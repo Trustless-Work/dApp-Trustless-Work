@@ -1,5 +1,3 @@
-import { kit } from "@/wallet/walletKit";
-import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
