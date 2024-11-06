@@ -1,7 +1,4 @@
 import axios from "axios";
-import { kit } from "@/wallet/walletKit";
-import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
-import { signTransaction } from "@stellar/freighter-api";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -14,7 +11,7 @@ export const getEngagement = async (payload: EscrowPayload) => {
   try {
     const { contractId, engagementId } = payload;
     const response = await axios.get(
-      `${API_URL}/escrow/get-escrow-by-engagement-id?contractId=${contractId}&engagementId=${engagementId}`,
+      `${API_URL}/escrow/get-escrow-by-engagement-id?contractId=${contractId}&engagementId=${engagementId}`
     );
     return response;
   } catch (error) {
