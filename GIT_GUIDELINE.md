@@ -20,6 +20,7 @@ The message should follow the format:
 - **test**: Test-related changes
 - **build**: Build system changes
 - **ci**: CI changes
+- **change**: Littles changes
 - **chore**: Other changes
 
 #### Example Branch Names
