@@ -1,3 +1,5 @@
+<p align="center"> <img src="https://github.com/user-attachments/assets/5b182044-dceb-41f5-acf0-da22dea7c98a" alt="CLR-S (2)"> </p>
+
 # Pull Request | Trustless Work
 
 ## 1. Issue Link
@@ -48,4 +50,7 @@
 - Note 2
 - Note 3
 
+
+
+# Please make sure that you complete the options of the right sidebar (Labels, Assigns and Reviewers)
 # If you don't use this template, you'd be ignored
