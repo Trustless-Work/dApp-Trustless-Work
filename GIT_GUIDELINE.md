@@ -12,6 +12,7 @@ The message should follow the format:
 
 - **feat**: New features
 - **fix**: Bug fixes
+- **remove**: Files
 - **docs**: Documentation updates
 - **style**: Style changes
 - **refactor**: Refactoring code
@@ -27,7 +28,6 @@ The message should follow the format:
 - `fix/product-price-validation`
 - `docs/readme-update`
 - `style/button-styling`
-
 
 ### Types of Commits
 
@@ -53,4 +53,3 @@ The message should be clear and descriptive, including the "what" and "why" of t
 - `docs: update installation section`
 
 ## Thanks for follow the guidelines
-
