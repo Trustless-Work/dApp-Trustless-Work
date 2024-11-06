@@ -1,13 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
+import Header from "@/components/header/Header";
 
-const inter = Inter({ subsets: ["latin"] });
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
   title: "Trustless Work",
-  description:
-    "A decentralized application (dApp) to enhance trust in agency-client relationships using blockchain. ",
+  description: "Trustless Work",
 };
 
 export default function RootLayout({
@@ -17,7 +27,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-950`}>{children}</body>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased p-5`}
+      >
+        <Header />
+        {children}
+        <footer></footer>
+        <Toaster />
+      </body>
     </html>
   );
 }
