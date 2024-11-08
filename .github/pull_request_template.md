@@ -6,7 +6,7 @@
 
 <!-- Provide the link to the related issue here -->
 
-[Issue #X](LINK_TO_ISSUE)
+- Closes #(issue number)
 
 ---
 
@@ -52,5 +52,4 @@
 
 
 
-# Please make sure that you complete the options of the right sidebar (Labels, Assigns and Reviewers)
 # If you don't use this template, you'd be ignored
