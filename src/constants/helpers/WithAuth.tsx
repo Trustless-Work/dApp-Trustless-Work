@@ -3,6 +3,8 @@ import { useEffect, ComponentType } from "react";
 import { redirect } from "next/navigation";
 import { useWalletStore } from "@/store/walletStore";
 
+// small change
+
 export default function WithAuthProtect<T extends JSX.IntrinsicAttributes>(
   Component: ComponentType<T>,
 ) {
