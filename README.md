@@ -47,50 +47,56 @@ POC of a decentralized application (dApp) to enhance trust in agency-client rela
 </table>
 
 
-## 1. Issue Link
-
-<!-- Provide the link to the related issue here -->
-
-- Closes #(issue number)
-
 ---
 
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+Follow the steps below to get started with this project:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+## Installation
+
+1. Install dependencies:
+
+   ```bash
+   npm i
+   ```
+
+2. Format the code using Prettier: (This is for avoid eslint errors)
+
+   ```bash
+   npx prettier --write .
+   ```
+
+3. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+## Environment Variables
+
+Make sure to set up the following environment variable in your `.env` file:
+
+```
+NEXT_PUBLIC_API_URL=https://api.trustlesswork.com
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Wallet Requirements
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To use this project, you must have one of the following wallets installed:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Freighter**
+- **Albedo**
+- **xBull**
 
-## Learn More
+These wallets are required to interact with the platform.
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## IMPORTANT NOTE:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+_It's important to note that we are using Husky. This means that when you run a `git push`, Husky will automatically execute `npm run format and npm run lint`. If either of these commands throws an error, the push will not be successful, and you will see a Husky error. When this happens, make sure to resolve any format and lint errors before trying the push again._
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-#
+---
