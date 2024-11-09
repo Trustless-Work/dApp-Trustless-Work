@@ -47,7 +47,9 @@ const ItemsHeader = ({ isEnabled }: ItemsHeaderProps) => {
             <Link
               href="/escrow/complete-escrow"
               className={
-                isActive("/escrow/complete-escrow") ? "font-bold text-primary" : ""
+                isActive("/escrow/complete-escrow")
+                  ? "font-bold text-primary"
+                  : ""
               }
               passHref
             >
@@ -58,7 +60,9 @@ const ItemsHeader = ({ isEnabled }: ItemsHeaderProps) => {
             <Link
               href="/escrow/claim-escrow-earnings"
               className={
-                isActive("/escrow/claim-escrow-earnings") ? "font-bold text-primary" : ""
+                isActive("/escrow/claim-escrow-earnings")
+                  ? "font-bold text-primary"
+                  : ""
               }
               passHref
             >
@@ -69,7 +73,9 @@ const ItemsHeader = ({ isEnabled }: ItemsHeaderProps) => {
             <Link
               href="/escrow/cancel-escrow"
               className={
-                isActive("/escrow/cancel-escrow") ? "font-bold text-primary" : ""
+                isActive("/escrow/cancel-escrow")
+                  ? "font-bold text-primary"
+                  : ""
               }
               passHref
             >
@@ -80,7 +86,9 @@ const ItemsHeader = ({ isEnabled }: ItemsHeaderProps) => {
             <Link
               href="/escrow/refund-remaining-funds"
               className={
-                isActive("/escrow/refund-remaining-funds") ? "font-bold text-primary" : ""
+                isActive("/escrow/refund-remaining-funds")
+                  ? "font-bold text-primary"
+                  : ""
               }
               passHref
             >

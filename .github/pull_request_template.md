@@ -17,7 +17,9 @@
 ---
 
 ## 3. Type of Change
+
 Mark with an `x` all the checkboxes that apply (like `[x]`).
+
 - [ ] 📝 Documentation (updates to README, docs, or comments)
 - [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
 - [ ] 👌 Enhancement (non-breaking change which adds functionality)
@@ -58,7 +60,5 @@ Mark with an `x` all the checkboxes that apply (like `[x]`).
 - Note 1
 - Note 2
 - Note 3
-
-
 
 # If you don't use this template, you'd be ignored

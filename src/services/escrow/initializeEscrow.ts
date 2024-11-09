@@ -14,7 +14,7 @@ export const initializeEscrow = async (payload: EscrowPayload) => {
   try {
     const response = await axios.post(
       `${API_URL}/deployer/invoke-deployer-contract`,
-      payload
+      payload,
     );
     return response.data;
   } catch (error) {

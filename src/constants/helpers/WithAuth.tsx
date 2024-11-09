@@ -1,17 +1,19 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, ComponentType } from "react";
 import { redirect } from "next/navigation";
 import { useWalletStore } from "@/store/walletStore";
 
-export default function WithAuthProtect(Component: any) {
-  return function WithAuthProtect(props: any) {
+export default function WithAuthProtect<T extends JSX.IntrinsicAttributes>(
+  Component: ComponentType<T>,
+) {
+  return function WithAuthProtect(props: T) {
     const { address } = useWalletStore();
 
     useEffect(() => {
       if (!address) {
         redirect("/");
       }
-    }, []);
+    });
 
     if (!address) {
       return null;
