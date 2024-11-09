@@ -6,7 +6,7 @@
 
 <!-- Provide the link to the related issue here -->
 
-[Issue #X](LINK_TO_ISSUE)
+- Closes #(issue number)
 
 ---
 
@@ -16,7 +16,18 @@
 
 ---
 
-## 3. Changes Made
+## 3. Type of Change
+
+Mark with an `x` all the checkboxes that apply (like `[x]`).
+
+- [ ] 📝 Documentation (updates to README, docs, or comments)
+- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
+- [ ] 👌 Enhancement (non-breaking change which adds functionality)
+- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to change)
+
+---
+
+## 4. Changes Made
 
 <!-- Describe the main changes and enhancements made to address the issue. List the modifications clearly and concisely. -->
 
@@ -26,7 +37,7 @@
 
 ---
 
-## 4. Evidence Before Solution
+## 5. Evidence Before Solution
 
 <!-- Record a video using Loom showing the behavior or bug before applying the solution. Provide a link to the Loom video here. -->
 
@@ -34,7 +45,7 @@
 
 ---
 
-## 5. Evidence After Solution
+## 6. Evidence After Solution
 
 <!-- Record a video using Loom showing the corrected behavior after the solution. Provide a link to the Loom video here. -->
 
@@ -42,14 +53,12 @@
 
 ---
 
-## 6. Important Notes
+## 7. Important Notes
 
 <!-- Any other relevant information that reviewers should be aware of, such as potential impacts, related issues, dependencies, or additional setup instructions. -->
 
 - Note 1
 - Note 2
 - Note 3
-
-# Please make sure that you complete the options of the right sidebar (Labels, Assigns and Reviewers)
 
 # If you don't use this template, you'd be ignored
