@@ -50,7 +50,6 @@
 - Note 2
 - Note 3
 
-
-
 # Please make sure that you complete the options of the right sidebar (Labels, Assigns and Reviewers)
+
 # If you don't use this template, you'd be ignored

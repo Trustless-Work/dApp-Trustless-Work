@@ -1,5 +1,4 @@
 import { getEngagement } from "@/services/escrow/getEngagement";
-import { useWalletStore } from "@/store/walletStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,8 +13,6 @@ const formSchema = z.object({
 });
 
 export const useGetEngagementEscrowHook = () => {
-  const { address } = useWalletStore();
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
