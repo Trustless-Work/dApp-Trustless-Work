@@ -29,7 +29,7 @@ const ItemsHeader = ({ isEnabled }: ItemsHeaderProps) => {
               }
               passHref
             >
-              Create Escrow
+              Initialize Escrow
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
