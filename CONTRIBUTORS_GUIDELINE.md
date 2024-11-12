@@ -40,13 +40,7 @@ git commit -m "type: description"
 
 ---
 
-## 5. Run the Project
-
-HACER
-
----
-
-## 6. Push Your Changes
+## 5. Push Your Changes
 
 - Push the changes to your forked repository:
 
@@ -60,7 +54,7 @@ _It's important to note that we are using Husky. This means that when you run a 
 
 ---
 
-## 7. Generate a Pull Request (PR)
+## 6. Generate a Pull Request (PR)
 
 - Create a Pull Request (PR) to the **develop** branch of the original repository.
 - Follow the PR template below to submit your PR.
