@@ -100,6 +100,11 @@ To use this project, you must have one of the following wallets installed:
 
 These wallets are required to interact with the platform.
 
+### How to use a Wallet 
+
+You should use Chrome, Brave or Firefox browser, please install any of the wallets that were listen before.
+Important Note: If you're having problems to use Freighter, make sure that you have the wallet in "test net", and also if even you couldn't be able to use because it shows you "Not Available". Try going to: Security > Manage Connected Wallet > Remove the "localhost". If the problem persist, please contact us. This mistake happens for the wallet, not our product.
+
 
 ## IMPORTANT NOTE:
 
