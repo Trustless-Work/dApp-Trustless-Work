@@ -3,10 +3,15 @@ import axios from "axios";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface EscrowPayload {
-  engagementId: string;
-  description: string;
+  client: string;
   serviceProvider: string;
+  platformAddress: string;
   amount: string;
+  releaseSigner: string;
+  milestones: {
+    description: string;
+    status: string;
+  }[];
   signer: string;
 }
 
