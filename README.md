@@ -1,6 +1,7 @@
 <p align="center"> <img src="https://github.com/user-attachments/assets/5b182044-dceb-41f5-acf0-da22dea7c98a" alt="CLR-S (2)"> </p>
 
 # Trustless Work | [API Documentation](https://docs.trustlesswork.com/trustless-work)
+
 POC of a decentralized application (dApp) to enhance trust in agency-client relationships using blockchain. It enables trustless payments via smart contracts, securing funds in escrow until milestones are approved by clients. Stablecoins like USDC are used to ensure stability and ease of use.
 
 ---
@@ -52,15 +53,11 @@ POC of a decentralized application (dApp) to enhance trust in agency-client rela
   </tr>
 </table>
 
-
 ---
-
-
 
 ## Getting Started
 
 Follow the steps below to get started with this project:
-
 
 ## Installation
 
@@ -100,11 +97,10 @@ To use this project, you must have one of the following wallets installed:
 
 These wallets are required to interact with the platform.
 
-### How to use a Wallet 
+### How to use a Wallet
 
 You should use Chrome, Brave or Firefox browser, please install any of the wallets that were listen before.
 Important Note: If you're having problems to use Freighter, make sure that you have the wallet in "test net", and also if even you couldn't be able to use because it shows you "Not Available". Try going to: Security > Manage Connected Wallet > Remove the "localhost". If the problem persist, please contact us. This mistake happens for the wallet, not our product.
-
 
 ## IMPORTANT NOTE:
 
