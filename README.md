@@ -34,7 +34,7 @@ POC of a decentralized application (dApp) to enhance trust in agency-client rela
     <td align="center">
       <img src="https://github.com/user-attachments/assets/53d65ea1-007e-40aa-b9b5-e7a10d7bea84" alt="Owner 3" width="150" />
       <br /><br />
-      <strong>Armando Cortés | Full Stack Developer</strong>
+      <strong>Armando Murillo | Full Stack Developer</strong>
       <br /><br />
       <a href="https://github.com/armandocodecr" target="_blank">armandocodecr</a>
       <br />
