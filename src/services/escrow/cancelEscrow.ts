@@ -1,8 +1,10 @@
+import axios from "axios";
 import { kit } from "@/wallet/walletKit";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
 import http from "@/core/axios/http";
-import axios from "axios";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface EscrowPayload {
   contractId: string;
@@ -10,33 +12,32 @@ interface EscrowPayload {
   serviceProvider: string;
 }
 
-export const cancelEscrow = async (payload: EscrowPayload): Promise<any> => {
+export const cancelEscrow = async (payload: EscrowPayload) => {
   try {
-    const response = await http.post("/escrow/cancel-escrow", payload);
+    const response = await http.post(
+      "/escrow/cancel-escrow",
+      payload,
+    );
     const { unsignedTransaction } = response.data;
-
-    const addressData = await kit.getAddress();
-    const { address } = addressData;
-
-    const signedTransactionData = await signTransaction(unsignedTransaction, {
+    const { address } = await kit.getAddress();
+    const { signedTxXdr } = await signTransaction(unsignedTransaction, {
       address,
       networkPassphrase: WalletNetwork.TESTNET,
     });
-    const { signedTxXdr } = signedTransactionData;
 
-    const txResponse = await http.post("/helper/send-transaction", {
+    const tx = await http.post("/helper/send-transaction", {
       signedXdr: signedTxXdr,
     });
-    const { data } = txResponse;
+    const { data } = tx;
 
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error("Axios Error:", error.message);
+      console.error("Error:", error.message);
       throw error;
     } else {
-      console.error("Unexpected Error:", error);
-      throw new Error("Unexpected error occurred");
+      console.error("Error:", error);
+      throw new Error("Error");
     }
   }
 };
