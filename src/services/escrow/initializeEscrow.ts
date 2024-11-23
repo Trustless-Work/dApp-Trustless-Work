@@ -1,29 +1,35 @@
+import http from "@/core/axios/http";
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
 interface EscrowPayload {
-  engagementId: string;
-  description: string;
+  client: string;
   serviceProvider: string;
+  platformAddress: string;
   amount: string;
+  releaseSigner: string;
+  milestones: {
+    description: string;
+    status: string;
+  }[];
   signer: string;
 }
 
 export const initializeEscrow = async (payload: EscrowPayload) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/deployer/invoke-deployer-contract`,
+    const response = await http.post(
+      "/deployer/invoke-deployer-contract",
       payload,
     );
     return response.data;
-  } catch (error) {
+  } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      console.error("Error:", error.message);
-      throw error;
+      console.error("Axios Error:", error.response?.data || error.message);
+      throw new Error(
+        error.response?.data?.message || "Error initializing escrow",
+      );
     } else {
-      console.error("Error:", error);
-      throw new Error("Error");
+      console.error("Unexpected Error:", error);
+      throw new Error("Unexpected error occurred");
     }
   }
 };
