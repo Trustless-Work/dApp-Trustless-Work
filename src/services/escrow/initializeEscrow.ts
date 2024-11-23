@@ -2,10 +2,15 @@ import http from "@/core/axios/http";
 import axios from "axios";
 
 interface EscrowPayload {
-  engagementId: string;
-  description: string;
+  client: string;
   serviceProvider: string;
+  platformAddress: string;
   amount: string;
+  releaseSigner: string;
+  milestones: {
+    description: string;
+    status: string;
+  }[];
   signer: string;
 }
 
