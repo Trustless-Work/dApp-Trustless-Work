@@ -2,6 +2,7 @@ import axios from "axios";
 import { kit } from "@/wallet/walletKit";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
+import http from "@/core/axios/http";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -13,8 +14,8 @@ interface EscrowPayload {
 
 export const cancelEscrow = async (payload: EscrowPayload) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/escrow/cancel-escrow`,
+    const response = await http.post(
+      "/escrow/cancel-escrow",
       payload,
     );
     const { unsignedTransaction } = response.data;
@@ -24,7 +25,7 @@ export const cancelEscrow = async (payload: EscrowPayload) => {
       networkPassphrase: WalletNetwork.TESTNET,
     });
 
-    const tx = await axios.post(`${API_URL}/helper/send-transaction`, {
+    const tx = await http.post("/helper/send-transaction", {
       signedXdr: signedTxXdr,
     });
     const { data } = tx;
