@@ -16,7 +16,7 @@ const CreateEscrow = () => {
       ) : (
         <div className="flex flex-col gap-3 w-full md:w-1/3">
           <h1 className="text-4xl font-bold">
-            Fill in the details of the Escrow.
+            Fill in the details of the Escrow
           </h1>
           <h2>
             Fill in the details below to set up a secure and reliable escrow

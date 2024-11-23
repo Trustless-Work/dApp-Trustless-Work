@@ -55,6 +55,8 @@ export const useInitializeEscrowHook = () => {
     },
   });
 
+  const milestones = form.watch("milestones");
+
   const handleAddMilestone = () => {
     const currentMilestones = form.getValues("milestones");
     form.setValue("milestones", [
@@ -70,8 +72,6 @@ export const useInitializeEscrowHook = () => {
   };
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    console.log(payload);
-
     const payloadSubmit = {
       ...payload,
       signer: address,
@@ -116,5 +116,6 @@ export const useInitializeEscrowHook = () => {
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
+    milestones,
   };
 };
