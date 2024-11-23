@@ -4,8 +4,6 @@ import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
 import http from "@/core/axios/http";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
 interface EscrowPayload {
   contractId: string;
   engagementId: string;
