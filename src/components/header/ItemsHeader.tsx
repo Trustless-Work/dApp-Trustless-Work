@@ -108,6 +108,19 @@ const ItemsHeader = ({ isEnabled }: ItemsHeaderProps) => {
               Get Engagement
             </Link>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Link
+              href="/help"
+              className={
+                isActive("/help")
+                  ? "font-bold text-primary"
+                  : ""
+              }
+              passHref
+            >
+              Help
+            </Link>
+          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     )
