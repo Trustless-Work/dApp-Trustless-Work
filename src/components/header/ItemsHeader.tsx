@@ -111,11 +111,7 @@ const ItemsHeader = ({ isEnabled }: ItemsHeaderProps) => {
           <NavigationMenuItem>
             <Link
               href="/help"
-              className={
-                isActive("/help")
-                  ? "font-bold text-primary"
-                  : ""
-              }
+              className={isActive("/help") ? "font-bold text-primary" : ""}
               passHref
             >
               Help

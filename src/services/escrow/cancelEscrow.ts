@@ -14,10 +14,7 @@ interface EscrowPayload {
 
 export const cancelEscrow = async (payload: EscrowPayload) => {
   try {
-    const response = await http.post(
-      "/escrow/cancel-escrow",
-      payload,
-    );
+    const response = await http.post("/escrow/cancel-escrow", payload);
     const { unsignedTransaction } = response.data;
     const { address } = await kit.getAddress();
     const { signedTxXdr } = await signTransaction(unsignedTransaction, {
