@@ -25,6 +25,8 @@ interface PopoverCategoryProps {
 const PopoverCategory = ({ milestone, index }: PopoverCategoryProps) => {
   const { form, milestones } = useInitializeEscrowHook();
 
+  console.log(milestones);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
