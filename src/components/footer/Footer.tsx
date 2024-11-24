@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="mt-auto flex flex-col bg-transparent text-gray-800 dark:text-gray-300 py-10 px-7 md:px-4 border-t border-gray-300 dark:border-gray-700">
       <div className="container mx-auto flex flex-wrap justify-between items-start gap-8">
-        <div className="flex w-full items-center justify-center">
+        <div className="flex items-center">
           <Image src="/logo.png" alt="trustless" width={100} height={100} />
         </div>
         <div>
