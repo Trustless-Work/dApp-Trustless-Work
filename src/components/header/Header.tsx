@@ -6,11 +6,11 @@ import { FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+
 import ItemsHeader from "./ItemsHeader";
 import ThemeToggle from "./ThemeToggle";
 
@@ -51,18 +51,16 @@ const Header = () => {
         <ThemeToggle />
         {address ? (
           <>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <FaUserCircle size={30} />
-                </TooltipTrigger>
-                <TooltipContent>
+            <HoverCard>
+              <HoverCardTrigger asChild>                
+                  <FaUserCircle size={30} />                
+                <HoverCardContent>
                   <p className="text-base">
                     {address && name + " - " + address}
                   </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+                </HoverCardContent>
+              </HoverCardTrigger>
+            </HoverCard>
             <button
               type="button"
               onClick={handleDisconnect}
