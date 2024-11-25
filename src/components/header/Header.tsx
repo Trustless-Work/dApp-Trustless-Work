@@ -9,7 +9,7 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
+} from "@/components/ui/hover-card";
 
 import ItemsHeader from "./ItemsHeader";
 import ThemeToggle from "./ThemeToggle";
@@ -52,8 +52,8 @@ const Header = () => {
         {address ? (
           <>
             <HoverCard>
-              <HoverCardTrigger asChild>                
-                  <FaUserCircle size={30} />                
+              <HoverCardTrigger asChild>
+                <FaUserCircle size={30} />
                 <HoverCardContent>
                   <p className="text-base">
                     {address && name + " - " + address}
