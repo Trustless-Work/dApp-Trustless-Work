@@ -77,6 +77,8 @@ export const useInitializeEscrowHook = () => {
       signer: address,
     };
 
+    console.log(payloadSubmit);
+
     setIsLoading(true);
 
     try {
@@ -113,9 +115,9 @@ export const useInitializeEscrowHook = () => {
 
   return {
     form,
+    milestones,
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
-    milestones,
   };
 };
