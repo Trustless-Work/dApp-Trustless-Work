@@ -94,8 +94,8 @@ const Footer: React.FC = () => {
               <Image
                 src="/assets/social-networks/linkedin.svg"
                 alt="LinkedIn"
-                width={50}
-                height={50}
+                width={40}
+                height={40}
               />
             </Link>
             <Link
@@ -107,8 +107,8 @@ const Footer: React.FC = () => {
               <Image
                 src="/assets/social-networks/x.svg"
                 alt="X"
-                width={50}
-                height={50}
+                width={40}
+                height={40}
               />
             </Link>
           </div>

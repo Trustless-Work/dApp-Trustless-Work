@@ -12,15 +12,30 @@ import {
 import { Input } from "@/components/ui/input";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useInitializeEscrowHook } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
-import PopoverCategory from "./components/PopoverCategory";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { statusOptions } from "@/constants/escrow/StatusOptions";
+import { cn } from "@/lib/utils";
 
 export function InitializeEscrowForm() {
   const {
     form,
+    milestones,
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
-    milestones,
   } = useInitializeEscrowHook();
 
   return (
@@ -117,7 +132,53 @@ export function InitializeEscrowForm() {
                 }}
               />
 
-              <PopoverCategory milestone={milestone} index={index} />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className="w-52 justify-between"
+                  >
+                    {milestone.status
+                      ? statusOptions.find(
+                          (option) => option.value === milestone.status,
+                        )?.label
+                      : "Select Status"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-52 p-0">
+                  <Command>
+                    <CommandInput placeholder="Search status..." />
+                    <CommandList>
+                      <CommandEmpty>No status found.</CommandEmpty>
+                      <CommandGroup>
+                        {statusOptions.map((option) => (
+                          <CommandItem
+                            key={option.value}
+                            value={option.value}
+                            onSelect={() => {
+                              const updatedMilestones = [...milestones];
+                              updatedMilestones[index].status = option.value;
+                              form.setValue("milestones", updatedMilestones);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                milestone.status === option.value
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                            {option.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
 
               <Button
                 onClick={() => handleRemoveMilestone(index)}
@@ -132,6 +193,7 @@ export function InitializeEscrowForm() {
             className="w-full md:w-1/4"
             variant="secondary"
             onClick={handleAddMilestone}
+            type="button"
           >
             Add Item
           </Button>
