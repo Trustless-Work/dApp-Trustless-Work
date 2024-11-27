@@ -10,13 +10,21 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-
 import ItemsHeader from "./ItemsHeader";
 import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
   const { connectWallet, disconnectWallet } = useWallet();
   const { address, name } = useWalletStore();
+
+  const copyAddress = async () => {
+    try {
+      await navigator.clipboard.writeText(address);
+      console.log("Address copied to clipboard");
+    } catch (error) {
+      console.error("Failed to copy address:", error);
+    }
+  };
 
   const handleConnect = async () => {
     try {
@@ -36,6 +44,13 @@ const Header = () => {
     }
   };
 
+  const formatAddress = (address: string): string => {
+    if (!address) return "";
+    const start = address.slice(0, 8);
+    const end = address.slice(-8);
+    return `${start}....${end}`;
+  };
+
   return (
     <header className="flex flex-col md:flex-row w-full justify-between gap-5 container mx-auto">
       <Link href="/" className="mx-auto md:m-0">
@@ -52,14 +67,20 @@ const Header = () => {
         {address ? (
           <>
             <HoverCard>
-              <HoverCardTrigger asChild>
+              <HoverCardTrigger>
                 <FaUserCircle size={30} />
-                <HoverCardContent>
-                  <p className="text-base">
-                    {address && name + " - " + address}
-                  </p>
-                </HoverCardContent>
               </HoverCardTrigger>
+              <HoverCardContent className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center translate-y-[50px]">
+                <p className="text-base">
+                  {address && name + " - " + formatAddress(address)}
+                </p>
+                <button
+                  onClick={copyAddress}
+                  className="p-2.5 text-white hover:text-black active:text-black focus:text-black"
+                >
+                  Copy Address
+                </button>
+              </HoverCardContent>
             </HoverCard>
             <button
               type="button"
