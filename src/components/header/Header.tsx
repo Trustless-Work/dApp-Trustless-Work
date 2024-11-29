@@ -2,8 +2,8 @@
 
 import { useWalletStore } from "@/store/walletStore";
 import { useWallet } from "@/wallet/hooks/useWallet.hook";
-import { FaUserCircle } from "react-icons/fa";
-import { FaRegCopy } from "react-icons/fa";
+import { FaUserCircle, FaRegCopy } from "react-icons/fa";
+import { LuWallet} from "react-icons/lu";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -100,7 +100,7 @@ const Header = () => {
               </HoverCardTrigger>
               <HoverCardContent className="w-80">
                 <div className="flex items-start space-x-4">
-                  <FaUserCircle size={40} />
+                  <LuWallet  size={40} />
                   <div className="space-y-1">
                     <h4 className="text-sm font-semibold">{name}</h4>
                     <div className="flex items-center space-x-2">
