@@ -1,6 +1,5 @@
+import http from "@/core/axios/http";
 import axios from "axios";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface EscrowPayload {
   contractId: string;
@@ -10,17 +9,19 @@ interface EscrowPayload {
 export const getEngagement = async (payload: EscrowPayload) => {
   try {
     const { contractId, engagementId } = payload;
-    const response = await axios.get(
-      `${API_URL}/escrow/get-escrow-by-engagement-id?contractId=${contractId}&engagementId=${engagementId}`,
+    const response = await http.get(
+      `/escrow/get-escrow-by-engagement-id?contractId=${contractId}&engagementId=${engagementId}`,
     );
-    return response;
-  } catch (error) {
+    return response.data;
+  } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      console.error("Error:", error.message);
-      throw error;
+      console.error("Axios Error:", error.response?.data || error.message);
+      throw new Error(
+        error.response?.data?.message || "Error fetching engagement details",
+      );
     } else {
-      console.error("Error:", error);
-      throw new Error("Error");
+      console.error("Unexpected Error:", error);
+      throw new Error("Unexpected error occurred");
     }
   }
 };

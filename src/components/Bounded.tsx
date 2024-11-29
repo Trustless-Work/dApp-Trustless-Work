@@ -7,13 +7,13 @@ type BoundedProps = {
 
 const Bounded = ({ children, center }: BoundedProps) => {
   return (
-    <main
-      className={`flex px-20 my-20 font-[family-name:var(--font-geist-sans)] ${
+    <div
+      className={`flex px-0 md:px-20 my-20 font-[family-name:var(--font-geist-sans)] flex-1 ${
         center && "justify-center"
       }`}
     >
       {children}
-    </main>
+    </div>
   );
 };
 

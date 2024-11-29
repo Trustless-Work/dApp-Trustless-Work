@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+"use client";
+
 import { useToast } from "@/hooks/use-toast";
 import { initializeEscrow } from "@/services/escrow/initializeEscrow";
 import { useLoaderStore } from "@/store/utilsStore";
@@ -8,18 +11,33 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  engagementId: z.string().min(1, {
-    message: "Engagement must be at least 1 characters.",
-  }),
-  description: z.string().min(3, {
-    message: "Description must be at least 3 characters.",
+  client: z.string().min(1, {
+    message: "Client is required.",
   }),
   serviceProvider: z.string().min(1, {
     message: "Service provider is required.",
   }),
-  amount: z.string().min(1, {
-    message: "Amount is required.",
+  platformAddress: z.string().min(1, {
+    message: "Platform address is required.",
   }),
+  amount: z.string().min(1, {
+    message: "Amount must be greater than 0.",
+  }),
+  releaseSigner: z.string().min(1, {
+    message: "Release signer is required.",
+  }),
+  milestones: z
+    .array(
+      z.object({
+        description: z.string().min(1, {
+          message: "Milestone description is required.",
+        }),
+        status: z.string().min(1, {
+          message: "Milestone status is required.",
+        }),
+      }),
+    )
+    .min(1, { message: "At least one milestone is required." }),
 });
 
 export const useInitializeEscrowHook = () => {
@@ -30,21 +48,43 @@ export const useInitializeEscrowHook = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      engagementId: "",
-      description: "",
+      client: "",
       serviceProvider: "",
+      platformAddress: "",
       amount: "",
+      releaseSigner: "",
+      milestones: [{ description: "", status: "" }],
     },
   });
 
+  const milestones = form.watch("milestones");
+
+  const handleAddMilestone = () => {
+    const currentMilestones = form.getValues("milestones");
+    form.setValue("milestones", [
+      ...currentMilestones,
+      { description: "", status: "" },
+    ]);
+  };
+
+  const handleRemoveMilestone = (index: number) => {
+    const currentMilestones = form.getValues("milestones");
+    const updatedMilestones = currentMilestones.filter((_, i) => i !== index);
+    form.setValue("milestones", updatedMilestones);
+  };
+
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    const payloadSubmit = { ...payload, signer: address };
+    const payloadSubmit = {
+      ...payload,
+      signer: address,
+    };
+
+    console.log(payloadSubmit);
 
     setIsLoading(true);
 
     try {
       const data = await initializeEscrow(payloadSubmit);
-
       if (data.status === "SUCCESS" || data.status === 201) {
         form.reset();
         setIsLoading(false);
@@ -75,5 +115,11 @@ export const useInitializeEscrowHook = () => {
     }
   };
 
-  return { form, onSubmit };
+  return {
+    form,
+    milestones,
+    onSubmit,
+    handleAddMilestone,
+    handleRemoveMilestone,
+  };
 };
