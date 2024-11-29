@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useToast } from "@/hooks/use-toast";
 import { fundEscrow } from "@/services/escrow/fundEscrow";
 import { useLoaderStore } from "@/store/utilsStore";

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useToast } from "@/hooks/use-toast";
 import { initializeEscrow } from "@/services/escrow/initializeEscrow";
 import { useLoaderStore } from "@/store/utilsStore";
