@@ -9,8 +9,9 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import * as React from "react";
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
-import ItemsHeader from "./ItemsHeader";
 import ThemeToggle from "./ThemeToggle";
+import { Menu } from "lucide-react";
+import { useSidebar } from "@/components/ui/sidebar";
 
 // Enhanced HoverCard Components
 const HoverCard = HoverCardPrimitive.Root;
@@ -33,6 +34,7 @@ const HoverCardContent = React.forwardRef<
 HoverCardContent.displayName = HoverCardPrimitive.Content.displayName;
 
 const Header = () => {
+  const { toggleSidebar } = useSidebar();
   const { connectWallet, disconnectWallet } = useWallet();
   const { address, name } = useWalletStore();
   const [copySuccess, setCopySuccess] = React.useState(false);
@@ -81,12 +83,19 @@ const Header = () => {
   };
 
   return (
-    <header className="flex flex-col md:flex-row w-full justify-between gap-5 container mx-auto">
-      <Link href="/" className="mx-auto md:m-0">
-        <Image src="/logo.png" width={100} height={100} alt="logo" />
-      </Link>
-
-      <ItemsHeader isEnabled={address} />
+    <header className="flex flex-col md:flex-row w-full justify-between gap-5 container mx-auto p-4">
+      <div className="grid grid-cols-3 items-center w-full md:w-auto md:flex md:justify-start gap-2">
+        <button
+          onClick={toggleSidebar}
+          className="md:hidden p-2 hover:bg-accent rounded-md"
+          aria-label="Toggle Menu"
+        >
+          <Menu className="h-10 w-10" />
+        </button>
+        <Link href="/" className="justify-self-center md:justify-self-start">
+          <Image src="/logo.png" width={100} height={100} alt="logo" />
+        </Link>
+      </div>
 
       <div className="flex mx-auto md:m-0 items-center gap-5">
         <ThemeToggle />
