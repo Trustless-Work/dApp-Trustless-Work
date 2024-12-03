@@ -4,6 +4,9 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/sidebar/AppSidebar";
+import { cn } from "@/lib/utils";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,20 +26,26 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased p-5`}
+        className={cn(geistSans.variable, geistMono.variable, "antialiased")}
       >
-        <main className="flex flex-col min-h-screen">
-          <Header />
-          {children}
-        </main>
-        <Footer />
-        <Toaster />
+        <SidebarProvider defaultOpen>
+          <div className="relative flex min-h-screen w-full">
+            <AppSidebar />
+            <div className="flex-1 flex flex-col w-full">
+              <Header />
+              <main className="flex-1 w-full p-4 pt-20">
+                <div className="w-full max-w-[1400px] mx-auto">{children}</div>
+              </main>
+            </div>
+          </div>
+          <Toaster />
+        </SidebarProvider>
       </body>
     </html>
   );
