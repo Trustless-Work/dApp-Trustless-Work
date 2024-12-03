@@ -5,6 +5,7 @@ import {
   FaStackOverflow,
   FaExternalLinkAlt,
   FaUserCircle,
+  FaBook,
 } from "react-icons/fa";
 import { useWalletStore } from "@/store/walletStore";
 import { usePathname } from "next/navigation";
@@ -22,6 +23,7 @@ import {
   SidebarFooter,
   SidebarRail,
   SidebarMenuSkeleton,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
@@ -71,24 +73,30 @@ const SidebarContentSection = ({
 }) => (
   <>
     <SidebarHeader className="border-b p-4" aria-label="Company Information">
-      <div className="flex items-center gap-2">
-        <Image src="/logo.png" alt="Trustless Work" width={24} height={24} />
-        <div>
-          <h2 className="text-lg font-semibold">Trustless Work</h2>
-          <p className="text-sm text-muted-foreground">Escrow-as-a-service</p>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Image src="/logo.png" alt="Trustless Work" width={35} height={35} />
+          <div>
+            <h2 className="text-xl font-semibold">Trustless Work</h2>
+            <p className="text-sm text-muted-foreground">Escrow-as-a-service</p>
+          </div>
         </div>
+        <SidebarTrigger className="md:hidden" />
       </div>
     </SidebarHeader>
 
-    <SidebarContentComponent>
+    <SidebarContentComponent className="flex flex-col gap-0">
       {address && (
         <Collapsible defaultOpen>
-          <SidebarGroup>
-            <CollapsibleTrigger className="flex w-full items-center p-2">
-              <SidebarGroupLabel className="flex items-center gap-2">
-                <FaStackOverflow className="h-4 w-4" />
-                <span>Main Menu</span>
-                <ChevronDown className="ml-auto h-4 w-4 transition-transform duration-200" />
+          <SidebarGroup className="mb-0 pb-0">
+            <CollapsibleTrigger className="flex w-full items-center p-2 group">
+              <SidebarGroupLabel className="flex items-center gap-2 text-base w-full">
+                <FaStackOverflow className="h-5 w-5 text-black dark:text-white" />
+                <span className="text-black dark:text-white">Escrow Menu</span>
+                <ChevronDown
+                  className="ml-auto h-4 w-4 transition-transform duration-200 
+                  group-data-[state=closed]:rotate-[-90deg]"
+                />
               </SidebarGroupLabel>
             </CollapsibleTrigger>
             <CollapsibleContent>
@@ -108,27 +116,40 @@ const SidebarContentSection = ({
         </Collapsible>
       )}
 
-      <SidebarGroup>
-        <SidebarGroupLabel>Documentation</SidebarGroupLabel>
-        <SidebarGroupContent>
-          <SidebarMenu>
-            {documentationLinks.map((link) => (
-              <SidebarMenuItem key={link.title}>
-                <SidebarMenuButton asChild>
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between group"
-                  >
-                    <span>{link.title}</span>
-                    <FaExternalLinkAlt className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroupContent>
+      <SidebarGroup className="mt-0 pt-0">
+        <Collapsible defaultOpen>
+          <CollapsibleTrigger className="flex w-full items-center p-2 group">
+            <SidebarGroupLabel className="flex items-center gap-2 text-base w-full">
+              <FaBook className="h-5 w-5 text-black dark:text-white" />
+              <span className="text-black dark:text-white">Documentation</span>
+              <ChevronDown
+                className="ml-auto h-4 w-4 transition-transform duration-200 
+                group-data-[state=closed]:rotate-[-90deg]"
+              />
+            </SidebarGroupLabel>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {documentationLinks.map((link) => (
+                  <SidebarMenuItem key={link.title}>
+                    <SidebarMenuButton asChild>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between group"
+                      >
+                        <span>{link.title}</span>
+                        <FaExternalLinkAlt className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </CollapsibleContent>
+        </Collapsible>
       </SidebarGroup>
     </SidebarContentComponent>
 
@@ -169,13 +190,15 @@ export function AppSidebar() {
   );
 
   return (
-    <Sidebar collapsible={address ? "offcanvas" : "icon"}>
-      <SidebarContentSection
-        address={address}
-        name={name}
-        isActive={isActive}
-      />
-      <SidebarRail />
-    </Sidebar>
+    <>
+      <Sidebar collapsible={address ? "offcanvas" : "icon"}>
+        <SidebarContentSection
+          address={address}
+          name={name}
+          isActive={isActive}
+        />
+        <SidebarRail />
+      </Sidebar>
+    </>
   );
 }

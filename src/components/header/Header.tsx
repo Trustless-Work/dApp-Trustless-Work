@@ -10,8 +10,7 @@ import { cn } from "@/lib/utils";
 import * as React from "react";
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
 import ThemeToggle from "./ThemeToggle";
-import { Menu } from "lucide-react";
-import { useSidebar } from "@/components/ui/sidebar";
+import { useSidebar, SidebarTrigger } from "@/components/ui/sidebar";
 
 // Enhanced HoverCard Components
 const HoverCard = HoverCardPrimitive.Root;
@@ -34,9 +33,9 @@ const HoverCardContent = React.forwardRef<
 HoverCardContent.displayName = HoverCardPrimitive.Content.displayName;
 
 const Header = () => {
-  const { toggleSidebar } = useSidebar();
   const { connectWallet, disconnectWallet } = useWallet();
   const { address, name } = useWalletStore();
+  const { isMobile } = useSidebar();
   const [copySuccess, setCopySuccess] = React.useState(false);
 
   const copyAddress = async () => {
@@ -84,81 +83,91 @@ const Header = () => {
 
   return (
     <header className="flex flex-col md:flex-row w-full justify-between gap-5 container mx-auto p-4">
-      <div className="grid grid-cols-3 items-center w-full md:w-auto md:flex md:justify-start gap-2">
-        <button
-          onClick={toggleSidebar}
-          className="md:hidden p-2 hover:bg-accent rounded-md"
-          aria-label="Toggle Menu"
+      <div className="flex items-center relative w-full md:w-auto">
+        <div
+          className={cn(
+            "flex items-center w-full",
+            isMobile ? "relative justify-center" : "gap-4",
+          )}
         >
-          <Menu className="h-10 w-10" />
-        </button>
-        <Link href="/" className="justify-self-center md:justify-self-start">
-          <Image src="/logo.png" width={100} height={100} alt="logo" />
-        </Link>
+          <SidebarTrigger
+            className={cn(
+              "h-10 w-10 z-0",
+              isMobile ? "absolute left-0" : "relative",
+            )}
+          />
+          <Link href="/" className="flex items-center">
+            <Image src="/logo.png" width={100} height={100} alt="logo" />
+          </Link>
+        </div>
       </div>
 
       <div className="flex mx-auto md:m-0 items-center gap-5">
         <ThemeToggle />
-        {address ? (
-          <>
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <button className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-                  <FaUserCircle size={30} />
-                </button>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80">
-                <div className="flex items-start space-x-4">
-                  <LuWallet size={40} />
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">{name}</h4>
-                    <div className="flex items-center space-x-2">
-                      <p className="text-sm text-muted-foreground">
-                        {formatAddress(address)}
-                      </p>
-                      <button
-                        onClick={copyAddress}
-                        className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                        title="Copy address"
-                      >
-                        <FaRegCopy
-                          className={cn(
-                            "h-4 w-4",
-                            copySuccess
-                              ? "text-green-500"
-                              : "text-muted-foreground",
-                          )}
-                        />
-                      </button>
+        <div className="flex items-center gap-4">
+          {address ? (
+            <>
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <button className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+                    <FaUserCircle size={30} />
+                  </button>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80">
+                  <div className="flex items-start space-x-4">
+                    <LuWallet size={40} />
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-semibold">{name}</h4>
+                      <div className="flex items-center space-x-2">
+                        <p className="text-sm text-muted-foreground">
+                          {formatAddress(address)}
+                        </p>
+                        <button
+                          onClick={copyAddress}
+                          className="p-1.5 hover:bg-muted rounded-md transition-colors"
+                          title="Copy address"
+                        >
+                          <FaRegCopy
+                            className={cn(
+                              "h-4 w-4",
+                              copySuccess
+                                ? "text-green-500"
+                                : "text-muted-foreground",
+                            )}
+                          />
+                        </button>
+                      </div>
+                      <div className="flex items-center text-xs text-muted-foreground">
+                        <span>{formatDate()}</span>
+                      </div>
+                      {copySuccess && (
+                        <p className="text-xs text-green-500">
+                          Address copied!
+                        </p>
+                      )}
                     </div>
-                    <div className="flex items-center text-xs text-muted-foreground">
-                      <span>{formatDate()}</span>
-                    </div>
-                    {copySuccess && (
-                      <p className="text-xs text-green-500">Address copied!</p>
-                    )}
                   </div>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
+                </HoverCardContent>
+              </HoverCard>
 
+              <button
+                type="button"
+                onClick={handleDisconnect}
+                className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
+              >
+                Disconnect
+              </button>
+            </>
+          ) : (
             <button
               type="button"
-              onClick={handleDisconnect}
+              onClick={handleConnect}
               className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
             >
-              Disconnect
+              Connect
             </button>
-          </>
-        ) : (
-          <button
-            type="button"
-            onClick={handleConnect}
-            className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
-          >
-            Connect
-          </button>
-        )}
+          )}
+        </div>
       </div>
     </header>
   );
