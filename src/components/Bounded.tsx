@@ -5,10 +5,10 @@ type BoundedProps = {
   center?: boolean;
 };
 
-const Bounded = ({ children, center }: BoundedProps) => {
+export const Bounded = ({ children, center }: BoundedProps) => {
   return (
     <div
-      className={`flex px-2 md:px-20 my-20 font-[family-name:var(--font-geist-sans)] flex-1 ${
+      className={`flex px-2 md:px-20 md:my-20 my-10 font-[family-name:var(--font-geist-sans)] flex-1 ${
         center && "justify-center"
       }`}
     >
@@ -16,5 +16,3 @@ const Bounded = ({ children, center }: BoundedProps) => {
     </div>
   );
 };
-
-export default Bounded;
