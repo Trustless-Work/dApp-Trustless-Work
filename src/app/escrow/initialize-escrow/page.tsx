@@ -3,6 +3,7 @@
 import { Bounded } from "@/components/Bounded";
 import { InitializeEscrowForm } from "@/components/modules/escrow/InitializeEscrowForm";
 import Loader from "@/components/utils/Loader";
+import { WrapperForm } from "@/components/Wrappers";
 import WithAuthProtect from "@/constants/helpers/WithAuth";
 import { useLoaderStore } from "@/store/utilsStore/store";
 
@@ -14,7 +15,7 @@ const CreateEscrow = () => {
       {isLoading ? (
         <Loader isLoading={isLoading} />
       ) : (
-        <div className="flex flex-col gap-3 w-full md:w-1/3">
+        <WrapperForm>
           <h1 className="text-4xl font-bold">
             Fill in the details of the Escrow
           </h1>
@@ -23,7 +24,7 @@ const CreateEscrow = () => {
             agreement.
           </h2>
           <InitializeEscrowForm />
-        </div>
+        </WrapperForm>
       )}
     </Bounded>
   );
