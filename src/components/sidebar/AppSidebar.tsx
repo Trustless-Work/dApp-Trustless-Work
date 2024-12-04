@@ -75,10 +75,12 @@ const SidebarContentSection = ({
     <SidebarHeader className="border-b p-4" aria-label="Company Information">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Image src="/logo.png" alt="Trustless Work" width={35} height={35} />
-          <div>
+          <Image src="/logo.png" alt="Trustless Work" width={50} height={50} />
+          <div className="ml-2">
             <h2 className="text-xl font-semibold">Trustless Work</h2>
-            <p className="text-sm text-muted-foreground">Escrow-as-a-service</p>
+            <p className="text-xs ml-1 text-muted-foreground">
+              Escrow-as-a-service
+            </p>
           </div>
         </div>
         <SidebarTrigger className="md:hidden" />
