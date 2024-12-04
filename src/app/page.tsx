@@ -1,11 +1,11 @@
 "use client";
 
-import Bounded from "@/components/Bounded";
+import { Bounded } from "@/components/Bounded";
 
 export default function Home() {
   return (
     <Bounded center={true}>
-      <div className="flex flex-col md:flex-row justify-center items-center w-full h-full mt-0 md:mt-20 gap-10">
+      <div className="flex flex-col sm:flex-row justify-center items-center w-full h-full mt-0 md:mt-20 gap-10">
         <h1 className="text-5xl md:text-6xl font-bold">
           Welcome to <br />
           Trustless Work

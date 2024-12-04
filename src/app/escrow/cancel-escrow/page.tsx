@@ -1,6 +1,6 @@
 "use client";
 
-import Bounded from "@/components/Bounded";
+import { Bounded } from "@/components/Bounded";
 import { CancelEscrowForm } from "@/components/modules/escrow/CancelEscrowForm";
 import WithAuthProtect from "@/constants/helpers/WithAuth";
 

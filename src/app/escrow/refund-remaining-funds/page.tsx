@@ -1,6 +1,6 @@
 "use client";
 
-import Bounded from "@/components/Bounded";
+import { Bounded } from "@/components/Bounded";
 import { RefundRemainingFundsForm } from "@/components/modules/escrow/RefundRemainingFundsForm";
 import WithAuthProtect from "@/constants/helpers/WithAuth";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import Bounded from "@/components/Bounded";
+import { Bounded } from "@/components/Bounded";
 import { InitializeEscrowForm } from "@/components/modules/escrow/InitializeEscrowForm";
 import Loader from "@/components/utils/Loader";
 import WithAuthProtect from "@/constants/helpers/WithAuth";
