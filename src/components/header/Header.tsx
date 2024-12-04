@@ -82,7 +82,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex flex-col md:flex-row w-full justify-between gap-5 container mx-auto p-4">
+    <header className="flex flex-col md:flex-row w-full justify-between gap-5 p-4 px-7">
       <div className="flex items-center relative w-full md:w-auto">
         <div
           className={cn(
@@ -96,13 +96,10 @@ const Header = () => {
               isMobile ? "absolute left-0" : "relative",
             )}
           />
-          <Link href="/" className="flex items-center">
-            <Image src="/logo.png" width={100} height={100} alt="logo" />
-          </Link>
         </div>
       </div>
 
-      <div className="flex mx-auto md:m-0 items-center gap-5">
+      <div className="flex justify-end md:mx-0 md:m-0 items-center gap-5">
         <ThemeToggle />
         <div className="flex items-center gap-4">
           {address ? (
@@ -114,7 +111,7 @@ const Header = () => {
                   </button>
                 </HoverCardTrigger>
                 <HoverCardContent className="w-80">
-                  <div className="flex items-start space-x-4">
+                  <div className="flex items-center space-x-4">
                     <LuWallet size={40} />
                     <div className="space-y-1">
                       <h4 className="text-sm font-semibold">{name}</h4>
