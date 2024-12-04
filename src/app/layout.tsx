@@ -39,9 +39,10 @@ export default function RootLayout({
             <AppSidebar />
             <div className="flex-1 flex flex-col w-full">
               <Header />
-              <main className="flex-1 w-full p-4 pt-20">
+              <main className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
                 <div className="w-full max-w-[1400px] mx-auto">{children}</div>
               </main>
+              <Footer />
             </div>
           </div>
           <Toaster />
