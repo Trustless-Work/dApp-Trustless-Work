@@ -3,7 +3,7 @@
 import { Bounded } from "@/components/Bounded";
 import { RefundRemainingFundsForm } from "@/components/modules/escrow/RefundRemainingFundsForm";
 import { WrapperForm } from "@/components/Wrappers";
-import WithAuthProtect from "@/constants/helpers/WithAuth";
+import WithAuthProtect from "@/helpers/WithAuth";
 
 const RefundRemainingFuns = () => {
   return (

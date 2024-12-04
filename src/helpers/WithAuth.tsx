@@ -1,21 +1,22 @@
 "use client";
-import { useEffect, ComponentType } from "react";
+
+import { useEffect, ComponentType, useState } from "react";
 import { redirect } from "next/navigation";
-import { useWalletStore } from "@/store/walletStore";
+import useLocalStorageUtils from "@/utils/hook/localStroage.hook";
 
 export default function WithAuthProtect<T extends JSX.IntrinsicAttributes>(
   Component: ComponentType<T>,
 ) {
   return function WithAuthProtect(props: T) {
-    const { address } = useWalletStore();
-
+    const [name] = useLocalStorageUtils("address-wallet", "");
     useEffect(() => {
-      if (!address) {
+      console.log();
+      if (!name.state.address) {
         redirect("/");
       }
     });
 
-    if (!address) {
+    if (!name.state.address) {
       return null;
     }
 

@@ -3,7 +3,7 @@
 import { Bounded } from "@/components/Bounded";
 import { CompleteEscrowForm } from "@/components/modules/escrow/CompleEscrowForm";
 import { WrapperForm } from "@/components/Wrappers";
-import WithAuthProtect from "@/constants/helpers/WithAuth";
+import WithAuthProtect from "@/helpers/WithAuth";
 
 const CompleteEscrow = () => {
   return (

@@ -34,19 +34,15 @@ export default function RootLayout({
       <body
         className={cn(geistSans.variable, geistMono.variable, "antialiased")}
       >
-        <SidebarProvider defaultOpen>
-          <div className="relative flex min-h-screen w-full">
-            <AppSidebar />
-            <div className="flex-1 flex flex-col w-full">
-              <Header />
-              <main className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
-                <div className="w-full max-w-[1400px] mx-auto">{children}</div>
-              </main>
-              <Footer />
-            </div>
+        <Header />
+        <div className="relative flex min-h-screen w-full">
+          <div className="flex-1 flex flex-col w-full">
+            <main className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
+              {children}
+            </main>
           </div>
-          <Toaster />
-        </SidebarProvider>
+        </div>
+        <Toaster />
       </body>
     </html>
   );

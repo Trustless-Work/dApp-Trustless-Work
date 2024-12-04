@@ -3,7 +3,7 @@
 import { Bounded } from "@/components/Bounded";
 import { GetEngagementForm } from "@/components/modules/escrow/GetEngagementForm";
 import { WrapperForm } from "@/components/Wrappers";
-import WithAuthProtect from "@/constants/helpers/WithAuth";
+import WithAuthProtect from "@/helpers/WithAuth";
 
 const GetEngagement = () => {
   return (

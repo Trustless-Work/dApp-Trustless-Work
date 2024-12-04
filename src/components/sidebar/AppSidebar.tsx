@@ -119,7 +119,7 @@ const SidebarContentSection = ({
       )}
 
       <SidebarGroup className="mt-0 pt-0">
-        <Collapsible defaultOpen>
+        <Collapsible defaultOpen className="group/collapsible">
           <CollapsibleTrigger className="flex w-full items-center p-2 group">
             <SidebarGroupLabel className="flex items-center gap-2 text-base w-full">
               <FaBook className="h-5 w-5 text-black dark:text-white" />
@@ -143,7 +143,6 @@ const SidebarContentSection = ({
                         className="flex items-center justify-between group"
                       >
                         <span>{link.title}</span>
-                        <FaExternalLinkAlt className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

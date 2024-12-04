@@ -4,7 +4,7 @@ import { Bounded } from "@/components/Bounded";
 import { InitializeEscrowForm } from "@/components/modules/escrow/InitializeEscrowForm";
 import Loader from "@/components/utils/Loader";
 import { WrapperForm } from "@/components/Wrappers";
-import WithAuthProtect from "@/constants/helpers/WithAuth";
+import WithAuthProtect from "@/helpers/WithAuth";
 import { useLoaderStore } from "@/store/utilsStore/store";
 
 const CreateEscrow = () => {

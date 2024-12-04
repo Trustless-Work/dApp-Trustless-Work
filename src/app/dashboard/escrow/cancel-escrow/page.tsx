@@ -3,7 +3,7 @@
 import { Bounded } from "@/components/Bounded";
 import { CancelEscrowForm } from "@/components/modules/escrow/CancelEscrowForm";
 import { WrapperForm } from "@/components/Wrappers";
-import WithAuthProtect from "@/constants/helpers/WithAuth";
+import WithAuthProtect from "@/helpers/WithAuth";
 
 const CancelEscrow = () => {
   return (
