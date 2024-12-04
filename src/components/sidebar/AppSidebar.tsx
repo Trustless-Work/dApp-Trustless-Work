@@ -74,7 +74,7 @@ const SidebarContentSection = ({
   <>
     <SidebarHeader className="border-b p-4" aria-label="Company Information">
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.png" alt="Trustless Work" width={50} height={50} />
           <div className="ml-2">
             <h2 className="text-xl font-semibold">Trustless Work</h2>
@@ -82,7 +82,7 @@ const SidebarContentSection = ({
               Escrow-as-a-service
             </p>
           </div>
-        </div>
+        </Link>
         <SidebarTrigger className="md:hidden" />
       </div>
     </SidebarHeader>
