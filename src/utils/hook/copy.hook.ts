@@ -3,11 +3,10 @@ import React from "react";
 
 export const useCopyUtils = () => {
   const [copySuccess, setCopySuccess] = React.useState(false);
-  const { address } = useWalletStore();
 
-  const copyAddress = async () => {
+  const copyText = async (text: string) => {
     try {
-      await navigator.clipboard.writeText(address);
+      await navigator.clipboard.writeText(text);
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 2000);
     } catch (error) {
@@ -15,5 +14,5 @@ export const useCopyUtils = () => {
     }
   };
 
-  return { copyAddress, setCopySuccess, copySuccess };
+  return { copyText, setCopySuccess, copySuccess };
 };

@@ -1,7 +1,4 @@
-"use client";
-
 import { ChevronRight, type LucideIcon } from "lucide-react";
-
 import {
   Collapsible,
   CollapsibleContent,
@@ -19,6 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import { IconType } from "react-icons/lib";
 import Link from "next/link";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 export function NavMain({
   items,
@@ -28,9 +26,11 @@ export function NavMain({
     url: string;
     icon?: IconType | LucideIcon;
     isActive?: boolean;
+    isExternal?: boolean;
     items?: {
       title: string;
       url: string;
+      isExternal?: boolean;
     }[];
   }[];
 }) {
@@ -58,7 +58,15 @@ export function NavMain({
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <Link href={`${subItem.url}`}>
+                        <Link
+                          href={subItem.url}
+                          target={subItem.isExternal ? "_blank" : "_self"}
+                          rel={
+                            subItem.isExternal
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                        >
                           <span>{subItem.title}</span>
                         </Link>
                       </SidebarMenuSubButton>
