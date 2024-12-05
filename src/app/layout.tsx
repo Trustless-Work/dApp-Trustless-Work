@@ -33,9 +33,9 @@ export default function RootLayout({
       >
         <div className="relative flex min-h-screen w-full">
           <div className="flex-1 flex flex-col w-full">
-            <main className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
+            <div className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
               {children}
-            </main>
+            </div>
           </div>
         </div>
         <Toaster />
