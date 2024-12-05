@@ -13,17 +13,28 @@ import {
 } from "../ui/breadcrumb";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { usePathname } from "next/navigation";
+import { SidebarTrigger } from "../ui/sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 const Header = () => {
   const { handleConnect, handleDisconnect } = useWalletUtils();
   const { address } = useWalletStore();
   const pathName = usePathname();
+  const isMobile = useIsMobile();
 
   return (
     <header className="flex flex-1 h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mb-4">
       <div className="flex w-full justify-between items-center gap-2 px-4">
         {pathName !== "/" && address ? (
           <>
+            <SidebarTrigger
+              className={cn(
+                "h-10 w-10 z-0",
+                isMobile ? "absolute left-0" : "relative",
+              )}
+            />
+
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">

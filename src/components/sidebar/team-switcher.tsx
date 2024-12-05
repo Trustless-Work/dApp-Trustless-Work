@@ -10,8 +10,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function TeamSwitcher({
   teams,
@@ -31,7 +35,7 @@ export function TeamSwitcher({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground bg-red"
             >
               <Image
                 width={40}
@@ -45,6 +49,7 @@ export function TeamSwitcher({
                 </span>
                 <span className="truncate text-xs">{activeTeam.plan}</span>
               </div>
+
               {/* Here could be the collapsable bottom */}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
