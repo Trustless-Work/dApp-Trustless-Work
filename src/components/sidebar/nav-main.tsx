@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/sidebar";
 import { IconType } from "react-icons/lib";
 import Link from "next/link";
-import { FaExternalLinkAlt } from "react-icons/fa";
 
 export function NavMain({
   items,

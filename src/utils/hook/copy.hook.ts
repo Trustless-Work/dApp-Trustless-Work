@@ -1,4 +1,3 @@
-import { useWalletStore } from "@/store/walletStore";
 import React from "react";
 
 export const useCopyUtils = () => {
