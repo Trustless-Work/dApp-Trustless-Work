@@ -14,6 +14,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 
+const basePath = "/dashboard/escrow";
+
 const data = {
   teams: [
     {
@@ -29,19 +31,19 @@ const data = {
       icon: FaStackOverflow,
       isActive: true,
       items: [
-        { title: "Initialize Escrow", url: "initialize-escrow" },
-        { title: "Fund Escrow", url: "fund-escrow" },
-        { title: "Complete Escrow", url: "complete-escrow" },
+        { title: "Initialize Escrow", url: `${basePath}/initialize-escrow` },
+        { title: "Fund Escrow", url: `${basePath}/fund-escrow` },
+        { title: "Complete Escrow", url: `${basePath}/complete-escrow` },
         {
           title: "Claim Escrow Earnings",
-          url: "claim-escrow-earnings",
+          url: `${basePath}/claim-escrow-earnings`,
         },
-        { title: "Cancel Escrow", url: "cancel-escrow" },
+        { title: "Cancel Escrow", url: `${basePath}/cancel-escrow` },
         {
           title: "Refund Remaining Funds",
-          url: "refund-remaining-funds",
+          url: `${basePath}/refund-remaining-funds`,
         },
-        { title: "Get Engagement", url: "get-engagement" },
+        { title: "Get Engagement", url: `${basePath}/get-engagement` },
       ],
     },
     {
