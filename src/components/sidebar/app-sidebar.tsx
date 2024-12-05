@@ -6,6 +6,7 @@ import { FaStackOverflow } from "react-icons/fa";
 import { NavMain } from "@/components/sidebar/nav-main";
 import { NavUser } from "@/components/sidebar/nav-user";
 import { TeamSwitcher } from "@/components/sidebar/team-switcher";
+import { LuLayoutDashboard } from "react-icons/lu";
 import {
   Sidebar,
   SidebarContent,
@@ -26,10 +27,18 @@ const data = {
   ],
   navMain: [
     {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LuLayoutDashboard,
+      isActive: true,
+      isExpandable: false,
+    },
+    {
       title: "Escrows",
       url: "#",
       icon: FaStackOverflow,
-      isActive: true,
+      isActive: false,
+      isExpandable: true,
       items: [
         { title: "Initialize Escrow", url: `${basePath}/initialize-escrow` },
         { title: "Fund Escrow", url: `${basePath}/fund-escrow` },
@@ -50,6 +59,7 @@ const data = {
       title: "Documentation",
       url: "#",
       icon: BookOpen,
+      isExpandable: true,
       items: [
         {
           title: "API Documentation",
