@@ -13,6 +13,7 @@ import {
   Settings2,
   SquareTerminal,
 } from "lucide-react";
+import { FaStackOverflow } from "react-icons/fa";
 
 import { NavMain } from "@/components/sidebar/nav-main";
 import { NavProjects } from "@/components/sidebar/nav-projects";
@@ -35,40 +36,31 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
+      name: "Trustless Work",
+      logo: "/logo.png",
+      plan: "Escrows as a service",
     },
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Escrows",
       url: "#",
-      icon: SquareTerminal,
+      icon: FaStackOverflow,
       isActive: true,
       items: [
+        { title: "Initialize Escrow", url: "initialize-escrow" },
+        { title: "Fund Escrow", url: "fund-escrow" },
+        { title: "Complete Escrow", url: "complete-escrow" },
         {
-          title: "History",
-          url: "#",
+          title: "Claim Escrow Earnings",
+          url: "claim-escrow-earnings",
         },
+        { title: "Cancel Escrow", url: "cancel-escrow" },
         {
-          title: "Starred",
-          url: "#",
+          title: "Refund Remaining Funds",
+          url: "refund-remaining-funds",
         },
-        {
-          title: "Settings",
-          url: "#",
-        },
+        { title: "Get Engagement", url: "get-engagement" },
       ],
     },
     {

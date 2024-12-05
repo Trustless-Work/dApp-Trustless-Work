@@ -31,7 +31,6 @@ export default function RootLayout({
       <body
         className={cn(geistSans.variable, geistMono.variable, "antialiased")}
       >
-        <Header />
         <div className="relative flex min-h-screen w-full">
           <div className="flex-1 flex flex-col w-full">
             <main className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
