@@ -41,7 +41,7 @@ const Header = () => {
               )}
             />
 
-            <Breadcrumb>
+            <Breadcrumb className="hidden md:block">
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
