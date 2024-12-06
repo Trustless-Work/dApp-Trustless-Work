@@ -111,6 +111,19 @@ const Footer: React.FC = () => {
                 height={40}
               />
             </Link>
+            <Link
+              href="https://t.me/+kmr8tGegxLU0NTA5"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80"
+            >
+              <Image
+                src="/assets/social-networks/telegram.svg"
+                alt="Telegram"
+                width={37}
+                height={37}
+              />
+            </Link>
           </div>
         </div>
       </div>

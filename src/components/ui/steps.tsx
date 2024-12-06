@@ -43,11 +43,11 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
     return (
       <div className={cn("grid grid-cols-1 gap-6", className)} {...props}>
         <div className="space-y-4">
-          {items.map((step, index) => {
-            const stepNumber = index + 1;
-            const isActive = stepNumber === currentStep;
-            const isCompleted = isStepCompleted(stepNumber);
-            const currentProgress = progressStates[index];
+          {items.map((step: StepItem, index: number) => {
+            const stepNumber: number = index + 1;
+            const isActive: boolean = stepNumber === currentStep;
+            const isCompleted: boolean = isStepCompleted(stepNumber);
+            const currentProgress: number = progressStates[index];
 
             return (
               <div
@@ -87,6 +87,7 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
                 </button>
 
                 <div className="flex-1 flex items-start gap-6">
+                  {/* Retroalimentation Cards */}
                   <div className="flex-1 bg-zinc-100/80 dark:bg-zinc-900/80 rounded-lg px-6 py-4">
                     <h3
                       className={cn(
@@ -105,10 +106,11 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
                     )}
                   </div>
 
+                  {/* Horizontal Steps */}
                   <div className="flex items-center pt-2">
-                    {Array.from({ length: 5 }).map((_, nodeIndex) => {
-                      const progressNumber = nodeIndex + 1;
-                      const isProgressActive =
+                    {Array.from({ length: 5 }).map((_, nodeIndex: number) => {
+                      const progressNumber: number = nodeIndex + 1;
+                      const isProgressActive: boolean =
                         progressNumber <= currentProgress;
 
                       return (
