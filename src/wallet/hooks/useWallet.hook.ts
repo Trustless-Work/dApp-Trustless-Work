@@ -1,7 +1,6 @@
 import { ISupportedWallet } from "@creit.tech/stellar-wallets-kit";
 import { useWalletStore } from "@/store/walletStore";
 import { kit } from "../walletKit";
-import { redirect } from "next/navigation";
 
 export const useWallet = () => {
   const { connectWalletStore, disconnectWalletStore } = useWalletStore();
@@ -23,7 +22,6 @@ export const useWallet = () => {
   const disconnectWallet = async () => {
     await kit.disconnect();
     disconnectWalletStore();
-    redirect("/");
   };
 
   return {
