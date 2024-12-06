@@ -40,7 +40,7 @@ export function NavUser() {
   useEffect(() => {
     if (address) router.push("/dashboard");
     else router.push("/");
-  }, [address, handleDisconnect]);
+  }, []);
 
   const user = {
     name: "Chris Nager",
