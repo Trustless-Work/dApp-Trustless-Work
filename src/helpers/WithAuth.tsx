@@ -9,13 +9,14 @@ export default function WithAuthProtect<T extends JSX.IntrinsicAttributes>(
 ) {
   return function WithAuthProtect(props: T) {
     const [name] = useLocalStorageUtils("address-wallet", "");
+
     useEffect(() => {
-      if (!name.state.address) {
+      if (!name || !name.state || !name.state.address) {
         redirect("/");
       }
-    });
+    }, [name]);
 
-    if (!name.state.address) {
+    if (!name || !name.state || !name.state.address) {
       return null;
     }
 
