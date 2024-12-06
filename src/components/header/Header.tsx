@@ -1,7 +1,6 @@
 "use client";
 
 import { useWalletStore } from "@/store/walletStore";
-import * as React from "react";
 import ThemeToggle from "./ThemeToggle";
 import {
   Breadcrumb,
@@ -12,16 +11,23 @@ import {
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { SidebarTrigger } from "../ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 const Header = () => {
   const { handleConnect, handleDisconnect } = useWalletUtils();
   const { address } = useWalletStore();
   const pathName = usePathname();
   const isMobile = useIsMobile();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (address) router.push("/dashboard");
+    else router.push("/");
+  }, []);
 
   return (
     <header className="flex flex-1 h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mb-4">

@@ -26,6 +26,8 @@ import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -33,6 +35,12 @@ export function NavUser() {
   const { formatAddress } = useFormatUtils();
   const { copyText, copySuccess } = useCopyUtils();
   const { handleDisconnect } = useWalletUtils();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (address) router.push("/dashboard");
+    else router.push("/");
+  }, [address, handleDisconnect]);
 
   const user = {
     name: "Chris Nager",

@@ -2,12 +2,21 @@
 
 import { Bounded } from "@/components/Bounded";
 import ThemeToggle from "@/components/header/ThemeToggle";
+import { useToast } from "@/hooks/use-toast";
 import { useWalletStore } from "@/store/walletStore";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
   const { handleConnect, handleDisconnect } = useWalletUtils();
   const { address } = useWalletStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (address) router.push("/dashboard");
+    else router.push("/");
+  }, [address, handleConnect, handleDisconnect]);
 
   return (
     <>
