@@ -2,7 +2,6 @@
 
 import { Bounded } from "@/components/Bounded";
 import ThemeToggle from "@/components/header/ThemeToggle";
-import { useToast } from "@/hooks/use-toast";
 import { useWalletStore } from "@/store/walletStore";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { useRouter } from "next/navigation";
