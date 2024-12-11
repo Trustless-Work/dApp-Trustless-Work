@@ -94,6 +94,7 @@ To use this project, you must have one of the following wallets installed:
 - **Freighter**
 - **Albedo**
 - **xBull**
+- **LOBSTR**
 
 These wallets are required to interact with the platform.
 
