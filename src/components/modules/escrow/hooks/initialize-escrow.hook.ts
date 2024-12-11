@@ -14,17 +14,26 @@ const formSchema = z.object({
   client: z.string().min(1, {
     message: "Client is required.",
   }),
+  engagementId: z.string().min(1, {
+    message: "Engagement is required.",
+  }),
   serviceProvider: z.string().min(1, {
     message: "Service provider is required.",
   }),
   platformAddress: z.string().min(1, {
     message: "Platform address is required.",
   }),
+  platformFee: z.string().min(1, {
+    message: "Platform fee is required.",
+  }),
   amount: z.string().min(1, {
     message: "Amount must be greater than 0.",
   }),
   releaseSigner: z.string().min(1, {
     message: "Release signer is required.",
+  }),
+  disputeResolver: z.string().min(1, {
+    message: "Dispute resolver is required.",
   }),
   milestones: z
     .array(
@@ -49,10 +58,13 @@ export const useInitializeEscrowHook = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       client: "",
+      engagementId: "",
       serviceProvider: "",
       platformAddress: "",
+      platformFee: "",
       amount: "",
       releaseSigner: "",
+      disputeResolver: "",
       milestones: [{ description: "", status: "" }],
     },
   });
@@ -78,8 +90,6 @@ export const useInitializeEscrowHook = () => {
       ...payload,
       signer: address,
     };
-
-    console.log(payloadSubmit);
 
     setIsLoading(true);
 

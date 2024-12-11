@@ -60,6 +60,20 @@ export function InitializeEscrowForm() {
 
         <FormField
           control={form.control}
+          name="engagementId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Engagement</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter identifier" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="serviceProvider"
           render={({ field }) => (
             <FormItem>
@@ -80,6 +94,20 @@ export function InitializeEscrowForm() {
               <FormLabel>Platform Address</FormLabel>
               <FormControl>
                 <Input placeholder="Platform Public Key" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="platformFee"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Platform Fee</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter platform fee" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -112,6 +140,20 @@ export function InitializeEscrowForm() {
               <FormLabel>Release Signer</FormLabel>
               <FormControl>
                 <Input placeholder="Enter the release signer" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="disputeResolver"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Dispute Resolver</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter the dispute resolver" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
