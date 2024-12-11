@@ -88,7 +88,7 @@ export const useInitializeEscrowHook = () => {
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     const payloadSubmit = {
       ...payload,
-      signer: address,
+      releaseSigner: address,
     };
 
     setIsLoading(true);
