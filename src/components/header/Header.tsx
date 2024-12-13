@@ -29,6 +29,30 @@ const Header = () => {
     else router.push("/");
   }, []);
 
+  const getBreadCrumbs = () => {
+    const crumbs = pathName.split("/").filter(Boolean);
+
+    return crumbs.map((crumb, index) => {
+      const href = "/" + crumbs.slice(0, index + 1).join("/");
+      const label = crumb
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+
+      return (
+        <BreadcrumbItem key={href}>
+          {index === crumbs.length - 1 ? (
+            <BreadcrumbPage>{label}</BreadcrumbPage>
+          ) : (
+            <>
+              <BreadcrumbLink href={href}>{label}</BreadcrumbLink>
+              <BreadcrumbSeparator />
+            </>
+          )}
+        </BreadcrumbItem>
+      );
+    });
+  };
+
   return (
     <header className="flex flex-1 h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mb-4">
       <div className="flex w-full justify-between items-center gap-2 px-4">
@@ -43,13 +67,11 @@ const Header = () => {
 
             <Breadcrumb className="hidden md:block">
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Example</BreadcrumbPage>
+                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                  <BreadcrumbSeparator />
                 </BreadcrumbItem>
+                {getBreadCrumbs()}
               </BreadcrumbList>
             </Breadcrumb>
 
