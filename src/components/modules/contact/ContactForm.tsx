@@ -19,8 +19,8 @@ export default function ContactForm() {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold">Complete escrow</CardTitle>
-        <CardDescription>Fill in the details below to fund an escrow.</CardDescription>
+        <CardTitle className="text-3xl font-bold">Request an API Key.</CardTitle>
+        <CardDescription>Fill out the form below to request an API key without the need to connect your wallet.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
