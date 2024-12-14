@@ -7,8 +7,6 @@ export default function RequestApyKeyPage() {
     <div>
        <Bounded center={true}>
           <WrapperForm>
-            <h1 className="text-4xl font-bold">Request</h1>
-            <h2>Fill in the details below to fund an escrow.</h2>
             <ContactForm />
           </WrapperForm>
         </Bounded>
