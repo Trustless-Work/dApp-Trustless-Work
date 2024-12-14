@@ -5,24 +5,21 @@ import ThemeToggle from "@/components/header/ThemeToggle";
 import { useWalletStore } from "@/store/walletStore";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Home() {
   const { handleConnect, handleDisconnect } = useWalletUtils();
   const { address } = useWalletStore();
   const router = useRouter();
-  const [navigating, setNavigating] = useState(false);
 
   useEffect(() => {
-    if (!navigating) {
-      if (address) router.push("/dashboard");
-      else router.push("/");
+    if (address) {
+      router.push("/dashboard");
     }
-  }, [address, handleConnect, handleDisconnect, navigating]);
-  
+  }, [address, router]);
+
   const handleRequestApiKey = () => {
-    setNavigating(true);
-    router.push('/request-api-key');
+    router.push("/request-api-key");
   };
 
   return (
