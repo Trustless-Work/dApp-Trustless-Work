@@ -5,17 +5,25 @@ import ThemeToggle from "@/components/header/ThemeToggle";
 import { useWalletStore } from "@/store/walletStore";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { handleConnect, handleDisconnect } = useWalletUtils();
   const { address } = useWalletStore();
   const router = useRouter();
+  const [navigating, setNavigating] = useState(false);
 
   useEffect(() => {
-    if (address) router.push("/dashboard");
-    else router.push("/");
-  }, [address, handleConnect, handleDisconnect]);
+    if (!navigating) {
+      if (address) router.push("/dashboard");
+      else router.push("/");
+    }
+  }, [address, handleConnect, handleDisconnect, navigating]);
+  
+  const handleRequestApiKey = () => {
+    setNavigating(true);
+    router.push('/request-api-key');
+  };
 
   return (
     <>
@@ -42,6 +50,14 @@ export default function Home() {
               className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
             >
               Connect
+            </button>
+
+            <button
+              type="button"
+              onClick={handleRequestApiKey}
+              className="text-black bg-gradient-to-br from-purple-400 to-white hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
+            >
+              Request an API Key
             </button>
           </div>
         )}
