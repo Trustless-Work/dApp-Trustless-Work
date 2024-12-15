@@ -17,7 +17,7 @@ export default function ContactForm() {
   const { form, isLoading, onSubmit } = useContactForm()
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-2xl mx-auto bg-muted/50" >
       <CardHeader>
         <CardTitle className="text-3xl font-bold">Request an API Key.</CardTitle>
         <CardDescription>Fill out the form below to request an API key without the need to connect your wallet.</CardDescription>
@@ -75,7 +75,7 @@ export default function ContactForm() {
                   <FormControl>
                     <select
                       {...field}
-                      className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-muted/50"
                     >
                       <option value="">Select type</option>
                       <option value="company">Company</option>
@@ -96,7 +96,7 @@ export default function ContactForm() {
                     <textarea
                       {...field}
                       placeholder="Enter description"
-                      className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+                      className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] bg-muted/50"
                     />
                   </FormControl>
                   <FormMessage />
