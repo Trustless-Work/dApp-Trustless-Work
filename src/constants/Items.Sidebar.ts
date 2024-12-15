@@ -1,6 +1,7 @@
 import { LuLayoutDashboard } from "react-icons/lu";
 import { BookOpen } from "lucide-react";
 import { FaStackOverflow } from "react-icons/fa";
+import { MdOutlineBugReport } from "react-icons/md";
 
 export const ItemsSidebar = {
   teams: [
@@ -60,6 +61,13 @@ export const ItemsSidebar = {
           isExternal: true,
         },
       ],
+    },
+    {
+      title: "Report an API Issue",
+      url: "/report-issue",
+      icon: MdOutlineBugReport,
+      isActive: true,
+      isExpandable: false,
     },
   ],
 };
