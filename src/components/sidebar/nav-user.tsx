@@ -126,7 +126,7 @@ export function NavUser() {
                 </DropdownMenuItem>
               </Link>
 
-              <Link href="/settings">
+              <Link href="/dashboard/settings">
                 <DropdownMenuItem>
                   <Bell />
                   Settings

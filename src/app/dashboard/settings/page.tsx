@@ -16,12 +16,14 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { WrapperForm } from "@/components/Wrappers";
+import { Bounded } from "@/components/Bounded";
+import { Textarea } from "@/components/ui/textArea";
 
 type SettingsFormValues = {
   identification: string;
-  name: string;
-  lastName: string;
+  username: string;
+  email: string;
+  bio: string;
   saveEscrow: boolean;
 };
 
@@ -30,8 +32,9 @@ export default function SettingsPage() {
   const form = useForm<SettingsFormValues>({
     defaultValues: {
       identification: "",
-      name: "",
-      lastName: "",
+      username: "",
+      email: "",
+      bio: "",
       saveEscrow: false,
     },
   });
@@ -57,13 +60,13 @@ export default function SettingsPage() {
   };
 
   return (
-    <WrapperForm>
+    <Bounded>
       <div>
-        <h1 className="text-3xl font-bold mb-4">Settings</h1>
-        <div className="mb-6">
-          <h2 className="text-lg font-medium">Theme</h2>
+        <section className="mb-12 border-b pb-8">
+          <h1 className="text-3xl font-bold mb-4">Appearance</h1>
           <p className="text-sm text-gray-500 mb-4">
-            Select the theme for the dashboard.
+            Customize the appearance of the app. Automatically switch between
+            day and night themes.
           </p>
           <div className="flex gap-4">
             <div
@@ -100,58 +103,88 @@ export default function SettingsPage() {
               </p>
             </div>
           </div>
-        </div>
+        </section>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="identification"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Identification</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your identification" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <section>
+          <h1 className="text-3xl font-bold mb-4">Profile</h1>
+          <p className="text-sm text-gray-500 mb-4">
+            This is how others will see you on the site.
+          </p>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="identification"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Identification</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your identification"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your username" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your last name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Select a verified email to display"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <Button className="w-full md:w-1/4" type="submit">
-              Save Settings
-            </Button>
-          </form>
-        </Form>
+              <FormField
+                control={form.control}
+                name="bio"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Bio</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="I own a computer."
+                        {...field}
+                        className="resize-none"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button className="w-full md:w-1/4" type="submit">
+                Save Settings
+              </Button>
+            </form>
+          </Form>
+        </section>
       </div>
-    </WrapperForm>
+    </Bounded>
   );
 }
