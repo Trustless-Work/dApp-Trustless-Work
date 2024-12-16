@@ -104,7 +104,7 @@ export default function ContactForm() {
               )}
             />
             <Button className="w-full" size="lg" type="submit" disabled={isLoading}>
-              {isLoading ? "Processing..." : "Fund Escrow"}
+              {isLoading ? "Processing..." : "Submit Request"}
             </Button>
           </form>
         </Form>
