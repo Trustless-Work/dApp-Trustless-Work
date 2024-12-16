@@ -45,7 +45,7 @@ export const ItemsSidebar = {
     },
     {
       title: "Request API key",
-      url: "/request-api-key",
+      url: "/dashboard/request-api-key",
       icon: FaWpforms,
       isActive: true,
       isExpandable: false,
