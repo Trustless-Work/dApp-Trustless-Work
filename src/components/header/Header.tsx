@@ -25,9 +25,12 @@ const Header = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (address) router.push("/dashboard");
-    else router.push("/");
-  }, []);
+    if (window.location.pathname === "/") {
+      if (address) router.push("/dashboard");
+      else router.push("/");
+    }
+  }, [address, router]);
+
 
   const getBreadCrumbs = () => {
     const crumbs = pathName.split("/").filter(Boolean);

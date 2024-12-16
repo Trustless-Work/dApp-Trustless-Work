@@ -13,9 +13,14 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (address) router.push("/dashboard");
-    else router.push("/");
-  }, [address, handleConnect, handleDisconnect]);
+    if (address) {
+      router.push("/dashboard");
+    }
+  }, [address, router]);
+
+  const handleRequestApiKey = () => {
+    router.push("/dashboard/request-api-key");
+  };
 
   return (
     <>
@@ -42,6 +47,14 @@ export default function Home() {
               className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
             >
               Connect
+            </button>
+
+            <button
+              type="button"
+              onClick={handleRequestApiKey}
+              className="text-black bg-gradient-to-br from-purple-400 to-white hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
+            >
+              Request an API Key
             </button>
           </div>
         )}
