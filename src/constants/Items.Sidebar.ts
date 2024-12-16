@@ -1,6 +1,8 @@
 import { LuLayoutDashboard } from "react-icons/lu";
 import { BookOpen } from "lucide-react";
 import { FaStackOverflow } from "react-icons/fa";
+import { title } from "process";
+import { url } from "inspector";
 
 export const ItemsSidebar = {
   teams: [
@@ -41,6 +43,7 @@ export const ItemsSidebar = {
           url: "/dashboard/escrow/refund-remaining-funds",
         },
         { title: "Get Engagement", url: "/dashboard/escrow/get-engagement" },
+        {title: "My Escrows", url: "/dashboard/escrow/my-escrows"}
       ],
     },
     {
