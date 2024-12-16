@@ -69,7 +69,7 @@ export const useContactForm = () => {
       console.log("Document successfully added!");
       toast({
         title: "Success",
-        description: "Your escrow has been funded successfully.",
+        description: "Your API key request has been submitted successfully.",
       })
       form.reset()
     } catch (error) {
