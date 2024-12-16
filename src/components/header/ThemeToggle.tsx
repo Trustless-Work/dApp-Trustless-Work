@@ -1,6 +1,6 @@
 import { MdOutlineLightMode } from "react-icons/md";
 import { LuMoonStar } from "react-icons/lu";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useThemeStore } from "@/store/themeStore/store";
 
 export default function ThemeToggle() {

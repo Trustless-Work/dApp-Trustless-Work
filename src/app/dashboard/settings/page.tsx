@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Bounded } from "@/components/Bounded";
 import { WrapperForm } from "@/components/Wrappers";
 
 type SettingsFormValues = {
