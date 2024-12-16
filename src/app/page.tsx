@@ -19,7 +19,7 @@ export default function Home() {
   }, [address, router]);
 
   const handleRequestApiKey = () => {
-    router.push("/request-api-key");
+    router.push("/dashboard/request-api-key");
   };
 
   return (
