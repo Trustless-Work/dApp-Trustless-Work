@@ -25,7 +25,6 @@ type SettingsFormValues = {
 
 export default function SettingsPage() {
   const { theme, toggleTheme } = useThemeStore();
-
   const form = useForm<SettingsFormValues>({
     defaultValues: {
       identification: "",
