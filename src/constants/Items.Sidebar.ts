@@ -1,8 +1,7 @@
 import { LuLayoutDashboard } from "react-icons/lu";
 import { BookOpen } from "lucide-react";
 import { FaStackOverflow } from "react-icons/fa";
-import { title } from "process";
-import { url } from "inspector";
+import { FaStackOverflow, FaWpforms } from "react-icons/fa";
 
 export const ItemsSidebar = {
   teams: [
@@ -45,6 +44,13 @@ export const ItemsSidebar = {
         { title: "Get Engagement", url: "/dashboard/escrow/get-engagement" },
         {title: "My Escrows", url: "/dashboard/escrow/my-escrows"}
       ],
+    },
+    {
+      title: "Request API key",
+      url: "/dashboard/request-api-key",
+      icon: FaWpforms,
+      isActive: true,
+      isExpandable: false,
     },
     {
       title: "Documentation",
