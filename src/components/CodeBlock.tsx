@@ -10,7 +10,7 @@ const CodeBlock = ({ code }: { code: string }) => (
       borderRadius: "8px",
       padding: "1rem",
       color: "#FFFFFF",
-      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)", 
+      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
     }}
   >
     {code}
