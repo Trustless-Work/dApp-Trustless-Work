@@ -13,23 +13,21 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (address) router.push("/dashboard");
-    else router.push("/");
-  }, [address, handleConnect, handleDisconnect]);
+    if (address) {
+      router.push("/dashboard");
+    }
+  }, [address, router]);
+
+  const handleRequestApiKey = () => {
+    router.push("/dashboard/request-api-key");
+  };
 
   return (
     <>
       <div className="flex w-full justify-between items-center gap-2 px-4">
-        <div className="flex gap-5 ml-auto">
-          <button
-            type="button"
-            onClick={() => router.push("/report-issue")}
-            className="text-blue-500 border border-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 rounded-lg text-sm px-5 py-3 text-center"
-          >
-            Report Issue
-          </button>
-          {address ? (
-            <>
+        {address ? (
+          <>
+            <div className="flex gap-5 ml-auto">
               <ThemeToggle />
               <button
                 type="button"
@@ -38,20 +36,35 @@ export default function Home() {
               >
                 Disconnect
               </button>
-            </>
-          ) : (
-            <>
-              <ThemeToggle />
-              <button
-                type="button"
-                onClick={handleConnect}
-                className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
-              >
-                Connect
-              </button>
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        ) : (
+          <div className="flex gap-5 ml-auto">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={handleConnect}
+              className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
+            >
+              Connect
+            </button>
+
+            <button
+              type="button"
+              onClick={handleRequestApiKey}
+              className="text-black bg-gradient-to-br from-purple-400 to-white hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-3 text-center"
+            >
+              Request an API Key
+            </button>
+            <button
+              type="button"
+              onClick={() => router.push("/report-issue")}
+              className="text-blue-500 border border-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 rounded-lg text-sm px-5 py-3 text-center"
+            >
+              Report Issue
+            </button>
+          </div>
+        )}
       </div>
       <Bounded center={true} className="mt-20">
         <div className="flex flex-col sm:flex-row justify-center items-center w-full h-full mt-0 md:mt-20 gap-10">
