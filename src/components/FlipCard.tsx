@@ -22,21 +22,23 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
         {/* Front Side */}
         <div className="absolute w-full h-full backface-hidden p-6">
           {children}
-          <div
-            className="absolute top-2 right-2 cursor-pointer p-2 bg-white text-black rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300"
-            onClick={() => setIsFlipped(true)}
-          >
-            <TbDeviceDesktopCode size={24} />
-          </div>
+          {!isFlipped && (
+            <div
+              className="absolute top-2 right-2 cursor-pointer p-2 bg-white text-black dark:bg-gray-900 dark:text-white rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-all duration-300"
+              onClick={() => setIsFlipped(true)}
+            >
+              <TbDeviceDesktopCode size={24} />
+            </div>
+          )}
         </div>
 
         {/* Back Side */}
-        <div className="absolute w-full h-full backface-hidden flex items-center justify-center p-6 bg-[#F9F9FA] text-white rotate-y-180">
-          <div className="w-[80%] max-w-[600px] p-4 ">
+        <div className="absolute w-full h-full backface-hidden flex items-center justify-center p-6 text-white rotate-y-180">
+          <div className="w-[80%] max-w-[600px] p-4">
             <CodeBlock code={codeExample} />
           </div>
           <div
-            className="absolute top-2 right-2 cursor-pointer p-2 bg-white text-black rounded-full shadow-lg hover:bg-gray-100 transition-all duration-300"
+            className="absolute top-2 right-2 cursor-pointer p-2 bg-white text-black dark:bg-gray-900 dark:text-white rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-all duration-300"
             onClick={() => setIsFlipped(false)}
           >
             <LuSquareUserRound size={24} />
