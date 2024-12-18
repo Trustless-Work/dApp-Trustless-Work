@@ -4,11 +4,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { useWalletStore } from "@/store/walletStore";
-import { useWalletUtils } from "@/utils/hook/wallet.hook";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const useHeader = () => {
