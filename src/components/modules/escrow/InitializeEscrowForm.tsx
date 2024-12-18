@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/command";
 import { statusOptions } from "@/constants/escrow/StatusOptions";
 import { cn } from "@/lib/utils";
+import { TooltipInfo } from "./EscrowFormField";
 
 export function InitializeEscrowForm() {
   const {
@@ -49,7 +50,10 @@ export function InitializeEscrowForm() {
           name="client"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Client</FormLabel>
+              <FormLabel className="flex items-center">
+                Client
+                <TooltipInfo content="Address of the client initiating the escrow." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Alice Address" {...field} />
               </FormControl>
@@ -63,7 +67,10 @@ export function InitializeEscrowForm() {
           name="engagementId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Engagement</FormLabel>
+              <FormLabel className="flex items-center">
+                Engagement
+                <TooltipInfo content="Unique identifier for this escrow engagement." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter identifier" {...field} />
               </FormControl>
@@ -77,7 +84,10 @@ export function InitializeEscrowForm() {
           name="serviceProvider"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Service Provider</FormLabel>
+              <FormLabel className="flex items-center">
+                Service Provider
+                <TooltipInfo content="Address of the service provider for this escrow." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Bob Address" {...field} />
               </FormControl>
@@ -91,7 +101,10 @@ export function InitializeEscrowForm() {
           name="platformAddress"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Platform Address</FormLabel>
+              <FormLabel className="flex items-center">
+                Platform Address
+                <TooltipInfo content="Public key of the platform managing the escrow." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Platform Public Key" {...field} />
               </FormControl>
@@ -105,7 +118,10 @@ export function InitializeEscrowForm() {
           name="platformFee"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Platform Fee</FormLabel>
+              <FormLabel className="flex items-center">
+                Platform Fee
+                <TooltipInfo content="Fee charged by the platform for this escrow." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter platform fee" {...field} />
               </FormControl>
@@ -119,7 +135,10 @@ export function InitializeEscrowForm() {
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel className="flex items-center">
+                Amount
+                <TooltipInfo content="Total amount to be held in escrow." />
+              </FormLabel>
               <FormControl>
                 <Input
                   type="string"
@@ -137,7 +156,10 @@ export function InitializeEscrowForm() {
           name="releaseSigner"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Release Signer</FormLabel>
+              <FormLabel className="flex items-center">
+                Release Signer
+                <TooltipInfo content="Entity authorized to release funds from escrow." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter the release signer" {...field} />
               </FormControl>
@@ -151,7 +173,10 @@ export function InitializeEscrowForm() {
           name="disputeResolver"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Dispute Resolver</FormLabel>
+              <FormLabel className="flex items-center">
+                Dispute Resolver
+                <TooltipInfo content="Entity responsible for resolving disputes." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter the dispute resolver" {...field} />
               </FormControl>
@@ -161,7 +186,10 @@ export function InitializeEscrowForm() {
         />
 
         <div className="space-y-4">
-          <FormLabel>Milestones</FormLabel>
+          <FormLabel className="flex items-center">
+            Milestones
+            <TooltipInfo content="Key stages or deliverables for the escrow." />
+          </FormLabel>
           {milestones.map((milestone, index) => (
             <div key={index} className="flex items-center space-x-4">
               <Input
