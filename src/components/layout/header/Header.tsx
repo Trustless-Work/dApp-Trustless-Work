@@ -1,60 +1,23 @@
 "use client";
 
-import { useWalletStore } from "@/store/walletStore";
 import ThemeToggle from "./ThemeToggle";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../../ui/breadcrumb";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
-import { usePathname, useRouter } from "next/navigation";
 import { SidebarTrigger } from "../../ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { useEffect } from "react";
+import useHeader from "./hooks/header.hook";
 
 const Header = () => {
   const { handleConnect, handleDisconnect } = useWalletUtils();
-  const { address } = useWalletStore();
-  const pathName = usePathname();
   const isMobile = useIsMobile();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!address) {
-      router.push("/");
-    } else if (pathName === "/") {
-      router.push("/dashboard");
-    }
-  }, [address, pathName, router]);
-
-  const getBreadCrumbs = () => {
-    const crumbs = pathName.split("/").filter(Boolean);
-
-    return crumbs.map((crumb, index) => {
-      const href = "/" + crumbs.slice(0, index + 1).join("/");
-      const label = crumb
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (char) => char.toUpperCase());
-
-      return (
-        <BreadcrumbItem key={href}>
-          {index === crumbs.length - 1 ? (
-            <BreadcrumbPage>{label}</BreadcrumbPage>
-          ) : (
-            <>
-              <BreadcrumbLink href={href}>{label}</BreadcrumbLink>
-              <BreadcrumbSeparator />
-            </>
-          )}
-        </BreadcrumbItem>
-      );
-    });
-  };
+  const { pathName, getBreadCrumbs, address } = useHeader();
 
   return (
     <header className="flex flex-1 h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mb-4">
