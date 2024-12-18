@@ -32,13 +32,7 @@ const Header = () => {
             />
 
             <Breadcrumb className="hidden md:block">
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                  <BreadcrumbSeparator />
-                </BreadcrumbItem>
-                {getBreadCrumbs()}
-              </BreadcrumbList>
+              <BreadcrumbList>{getBreadCrumbs()}</BreadcrumbList>
             </Breadcrumb>
 
             <div className="flex gap-5 ml-auto">
