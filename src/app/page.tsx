@@ -22,6 +22,10 @@ export default function Home() {
     router.push("/dashboard/request-api-key");
   };
 
+  const handleReportIssue = () => {
+    router.push("/report-issue");
+  };
+
   return (
     <>
       <div className="flex w-full justify-between items-center gap-2 px-4">
@@ -40,6 +44,13 @@ export default function Home() {
           </>
         ) : (
           <div className="flex gap-5 ml-auto">
+            <button
+              type="button"
+              onClick={handleReportIssue}
+              className="text-blue-500 border border-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 rounded-lg text-sm px-5 py-3 text-center"
+            >
+              Report Issue
+            </button>
             <ThemeToggle />
             <button
               type="button"
