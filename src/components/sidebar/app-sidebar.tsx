@@ -20,7 +20,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={ItemsSidebar.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={ItemsSidebar.navMain} />
+        <NavMain groups={ItemsSidebar.navGroups} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
