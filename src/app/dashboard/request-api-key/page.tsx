@@ -1,5 +1,5 @@
 import { Bounded } from "@/components/Bounded";
-import ContactForm from "@/components/modules/contact/ContactForm";
+import RequestApiKeyForm from "@/components/modules/request-api-key/RequestApiKeyForm";
 import { WrapperForm } from "@/components/Wrappers";
 
 export default function RequestApyKeyPage() {
@@ -7,7 +7,7 @@ export default function RequestApyKeyPage() {
     <div>
       <Bounded center={true}>
         <WrapperForm>
-          <ContactForm />
+          <RequestApiKeyForm />
         </WrapperForm>
       </Bounded>
     </div>
