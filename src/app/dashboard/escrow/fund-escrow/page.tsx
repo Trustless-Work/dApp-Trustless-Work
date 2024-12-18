@@ -11,7 +11,7 @@ const FundEscrow = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
 
   return (
-    <Bounded center={true}>
+    <Bounded center={false}>
       {isLoading ? (
         <Loader isLoading={isLoading} />
       ) : (

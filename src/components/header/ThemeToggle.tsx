@@ -1,25 +1,18 @@
 import { MdOutlineLightMode } from "react-icons/md";
 import { LuMoonStar } from "react-icons/lu";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useThemeStore } from "@/store/themeStore/store";
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState("light");
+  const { theme, toggleTheme } = useThemeStore();
 
   useEffect(() => {
     const root = window.document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+    root.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
-
   return (
-    <button onClick={toggleTheme}>
+    <button onClick={() => toggleTheme()}>
       {theme === "dark" ? (
         <MdOutlineLightMode className="text-yellow-700" size={30} />
       ) : (

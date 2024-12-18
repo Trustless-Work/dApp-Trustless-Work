@@ -5,11 +5,11 @@ import { WrapperForm } from "@/components/Wrappers";
 export default function RequestApyKeyPage() {
   return (
     <div>
-       <Bounded center={true}>
-          <WrapperForm>
-            <ContactForm />
-          </WrapperForm>
-        </Bounded>
+      <Bounded center={true}>
+        <WrapperForm>
+          <ContactForm />
+        </WrapperForm>
+      </Bounded>
     </div>
   );
 }

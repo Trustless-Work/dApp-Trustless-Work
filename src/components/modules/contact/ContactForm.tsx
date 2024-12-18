@@ -1,8 +1,14 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -10,17 +16,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { useContactForm } from "./hooks/contact-form.hook"
+} from "@/components/ui/form";
+import { useContactForm } from "./hooks/contact-form.hook";
 
 export default function ContactForm() {
-  const { form, isLoading, onSubmit } = useContactForm()
+  const { form, isLoading, onSubmit } = useContactForm();
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-muted/50" >
+    <Card className="w-full max-w-2xl mx-auto bg-muted/50">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold">Request an API Key.</CardTitle>
-        <CardDescription>Fill out the form below to request an API key without the need to connect your wallet.</CardDescription>
+        <CardTitle className="text-3xl font-bold">
+          Request an API Key.
+        </CardTitle>
+        <CardDescription>
+          Fill out the form below to request an API key without the need to
+          connect your wallet.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -60,7 +71,11 @@ export default function ContactForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="Enter your email address" {...field} />
+                    <Input
+                      type="email"
+                      placeholder="Enter your email address"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,13 +118,17 @@ export default function ContactForm() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" size="lg" type="submit" disabled={isLoading}>
+            <Button
+              className="w-full"
+              size="lg"
+              type="submit"
+              disabled={isLoading}
+            >
               {isLoading ? "Processing..." : "Submit Request"}
             </Button>
           </form>
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
-

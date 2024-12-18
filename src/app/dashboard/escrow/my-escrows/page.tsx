@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import {
   Table,
@@ -71,7 +71,7 @@ const escrowData = [
     serviceProvider: "0xvwx...901",
     amount: "260 USDC",
     milestones: "2/5 completed",
-  }
+  },
 ];
 
 export default function EscrowDataPage() {
@@ -81,7 +81,7 @@ export default function EscrowDataPage() {
   const totalPages = Math.ceil(escrowData.length / itemsPerPage);
   const currentData = escrowData.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handlePageChange = (pageNumber: number) => {
