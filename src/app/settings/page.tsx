@@ -1,16 +1,16 @@
 "use client";
 
-import { AppearanceSection } from "@/components/setting/appearanceSection";
-import { ProfileSection } from "@/components/setting/profileSection";
-import { SettingsSidebar } from "@/components/setting/settingsSidebar";
+import { AppearanceSection } from "@/components/modules/setting/appearanceSection";
+import { ProfileSection } from "@/components/modules/setting/profileSection";
+import { SettingsSidebar } from "@/components/modules/setting/settingsSidebar";
 import { useState } from "react";
 import { db } from "@/constants/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "@/hooks/use-toast";
 import { useThemeStore } from "@/store/themeStore/store";
-import Header from "@/components/header/Header";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { PreferencesSection } from "@/components/setting/preferences";
+import { PreferencesSection } from "@/components/modules/setting/preferences";
+import Header from "@/components/layout/header/Header";
 
 export default function SettingsPage() {
   const [currentTab, setCurrentTab] = useState("profile");
