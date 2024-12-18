@@ -12,6 +12,11 @@ import {
 } from "firebase/firestore/lite";
 import { firebaseDB } from "../../../../../firebase";
 
+export enum RequestType {
+  Individual = "Individual",
+  Company = "Company",
+}
+
 const formSchema = z.object({
   firstName: z.string().min(1, { message: "First name is required" }),
   lastName: z.string().min(1, { message: "Last name is required" }),
@@ -22,9 +27,7 @@ const formSchema = z.object({
       (email) => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email), // Custom regex for additional validation
       { message: "Invalid email domain." },
     ),
-  type: z.enum(["company", "individual"], {
-    required_error: "Please select a type",
-  }),
+  type: z.nativeEnum(RequestType),
   description: z
     .string()
     .min(10, { message: "Description must be at least 10 characters" }),
@@ -96,5 +99,5 @@ export const useRequestApiKeyForm = () => {
     }
   };
 
-  return { form, isLoading, onSubmit };
+  return { form, isLoading, onSubmit, RequestType };
 };
