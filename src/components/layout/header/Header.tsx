@@ -1,13 +1,7 @@
 "use client";
 
 import ThemeToggle from "./ThemeToggle";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "../../ui/breadcrumb";
+import { Breadcrumb, BreadcrumbList } from "../../ui/breadcrumb";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { SidebarTrigger } from "../../ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
