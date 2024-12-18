@@ -3,7 +3,7 @@
 import { AppearanceSection } from "@/components/setting/appearanceSection";
 import { ProfileSection } from "@/components/setting/profileSection";
 import { SettingsSidebar } from "@/components/setting/settingsSidebar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { db } from "@/constants/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "@/hooks/use-toast";

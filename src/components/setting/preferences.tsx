@@ -37,7 +37,7 @@ export function PreferencesSection({
           <FormField
             control={form.control}
             name="saveEscrow"
-            render={({ field }) => (
+            render={() => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                 <div className="space-y-0.5">
                   <FormLabel>Save Escrows</FormLabel>
