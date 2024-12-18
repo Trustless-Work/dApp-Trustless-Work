@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { db } from "@/constants/firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
-import { Switch } from "@/components/ui/switch";
 
 export function AppearanceSection({
   theme,
@@ -14,13 +12,11 @@ export function AppearanceSection({
 }: {
   theme: "light" | "dark";
   onThemeChange: (theme: "light" | "dark") => void;
-  }) {
-  const [saveEscrows, setSaveEscrows] = useState(false);
-  
+}) {
   const handleSaveTheme = async () => {
     try {
       const userDoc = doc(db, "users", "appearance-settings");
-      await setDoc(userDoc, { theme, saveEscrows });
+      await setDoc(userDoc, { theme });
 
       toast({
         title: "Success",
@@ -43,16 +39,6 @@ export function AppearanceSection({
         Customize the appearance of the app. Automatically switch between day
         and night themes.
       </p>
-      <div className="flex items-center gap-2 mb-6">
-        <Switch
-          id="save-escrows"
-          checked={saveEscrows}
-          onCheckedChange={(checked) => setSaveEscrows(!!checked)}
-        />
-        <label htmlFor="save-escrows">
-          Save Escrows
-        </label>
-      </div>
       <h3>Theme</h3>
       <p className="text-gray-500 mb-4">Select the theme for the dashboard.</p>
       <div className="flex gap-4 mb-6">

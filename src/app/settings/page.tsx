@@ -3,13 +3,14 @@
 import { AppearanceSection } from "@/components/setting/appearanceSection";
 import { ProfileSection } from "@/components/setting/profileSection";
 import { SettingsSidebar } from "@/components/setting/settingsSidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "@/constants/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "@/hooks/use-toast";
 import { useThemeStore } from "@/store/themeStore/store";
 import Header from "@/components/header/Header";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { PreferencesSection } from "@/components/setting/preferences";
 
 export default function SettingsPage() {
   const [currentTab, setCurrentTab] = useState("profile");
@@ -51,6 +52,9 @@ export default function SettingsPage() {
               )}
               {currentTab === "appearance" && (
                 <AppearanceSection theme={theme} onThemeChange={toggleTheme} />
+              )}
+              {currentTab === "preferences" && (
+                <PreferencesSection onSave={saveProfile} />
               )}
             </main>
           </div>

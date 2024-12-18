@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useClaimEscrowEarningsHook } from "./hooks/claim-escrow-earnings.hook";
+import { TooltipInfo } from "./EscrowFormField";
 
 export function ClaimEscrowEarningsForm() {
   const { form, onSubmit } = useClaimEscrowEarningsHook();
@@ -27,7 +28,10 @@ export function ClaimEscrowEarningsForm() {
           name="contractId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contract ID</FormLabel>
+              <FormLabel className="flex items-center">
+                Contract ID
+                <TooltipInfo content="Unique identifier for this escrow contract." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter the contract id" {...field} />
               </FormControl>
@@ -40,7 +44,10 @@ export function ClaimEscrowEarningsForm() {
           name="engagementId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Engagement</FormLabel>
+              <FormLabel className="flex items-center">
+                Engagement
+                <TooltipInfo content="ID to identify escrows for a service provider." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter the engagement" {...field} />
               </FormControl>
@@ -53,7 +60,7 @@ export function ClaimEscrowEarningsForm() {
           )}
         />
         <Button className="w-full md:w-1/4" type="submit">
-          Fund Escrow
+          Claim Escrow Earnings
         </Button>
       </form>
     </Form>

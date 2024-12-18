@@ -26,10 +26,11 @@ import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import Link from "next/link";
+
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-export function NavUser() {
+export const NavUser = () => {
   const { isMobile } = useSidebar();
   const { address, name } = useWalletStore();
   const { formatAddress } = useFormatUtils();
@@ -149,4 +150,4 @@ export function NavUser() {
       </SidebarMenuItem>
     </SidebarMenu>
   );
-}
+};

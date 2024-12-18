@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useCompleteEscrowHook } from "./hooks/complete-escrow.hook";
+import { TooltipInfo } from "./EscrowFormField";
 
 export function CompleteEscrowForm() {
   const { form, onSubmit } = useCompleteEscrowHook();
@@ -27,7 +28,10 @@ export function CompleteEscrowForm() {
           name="contractId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contract ID</FormLabel>
+              <FormLabel className="flex items-center">
+                Contract ID
+                <TooltipInfo content="Unique identifier for this escrow contract." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter the contract id" {...field} />
               </FormControl>
@@ -40,7 +44,10 @@ export function CompleteEscrowForm() {
           name="engagementId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Engagement</FormLabel>
+              <FormLabel className="flex items-center">
+                Engagement
+                <TooltipInfo content="ID to identify escrows for a service provider." />
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Enter the engagement" {...field} />
               </FormControl>
@@ -53,7 +60,7 @@ export function CompleteEscrowForm() {
           )}
         />
         <Button className="w-full md:w-1/4" type="submit">
-          Fund Escrow
+          Complete Escrow
         </Button>
       </form>
     </Form>

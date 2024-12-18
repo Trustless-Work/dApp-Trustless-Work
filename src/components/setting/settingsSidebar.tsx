@@ -16,9 +16,7 @@ export function SettingsSidebar({
   return (
     <aside
       className={`w-64 h-full rounded-xl p-4 ${
-        theme === "dark"
-          ? " bg-zinc-950 text-white"
-          : "bg-gray-100 text-black"
+        theme === "dark" ? " bg-zinc-950 text-white" : "bg-gray-100 text-black"
       }`}
     >
       <nav className="flex flex-col gap-4">
@@ -49,6 +47,20 @@ export function SettingsSidebar({
           }`}
         >
           Appearance
+        </button>
+        <button
+          onClick={() => onTabChange("preferences")}
+          className={`text-left p-2 rounded ${
+            currentTab === "preferences"
+              ? theme === "dark"
+                ? "bg-gray-700"
+                : "bg-gray-300"
+              : theme === "dark"
+                ? "hover:bg-gray-800"
+                : "hover:bg-gray-200"
+          }`}
+        >
+          Preference
         </button>
       </nav>
     </aside>

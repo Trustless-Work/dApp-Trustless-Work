@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
-import { Switch } from "@radix-ui/react-switch";
 
 export function ProfileSection({
   onSave,
@@ -26,7 +25,6 @@ export function ProfileSection({
       identification: "",
       firstName: "",
       lastName: "",
-      saveEscrow: false,
       wallet: "",
     },
   });
@@ -78,22 +76,6 @@ export function ProfileSection({
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter your last name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="saveEscrow"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Save Escrow</FormLabel>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
