@@ -1,4 +1,4 @@
-import { LuLayoutDashboard } from "react-icons/lu";
+import { LuLayoutDashboard, LuContactRound } from "react-icons/lu";
 import { BookOpen } from "lucide-react";
 import { FaStackOverflow, FaWpforms } from "react-icons/fa";
 import { MdOutlineBugReport } from "react-icons/md";
@@ -25,14 +25,7 @@ export const ItemsSidebar = {
         {
           title: "Contacts",
           url: "/dashboard/contact",
-          icon: FaWpforms,
-          isActive: true,
-          isExpandable: false,
-        },
-        {
-          title: "Request API key",
-          url: "/dashboard/request-api-key",
-          icon: FaWpforms,
+          icon: LuContactRound,
           isActive: true,
           isExpandable: false,
         },
@@ -101,6 +94,13 @@ export const ItemsSidebar = {
     {
       label: "Support",
       items: [
+        {
+          title: "Request API key",
+          url: "/dashboard/request-api-key",
+          icon: FaWpforms,
+          isActive: true,
+          isExpandable: false,
+        },
         {
           title: "Report an API Issue",
           url: "/dashboard/report-issue",
