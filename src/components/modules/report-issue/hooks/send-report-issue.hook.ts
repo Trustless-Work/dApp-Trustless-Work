@@ -33,7 +33,6 @@ export const useSendReportIssue = () => {
       name: "",
       lastName: "",
       email: "",
-      type: IssueType.Recommendation,
       description: "",
     },
   });

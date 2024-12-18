@@ -14,18 +14,29 @@ import {
   IssueType,
   useSendReportIssue,
 } from "@/components/modules/report-issue/hooks/send-report-issue.hook";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Command } from "cmdk";
+import {
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 
 export function ReportIssueForm() {
   const { form, onSubmit } = useSendReportIssue();
-  const [dropdownValue, setDropdownValue] = useState(IssueType.Recommendation);
+  const typeOptions = Object.values(IssueType).map((value) => ({
+    value,
+    label: value,
+  }));
 
   return (
     <Form {...form}>
@@ -79,31 +90,51 @@ export function ReportIssueForm() {
             <FormItem>
               <FormLabel>Type</FormLabel>
               <FormControl>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                      {dropdownValue || "Select type"}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className="w-full justify-between p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-muted/50"
+                    >
+                      {field.value
+                        ? typeOptions.find(
+                            (option) => option.value === field.value,
+                          )?.label
+                        : "Select Type"}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setDropdownValue(IssueType.Bug);
-                        field.onChange("Bug");
-                      }}
-                    >
-                      Bug
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        setDropdownValue(IssueType.Recommendation);
-                        field.onChange("Recommendation");
-                      }}
-                    >
-                      Recommendation
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Search type..." />
+                      <CommandList>
+                        <CommandEmpty>No type found.</CommandEmpty>
+                        <CommandGroup>
+                          {typeOptions.map((option) => (
+                            <CommandItem
+                              key={option.value}
+                              value={option.value}
+                              onSelect={() => {
+                                field.onChange(option.value);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  field.value === option.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {option.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </FormControl>
               <FormMessage />
             </FormItem>

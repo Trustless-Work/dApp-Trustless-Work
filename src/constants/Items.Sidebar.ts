@@ -42,7 +42,7 @@ export const ItemsSidebar = {
           url: "/dashboard/escrow/refund-remaining-funds",
         },
         { title: "Get Engagement", url: "/dashboard/escrow/get-engagement" },
-        { title: "My Escrows", url: "/dashboard/escrow/my-escrows"}
+        { title: "My Escrows", url: "/dashboard/escrow/my-escrows" },
       ],
     },
     {
@@ -72,7 +72,7 @@ export const ItemsSidebar = {
     },
     {
       title: "Report an API Issue",
-      url: "/report-issue",
+      url: "/dashboard/report-issue",
       icon: MdOutlineBugReport,
       isActive: true,
       isExpandable: false,
