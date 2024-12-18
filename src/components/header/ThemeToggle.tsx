@@ -12,7 +12,7 @@ export default function ThemeToggle() {
   }, [theme]);
 
   return (
-    <button onClick={toggleTheme}>
+    <button onClick={() => toggleTheme()}>
       {theme === "dark" ? (
         <MdOutlineLightMode className="text-yellow-700" size={30} />
       ) : (

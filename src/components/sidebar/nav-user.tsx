@@ -27,7 +27,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import Link from "next/link";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -36,11 +36,15 @@ export function NavUser() {
   const { copyText, copySuccess } = useCopyUtils();
   const { handleDisconnect } = useWalletUtils();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (address) router.push("/dashboard");
-    else router.push("/");
-  }, []);
+    if (!address) {
+      router.push("/");
+    } else if (pathname === "/") {
+      router.push("/dashboard");
+    }
+  }, [address, pathname, router]);
 
   const user = {
     name: "Chris Nager",
@@ -126,7 +130,7 @@ export function NavUser() {
                 </DropdownMenuItem>
               </Link>
 
-              <Link href="/dashboard/settings">
+              <Link href="/settings">
                 <DropdownMenuItem>
                   <Bell />
                   Settings

@@ -3,16 +3,18 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 type ThemeState = {
   theme: "light" | "dark";
-  toggleTheme: () => void;
+  toggleTheme: (newTheme?: "light" | "dark") => void;
 };
 
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set, get) => ({
       theme: "light",
-      toggleTheme: () => {
-        const newTheme = get().theme === "light" ? "dark" : "light";
-        set({ theme: newTheme });
+      toggleTheme: (newTheme?: "light" | "dark") => {
+        const currentTheme = get().theme;
+        const themeToSet =
+          newTheme || (currentTheme === "light" ? "dark" : "light");
+        set({ theme: themeToSet });
       },
     }),
     {
