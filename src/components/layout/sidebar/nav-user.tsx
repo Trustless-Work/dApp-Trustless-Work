@@ -23,7 +23,11 @@ import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { FaRegCopy } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
-import { IoSettingsOutline } from "react-icons/io5";
+import {
+  IoArrowBackSharp,
+  IoLogOutOutline,
+  IoSettingsOutline,
+} from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import Link from "next/link";
 
@@ -124,16 +128,9 @@ export const NavUser = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href="/profile">
-                <DropdownMenuItem>
-                  <FaRegUser />
-                  Account
-                </DropdownMenuItem>
-              </Link>
-
               <Link href="/settings">
                 <DropdownMenuItem>
-                  <Bell />
+                  <IoSettingsOutline />
                   Settings
                 </DropdownMenuItem>
               </Link>
@@ -141,7 +138,7 @@ export const NavUser = () => {
             <DropdownMenuSeparator />
             <button className="w-full" onClick={handleDisconnect}>
               <DropdownMenuItem>
-                <IoSettingsOutline />
+                <IoLogOutOutline />
                 Disconnect
               </DropdownMenuItem>
             </button>

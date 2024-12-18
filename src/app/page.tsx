@@ -1,7 +1,7 @@
 "use client";
 
 import { Bounded } from "@/components/Bounded";
-import ThemeToggle from "@/components/header/ThemeToggle";
+import ThemeToggle from "@/components/layout/header/ThemeToggle";
 import { useWalletStore } from "@/store/walletStore";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { useRouter } from "next/navigation";
