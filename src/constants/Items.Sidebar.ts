@@ -1,6 +1,5 @@
 import { LuLayoutDashboard } from "react-icons/lu";
 import { BookOpen } from "lucide-react";
-import { FaStackOverflow } from "react-icons/fa";
 import { FaStackOverflow, FaWpforms } from "react-icons/fa";
 
 export const ItemsSidebar = {
@@ -26,6 +25,7 @@ export const ItemsSidebar = {
       isActive: false,
       isExpandable: true,
       items: [
+        { title: "My Escrows", url: "/dashboard/escrow/my-escrows" },
         {
           title: "Initialize Escrow",
           url: "/dashboard/escrow/initialize-escrow",
@@ -42,7 +42,6 @@ export const ItemsSidebar = {
           url: "/dashboard/escrow/refund-remaining-funds",
         },
         { title: "Get Engagement", url: "/dashboard/escrow/get-engagement" },
-        {title: "My Escrows", url: "/dashboard/escrow/my-escrows"}
       ],
     },
     {
