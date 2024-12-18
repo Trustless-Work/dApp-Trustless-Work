@@ -53,6 +53,13 @@ export const ItemsSidebar = {
       isExpandable: false,
     },
     {
+      title: "Contacts",
+      url: "/dashboard/contact",
+      icon: FaWpforms,
+      isActive: true,
+      isExpandable: false,
+    },
+    {
       title: "Documentation",
       url: "#",
       icon: BookOpen,
