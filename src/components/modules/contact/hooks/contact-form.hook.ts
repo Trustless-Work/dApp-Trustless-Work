@@ -85,6 +85,7 @@ export const useContactForm = () => {
       });
       form.reset();
     } catch (error) {
+      console.error("Error submitting form:", error);
       toast({
         title: "Error",
         description: "An error occurred while processing your request.",
