@@ -1,3 +1,5 @@
+"use client";
+
 import { MdOutlineLightMode } from "react-icons/md";
 import { LuMoonStar } from "react-icons/lu";
 import { useEffect } from "react";

@@ -1,4 +1,3 @@
-import { ReportIssueForm } from "@/components/modules/report-issue/ReportIssueForm";
 import { WrapperForm } from "@/components/Wrappers";
 import { Bounded } from "@/components/Bounded";
 import {
@@ -9,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
+import RequestApiKeyForm from "@/components/modules/request-api-key/RequestApiKeyForm";
 
 export default function Page() {
   return (
@@ -19,14 +19,15 @@ export default function Page() {
           <Card className="w-full max-w-2xl mx-auto bg-muted/50 mt-10">
             <CardHeader>
               <CardTitle className="text-3xl font-bold">
-                Report an API Issue
+                Request an API Key.
               </CardTitle>
               <CardDescription>
-                Fill in the details below to report an API issue.
+                Fill out the form below to request an API key without the need
+                to connect your wallet.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ReportIssueForm />
+              <RequestApiKeyForm />
             </CardContent>
           </Card>
         </WrapperForm>

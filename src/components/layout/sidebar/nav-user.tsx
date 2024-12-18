@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronsUpDown, CreditCard } from "lucide-react";
+import { ChevronsUpDown, CreditCard } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -23,8 +23,7 @@ import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { FaRegCopy } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
-import { IoSettingsOutline } from "react-icons/io5";
-import { FaRegUser } from "react-icons/fa";
+import { IoLogOutOutline, IoSettingsOutline } from "react-icons/io5";
 import Link from "next/link";
 
 import { useEffect } from "react";
@@ -124,16 +123,9 @@ export const NavUser = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href="/profile">
-                <DropdownMenuItem>
-                  <FaRegUser />
-                  Account
-                </DropdownMenuItem>
-              </Link>
-
               <Link href="/settings">
                 <DropdownMenuItem>
-                  <Bell />
+                  <IoSettingsOutline />
                   Settings
                 </DropdownMenuItem>
               </Link>
@@ -141,7 +133,7 @@ export const NavUser = () => {
             <DropdownMenuSeparator />
             <button className="w-full" onClick={handleDisconnect}>
               <DropdownMenuItem>
-                <IoSettingsOutline />
+                <IoLogOutOutline />
                 Disconnect
               </DropdownMenuItem>
             </button>
