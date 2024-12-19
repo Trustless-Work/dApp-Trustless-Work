@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "@/constants/firebase";
+import { db } from "@/config/firebase";
 import { useToast } from "@/hooks/use-toast";
 
 export enum IssueType {

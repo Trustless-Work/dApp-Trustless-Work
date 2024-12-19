@@ -10,7 +10,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "@/constants/firebase";
+import { db } from "@/config/firebase";
 import { useToast } from "@/hooks/use-toast";
 
 export enum WalletType {

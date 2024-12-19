@@ -1,4 +1,4 @@
-import { db } from "@/constants/firebase";
+import { db } from "@/config/firebase";
 import { toast } from "@/hooks/use-toast";
 import { doc, setDoc } from "firebase/firestore";
 

@@ -2,7 +2,7 @@
 
 import SettingsSidebar from "@/components/modules/setting/settingsSidebar";
 import { useState } from "react";
-import { db } from "@/constants/firebase";
+import { db } from "@/config/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "@/hooks/use-toast";
 import { useThemeStore } from "@/store/themeStore/store";

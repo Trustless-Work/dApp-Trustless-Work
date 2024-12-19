@@ -9,9 +9,7 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import usePreferences from "./hooks/preferences-section.hook";
 
 interface PreferencesSectionProps {
