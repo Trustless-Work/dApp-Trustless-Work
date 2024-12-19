@@ -2,9 +2,6 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
-import { db } from "@/constants/firebase";
-import { doc, setDoc } from "firebase/firestore";
 import useAppearance from "./hooks/appearance-section.hook";
 
 interface AppearanceSectionProps {
@@ -16,7 +13,7 @@ const AppearanceSection = ({
   theme,
   onThemeChange,
 }: AppearanceSectionProps) => {
-  const { handleSaveTheme } = useAppearance();
+  const { handleSaveTheme } = useAppearance({ theme });
 
   return (
     <section>

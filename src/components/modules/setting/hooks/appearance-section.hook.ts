@@ -1,11 +1,12 @@
 import { db } from "@/constants/firebase";
 import { toast } from "@/hooks/use-toast";
-import { useThemeStore } from "@/store/themeStore/store";
 import { doc, setDoc } from "firebase/firestore";
 
-const useAppearance = () => {
-  const { theme } = useThemeStore();
+interface useAppearanceProps {
+  theme: "light" | "dark";
+}
 
+const useAppearance = ({ theme }: useAppearanceProps) => {
   const handleSaveTheme = async () => {
     try {
       const userDoc = doc(db, "users", "appearance-settings");
