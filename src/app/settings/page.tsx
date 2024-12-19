@@ -8,19 +8,15 @@ import { toast } from "@/hooks/use-toast";
 import { useThemeStore } from "@/store/themeStore/store";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Header from "@/components/layout/header/Header";
-import PreferencesSection, {
-  PreferencesForm,
-} from "@/components/modules/setting/preferences";
+import PreferencesSection from "@/components/modules/setting/preferences";
 import AppearanceSection from "@/components/modules/setting/appearanceSection";
-import ProfileSection, {
-  ProfileForm,
-} from "@/components/modules/setting/profileSection";
+import ProfileSection from "@/components/modules/setting/profileSection";
 
 const SettingsPage = () => {
   const [currentTab, setCurrentTab] = useState("profile");
   const { theme, toggleTheme } = useThemeStore();
 
-  const saveProfile = async (data: ProfileForm | PreferencesForm) => {
+  const saveProfile = async (data: any) => {
     try {
       const userDoc = doc(db, "users", data.identification || "default");
       await setDoc(userDoc, { ...data, theme });
