@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useCancelEscrowHook } from "./hooks/cancel-escrow.hook";
-import { TooltipInfo } from "./EscrowFormField";
+import TooltipInfo from "./EscrowFormField";
 
-export function CancelEscrowForm() {
+const CancelEscrowForm = () => {
   const { form, onSubmit } = useCancelEscrowHook();
 
   return (
@@ -65,4 +65,6 @@ export function CancelEscrowForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default CancelEscrowForm;

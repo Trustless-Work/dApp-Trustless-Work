@@ -1,7 +1,5 @@
 "use client";
 
-import { AppearanceSection } from "@/components/modules/setting/appearanceSection";
-import { ProfileSection } from "@/components/modules/setting/profileSection";
 import { SettingsSidebar } from "@/components/modules/setting/settingsSidebar";
 import { useState } from "react";
 import { db } from "@/constants/firebase";
@@ -9,10 +7,12 @@ import { doc, setDoc } from "firebase/firestore";
 import { toast } from "@/hooks/use-toast";
 import { useThemeStore } from "@/store/themeStore/store";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { PreferencesSection } from "@/components/modules/setting/preferences";
 import Header from "@/components/layout/header/Header";
+import PreferencesSection from "@/components/modules/setting/preferences";
+import AppearanceSection from "@/components/modules/setting/appearanceSection";
+import ProfileSection from "@/components/modules/setting/profileSection";
 
-export default function SettingsPage() {
+const SettingsPage = () => {
   const [currentTab, setCurrentTab] = useState("profile");
   const { theme, toggleTheme } = useThemeStore();
 
@@ -62,4 +62,6 @@ export default function SettingsPage() {
       </div>
     </SidebarProvider>
   );
-}
+};
+
+export default SettingsPage;

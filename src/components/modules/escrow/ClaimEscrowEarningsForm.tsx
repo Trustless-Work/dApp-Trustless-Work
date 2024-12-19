@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useClaimEscrowEarningsHook } from "./hooks/claim-escrow-earnings.hook";
-import { TooltipInfo } from "./EscrowFormField";
+import TooltipInfo from "./EscrowFormField";
 
-export function ClaimEscrowEarningsForm() {
+const ClaimEscrowEarningsForm = () => {
   const { form, onSubmit } = useClaimEscrowEarningsHook();
 
   return (
@@ -65,4 +65,6 @@ export function ClaimEscrowEarningsForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default ClaimEscrowEarningsForm;

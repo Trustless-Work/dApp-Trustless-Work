@@ -13,13 +13,13 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
-export function ProfileSection({
+const ProfileSection = ({
   onSave,
   walletAddress,
 }: {
   onSave: (data: any) => void;
   walletAddress: string;
-}) {
+}) => {
   const form = useForm({
     defaultValues: {
       identification: "",
@@ -95,4 +95,6 @@ export function ProfileSection({
       </Form>
     </section>
   );
-}
+};
+
+export default ProfileSection;

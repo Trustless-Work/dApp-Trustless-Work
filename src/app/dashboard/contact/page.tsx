@@ -1,10 +1,10 @@
 "use client";
 
 import { Bounded } from "@/components/Bounded";
-import { ContactForm } from "@/components/modules/contact/ContactForm";
+import ContactForm from "@/components/modules/contact/ContactForm";
 import { WrapperForm } from "@/components/Wrappers";
 
-export default function Contacts() {
+const Contacts = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -14,4 +14,6 @@ export default function Contacts() {
       </WrapperForm>
     </Bounded>
   );
-}
+};
+
+export default Contacts;

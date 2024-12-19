@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFundEscrowHook } from "./hooks/fund-escrow.hook";
-import { TooltipInfo } from "./EscrowFormField";
+import TooltipInfo from "./EscrowFormField";
 
-export function FundEscrowForm() {
+const FundEscrowForm = () => {
   const { onSubmit, form } = useFundEscrowHook();
 
   return (
@@ -65,4 +65,6 @@ export function FundEscrowForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default FundEscrowForm;

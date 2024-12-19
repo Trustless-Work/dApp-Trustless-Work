@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 
-export default function Page() {
+const ReportIssueWithoutAuthPage = () => {
   return (
     <>
       <HeaderWithoutAuth />
@@ -33,4 +33,6 @@ export default function Page() {
       </Bounded>
     </>
   );
-}
+};
+
+export default ReportIssueWithoutAuthPage;

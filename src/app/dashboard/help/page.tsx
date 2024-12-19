@@ -5,7 +5,7 @@ import { HelpAccordion } from "@/components/modules/help/HelpAccordion";
 import Loader from "@/components/utils/Loader";
 import { useLoaderStore } from "@/store/utilsStore";
 
-export default function HelpPage() {
+const HelpPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
 
   return (
@@ -21,4 +21,6 @@ export default function HelpPage() {
       )}
     </Bounded>
   );
-}
+};
+
+export default HelpPage;

@@ -13,11 +13,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-export function PreferencesSection({
-  onSave,
-}: {
-  onSave: (data: any) => void;
-}) {
+const PreferencesSection = ({ onSave }: { onSave: (data: any) => void }) => {
   const form = useForm({
     defaultValues: {
       saveEscrow: false,
@@ -61,4 +57,6 @@ export function PreferencesSection({
       </Form>
     </section>
   );
-}
+};
+
+export default PreferencesSection;

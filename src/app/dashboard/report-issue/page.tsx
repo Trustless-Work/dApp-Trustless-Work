@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function Page() {
+const ReportIssuePage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -29,4 +29,6 @@ export default function Page() {
       </WrapperForm>
     </Bounded>
   );
-}
+};
+
+export default ReportIssuePage;

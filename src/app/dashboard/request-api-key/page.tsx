@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { WrapperForm } from "@/components/Wrappers";
 
-export default function RequestApyKeyPage() {
+const RequestApyKeyPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -30,4 +30,6 @@ export default function RequestApyKeyPage() {
       </WrapperForm>
     </Bounded>
   );
-}
+};
+
+export default RequestApyKeyPage;

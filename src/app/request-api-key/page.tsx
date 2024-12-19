@@ -10,7 +10,7 @@ import {
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 import RequestApiKeyForm from "@/components/modules/request-api-key/RequestApiKeyForm";
 
-export default function Page() {
+const ResquestApiKeyWithoutAuthPage = () => {
   return (
     <>
       <HeaderWithoutAuth />
@@ -34,4 +34,6 @@ export default function Page() {
       </Bounded>
     </>
   );
-}
+};
+
+export default ResquestApiKeyWithoutAuthPage;

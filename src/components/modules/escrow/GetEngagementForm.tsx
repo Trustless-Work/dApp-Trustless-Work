@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useGetEngagementEscrowHook } from "./hooks/get-engagement-escrow.hook";
-import { TooltipInfo } from "./EscrowFormField";
+import TooltipInfo from "./EscrowFormField";
 
-export function GetEngagementForm() {
+const GetEngagementForm = () => {
   const { onSubmit, form } = useGetEngagementEscrowHook();
 
   return (
@@ -65,4 +65,6 @@ export function GetEngagementForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default GetEngagementForm;

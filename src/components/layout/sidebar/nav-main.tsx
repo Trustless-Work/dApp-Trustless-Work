@@ -17,7 +17,7 @@ import {
 import { IconType } from "react-icons/lib";
 import Link from "next/link";
 
-export function NavMain({
+const NavMain = ({
   groups,
 }: {
   groups: {
@@ -36,7 +36,7 @@ export function NavMain({
       }[];
     }[];
   }[];
-}) {
+}) => {
   return (
     <>
       {groups.map((group) => (
@@ -98,4 +98,6 @@ export function NavMain({
       ))}
     </>
   );
-}
+};
+
+export default NavMain;

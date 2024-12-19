@@ -74,7 +74,7 @@ const escrowData = [
   },
 ];
 
-export default function EscrowDataPage() {
+const MyEscrows = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(15);
 
@@ -150,4 +150,6 @@ export default function EscrowDataPage() {
       </div>
     </div>
   );
-}
+};
+
+export default MyEscrows;

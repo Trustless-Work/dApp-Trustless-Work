@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 
-export function ReportIssueForm() {
+const ReportIssueForm = () => {
   const { form, onSubmit } = useSendReportIssue();
   const typeOptions = Object.values(IssueType).map((value) => ({
     value,
@@ -165,4 +165,6 @@ export function ReportIssueForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default ReportIssueForm;

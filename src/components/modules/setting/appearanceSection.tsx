@@ -6,13 +6,13 @@ import { toast } from "@/hooks/use-toast";
 import { db } from "@/constants/firebase";
 import { doc, setDoc } from "firebase/firestore";
 
-export function AppearanceSection({
+const AppearanceSection = ({
   theme,
   onThemeChange,
 }: {
   theme: "light" | "dark";
   onThemeChange: (theme: "light" | "dark") => void;
-}) {
+}) => {
   const handleSaveTheme = async () => {
     try {
       const userDoc = doc(db, "users", "appearance-settings");
@@ -70,4 +70,6 @@ export function AppearanceSection({
       </Button>
     </section>
   );
-}
+};
+
+export default AppearanceSection;

@@ -3,7 +3,7 @@
 import { Bounded } from "@/components/Bounded";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <HeaderWithoutAuth />
@@ -26,4 +26,6 @@ export default function Home() {
       </Bounded>
     </>
   );
-}
+};
+
+export default Home;

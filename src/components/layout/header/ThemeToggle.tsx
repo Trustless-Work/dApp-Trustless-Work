@@ -5,7 +5,7 @@ import { LuMoonStar } from "react-icons/lu";
 import { useEffect } from "react";
 import { useThemeStore } from "@/store/themeStore/store";
 
-export default function ThemeToggle() {
+const ThemeToggle = () => {
   const { theme, toggleTheme } = useThemeStore();
 
   useEffect(() => {
@@ -22,4 +22,6 @@ export default function ThemeToggle() {
       )}
     </button>
   );
-}
+};
+
+export default ThemeToggle;

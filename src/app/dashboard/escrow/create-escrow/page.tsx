@@ -4,7 +4,7 @@ import { Bounded } from "@/components/Bounded";
 import { Button } from "@/components/ui/button";
 import { fetchCreateEscrow } from "@/services/deploy/createEscrow";
 
-export default function CreateEscrow() {
+const CreateEscrow = () => {
   const handleStart = async () => {
     const result = await fetchCreateEscrow();
 
@@ -41,4 +41,6 @@ export default function CreateEscrow() {
       </div>
     </Bounded>
   );
-}
+};
+
+export default CreateEscrow;

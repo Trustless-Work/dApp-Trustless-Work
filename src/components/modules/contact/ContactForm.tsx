@@ -27,7 +27,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useContact, WalletType } from "./hooks/contact.hook";
 
-export function ContactForm() {
+const ContactForm = () => {
   const { form, onSubmit } = useContact();
   const typeOptions = Object.values(WalletType).map((value) => ({
     value,
@@ -155,4 +155,6 @@ export function ContactForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default ContactForm;
