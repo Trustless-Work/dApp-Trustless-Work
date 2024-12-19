@@ -13,13 +13,19 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
-const ProfileSection = ({
-  onSave,
-  walletAddress,
-}: {
-  onSave: (data: any) => void;
+interface ProfileSectionProps {
+  onSave: (data: ProfileForm) => void;
   walletAddress: string;
-}) => {
+}
+
+interface ProfileForm {
+  identification: string;
+  firstName: string;
+  lastName: string;
+  wallet: string;
+}
+
+const ProfileSection = ({ onSave, walletAddress }: ProfileSectionProps) => {
   const form = useForm({
     defaultValues: {
       identification: "",
@@ -33,7 +39,7 @@ const ProfileSection = ({
     form.setValue("wallet", walletAddress);
   }, [walletAddress, form]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: ProfileForm) => {
     onSave(data);
   };
 

@@ -13,15 +13,24 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-const PreferencesSection = ({ onSave }: { onSave: (data: any) => void }) => {
+interface PreferencesSectionProps {
+  onSave: (data: PreferencesForm) => void;
+}
+
+interface PreferencesForm {
+  saveEscrow: boolean;
+}
+
+const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
   const form = useForm({
     defaultValues: {
       saveEscrow: false,
     },
   });
+
   const [saveEscrow, setSaveEscrow] = useState(false);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: PreferencesForm) => {
     onSave(data);
   };
 
