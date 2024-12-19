@@ -1,7 +1,7 @@
 "use client";
 
 import { Bounded } from "@/components/Bounded";
-import { GetEngagementForm } from "@/components/modules/escrow/GetEngagementForm";
+import GetEngagementForm from "@/components/modules/escrow/GetEngagementForm";
 import { WrapperForm } from "@/components/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 

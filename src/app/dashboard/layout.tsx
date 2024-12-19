@@ -1,4 +1,4 @@
-import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
+import AppSidebar from "@/components/layout/sidebar/app-sidebar";
 import Footer from "@/components/layout/footer/Footer";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import Header from "@/components/layout/header/Header";

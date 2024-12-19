@@ -1,7 +1,7 @@
 "use client";
 
 import { Bounded } from "@/components/Bounded";
-import { ClaimEscrowEarningsForm } from "@/components/modules/escrow/ClaimEscrowEarningsForm";
+import ClaimEscrowEarningsForm from "@/components/modules/escrow/ClaimEscrowEarningsForm";
 import { WrapperForm } from "@/components/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 

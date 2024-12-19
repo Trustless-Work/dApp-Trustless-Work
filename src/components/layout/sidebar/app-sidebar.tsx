@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { NavUser } from "@/components/layout/sidebar/nav-user";
-import { TeamSwitcher } from "@/components/layout/sidebar/team-switcher";
+import TeamSwitcher from "@/components/layout/sidebar/team-switcher";
 import {
   Sidebar,
   SidebarContent,

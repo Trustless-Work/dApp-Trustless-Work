@@ -1,6 +1,6 @@
 "use client";
 
-import { SettingsSidebar } from "@/components/modules/setting/settingsSidebar";
+import SettingsSidebar from "@/components/modules/setting/settingsSidebar";
 import { useState } from "react";
 import { db } from "@/constants/firebase";
 import { doc, setDoc } from "firebase/firestore";
