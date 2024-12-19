@@ -1,6 +1,6 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
+import { Bounded } from "@/components/layout/Bounded";
 import HelpAccordion from "@/components/modules/help/HelpAccordion";
 import Loader from "@/components/utils/Loader";
 import { useLoaderStore } from "@/store/utilsStore";

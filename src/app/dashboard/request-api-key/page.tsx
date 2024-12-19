@@ -1,4 +1,4 @@
-import { Bounded } from "@/components/Bounded";
+import { Bounded } from "@/components/layout/Bounded";
 import RequestApiKeyForm from "@/components/modules/request-api-key/RequestApiKeyForm";
 import {
   Card,
@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { WrapperForm } from "@/components/Wrappers";
+import { WrapperForm } from "@/components/layout/Wrappers";
 
 const RequestApyKeyPage = () => {
   return (

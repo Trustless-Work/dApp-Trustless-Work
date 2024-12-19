@@ -1,6 +1,6 @@
 import ReportIssueForm from "@/components/modules/report-issue/ReportIssueForm";
-import { WrapperForm } from "@/components/Wrappers";
-import { Bounded } from "@/components/Bounded";
+import { WrapperForm } from "@/components/layout/Wrappers";
+import { Bounded } from "@/components/layout/Bounded";
 import {
   Card,
   CardContent,

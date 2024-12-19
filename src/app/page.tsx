@@ -1,6 +1,6 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
+import { Bounded } from "@/components/layout/Bounded";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 
 const Home = () => {

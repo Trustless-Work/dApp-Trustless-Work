@@ -1,8 +1,8 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
+import { Bounded } from "@/components/layout/Bounded";
 import CancelEscrowForm from "@/components/modules/escrow/CancelEscrowForm";
-import { WrapperForm } from "@/components/Wrappers";
+import { WrapperForm } from "@/components/layout/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 
 const CancelEscrowPage = () => {
