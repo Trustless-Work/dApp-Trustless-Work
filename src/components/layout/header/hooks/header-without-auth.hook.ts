@@ -1,6 +1,6 @@
 "use client";
 
-import { useWalletStore } from "@/store/walletStore";
+import { useWalletStore } from "@/store/walletStore/store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

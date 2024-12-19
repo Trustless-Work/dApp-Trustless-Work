@@ -5,7 +5,7 @@ import FundEscrowForm from "@/components/modules/escrow/FundEscrowForm";
 import Loader from "@/components/utils/Loader";
 import { WrapperForm } from "@/components/layout/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
-import { useLoaderStore } from "@/store/utilsStore";
+import { useLoaderStore } from "@/store/utilsStore/store";
 
 const FundEscrowPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);

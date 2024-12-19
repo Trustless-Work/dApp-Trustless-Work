@@ -4,7 +4,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useWalletStore } from "@/store/walletStore";
+import { useWalletStore } from "@/store/walletStore/store";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 

@@ -4,7 +4,7 @@ import { Bounded } from "@/components/layout/Bounded";
 import HelpAccordion from "@/components/modules/help/HelpAccordion";
 import Loader from "@/components/utils/Loader";
 import WithAuthProtect from "@/helpers/WithAuth";
-import { useLoaderStore } from "@/store/utilsStore";
+import { useLoaderStore } from "@/store/utilsStore/store";
 
 const HelpPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
