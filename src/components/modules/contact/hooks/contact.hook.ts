@@ -11,7 +11,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/core/config/firebase";
+import { db } from "@/core/config/firebase/firebase";
 
 export enum WalletType {
   Albedo = "Albedo",

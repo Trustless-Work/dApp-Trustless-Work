@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/core/config/firebase";
+import { db } from "@/core/config/firebase/firebase";
 
 export enum IssueType {
   Bug = "Bug",

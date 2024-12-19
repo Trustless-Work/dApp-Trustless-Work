@@ -2,7 +2,7 @@ import { useThemeStore } from "@/store/themeStore/store";
 import { useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "@/hooks/use-toast";
-import { db } from "@/core/config/firebase";
+import { db } from "@/core/config/firebase/firebase";
 import { ProfileForm } from "../ProfileSection";
 import { PreferencesForm } from "../PreferencesSection";
 
