@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, ChevronsUpDown, CreditCard } from "lucide-react";
+import { ChevronsUpDown, CreditCard } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -23,24 +23,28 @@ import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { FaRegCopy } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
-import { IoSettingsOutline } from "react-icons/io5";
-import { FaRegUser } from "react-icons/fa";
+import { IoLogOutOutline, IoSettingsOutline } from "react-icons/io5";
 import Link from "next/link";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 
-export function NavUser() {
+import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+
+export const NavUser = () => {
   const { isMobile } = useSidebar();
   const { address, name } = useWalletStore();
   const { formatAddress } = useFormatUtils();
   const { copyText, copySuccess } = useCopyUtils();
   const { handleDisconnect } = useWalletUtils();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (address) router.push("/dashboard");
-    else router.push("/");
-  }, []);
+    if (!address) {
+      router.push("/");
+    } else if (pathname === "/") {
+      router.push("/dashboard");
+    }
+  }, [address, pathname, router]);
 
   const user = {
     name: "Chris Nager",
@@ -119,16 +123,9 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href="/profile">
-                <DropdownMenuItem>
-                  <FaRegUser />
-                  Account
-                </DropdownMenuItem>
-              </Link>
-
               <Link href="/settings">
                 <DropdownMenuItem>
-                  <Bell />
+                  <IoSettingsOutline />
                   Settings
                 </DropdownMenuItem>
               </Link>
@@ -136,7 +133,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <button className="w-full" onClick={handleDisconnect}>
               <DropdownMenuItem>
-                <IoSettingsOutline />
+                <IoLogOutOutline />
                 Disconnect
               </DropdownMenuItem>
             </button>
@@ -145,4 +142,4 @@ export function NavUser() {
       </SidebarMenuItem>
     </SidebarMenu>
   );
-}
+};

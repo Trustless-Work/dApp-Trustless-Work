@@ -92,3 +92,38 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Scrollbar personalización */
+::-webkit-scrollbar {
+  width: 12px; /* Ancho de la barra */
+  height: 12px; /* Alto de la barra horizontal */
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f5; /* Color del track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #006be4; /* Color del pulgar */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #71717a; /* Color al pasar el cursor */
+}
