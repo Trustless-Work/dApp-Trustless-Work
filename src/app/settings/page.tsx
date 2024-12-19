@@ -10,7 +10,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import Header from "@/components/layout/header/Header";
 import PreferencesSection, {
   PreferencesForm,
-} from "@/components/modules/setting/preferences";
+} from "@/components/modules/setting/preferencesSection";
 import AppearanceSection from "@/components/modules/setting/appearanceSection";
 import ProfileSection, {
   ProfileForm,

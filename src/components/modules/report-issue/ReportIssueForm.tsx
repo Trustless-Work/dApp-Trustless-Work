@@ -14,7 +14,6 @@ import {
   IssueType,
   useSendReportIssue,
 } from "@/components/modules/report-issue/hooks/send-report-issue.hook";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Popover,
   PopoverContent,
@@ -30,6 +29,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
 const ReportIssueForm = () => {
   const { form, onSubmit } = useSendReportIssue();
