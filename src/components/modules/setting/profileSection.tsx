@@ -18,8 +18,8 @@ interface ProfileSectionProps {
   walletAddress: string;
 }
 
-interface ProfileForm {
-  identification: string;
+export interface ProfileForm {
+  identification?: string;
   firstName: string;
   lastName: string;
   wallet: string;

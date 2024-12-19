@@ -17,7 +17,8 @@ interface PreferencesSectionProps {
   onSave: (data: PreferencesForm) => void;
 }
 
-interface PreferencesForm {
+export interface PreferencesForm {
+  identification?: string;
   saveEscrow: boolean;
 }
 
