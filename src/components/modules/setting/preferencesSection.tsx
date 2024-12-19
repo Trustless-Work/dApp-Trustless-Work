@@ -24,7 +24,9 @@ export interface PreferencesForm {
 }
 
 const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
-  const { form, saveEscrow, setSaveEscrow, onSubmit } = usePreferences(onSave);
+  const { form, saveEscrow, setSaveEscrow, onSubmit } = usePreferences({
+    onSave,
+  });
 
   return (
     <section>
