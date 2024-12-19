@@ -7,7 +7,7 @@ import { WrapperForm } from "@/components/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 import { useLoaderStore } from "@/store/utilsStore/store";
 
-const CreateEscrow = () => {
+const InitializeEscrowPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
 
   return (
@@ -30,4 +30,4 @@ const CreateEscrow = () => {
   );
 };
 
-export default WithAuthProtect(CreateEscrow);
+export default WithAuthProtect(InitializeEscrowPage);

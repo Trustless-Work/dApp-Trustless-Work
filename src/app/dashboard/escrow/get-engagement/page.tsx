@@ -5,7 +5,7 @@ import GetEngagementForm from "@/components/modules/escrow/GetEngagementForm";
 import { WrapperForm } from "@/components/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 
-const GetEngagement = () => {
+const GetEngagementPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -17,4 +17,4 @@ const GetEngagement = () => {
   );
 };
 
-export default WithAuthProtect(GetEngagement);
+export default WithAuthProtect(GetEngagementPage);

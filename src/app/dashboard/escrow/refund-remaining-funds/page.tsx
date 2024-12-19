@@ -5,7 +5,7 @@ import RefundRemainingFundsForm from "@/components/modules/escrow/RefundRemainin
 import { WrapperForm } from "@/components/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 
-const RefundRemainingFuns = () => {
+const RefundRemainingFunsPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -17,4 +17,4 @@ const RefundRemainingFuns = () => {
   );
 };
 
-export default WithAuthProtect(RefundRemainingFuns);
+export default WithAuthProtect(RefundRemainingFunsPage);

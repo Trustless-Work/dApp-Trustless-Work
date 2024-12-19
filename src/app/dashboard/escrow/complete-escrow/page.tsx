@@ -5,7 +5,7 @@ import CompleteEscrowForm from "@/components/modules/escrow/CompleEscrowForm";
 import { WrapperForm } from "@/components/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 
-const CompleteEscrow = () => {
+const CompleteEscrowPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -17,4 +17,4 @@ const CompleteEscrow = () => {
   );
 };
 
-export default WithAuthProtect(CompleteEscrow);
+export default WithAuthProtect(CompleteEscrowPage);

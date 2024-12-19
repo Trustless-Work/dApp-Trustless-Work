@@ -3,8 +3,9 @@
 import { Bounded } from "@/components/Bounded";
 import ContactForm from "@/components/modules/contact/ContactForm";
 import { WrapperForm } from "@/components/Wrappers";
+import WithAuthProtect from "@/helpers/WithAuth";
 
-const Contacts = () => {
+const ContactsPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -16,4 +17,4 @@ const Contacts = () => {
   );
 };
 
-export default Contacts;
+export default WithAuthProtect(ContactsPage);

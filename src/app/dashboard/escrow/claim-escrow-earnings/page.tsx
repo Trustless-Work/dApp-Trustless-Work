@@ -5,7 +5,7 @@ import ClaimEscrowEarningsForm from "@/components/modules/escrow/ClaimEscrowEarn
 import { WrapperForm } from "@/components/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 
-const ClaimEscrowEarnings = () => {
+const ClaimEscrowEarningsPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -17,4 +17,4 @@ const ClaimEscrowEarnings = () => {
   );
 };
 
-export default WithAuthProtect(ClaimEscrowEarnings);
+export default WithAuthProtect(ClaimEscrowEarningsPage);

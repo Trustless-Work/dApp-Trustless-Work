@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import WithAuthProtect from "@/helpers/WithAuth";
 
 const escrowData = [
   {
@@ -74,7 +75,7 @@ const escrowData = [
   },
 ];
 
-const MyEscrows = () => {
+const MyEscrowsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(15);
 
@@ -152,4 +153,4 @@ const MyEscrows = () => {
   );
 };
 
-export default MyEscrows;
+export default WithAuthProtect(MyEscrowsPage);

@@ -5,7 +5,7 @@ import CancelEscrowForm from "@/components/modules/escrow/CancelEscrowForm";
 import { WrapperForm } from "@/components/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 
-const CancelEscrow = () => {
+const CancelEscrowPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -17,4 +17,4 @@ const CancelEscrow = () => {
   );
 };
 
-export default WithAuthProtect(CancelEscrow);
+export default WithAuthProtect(CancelEscrowPage);

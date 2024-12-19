@@ -2,9 +2,10 @@
 
 import { Bounded } from "@/components/Bounded";
 import { Button } from "@/components/ui/button";
+import WithAuthProtect from "@/helpers/WithAuth";
 import { fetchCreateEscrow } from "@/services/deploy/createEscrow";
 
-const CreateEscrow = () => {
+const CreateEscrowPage = () => {
   const handleStart = async () => {
     const result = await fetchCreateEscrow();
 
@@ -43,4 +44,4 @@ const CreateEscrow = () => {
   );
 };
 
-export default CreateEscrow;
+export default WithAuthProtect(CreateEscrowPage);
