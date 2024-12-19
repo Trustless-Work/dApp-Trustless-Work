@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { db } from "@/constants/firebase";
 import { doc, setDoc } from "firebase/firestore";
+import useAppearance from "./hooks/appearance-section.hook";
 
 interface AppearanceSectionProps {
   theme: "light" | "dark";
@@ -15,24 +16,7 @@ const AppearanceSection = ({
   theme,
   onThemeChange,
 }: AppearanceSectionProps) => {
-  const handleSaveTheme = async () => {
-    try {
-      const userDoc = doc(db, "users", "appearance-settings");
-      await setDoc(userDoc, { theme });
-
-      toast({
-        title: "Success",
-        description: `Theme "${theme}" saved successfully!`,
-      });
-    } catch (error) {
-      console.error("Error saving theme:", error);
-      toast({
-        title: "Error",
-        description: "Failed to save theme. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
+  const { handleSaveTheme } = useAppearance();
 
   return (
     <section>
