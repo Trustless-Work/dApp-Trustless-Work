@@ -3,6 +3,7 @@
 import { Bounded } from "@/components/layout/Bounded";
 import HelpAccordion from "@/components/modules/help/HelpAccordion";
 import Loader from "@/components/utils/Loader";
+import WithAuthProtect from "@/helpers/WithAuth";
 import { useLoaderStore } from "@/store/utilsStore";
 
 const HelpPage = () => {
@@ -23,4 +24,4 @@ const HelpPage = () => {
   );
 };
 
-export default HelpPage;
+export default WithAuthProtect(HelpPage);
