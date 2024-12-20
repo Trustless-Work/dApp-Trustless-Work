@@ -1,8 +1,8 @@
 import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
-import { MetricCard } from "./MetricCard";
 import { formatCurrency, formatNumber, formatPercentage } from "@/lib/utils";
+import MetricCard from "./MetricCard";
 
-export function MetricsSection() {
+const MetricsSection = () => {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <MetricCard
@@ -31,4 +31,6 @@ export function MetricsSection() {
       />
     </div>
   );
-}
+};
+
+export default MetricsSection;

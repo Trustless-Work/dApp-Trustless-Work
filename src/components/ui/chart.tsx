@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "../card";
+import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import {
   Bar,
   BarChart,
@@ -55,7 +55,7 @@ export function Chart({ title, data, className }: ChartProps) {
                 tickFormatter={(value) => `$${value}`}
               />
               <Tooltip
-                cursor={{ fill: 'hsl(var(--muted))' }}
+                cursor={{ fill: "hsl(var(--muted))" }}
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
