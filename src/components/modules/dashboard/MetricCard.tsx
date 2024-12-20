@@ -9,13 +9,13 @@ interface MetricCardProps {
   className?: string;
 }
 
-export function MetricCard({
+const MetricCard = ({
   title,
   value,
   icon,
   subValue,
   className,
-}: MetricCardProps) {
+}: MetricCardProps) => {
   return (
     <Card className={cn("overflow-hidden", className)}>
       <CardContent className="p-6">
@@ -32,4 +32,6 @@ export function MetricCard({
       </CardContent>
     </Card>
   );
-}
+};
+
+export default MetricCard;

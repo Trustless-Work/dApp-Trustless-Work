@@ -15,11 +15,11 @@ interface DateRangePickerProps {
   onChange?: (date: DateRange | undefined) => void;
 }
 
-export function DateRangePicker({
+const DateRangePicker = ({
   className,
   date,
   onChange,
-}: DateRangePickerProps) {
+}: DateRangePickerProps) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(date);
 
   const handleSelect = (range: DateRange | undefined) => {
@@ -67,4 +67,6 @@ export function DateRangePicker({
       </Popover>
     </div>
   );
-}
+};
+
+export default DateRangePicker;
