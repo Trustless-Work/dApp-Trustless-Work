@@ -2,6 +2,7 @@ import { DashboardLayout } from "@/components/ui/dashboard/dashboardLayout";
 import { MetricsSection } from "@/components/ui/dashboard/MetricSection";
 import { RecentSales } from "@/components/ui/dashboard/RecentSales";
 import { Chart } from "@/components/ui/dashboard/chart";
+import Progress from "@/components/ui/dashboard/Progress";
 
 export default function Page() {
   const chartData = [
@@ -30,8 +31,13 @@ export default function Page() {
               data={chartData}
             />
           </div>
-          <div className="col-span-3">
+          <div className="col-span-4 lg:col-span-3">
             <RecentSales />
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <div className="col-span-4">
+            <Progress value={50} label="Progress" />
           </div>
         </div>
       </div>
