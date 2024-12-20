@@ -1,11 +1,11 @@
-import { MetricsSection } from "@/components/modules/dashboard/MetricSection";
-import { RecentSales } from "@/components/modules/dashboard/RecentSales";
 import { Chart } from "@/components/ui/chart";
 import Progress from "@/components/modules/dashboard/Progress";
-import { DateRangePicker } from "@/components/modules/dashboard/Datepicker";
 import { Button } from "@/components/ui/button";
+import DateRangePicker from "@/components/modules/dashboard/Datepicker";
+import MetricsSection from "@/components/modules/dashboard/MetricSection";
+import RecentSales from "@/components/modules/dashboard/RecentSales";
 
-export default function Page() {
+const Dashboard = () => {
   const chartData = [
     { name: "Jan", value: 4500 },
     { name: "Feb", value: 4000 },
@@ -49,4 +49,6 @@ export default function Page() {
       </div>
     </div>
   );
-}
+};
+
+export default Dashboard;
