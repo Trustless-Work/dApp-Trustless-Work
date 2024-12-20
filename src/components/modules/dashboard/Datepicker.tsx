@@ -4,13 +4,9 @@ import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
-import { Button } from "../button";
-import { Calendar } from "./calender";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../popover";
+import { Button } from "../../ui/button";
+import { Calendar } from "../../ui/calender";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { useState } from "react";
 
 interface DateRangePickerProps {
@@ -40,7 +36,7 @@ export function DateRangePicker({
             variant={"outline"}
             className={cn(
               "w-[300px] justify-start text-left font-normal",
-              !dateRange && "text-muted-foreground"
+              !dateRange && "text-muted-foreground",
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />

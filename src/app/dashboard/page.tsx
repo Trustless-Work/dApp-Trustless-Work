@@ -1,8 +1,9 @@
-import { DashboardLayout } from "@/components/ui/dashboard/dashboardLayout";
-import { MetricsSection } from "@/components/ui/dashboard/MetricSection";
-import { RecentSales } from "@/components/ui/dashboard/RecentSales";
-import { Chart } from "@/components/ui/dashboard/chart";
-import Progress from "@/components/ui/dashboard/Progress";
+import { MetricsSection } from "@/components/modules/dashboard/MetricSection";
+import { RecentSales } from "@/components/modules/dashboard/RecentSales";
+import { Chart } from "@/components/ui/chart";
+import Progress from "@/components/modules/dashboard/Progress";
+import { DateRangePicker } from "@/components/modules/dashboard/Datepicker";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   const chartData = [
@@ -22,14 +23,19 @@ export default function Page() {
 
   return (
     <div className="flex flex-col">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+        <div className="flex items-center space-x-2">
+          <DateRangePicker />
+          <Button>Download</Button>
+        </div>
+      </div>
+
       <div className="space-y-4">
         <MetricsSection />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <div className="col-span-4">
-            <Chart
-              title="Overview"
-              data={chartData}
-            />
+            <Chart title="Overview" data={chartData} />
           </div>
           <div className="col-span-4 lg:col-span-3">
             <RecentSales />
