@@ -20,12 +20,12 @@ export default function Page() {
   ];
 
   return (
-    <DashboardLayout>
+    <div className="flex flex-col">
       <div className="space-y-4">
         <MetricsSection />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <div className="col-span-4">
-             <Chart
+            <Chart
               title="Overview"
               data={chartData}
             />
@@ -35,6 +35,6 @@ export default function Page() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </div>
   );
 }
