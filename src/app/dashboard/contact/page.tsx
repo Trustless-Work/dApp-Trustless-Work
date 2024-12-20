@@ -1,10 +1,11 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
-import { ContactForm } from "@/components/modules/contact/ContactForm";
-import { WrapperForm } from "@/components/Wrappers";
+import { Bounded } from "@/components/layout/Bounded";
+import ContactForm from "@/components/modules/contact/ContactForm";
+import { WrapperForm } from "@/components/layout/Wrappers";
+import WithAuthProtect from "@/helpers/WithAuth";
 
-export default function Contacts() {
+const ContactsPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -14,4 +15,6 @@ export default function Contacts() {
       </WrapperForm>
     </Bounded>
   );
-}
+};
+
+export default WithAuthProtect(ContactsPage);

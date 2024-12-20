@@ -1,4 +1,4 @@
-import http from "@/core/axios/http";
+import http from "@/core/config/axios/http";
 import axios from "axios";
 
 interface EscrowPayload {

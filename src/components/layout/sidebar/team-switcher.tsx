@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-export function TeamSwitcher({
+const TeamSwitcher = ({
   teams,
 }: {
   teams: {
@@ -22,7 +22,7 @@ export function TeamSwitcher({
     logo: string;
     plan: string;
   }[];
-}) {
+}) => {
   const [activeTeam] = React.useState(teams[0]);
 
   return (
@@ -54,4 +54,6 @@ export function TeamSwitcher({
       </SidebarMenuItem>
     </SidebarMenu>
   );
-}
+};
+
+export default TeamSwitcher;

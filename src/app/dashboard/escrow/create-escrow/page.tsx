@@ -1,10 +1,11 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
+import { Bounded } from "@/components/layout/Bounded";
 import { Button } from "@/components/ui/button";
+import WithAuthProtect from "@/helpers/WithAuth";
 import { fetchCreateEscrow } from "@/services/deploy/createEscrow";
 
-export default function CreateEscrow() {
+const CreateEscrowPage = () => {
   const handleStart = async () => {
     const result = await fetchCreateEscrow();
 
@@ -41,4 +42,6 @@ export default function CreateEscrow() {
       </div>
     </Bounded>
   );
-}
+};
+
+export default WithAuthProtect(CreateEscrowPage);

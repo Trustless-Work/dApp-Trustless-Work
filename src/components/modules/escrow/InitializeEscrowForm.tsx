@@ -28,9 +28,9 @@ import {
 } from "@/components/ui/command";
 import { statusOptions } from "@/constants/escrow/StatusOptions";
 import { cn } from "@/lib/utils";
-import { TooltipInfo } from "./EscrowFormField";
+import TooltipInfo from "./EscrowFormField";
 
-export function InitializeEscrowForm() {
+const InitializeEscrowForm = () => {
   const {
     form,
     milestones,
@@ -275,4 +275,6 @@ export function InitializeEscrowForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default InitializeEscrowForm;

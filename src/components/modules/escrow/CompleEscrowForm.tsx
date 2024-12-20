@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useCompleteEscrowHook } from "./hooks/complete-escrow.hook";
-import { TooltipInfo } from "./EscrowFormField";
+import TooltipInfo from "./EscrowFormField";
 
-export function CompleteEscrowForm() {
+const CompleteEscrowForm = () => {
   const { form, onSubmit } = useCompleteEscrowHook();
 
   return (
@@ -65,4 +65,6 @@ export function CompleteEscrowForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default CompleteEscrowForm;

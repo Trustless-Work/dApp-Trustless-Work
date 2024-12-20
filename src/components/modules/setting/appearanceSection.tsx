@@ -2,35 +2,18 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
-import { db } from "@/constants/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import useAppearance from "./hooks/appearance-section.hook";
 
-export function AppearanceSection({
-  theme,
-  onThemeChange,
-}: {
+interface AppearanceSectionProps {
   theme: "light" | "dark";
   onThemeChange: (theme: "light" | "dark") => void;
-}) {
-  const handleSaveTheme = async () => {
-    try {
-      const userDoc = doc(db, "users", "appearance-settings");
-      await setDoc(userDoc, { theme });
+}
 
-      toast({
-        title: "Success",
-        description: `Theme "${theme}" saved successfully!`,
-      });
-    } catch (error) {
-      console.error("Error saving theme:", error);
-      toast({
-        title: "Error",
-        description: "Failed to save theme. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
+const AppearanceSection = ({
+  theme,
+  onThemeChange,
+}: AppearanceSectionProps) => {
+  const { handleSaveTheme } = useAppearance({ theme });
 
   return (
     <section>
@@ -70,4 +53,6 @@ export function AppearanceSection({
       </Button>
     </section>
   );
-}
+};
+
+export default AppearanceSection;

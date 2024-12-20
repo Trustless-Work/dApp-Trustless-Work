@@ -1,4 +1,4 @@
-import { Bounded } from "@/components/Bounded";
+import { Bounded } from "@/components/layout/Bounded";
 import RequestApiKeyForm from "@/components/modules/request-api-key/RequestApiKeyForm";
 import {
   Card,
@@ -7,9 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { WrapperForm } from "@/components/Wrappers";
+import { WrapperForm } from "@/components/layout/Wrappers";
+import WithAuthProtect from "@/helpers/WithAuth";
 
-export default function RequestApyKeyPage() {
+const RequestApyKeyPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -30,4 +31,6 @@ export default function RequestApyKeyPage() {
       </WrapperForm>
     </Bounded>
   );
-}
+};
+
+export default WithAuthProtect(RequestApyKeyPage);

@@ -1,7 +1,7 @@
 import { kit } from "@/wallet/walletKit";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
-import http from "@/core/axios/http";
+import http from "@/core/config/axios/http";
 import axios from "axios";
 
 interface EscrowPayload {

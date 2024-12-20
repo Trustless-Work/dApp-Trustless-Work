@@ -11,7 +11,7 @@ interface TooltipInfoProps {
   content: string;
 }
 
-export function TooltipInfo({ content }: TooltipInfoProps) {
+const TooltipInfo = ({ content }: TooltipInfoProps) => {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -27,4 +27,6 @@ export function TooltipInfo({ content }: TooltipInfoProps) {
       </Tooltip>
     </TooltipProvider>
   );
-}
+};
+
+export default TooltipInfo;

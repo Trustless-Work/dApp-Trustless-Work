@@ -1,6 +1,6 @@
-import { ReportIssueForm } from "@/components/modules/report-issue/ReportIssueForm";
-import { WrapperForm } from "@/components/Wrappers";
-import { Bounded } from "@/components/Bounded";
+import ReportIssueForm from "@/components/modules/report-issue/ReportIssueForm";
+import { WrapperForm } from "@/components/layout/Wrappers";
+import { Bounded } from "@/components/layout/Bounded";
 import {
   Card,
   CardContent,
@@ -8,8 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import WithAuthProtect from "@/helpers/WithAuth";
 
-export default function Page() {
+const ReportIssuePage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -29,4 +30,6 @@ export default function Page() {
       </WrapperForm>
     </Bounded>
   );
-}
+};
+
+export default WithAuthProtect(ReportIssuePage);

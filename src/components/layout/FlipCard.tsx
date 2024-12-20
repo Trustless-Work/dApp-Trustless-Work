@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { TbDeviceDesktopCode } from "react-icons/tb";
 import { LuSquareUserRound } from "react-icons/lu";
-import CodeBlock from "@/components/CodeBlock";
+import CodeBlock from "@/components/layout/CodeBlock";
 
 type FlipCardProps = {
   children: React.ReactNode;

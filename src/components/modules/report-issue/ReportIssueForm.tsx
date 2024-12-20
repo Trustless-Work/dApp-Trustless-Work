@@ -14,7 +14,6 @@ import {
   IssueType,
   useSendReportIssue,
 } from "@/components/modules/report-issue/hooks/send-report-issue.hook";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Popover,
   PopoverContent,
@@ -30,8 +29,9 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
 
-export function ReportIssueForm() {
+const ReportIssueForm = () => {
   const { form, onSubmit } = useSendReportIssue();
   const typeOptions = Object.values(IssueType).map((value) => ({
     value,
@@ -165,4 +165,6 @@ export function ReportIssueForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default ReportIssueForm;

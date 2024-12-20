@@ -10,32 +10,25 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import useProfile from "./hooks/profile-section.hook";
 
-export function ProfileSection({
-  onSave,
-  walletAddress,
-}: {
-  onSave: (data: any) => void;
+interface ProfileSectionProps {
+  onSave: (data: ProfileForm) => void;
   walletAddress: string;
-}) {
-  const form = useForm({
-    defaultValues: {
-      identification: "",
-      firstName: "",
-      lastName: "",
-      wallet: "",
-    },
+}
+
+export interface ProfileForm {
+  identification?: string;
+  firstName: string;
+  lastName: string;
+  wallet: string;
+}
+
+const ProfileSection = ({ onSave, walletAddress }: ProfileSectionProps) => {
+  const { form, onSubmit } = useProfile({
+    walletAddress,
+    onSave,
   });
-
-  useEffect(() => {
-    form.setValue("wallet", walletAddress);
-  }, [walletAddress, form]);
-
-  const onSubmit = (data: any) => {
-    onSave(data);
-  };
 
   return (
     <section>
@@ -95,4 +88,6 @@ export function ProfileSection({
       </Form>
     </section>
   );
-}
+};
+
+export default ProfileSection;

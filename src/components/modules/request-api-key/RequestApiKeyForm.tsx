@@ -31,7 +31,7 @@ import {
   useRequestApiKeyForm,
 } from "./hooks/request-api-key-form.hook";
 
-export default function RequestApiKeyForm() {
+const RequestApiKeyForm = () => {
   const { form, isLoading, onSubmit } = useRequestApiKeyForm();
 
   const typeOptions = Object.values(RequestType).map((value) => ({
@@ -167,4 +167,6 @@ export default function RequestApiKeyForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default RequestApiKeyForm;

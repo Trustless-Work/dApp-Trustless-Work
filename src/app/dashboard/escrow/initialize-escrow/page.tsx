@@ -1,13 +1,13 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
-import { InitializeEscrowForm } from "@/components/modules/escrow/InitializeEscrowForm";
+import { Bounded } from "@/components/layout/Bounded";
+import InitializeEscrowForm from "@/components/modules/escrow/InitializeEscrowForm";
 import Loader from "@/components/utils/Loader";
-import { WrapperForm } from "@/components/Wrappers";
+import { WrapperForm } from "@/components/layout/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 import { useLoaderStore } from "@/store/utilsStore/store";
 
-const CreateEscrow = () => {
+const InitializeEscrowPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
 
   return (
@@ -30,4 +30,4 @@ const CreateEscrow = () => {
   );
 };
 
-export default WithAuthProtect(CreateEscrow);
+export default WithAuthProtect(InitializeEscrowPage);

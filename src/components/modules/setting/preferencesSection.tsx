@@ -9,25 +9,22 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import usePreferences from "./hooks/preferences-section.hook";
 
-export function PreferencesSection({
-  onSave,
-}: {
-  onSave: (data: any) => void;
-}) {
-  const form = useForm({
-    defaultValues: {
-      saveEscrow: false,
-    },
+interface PreferencesSectionProps {
+  onSave: (data: PreferencesForm) => void;
+}
+
+export interface PreferencesForm {
+  identification?: string;
+  saveEscrow: boolean;
+}
+
+const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
+  const { form, saveEscrow, setSaveEscrow, onSubmit } = usePreferences({
+    onSave,
   });
-  const [saveEscrow, setSaveEscrow] = useState(false);
-
-  const onSubmit = (data: any) => {
-    onSave(data);
-  };
 
   return (
     <section>
@@ -61,4 +58,6 @@ export function PreferencesSection({
       </Form>
     </section>
   );
-}
+};
+
+export default PreferencesSection;

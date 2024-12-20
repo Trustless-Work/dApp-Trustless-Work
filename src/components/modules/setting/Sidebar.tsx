@@ -7,10 +7,7 @@ interface SettingsSidebarProps {
   onTabChange: (tab: string) => void;
 }
 
-export function SettingsSidebar({
-  currentTab,
-  onTabChange,
-}: SettingsSidebarProps) {
+const SettingsSidebar = ({ currentTab, onTabChange }: SettingsSidebarProps) => {
   const { theme } = useThemeStore();
 
   return (
@@ -65,4 +62,6 @@ export function SettingsSidebar({
       </nav>
     </aside>
   );
-}
+};
+
+export default SettingsSidebar;

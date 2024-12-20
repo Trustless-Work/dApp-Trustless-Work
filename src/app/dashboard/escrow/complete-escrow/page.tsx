@@ -1,11 +1,11 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
-import { CompleteEscrowForm } from "@/components/modules/escrow/CompleEscrowForm";
-import { WrapperForm } from "@/components/Wrappers";
+import { Bounded } from "@/components/layout/Bounded";
+import CompleteEscrowForm from "@/components/modules/escrow/CompleEscrowForm";
+import { WrapperForm } from "@/components/layout/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 
-const CompleteEscrow = () => {
+const CompleteEscrowPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -17,4 +17,4 @@ const CompleteEscrow = () => {
   );
 };
 
-export default WithAuthProtect(CompleteEscrow);
+export default WithAuthProtect(CompleteEscrowPage);

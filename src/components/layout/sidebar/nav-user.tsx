@@ -17,7 +17,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useWalletStore } from "@/store/walletStore";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { FaRegCopy } from "react-icons/fa";
@@ -28,6 +27,7 @@ import Link from "next/link";
 
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useWalletStore } from "@/store/walletStore/store";
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();
