@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-type WalletState = {
+interface WalletState {
   address: string;
   name: string;
   connectWalletStore: (address: string, name: string) => void;
   disconnectWalletStore: () => void;
-};
+}
 
 export const useWalletStore = create<WalletState>()(
   devtools(

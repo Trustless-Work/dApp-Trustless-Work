@@ -1,4 +1,4 @@
-import http from "@/core/axios/http";
+import http from "@/core/config/axios/http";
 
 export const fetchCreateEscrow = async () => {
   try {

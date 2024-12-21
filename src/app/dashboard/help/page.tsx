@@ -1,11 +1,12 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
-import { HelpAccordion } from "@/components/help/HelpAccordion";
+import { Bounded } from "@/components/layout/Bounded";
+import HelpAccordion from "@/components/modules/help/HelpAccordion";
 import Loader from "@/components/utils/Loader";
-import { useLoaderStore } from "@/store/utilsStore";
+import WithAuthProtect from "@/helpers/WithAuth";
+import { useLoaderStore } from "@/store/utilsStore/store";
 
-export default function HelpPage() {
+const HelpPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
 
   return (
@@ -21,4 +22,6 @@ export default function HelpPage() {
       )}
     </Bounded>
   );
-}
+};
+
+export default WithAuthProtect(HelpPage);

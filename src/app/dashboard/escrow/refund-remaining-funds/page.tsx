@@ -1,11 +1,11 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
-import { RefundRemainingFundsForm } from "@/components/modules/escrow/RefundRemainingFundsForm";
-import { WrapperForm } from "@/components/Wrappers";
+import { Bounded } from "@/components/layout/Bounded";
+import RefundRemainingFundsForm from "@/components/modules/escrow/RefundRemainingFundsForm";
+import { WrapperForm } from "@/components/layout/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 
-const RefundRemainingFuns = () => {
+const RefundRemainingFunsPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -17,4 +17,4 @@ const RefundRemainingFuns = () => {
   );
 };
 
-export default WithAuthProtect(RefundRemainingFuns);
+export default WithAuthProtect(RefundRemainingFunsPage);

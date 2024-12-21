@@ -1,17 +1,17 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
-import { FundEscrowForm } from "@/components/modules/escrow/FundEscrowForm";
+import { Bounded } from "@/components/layout/Bounded";
+import FundEscrowForm from "@/components/modules/escrow/FundEscrowForm";
 import Loader from "@/components/utils/Loader";
-import { WrapperForm } from "@/components/Wrappers";
+import { WrapperForm } from "@/components/layout/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
-import { useLoaderStore } from "@/store/utilsStore";
+import { useLoaderStore } from "@/store/utilsStore/store";
 
-const FundEscrow = () => {
+const FundEscrowPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
 
   return (
-    <Bounded center={true}>
+    <Bounded center={false}>
       {isLoading ? (
         <Loader isLoading={isLoading} />
       ) : (
@@ -25,4 +25,4 @@ const FundEscrow = () => {
   );
 };
 
-export default WithAuthProtect(FundEscrow);
+export default WithAuthProtect(FundEscrowPage);

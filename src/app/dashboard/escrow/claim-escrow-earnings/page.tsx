@@ -1,11 +1,11 @@
 "use client";
 
-import { Bounded } from "@/components/Bounded";
-import { ClaimEscrowEarningsForm } from "@/components/modules/escrow/ClaimEscrowEarningsForm";
-import { WrapperForm } from "@/components/Wrappers";
+import { Bounded } from "@/components/layout/Bounded";
+import ClaimEscrowEarningsForm from "@/components/modules/escrow/ClaimEscrowEarningsForm";
+import { WrapperForm } from "@/components/layout/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 
-const ClaimEscrowEarnings = () => {
+const ClaimEscrowEarningsPage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
@@ -17,4 +17,4 @@ const ClaimEscrowEarnings = () => {
   );
 };
 
-export default WithAuthProtect(ClaimEscrowEarnings);
+export default WithAuthProtect(ClaimEscrowEarningsPage);

@@ -1,7 +1,7 @@
-import React from "react";
+import { useState } from "react";
 
 export const useCopyUtils = () => {
-  const [copySuccess, setCopySuccess] = React.useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   const copyText = async (text: string) => {
     try {

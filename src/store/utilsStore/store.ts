@@ -1,10 +1,10 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
-type LoaderState = {
+interface LoaderState {
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
-};
+}
 
 export const useLoaderStore = create<LoaderState>()(
   devtools((set) => ({
