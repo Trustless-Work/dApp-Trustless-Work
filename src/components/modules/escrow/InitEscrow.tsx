@@ -1,15 +1,13 @@
-import { Bounded } from "@/components/Bounded";
-import { WrapperForm } from "@/components/Wrappers";
-import React from "react";
-import { InitializeEscrowForm } from "./InitializeEscrowForm";
-import { useLoaderStore } from "@/store/utilsStore/store";
+"use client";
+
+import { Bounded } from "@/components/layout/Bounded";
+import InitializeEscrowForm from "@/components/modules/escrow/InitializeEscrowForm";
 import Loader from "@/components/utils/Loader";
+import { WrapperForm } from "@/components/layout/Wrappers";
+import WithAuthProtect from "@/helpers/WithAuth";
+import { useLoaderStore } from "@/store/utilsStore/store";
 
-interface InitEscrowProps {
-  serviceDetails: any;
-}
-
-const InitEscrow: React.FC<InitEscrowProps> = ({ serviceDetails }) => {
+const InitializeEscrow = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
 
   return (
@@ -32,4 +30,4 @@ const InitEscrow: React.FC<InitEscrowProps> = ({ serviceDetails }) => {
   );
 };
 
-export default InitEscrow;
+export default WithAuthProtect(InitializeEscrow);

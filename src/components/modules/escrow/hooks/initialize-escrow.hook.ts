@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
 import { initializeEscrow } from "@/services/escrow/initializeEscrow";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { useWalletStore } from "@/store/walletStore/store";
+import { useEscrowFormStore } from "@/store/escrowFormStore/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -53,6 +54,7 @@ export const useInitializeEscrowHook = () => {
   const { address } = useWalletStore();
   const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
+  const { formData, setFormData } = useEscrowFormStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,20 +71,29 @@ export const useInitializeEscrowHook = () => {
     },
   });
 
+  // Load stored form data when component mounts
+  useEffect(() => {
+    if (formData) {
+      Object.keys(formData).forEach((key) => {
+        form.setValue(key as any, formData[key as keyof typeof formData]);
+      });
+    }
+  }, [formData, form]);
+
   const milestones = form.watch("milestones");
 
   const handleAddMilestone = () => {
     const currentMilestones = form.getValues("milestones");
-    form.setValue("milestones", [
-      ...currentMilestones,
-      { description: "", status: "" },
-    ]);
+    const updatedMilestones = [...currentMilestones, { description: "", status: "" }];
+    form.setValue("milestones", updatedMilestones);
+    setFormData({ milestones: updatedMilestones });
   };
 
   const handleRemoveMilestone = (index: number) => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = currentMilestones.filter((_, i) => i !== index);
     form.setValue("milestones", updatedMilestones);
+    setFormData({ milestones: updatedMilestones });
   };
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
@@ -91,6 +102,8 @@ export const useInitializeEscrowHook = () => {
       releaseSigner: address,
     };
 
+    // Update store with latest form data before submission
+    setFormData(payload);
     setIsLoading(true);
 
     try {
@@ -125,11 +138,17 @@ export const useInitializeEscrowHook = () => {
     }
   };
 
+  // Update store whenever form fields change
+  const handleFieldChange = (name: string, value: any) => {
+    setFormData({ [name]: value });
+  };
+
   return {
     form,
     milestones,
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
+    handleFieldChange,
   };
 };
