@@ -1,12 +1,12 @@
 "use client"
 
 import CreateEscrow from '@/components/modules/escrow/CreateEscrow';
+import { EscrowStepper } from '@/components/modules/escrow/EscrowStepper';
 import InitEscrow from '@/components/modules/escrow/InitEscrow';
-import { Steps } from '@/components/ui/steps'
 import WithAuthProtect from '@/helpers/WithAuth';
 import React from 'react'
 
-const EscrowStepper = () => {
+const CreateEscrowPage = () => {
   const steps = [
     {
       title: "Create Escrow",
@@ -20,8 +20,8 @@ const EscrowStepper = () => {
     }
   ];
   return (
-    <Steps items={steps} />
+    <EscrowStepper items={steps} />
   )
 }
 
-export default WithAuthProtect(EscrowStepper)
+export default WithAuthProtect(CreateEscrowPage)
