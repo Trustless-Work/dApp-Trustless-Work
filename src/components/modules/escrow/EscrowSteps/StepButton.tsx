@@ -32,8 +32,8 @@ export const StepButton = React.memo(function StepButton({
           isCompleted
             ? "text-white"
             : isActive
-            ? "text-blue-500"
-            : "text-zinc-500 dark:text-zinc-400",
+              ? "text-blue-500"
+              : "text-zinc-500 dark:text-zinc-400",
         )}
       >
         {number}
@@ -41,4 +41,3 @@ export const StepButton = React.memo(function StepButton({
     </button>
   );
 });
-
