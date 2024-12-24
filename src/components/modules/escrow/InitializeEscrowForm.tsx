@@ -37,6 +37,7 @@ const InitializeEscrowForm = () => {
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
+    handleFieldChange,
   } = useInitializeEscrowHook();
 
   return (
@@ -55,7 +56,14 @@ const InitializeEscrowForm = () => {
                 <TooltipInfo content="Address of the client initiating the escrow." />
               </FormLabel>
               <FormControl>
-                <Input placeholder="Alice Address" {...field} />
+                <Input 
+                  placeholder="Alice Address" 
+                  {...field} 
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleFieldChange("client", e.target.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,7 +80,14 @@ const InitializeEscrowForm = () => {
                 <TooltipInfo content="Unique identifier for this escrow engagement." />
               </FormLabel>
               <FormControl>
-                <Input placeholder="Enter identifier" {...field} />
+                <Input 
+                  placeholder="Enter identifier" 
+                  {...field} 
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleFieldChange("engagementId", e.target.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -89,7 +104,14 @@ const InitializeEscrowForm = () => {
                 <TooltipInfo content="Address of the service provider for this escrow." />
               </FormLabel>
               <FormControl>
-                <Input placeholder="Bob Address" {...field} />
+                <Input 
+                  placeholder="Bob Address" 
+                  {...field} 
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleFieldChange("serviceProvider", e.target.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -106,7 +128,14 @@ const InitializeEscrowForm = () => {
                 <TooltipInfo content="Public key of the platform managing the escrow." />
               </FormLabel>
               <FormControl>
-                <Input placeholder="Platform Public Key" {...field} />
+                <Input 
+                  placeholder="Platform Public Key" 
+                  {...field} 
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleFieldChange("platformAddress", e.target.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -123,7 +152,14 @@ const InitializeEscrowForm = () => {
                 <TooltipInfo content="Fee charged by the platform for this escrow." />
               </FormLabel>
               <FormControl>
-                <Input placeholder="Enter platform fee" {...field} />
+                <Input 
+                  placeholder="Enter platform fee" 
+                  {...field} 
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleFieldChange("platformFee", e.target.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -144,6 +180,10 @@ const InitializeEscrowForm = () => {
                   type="string"
                   placeholder="Enter the escrow amount"
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleFieldChange("amount", e.target.value);
+                  }}
                 />
               </FormControl>
               <FormMessage />
@@ -161,7 +201,14 @@ const InitializeEscrowForm = () => {
                 <TooltipInfo content="Entity authorized to release funds from escrow." />
               </FormLabel>
               <FormControl>
-                <Input placeholder="Enter the release signer" {...field} />
+                <Input 
+                  placeholder="Enter the release signer" 
+                  {...field} 
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleFieldChange("releaseSigner", e.target.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -178,7 +225,14 @@ const InitializeEscrowForm = () => {
                 <TooltipInfo content="Entity responsible for resolving disputes." />
               </FormLabel>
               <FormControl>
-                <Input placeholder="Enter the dispute resolver" {...field} />
+                <Input 
+                  placeholder="Enter the dispute resolver" 
+                  {...field} 
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleFieldChange("disputeResolver", e.target.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -199,6 +253,7 @@ const InitializeEscrowForm = () => {
                   const updatedMilestones = [...milestones];
                   updatedMilestones[index].description = e.target.value;
                   form.setValue("milestones", updatedMilestones);
+                  handleFieldChange("milestones", updatedMilestones);
                 }}
               />
 
@@ -231,6 +286,7 @@ const InitializeEscrowForm = () => {
                               const updatedMilestones = [...milestones];
                               updatedMilestones[index].status = option.value;
                               form.setValue("milestones", updatedMilestones);
+                              handleFieldChange("milestones", updatedMilestones);
                             }}
                           >
                             <Check
