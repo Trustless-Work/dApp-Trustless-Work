@@ -1,36 +1,13 @@
-import { WrapperForm } from "@/components/layout/Wrappers";
 import { Bounded } from "@/components/layout/Bounded";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
-import RequestApiKeyForm from "@/components/modules/request-api-key/RequestApiKeyForm";
+import Connect from "@/components/utils/Connect";
 
 const ResquestApiKeyWithoutAuthPage = () => {
   return (
     <>
-      <HeaderWithoutAuth />
-      <Bounded center={true}>
-        <WrapperForm>
-          <Card className="w-full max-w-2xl mx-auto bg-muted/50 mt-10">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold">
-                Request an API Key.
-              </CardTitle>
-              <CardDescription>
-                Fill out the form below to request an API key without the need
-                to connect your wallet.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <RequestApiKeyForm />
-            </CardContent>
-          </Card>
-        </WrapperForm>
+      <HeaderWithoutAuth highlightConnect={true} />
+      <Bounded center={true} className="mt-20">
+        <Connect />
       </Bounded>
     </>
   );
