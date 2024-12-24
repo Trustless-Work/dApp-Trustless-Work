@@ -1,3 +1,5 @@
+"use client";
+
 import { Bounded } from "@/components/layout/Bounded";
 import RequestApiKeyForm from "@/components/modules/request-api-key/RequestApiKeyForm";
 import {

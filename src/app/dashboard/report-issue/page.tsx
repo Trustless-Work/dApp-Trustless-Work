@@ -1,3 +1,5 @@
+"use client";
+
 import ReportIssueForm from "@/components/modules/report-issue/ReportIssueForm";
 import { WrapperForm } from "@/components/layout/Wrappers";
 import { Bounded } from "@/components/layout/Bounded";
