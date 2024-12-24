@@ -1,21 +1,21 @@
 "use client";
 
-import { Bounded } from "@/components/layout/Bounded";
 import InitializeEscrowForm from "@/components/modules/escrow/InitializeEscrowForm";
+import FlipCard from "@/components/utils/Code/FlipCard";
 import Loader from "@/components/utils/Loader";
-import { WrapperForm } from "@/components/layout/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
 import { useLoaderStore } from "@/store/utilsStore/store";
+import { initializeEscrowCode } from "./code/initialize.code";
 
 const InitializeEscrow = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
 
   return (
-    <Bounded center={true}>
+    <>
       {isLoading ? (
         <Loader isLoading={isLoading} />
       ) : (
-        <WrapperForm>
+        <div className="flex flex-col gap-3">
           <h1 className="text-4xl font-bold">
             Fill in the details of the Escrow
           </h1>
@@ -23,10 +23,13 @@ const InitializeEscrow = () => {
             Fill in the details below to set up a secure and reliable escrow
             agreement.
           </h2>
-          <InitializeEscrowForm />
-        </WrapperForm>
+          <FlipCard
+            children={<InitializeEscrowForm />}
+            codeExample={initializeEscrowCode}
+          />
+        </div>
       )}
-    </Bounded>
+    </>
   );
 };
 
