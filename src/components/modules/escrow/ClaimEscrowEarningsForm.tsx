@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useClaimEscrowEarningsHook } from "./hooks/claim-escrow-earnings.hook";
-import TooltipInfo from "./EscrowFormField";
+import TooltipInfo from "../../utils/Tooltip";
 
 const ClaimEscrowEarningsForm = () => {
   const { form, onSubmit } = useClaimEscrowEarningsHook();

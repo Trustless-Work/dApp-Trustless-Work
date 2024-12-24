@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRefundRemainingFundsEscrowHook } from "./hooks/refund-remaining-funds-escrow.hook";
-import TooltipInfo from "./EscrowFormField";
+import TooltipInfo from "../../utils/Tooltip";
 
 const RefundRemainingFundsForm = () => {
   const { onSubmit, form } = useRefundRemainingFundsEscrowHook();
