@@ -10,7 +10,9 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       <SidebarInset>
         <Header />
         <div className="bg-muted/50 min-h-screen">
-          <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">{children}</div>
+          <div className="flex-1 space-y-4 p-4 pt-6 md:p-8 h-full">
+            {children}
+          </div>
         </div>
         <Footer />
       </SidebarInset>
