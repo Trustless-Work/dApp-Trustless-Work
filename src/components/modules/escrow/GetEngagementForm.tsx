@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useGetEngagementEscrowHook } from "./hooks/get-engagement-escrow.hook";
-import TooltipInfo from "./EscrowFormField";
+import TooltipInfo from "../../utils/Tooltip";
 
 const GetEngagementForm = () => {
   const { onSubmit, form } = useGetEngagementEscrowHook();
