@@ -1,33 +1,24 @@
 "use client";
 
-import { Bounded } from "@/components/layout/Bounded";
-import InitializeEscrowForm from "@/components/modules/escrow/InitializeEscrowForm";
-import Loader from "@/components/utils/Loader";
-import { WrapperForm } from "@/components/layout/Wrappers";
 import WithAuthProtect from "@/helpers/WithAuth";
-import { useLoaderStore } from "@/store/utilsStore/store";
+import CreateEscrow from "@/components/modules/escrow/CreateEscrow";
+import InitEscrow from "@/components/modules/escrow/InitEscrow";
+import { EscrowSteps } from "@/components/modules/escrow/EscrowSteps/EscrowStepper";
 
 const InitializeEscrowPage = () => {
-  const isLoading = useLoaderStore((state) => state.isLoading);
-
-  return (
-    <Bounded center={true}>
-      {isLoading ? (
-        <Loader isLoading={isLoading} />
-      ) : (
-        <WrapperForm>
-          <h1 className="text-4xl font-bold">
-            Fill in the details of the Escrow
-          </h1>
-          <h2>
-            Fill in the details below to set up a secure and reliable escrow
-            agreement.
-          </h2>
-          <InitializeEscrowForm />
-        </WrapperForm>
-      )}
-    </Bounded>
-  );
+  const steps = [
+    {
+      title: "Create Escrow",
+      description: "Create Escrow",
+      component: <CreateEscrow />,
+    },
+    {
+      title: "Initialize Escrow",
+      description: "Set up your escrow details",
+      component: <InitEscrow />,
+    },
+  ];
+  return <EscrowSteps items={steps} />;
 };
 
 export default WithAuthProtect(InitializeEscrowPage);

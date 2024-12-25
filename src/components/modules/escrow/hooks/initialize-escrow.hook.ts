@@ -84,7 +84,10 @@ export const useInitializeEscrowHook = () => {
 
   const handleAddMilestone = () => {
     const currentMilestones = form.getValues("milestones");
-    const updatedMilestones = [...currentMilestones, { description: "", status: "" }];
+    const updatedMilestones = [
+      ...currentMilestones,
+      { description: "", status: "" },
+    ];
     form.setValue("milestones", updatedMilestones);
     setFormData({ milestones: updatedMilestones });
   };

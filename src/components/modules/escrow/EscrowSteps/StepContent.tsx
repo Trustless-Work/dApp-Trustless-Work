@@ -29,4 +29,3 @@ export const StepContent = React.memo(function StepContent({
     </div>
   );
 });
-

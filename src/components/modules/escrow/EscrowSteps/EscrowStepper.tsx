@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { StepButton } from "./StepButton";
 import { StepContent } from "./StepContent";
 import { useEscrowStepsStore } from "@/store/EscrowStepStore/store";
+import { Card, CardContent } from "@/components/ui/card";
 
 export interface StepItem {
   title: string;
@@ -29,63 +30,68 @@ export const EscrowSteps = React.forwardRef<HTMLDivElement, EscrowStepsProps>(
       (stepNumber: number) => {
         toggleStep(stepNumber);
       },
-      [toggleStep]
+      [toggleStep],
     );
 
     const currentComponent = React.useMemo(
       () => items[currentStep - 1]?.component,
-      [items, currentStep]
+      [items, currentStep],
     );
 
     return (
       <div
         ref={ref}
-        className={cn("grid grid-cols-[300px_1fr] gap-6", className)}
+        className={cn("flex flex-col md:flex-row h-full gap-6", className)}
         {...props}
       >
-        <div className="space-y-4">
-          {items.map((step: StepItem, index: number) => {
-            const stepNumber: number = index + 1;
-            const isActive: boolean = stepNumber === currentStep;
-            const isCompleted: boolean = isStepCompleted(stepNumber);
+        <Card className={cn("overflow-hidden md:w-1/3 w-full h-auto")}>
+          <CardContent className="p-6 space-y-4">
+            {items.map((step: StepItem, index: number) => {
+              const stepNumber: number = index + 1;
+              const isActive: boolean = stepNumber === currentStep;
+              const isCompleted: boolean = isStepCompleted(stepNumber);
 
-            return (
-              <div
-                key={index}
-                className={cn(
-                  "relative flex items-start gap-3",
-                  "before:absolute before:left-5 before:top-[2.9rem] before:h-[calc(100%-2rem)] before:w-[2px]",
-                  isCompleted
-                    ? "before:bg-blue-500"
-                    : "before:bg-zinc-200 dark:before:bg-zinc-800",
-                  index === items.length - 1 ? "before:hidden" : ""
-                )}
-              >
-                <StepButton
-                  number={stepNumber}
-                  isActive={isActive}
-                  isCompleted={isCompleted}
-                  onClick={() => handleStepToggle(stepNumber)}
-                />
+              return (
+                <div
+                  key={index}
+                  className={cn(
+                    "relative flex items-start gap-3",
+                    "before:absolute before:left-5 before:top-[2.9rem] before:h-[calc(100%-2rem)] before:w-[2px]",
+                    isCompleted
+                      ? "before:bg-blue-500"
+                      : "before:bg-zinc-200 dark:before:bg-zinc-800",
+                    index === items.length - 1 ? "before:hidden" : "",
+                  )}
+                >
+                  <StepButton
+                    number={stepNumber}
+                    isActive={isActive}
+                    isCompleted={isCompleted}
+                    onClick={() => handleStepToggle(stepNumber)}
+                  />
 
-                <div className="flex-1">
-                  <StepContent step={step} isActive={isActive} />
+                  <div className="flex-1">
+                    <StepContent step={step} isActive={isActive} />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </CardContent>
+        </Card>
 
-        <div 
-          className="min-h-[300px] bg-zinc-100/80 dark:bg-zinc-900/80 rounded-lg p-6 transition-all duration-200"
-          key={currentStep}
-        >
-          {currentComponent}
-        </div>
+        <Card className={cn("overflow-hidden md:w-4/6 w-full h-auto")}>
+          <CardContent className="p-6 space-y-4">
+            <div
+              className="rounded-lg p-6 transition-all duration-200"
+              key={currentStep}
+            >
+              {currentComponent}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
-  }
+  },
 );
 
 EscrowSteps.displayName = "EscrowSteps";
-
