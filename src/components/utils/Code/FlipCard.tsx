@@ -16,39 +16,33 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
   const { copyText, copySuccess } = useCopyUtils();
 
   return (
-    <div className="relative w-full perspective-1000">
+    <section className="relative w-full perspective-1000 mt-5">
       <div
-        className={`relative w-full h-full transition-transform duration-500 transform-style-preserve-3d ${
+        className={`w-full h-full transition-transform duration-500 transform-style-preserve-3d ${
           isFlipped ? "rotate-y-180" : ""
         }`}
       >
         {/* Front Side */}
-        <div className="absolute w-full h-full backface-hidden p-6">
-          {children}
+        <section className="absolute w-full h-full backface-hidden flex-col">
           {!isFlipped && (
-            <button
-              className="absolute top-2 right-2 cursor-pointer p-2 bg-white text-black dark:bg-gray-900 dark:text-white rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-all duration-300"
-              onClick={() => setIsFlipped(true)}
-            >
-              <TbDeviceDesktopCode size={24} title="Developer Mode" />
-            </button>
+            <div className="w-full flex justify-end items-center">
+              <button
+                className="cursor-pointer scale-100 p-2 text-muted-foreground dark:text-white rounded-full transition-all duration-300 hover:scale-125"
+                onClick={() => setIsFlipped(true)}
+                >
+                <TbDeviceDesktopCode size={24} title="Developer Mode" />
+              </button>
+            </div>
           )}
-        </div>
+          {children}
+        </section>
 
         {/* Back Side */}
-        <div className="w-full h-full backface-hidden flex items-center justify-center p-6 text-white rotate-y-180">
-          <div className="w-full p-4">
-            <CodeBlock code={codeExample} />
-          </div>
-          <button
-            className="absolute top-2 right-2 cursor-pointer p-2 rounded-full shadow-lg transition-all duration-300"
-            onClick={() => setIsFlipped(false)}
-          >
-            <LuSquareUserRound size={24} title="User Mode" />
-          </button>
+        <section className="w-full h-full backface-hidden flex flex-col items-center justify-center text-white rotate-y-180">
+         <div className="w-full flex items-center justify-end gap-5">
           <button
             onClick={() => copyText(codeExample)}
-            className="absolute top-2 right-10 cursor-pointer p-2 rounded-full shadow-lg transition-all duration-300"
+            className="cursor-pointer rounded-full shadow-lg scale-100 transition-all duration-300 hover:scale-125"
             title="Copy address"
           >
             {copySuccess ? (
@@ -57,15 +51,24 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
               <LuClipboard
                 size={24}
                 className={cn(
-                  "dark:text-white text-black",
-                  copySuccess ? "text-green-700" : "text-muted-foreground",
+                  copySuccess ? "text-green-700" : "dark:text-white text-muted-foreground",
                 )}
               />
             )}
           </button>
-        </div>
+          <button
+            className="cursor-pointerrounded-full shadow-lg transition-all duration-300 scale-100 hover:scale-125"
+            onClick={() => setIsFlipped(false)}
+          >
+            <LuSquareUserRound size={24} title="User Mode" className="dark:text-white text-muted-foreground" />
+          </button>
+         </div>
+          <div className="w-full mt-2">
+            <CodeBlock code={codeExample} />
+          </div>
+        </section>
       </div>
-    </div>
+    </section>
   );
 };
 
