@@ -100,17 +100,11 @@ export const useInitializeEscrowHook = () => {
   };
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    const payloadSubmit = {
-      ...payload,
-      releaseSigner: address,
-    };
-
-    // Update store with latest form data before submission
     setFormData(payload);
     setIsLoading(true);
 
     try {
-      const data = await initializeEscrow(payloadSubmit);
+      const data = await initializeEscrow(payload);
       if (data.status === "SUCCESS" || data.status === 201) {
         form.reset();
         setIsLoading(false);
