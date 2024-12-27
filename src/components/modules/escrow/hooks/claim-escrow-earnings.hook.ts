@@ -25,7 +25,7 @@ export const useClaimEscrowEarningsHook = () => {
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    const data = { ...payload, serviceProvider: address };
+    const data = { ...payload, releaseSigner: address };
     await claimEscrowEarnings(data);
   };
 

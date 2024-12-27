@@ -7,12 +7,12 @@ import axios from "axios";
 interface EscrowPayload {
   contractId: string;
   engagementId: string;
-  serviceProvider: string;
+  releaseSigner: string;
 }
 
 export const claimEscrowEarnings = async (payload: EscrowPayload) => {
   try {
-    const response = await http.post("/escrow/claim-escrow-earnings", payload);
+    const response = await http.post("/escrow/distribute-escrow-earnings", payload);
     const { unsignedTransaction } = response.data;
     const { address } = await kit.getAddress();
     const { signedTxXdr } = await signTransaction(unsignedTransaction, {
