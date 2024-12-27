@@ -1,20 +1,18 @@
-export const initializeEscrowCode = `export const initializeEscrow = async (payload: EscrowPayload) => {
+export const initializeEscrowCode = `
+  export const initializeEscrow = async (payload: EscrowPayload) => {
   try {
-    const payloadWithFlag: EscrowPayload = {
+    const { address } = await kit.getAddress();
+    const payloadWithSigner: EscrowPayload = {
       ...payload,
-      milestones: payload.milestones.map((milestone) => ({
-        ...milestone,
-        flag: false,
-      })),
+      signer: address,
     };
 
     const response = await http.post(
       "/deployer/invoke-deployer-contract",
-      payloadWithFlag,
+      payloadWithSigner,
     );
 
     const { unsignedTransaction } = response.data;
-    const { address } = await kit.getAddress();
 
     const { signedTxXdr } = await signTransaction(unsignedTransaction, {
       address,
