@@ -14,6 +14,9 @@ const formSchema = z.object({
   engagementId: z.string().min(1, {
     message: "Engagement must be at least 1 characters.",
   }),
+  amount: z.string().min(1, {
+    message: "Engagement must be at least 1 characters.",
+  }),
 });
 
 export const useFundEscrowHook = () => {
@@ -26,6 +29,7 @@ export const useFundEscrowHook = () => {
     defaultValues: {
       contractId: "",
       engagementId: "",
+      amount: "",
     },
   });
 

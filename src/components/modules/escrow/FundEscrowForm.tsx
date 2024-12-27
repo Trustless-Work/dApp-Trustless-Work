@@ -59,6 +59,22 @@ const FundEscrowForm = () => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="flex items-center">
+                Amount
+                <TooltipInfo content="Amount you want to transfer to escrow." />
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Enter the amount" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button className="w-full md:w-1/4" type="submit">
           Fund Escrow
         </Button>
