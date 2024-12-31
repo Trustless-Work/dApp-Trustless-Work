@@ -12,22 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useInitializeEscrowHook } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { statusOptions } from "@/constants/escrow/StatusOptions";
-import { cn } from "@/lib/utils";
 import TooltipInfo from "../../utils/Tooltip";
 
 const InitializeEscrowForm = () => {
@@ -47,6 +31,54 @@ const InitializeEscrowForm = () => {
         className="flex flex-col space-y-6"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex items-center">
+                  Title
+                  <TooltipInfo content="Significant title for escrow." />
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Escrow title"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      handleFieldChange("title", e.target.value);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex items-center">
+                  Description
+                  <TooltipInfo content="Description that clearly explains the purpose of the escrow." />
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Escrow description"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      handleFieldChange("description", e.target.value);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="client"
@@ -265,57 +297,14 @@ const InitializeEscrowForm = () => {
                 }}
               />
 
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    className="w-52 justify-between"
-                  >
-                    {milestone.status
-                      ? statusOptions.find(
-                          (option) => option.value === milestone.status,
-                        )?.label
-                      : "Select Status"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-52 p-0">
-                  <Command>
-                    <CommandInput placeholder="Search status..." />
-                    <CommandList>
-                      <CommandEmpty>No status found.</CommandEmpty>
-                      <CommandGroup>
-                        {statusOptions.map((option) => (
-                          <CommandItem
-                            key={option.value}
-                            value={option.value}
-                            onSelect={() => {
-                              const updatedMilestones = [...milestones];
-                              updatedMilestones[index].status = option.value;
-                              form.setValue("milestones", updatedMilestones);
-                              handleFieldChange(
-                                "milestones",
-                                updatedMilestones,
-                              );
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                milestone.status === option.value
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            {option.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+              <Button
+                className="w-full md:w-1/4"
+                variant="outline"
+                onClick={handleAddMilestone}
+                type="button"
+              >
+                Add Item
+              </Button>
 
               <Button
                 onClick={() => handleRemoveMilestone(index)}
@@ -326,18 +315,9 @@ const InitializeEscrowForm = () => {
               </Button>
             </div>
           ))}
-
-          <Button
-            className="w-full md:w-1/6"
-            variant="outline"
-            onClick={handleAddMilestone}
-            type="button"
-          >
-            Add Item
-          </Button>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-start">
           <Button className="w-full md:w-1/4" type="submit">
             Initialize Escrow
           </Button>
