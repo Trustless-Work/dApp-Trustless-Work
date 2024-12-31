@@ -2,7 +2,6 @@ import { create } from "zustand";
 
 interface Milestone {
   description: string;
-  status: string;
 }
 
 interface EscrowFormData {
@@ -32,7 +31,7 @@ const initialState: EscrowFormData = {
   amount: "",
   releaseSigner: "",
   disputeResolver: "",
-  milestones: [{ description: "", status: "" }],
+  milestones: [{ description: ""}],
 };
 
 export const useEscrowFormStore = create<EscrowFormState>((set) => ({
