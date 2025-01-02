@@ -17,6 +17,12 @@ const formSchema = z.object({
   engagementId: z.string().min(1, {
     message: "Engagement is required.",
   }),
+  title: z.string().min(1, {
+    message: "Title is required.",
+  }),
+  description: z.string().min(1, {
+    message: "Description is required.",
+  }),
   serviceProvider: z.string().min(1, {
     message: "Service provider is required.",
   }),
@@ -41,9 +47,6 @@ const formSchema = z.object({
         description: z.string().min(1, {
           message: "Milestone description is required.",
         }),
-        status: z.string().min(1, {
-          message: "Milestone status is required.",
-        }),
       }),
     )
     .min(1, { message: "At least one milestone is required." }),
@@ -59,13 +62,15 @@ export const useInitializeEscrowHook = () => {
     defaultValues: {
       client: "",
       engagementId: "",
+      title: "",
+      description: "",
       serviceProvider: "",
       platformAddress: "",
       platformFee: "",
       amount: "",
       releaseSigner: "",
       disputeResolver: "",
-      milestones: [{ description: "", status: "" }],
+      milestones: [{ description: "" }],
     },
   });
 
@@ -84,7 +89,7 @@ export const useInitializeEscrowHook = () => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = [
       ...currentMilestones,
-      { description: "", status: "" },
+      { description: "" },
     ];
     form.setValue("milestones", updatedMilestones);
     setFormData({ milestones: updatedMilestones });

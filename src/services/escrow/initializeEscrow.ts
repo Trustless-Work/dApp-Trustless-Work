@@ -7,6 +7,8 @@ import axios from "axios";
 interface EscrowPayload {
   signer?: string;
   engagementId: string;
+  title: string;
+  description: string;
   client: string;
   serviceProvider: string;
   platformAddress: string;
@@ -15,7 +17,6 @@ interface EscrowPayload {
   releaseSigner: string;
   milestones: {
     description: string;
-    status: string;
   }[];
   disputeResolver: string;
 }
