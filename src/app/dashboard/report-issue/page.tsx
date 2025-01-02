@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import WithAuthProtect from "@/helpers/WithAuth";
 
 const ReportIssuePage = () => {
   return (

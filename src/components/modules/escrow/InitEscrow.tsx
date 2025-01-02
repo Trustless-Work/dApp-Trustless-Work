@@ -3,7 +3,6 @@
 import InitializeEscrowForm from "@/components/modules/escrow/InitializeEscrowForm";
 import FlipCard from "@/components/utils/Code/FlipCard";
 import Loader from "@/components/utils/Loader";
-import WithAuthProtect from "@/helpers/WithAuth";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { initializeEscrowCode } from "./code/initialize.code";
 
@@ -33,4 +32,4 @@ const InitializeEscrow = () => {
   );
 };
 
-export default WithAuthProtect(InitializeEscrow);
+export default InitializeEscrow;

@@ -2,7 +2,6 @@
 
 import { Bounded } from "@/components/layout/Bounded";
 import { Button } from "@/components/ui/button";
-import WithAuthProtect from "@/helpers/WithAuth";
 import { useEscrowStepsStore } from "@/store/EscrowStepStore/store";
 
 const CreateEscrowPage = () => {
@@ -40,4 +39,4 @@ const CreateEscrowPage = () => {
   );
 };
 
-export default WithAuthProtect(CreateEscrowPage);
+export default CreateEscrowPage;

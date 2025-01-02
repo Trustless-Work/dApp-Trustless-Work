@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { WrapperForm } from "@/components/layout/Wrappers";
-import WithAuthProtect from "@/helpers/WithAuth";
 
 const RequestApyKeyPage = () => {
   return (
