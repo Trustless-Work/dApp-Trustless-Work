@@ -29,7 +29,7 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
               <button
                 className="cursor-pointer scale-100 p-2 text-muted-foreground dark:text-white rounded-full transition-all duration-300 hover:scale-125"
                 onClick={() => setIsFlipped(true)}
-                >
+              >
                 <TbDeviceDesktopCode size={24} title="Developer Mode" />
               </button>
             </div>
@@ -39,30 +39,36 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
 
         {/* Back Side */}
         <section className="w-full h-full backface-hidden flex flex-col items-center justify-center text-white rotate-y-180">
-         <div className="w-full flex items-center justify-end gap-5">
-          <button
-            onClick={() => copyText(codeExample)}
-            className="cursor-pointer rounded-full shadow-lg scale-100 transition-all duration-300 hover:scale-125"
-            title="Copy address"
-          >
-            {copySuccess ? (
-              <LuCheck size={24} className="text-green-700" />
-            ) : (
-              <LuClipboard
+          <div className="w-full flex items-center justify-end gap-5">
+            <button
+              onClick={() => copyText(codeExample)}
+              className="cursor-pointer rounded-full shadow-lg scale-100 transition-all duration-300 hover:scale-125"
+              title="Copy address"
+            >
+              {copySuccess ? (
+                <LuCheck size={24} className="text-green-700" />
+              ) : (
+                <LuClipboard
+                  size={24}
+                  className={cn(
+                    copySuccess
+                      ? "text-green-700"
+                      : "dark:text-white text-muted-foreground",
+                  )}
+                />
+              )}
+            </button>
+            <button
+              className="cursor-pointerrounded-full shadow-lg transition-all duration-300 scale-100 hover:scale-125"
+              onClick={() => setIsFlipped(false)}
+            >
+              <LuSquareUserRound
                 size={24}
-                className={cn(
-                  copySuccess ? "text-green-700" : "dark:text-white text-muted-foreground",
-                )}
+                title="User Mode"
+                className="dark:text-white text-muted-foreground"
               />
-            )}
-          </button>
-          <button
-            className="cursor-pointerrounded-full shadow-lg transition-all duration-300 scale-100 hover:scale-125"
-            onClick={() => setIsFlipped(false)}
-          >
-            <LuSquareUserRound size={24} title="User Mode" className="dark:text-white text-muted-foreground" />
-          </button>
-         </div>
+            </button>
+          </div>
           <div className="w-full mt-2">
             <CodeBlock code={codeExample} />
           </div>
