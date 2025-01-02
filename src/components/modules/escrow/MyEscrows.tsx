@@ -91,7 +91,7 @@ const MyEscrowsTable = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">UID</TableHead>
+              <TableHead className="w-24">UID</TableHead>
               <TableHead>Service Provider</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Milestones</TableHead>
