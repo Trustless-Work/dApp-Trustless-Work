@@ -14,7 +14,7 @@ const CreateEscrowPage = () => {
 
   return (
     <Bounded center={true}>
-      <div className="flex flex-col justify-center items-center w-full h-full mt-0 md:mt-20 gap-10 px-5">
+      <div className="flex flex-col justify-center items-center w-full h-full gap-10 px-5">
         <div className="flex flex-col justify-center gap-6 text-center md:text-left">
           <h1 className="text-center text-3xl md:text-4xl font-semibold">
             Create an Escrow
