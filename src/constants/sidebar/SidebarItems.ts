@@ -33,11 +33,11 @@ export const ItemsSidebar = {
       ],
     },
     {
-      label: "Escrows",
+      label: "Financials",
       items: [
         {
           title: "Escrows",
-          url: "dashboard/escrow/my-escrows",
+          url: "/dashboard/escrow/my-escrows",
           icon: FaStackOverflow,
           isActive: false,
           isExpandable: false,
