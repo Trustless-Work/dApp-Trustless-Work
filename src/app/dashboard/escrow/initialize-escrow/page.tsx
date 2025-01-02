@@ -9,7 +9,7 @@ const InitializeEscrowPage = () => {
   const steps = [
     {
       title: "Create Escrow",
-      description: "Create Escrow",
+      description: "See details",
       component: <CreateEscrow />,
     },
     {
