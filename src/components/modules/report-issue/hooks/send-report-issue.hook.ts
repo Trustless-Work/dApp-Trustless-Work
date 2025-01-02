@@ -5,25 +5,7 @@ import { z } from "zod";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/core/config/firebase/firebase";
-
-export enum IssueType {
-  Bug = "Bug",
-  Recommendation = "Recommendation",
-}
-
-const formSchema = z.object({
-  name: z.string().min(3, {
-    message: "Name must be at least 3 characters.",
-  }),
-  lastName: z.string().min(3, {
-    message: "Last name must be at least 3 characters.",
-  }),
-  email: z.string().email({ message: "Invalid email address" }),
-  type: z.nativeEnum(IssueType),
-  description: z.string().min(10, {
-    message: "Description must be at least 10 characters.",
-  }),
-});
+import { formSchema } from "../schema/report-issue-schema";
 
 export const useSendReportIssue = () => {
   const { toast } = useToast();
