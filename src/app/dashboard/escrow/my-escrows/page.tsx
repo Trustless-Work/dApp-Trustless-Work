@@ -1,9 +1,7 @@
 "use client";
 
-import WithAuthProtect from "@/helpers/WithAuth";
 import MyEscrowsTable from "@/components/modules/escrow/MyEscrows";
 import { useLoaderStore } from "@/store/utilsStore/store";
-import { Bounded } from "@/components/layout/Bounded";
 import Loader from "@/components/utils/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -28,4 +26,4 @@ const EscrowsPage = () => {
   );
 };
 
-export default WithAuthProtect(EscrowsPage);
+export default EscrowsPage;

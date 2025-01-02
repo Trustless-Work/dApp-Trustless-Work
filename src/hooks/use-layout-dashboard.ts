@@ -1,6 +1,9 @@
+import useLocalStorageUtils from "@/utils/hook/localStroage.hook";
 import { usePathname } from "next/navigation";
 
 const useLayoutDashboard = () => {
+  const [name] = useLocalStorageUtils("address-wallet", "");
+
   const pathName = usePathname();
   const crumbs = pathName.split("/").filter(Boolean);
 
@@ -25,7 +28,7 @@ const useLayoutDashboard = () => {
         }
       : { show: false, label: "", url: "" };
 
-  return { pathName, label, buttonConfig };
+  return { pathName, label, buttonConfig, name };
 };
 
 export default useLayoutDashboard;

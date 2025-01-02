@@ -34,4 +34,4 @@ const ReportIssuePage = () => {
   );
 };
 
-export default WithAuthProtect(ReportIssuePage);
+export default ReportIssuePage;

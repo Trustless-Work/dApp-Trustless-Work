@@ -35,4 +35,4 @@ const RequestApyKeyPage = () => {
   );
 };
 
-export default WithAuthProtect(RequestApyKeyPage);
+export default RequestApyKeyPage;

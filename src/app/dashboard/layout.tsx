@@ -6,9 +6,14 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import Header from "@/components/layout/header/Header";
 import CreateButton from "@/components/utils/Create";
 import useLayoutDashboard from "@/hooks/use-layout-dashboard";
+import { redirect } from "next/navigation";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { buttonConfig, label } = useLayoutDashboard();
+  const { buttonConfig, label, name } = useLayoutDashboard();
+
+  if (!name || !name.state || !name.state.address) {
+    redirect("/");
+  }
 
   return (
     <SidebarProvider>

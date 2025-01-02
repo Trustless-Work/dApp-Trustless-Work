@@ -17,4 +17,4 @@ const ContactsPage = () => {
   );
 };
 
-export default WithAuthProtect(ContactsPage);
+export default ContactsPage;

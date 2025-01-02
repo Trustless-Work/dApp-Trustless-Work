@@ -4,7 +4,6 @@ import { Bounded } from "@/components/layout/Bounded";
 import HelpAccordion from "@/components/modules/help/HelpAccordion";
 import { Card, CardContent } from "@/components/ui/card";
 import Loader from "@/components/utils/Loader";
-import WithAuthProtect from "@/helpers/WithAuth";
 import { cn } from "@/lib/utils";
 import { useLoaderStore } from "@/store/utilsStore/store";
 
@@ -32,4 +31,4 @@ const HelpPage = () => {
   );
 };
 
-export default WithAuthProtect(HelpPage);
+export default HelpPage;
