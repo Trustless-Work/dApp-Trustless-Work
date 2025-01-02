@@ -4,7 +4,6 @@
 import { useToast } from "@/hooks/use-toast";
 import { initializeEscrow } from "@/services/escrow/initializeEscrow";
 import { useLoaderStore } from "@/store/utilsStore/store";
-import { useWalletStore } from "@/store/walletStore/store";
 import { useEscrowFormStore } from "@/store/escrowFormStore/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -51,7 +50,6 @@ const formSchema = z.object({
 });
 
 export const useInitializeEscrowHook = () => {
-  const { address } = useWalletStore();
   const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const { formData, setFormData } = useEscrowFormStore();

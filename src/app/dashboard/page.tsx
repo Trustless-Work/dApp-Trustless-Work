@@ -1,7 +1,4 @@
 import { Chart } from "@/components/ui/chart";
-import Progress from "@/components/modules/dashboard/Progress";
-import { Button } from "@/components/ui/button";
-import DateRangePicker from "@/components/modules/dashboard/Datepicker";
 import MetricsSection from "@/components/modules/dashboard/MetricSection";
 import RecentSales from "@/components/modules/dashboard/RecentSales";
 
