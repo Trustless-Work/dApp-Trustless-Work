@@ -31,7 +31,7 @@ const initialState: EscrowFormData = {
   amount: "",
   releaseSigner: "",
   disputeResolver: "",
-  milestones: [{ description: ""}],
+  milestones: [{ description: "" }],
 };
 
 export const useEscrowFormStore = create<EscrowFormState>((set) => ({
