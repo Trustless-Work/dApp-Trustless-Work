@@ -4,7 +4,6 @@
 import { useToast } from "@/hooks/use-toast";
 import { initializeEscrow } from "@/services/escrow/initializeEscrow";
 import { useLoaderStore } from "@/store/utilsStore/store";
-import { useWalletStore } from "@/store/walletStore/store";
 import { useEscrowFormStore } from "@/store/escrowFormStore/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,6 +16,12 @@ const formSchema = z.object({
   }),
   engagementId: z.string().min(1, {
     message: "Engagement is required.",
+  }),
+  title: z.string().min(1, {
+    message: "Title is required.",
+  }),
+  description: z.string().min(1, {
+    message: "Description is required.",
   }),
   serviceProvider: z.string().min(1, {
     message: "Service provider is required.",
@@ -42,16 +47,12 @@ const formSchema = z.object({
         description: z.string().min(1, {
           message: "Milestone description is required.",
         }),
-        status: z.string().min(1, {
-          message: "Milestone status is required.",
-        }),
       }),
     )
     .min(1, { message: "At least one milestone is required." }),
 });
 
 export const useInitializeEscrowHook = () => {
-  const { address } = useWalletStore();
   const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const { formData, setFormData } = useEscrowFormStore();
@@ -61,13 +62,15 @@ export const useInitializeEscrowHook = () => {
     defaultValues: {
       client: "",
       engagementId: "",
+      title: "",
+      description: "",
       serviceProvider: "",
       platformAddress: "",
       platformFee: "",
       amount: "",
       releaseSigner: "",
       disputeResolver: "",
-      milestones: [{ description: "", status: "" }],
+      milestones: [{ description: "" }],
     },
   });
 
@@ -86,7 +89,7 @@ export const useInitializeEscrowHook = () => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = [
       ...currentMilestones,
-      { description: "", status: "" },
+      { description: "" },
     ];
     form.setValue("milestones", updatedMilestones);
     setFormData({ milestones: updatedMilestones });
