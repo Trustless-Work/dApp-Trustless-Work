@@ -87,8 +87,6 @@ const MyEscrowsTable = () => {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-5">Escrow Data</h1>
-
       <div className="mb-4 flex items-center space-x-4">
         <label htmlFor="itemsPerPage" className="font-medium">
           Items per page:
