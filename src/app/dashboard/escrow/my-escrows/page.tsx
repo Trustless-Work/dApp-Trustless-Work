@@ -3,8 +3,8 @@
 import WithAuthProtect from "@/helpers/WithAuth";
 import MyEscrowsTable from "@/components/modules/escrow/MyEscrows";
 
-const MyEscrowsPage = () => {
+const EscrowsPage = () => {
   return <MyEscrowsTable />;
 };
 
-export default WithAuthProtect(MyEscrowsPage);
+export default WithAuthProtect(EscrowsPage);
