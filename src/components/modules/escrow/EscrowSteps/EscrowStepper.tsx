@@ -41,7 +41,7 @@ export const EscrowSteps = React.forwardRef<HTMLDivElement, EscrowStepsProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex flex-col md:flex-row h-full gap-6", className)}
+        className={cn("flex flex-col md:flex-row gap-6", className)}
         {...props}
       >
         <Card className={cn("overflow-hidden md:w-1/3 w-full h-auto")}>

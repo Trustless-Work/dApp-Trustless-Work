@@ -10,10 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  IssueType,
-  useSendReportIssue,
-} from "@/components/modules/report-issue/hooks/send-report-issue.hook";
+import { useSendReportIssue } from "@/components/modules/report-issue/hooks/send-report-issue.hook";
 import {
   Popover,
   PopoverContent,
@@ -30,6 +27,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
+import { IssueType } from "./schema/report-issue-schema";
 
 const ReportIssueForm = () => {
   const { form, onSubmit } = useSendReportIssue();

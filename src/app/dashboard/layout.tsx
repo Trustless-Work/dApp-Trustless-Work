@@ -17,7 +17,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <Header />
         <div className="bg-muted/50 min-h-screen">
           <div className="flex-1 space-y-4 p-4 pt-6 md:p-8 h-full">
-            <div className="flex justify-between">
+            <div className="flex justify-between mb-6">
               <h2 className="text-3xl font-bold tracking-tight">{label}</h2>
               {buttonConfig.show && (
                 <CreateButton
