@@ -2,9 +2,6 @@
 
 import { Bounded } from "@/components/layout/Bounded";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
-import useLocalStorageUtils from "@/utils/hook/localStroage.hook";
-import { redirect } from "next/navigation";
-import { useEffect } from "react";
 
 const Home = () => {
   return (
