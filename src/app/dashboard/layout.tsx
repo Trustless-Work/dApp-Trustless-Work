@@ -11,6 +11,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         <Header />
         <div className="bg-muted/50 min-h-screen">
           <div className="flex-1 space-y-4 p-4 pt-6 md:p-8 h-full">
+            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
             {children}
           </div>
         </div>
