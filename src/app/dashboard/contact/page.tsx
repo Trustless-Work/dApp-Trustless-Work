@@ -4,7 +4,7 @@ import { Bounded } from "@/components/layout/Bounded";
 import ContactForm from "@/components/modules/contact/ContactForm";
 import { WrapperForm } from "@/components/layout/Wrappers";
 
-const ContactsPage = () => {
+const ContactsPage: React.FC = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
