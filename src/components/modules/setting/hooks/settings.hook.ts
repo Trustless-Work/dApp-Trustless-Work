@@ -3,8 +3,8 @@ import { useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "@/hooks/use-toast";
 import { db } from "@/core/config/firebase/firebase";
-import { ProfileForm } from "../ProfileSection";
-import { PreferencesForm } from "../PreferencesSection";
+import { ProfileForm } from "../profileSection";
+import { PreferencesForm } from "../preferencesSection";
 
 const useSettings = () => {
   const [currentTab, setCurrentTab] = useState("profile");
