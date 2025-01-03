@@ -5,10 +5,16 @@ import { z } from "zod";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { db } from "@/core/config/firebase/firebase";
-import { formSchema } from "../schema/report-issue-schema";
+import { formSchema, IssueType } from "../schema/report-issue-schema";
 
 export const useSendReportIssue = () => {
   const { toast } = useToast();
+
+  const typeOptions = Object.values(IssueType).map((value) => ({
+    value,
+    label: value,
+  }));
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,5 +60,5 @@ export const useSendReportIssue = () => {
     }
   };
 
-  return { form, onSubmit };
+  return { form, onSubmit, typeOptions };
 };
