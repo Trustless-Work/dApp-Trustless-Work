@@ -7,11 +7,13 @@ import Header from "@/components/layout/header/Header";
 import CreateButton from "@/components/utils/Create";
 import useLayoutDashboard from "@/hooks/use-layout-dashboard";
 import { redirect } from "next/navigation";
+import { useWalletStore } from "@/store/walletStore/store";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { buttonConfig, label, name } = useLayoutDashboard();
+  const { address } = useWalletStore();
+  const { buttonConfig, label } = useLayoutDashboard();
 
-  if (!name || !name.state || !name.state.address) {
+  if (address === "") {
     redirect("/");
   }
 
