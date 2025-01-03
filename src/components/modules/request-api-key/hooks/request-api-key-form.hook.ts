@@ -11,27 +11,7 @@ import {
   getDocs,
 } from "firebase/firestore/lite";
 import { firebaseDB } from "../../../../../firebase";
-
-export enum RequestType {
-  Individual = "Individual",
-  Company = "Company",
-}
-
-const formSchema = z.object({
-  firstName: z.string().min(1, { message: "First name is required" }),
-  lastName: z.string().min(1, { message: "Last name is required" }),
-  email: z
-    .string()
-    .email({ message: "Invalid email address" })
-    .refine(
-      (email) => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email), // Custom regex for additional validation
-      { message: "Invalid email domain." },
-    ),
-  type: z.nativeEnum(RequestType),
-  description: z
-    .string()
-    .min(10, { message: "Description must be at least 10 characters" }),
-});
+import { formSchema } from "../schema/request-api-key-schema";
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -99,5 +79,5 @@ export const useRequestApiKeyForm = () => {
     }
   };
 
-  return { form, isLoading, onSubmit, RequestType };
+  return { form, isLoading, onSubmit };
 };

@@ -33,39 +33,14 @@ export const ItemsSidebar = {
       ],
     },
     {
-      label: "Escrows",
+      label: "Financials",
       items: [
         {
           title: "Escrows",
-          url: "#",
+          url: "/dashboard/escrow/my-escrows",
           icon: FaStackOverflow,
           isActive: false,
-          isExpandable: true,
-          items: [
-            { title: "My Escrows", url: "/dashboard/escrow/my-escrows" },
-            {
-              title: "Initialize Escrow",
-              url: "/dashboard/escrow/initialize-escrow",
-            },
-            { title: "Fund Escrow", url: "/dashboard/escrow/fund-escrow" },
-            {
-              title: "Complete Escrow",
-              url: "/dashboard/escrow/complete-escrow",
-            },
-            {
-              title: "Claim Escrow Earnings",
-              url: "/dashboard/escrow/claim-escrow-earnings",
-            },
-            { title: "Cancel Escrow", url: "/dashboard/escrow/cancel-escrow" },
-            {
-              title: "Refund Remaining Funds",
-              url: "/dashboard/escrow/refund-remaining-funds",
-            },
-            {
-              title: "Get Engagement",
-              url: "/dashboard/escrow/get-engagement",
-            },
-          ],
+          isExpandable: false,
         },
       ],
     },

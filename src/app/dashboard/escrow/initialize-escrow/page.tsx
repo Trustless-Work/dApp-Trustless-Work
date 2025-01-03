@@ -1,6 +1,5 @@
 "use client";
 
-import WithAuthProtect from "@/helpers/WithAuth";
 import CreateEscrow from "@/components/modules/escrow/CreateEscrow";
 import InitEscrow from "@/components/modules/escrow/InitEscrow";
 import { EscrowSteps } from "@/components/modules/escrow/EscrowSteps/EscrowStepper";
@@ -9,7 +8,7 @@ const InitializeEscrowPage = () => {
   const steps = [
     {
       title: "Create Escrow",
-      description: "Create Escrow",
+      description: "See details",
       component: <CreateEscrow />,
     },
     {
@@ -21,4 +20,4 @@ const InitializeEscrowPage = () => {
   return <EscrowSteps items={steps} />;
 };
 
-export default WithAuthProtect(InitializeEscrowPage);
+export default InitializeEscrowPage;

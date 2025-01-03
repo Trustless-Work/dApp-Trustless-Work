@@ -8,49 +8,8 @@ import { useEscrowFormStore } from "@/store/escrowFormStore/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { formSchema } from "../schema/initialize-escrow-schema";
 import { z } from "zod";
-
-const formSchema = z.object({
-  client: z.string().min(1, {
-    message: "Client is required.",
-  }),
-  engagementId: z.string().min(1, {
-    message: "Engagement is required.",
-  }),
-  title: z.string().min(1, {
-    message: "Title is required.",
-  }),
-  description: z.string().min(1, {
-    message: "Description is required.",
-  }),
-  serviceProvider: z.string().min(1, {
-    message: "Service provider is required.",
-  }),
-  platformAddress: z.string().min(1, {
-    message: "Platform address is required.",
-  }),
-  platformFee: z.string().min(1, {
-    message: "Platform fee is required.",
-  }),
-  amount: z.string().min(1, {
-    message: "Amount must be greater than 0.",
-  }),
-  releaseSigner: z.string().min(1, {
-    message: "Release signer is required.",
-  }),
-  disputeResolver: z.string().min(1, {
-    message: "Dispute resolver is required.",
-  }),
-  milestones: z
-    .array(
-      z.object({
-        description: z.string().min(1, {
-          message: "Milestone description is required.",
-        }),
-      }),
-    )
-    .min(1, { message: "At least one milestone is required." }),
-});
 
 export const useInitializeEscrowHook = () => {
   const { toast } = useToast();
@@ -87,10 +46,7 @@ export const useInitializeEscrowHook = () => {
 
   const handleAddMilestone = () => {
     const currentMilestones = form.getValues("milestones");
-    const updatedMilestones = [
-      ...currentMilestones,
-      { description: "" },
-    ];
+    const updatedMilestones = [...currentMilestones, { description: "" }];
     form.setValue("milestones", updatedMilestones);
     setFormData({ milestones: updatedMilestones });
   };

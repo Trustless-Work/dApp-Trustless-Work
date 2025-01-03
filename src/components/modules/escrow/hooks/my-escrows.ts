@@ -18,6 +18,14 @@ const useMyEscrows = ({ escrowData }: useMyEscrowsProps) => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  const itemsPerPageOptions = [
+    { value: 5, label: "5" },
+    { value: 10, label: "10" },
+    { value: 50, label: "50" },
+    { value: 100, label: "100" },
+  ];
+
   return {
     currentData,
     currentPage,
@@ -26,6 +34,7 @@ const useMyEscrows = ({ escrowData }: useMyEscrowsProps) => {
     handlePageChange,
     setItemsPerPage,
     setCurrentPage,
+    itemsPerPageOptions,
   };
 };
 

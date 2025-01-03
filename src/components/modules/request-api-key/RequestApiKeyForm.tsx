@@ -26,10 +26,8 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import {
-  RequestType,
-  useRequestApiKeyForm,
-} from "./hooks/request-api-key-form.hook";
+import { useRequestApiKeyForm } from "./hooks/request-api-key-form.hook";
+import { RequestType } from "./schema/request-api-key-schema";
 
 const RequestApiKeyForm = () => {
   const { form, isLoading, onSubmit } = useRequestApiKeyForm();

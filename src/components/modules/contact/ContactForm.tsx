@@ -25,7 +25,8 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import { useContact, WalletType } from "./hooks/contact.hook";
+import { useContact } from "./hooks/contact.hook";
+import { WalletType } from "./schema/contact-schema";
 
 const ContactForm = () => {
   const { form, onSubmit } = useContact();

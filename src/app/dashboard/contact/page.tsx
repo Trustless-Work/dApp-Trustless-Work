@@ -3,7 +3,6 @@
 import { Bounded } from "@/components/layout/Bounded";
 import ContactForm from "@/components/modules/contact/ContactForm";
 import { WrapperForm } from "@/components/layout/Wrappers";
-import WithAuthProtect from "@/helpers/WithAuth";
 
 const ContactsPage = () => {
   return (
@@ -17,4 +16,4 @@ const ContactsPage = () => {
   );
 };
 
-export default WithAuthProtect(ContactsPage);
+export default ContactsPage;

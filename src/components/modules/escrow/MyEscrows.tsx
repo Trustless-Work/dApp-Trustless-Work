@@ -87,31 +87,11 @@ const MyEscrowsTable = () => {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-5">Escrow Data</h1>
-
-      <div className="mb-4 flex items-center space-x-4">
-        <label htmlFor="itemsPerPage" className="font-medium">
-          Items per page:
-        </label>
-        <Input
-          id="itemsPerPage"
-          type="number"
-          min="1"
-          max={escrowData.length}
-          value={itemsPerPage}
-          onChange={(e) => {
-            setItemsPerPage(Number(e.target.value) || 1);
-            setCurrentPage(1);
-          }}
-          className="w-20"
-        />
-      </div>
-
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">UID</TableHead>
+              <TableHead className="w-24">UID</TableHead>
               <TableHead>Service Provider</TableHead>
               <TableHead>Amount</TableHead>
               <TableHead>Milestones</TableHead>
@@ -138,12 +118,24 @@ const MyEscrowsTable = () => {
             className={
               currentPage === index + 1
                 ? "bg-primary text-white"
-                : "bg-gray-200 text-gray-700"
+                : "bg-gray-200 text-gray-700 hover:text-white"
             }
           >
             {index + 1}
           </Button>
         ))}
+        <Input
+          id="itemsPerPage"
+          type="number"
+          min="1"
+          max={escrowData.length}
+          value={itemsPerPage}
+          onChange={(e) => {
+            setItemsPerPage(Number(e.target.value) || 1);
+            setCurrentPage(1);
+          }}
+          className="w-20"
+        />
       </div>
     </div>
   );
