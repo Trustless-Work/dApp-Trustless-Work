@@ -9,6 +9,8 @@ const ThemeToggle = () => {
   const { theme, toggleTheme } = useThemeStore();
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const root = window.document.documentElement;
     root.classList.toggle("dark", theme === "dark");
   }, [theme]);
