@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { useState } from "react";
 
 interface UseLocalStorageUtils<T> {
@@ -14,13 +13,16 @@ const useLocalStorageUtils: UseLocalStorageUtils<any> = <T>(
   initialValue: T,
 ) => {
   const [state, setState] = useState<T>(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : initialValue;
-    } catch (error) {
-      console.error("Error reading from localStorage:", error);
-      return initialValue;
+    if (typeof window !== "undefined") {
+      try {
+        const item = window.localStorage.getItem(key);
+        return item ? (JSON.parse(item) as T) : initialValue;
+      } catch (error) {
+        console.error("Error reading from localStorage:", error);
+        return initialValue;
+      }
     }
+    return initialValue;
   });
 
   const setValue: (value: T | ((val: T) => T)) => void = (value) => {
