@@ -6,6 +6,11 @@ if ! npx prettier --write .; then
   exit 1
 fi
 
+if ! npm run build; then
+  echo "Error: Code building failed. Please fix the issues before committing."
+  exit 1
+fi
+
 if ! npm run lint; then
   echo "Error: Linting failed. Please fix the issues before committing."
   exit 1
