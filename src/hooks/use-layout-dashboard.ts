@@ -11,21 +11,7 @@ const useLayoutDashboard = () => {
           .replace(/\b\w/g, (char) => char.toUpperCase())
       : "Home";
 
-  const buttonConfig = pathName.includes("/my-escrows")
-    ? {
-        show: true,
-        label: "Create Escrow",
-        url: "/dashboard/escrow/initialize-escrow",
-      }
-    : pathName.includes("/other-route")
-      ? {
-          show: true,
-          label: "Create Something Else",
-          url: "/dashboard/something-else",
-        }
-      : { show: false, label: "", url: "" };
-
-  return { pathName, label, buttonConfig };
+  return { label };
 };
 
 export default useLayoutDashboard;
