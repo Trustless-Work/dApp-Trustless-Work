@@ -19,7 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
+import MyEscrowsClientCards from "@/components/modules/escrow/ui/cards/MyEscrowsClientCards";
+import MyEscrowsServiceProviderCards from "@/components/modules/escrow/ui/cards/MyEscrowsServiceProviderCards";
+import MyEscrowsDisputeResolverCards from "@/components/modules/escrow/ui/cards/MyEscrowsDisputeResolverCards";
 
 const EscrowsPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
@@ -73,7 +75,7 @@ const EscrowsPage = () => {
                   <MyEscrowsClientTable />
                 </Card>
               ) : (
-                <MyEscrowsCards />
+                <MyEscrowsClientCards />
               )}
             </TabsContent>
 
@@ -91,12 +93,7 @@ const EscrowsPage = () => {
                   <MyEscrowsServiceProviderTable />
                 </Card>
               ) : (
-                <Card className={cn("overflow-hidden")}>
-                  <CardContent className="p-6">
-                    {/* SET CARDS */}
-                    <p>Cards View for Service Provider</p>
-                  </CardContent>
-                </Card>
+                <MyEscrowsServiceProviderCards />
               )}
             </TabsContent>
 
@@ -114,12 +111,7 @@ const EscrowsPage = () => {
                   <MyEscrowsDisputeResolverTable />
                 </Card>
               ) : (
-                <Card className={cn("overflow-hidden")}>
-                  <CardContent className="p-6">
-                    {/* SET CARDS */}
-                    <p>Cards View for Dispute Resolver</p>
-                  </CardContent>
-                </Card>
+                <MyEscrowsDisputeResolverCards />
               )}
             </TabsContent>
           </Tabs>
