@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import http from "@/core/config/axios/http";
-import { useWalletStore } from "@/store/walletStore/store";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
 import axios from "axios";
@@ -23,9 +22,11 @@ interface EscrowPayload {
   disputeResolver: string;
 }
 
-export const initializeEscrow = async (payload: EscrowPayload) => {
+export const initializeEscrow = async (
+  payload: EscrowPayload,
+  address: string,
+) => {
   try {
-    const { address } = useWalletStore();
     const payloadWithSigner: EscrowPayload = {
       ...payload,
       signer: address,
