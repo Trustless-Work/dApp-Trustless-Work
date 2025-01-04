@@ -26,7 +26,7 @@ const useMyEscrows = () => {
   useEffect(() => {
     const fetchEscrows = async () => {
       if (address) {
-        fetchAllEscrows({ address, type: "client" });
+        fetchAllEscrows({ address, type: "user" });
       }
     };
 
