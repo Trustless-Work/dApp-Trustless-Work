@@ -1,30 +1,32 @@
 import { useWalletStore } from "@/store/walletStore/store";
 import { useState, useEffect, useMemo } from "react";
-import { getAllEscrowsByUser } from "../server/escrow-firebase";
-import { Escrow } from "@/@types/escrow.entity";
+import { useGlobalBoundedStore } from "@/core/store";
 
 const useMyEscrows = () => {
   const { address } = useWalletStore();
+  const fetchAllEscrows = useGlobalBoundedStore(
+    (state) => state.fetchAllEscrows,
+  );
+  const escrows = useGlobalBoundedStore((state) => state.escrows);
+  const totalEscrows = useGlobalBoundedStore((state) => state.totalEscrows);
 
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(15);
-  const [fetchedEscrows, setFetchedEscrows] = useState<Escrow[]>([]);
 
-  const totalPages = Math.ceil(fetchedEscrows.length / itemsPerPage);
+  const totalPages = Math.ceil(totalEscrows / itemsPerPage);
 
   const currentData = useMemo(() => {
-    return fetchedEscrows.slice(
+    return escrows.slice(
       (currentPage - 1) * itemsPerPage,
       currentPage * itemsPerPage,
     );
-  }, [fetchedEscrows, currentPage, itemsPerPage]);
+  }, [escrows, currentPage, itemsPerPage]);
 
   useEffect(() => {
     const fetchEscrows = async () => {
       if (address) {
-        const res = await getAllEscrowsByUser({ address });
-        setFetchedEscrows(res.data);
+        fetchAllEscrows({ address, type: "client" });
       }
     };
 
