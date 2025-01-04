@@ -61,7 +61,7 @@ const EscrowsPage = () => {
               </div>
             </div>
 
-            <TabsContent value="client">
+            <TabsContent value="client" className="flex flex-col gap-3">
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
                   <MyEscrowsClientFilter />
@@ -83,7 +83,10 @@ const EscrowsPage = () => {
               )}
             </TabsContent>
 
-            <TabsContent value="service-provider">
+            <TabsContent
+              value="service-provider"
+              className="flex flex-col gap-3"
+            >
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
                   <MyEscrowsServiceProviderFilter />
@@ -105,7 +108,10 @@ const EscrowsPage = () => {
               )}
             </TabsContent>
 
-            <TabsContent value="dispute-resolver">
+            <TabsContent
+              value="dispute-resolver"
+              className="flex flex-col gap-3"
+            >
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
                   <MyEscrowsDisputeResolverFilter />
