@@ -4,13 +4,13 @@ import { useLoaderStore } from "@/store/utilsStore/store";
 import Loader from "@/components/utils/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import MyEscrowsClientTable from "@/components/modules/escrow/table/MyEscrowsClientTable";
+import MyEscrowsClientTable from "@/components/modules/escrow/ui/tables/MyEscrowsClientTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import MyEscrowsClientFilter from "@/components/modules/escrow/filters/MyEscrowsClientFilter";
-import MyEscrowsServiceProviderFilter from "@/components/modules/escrow/filters/MyEscrowsServiceProviderFilter";
-import MyEscrowsServiceProviderTable from "@/components/modules/escrow/table/MyEscrowsServiceProviderTable";
-import MyEscrowsDisputeResolverFilter from "@/components/modules/escrow/filters/MyEscrowsDisputeResolverFilter";
-import MyEscrowsDisputeResolverTable from "@/components/modules/escrow/table/MyEscrowsDisputeResolverTable";
+import MyEscrowsClientFilter from "@/components/modules/escrow/ui/filters/MyEscrowsClientFilter";
+import MyEscrowsServiceProviderFilter from "@/components/modules/escrow/ui/filters/MyEscrowsServiceProviderFilter";
+import MyEscrowsServiceProviderTable from "@/components/modules/escrow/ui/tables/MyEscrowsServiceProviderTable";
+import MyEscrowsDisputeResolverFilter from "@/components/modules/escrow/ui/filters/MyEscrowsDisputeResolverFilter";
+import MyEscrowsDisputeResolverTable from "@/components/modules/escrow/ui/tables/MyEscrowsDisputeResolverTable";
 import { useState } from "react";
 import {
   Select,
@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
 
 const EscrowsPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
@@ -31,8 +32,8 @@ const EscrowsPage = () => {
       ) : (
         <div className="flex gap-3 w-full h-full justify-between">
           <Tabs defaultValue="client" className="w-full">
-            <div className="flex w-full justify-between items-center">
-              <TabsList className="grid w-2/6 grid-cols-3">
+            <div className="flex w-full justify-between items-center flex-col md:flex-row md:gap-3">
+              <TabsList className="grid w-full sm:w-2/3 md:w-1/2 lg:w-1/3 grid-cols-2 md:grid-cols-3">
                 <TabsTrigger value="client">Client</TabsTrigger>
                 <TabsTrigger value="service-provider">
                   Service Provider
@@ -69,17 +70,10 @@ const EscrowsPage = () => {
               </Card>
               {viewMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <CardContent className="p-6">
-                    <MyEscrowsClientTable />
-                  </CardContent>
+                  <MyEscrowsClientTable />
                 </Card>
               ) : (
-                <Card className={cn("overflow-hidden")}>
-                  <CardContent className="p-6">
-                    {/* SET CARDS */}
-                    <p>Cards View for Client</p>
-                  </CardContent>
-                </Card>
+                <MyEscrowsCards />
               )}
             </TabsContent>
 
@@ -94,9 +88,7 @@ const EscrowsPage = () => {
               </Card>
               {viewMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <CardContent className="p-6">
-                    <MyEscrowsServiceProviderTable />
-                  </CardContent>
+                  <MyEscrowsServiceProviderTable />
                 </Card>
               ) : (
                 <Card className={cn("overflow-hidden")}>
@@ -119,9 +111,7 @@ const EscrowsPage = () => {
               </Card>
               {viewMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <CardContent className="p-6">
-                    <MyEscrowsDisputeResolverTable />
-                  </CardContent>
+                  <MyEscrowsDisputeResolverTable />
                 </Card>
               ) : (
                 <Card className={cn("overflow-hidden")}>
