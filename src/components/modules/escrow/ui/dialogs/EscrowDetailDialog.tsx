@@ -34,7 +34,7 @@ const EscrowDetailDialog = ({
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="!w-full">
+      <DialogContent className="w-3/5 h-4/6">
         <DialogHeader>
           <DialogTitle>{selectedEscrow?.title}</DialogTitle>
           <DialogDescription>
