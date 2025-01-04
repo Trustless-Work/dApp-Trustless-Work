@@ -1,4 +1,4 @@
-import { Escrow } from "@/@types/escrow.entity";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -7,20 +7,38 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { MoreHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useFormatUtils } from "@/utils/hook/format.hook";
+import { Label } from "@/components/ui/label";
 import useMyEscrows from "../../hooks/my-escrows.hook";
-import React from "react";
+import { useFormatUtils } from "@/utils/hook/format.hook";
+import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/NoData";
 
 const MyEscrowsClientTable = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para manejar el Dialog
+
   const {
     currentData,
     currentPage,
     itemsPerPage,
     totalPages,
-    handlePageChange,
     setItemsPerPage,
     setCurrentPage,
     expandedRows,
@@ -44,10 +62,7 @@ const MyEscrowsClientTable = () => {
                   <TableHead>Platform</TableHead>
                   <TableHead>Platform Fee</TableHead>
                   <TableHead>Client</TableHead>
-                  <TableHead>Dispute Resolver</TableHead>
-                  <TableHead>Release Signer</TableHead>
-                  <TableHead>Service Provider</TableHead>
-                  <TableHead>Created</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -67,17 +82,25 @@ const MyEscrowsClientTable = () => {
                       <TableCell>{row.platformFee}</TableCell>
                       <TableCell>{formatAddress(row.client)}</TableCell>
                       <TableCell>
-                        {formatDateFromFirebase(
-                          row.createdAt.seconds,
-                          row.createdAt.nanoseconds,
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {formatAddress(row.disputeResolver)}
-                      </TableCell>
-                      <TableCell>{formatAddress(row.releaseSigner)}</TableCell>
-                      <TableCell>
-                        {formatAddress(row.serviceProvider)}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <span className="sr-only">Open menu</span>
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setIsDialogOpen(true);
+                              }}
+                            >
+                              More Details
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                       <TableCell>
                         <p
@@ -91,7 +114,6 @@ const MyEscrowsClientTable = () => {
                         </p>
                       </TableCell>
                     </TableRow>
-
                     {row.milestones && expandedRows.includes(row.id) && (
                       <TableRow>
                         <TableCell colSpan={8} className="p-4">
@@ -114,37 +136,67 @@ const MyEscrowsClientTable = () => {
             </Table>
           </div>
 
-          <div className="flex justify-center items-center mt-4 space-x-2">
-            {Array.from({ length: totalPages }, (_, index) => (
-              <Button
-                key={index}
-                onClick={() => handlePageChange(index + 1)}
-                className={
-                  currentPage === index + 1
-                    ? "bg-primary text-white"
-                    : "bg-gray-200 text-gray-700 hover:text-white"
-                }
-              >
-                {index + 1}
-              </Button>
-            ))}
-            <Input
-              id="itemsPerPage"
-              type="number"
-              min="1"
-              max={currentData.length}
-              value={itemsPerPage}
-              onChange={(e) => {
-                setItemsPerPage(Number(e.target.value) || 1);
-                setCurrentPage(1);
-              }}
-              className="w-20"
-            />
+          <div className="flex justify-end items-center gap-4 mt-10 mb-3 px-3">
+            <div className="flex items-center gap-2">
+              <span>Items per page:</span>
+              <Input
+                type="number"
+                value={itemsPerPage}
+                onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                className="w-16"
+              />
+            </div>
+            <Button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <Button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </Button>
           </div>
         </>
       ) : (
         <NoData />
       )}
+
+      {/* Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit profile</DialogTitle>
+            <DialogDescription>
+              Make changes to your profile here. Click save when you're done.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Name
+              </Label>
+              <Input id="name" value="Pedro Duarte" className="col-span-3" />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="username" className="text-right">
+                Username
+              </Label>
+              <Input id="username" value="@peduarte" className="col-span-3" />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit" onClick={() => setIsDialogOpen(false)}>
+              Save changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

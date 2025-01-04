@@ -37,10 +37,6 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
     fetchEscrows();
   }, []);
 
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-
   const toggleRowExpansion = (rowId: string) => {
     setExpandedRows((prev) =>
       prev.includes(rowId)
@@ -61,7 +57,6 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
     currentPage,
     itemsPerPage,
     totalPages,
-    handlePageChange,
     setItemsPerPage,
     setCurrentPage,
     itemsPerPageOptions,
