@@ -23,11 +23,15 @@ import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/NoData";
 import { useEscrowBoundedStore } from "../../store/ui";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
+import { useGlobalBoundedStore } from "@/core/store";
 
 const MyEscrowsClientTable = () => {
   const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsDialogOpen,
+  );
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
   );
 
   const {
@@ -62,21 +66,23 @@ const MyEscrowsClientTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentData.map((row: Escrow) => (
-                  <React.Fragment key={row.id}>
+                {currentData.map((escrow: Escrow) => (
+                  <React.Fragment key={escrow.id}>
                     <TableRow
                       className="animate-fade-in"
-                      onClick={() => toggleRowExpansion(row.id)}
+                      onClick={() => toggleRowExpansion(escrow.id)}
                     >
-                      <TableCell className="font-medium">{row.title}</TableCell>
-                      <TableCell>{row.description}</TableCell>
-                      <TableCell>{row.amount}</TableCell>
-                      <TableCell>{row.engagementId}</TableCell>
-                      <TableCell>
-                        {formatAddress(row.platformAddress)}
+                      <TableCell className="font-medium">
+                        {escrow.title}
                       </TableCell>
-                      <TableCell>{row.platformFee}</TableCell>
-                      <TableCell>{formatAddress(row.client)}</TableCell>
+                      <TableCell>{escrow.description}</TableCell>
+                      <TableCell>{escrow.amount}</TableCell>
+                      <TableCell>{escrow.engagementId}</TableCell>
+                      <TableCell>
+                        {formatAddress(escrow.platformAddress)}
+                      </TableCell>
+                      <TableCell>{escrow.platformFee}</TableCell>
+                      <TableCell>{formatAddress(escrow.client)}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -91,6 +97,7 @@ const MyEscrowsClientTable = () => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setIsDialogOpen(true);
+                                setSelectedEscrow(escrow);
                               }}
                             >
                               More Details
@@ -103,14 +110,14 @@ const MyEscrowsClientTable = () => {
                           className="w-5 h-5 cursor-pointer border border-gray-400 dark:border-gray-500 rounded-lg flex justify-center items-center"
                           onClick={(e) => {
                             e.stopPropagation();
-                            toggleRowExpansion(row.id);
+                            toggleRowExpansion(escrow.id);
                           }}
                         >
-                          {expandedRows.includes(row.id) ? "-" : "+"}
+                          {expandedRows.includes(escrow.id) ? "-" : "+"}
                         </p>
                       </TableCell>
                     </TableRow>
-                    {row.milestones && expandedRows.includes(row.id) && (
+                    {escrow.milestones && expandedRows.includes(escrow.id) && (
                       <TableRow>
                         <TableCell colSpan={8} className="p-4">
                           <div>
@@ -118,7 +125,7 @@ const MyEscrowsClientTable = () => {
                               <strong>Milestones:</strong>
                             </p>
                             <ul>
-                              {row.milestones.map((milestone, index) => (
+                              {escrow.milestones.map((milestone, index) => (
                                 <li key={index}>{milestone.description}</li>
                               ))}
                             </ul>
@@ -167,6 +174,7 @@ const MyEscrowsClientTable = () => {
       <EscrowDetailDialog
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
+        setSelectedEscrow={setSelectedEscrow}
       />
     </div>
   );
