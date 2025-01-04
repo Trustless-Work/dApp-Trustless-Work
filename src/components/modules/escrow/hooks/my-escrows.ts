@@ -6,6 +6,7 @@ import { Escrow } from "@/@types/escrow.entity";
 const useMyEscrows = () => {
   const { address } = useWalletStore();
 
+  const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const [fetchedEscrows, setFetchedEscrows] = useState<Escrow[]>([]);
@@ -34,6 +35,14 @@ const useMyEscrows = () => {
     setCurrentPage(pageNumber);
   };
 
+  const toggleRowExpansion = (rowId: string) => {
+    setExpandedRows((prev) =>
+      prev.includes(rowId)
+        ? prev.filter((id) => id !== rowId)
+        : [...prev, rowId],
+    );
+  };
+
   const itemsPerPageOptions = [
     { value: 5, label: "5" },
     { value: 10, label: "10" },
@@ -50,6 +59,8 @@ const useMyEscrows = () => {
     setItemsPerPage,
     setCurrentPage,
     itemsPerPageOptions,
+    toggleRowExpansion,
+    expandedRows,
   };
 };
 

@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useMyEscrows from "./hooks/my-escrows";
+import { useFormatUtils } from "@/utils/hook/format.hook";
 
 const MyEscrowsTable = () => {
   const {
@@ -20,7 +21,11 @@ const MyEscrowsTable = () => {
     handlePageChange,
     setItemsPerPage,
     setCurrentPage,
+    expandedRows,
+    toggleRowExpansion,
   } = useMyEscrows();
+
+  const { formatDateFromFirebase, formatAddress } = useFormatUtils();
 
   return (
     <div className="container mx-auto py-10">
@@ -28,21 +33,73 @@ const MyEscrowsTable = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-24">Title</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
               <TableHead>Amount</TableHead>
+              <TableHead>Engagement</TableHead>
+              <TableHead>Platform</TableHead>
+              <TableHead>Platform Fee</TableHead>
+              <TableHead>Client</TableHead>
+              <TableHead>Dispute Resolver</TableHead>
+              <TableHead>Release Signer</TableHead>
+              <TableHead>Service Provider</TableHead>
+              <TableHead>Created</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {currentData.map((row: Escrow) => (
-              <TableRow key={row.id} className="animate-fade-in">
-                <TableCell className="font-medium">{row.title}</TableCell>
-                <TableCell>{row.amount}</TableCell>
-                {/* <TableCell>
-                  {row.milestones.map((milestone, index) => (
-                    <div key={index}>{milestone.description}</div>
-                  ))}
-                </TableCell> */}
-              </TableRow>
+              <>
+                <TableRow
+                  key={row.id}
+                  className="animate-fade-in"
+                  onClick={() => toggleRowExpansion(row.id)}
+                >
+                  <TableCell className="font-medium">{row.title}</TableCell>
+                  <TableCell>{row.description}</TableCell>
+                  <TableCell>{row.amount}</TableCell>
+                  <TableCell>{row.engagementId}</TableCell>
+                  <TableCell>{formatAddress(row.platformAddress)}</TableCell>
+                  <TableCell>{row.platformFee}</TableCell>
+                  <TableCell>{formatAddress(row.client)}</TableCell>
+                  <TableCell>
+                    {formatDateFromFirebase(
+                      row.createdAt.seconds,
+                      row.createdAt.nanoseconds,
+                    )}
+                  </TableCell>
+                  <TableCell>{formatAddress(row.disputeResolver)}</TableCell>
+                  <TableCell>{formatAddress(row.releaseSigner)}</TableCell>
+                  <TableCell>{formatAddress(row.serviceProvider)}</TableCell>
+                  <TableCell>
+                    <Button
+                      className="w-3 h-4"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleRowExpansion(row.id);
+                      }}
+                    >
+                      {expandedRows.includes(row.id) ? "-" : "+"}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+
+                {row.milestones && expandedRows.includes(row.id) && (
+                  <TableRow>
+                    <TableCell colSpan={8} className="p-4">
+                      <div>
+                        <p>
+                          <strong>Milestones:</strong>
+                        </p>
+                        <ul>
+                          {row.milestones.map((milestone, index) => (
+                            <li key={index}>{milestone.description}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </>
             ))}
           </TableBody>
         </Table>
