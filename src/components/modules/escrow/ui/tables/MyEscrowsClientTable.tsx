@@ -33,7 +33,7 @@ const MyEscrowsClientTable = () => {
     <div className="container mx-auto py-3">
       {currentData.length !== 0 ? (
         <>
-          <div className="rounded-md border">
+          <div className="rounded-lg p-3">
             <Table>
               <TableHeader>
                 <TableRow>
