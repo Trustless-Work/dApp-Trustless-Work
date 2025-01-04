@@ -13,5 +13,20 @@ export const useFormatUtils = () => {
     });
   };
 
-  return { formatAddress, formatDate };
+  const formatDateFromFirebase = (
+    seconds: number,
+    nanoseconds: number,
+  ): string => {
+    const milliseconds = seconds * 1000 + nanoseconds / 1000000;
+    const date = new Date(milliseconds);
+
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    // DD/MM/YYYY
+    return `${day}/${month}/${year}`;
+  };
+
+  return { formatAddress, formatDate, formatDateFromFirebase };
 };

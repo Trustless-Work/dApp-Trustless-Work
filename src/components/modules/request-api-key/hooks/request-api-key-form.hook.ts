@@ -43,13 +43,12 @@ export const useRequestApiKeyForm = () => {
 
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
-        console.log("Email already exists!");
         toast({
           title: "Error",
           description: "An API key has already been requested with this email.",
           variant: "destructive",
         });
-        return; // If it already exists, do not add the new record.
+        return;
       }
 
       //  If it doesn't exist, add the new record
@@ -61,7 +60,6 @@ export const useRequestApiKeyForm = () => {
         description,
         createdAt: new Date().toISOString(),
       });
-      console.log("Document successfully added!");
       toast({
         title: "Success",
         description: "Your API key request has been submitted successfully.",

@@ -27,14 +27,9 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import { IssueType } from "./schema/report-issue-schema";
 
 const ReportIssueForm = () => {
-  const { form, onSubmit } = useSendReportIssue();
-  const typeOptions = Object.values(IssueType).map((value) => ({
-    value,
-    label: value,
-  }));
+  const { form, onSubmit, typeOptions } = useSendReportIssue();
 
   return (
     <Form {...form}>

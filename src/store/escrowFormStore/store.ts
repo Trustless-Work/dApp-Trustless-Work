@@ -1,8 +1,5 @@
+import { Milestone } from "@/@types/escrow.entity";
 import { create } from "zustand";
-
-interface Milestone {
-  description: string;
-}
 
 interface EscrowFormData {
   client: string;

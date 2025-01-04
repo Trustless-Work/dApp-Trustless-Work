@@ -11,9 +11,12 @@ import { useEffect } from "react";
 import { formSchema } from "../schema/initialize-escrow-schema";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
+import { addEscrow } from "../server/escrow-firebase";
+import { useWalletStore } from "@/store/walletStore/store";
 
 export const useInitializeEscrowHook = () => {
   const { toast } = useToast();
+  const { address } = useWalletStore();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const { formData, setFormData, resetForm } = useEscrowFormStore();
   const router = useRouter();
@@ -65,7 +68,7 @@ export const useInitializeEscrowHook = () => {
     setIsLoading(true);
 
     try {
-      const data = await initializeEscrow(payload);
+      const data = await initializeEscrow(payload, address);
       if (data.status === "SUCCESS" || data.status === 201) {
         // ! Validate if the user has the preference in true
         await addEscrow({ payload, address });
