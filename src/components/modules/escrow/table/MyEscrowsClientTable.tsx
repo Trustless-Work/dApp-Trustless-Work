@@ -71,15 +71,15 @@ const MyEscrowsClientTable = () => {
                   <TableCell>{formatAddress(row.releaseSigner)}</TableCell>
                   <TableCell>{formatAddress(row.serviceProvider)}</TableCell>
                   <TableCell>
-                    <Button
-                      className="w-3 h-4"
+                    <p
+                      className="w-5 h-5 cursor-pointer border border-gray-400 dark:border-gray-500 rounded-lg flex justify-center items-center"
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleRowExpansion(row.id);
                       }}
                     >
                       {expandedRows.includes(row.id) ? "-" : "+"}
-                    </Button>
+                    </p>
                   </TableCell>
                 </TableRow>
 
