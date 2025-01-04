@@ -11,61 +11,120 @@ import MyEscrowsServiceProviderFilter from "@/components/modules/escrow/filters/
 import MyEscrowsServiceProviderTable from "@/components/modules/escrow/table/MyEscrowsServiceProviderTable";
 import MyEscrowsDisputeResolverFilter from "@/components/modules/escrow/filters/MyEscrowsDisputeResolverFilter";
 import MyEscrowsDisputeResolverTable from "@/components/modules/escrow/table/MyEscrowsDisputeResolverTable";
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const EscrowsPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
+  const [viewMode, setViewMode] = useState<"table" | "cards">("table");
 
   return (
     <>
       {isLoading ? (
         <Loader isLoading={isLoading} />
       ) : (
-        <div className="flex flex-col gap-3 w-full h-full">
-          <Tabs defaultValue="account" className="w-full">
-            <TabsList className="grid w-2/6 grid-cols-3">
-              <TabsTrigger value="client">Client</TabsTrigger>
-              <TabsTrigger value="service-provider">
-                Service Provider
-              </TabsTrigger>
-              <TabsTrigger value="dispute-resolver">
-                Dispute Resolver
-              </TabsTrigger>
-            </TabsList>
+        <div className="flex gap-3 w-full h-full justify-between">
+          <Tabs defaultValue="client" className="w-full">
+            <div className="flex w-full justify-between items-center">
+              <TabsList className="grid w-2/6 grid-cols-3">
+                <TabsTrigger value="client">Client</TabsTrigger>
+                <TabsTrigger value="service-provider">
+                  Service Provider
+                </TabsTrigger>
+                <TabsTrigger value="dispute-resolver">
+                  Dispute Resolver
+                </TabsTrigger>
+              </TabsList>
+
+              <div className="flex items-center gap-2">
+                <label className="text-sm">View:</label>
+                <Select
+                  value={viewMode}
+                  onValueChange={(value) =>
+                    setViewMode(value as "table" | "cards")
+                  }
+                >
+                  <SelectTrigger className="w-32">
+                    <SelectValue placeholder="Select view" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="table">Table</SelectItem>
+                    <SelectItem value="cards">Cards</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
             <TabsContent value="client">
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
                   <MyEscrowsClientFilter />
                 </CardContent>
               </Card>
-              <Card className={cn("overflow-hidden")}>
-                <CardContent className="p-6">
-                  <MyEscrowsClientTable />
-                </CardContent>
-              </Card>
+              {viewMode === "table" ? (
+                <Card className={cn("overflow-hidden")}>
+                  <CardContent className="p-6">
+                    <MyEscrowsClientTable />
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card className={cn("overflow-hidden")}>
+                  <CardContent className="p-6">
+                    {/* SET CARDS */}
+                    <p>Cards View for Client</p>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
+
             <TabsContent value="service-provider">
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
                   <MyEscrowsServiceProviderFilter />
                 </CardContent>
               </Card>
-              <Card className={cn("overflow-hidden")}>
-                <CardContent className="p-6">
-                  <MyEscrowsServiceProviderTable />
-                </CardContent>
-              </Card>
+              {viewMode === "table" ? (
+                <Card className={cn("overflow-hidden")}>
+                  <CardContent className="p-6">
+                    <MyEscrowsServiceProviderTable />
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card className={cn("overflow-hidden")}>
+                  <CardContent className="p-6">
+                    {/* SET CARDS */}
+                    <p>Cards View for Service Provider</p>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
+
             <TabsContent value="dispute-resolver">
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
                   <MyEscrowsDisputeResolverFilter />
                 </CardContent>
               </Card>
-              <Card className={cn("overflow-hidden")}>
-                <CardContent className="p-6">
-                  <MyEscrowsDisputeResolverTable />
-                </CardContent>
-              </Card>
+              {viewMode === "table" ? (
+                <Card className={cn("overflow-hidden")}>
+                  <CardContent className="p-6">
+                    <MyEscrowsDisputeResolverTable />
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card className={cn("overflow-hidden")}>
+                  <CardContent className="p-6">
+                    {/* SET CARDS */}
+                    <p>Cards View for Dispute Resolver</p>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
           </Tabs>
         </div>
