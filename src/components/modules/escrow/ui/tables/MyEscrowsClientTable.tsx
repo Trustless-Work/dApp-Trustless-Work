@@ -10,9 +10,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import useMyEscrows from "../hooks/my-escrows";
+import useMyEscrows from "../../hooks/my-escrows";
+import React from "react";
 
-const MyEscrowsServiceProviderTable = () => {
+const MyEscrowsClientTable = () => {
   const {
     currentData,
     currentPage,
@@ -48,7 +49,7 @@ const MyEscrowsServiceProviderTable = () => {
           </TableHeader>
           <TableBody>
             {currentData.map((row: Escrow) => (
-              <>
+              <React.Fragment key={row.id}>
                 <TableRow
                   key={row.id}
                   className="animate-fade-in"
@@ -99,7 +100,7 @@ const MyEscrowsServiceProviderTable = () => {
                     </TableCell>
                   </TableRow>
                 )}
-              </>
+              </React.Fragment>
             ))}
           </TableBody>
         </Table>
@@ -136,4 +137,4 @@ const MyEscrowsServiceProviderTable = () => {
   );
 };
 
-export default MyEscrowsServiceProviderTable;
+export default MyEscrowsClientTable;

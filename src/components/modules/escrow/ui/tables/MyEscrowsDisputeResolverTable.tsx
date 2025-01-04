@@ -10,9 +10,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import useMyEscrows from "../hooks/my-escrows";
+import useMyEscrows from "../../hooks/my-escrows";
 
-const MyEscrowsClientTable = () => {
+const MyEscrowsDisputeResolverTable = () => {
   const {
     currentData,
     currentPage,
@@ -136,4 +136,4 @@ const MyEscrowsClientTable = () => {
   );
 };
 
-export default MyEscrowsClientTable;
+export default MyEscrowsDisputeResolverTable;
