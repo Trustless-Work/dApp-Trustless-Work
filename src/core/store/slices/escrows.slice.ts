@@ -5,7 +5,7 @@ import { getAllEscrowsByUser } from "@/components/modules/escrow/server/escrow-f
 
 const ESCROW_ACTIONS = {
   SET_ESCROWS: "escrows/set",
-  SET_ESCROW_TO_UPDATE: "escrows/setToUpdate",
+  SET_SELECTED_ESCROW: "escrows/setSelected",
   FETCH_ALL_ESCROWS: "escrows/fetchAll",
   CREATE_PRODUCT: "escrows/create",
   UPDATE_PRODUCT: "escrows/update",
@@ -28,16 +28,17 @@ export const useGlobalEscrowsSlice: StateCreator<
     totalEscrows: 0,
     loadingEscrows: false,
     escrowsToDelete: [],
+    selectedEscrow: null,
 
     // Modifiers
     setEscrows: (escrows: Escrow[]) =>
       set({ escrows }, false, ESCROW_ACTIONS.SET_ESCROWS),
 
-    setEscrowToUpdate: (escrow) =>
+    setSelectedEscrow: (escrow) =>
       set(
-        { escrowToUpdate: escrow },
+        { selectedEscrow: escrow },
         false,
-        ESCROW_ACTIONS.SET_ESCROW_TO_UPDATE,
+        ESCROW_ACTIONS.SET_SELECTED_ESCROW,
       ),
 
     fetchAllEscrows: async ({ address, type = "client" }) => {

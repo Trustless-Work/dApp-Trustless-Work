@@ -4,11 +4,11 @@ export interface EscrowGlobalStore {
   escrows: Escrow[];
   totalEscrows: number;
   loadingEscrows: boolean;
-  escrowToUpdate?: Escrow;
+  selectedEscrow: Escrow | null;
   escrowsToDelete: string[];
 
   setEscrows: (escrows: Escrow[]) => void;
-  setEscrowToUpdate: (escrow?: Escrow) => void;
+  setSelectedEscrow: (selectedEscrow?: Escrow) => void;
   // setEscrowsToDelete: (escrows: string[]) => void;
   fetchAllEscrows: (params: { address: string; type: string }) => void;
   // addEscrow: (escrow: Escrow) => Promise<Escrow | undefined>;
