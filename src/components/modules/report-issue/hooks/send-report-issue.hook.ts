@@ -29,8 +29,6 @@ export const useSendReportIssue = () => {
     try {
       const res = await addReportIssue({ payload, address });
 
-      console.log(res);
-
       if (res.success) {
         form.reset();
         toast({
