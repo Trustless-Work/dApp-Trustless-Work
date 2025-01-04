@@ -1,6 +1,6 @@
 import { CreatedAt, UpdatedAt } from "./dates.entity";
 
-type Milestone = {
+export type Milestone = {
   description: string;
 };
 
