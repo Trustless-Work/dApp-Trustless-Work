@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import NoData from "@/components/utils/NoData";
 
-const MyEscrowsCards = () => {
+const MyEscrowsServiceProviderCards = () => {
   const {
     currentData,
     currentPage,
@@ -16,7 +16,8 @@ const MyEscrowsCards = () => {
     handlePageChange,
     setItemsPerPage,
     setCurrentPage,
-  } = useMyEscrows();
+  } = useMyEscrows({ type: "serviceProvider" });
+  // ! EN LAS TABLAS Y CARDS, CREE 3 SEPARADO PARA MAS RAPIDO, PERO DEBO DE ALMACENAR EN ZUSTAND EL TIPO DE ENTIDAD, ESTO PARA LEERLO AQUI Y CUANDO SE LLAME USEMYESCROWS, SEPA QUE TIPO DE ESCROW DEBE DE TRAER
 
   const { formatDateFromFirebase, formatAddress, formatDollar } =
     useFormatUtils();
@@ -94,4 +95,4 @@ const MyEscrowsCards = () => {
   );
 };
 
-export default MyEscrowsCards;
+export default MyEscrowsServiceProviderCards;
