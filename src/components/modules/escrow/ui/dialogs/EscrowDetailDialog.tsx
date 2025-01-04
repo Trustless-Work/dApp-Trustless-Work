@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,25 +11,32 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
+import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
+import { useGlobalBoundedStore } from "@/core/store";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (value: boolean) => void;
+  setSelectedEscrow: (selectedEscrow?: Escrow) => void;
 }
 
 const EscrowDetailDialog = ({
   isDialogOpen,
   setIsDialogOpen,
+  setSelectedEscrow,
 }: EscrowDetailDialogProps) => {
-  const handleClose = () => {
-    setIsDialogOpen(false);
-  };
+  const { handleClose } = useEscrowDetailDialog({
+    setIsDialogOpen,
+    setSelectedEscrow,
+  });
+  const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>{selectedEscrow?.title}</DialogTitle>
           <DialogDescription>
             Make changes to your profile here. Click save when you're done.
           </DialogDescription>
