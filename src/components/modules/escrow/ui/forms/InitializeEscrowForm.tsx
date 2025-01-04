@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useInitializeEscrowHook } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
-import TooltipInfo from "../../utils/Tooltip";
+import TooltipInfo from "@/components/utils/Tooltip";
 
 const InitializeEscrowForm = () => {
   const {

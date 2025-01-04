@@ -1,10 +1,10 @@
 "use client";
 
-import InitializeEscrowForm from "@/components/modules/escrow/InitializeEscrowForm";
 import FlipCard from "@/components/utils/Code/FlipCard";
 import Loader from "@/components/utils/Loader";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { initializeEscrowCode } from "./code/initialize.code";
+import InitializeEscrowForm from "./ui/forms/InitializeEscrowForm";
 
 const InitializeEscrow = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
