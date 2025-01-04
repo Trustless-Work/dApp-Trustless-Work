@@ -2,7 +2,11 @@ import { useWalletStore } from "@/store/walletStore/store";
 import { useState, useEffect, useMemo } from "react";
 import { useGlobalBoundedStore } from "@/core/store";
 
-const useMyEscrows = () => {
+interface useMyEscrowsProps {
+  type: string;
+}
+
+const useMyEscrows = ({ type }: useMyEscrowsProps) => {
   const { address } = useWalletStore();
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
@@ -26,7 +30,7 @@ const useMyEscrows = () => {
   useEffect(() => {
     const fetchEscrows = async () => {
       if (address) {
-        fetchAllEscrows({ address, type: "user" });
+        fetchAllEscrows({ address, type });
       }
     };
 
