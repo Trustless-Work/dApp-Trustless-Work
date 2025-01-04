@@ -1,5 +1,5 @@
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import useMyEscrows from "../../hooks/my-escrows";
+import useMyEscrows from "../../hooks/my-escrows.hook";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { FaStackOverflow } from "react-icons/fa";
@@ -52,7 +52,6 @@ const MyEscrowsCards = () => {
         ))}
       </div>
 
-      {/* Controles de Paginación */}
       <div className="flex justify-center items-center mt-4 space-x-2">
         {Array.from({ length: totalPages }, (_, index) => (
           <Button
