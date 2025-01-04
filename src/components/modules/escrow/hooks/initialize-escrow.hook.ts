@@ -68,6 +68,7 @@ export const useInitializeEscrowHook = () => {
     try {
       const data = await initializeEscrow(payload);
       if (data.status === "SUCCESS" || data.status === 201) {
+        // ! Validate if the user has the preference in true
         await addEscrow({ payload, address });
 
         form.reset();

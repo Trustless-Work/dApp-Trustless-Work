@@ -28,23 +28,20 @@ const MyEscrowsTable = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-24">UID</TableHead>
-              <TableHead>Service Provider</TableHead>
+              <TableHead className="w-24">Title</TableHead>
               <TableHead>Amount</TableHead>
-              <TableHead>Milestones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {currentData.map((row: Escrow) => (
               <TableRow key={row.id} className="animate-fade-in">
-                <TableCell className="font-medium">{row.id}</TableCell>
-                <TableCell>{row.serviceProvider}</TableCell>
+                <TableCell className="font-medium">{row.title}</TableCell>
                 <TableCell>{row.amount}</TableCell>
-                <TableCell>
+                {/* <TableCell>
                   {row.milestones.map((milestone, index) => (
                     <div key={index}>{milestone.description}</div>
                   ))}
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>
