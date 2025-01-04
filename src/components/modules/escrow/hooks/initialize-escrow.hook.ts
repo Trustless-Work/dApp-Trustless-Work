@@ -10,9 +10,12 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { formSchema } from "../schema/initialize-escrow-schema";
 import { z } from "zod";
+import { addEscrow } from "../server/initialize-escrow-firebase";
+import { useWalletStore } from "@/store/walletStore/store";
 
 export const useInitializeEscrowHook = () => {
   const { toast } = useToast();
+  const { address } = useWalletStore();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const { formData, setFormData } = useEscrowFormStore();
 
@@ -65,6 +68,8 @@ export const useInitializeEscrowHook = () => {
     try {
       const data = await initializeEscrow(payload);
       if (data.status === "SUCCESS" || data.status === 201) {
+        await addEscrow({ payload, address });
+
         form.reset();
         setIsLoading(false);
         toast({
