@@ -1,6 +1,6 @@
 import { useWalletStore } from "@/store/walletStore/store";
 import { useState, useEffect, useMemo } from "react";
-import { getAllEscrowsByUser } from "../server/initialize-escrow-firebase";
+import { getAllEscrowsByUser } from "../server/escrow-firebase";
 import { Escrow } from "@/@types/escrow.entity";
 
 const useMyEscrows = () => {

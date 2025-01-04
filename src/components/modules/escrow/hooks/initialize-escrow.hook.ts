@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { formSchema } from "../schema/initialize-escrow-schema";
 import { z } from "zod";
-import { addEscrow } from "../server/initialize-escrow-firebase";
+import { addEscrow } from "../server/escrow-firebase";
 import { useWalletStore } from "@/store/walletStore/store";
 
 export const useInitializeEscrowHook = () => {
