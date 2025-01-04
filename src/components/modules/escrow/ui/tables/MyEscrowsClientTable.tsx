@@ -25,7 +25,7 @@ const MyEscrowsClientTable = () => {
     setCurrentPage,
     expandedRows,
     toggleRowExpansion,
-  } = useMyEscrows();
+  } = useMyEscrows({ type: "user" });
 
   const { formatDateFromFirebase, formatAddress } = useFormatUtils();
 

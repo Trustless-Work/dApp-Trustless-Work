@@ -24,7 +24,7 @@ const MyEscrowsServiceProviderTable = () => {
     setCurrentPage,
     expandedRows,
     toggleRowExpansion,
-  } = useMyEscrows();
+  } = useMyEscrows({ type: "serviceProvider" });
 
   const { formatDateFromFirebase, formatAddress } = useFormatUtils();
 

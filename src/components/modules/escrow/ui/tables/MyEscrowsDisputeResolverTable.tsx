@@ -24,7 +24,7 @@ const MyEscrowsDisputeResolverTable = () => {
     setCurrentPage,
     expandedRows,
     toggleRowExpansion,
-  } = useMyEscrows();
+  } = useMyEscrows({ type: "disputeResolver" });
 
   const { formatDateFromFirebase, formatAddress } = useFormatUtils();
 
