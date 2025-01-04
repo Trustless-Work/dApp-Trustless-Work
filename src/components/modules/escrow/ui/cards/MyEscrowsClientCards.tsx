@@ -6,14 +6,24 @@ import { FaStackOverflow } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import NoData from "@/components/utils/NoData";
+import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
+import { useEscrowBoundedStore } from "../../store/ui";
+import { useGlobalBoundedStore } from "@/core/store";
 
 const MyEscrowsClientCards = () => {
+  const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
+  const setIsDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsDialogOpen,
+  );
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
+  );
+
   const {
     currentData,
     currentPage,
     totalPages,
     itemsPerPage,
-    handlePageChange,
     setItemsPerPage,
     setCurrentPage,
   } = useMyEscrows({ type: "user" });
@@ -29,7 +39,17 @@ const MyEscrowsClientCards = () => {
           <div className="flex flex-col">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {currentData.map((escrow, index) => (
-                <Card key={index} className={cn("overflow-hidden")}>
+                <Card
+                  key={index}
+                  className={cn(
+                    "overflow-hidden cursor-pointer hover:shadow-lg",
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDialogOpen(true);
+                    setSelectedEscrow(escrow);
+                  }}
+                >
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-medium text-muted-foreground">
@@ -57,32 +77,31 @@ const MyEscrowsClientCards = () => {
               ))}
             </div>
 
-            <div className="flex justify-center items-center mt-4 space-x-2">
-              {Array.from({ length: totalPages }, (_, index) => (
-                <Button
-                  key={index}
-                  onClick={() => handlePageChange(index + 1)}
-                  className={
-                    currentPage === index + 1
-                      ? "bg-primary text-white"
-                      : "bg-gray-200 text-gray-700 hover:text-white"
-                  }
-                >
-                  {index + 1}
-                </Button>
-              ))}
-              <Input
-                id="itemsPerPage"
-                type="number"
-                min="1"
-                max={currentData.length}
-                value={itemsPerPage}
-                onChange={(e) => {
-                  setItemsPerPage(Number(e.target.value) || 1);
-                  setCurrentPage(1);
-                }}
-                className="w-20"
-              />
+            <div className="flex justify-end items-center gap-4 mt-10 mb-3 px-3">
+              <div className="flex items-center gap-2">
+                <span>Items per page:</span>
+                <Input
+                  type="number"
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                  className="w-16"
+                />
+              </div>
+              <Button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </Button>
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+              <Button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </Button>
             </div>
           </div>
         </div>
@@ -91,6 +110,13 @@ const MyEscrowsClientCards = () => {
           <NoData isCard={true} />
         </Card>
       )}
+
+      {/* Dialog */}
+      <EscrowDetailDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        setSelectedEscrow={setSelectedEscrow}
+      />
     </>
   );
 };
