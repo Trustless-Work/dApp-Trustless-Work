@@ -6,17 +6,29 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import CreateButton from "@/components/utils/Create";
 import Divider from "@/components/utils/Divider";
 import { Search, Trash2 } from "lucide-react";
 
 const MyEscrowsClientFilter = () => {
   return (
     <form className="flex flex-col space-y-5">
-      <div className="flex flex-col w-1/4">
-        <div className="flex items-center space-x-2">
-          <Input id="search" placeholder="Search..." />
-          <Search className="h-5 w-5" />
+      <div className="flex justify-between w-full gap-10">
+        <div className="flex gap-10">
+          <div className="flex items-center space-x-2">
+            <Input id="search" placeholder="Search..." />
+            <Search className="h-5 w-5" />
+          </div>
+          <Button variant="destructive" className="flex items-center space-x-2">
+            <Trash2 className="h-5 w-5" />
+          </Button>
         </div>
+
+        <CreateButton
+          className="mr-auto"
+          label="Create Escrow"
+          url={"/dashboard/escrow/initialize-escrow"}
+        />
       </div>
 
       <Divider type="horizontal" />
@@ -24,11 +36,11 @@ const MyEscrowsClientFilter = () => {
       <div className="flex gap-3">
         <div className="flex flex-col">
           <label className="text-xs font-bold mb-2 ml-2" htmlFor="select1">
-            Filtro 1
+            Filter 1
           </label>
           <Select>
             <SelectTrigger>
-              <span>Selecciona una opción</span>
+              <span>Select an option</span>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="option1">Opción 1</SelectItem>
@@ -40,11 +52,11 @@ const MyEscrowsClientFilter = () => {
 
         <div className="flex flex-col">
           <label className="text-xs font-bold mb-2 ml-2" htmlFor="select1">
-            Filtro 2
+            Filter 2
           </label>
           <Select>
             <SelectTrigger>
-              <span>Selecciona otra opción</span>
+              <span>Select an option</span>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="optionA">Opción A</SelectItem>
