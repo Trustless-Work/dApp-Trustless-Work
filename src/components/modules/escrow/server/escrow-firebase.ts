@@ -49,10 +49,12 @@ const addEscrow = async ({
 
 interface getAllEscrowsByUserProps {
   address: string;
+  type: string;
 }
 
 const getAllEscrowsByUser = async ({
   address,
+  type, // ! client/user, disputeResolver or serviceProvider
 }: getAllEscrowsByUserProps): Promise<{
   success: boolean;
   message?: string;
@@ -62,7 +64,7 @@ const getAllEscrowsByUser = async ({
 
   try {
     const escrowCollectionSnapshot = await getDocs(
-      query(collectionRef, where("user", "==", address)),
+      query(collectionRef, where(type, "==", address)),
     );
 
     const escrowList = escrowCollectionSnapshot.docs.map((doc) => ({
