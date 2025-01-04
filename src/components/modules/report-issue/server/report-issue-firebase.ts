@@ -1,12 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { db } from "@/core/config/firebase/firebase";
-import {
-  addDoc,
-  collection,
-  DocumentReference,
-  serverTimestamp,
-} from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { formSchema } from "../schema/report-issue-schema";
 import { z } from "zod";
 

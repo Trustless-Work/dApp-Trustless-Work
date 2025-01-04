@@ -1,8 +1,3 @@
-type formatDateFromFirebaseProps = {
-  seconds: number;
-  nanoseconds: number;
-};
-
 export const useFormatUtils = () => {
   const formatAddress = (address: string): string => {
     if (!address) return "";
