@@ -1,3 +1,4 @@
+import { Escrow } from "@/@types/escrow.entity"; // Asegúrate de importar Escrow correctamente
 import {
   Table,
   TableBody,
@@ -8,71 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Escrow } from "@/@types/escrow.entity";
 import useMyEscrows from "./hooks/my-escrows";
-
-const escrowData: Escrow[] = [
-  {
-    uid: "1",
-    serviceProvider: "0x123...abc",
-    amount: "100 USDC",
-    milestones: "3/5 completed",
-  },
-  {
-    uid: "2",
-    serviceProvider: "0x456...def",
-    amount: "200 USDC",
-    milestones: "2/4 completed",
-  },
-  {
-    uid: "3",
-    serviceProvider: "0x789...ghi",
-    amount: "150 USDC",
-    milestones: "1/3 completed",
-  },
-  {
-    uid: "4",
-    serviceProvider: "0xabc...123",
-    amount: "300 USDC",
-    milestones: "4/6 completed",
-  },
-  {
-    uid: "5",
-    serviceProvider: "0xdef...456",
-    amount: "250 USDC",
-    milestones: "2/5 completed",
-  },
-  {
-    uid: "6",
-    serviceProvider: "0xghi...789",
-    amount: "350 USDC",
-    milestones: "5/5 completed",
-  },
-  {
-    uid: "7",
-    serviceProvider: "0xjkl...012",
-    amount: "400 USDC",
-    milestones: "3/6 completed",
-  },
-  {
-    uid: "8",
-    serviceProvider: "0xopq...345",
-    amount: "180 USDC",
-    milestones: "1/2 completed",
-  },
-  {
-    uid: "9",
-    serviceProvider: "0xstu...678",
-    amount: "220 USDC",
-    milestones: "4/4 completed",
-  },
-  {
-    uid: "10",
-    serviceProvider: "0xvwx...901",
-    amount: "260 USDC",
-    milestones: "2/5 completed",
-  },
-];
 
 const MyEscrowsTable = () => {
   const {
@@ -83,7 +20,7 @@ const MyEscrowsTable = () => {
     handlePageChange,
     setItemsPerPage,
     setCurrentPage,
-  } = useMyEscrows({ escrowData });
+  } = useMyEscrows();
 
   return (
     <div className="container mx-auto py-10">
@@ -98,12 +35,16 @@ const MyEscrowsTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentData.map((row) => (
-              <TableRow key={row.uid} className="animate-fade-in">
-                <TableCell className="font-medium">{row.uid}</TableCell>
+            {currentData.map((row: Escrow) => (
+              <TableRow key={row.id} className="animate-fade-in">
+                <TableCell className="font-medium">{row.id}</TableCell>
                 <TableCell>{row.serviceProvider}</TableCell>
                 <TableCell>{row.amount}</TableCell>
-                <TableCell>{row.milestones}</TableCell>
+                <TableCell>
+                  {row.milestones.map((milestone, index) => (
+                    <div key={index}>{milestone.description}</div>
+                  ))}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -128,7 +69,7 @@ const MyEscrowsTable = () => {
           id="itemsPerPage"
           type="number"
           min="1"
-          max={escrowData.length}
+          max={currentData.length}
           value={itemsPerPage}
           onChange={(e) => {
             setItemsPerPage(Number(e.target.value) || 1);
