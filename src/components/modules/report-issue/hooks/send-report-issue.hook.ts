@@ -1,14 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
-import { db } from "@/core/config/firebase/firebase";
-import { formSchema } from "../schema/report-issue-schema";
+import { formSchema, IssueType } from "../schema/report-issue-schema";
+import { addReportIssue } from "../server/report-issue-firebase";
+import { useWalletStore } from "@/store/walletStore/store";
 
 export const useSendReportIssue = () => {
   const { toast } = useToast();
+  const { address } = useWalletStore();
+
+  const typeOptions = Object.values(IssueType).map((value) => ({
+    value,
+    label: value,
+  }));
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -21,22 +29,18 @@ export const useSendReportIssue = () => {
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     try {
-      const res = await addDoc(collection(db, "api issues"), {
-        ...payload,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
+      const res = await addReportIssue({ payload, address });
 
-      if (res.id) {
+      if (res.success) {
         form.reset();
         toast({
           title: "Success",
-          description: "Issue reported successfully",
+          description: res.message,
         });
       } else {
         toast({
           title: "Error",
-          description: "An error occurred",
+          description: res.message,
           variant: "destructive",
         });
       }
@@ -54,5 +58,5 @@ export const useSendReportIssue = () => {
     }
   };
 
-  return { form, onSubmit };
+  return { form, onSubmit, typeOptions };
 };
