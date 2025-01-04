@@ -1,19 +1,34 @@
+import { useWalletStore } from "@/store/walletStore/store";
+import { useState, useEffect, useMemo } from "react";
+import { getAllEscrowsByUser } from "../server/initialize-escrow-firebase";
 import { Escrow } from "@/@types/escrow.entity";
-import { useState } from "react";
 
-interface useMyEscrowsProps {
-  escrowData: Escrow[];
-}
+const useMyEscrows = () => {
+  const { address } = useWalletStore();
 
-const useMyEscrows = ({ escrowData }: useMyEscrowsProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(15);
+  const [fetchedEscrows, setFetchedEscrows] = useState<Escrow[]>([]);
 
-  const totalPages = Math.ceil(escrowData.length / itemsPerPage);
-  const currentData = escrowData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
+  const totalPages = Math.ceil(fetchedEscrows.length / itemsPerPage);
+
+  const currentData = useMemo(() => {
+    return fetchedEscrows.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage,
+    );
+  }, [fetchedEscrows, currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    const fetchEscrows = async () => {
+      if (address) {
+        const res = await getAllEscrowsByUser({ address });
+        setFetchedEscrows(res.data);
+      }
+    };
+
+    fetchEscrows();
+  }, []);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
