@@ -15,24 +15,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { MoreHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import useMyEscrows from "../../hooks/my-escrows.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/NoData";
+import { useEscrowBoundedStore } from "../../store/ui";
+import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 
 const MyEscrowsClientTable = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para manejar el Dialog
+  const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
+  const setIsDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsDialogOpen,
+  );
 
   const {
     currentData,
@@ -168,35 +164,10 @@ const MyEscrowsClientTable = () => {
       )}
 
       {/* Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input id="name" value="Pedro Duarte" className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
-              </Label>
-              <Input id="username" value="@peduarte" className="col-span-3" />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit" onClick={() => setIsDialogOpen(false)}>
-              Save changes
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <EscrowDetailDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+      />
     </div>
   );
 };
