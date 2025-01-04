@@ -10,11 +10,13 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { formSchema } from "../schema/initialize-escrow-schema";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 export const useInitializeEscrowHook = () => {
   const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
-  const { formData, setFormData } = useEscrowFormStore();
+  const { formData, setFormData, resetForm } = useEscrowFormStore();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,8 +67,14 @@ export const useInitializeEscrowHook = () => {
     try {
       const data = await initializeEscrow(payload);
       if (data.status === "SUCCESS" || data.status === 201) {
+        // ! Validate if the user has the preference in true
+        await addEscrow({ payload, address });
+
         form.reset();
+        resetForm();
+        router.push("/dashboard/escrow/my-escrows");
         setIsLoading(false);
+
         toast({
           title: "Success",
           description: data.message,

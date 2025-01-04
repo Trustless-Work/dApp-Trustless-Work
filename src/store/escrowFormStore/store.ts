@@ -18,7 +18,7 @@ interface EscrowFormData {
 
 interface EscrowFormState {
   formData: EscrowFormData;
-  setFormData: (data: Partial<EscrowFormData>) => void;
+  setFormData: (data: Partial<EscrowFormData | null>) => void;
   resetForm: () => void;
 }
 
