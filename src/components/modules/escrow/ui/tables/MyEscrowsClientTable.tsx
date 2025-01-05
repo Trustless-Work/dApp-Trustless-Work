@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -45,7 +45,7 @@ const MyEscrowsClientTable = () => {
     toggleRowExpansion,
   } = useMyEscrows({ type: "user" });
 
-  const { formatDateFromFirebase, formatAddress } = useFormatUtils();
+  const { /*formatDateFromFirebase,*/ formatAddress } = useFormatUtils();
 
   return (
     <div className="container mx-auto py-3">
