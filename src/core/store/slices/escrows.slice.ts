@@ -50,7 +50,7 @@ export const useGlobalEscrowsSlice: StateCreator<
       });
 
       set(
-        { escrows: escrows.data, totalEscrows: escrows.data.length },
+        { escrows: escrows.data, totalEscrows: escrows.data?.length },
         false,
         ESCROW_ACTIONS.FETCH_ALL_ESCROWS,
       );
