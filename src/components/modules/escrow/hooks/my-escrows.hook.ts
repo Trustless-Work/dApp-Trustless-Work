@@ -19,7 +19,7 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
   const [itemsPerPage, setItemsPerPage] = useState(15);
 
   const totalPages = Math.ceil(totalEscrows / itemsPerPage);
-  console.log(escrows);
+
   const currentData = useMemo(() => {
     if (!escrows) return [];
 
