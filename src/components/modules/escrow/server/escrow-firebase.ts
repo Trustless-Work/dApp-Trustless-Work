@@ -6,6 +6,8 @@ import { db } from "@/core/config/firebase/firebase";
 import {
   addDoc,
   collection,
+  DocumentReference,
+  getDoc,
   getDocs,
   query,
   serverTimestamp,
@@ -17,26 +19,43 @@ import { formSchema } from "../schema/initialize-escrow-schema";
 interface addEscrowProps {
   payload: z.infer<typeof formSchema>;
   address: string;
+  contractId: string;
 }
 
 const addEscrow = async ({
   payload,
   address,
-}: addEscrowProps): Promise<{ success: boolean; message: string }> => {
+  contractId,
+}: addEscrowProps): Promise<{
+  success: boolean;
+  message: string;
+  data?: any;
+}> => {
   const collectionRef = collection(db, "escrows");
 
   try {
-    await addDoc(collectionRef, {
+    const docRef: DocumentReference = await addDoc(collectionRef, {
       ...payload,
       user: address,
+      contractId,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
 
-    return {
-      success: true,
-      message: `Escrow ${payload.title} created successfully`,
-    };
+    const createdDoc = await getDoc(docRef);
+
+    if (createdDoc.exists()) {
+      return {
+        success: true,
+        message: `Escrow ${payload.title} created successfully`,
+        data: { id: docRef.id, ...createdDoc.data() },
+      };
+    } else {
+      return {
+        success: false,
+        message: "Document was created but no data was found.",
+      };
+    }
   } catch (error: any) {
     const errorMessage =
       error.response && error.response.data
