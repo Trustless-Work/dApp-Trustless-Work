@@ -39,8 +39,6 @@ export const initializeEscrow = async (
 
     const { data } = tx;
 
-    // console.log(data);
-
     return data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
