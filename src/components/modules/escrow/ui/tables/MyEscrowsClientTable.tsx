@@ -124,15 +124,8 @@ const MyEscrowsClientTable = () => {
                     {escrow.milestones && expandedRows.includes(escrow.id) && (
                       <TableRow>
                         <TableCell colSpan={8} className="p-4">
-                          <div>
-                            <p>
-                              <strong>Milestones:</strong>
-                            </p>
-                            <ul>
-                              {escrow.milestones.map((milestone, index) => (
-                                <li key={index}>{milestone.description}</li>
-                              ))}
-                            </ul>
+                          <div className="flex bg-red-600 w-full">
+                            <p>joel</p>
                           </div>
                         </TableCell>
                       </TableRow>
