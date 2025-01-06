@@ -1,4 +1,4 @@
-import { Escrow } from "@/@types/escrow.entity";
+import { Escrow, EscrowPayload } from "@/@types/escrow.entity";
 
 export interface EscrowGlobalStore {
   escrows: Escrow[];
@@ -11,7 +11,11 @@ export interface EscrowGlobalStore {
   setSelectedEscrow: (selectedEscrow?: Escrow) => void;
   // setEscrowsToDelete: (escrows: string[]) => void;
   fetchAllEscrows: (params: { address: string; type: string }) => void;
-  // addEscrow: (escrow: Escrow) => Promise<Escrow | undefined>;
+  addEscrow: (
+    payload: EscrowPayload,
+    address: string,
+    contractId: string,
+  ) => Promise<Escrow | undefined>;
   // updateEscrow: (
   //   escrowId: string,
   //   escrow: Escrow,

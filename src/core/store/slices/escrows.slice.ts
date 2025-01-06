@@ -1,13 +1,16 @@
 import { StateCreator } from "zustand";
 import { EscrowGlobalStore } from "../@types/escrows.entity";
 import { Escrow } from "@/@types/escrow.entity";
-import { getAllEscrowsByUser } from "@/components/modules/escrow/server/escrow-firebase";
+import {
+  addEscrow,
+  getAllEscrowsByUser,
+} from "@/components/modules/escrow/server/escrow-firebase";
 
 const ESCROW_ACTIONS = {
   SET_ESCROWS: "escrows/set",
   SET_SELECTED_ESCROW: "escrows/setSelected",
   FETCH_ALL_ESCROWS: "escrows/fetchAll",
-  CREATE_PRODUCT: "escrows/create",
+  ADD_ESCROW: "escrows/add",
   UPDATE_PRODUCT: "escrows/update",
   DELETE_PRODUCT: "escrows/delete",
   SET_ESCROW_TO_DELETE: "escrows/setToDelete",
@@ -57,24 +60,26 @@ export const useGlobalEscrowsSlice: StateCreator<
       set({ loadingEscrows: false }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
     },
 
-    //   createProduct: async (storeId, product) => {
-    //     const newProduct = await fetchCreateProduct({
-    //       storeId,
-    //       product: { ...product, category: product?.category?.toString() },
-    //     });
-    //     if (newProduct) {
-    //       set(
-    //         (state) => ({
-    //           products: [newProduct, ...state.products],
-    //         }),
-    //         false,
-    //         ESCROW_ACTIONS.CREATE_PRODUCT,
-    //       );
-    //       return newProduct;
-    //     }
+    addEscrow: async (payload, address, contractId) => {
+      const newEscrowResponse = await addEscrow({
+        payload,
+        address,
+        contractId,
+      });
+      if (newEscrowResponse && newEscrowResponse.data) {
+        const newEscrow: Escrow = newEscrowResponse.data;
+        set(
+          (state) => ({
+            escrows: [newEscrow, ...state.escrows],
+          }),
+          false,
+          ESCROW_ACTIONS.ADD_ESCROW,
+        );
+        return newEscrow;
+      }
 
-    //     return undefined;
-    //   },
+      return undefined;
+    },
 
     //   updateProduct: async (productId, product) => {
     //     const productToUpdate = await fetchUpdateProduct({
