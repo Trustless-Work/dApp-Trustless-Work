@@ -4,8 +4,12 @@ interface DividerProps {
 
 const Divider = ({ type }: DividerProps) => {
   return (
-    <hr
-      className={`${type === "horizontal" ? "w-full h-0.5" : "w-0.5 h-full"} border-gray-200 dark:border-gray-800`}
+    <div
+      className={`${
+        type === "horizontal"
+          ? "border-t-[1px] border-gray-200 dark:border-[#e9e9ed33]"
+          : "border-l-[1px] border-gray-200 dark:border-[#E9E9ED]"
+      }`}
     />
   );
 };
