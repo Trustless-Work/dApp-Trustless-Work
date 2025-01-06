@@ -9,15 +9,20 @@ export interface Escrow {
   engagementId: string;
   disputeResolver: string;
   amount: string;
-  updatedAt: UpdatedAt;
-  milestones: Milestone[];
   platformAddress: string;
+  milestones: Milestone[];
   description: string;
   title: string;
-  createdAt: CreatedAt;
-  user: string;
   platformFee: string;
   client: string;
   releaseSigner: string;
+  user: string;
+  createdAt: CreatedAt;
+  updatedAt: UpdatedAt;
   id: string;
 }
+
+export type EscrowPayload = Omit<
+  Escrow,
+  "user" | "createdAt" | "updatedAt" | "id"
+>;
