@@ -10,7 +10,7 @@ import CreateButton from "@/components/utils/Create";
 import Divider from "@/components/utils/Divider";
 import { Search, Trash2 } from "lucide-react";
 
-const MyEscrowsClientFilter = () => {
+const MyEscrowsFilter = () => {
   return (
     <form className="flex flex-col space-y-5">
       <div className="flex justify-between w-full gap-10">
@@ -70,4 +70,4 @@ const MyEscrowsClientFilter = () => {
   );
 };
 
-export default MyEscrowsClientFilter;
+export default MyEscrowsFilter;
