@@ -4,13 +4,7 @@ import { useLoaderStore } from "@/store/utilsStore/store";
 import Loader from "@/components/utils/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import MyEscrowsClientTable from "@/components/modules/escrow/ui/tables/MyEscrowsClientTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import MyEscrowsClientFilter from "@/components/modules/escrow/ui/filters/MyEscrowsClientFilter";
-import MyEscrowsServiceProviderFilter from "@/components/modules/escrow/ui/filters/MyEscrowsServiceProviderFilter";
-import MyEscrowsServiceProviderTable from "@/components/modules/escrow/ui/tables/MyEscrowsServiceProviderTable";
-import MyEscrowsDisputeResolverFilter from "@/components/modules/escrow/ui/filters/MyEscrowsDisputeResolverFilter";
-import MyEscrowsDisputeResolverTable from "@/components/modules/escrow/ui/tables/MyEscrowsDisputeResolverTable";
 import { useState } from "react";
 import {
   Select,
@@ -19,12 +13,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import MyEscrowsClientCards from "@/components/modules/escrow/ui/cards/MyEscrowsClientCards";
-import MyEscrowsServiceProviderCards from "@/components/modules/escrow/ui/cards/MyEscrowsServiceProviderCards";
-import MyEscrowsDisputeResolverCards from "@/components/modules/escrow/ui/cards/MyEscrowsDisputeResolverCards";
+import { useEscrowBoundedStore } from "@/components/modules/escrow/store/ui";
+import MyEscrowsTable from "@/components/modules/escrow/ui/tables/MyEscrowsTable";
+import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
+import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFilter";
 
 const EscrowsPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
+  const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
+
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
 
   return (
@@ -36,11 +33,22 @@ const EscrowsPage = () => {
           <Tabs defaultValue="client" className="w-full">
             <div className="flex w-full justify-between items-center flex-col md:flex-row md:gap-3">
               <TabsList className="grid w-full sm:w-2/3 md:w-1/2 lg:w-1/3 grid-cols-2 md:grid-cols-3">
-                <TabsTrigger value="client">Client</TabsTrigger>
-                <TabsTrigger value="service-provider">
+                <TabsTrigger
+                  onClick={() => setActiveTab("user")}
+                  value="client"
+                >
+                  Client
+                </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => setActiveTab("serviceProvider")}
+                  value="service-provider"
+                >
                   Service Provider
                 </TabsTrigger>
-                <TabsTrigger value="dispute-resolver">
+                <TabsTrigger
+                  onClick={() => setActiveTab("disputeResolver")}
+                  value="dispute-resolver"
+                >
                   Dispute Resolver
                 </TabsTrigger>
               </TabsList>
@@ -66,15 +74,15 @@ const EscrowsPage = () => {
             <TabsContent value="client" className="flex flex-col gap-3">
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
-                  <MyEscrowsClientFilter />
+                  <MyEscrowsFilter />
                 </CardContent>
               </Card>
               {viewMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <MyEscrowsClientTable />
+                  <MyEscrowsTable type="user" />
                 </Card>
               ) : (
-                <MyEscrowsClientCards />
+                <MyEscrowsCards type="user" />
               )}
             </TabsContent>
 
@@ -84,15 +92,15 @@ const EscrowsPage = () => {
             >
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
-                  <MyEscrowsServiceProviderFilter />
+                  <MyEscrowsFilter />
                 </CardContent>
               </Card>
               {viewMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <MyEscrowsServiceProviderTable />
+                  <MyEscrowsTable type="serviceProvider" />
                 </Card>
               ) : (
-                <MyEscrowsServiceProviderCards />
+                <MyEscrowsCards type="serviceProvider" />
               )}
             </TabsContent>
 
@@ -102,15 +110,15 @@ const EscrowsPage = () => {
             >
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
-                  <MyEscrowsDisputeResolverFilter />
+                  <MyEscrowsFilter />
                 </CardContent>
               </Card>
               {viewMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <MyEscrowsDisputeResolverTable />
+                  <MyEscrowsTable type="disputeResolver" />
                 </Card>
               ) : (
-                <MyEscrowsDisputeResolverCards />
+                <MyEscrowsCards type="disputeResolver" />
               )}
             </TabsContent>
           </Tabs>
