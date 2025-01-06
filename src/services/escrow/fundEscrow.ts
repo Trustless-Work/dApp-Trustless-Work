@@ -1,16 +1,11 @@
+import { FundEscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/wallet/walletKit";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
 import axios from "axios";
 
-interface EscrowPayload {
-  contractId: string;
-  engagementId: string;
-  signer: string;
-}
-
-export const fundEscrow = async (payload: EscrowPayload) => {
+export const fundEscrow = async (payload: FundEscrowPayload) => {
   try {
     const response = await http.post("/escrow/fund-escrow", payload);
 
