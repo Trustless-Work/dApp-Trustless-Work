@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useGlobalBoundedStore } from "@/core/store";
 
 interface useMyEscrowsProps {
-  type: string;
+  type: "user" | "disputeResolver" | "serviceProvider";
 }
 
 const useMyEscrows = ({ type }: useMyEscrowsProps) => {
