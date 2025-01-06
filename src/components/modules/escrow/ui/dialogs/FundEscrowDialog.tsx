@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useFundEscrowDialog from "./hooks/fund-escrow-dialog.hook";
 import { useGlobalBoundedStore } from "@/core/store";
-import { Form } from "react-hook-form";
+import { Form, FormProvider } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -52,12 +52,12 @@ const FundEscrowDialog = ({
             securing them until the agreed conditions are met.
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
+        <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="grid gap-4 py-4"
           >
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="flex flex-col ms-center gap-4">
               <FormField
                 control={form.control}
                 name="contractId"
@@ -127,10 +127,10 @@ const FundEscrowDialog = ({
             </div>
 
             <DialogFooter>
-              <Button type="submit">Fund</Button>
+              <Button type="submit">Fund Escrow</Button>
             </DialogFooter>
           </form>
-        </Form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   );
