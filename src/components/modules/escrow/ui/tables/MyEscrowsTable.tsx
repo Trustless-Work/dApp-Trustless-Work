@@ -25,8 +25,6 @@ import { useEscrowBoundedStore } from "../../store/ui";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useGlobalBoundedStore } from "@/core/store";
 import LoaderData from "@/components/utils/LoaderData";
-import Divider from "@/components/utils/Divider";
-import { Progress } from "@/components/ui/progress";
 import ExpandableContent from "./expandable/ExpandableContent";
 
 interface MyEscrowsTableProps {
