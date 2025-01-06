@@ -27,6 +27,7 @@ import { useGlobalBoundedStore } from "@/core/store";
 import LoaderData from "@/components/utils/LoaderData";
 import Divider from "@/components/utils/Divider";
 import { Progress } from "@/components/ui/progress";
+import ExpandableContent from "./expandable/ExpandableContent";
 
 interface MyEscrowsTableProps {
   type: "user" | "disputeResolver" | "serviceProvider";
@@ -129,60 +130,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                     </TableRow>
                     {escrow.milestones && expandedRows.includes(escrow.id) && (
                       <TableRow>
-                        <TableCell colSpan={5} className="p-4">
-                          <h3 className="mb-1 font-bold text-xs">Milestones</h3>
-                          <Divider type="horizontal" />
-                          <div className="flex flex-col">
-                            <Table>
-                              <TableHeader>
-                                <TableRow>
-                                  <TableHead>Description</TableHead>
-                                  <TableHead>Amount</TableHead>
-                                  <TableHead>Status</TableHead>
-                                </TableRow>
-                              </TableHeader>
-                              <TableBody>
-                                {escrow.milestones.map((milestone, index) => (
-                                  <TableRow key={index}>
-                                    <TableCell>
-                                      {milestone.description}
-                                    </TableCell>
-                                    <TableCell>amount</TableCell>
-                                    <TableCell>status</TableCell>
-                                  </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-
-                            {/* {(() => {
-                              const completedMilestones =
-                                escrow.milestones.filter(
-                                  (milestone) =>
-                                    milestone.status === "Completed",
-                                );
-                              const progressValue =
-                                (completedMilestones.length /
-                                  escrow.milestones.length) *
-                                100;
-                              return <Progress value={progressValue} />;
-                            })()} */}
-
-                            {/* CAMBIAR */}
-                            <div className="flex flex-col gap-2 mt-4">
-                              <h3 className="mb-1 font-bold text-xs">
-                                Completed
-                              </h3>
-                              <div className="flex items-center gap-2">
-                                <Progress value={67} />
-                                <strong className="text-xs">65%</strong>
-                              </div>
-                            </div>
-                          </div>
-                        </TableCell>
-
-                        <div className="mt-8 ml-10 p-3 border rounded border-primary w-full h-full">
-                          <p>other data</p>
-                        </div>
+                        <ExpandableContent escrow={escrow} />
                       </TableRow>
                     )}
                   </React.Fragment>
