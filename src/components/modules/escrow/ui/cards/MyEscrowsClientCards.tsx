@@ -9,6 +9,7 @@ import NoData from "@/components/utils/NoData";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store";
+import LoaderData from "@/components/utils/LoaderData";
 
 const MyEscrowsClientCards = () => {
   const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
@@ -18,6 +19,7 @@ const MyEscrowsClientCards = () => {
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
+  const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
 
   const {
     currentData,
@@ -34,7 +36,9 @@ const MyEscrowsClientCards = () => {
 
   return (
     <>
-      {currentData.length !== 0 ? (
+      {loadingEscrows ? (
+        <LoaderData />
+      ) : currentData.length !== 0 ? (
         <div className="py-3">
           <div className="flex flex-col">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

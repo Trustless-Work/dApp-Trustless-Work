@@ -6,8 +6,21 @@ import { FaStackOverflow } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import NoData from "@/components/utils/NoData";
+import { useEscrowBoundedStore } from "../../store/ui";
+import { useGlobalBoundedStore } from "@/core/store";
+import LoaderData from "@/components/utils/LoaderData";
+import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 
 const MyEscrowsServiceProviderCards = () => {
+  const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
+  const setIsDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsDialogOpen,
+  );
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
+  );
+  const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
+
   const {
     currentData,
     currentPage,
@@ -23,7 +36,9 @@ const MyEscrowsServiceProviderCards = () => {
 
   return (
     <>
-      {currentData.length !== 0 ? (
+      {loadingEscrows ? (
+        <LoaderData />
+      ) : currentData.length !== 0 ? (
         <div className="py-3">
           <div className="flex flex-col">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -89,6 +104,13 @@ const MyEscrowsServiceProviderCards = () => {
           <NoData isCard={true} />
         </Card>
       )}
+
+      {/* Dialog */}
+      <EscrowDetailDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        setSelectedEscrow={setSelectedEscrow}
+      />
     </>
   );
 };

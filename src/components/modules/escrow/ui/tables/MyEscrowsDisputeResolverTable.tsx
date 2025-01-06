@@ -12,8 +12,21 @@ import { Input } from "@/components/ui/input";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import useMyEscrows from "../../hooks/my-escrows.hook";
 import NoData from "@/components/utils/NoData";
+import { useEscrowBoundedStore } from "../../store/ui";
+import { useGlobalBoundedStore } from "@/core/store";
+import LoaderData from "@/components/utils/LoaderData";
+import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 
 const MyEscrowsDisputeResolverTable = () => {
+  const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
+  const setIsDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsDialogOpen,
+  );
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
+  );
+  const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
+
   const {
     currentData,
     currentPage,
@@ -29,7 +42,9 @@ const MyEscrowsDisputeResolverTable = () => {
 
   return (
     <div className="container mx-auto py-3">
-      {currentData.length !== 0 ? (
+      {loadingEscrows ? (
+        <LoaderData />
+      ) : currentData.length !== 0 ? (
         <>
           <div className="rounded-lg p-3">
             <Table>
@@ -143,6 +158,13 @@ const MyEscrowsDisputeResolverTable = () => {
       ) : (
         <NoData />
       )}
+
+      {/* Dialog */}
+      <EscrowDetailDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        setSelectedEscrow={setSelectedEscrow}
+      />
     </div>
   );
 };
