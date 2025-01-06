@@ -1,33 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { EscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
 import axios from "axios";
 
-interface EscrowPayload {
+interface EscrowPayloadWithSigner extends EscrowPayload {
   signer?: string;
-  engagementId: string;
-  title: string;
-  description: string;
-  client: string;
-  serviceProvider: string;
-  platformAddress: string;
-  platformFee: string;
-  amount: string;
-  releaseSigner: string;
-  milestones: {
-    description: string;
-  }[];
-  disputeResolver: string;
 }
 
 export const initializeEscrow = async (
-  payload: EscrowPayload,
+  payload: EscrowPayloadWithSigner,
   address: string,
 ) => {
   try {
-    const payloadWithSigner: EscrowPayload = {
+    const payloadWithSigner: EscrowPayloadWithSigner = {
       ...payload,
       signer: address,
     };
@@ -50,6 +38,9 @@ export const initializeEscrow = async (
     });
 
     const { data } = tx;
+
+    // console.log(data);
+
     return data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
