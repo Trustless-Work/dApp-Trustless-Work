@@ -2,8 +2,10 @@ import { devtools, DevtoolsOptions } from "zustand/middleware";
 import { create } from "zustand";
 import { useEscrowDialogSlice } from "./slices/dialogs.slice";
 import { DialogEscrowStore } from "./@types/dialogs.entity";
+import { TabsEscrowStore } from "./@types/tabs.entity";
+import { useEscrowTabSlice } from "./slices/tabs.slice";
 
-type GlobalState = DialogEscrowStore;
+type GlobalState = DialogEscrowStore & TabsEscrowStore;
 
 const devtoolsOptions: DevtoolsOptions = {
   name: "Global State",
@@ -37,6 +39,7 @@ export const useEscrowBoundedStore = create<GlobalState>()(
   devtools(
     (...a) => ({
       ...useEscrowDialogSlice(...a),
+      ...useEscrowTabSlice(...a),
     }),
     devtoolsOptions,
   ),
