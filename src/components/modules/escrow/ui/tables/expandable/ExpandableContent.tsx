@@ -1,4 +1,5 @@
 import { Escrow } from "@/@types/escrow.entity";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   Table,
@@ -25,7 +26,8 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
             <TableHeader>
               <TableRow>
                 <TableHead>Description</TableHead>
-                <TableHead>Amount</TableHead>
+                {/* <TableHead>Amount</TableHead> */}
+                <TableHead>In Dispute</TableHead>
                 <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
@@ -33,8 +35,18 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
               {escrow.milestones.map((milestone, index) => (
                 <TableRow key={index}>
                   <TableCell>{milestone.description}</TableCell>
-                  <TableCell>amount</TableCell>
-                  <TableCell>status</TableCell>
+                  {/* <TableCell>amount</TableCell> */}
+                  <TableCell>
+                    {milestone.flag ? (
+                      <Badge variant="destructive">Yes</Badge>
+                    ) : (
+                      <Badge variant="secondary">No</Badge>
+                    )}
+                  </TableCell>
+
+                  <TableCell>
+                    <Badge>{milestone.status}</Badge>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
