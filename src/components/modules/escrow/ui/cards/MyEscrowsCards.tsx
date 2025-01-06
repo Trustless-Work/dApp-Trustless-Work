@@ -6,12 +6,16 @@ import { FaStackOverflow } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import NoData from "@/components/utils/NoData";
+import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store";
 import LoaderData from "@/components/utils/LoaderData";
-import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 
-const MyEscrowsServiceProviderCards = () => {
+interface MyEscrowsCardsProps {
+  type: "user" | "disputeResolver" | "serviceProvider";
+}
+
+const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
   const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -28,8 +32,7 @@ const MyEscrowsServiceProviderCards = () => {
     itemsPerPage,
     setItemsPerPage,
     setCurrentPage,
-  } = useMyEscrows({ type: "serviceProvider" });
-  // ! EN LAS TABLAS Y CARDS, CREE 3 SEPARADO PARA MAS RAPIDO, PERO DEBO DE ALMACENAR EN ZUSTAND EL TIPO DE ENTIDAD, ESTO PARA LEERLO AQUI Y CUANDO SE LLAME USEMYESCROWS, SEPA QUE TIPO DE ESCROW DEBE DE TRAER
+  } = useMyEscrows({ type });
 
   const { formatDateFromFirebase, formatAddress, formatDollar } =
     useFormatUtils();
@@ -43,7 +46,17 @@ const MyEscrowsServiceProviderCards = () => {
           <div className="flex flex-col">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {currentData.map((escrow, index) => (
-                <Card key={index} className={cn("overflow-hidden")}>
+                <Card
+                  key={index}
+                  className={cn(
+                    "overflow-hidden cursor-pointer hover:shadow-lg",
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDialogOpen(true);
+                    setSelectedEscrow(escrow);
+                  }}
+                >
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-medium text-muted-foreground">
@@ -115,4 +128,4 @@ const MyEscrowsServiceProviderCards = () => {
   );
 };
 
-export default MyEscrowsServiceProviderCards;
+export default MyEscrowsCards;
