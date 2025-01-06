@@ -1,4 +1,4 @@
-import { Escrow } from "@/@types/escrow.entity";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -7,17 +7,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useFormatUtils } from "@/utils/hook/format.hook";
 import useMyEscrows from "../../hooks/my-escrows.hook";
+import { useFormatUtils } from "@/utils/hook/format.hook";
+import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/NoData";
-import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
-import LoaderData from "@/components/utils/LoaderData";
 import { useEscrowBoundedStore } from "../../store/ui";
+import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useGlobalBoundedStore } from "@/core/store";
+import LoaderData from "@/components/utils/LoaderData";
 
-const MyEscrowsServiceProviderTable = () => {
+interface MyEscrowsTableProps {
+  type: "user" | "disputeResolver" | "serviceProvider";
+}
+
+const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -36,9 +49,9 @@ const MyEscrowsServiceProviderTable = () => {
     setCurrentPage,
     expandedRows,
     toggleRowExpansion,
-  } = useMyEscrows({ type: "serviceProvider" });
+  } = useMyEscrows({ type });
 
-  const { formatDateFromFirebase, formatAddress } = useFormatUtils();
+  const { /*formatDateFromFirebase,*/ formatAddress } = useFormatUtils();
 
   return (
     <div className="container mx-auto py-3">
@@ -57,72 +70,71 @@ const MyEscrowsServiceProviderTable = () => {
                   <TableHead>Platform</TableHead>
                   <TableHead>Platform Fee</TableHead>
                   <TableHead>Client</TableHead>
-                  <TableHead>Dispute Resolver</TableHead>
-                  <TableHead>Release Signer</TableHead>
-                  <TableHead>Service Provider</TableHead>
-                  <TableHead>Created</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentData.map((row: Escrow) => (
-                  <>
+                {currentData.map((escrow: Escrow) => (
+                  <React.Fragment key={escrow.id}>
                     <TableRow
-                      key={row.id}
                       className="animate-fade-in"
-                      onClick={() => toggleRowExpansion(row.id)}
+                      onClick={() => toggleRowExpansion(escrow.id)}
                     >
-                      <TableCell className="font-medium">{row.title}</TableCell>
-                      <TableCell>{row.description}</TableCell>
-                      <TableCell>{row.amount}</TableCell>
-                      <TableCell>{row.engagementId}</TableCell>
-                      <TableCell>
-                        {formatAddress(row.platformAddress)}
+                      <TableCell className="font-medium">
+                        {escrow.title}
                       </TableCell>
-                      <TableCell>{row.platformFee}</TableCell>
-                      <TableCell>{formatAddress(row.client)}</TableCell>
+                      <TableCell>{escrow.description}</TableCell>
+                      <TableCell>{escrow.amount}</TableCell>
+                      <TableCell>{escrow.engagementId}</TableCell>
                       <TableCell>
-                        {formatDateFromFirebase(
-                          row.createdAt.seconds,
-                          row.createdAt.nanoseconds,
-                        )}
+                        {formatAddress(escrow.platformAddress)}
                       </TableCell>
+                      <TableCell>{escrow.platformFee}</TableCell>
+                      <TableCell>{formatAddress(escrow.client)}</TableCell>
                       <TableCell>
-                        {formatAddress(row.disputeResolver)}
-                      </TableCell>
-                      <TableCell>{formatAddress(row.releaseSigner)}</TableCell>
-                      <TableCell>
-                        {formatAddress(row.serviceProvider)}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <span className="sr-only">Open menu</span>
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setIsDialogOpen(true);
+                                setSelectedEscrow(escrow);
+                              }}
+                            >
+                              More Details
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                       <TableCell>
                         <p
                           className="w-5 h-5 cursor-pointer border border-gray-400 dark:border-gray-500 rounded-lg flex justify-center items-center"
                           onClick={(e) => {
                             e.stopPropagation();
-                            toggleRowExpansion(row.id);
+                            toggleRowExpansion(escrow.id);
                           }}
                         >
-                          {expandedRows.includes(row.id) ? "-" : "+"}
+                          {expandedRows.includes(escrow.id) ? "-" : "+"}
                         </p>
                       </TableCell>
                     </TableRow>
-
-                    {row.milestones && expandedRows.includes(row.id) && (
+                    {escrow.milestones && expandedRows.includes(escrow.id) && (
                       <TableRow>
                         <TableCell colSpan={8} className="p-4">
-                          <div>
-                            <p>
-                              <strong>Milestones:</strong>
-                            </p>
-                            <ul>
-                              {row.milestones.map((milestone, index) => (
-                                <li key={index}>{milestone.description}</li>
-                              ))}
-                            </ul>
+                          <div className="flex bg-red-600 w-full">
+                            <p>joel</p>
                           </div>
                         </TableCell>
                       </TableRow>
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
               </TableBody>
             </Table>
@@ -169,4 +181,4 @@ const MyEscrowsServiceProviderTable = () => {
   );
 };
 
-export default MyEscrowsServiceProviderTable;
+export default MyEscrowsTable;
