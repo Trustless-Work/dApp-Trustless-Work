@@ -4,15 +4,20 @@ import { useThemeStore } from "@/store/themeStore/store";
 
 interface SettingsSidebarProps {
   currentTab: string;
+  className?: string;
   onTabChange: (tab: string) => void;
 }
 
-const SettingsSidebar = ({ currentTab, onTabChange }: SettingsSidebarProps) => {
+const SettingsSidebar = ({
+  currentTab,
+  onTabChange,
+  className,
+}: SettingsSidebarProps) => {
   const { theme } = useThemeStore();
 
   return (
     <aside
-      className={`w-64 h-full rounded-xl p-4 ${
+      className={`w-64 h-full rounded-xl p-4 ${className} ${
         theme === "dark" ? " bg-zinc-950 text-white" : "bg-gray-100 text-black"
       }`}
     >
