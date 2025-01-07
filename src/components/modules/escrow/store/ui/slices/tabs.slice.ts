@@ -9,10 +9,11 @@ export const useEscrowTabSlice: StateCreator<
 > = (set) => {
   return {
     // Stores
-    activeTab: "user",
+    activeTab: "issuer",
 
     // Modifiers
-    setActiveTab: (value: "user" | "serviceProvider" | "disputeResolver") =>
-      set({ activeTab: value }),
+    setActiveTab: (
+      value: "issuer" | "client" | "serviceProvider" | "disputeResolver",
+    ) => set({ activeTab: value }),
   };
 };
