@@ -15,6 +15,8 @@ const useProfile = ({ onSave }: useProfileProps) => {
       firstName: loggedUser?.firstName || "",
       lastName: loggedUser?.lastName || "",
       email: loggedUser?.email || "",
+      phone: loggedUser?.phone || "",
+      country: loggedUser?.country || "",
     },
   });
 
