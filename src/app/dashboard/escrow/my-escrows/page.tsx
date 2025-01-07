@@ -30,11 +30,17 @@ const EscrowsPage = () => {
         <Loader isLoading={isLoading} />
       ) : (
         <div className="flex gap-3 w-full h-full justify-between">
-          <Tabs defaultValue="client" className="w-full">
-            <div className="flex w-full justify-between items-center flex-col md:flex-row md:gap-3">
-              <TabsList className="grid w-full sm:w-2/3 md:w-1/2 lg:w-1/3 grid-cols-2 md:grid-cols-3">
+          <Tabs defaultValue="issuer" className="w-full">
+            <div className="flex w-full justify-between items-center flex-col md:flex-row gap-16 md:gap-3">
+              <TabsList className="grid w-full sm:w-2/3 md:w-1/2 lg:w-1/3 grid-cols-2 sm:grid-cols-4 gap-4">
                 <TabsTrigger
-                  onClick={() => setActiveTab("user")}
+                  onClick={() => setActiveTab("issuer")}
+                  value="issuer"
+                >
+                  Initiated Escrows
+                </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => setActiveTab("client")}
                   value="client"
                 >
                   Client
@@ -71,6 +77,21 @@ const EscrowsPage = () => {
               </div>
             </div>
 
+            <TabsContent value="issuer" className="flex flex-col gap-3">
+              <Card className={cn("overflow-hidden")}>
+                <CardContent className="p-6">
+                  <MyEscrowsFilter />
+                </CardContent>
+              </Card>
+              {viewMode === "table" ? (
+                <Card className={cn("overflow-hidden")}>
+                  <MyEscrowsTable type="issuer" />
+                </Card>
+              ) : (
+                <MyEscrowsCards type="issuer" />
+              )}
+            </TabsContent>
+
             <TabsContent value="client" className="flex flex-col gap-3">
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
@@ -79,10 +100,10 @@ const EscrowsPage = () => {
               </Card>
               {viewMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <MyEscrowsTable type="user" />
+                  <MyEscrowsTable type="client" />
                 </Card>
               ) : (
-                <MyEscrowsCards type="user" />
+                <MyEscrowsCards type="client" />
               )}
             </TabsContent>
 
