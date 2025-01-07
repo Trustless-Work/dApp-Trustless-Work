@@ -1,5 +1,5 @@
 export const useFormatUtils = () => {
-  const formatAddress = (address: string): string => {
+  const formatAddress = (address: string | undefined): string => {
     if (!address) return "";
     const start = address.slice(0, 8);
     const end = address.slice(-8);

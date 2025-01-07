@@ -2,8 +2,8 @@ import { CreatedAt, UpdatedAt } from "./dates.entity";
 
 export type Milestone = {
   description: string;
-  status: string; // ! todo: tipar con los tipos correctos
-  flag: boolean;
+  status?: string; // ! todo: tipar con los tipos correctos
+  flag?: boolean;
 };
 
 export interface Escrow {
