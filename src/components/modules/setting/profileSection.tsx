@@ -14,8 +14,6 @@ import useProfile from "./hooks/profile-section.hook";
 import { UserPayload } from "@/@types/user.entity";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { useFormatUtils } from "@/utils/hook/format.hook";
 
 interface ProfileSectionProps {
   onSave: (data: UserPayload) => void;
@@ -26,9 +24,6 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
     onSave,
   });
 
-  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
-  const { formatDateFromFirebase } = useFormatUtils();
-  console.log(loggedUser);
   return (
     <Card className={cn("overflow-hidden")}>
       <CardContent className="p-6">
@@ -39,6 +34,10 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
             {/* <strong>Created:</strong>{formatDateFromFirebase(loggedUser?.createdAt.)} */}
           </p>
         </div>
+        <p className="text-gray-500 mb-4">
+          Manage your personal details, update preferences, and customize your
+          experience here.
+        </p>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -95,10 +94,37 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your phone" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Country</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your country" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <div className="flex justify-end w-full">
-              <Button type="submit">Save Profile</Button>
-            </div>
+
+            <Button className="w-full md:w-1/6" type="button">
+              Update profile
+            </Button>
           </form>
         </Form>
       </CardContent>
