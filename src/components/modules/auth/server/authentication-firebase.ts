@@ -1,7 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { UserPayload } from "@/@types/user.entity";
 import { db } from "@/core/config/firebase/firebase";
-import { doc, setDoc, getDoc, collection } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  updateDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 
 interface addUserProps {
   address: string;
@@ -84,5 +92,52 @@ const getUser = async ({
     return { success: false, message: errorMessage };
   }
 };
+interface updateUserProps {
+  address: string;
+  payload: UserPayload;
+}
 
-export { addUser, getUser };
+const updateUser = async ({
+  address,
+  payload,
+}: updateUserProps): Promise<{
+  success: boolean;
+  message: string;
+  data?: any;
+}> => {
+  try {
+    const userDoc = doc(db, "users", address);
+    const userSnapshot = await getDoc(userDoc);
+
+    if (userSnapshot.exists()) {
+      await updateDoc(userDoc, { ...payload, updatedAt: serverTimestamp() });
+
+      return {
+        success: true,
+        message: `User ${address} updated successfully`,
+        data: { id: userDoc.id, address, ...payload },
+      };
+    } else {
+      await setDoc(userDoc, {
+        ...payload,
+        address,
+        createdAt: serverTimestamp(),
+      });
+
+      return {
+        success: true,
+        message: `User ${address} registered and updated successfully`,
+        data: { id: userDoc.id, address, createdAt: new Date(), ...payload },
+      };
+    }
+  } catch (error: any) {
+    const errorMessage =
+      error.response && error.response.data
+        ? error.response.data.message
+        : "An error occurred";
+
+    return { success: false, message: errorMessage };
+  }
+};
+
+export { addUser, getUser, updateUser };
