@@ -6,11 +6,11 @@ import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { formSchema, IssueType } from "../schema/report-issue-schema";
 import { addReportIssue } from "../server/report-issue-firebase";
-import { useWalletStore } from "@/store/walletStore/store";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 export const useSendReportIssue = () => {
   const { toast } = useToast();
-  const { address } = useWalletStore();
+  const { address } = useGlobalAuthenticationStore();
 
   const typeOptions = Object.values(IssueType).map((value) => ({
     value,

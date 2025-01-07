@@ -1,11 +1,11 @@
 "use client";
 
-import { useWalletStore } from "@/store/walletStore/store";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const useHeaderWithoutAuth = () => {
-  const { address } = useWalletStore();
+  const { address } = useGlobalAuthenticationStore();
   const router = useRouter();
 
   useEffect(() => {

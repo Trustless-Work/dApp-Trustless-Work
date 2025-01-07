@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import useFundEscrowDialog from "./hooks/fund-escrow-dialog.hook";
-import { useGlobalBoundedStore } from "@/core/store";
+import { useGlobalBoundedStore } from "@/core/store/data";
 import { FormProvider } from "react-hook-form";
 import {
   FormControl,

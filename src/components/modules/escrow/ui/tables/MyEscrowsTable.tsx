@@ -23,7 +23,7 @@ import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/NoData";
 import { useEscrowBoundedStore } from "../../store/ui";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
-import { useGlobalBoundedStore } from "@/core/store";
+import { useGlobalBoundedStore } from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
 import ExpandableContent from "./expandable/ExpandableContent";
 

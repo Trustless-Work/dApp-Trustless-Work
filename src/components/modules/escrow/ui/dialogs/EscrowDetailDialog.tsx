@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
-import { useGlobalBoundedStore } from "@/core/store";
 import { Escrow } from "@/@types/escrow.entity";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -41,6 +40,7 @@ import { useCopyUtils } from "@/utils/hook/copy.hook";
 import EntityCard from "./components/EntityCard";
 import FundEscrowDialog from "./FundEscrowDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
+import { useGlobalBoundedStore } from "@/core/store/data";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;

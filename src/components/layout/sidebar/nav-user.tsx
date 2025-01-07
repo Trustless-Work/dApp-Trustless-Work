@@ -27,11 +27,11 @@ import Link from "next/link";
 
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useWalletStore } from "@/store/walletStore/store";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();
-  const { address, name } = useWalletStore();
+  const { address, name } = useGlobalAuthenticationStore();
   const { formatAddress } = useFormatUtils();
   const { copyText, copySuccess } = useCopyUtils();
   const { handleDisconnect } = useWalletUtils();

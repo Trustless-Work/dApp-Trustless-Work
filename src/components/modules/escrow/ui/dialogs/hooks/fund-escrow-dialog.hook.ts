@@ -8,8 +8,8 @@ import { z } from "zod";
 import { formSchema } from "../../../schema/fund-escrow-schema";
 import { useToast } from "@/hooks/use-toast";
 import { useLoaderStore } from "@/store/utilsStore/store";
-import { useWalletStore } from "@/store/walletStore/store";
 import { fundEscrow } from "@/components/modules/escrow/services/fundEscrow";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
@@ -19,7 +19,7 @@ const useFundEscrowDialogHook = ({
   setIsSecondDialogOpen,
 }: useFundEscrowDialogProps) => {
   const { toast } = useToast();
-  const { address } = useWalletStore();
+  const { address } = useGlobalAuthenticationStore();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
 
   const form = useForm<z.infer<typeof formSchema>>({
