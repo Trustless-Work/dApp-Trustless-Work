@@ -58,50 +58,6 @@ const FundEscrowDialog = ({
             <div className="flex flex-col ms-center gap-4">
               <FormField
                 control={form.control}
-                name="contractId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      ContractID
-                      <TooltipInfo content="The unique identifier of the contract." />
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Unique contract identifier"
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="engagementId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      Engagement
-                      <TooltipInfo content="The unique identifier linking this escrow to a specific project or transaction." />
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Engagement identifier"
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="amount"
                 render={({ field }) => (
                   <FormItem>

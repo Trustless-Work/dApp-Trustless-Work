@@ -136,13 +136,13 @@ const EscrowDetailDialog = ({
             {/* Contract ID and Actions */}
             <div className="flex flex-col justify-center w-1/5">
               <p className="text-center mb-3 text-sm">
-                <span className="uppercase font-bold">Contract ID:</span>
+                <span className="uppercase font-bold">Escrow ID:</span>
                 <div className="flex items-center justify-center">
                   {formatAddress(selectedEscrow.contractId)}
                   <button
                     onClick={() => copyText(selectedEscrow.contractId)}
                     className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                    title="Copy Contract ID"
+                    title="Copy Escrow ID"
                   >
                     {copySuccess ? (
                       <FaCheck className={cn("h-4 w-4 text-green-700")} />

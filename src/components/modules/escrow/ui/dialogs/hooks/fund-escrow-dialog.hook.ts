@@ -25,9 +25,7 @@ const useFundEscrowDialogHook = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      contractId: "",
       amount: "",
-      engagementId: "",
     },
   });
 
@@ -36,10 +34,8 @@ const useFundEscrowDialogHook = ({
 
     try {
       const data = await fundEscrow({
-        contractId: payload.contractId,
-        signer: address,
+        issuer: address,
         amount: payload.amount,
-        engagementId: payload.engagementId,
       });
       if (data.status === "SUCCESS" || data.status === 201) {
         // ! Validate if the user has the preference in true
