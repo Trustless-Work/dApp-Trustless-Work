@@ -12,7 +12,7 @@ import { useGlobalBoundedStore } from "@/core/store";
 import LoaderData from "@/components/utils/LoaderData";
 
 interface MyEscrowsCardsProps {
-  type: "user" | "disputeResolver" | "serviceProvider";
+  type: "issuer" | "client" | "disputeResolver" | "serviceProvider";
 }
 
 const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {

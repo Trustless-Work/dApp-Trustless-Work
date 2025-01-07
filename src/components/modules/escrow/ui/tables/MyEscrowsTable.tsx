@@ -28,7 +28,7 @@ import LoaderData from "@/components/utils/LoaderData";
 import ExpandableContent from "./expandable/ExpandableContent";
 
 interface MyEscrowsTableProps {
-  type: "user" | "disputeResolver" | "serviceProvider";
+  type: "issuer" | "client" | "disputeResolver" | "serviceProvider";
 }
 
 const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
