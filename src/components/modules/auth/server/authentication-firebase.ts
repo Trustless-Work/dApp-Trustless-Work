@@ -32,12 +32,16 @@ const addUser = async ({
       await setDoc(userDoc, {
         address,
         createdAt: new Date(),
+        saveEscrow: true,
       });
 
       return {
         success: true,
         message: `User ${address} registered successfully`,
-        data: { id: userDoc.id, address, createdAt: new Date() },
+        data: {
+          id: userDoc.id,
+          address,
+        },
       };
     } else {
       return {
@@ -127,7 +131,7 @@ const updateUser = async ({
       return {
         success: true,
         message: `User ${address} registered and updated successfully`,
-        data: { id: userDoc.id, address, createdAt: new Date(), ...payload },
+        data: { id: userDoc.id, address, ...payload },
       };
     }
   } catch (error: any) {
