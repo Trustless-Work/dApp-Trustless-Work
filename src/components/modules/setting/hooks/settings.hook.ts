@@ -10,12 +10,16 @@ const useSettings = () => {
   const { theme, toggleTheme } = useThemeStore();
   const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
 
   const saveProfile = async (data: UserPayload | PreferencesForm) => {
     try {
-      const updatedUser = await updateUser(address, data);
+      const updatedData = {
+        ...loggedUser,
+        ...data,
+      };
 
-      console.log(updatedUser);
+      await updateUser(address, updatedData);
 
       toast({
         title: "Success",
