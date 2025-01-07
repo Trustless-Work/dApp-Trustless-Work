@@ -13,8 +13,8 @@ import { Search, Trash2 } from "lucide-react";
 const MyEscrowsFilter = () => {
   return (
     <form className="flex flex-col space-y-5">
-      <div className="flex justify-between w-full gap-10">
-        <div className="flex gap-10">
+      <div className="flex flex-col md:flex-row justify-between w-full gap-10">
+        <div className="flex flex-col md:flex-row gap-10">
           <div className="flex items-center space-x-2">
             <Input id="search" placeholder="Search..." />
             <Search className="h-5 w-5" />
@@ -25,7 +25,7 @@ const MyEscrowsFilter = () => {
         </div>
 
         <CreateButton
-          className="mr-auto"
+          className="mr-auto w-full md:w-auto"
           label="Create Escrow"
           url={"/dashboard/escrow/initialize-escrow"}
         />
@@ -33,7 +33,7 @@ const MyEscrowsFilter = () => {
 
       <Divider type="horizontal" />
 
-      <div className="flex gap-3">
+      <div className="flex flex-col md:flex-row gap-3">
         <div className="flex flex-col">
           <label className="text-xs font-bold mb-2 ml-2" htmlFor="select1">
             Filter 1
