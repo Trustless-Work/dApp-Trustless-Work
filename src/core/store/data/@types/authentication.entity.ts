@@ -1,4 +1,4 @@
-import { User } from "@/@types/user.entity";
+import { User, UserPayload } from "@/@types/user.entity";
 
 export interface AuthenticationGlobalStore {
   address: string;
@@ -7,4 +7,5 @@ export interface AuthenticationGlobalStore {
 
   connectWalletStore: (address: string, name: string) => void;
   disconnectWalletStore: () => void;
+  updateUser: (address: string, payload: UserPayload) => void;
 }
