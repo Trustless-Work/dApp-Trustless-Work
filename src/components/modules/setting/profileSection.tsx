@@ -122,7 +122,7 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
               />
             </div>
 
-            <Button className="w-full md:w-1/6" type="button">
+            <Button className="w-full md:w-1/6" type="submit">
               Update profile
             </Button>
           </form>

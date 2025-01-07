@@ -28,6 +28,8 @@ const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
     onSave,
   });
 
+  console.log(saveEscrow);
+
   return (
     <Card className={cn("overflow-hidden")}>
       <CardContent className="p-6">
@@ -41,7 +43,7 @@ const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
             <FormField
               control={form.control}
               name="saveEscrow"
-              render={() => (
+              render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                   <div className="space-y-0.5">
                     <FormLabel>Save Escrows</FormLabel>
@@ -51,13 +53,14 @@ const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
                   </div>
                   <FormControl>
                     <Switch
-                      checked={saveEscrow}
-                      onCheckedChange={(checked) => setSaveEscrow(checked)}
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
+
             <Button type="submit" className="w-full md:w-1/6">
               Save Preferences
             </Button>
