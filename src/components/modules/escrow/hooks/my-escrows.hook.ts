@@ -1,13 +1,15 @@
-import { useWalletStore } from "@/store/walletStore/store";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 import { useState, useEffect, useMemo } from "react";
-import { useGlobalBoundedStore } from "@/core/store";
 
 interface useMyEscrowsProps {
   type: string;
 }
 
 const useMyEscrows = ({ type }: useMyEscrowsProps) => {
-  const { address } = useWalletStore();
+  const { address } = useGlobalAuthenticationStore();
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );

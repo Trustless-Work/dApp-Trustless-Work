@@ -11,11 +11,13 @@ import { useEffect } from "react";
 import { formSchema } from "../schema/initialize-escrow-schema";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useWalletStore } from "@/store/walletStore/store";
-import { useGlobalBoundedStore } from "@/core/store";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 
 export const useInitializeEscrowHook = () => {
-  const { address } = useWalletStore();
+  const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
 
   const { toast } = useToast();
