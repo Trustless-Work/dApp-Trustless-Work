@@ -36,7 +36,7 @@ const addEscrow = async ({
   try {
     const docRef: DocumentReference = await addDoc(collectionRef, {
       ...payload,
-      user: address,
+      issuer: address,
       contractId,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -73,7 +73,7 @@ interface getAllEscrowsByUserProps {
 
 const getAllEscrowsByUser = async ({
   address,
-  type, // ! client/user, disputeResolver or serviceProvider
+  type, // ! issuer, client, disputeResolver or serviceProvider
 }: getAllEscrowsByUserProps): Promise<{
   success: boolean;
   message?: string;
