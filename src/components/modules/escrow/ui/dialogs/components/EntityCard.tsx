@@ -18,7 +18,7 @@ const EntityCard = ({
   const { formatAddress } = useFormatUtils();
 
   return (
-    <div className="flex flex-col w-1/3">
+    <div className="flex flex-col w-full md:w-1/3">
       <h3 className="font-bold text-xs ml-2 mb-2 flex justify-between">
         {type}{" "}
         {hasPercentage && (

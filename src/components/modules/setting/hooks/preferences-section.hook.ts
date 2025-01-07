@@ -1,19 +1,21 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { PreferencesForm } from "../preferencesSection";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 interface usePreferencesProps {
   onSave: (data: PreferencesForm) => void;
 }
 
 const usePreferences = ({ onSave }: usePreferencesProps) => {
-  const form = useForm({
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
+
+  const form = useForm<PreferencesForm>({
     defaultValues: {
-      saveEscrow: false,
+      saveEscrow: loggedUser?.saveEscrow || false,
     },
   });
 
-  const [saveEscrow, setSaveEscrow] = useState(false);
+  const saveEscrow = form.watch("saveEscrow");
 
   const onSubmit = (data: PreferencesForm) => {
     onSave(data);
@@ -22,7 +24,7 @@ const usePreferences = ({ onSave }: usePreferencesProps) => {
   return {
     form,
     saveEscrow,
-    setSaveEscrow,
+    setSaveEscrow: (value: boolean) => form.setValue("saveEscrow", value),
     onSubmit,
   };
 };

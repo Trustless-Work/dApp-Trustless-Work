@@ -4,12 +4,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useWalletStore } from "@/store/walletStore/store";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const useHeader = () => {
-  const { address } = useWalletStore();
+  const { address } = useGlobalAuthenticationStore();
   const pathName = usePathname();
   const router = useRouter();
 

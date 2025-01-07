@@ -25,11 +25,8 @@ export interface Escrow {
   user: string;
 }
 
-export type FundEscrowPayload = Pick<
-  Escrow,
-  "contractId" | "amount" | "engagementId"
-> & {
-  signer: string;
+export type FundEscrowPayload = Pick<Escrow, "amount"> & {
+  issuer: string;
 };
 
 export type EscrowPayload = Omit<

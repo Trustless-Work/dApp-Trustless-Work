@@ -8,8 +8,8 @@ import { z } from "zod";
 import { formSchema } from "../../../schema/fund-escrow-schema";
 import { useToast } from "@/hooks/use-toast";
 import { useLoaderStore } from "@/store/utilsStore/store";
-import { useWalletStore } from "@/store/walletStore/store";
-import { fundEscrow } from "@/services/escrow/fundEscrow";
+import { fundEscrow } from "@/components/modules/escrow/services/fundEscrow";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
@@ -19,15 +19,13 @@ const useFundEscrowDialogHook = ({
   setIsSecondDialogOpen,
 }: useFundEscrowDialogProps) => {
   const { toast } = useToast();
-  const { address } = useWalletStore();
+  const { address } = useGlobalAuthenticationStore();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      contractId: "",
       amount: "",
-      engagementId: "",
     },
   });
 
@@ -36,10 +34,8 @@ const useFundEscrowDialogHook = ({
 
     try {
       const data = await fundEscrow({
-        contractId: payload.contractId,
-        signer: address,
+        issuer: address,
         amount: payload.amount,
-        engagementId: payload.engagementId,
       });
       if (data.status === "SUCCESS" || data.status === 201) {
         // ! Validate if the user has the preference in true

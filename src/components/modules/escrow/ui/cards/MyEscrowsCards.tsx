@@ -8,11 +8,11 @@ import { Input } from "@/components/ui/input";
 import NoData from "@/components/utils/NoData";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
-import { useGlobalBoundedStore } from "@/core/store";
+import { useGlobalBoundedStore } from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
 
 interface MyEscrowsCardsProps {
-  type: "user" | "disputeResolver" | "serviceProvider";
+  type: "issuer" | "client" | "disputeResolver" | "serviceProvider";
 }
 
 const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {

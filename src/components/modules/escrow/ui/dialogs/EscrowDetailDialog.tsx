@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
-import { useGlobalBoundedStore } from "@/core/store";
 import { Escrow } from "@/@types/escrow.entity";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -41,6 +40,7 @@ import { useCopyUtils } from "@/utils/hook/copy.hook";
 import EntityCard from "./components/EntityCard";
 import FundEscrowDialog from "./FundEscrowDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
+import { useGlobalBoundedStore } from "@/core/store/data";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -79,7 +79,7 @@ const EscrowDetailDialog = ({
   return (
     <>
       <Dialog open={isDialogOpen} onOpenChange={handleClose}>
-        <DialogContent className="w-2/3 h-5/6">
+        <DialogContent className="w-11/12 md:w-2/3 h-auto max-h-screen overflow-y-auto">
           <DialogHeader>
             <div className="justify-between items-center md:w-2/4 w-full">
               <div className="flex flex-col gap-2">
@@ -93,11 +93,11 @@ const EscrowDetailDialog = ({
             </div>
           </DialogHeader>
 
-          <div className="flex w-full gap-5 items-center justify-center">
+          <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
             {/* Amount and Balance Cards */}
             <Card
               className={cn(
-                "overflow-hidden cursor-pointer hover:shadow-lg w-2/5",
+                "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
               )}
             >
               <CardContent className="p-6">
@@ -117,7 +117,7 @@ const EscrowDetailDialog = ({
 
             <Card
               className={cn(
-                "overflow-hidden cursor-pointer hover:shadow-lg w-2/5",
+                "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
               )}
             >
               <CardContent className="p-6">
@@ -133,16 +133,16 @@ const EscrowDetailDialog = ({
               </CardContent>
             </Card>
 
-            {/* Contract ID and Actions */}
-            <div className="flex flex-col justify-center w-1/5">
+            {/* Escrow ID and Actions */}
+            <div className="flex flex-col justify-center w-full md:w-1/5">
               <p className="text-center mb-3 text-sm">
-                <span className="uppercase font-bold">Contract ID:</span>
+                <span className="uppercase font-bold">Escrow ID:</span>
                 <div className="flex items-center justify-center">
                   {formatAddress(selectedEscrow.contractId)}
                   <button
                     onClick={() => copyText(selectedEscrow.contractId)}
                     className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                    title="Copy Contract ID"
+                    title="Copy Escrow ID"
                   >
                     {copySuccess ? (
                       <FaCheck className={cn("h-4 w-4 text-green-700")} />
@@ -167,7 +167,7 @@ const EscrowDetailDialog = ({
           {/* Main Content */}
           <Card className={cn("overflow-hidden h-full")}>
             <CardContent className="p-6">
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 <EntityCard type="Client" entity={selectedEscrow.client} />
                 <EntityCard
                   type="Service Provider"
@@ -187,7 +187,7 @@ const EscrowDetailDialog = ({
 
               {/* Milestones */}
               <div className="flex justify-center w-full mt-5">
-                <div className="flex flex-col gap-4 py-4 w-2/3">
+                <div className="flex flex-col gap-4 py-4 w-full md:w-2/3">
                   <div className="space-y-4">
                     <label className="flex items-center">
                       Milestones
