@@ -1,4 +1,5 @@
 import { UserPayload } from "@/@types/user.entity";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useForm } from "react-hook-form";
 
 interface useProfileProps {
@@ -6,11 +7,14 @@ interface useProfileProps {
 }
 
 const useProfile = ({ onSave }: useProfileProps) => {
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
+
   const form = useForm({
     defaultValues: {
-      identification: "",
-      firstName: "",
-      lastName: "",
+      identification: loggedUser?.identification || "",
+      firstName: loggedUser?.firstName || "",
+      lastName: loggedUser?.lastName || "",
+      email: loggedUser?.email || "",
     },
   });
 
