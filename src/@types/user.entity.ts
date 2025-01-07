@@ -6,6 +6,9 @@ export interface User {
   lastName?: string;
   email?: string;
   identification?: string;
+  phone?: string;
+  country?: string;
+  saveEscrow?: boolean;
 }
 
 export type UserPayload = Omit<User, "createdAt" | "updatedAt" | "id">;
