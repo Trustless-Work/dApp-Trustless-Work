@@ -79,7 +79,7 @@ const EscrowDetailDialog = ({
   return (
     <>
       <Dialog open={isDialogOpen} onOpenChange={handleClose}>
-        <DialogContent className="w-2/3 h-5/6">
+        <DialogContent className="w-11/12 md:w-2/3 h-auto max-h-screen overflow-y-auto">
           <DialogHeader>
             <div className="justify-between items-center md:w-2/4 w-full">
               <div className="flex flex-col gap-2">
@@ -93,11 +93,11 @@ const EscrowDetailDialog = ({
             </div>
           </DialogHeader>
 
-          <div className="flex w-full gap-5 items-center justify-center">
+          <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
             {/* Amount and Balance Cards */}
             <Card
               className={cn(
-                "overflow-hidden cursor-pointer hover:shadow-lg w-2/5",
+                "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
               )}
             >
               <CardContent className="p-6">
@@ -117,7 +117,7 @@ const EscrowDetailDialog = ({
 
             <Card
               className={cn(
-                "overflow-hidden cursor-pointer hover:shadow-lg w-2/5",
+                "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
               )}
             >
               <CardContent className="p-6">
@@ -133,8 +133,8 @@ const EscrowDetailDialog = ({
               </CardContent>
             </Card>
 
-            {/* Contract ID and Actions */}
-            <div className="flex flex-col justify-center w-1/5">
+            {/* Escrow ID and Actions */}
+            <div className="flex flex-col justify-center w-full md:w-1/5">
               <p className="text-center mb-3 text-sm">
                 <span className="uppercase font-bold">Escrow ID:</span>
                 <div className="flex items-center justify-center">
@@ -167,7 +167,7 @@ const EscrowDetailDialog = ({
           {/* Main Content */}
           <Card className={cn("overflow-hidden h-full")}>
             <CardContent className="p-6">
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 <EntityCard type="Client" entity={selectedEscrow.client} />
                 <EntityCard
                   type="Service Provider"
@@ -187,7 +187,7 @@ const EscrowDetailDialog = ({
 
               {/* Milestones */}
               <div className="flex justify-center w-full mt-5">
-                <div className="flex flex-col gap-4 py-4 w-2/3">
+                <div className="flex flex-col gap-4 py-4 w-full md:w-2/3">
                   <div className="space-y-4">
                     <label className="flex items-center">
                       Milestones
