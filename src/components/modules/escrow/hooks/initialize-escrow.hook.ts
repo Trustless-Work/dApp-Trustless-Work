@@ -2,7 +2,7 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
-import { initializeEscrow } from "@/services/escrow/initializeEscrow";
+import { initializeEscrow } from "@/components/modules/escrow/services/initializeEscrow";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { useEscrowFormStore } from "@/store/escrowFormStore/store";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,12 +11,14 @@ import { useEffect } from "react";
 import { formSchema } from "../schema/initialize-escrow-schema";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { addEscrow } from "../server/escrow-firebase";
 import { useWalletStore } from "@/store/walletStore/store";
+import { useGlobalBoundedStore } from "@/core/store";
 
 export const useInitializeEscrowHook = () => {
-  const { toast } = useToast();
   const { address } = useWalletStore();
+  const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
+
+  const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const { formData, setFormData, resetForm } = useEscrowFormStore();
   const router = useRouter();
@@ -71,7 +73,7 @@ export const useInitializeEscrowHook = () => {
       const data = await initializeEscrow(payload, address);
       if (data.status === "SUCCESS" || data.status === 201) {
         // ! Validate if the user has the preference in true
-        await addEscrow({ payload, address });
+        await addEscrow(data.escrow, address, data.contract_id);
 
         form.reset();
         resetForm();

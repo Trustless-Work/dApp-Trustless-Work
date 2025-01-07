@@ -1,7 +1,7 @@
 "use client";
 
 import CreateEscrow from "@/components/modules/escrow/CreateEscrow";
-import { EscrowSteps } from "@/components/modules/escrow/steps/EscrowStepper";
+import { EscrowSteps } from "@/components/modules/escrow/ui/steps/EscrowStepper";
 import InitEscrow from "@/components/modules/escrow/InitEscrow";
 
 const InitializeEscrowPage = () => {

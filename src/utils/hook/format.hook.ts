@@ -28,5 +28,11 @@ export const useFormatUtils = () => {
     return `${day}/${month}/${year}`;
   };
 
-  return { formatAddress, formatDate, formatDateFromFirebase };
+  const formatDollar = (amount: string): string => {
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount)) return "$0.00";
+    return `$${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
+  };
+
+  return { formatAddress, formatDate, formatDateFromFirebase, formatDollar };
 };
