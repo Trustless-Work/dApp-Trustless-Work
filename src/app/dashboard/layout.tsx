@@ -6,10 +6,10 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import Header from "@/components/layout/header/Header";
 import useLayoutDashboard from "@/hooks/use-layout-dashboard";
 import { redirect } from "next/navigation";
-import { useWalletStore } from "@/store/walletStore/store";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { address } = useWalletStore();
+  const { address } = useGlobalAuthenticationStore();
   const { label } = useLayoutDashboard();
 
   if (address === "") {
