@@ -1,19 +1,21 @@
 import { useThemeStore } from "@/store/themeStore/store";
 import { useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
 import { toast } from "@/hooks/use-toast";
-import { db } from "@/core/config/firebase/firebase";
-import { ProfileForm } from "../profileSection";
 import { PreferencesForm } from "../preferencesSection";
+import { UserPayload } from "@/@types/user.entity";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 const useSettings = () => {
   const [currentTab, setCurrentTab] = useState("profile");
   const { theme, toggleTheme } = useThemeStore();
+  const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
+  const address = useGlobalAuthenticationStore((state) => state.address);
 
-  const saveProfile = async (data: ProfileForm | PreferencesForm) => {
+  const saveProfile = async (data: UserPayload | PreferencesForm) => {
     try {
-      const userDoc = doc(db, "users", data.identification || "default");
-      await setDoc(userDoc, { ...data, theme });
+      const updatedUser = await updateUser(address, data);
+
+      console.log(updatedUser);
 
       toast({
         title: "Success",
