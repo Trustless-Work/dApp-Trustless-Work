@@ -24,11 +24,9 @@ export interface PreferencesForm {
 }
 
 const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
-  const { form, saveEscrow, setSaveEscrow, onSubmit } = usePreferences({
+  const { form, onSubmit } = usePreferences({
     onSave,
   });
-
-  console.log(saveEscrow);
 
   return (
     <Card className={cn("overflow-hidden")}>

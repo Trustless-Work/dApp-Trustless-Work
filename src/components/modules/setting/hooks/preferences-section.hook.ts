@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { PreferencesForm } from "../preferencesSection";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
