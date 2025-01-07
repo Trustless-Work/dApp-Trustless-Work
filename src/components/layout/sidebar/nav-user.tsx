@@ -117,14 +117,16 @@ export const NavUser = () => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <HiOutlineIdentification />
-                <span className="truncate">
-                  Identification - {loggedUser?.identification}
-                </span>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            {loggedUser?.identification && (
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <HiOutlineIdentification />
+                  <span className="truncate">
+                    Identification - {loggedUser?.identification}
+                  </span>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
