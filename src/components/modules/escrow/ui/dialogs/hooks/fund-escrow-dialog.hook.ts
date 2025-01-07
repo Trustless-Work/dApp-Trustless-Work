@@ -1,4 +1,6 @@
-"sue client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+"use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

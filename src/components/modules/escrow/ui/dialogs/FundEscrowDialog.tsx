@@ -6,13 +6,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import useFundEscrowDialog from "./hooks/fund-escrow-dialog.hook";
 import { useGlobalBoundedStore } from "@/core/store";
-import { Form, FormProvider } from "react-hook-form";
+import { FormProvider } from "react-hook-form";
 import {
   FormControl,
   FormField,
