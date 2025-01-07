@@ -24,14 +24,16 @@ import { cn } from "@/lib/utils";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { IoLogOutOutline, IoSettingsOutline } from "react-icons/io5";
 import Link from "next/link";
-
+import { HiOutlineIdentification } from "react-icons/hi2";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();
-  const { address, name } = useGlobalAuthenticationStore();
+  const address = useGlobalAuthenticationStore((state) => state.address);
+  const name = useGlobalAuthenticationStore((state) => state.name);
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const { formatAddress } = useFormatUtils();
   const { copyText, copySuccess } = useCopyUtils();
   const { handleDisconnect } = useWalletUtils();
@@ -47,7 +49,7 @@ export const NavUser = () => {
   }, [address, pathname, router]);
 
   const user = {
-    name: "Chris Nager",
+    name: loggedUser?.firstName + " " + loggedUser?.lastName,
     adress: address,
     avatar: "https://avatars.githubusercontent.com/u/512548?s=60",
   };
@@ -114,6 +116,15 @@ export const NavUser = () => {
                 </div>
               </div>
             </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <HiOutlineIdentification />
+                <span className="truncate">
+                  Identification - {loggedUser?.identification}
+                </span>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
