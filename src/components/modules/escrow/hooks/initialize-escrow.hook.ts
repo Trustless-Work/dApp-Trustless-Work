@@ -19,6 +19,7 @@ import {
 export const useInitializeEscrowHook = () => {
   const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
 
   const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
@@ -74,18 +75,26 @@ export const useInitializeEscrowHook = () => {
     try {
       const data = await initializeEscrow(payload, address);
       if (data.status === "SUCCESS" || data.status === 201) {
-        // ! Validate if the user has the preference in true
-        await addEscrow(data.escrow, address, data.contract_id);
+        if (loggedUser?.saveEscrow) {
+          await addEscrow(data.escrow, address, data.contract_id);
+
+          toast({
+            title: "Success",
+            description: data.message,
+          });
+        } else {
+          toast({
+            title: "Attention!",
+            description:
+              "According to your preferences, the escrow was not saved in our database. But it was sent to Stellar Network",
+            variant: "default",
+          });
+        }
 
         form.reset();
         resetForm();
         router.push("/dashboard/escrow/my-escrows");
         setIsLoading(false);
-
-        toast({
-          title: "Success",
-          description: data.message,
-        });
       } else {
         setIsLoading(false);
         toast({
