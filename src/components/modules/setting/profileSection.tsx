@@ -11,22 +11,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useProfile from "./hooks/profile-section.hook";
+import { UserPayload } from "@/@types/user.entity";
 
 interface ProfileSectionProps {
-  onSave: (data: ProfileForm) => void;
-  walletAddress: string;
+  onSave: (data: UserPayload) => void;
 }
 
-export interface ProfileForm {
-  identification?: string;
-  firstName: string;
-  lastName: string;
-  wallet: string;
-}
-
-const ProfileSection = ({ onSave, walletAddress }: ProfileSectionProps) => {
+const ProfileSection = ({ onSave }: ProfileSectionProps) => {
   const { form, onSubmit } = useProfile({
-    walletAddress,
     onSave,
   });
 
@@ -71,15 +63,6 @@ const ProfileSection = ({ onSave, walletAddress }: ProfileSectionProps) => {
                   <Input placeholder="Enter your last name" {...field} />
                 </FormControl>
                 <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="wallet"
-            render={({ field }) => (
-              <FormItem>
-                <Input type="hidden" {...field} />
               </FormItem>
             )}
           />

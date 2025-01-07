@@ -23,7 +23,7 @@ const Settings = () => {
           <div className="flex-1 flex flex-col">
             <main className="flex-1 p-8">
               {currentTab === "profile" && (
-                <ProfileSection onSave={saveProfile} walletAddress={""} />
+                <ProfileSection onSave={saveProfile} />
               )}
               {currentTab === "appearance" && (
                 <AppearanceSection theme={theme} onThemeChange={toggleTheme} />
