@@ -39,6 +39,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
+  const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
 
   const {
