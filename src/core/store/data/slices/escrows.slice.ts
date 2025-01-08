@@ -4,6 +4,7 @@ import { Escrow } from "@/@types/escrow.entity";
 import {
   addEscrow,
   getAllEscrowsByUser,
+  updateEscrow,
 } from "@/components/modules/escrow/server/escrow-firebase";
 
 const ESCROW_ACTIONS = {
@@ -81,26 +82,26 @@ export const useGlobalEscrowsSlice: StateCreator<
       return undefined;
     },
 
-    //   updateProduct: async (productId, product) => {
-    //     const productToUpdate = await fetchUpdateProduct({
-    //       productId,
-    //       product: { ...product, category: product?.category?.toString() },
-    //     });
+    updateEscrow: async (escrowId, payload) => {
+      const escrowToUpdate = await updateEscrow({
+        escrowId,
+        payload: { ...payload, balance: payload.balance || 0 },
+      });
 
-    //     if (productToUpdate) {
-    //       set(
-    //         (state) => ({
-    //           products: state.products.map((p) =>
-    //             p.id === productToUpdate._id ? productToUpdate : p,
-    //           ),
-    //         }),
-    //         false,
-    //         ESCROW_ACTIONS.UPDATE_PRODUCT,
-    //       );
-    //     }
+      if (escrowToUpdate) {
+        set(
+          (state) => ({
+            escrows: state.escrows.map((e) =>
+              e.id === escrowToUpdate.id ? escrowToUpdate : e,
+            ),
+          }),
+          false,
+          ESCROW_ACTIONS.UPDATE_PRODUCT,
+        );
+      }
 
-    //     return productToUpdate;
-    //   },
+      return escrowToUpdate;
+    },
 
     //   fetchDeleteProduct: async (productId) => {
     //     const ok = await fetchDeleteProduct({ productId });

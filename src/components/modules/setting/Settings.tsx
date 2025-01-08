@@ -5,6 +5,7 @@ import useSettings from "./hooks/settings.hook";
 import ProfileSection from "./profileSection";
 import AppearanceSection from "./appearanceSection";
 import PreferencesSection from "./preferencesSection";
+import APIKeysSection from "./APIKeysSection";
 
 const Settings = () => {
   const { currentTab, setCurrentTab, saveProfile, theme, toggleTheme } =
@@ -32,6 +33,7 @@ const Settings = () => {
               {currentTab === "preferences" && (
                 <PreferencesSection onSave={saveProfile} />
               )}
+              {currentTab === "api-keys" && <APIKeysSection />}
             </main>
           </div>
         </div>
