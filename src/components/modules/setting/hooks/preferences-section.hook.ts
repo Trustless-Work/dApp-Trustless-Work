@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { PreferencesForm } from "../preferencesSection";
+import { PreferencesForm } from "../PreferencesSection";
 
 interface usePreferencesProps {
   onSave: (data: PreferencesForm) => void;
