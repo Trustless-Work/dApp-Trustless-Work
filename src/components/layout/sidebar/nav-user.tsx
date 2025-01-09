@@ -49,7 +49,10 @@ export const NavUser = () => {
   }, [address, pathname, router]);
 
   const user = {
-    name: loggedUser?.firstName + " " + loggedUser?.lastName,
+    name:
+      loggedUser?.firstName && loggedUser?.lastName
+        ? `${loggedUser.firstName} ${loggedUser.lastName}`
+        : loggedUser?.firstName || loggedUser?.lastName || "Without Name",
     adress: address,
     avatar: "https://avatars.githubusercontent.com/u/512548?s=60",
   };

@@ -64,6 +64,20 @@ const SettingsSidebar = ({
         >
           Preference
         </button>
+        <button
+          onClick={() => onTabChange("api-keys")}
+          className={`text-left p-2 rounded ${
+            currentTab === "api-keys"
+              ? theme === "dark"
+                ? "bg-gray-700"
+                : "bg-gray-300"
+              : theme === "dark"
+                ? "hover:bg-gray-800"
+                : "hover:bg-gray-200"
+          }`}
+        >
+          API Keys
+        </button>
       </nav>
     </aside>
   );

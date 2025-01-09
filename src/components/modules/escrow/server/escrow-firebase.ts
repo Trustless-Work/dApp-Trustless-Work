@@ -6,15 +6,18 @@ import { db } from "@/core/config/firebase/firebase";
 import {
   addDoc,
   collection,
+  doc,
   DocumentReference,
   getDoc,
   getDocs,
   query,
   serverTimestamp,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { z } from "zod";
 import { formSchema } from "../schema/initialize-escrow-schema";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface addEscrowProps {
   payload: z.infer<typeof formSchema>;
@@ -102,4 +105,52 @@ const getAllEscrowsByUser = async ({
   }
 };
 
-export { addEscrow, getAllEscrowsByUser };
+interface updateEscrowProps {
+  escrowId: string;
+  payload: Record<string, any>;
+}
+
+const updateEscrow = async ({
+  escrowId,
+  payload,
+}: updateEscrowProps): Promise<
+  | {
+      success: boolean;
+      message: string;
+      data?: any;
+    }
+  | Escrow
+> => {
+  try {
+    const docRef = doc(db, "escrows", escrowId);
+    const updatesWithTimestamp = {
+      ...payload,
+      balance: payload.balance || 0,
+      updatedAt: serverTimestamp(),
+    };
+
+    await updateDoc(docRef, updatesWithTimestamp);
+
+    const updatedDoc = await getDoc(docRef);
+    if (!updatedDoc.exists()) {
+      throw new Error("Escrow not found.");
+    }
+
+    const updatedEscrow = updatedDoc.data();
+
+    return {
+      success: true,
+      message: `Escrow with ID ${escrowId} updated successfully.`,
+      data: { escrowId, ...updatedEscrow },
+    };
+  } catch (error: any) {
+    const errorMessage =
+      error.response && error.response.data
+        ? error.response.data.message
+        : "An error occurred during the update.";
+
+    return { success: false, message: errorMessage };
+  }
+};
+
+export { addEscrow, getAllEscrowsByUser, updateEscrow };

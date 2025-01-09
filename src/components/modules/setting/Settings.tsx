@@ -2,9 +2,10 @@ import Header from "@/components/layout/header/Header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import SettingsSidebar from "./Sidebar";
 import useSettings from "./hooks/settings.hook";
-import ProfileSection from "./profileSection";
-import AppearanceSection from "./appearanceSection";
-import PreferencesSection from "./preferencesSection";
+import ProfileSection from "./ProfileSection";
+import AppearanceSection from "./AppearanceSection";
+import PreferencesSection from "./PreferencesSection";
+import APIKeysSection from "./APIKeysSection";
 
 const Settings = () => {
   const { currentTab, setCurrentTab, saveProfile, theme, toggleTheme } =
@@ -32,6 +33,7 @@ const Settings = () => {
               {currentTab === "preferences" && (
                 <PreferencesSection onSave={saveProfile} />
               )}
+              {currentTab === "api-keys" && <APIKeysSection />}
             </main>
           </div>
         </div>

@@ -13,6 +13,7 @@ export interface Escrow {
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
   contractId?: string;
+  balance?: string;
   milestones: Milestone[];
   serviceProvider: string;
   engagementId: string;

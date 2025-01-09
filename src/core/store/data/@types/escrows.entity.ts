@@ -16,9 +16,9 @@ export interface EscrowGlobalStore {
     address: string,
     contractId: string,
   ) => Promise<Escrow | undefined>;
-  // updateEscrow: (
-  //   escrowId: string,
-  //   escrow: Escrow,
-  // ) => Promise<Escrow | undefined>;
+  updateEscrow: (
+    escrowId: string,
+    payload: Escrow,
+  ) => Promise<Escrow | undefined>;
   // deleteProduct: (escrowId: string) => void;
 }

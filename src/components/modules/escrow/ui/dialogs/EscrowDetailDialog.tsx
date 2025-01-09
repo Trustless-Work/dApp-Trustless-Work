@@ -53,9 +53,12 @@ const EscrowDetailDialog = ({
   setIsDialogOpen,
   setSelectedEscrow,
 }: EscrowDetailDialogProps) => {
+  const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+
   const { handleClose } = useEscrowDetailDialog({
     setIsDialogOpen,
     setSelectedEscrow,
+    selectedEscrow,
   });
 
   const isSecondDialogOpen = useEscrowBoundedStore(
@@ -64,8 +67,6 @@ const EscrowDetailDialog = ({
   const setIsSecondDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSecondDialogOpen,
   );
-
-  const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
   const { formatAddress, formatDollar, formatDateFromFirebase } =
     useFormatUtils();

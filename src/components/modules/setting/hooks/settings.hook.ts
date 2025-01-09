@@ -1,9 +1,9 @@
 import { useThemeStore } from "@/store/themeStore/store";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import { PreferencesForm } from "../preferencesSection";
 import { UserPayload } from "@/@types/user.entity";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { PreferencesForm } from "../PreferencesSection";
 
 const useSettings = () => {
   const [currentTab, setCurrentTab] = useState("profile");
