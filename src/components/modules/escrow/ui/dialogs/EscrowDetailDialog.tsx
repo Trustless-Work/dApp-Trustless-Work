@@ -129,7 +129,9 @@ const EscrowDetailDialog = ({
                   <TbPigMoney size={30} />
                 </div>
                 <div className="mt-2 flex items-baseline">
-                  <h3 className="text-2xl font-semibold">$500.00</h3>
+                  <h3 className="text-2xl font-semibold">
+                    {formatDollar(selectedEscrow.balance ?? "null")}
+                  </h3>
                 </div>
               </CardContent>
             </Card>
