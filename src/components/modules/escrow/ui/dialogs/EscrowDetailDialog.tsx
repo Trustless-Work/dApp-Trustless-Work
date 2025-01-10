@@ -15,8 +15,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import TooltipInfo from "@/components/utils/Tooltip";
-import { useInitializeEscrowHook } from "../../hooks/initialize-escrow.hook";
-import { FaRegTrashCan } from "react-icons/fa6";
 import {
   Popover,
   PopoverContent,
@@ -72,8 +70,30 @@ const EscrowDetailDialog = ({
     useFormatUtils();
   const { copyText, copySuccess } = useCopyUtils();
 
-  const { handleAddMilestone, handleRemoveMilestone } =
-    useInitializeEscrowHook();
+  const areAllMilestonesCompleted =
+    selectedEscrow?.milestones
+      ?.map((milestone) => milestone.status)
+      .every((status) => status === "completed") ?? false;
+
+  const getFilteredStatusOptions = (currentStatus: string | undefined) => {
+    switch (currentStatus) {
+      case "ToDo":
+        return statusOptions.filter((option) => option.value === "inProgress");
+      case "inProgress":
+        return statusOptions.filter((option) => option.value === "inReview");
+      case "inReview":
+        return statusOptions.filter(
+          (option) =>
+            option.value === "approved" || option.value === "inDispute",
+        );
+      case "approved":
+        return statusOptions.filter((option) => option.value === "release");
+      case "inDispute":
+        return statusOptions.filter((option) => option.value === "resolve");
+      default:
+        return [];
+    }
+  };
 
   if (!isDialogOpen || !selectedEscrow) return null;
 
@@ -199,19 +219,10 @@ const EscrowDetailDialog = ({
                     {selectedEscrow.milestones.map((milestone, index) => (
                       <div key={index} className="flex items-center space-x-4">
                         <Input
-                          placeholder="Milestone Description"
+                          disabled
                           value={milestone.description}
-                          onChange={(e) => {
-                            const updatedMilestones = [
-                              ...selectedEscrow.milestones,
-                            ];
-                            updatedMilestones[index].description =
-                              e.target.value;
-                            // form.setValue("milestones", updatedMilestones);
-                            // handleFieldChange("milestones", updatedMilestones);
-                          }}
+                          placeholder="Milestone Description"
                         />
-
                         <Popover>
                           <PopoverTrigger asChild>
                             <Button
@@ -234,18 +245,15 @@ const EscrowDetailDialog = ({
                               <CommandList>
                                 <CommandEmpty>No status found.</CommandEmpty>
                                 <CommandGroup>
-                                  {statusOptions.map((option) => (
+                                  {getFilteredStatusOptions(
+                                    milestone.status,
+                                  ).map((option) => (
                                     <CommandItem
                                       key={option.value}
-                                      value={option.value}
                                       onSelect={() => {
-                                        const updatedMilestones = [
-                                          ...selectedEscrow.milestones,
-                                        ];
-                                        updatedMilestones[index].status =
-                                          option.value;
-                                        // form.setValue("milestones", updatedMilestones);
+                                        milestone.status = option.value;
                                       }}
+                                      defaultValue={option.value}
                                     >
                                       <Check
                                         className={cn(
@@ -263,31 +271,33 @@ const EscrowDetailDialog = ({
                             </Command>
                           </PopoverContent>
                         </Popover>
-
-                        <Button
-                          className="w-full md:w-1/4"
-                          variant="outline"
-                          onClick={handleAddMilestone}
-                          type="button"
-                        >
-                          Add Item
-                        </Button>
-
-                        <Button
-                          onClick={() => handleRemoveMilestone(index)}
-                          className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
-                          disabled={index === 0}
-                        >
-                          <FaRegTrashCan className="h-5 w-5" />
-                        </Button>
                       </div>
                     ))}
 
                     <div className="flex flex-col gap-2 mt-4">
                       <h3 className="mb-1 font-bold text-xs">Completed</h3>
                       <div className="flex items-center gap-2">
-                        <Progress value={67} />
-                        <strong className="text-xs">65%</strong>
+                        {(() => {
+                          const completedMilestones =
+                            selectedEscrow.milestones.filter(
+                              (milestone) => milestone.status === "completed",
+                            ).length;
+                          const totalMilestones =
+                            selectedEscrow.milestones.length;
+                          const progressPercentage =
+                            totalMilestones > 0
+                              ? (completedMilestones / totalMilestones) * 100
+                              : 0;
+
+                          return (
+                            <>
+                              <Progress value={progressPercentage} />
+                              <strong className="text-xs">
+                                {progressPercentage.toFixed(0)}%
+                              </strong>
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
                   </div>
@@ -304,9 +314,11 @@ const EscrowDetailDialog = ({
                 selectedEscrow.createdAt.nanoseconds,
               )}
             </p>
-            <Button type="submit" onClick={handleClose}>
-              Save changes
-            </Button>
+            {areAllMilestonesCompleted && (
+              <Button type="button" className="bg-green-800 hover:bg-green-700">
+                Release
+              </Button>
+            )}
           </div>
         </DialogContent>
       </Dialog>

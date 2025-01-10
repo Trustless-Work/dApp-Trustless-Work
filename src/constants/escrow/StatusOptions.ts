@@ -4,4 +4,5 @@ export const statusOptions = [
   { value: "inProgress", label: "In Progress" },
   { value: "inReview", label: "In Review" },
   { value: "inDispute", label: "In Dispute" },
+  { value: "approved", label: "Approved" },
 ];

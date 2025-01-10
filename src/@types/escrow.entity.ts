@@ -2,7 +2,7 @@ import { CreatedAt, UpdatedAt } from "./dates.entity";
 
 export type Milestone = {
   description: string;
-  status?: string; // ! todo: tipar con los tipos correctos
+  status?: string; // ! todo: tipar con los tipos correctos ToDo, completed
   flag?: boolean;
 };
 
