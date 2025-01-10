@@ -32,7 +32,7 @@ const EscrowsPage = () => {
         <div className="flex gap-3 w-full h-full justify-between">
           <Tabs defaultValue="issuer" className="w-full">
             <div className="flex w-full justify-between items-center flex-col md:flex-row gap-16 md:gap-3">
-              <TabsList className="grid w-full sm:w-2/3 md:w-1/2 lg:w-1/3 grid-cols-2 sm:grid-cols-4 gap-4">
+              <TabsList className="grid w-full sm:w-9/12 md:w-9/12 lg:w-3/5 grid-cols-2 sm:grid-cols-4 gap-4">
                 <TabsTrigger
                   onClick={() => setActiveTab("issuer")}
                   value="issuer"
