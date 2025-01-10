@@ -1,8 +1,10 @@
 import { Escrow } from "@/@types/escrow.entity";
 import { useEffect } from "react";
 import { getBalance } from "../../../services/getBalance";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { updateEscrow } from "../../../server/escrow-firebase";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 
 interface useEscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -16,6 +18,7 @@ const useEscrowDetailDialog = ({
   selectedEscrow,
 }: useEscrowDetailDialogProps) => {
   const address = useGlobalAuthenticationStore((state) => state.address);
+  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -25,10 +28,12 @@ const useEscrowDetailDialog = ({
         const balance = response.data.balance;
         const plainBalance = JSON.parse(JSON.stringify(balance));
 
-        await updateEscrow({
-          escrowId: selectedEscrow.id,
-          payload: plainBalance,
-        });
+        if (selectedEscrow.balance !== plainBalance) {
+          await updateEscrow({
+            escrowId: selectedEscrow.id,
+            payload: plainBalance,
+          });
+        }
       }
     };
 
