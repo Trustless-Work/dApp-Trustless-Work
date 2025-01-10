@@ -12,7 +12,7 @@ const ESCROW_ACTIONS = {
   SET_SELECTED_ESCROW: "escrows/setSelected",
   FETCH_ALL_ESCROWS: "escrows/fetchAll",
   ADD_ESCROW: "escrows/add",
-  UPDATE_PRODUCT: "escrows/update",
+  UPDATE_ESCROW: "escrows/update",
   DELETE_PRODUCT: "escrows/delete",
   SET_ESCROW_TO_DELETE: "escrows/setToDelete",
   SET_LOADING_ESCROWS: "escrows/setLoading",
@@ -82,23 +82,11 @@ export const useGlobalEscrowsSlice: StateCreator<
       return undefined;
     },
 
-    updateEscrow: async (escrowId, payload) => {
+    updateEscrow: async ({ escrowId, payload }) => {
       const escrowToUpdate = await updateEscrow({
         escrowId,
         payload: { ...payload, balance: payload.balance || 0 },
       });
-
-      if (escrowToUpdate) {
-        set(
-          (state) => ({
-            escrows: state.escrows.map((e) =>
-              e.id === escrowToUpdate.id ? escrowToUpdate : e,
-            ),
-          }),
-          false,
-          ESCROW_ACTIONS.UPDATE_PRODUCT,
-        );
-      }
 
       return escrowToUpdate;
     },
