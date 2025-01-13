@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
-import { Escrow } from "@/@types/escrow.entity";
+import { Escrow, MilestoneStatus } from "@/@types/escrow.entity";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";
@@ -53,7 +53,13 @@ const EscrowDetailDialog = ({
 }: EscrowDetailDialogProps) => {
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
-  const { handleClose } = useEscrowDetailDialog({
+  const {
+    getButtonLabel,
+    handleButtonClick,
+    handleClose,
+    getFilteredStatusOptions,
+    areAllMilestonesCompleted,
+  } = useEscrowDetailDialog({
     setIsDialogOpen,
     setSelectedEscrow,
     selectedEscrow,
@@ -70,31 +76,6 @@ const EscrowDetailDialog = ({
     useFormatUtils();
   const { copyText, copySuccess } = useCopyUtils();
 
-  const areAllMilestonesCompleted =
-    selectedEscrow?.milestones
-      ?.map((milestone) => milestone.status)
-      .every((status) => status === "completed") ?? false;
-
-  const getFilteredStatusOptions = (currentStatus: string | undefined) => {
-    switch (currentStatus) {
-      case "ToDo":
-        return statusOptions.filter((option) => option.value === "inProgress");
-      case "inProgress":
-        return statusOptions.filter((option) => option.value === "inReview");
-      case "inReview":
-        return statusOptions.filter(
-          (option) =>
-            option.value === "approved" || option.value === "inDispute",
-        );
-      case "approved":
-        return statusOptions.filter((option) => option.value === "release");
-      case "inDispute":
-        return statusOptions.filter((option) => option.value === "resolve");
-      default:
-        return [];
-    }
-  };
-
   if (!isDialogOpen || !selectedEscrow) return null;
 
   return (
@@ -102,13 +83,17 @@ const EscrowDetailDialog = ({
       <Dialog open={isDialogOpen} onOpenChange={handleClose}>
         <DialogContent className="w-11/12 md:w-2/3 h-auto max-h-screen overflow-y-auto">
           <DialogHeader>
-            <div className="justify-between items-center md:w-2/4 w-full">
+            <div className="md:w-2/4 w-full">
               <div className="flex flex-col gap-2">
                 <DialogTitle className="text-xl">
                   {selectedEscrow.title} - {selectedEscrow.engagementId}
                 </DialogTitle>
                 <DialogDescription>
                   {selectedEscrow.description}
+                </DialogDescription>
+                <DialogDescription>
+                  <strong>Role:</strong> {selectedEscrow.description}{" "}
+                  {/** TODO: Change role */}
                 </DialogDescription>
               </div>
             </div>
@@ -180,6 +165,16 @@ const EscrowDetailDialog = ({
                   e.stopPropagation();
                   setIsSecondDialogOpen(true);
                 }}
+                className="w-full mb-3"
+                variant="outline"
+              >
+                Show QR Address
+              </Button>
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsSecondDialogOpen(true);
+                }}
                 className="w-full"
               >
                 Fund Escrow
@@ -223,54 +218,33 @@ const EscrowDetailDialog = ({
                           value={milestone.description}
                           placeholder="Milestone Description"
                         />
-                        <Popover>
-                          <PopoverTrigger asChild>
+                        {milestone.status !== "completed" &&
+                          milestone.status !== "forReview" && (
                             <Button
-                              variant="outline"
-                              role="combobox"
-                              className="w-52 justify-between"
+                              className="w-32"
+                              onClick={() => handleButtonClick(milestone)}
                             >
-                              {milestone.status
-                                ? statusOptions.find(
-                                    (option) =>
-                                      option.value === milestone.status,
-                                  )?.label
-                                : "Select Status"}
-                              <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                              {getButtonLabel(milestone.status)}
                             </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-52 p-0">
-                            <Command>
-                              <CommandInput placeholder="Search status..." />
-                              <CommandList>
-                                <CommandEmpty>No status found.</CommandEmpty>
-                                <CommandGroup>
-                                  {getFilteredStatusOptions(
-                                    milestone.status,
-                                  ).map((option) => (
-                                    <CommandItem
-                                      key={option.value}
-                                      onSelect={() => {
-                                        milestone.status = option.value;
-                                      }}
-                                      defaultValue={option.value}
-                                    >
-                                      <Check
-                                        className={cn(
-                                          "mr-2 h-4 w-4",
-                                          milestone.status === option.value
-                                            ? "opacity-100"
-                                            : "opacity-0",
-                                        )}
-                                      />
-                                      {option.label}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
+                          )}
+
+                        {milestone.status === "forReview" && (
+                          <>
+                            <Button
+                              className="w-32 bg-green-800 hover:bg-green-700"
+                              onClick={() => handleButtonClick(milestone)}
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              className="w-32"
+                              onClick={() => handleButtonClick(milestone)}
+                            >
+                              Start Dispute
+                            </Button>
+                          </>
+                        )}
                       </div>
                     ))}
 
