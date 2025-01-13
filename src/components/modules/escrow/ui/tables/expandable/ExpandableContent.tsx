@@ -74,8 +74,43 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
         </div>
       </TableCell>
 
-      <div className="mt-8 ml-10 p-3 border rounded border-primary w-full h-full">
-        <p>other data</p>
+      <div className="flex mt-8 ml-10 p-3 border rounded border-primary w-full h-full gap-5">
+        <div className="flex flex-col gap-5">
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+        </div>
+        <div className="flex flex-col gap-5">
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+        </div>
       </div>
     </>
   );
