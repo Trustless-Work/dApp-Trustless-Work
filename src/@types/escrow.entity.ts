@@ -1,8 +1,16 @@
 import { CreatedAt, UpdatedAt } from "./dates.entity";
 
+export type MilestoneStatus =
+  | "cancelled"
+  | "completed"
+  | "forReview"
+  | "inDispute"
+  | "approved"
+  | "pending";
+
 export type Milestone = {
   description: string;
-  status?: string; // ! todo: tipar con los tipos correctos ToDo, completed
+  status?: MilestoneStatus;
   flag?: boolean;
 };
 
