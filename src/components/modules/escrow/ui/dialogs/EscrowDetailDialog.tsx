@@ -10,26 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
-import { Escrow, MilestoneStatus } from "@/@types/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import TooltipInfo from "@/components/utils/Tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { statusOptions } from "@/constants/escrow/StatusOptions";
 import { TbPigMoney } from "react-icons/tb";
 import { MdAttachMoney } from "react-icons/md";
 import { Progress } from "@/components/ui/progress";
@@ -57,7 +42,6 @@ const EscrowDetailDialog = ({
     getButtonLabel,
     handleButtonClick,
     handleClose,
-    getFilteredStatusOptions,
     areAllMilestonesCompleted,
   } = useEscrowDetailDialog({
     setIsDialogOpen,
