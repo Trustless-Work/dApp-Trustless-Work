@@ -52,32 +52,65 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
             </TableBody>
           </Table>
 
-          {/* {(() => {
-        const completedMilestones =
-          escrow.milestones.filter(
-            (milestone) =>
-              milestone.status === "Completed",
-          );
-        const progressValue =
-          (completedMilestones.length /
-            escrow.milestones.length) *
-          100;
-        return <Progress value={progressValue} />;
-      })()} */}
+          {(() => {
+            const completedMilestones = escrow.milestones.filter(
+              (milestone) => milestone.status === "completed",
+            ).length;
+            const totalMilestones = escrow.milestones.length;
+            const progressPercentage =
+              totalMilestones > 0
+                ? (completedMilestones / totalMilestones) * 100
+                : 0;
 
-          {/* CAMBIAR */}
-          <div className="flex flex-col gap-2 mt-4">
-            <h3 className="mb-1 font-bold text-xs">Completed</h3>
-            <div className="flex items-center gap-2">
-              <Progress value={67} />
-              <strong className="text-xs">65%</strong>
-            </div>
-          </div>
+            return (
+              <div className="flex gap-3 items-center mt-4">
+                <Progress value={progressPercentage} />
+                <strong className="text-xs">
+                  {progressPercentage.toFixed(0)}%
+                </strong>
+              </div>
+            );
+          })()}
         </div>
       </TableCell>
 
-      <div className="mt-8 ml-10 p-3 border rounded border-primary w-full h-full">
-        <p>other data</p>
+      <div className="flex mt-8 ml-10 p-3 border rounded border-primary w-full h-full gap-5">
+        <div className="flex flex-col gap-5">
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+        </div>
+        <div className="flex flex-col gap-5">
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+          <div className="flex">
+            <strong className="mr-1">Title:</strong>
+            {escrow.title}
+          </div>
+        </div>
       </div>
     </>
   );
