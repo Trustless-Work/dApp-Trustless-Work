@@ -24,6 +24,7 @@ import EntityCard from "./components/EntityCard";
 import FundEscrowDialog from "./FundEscrowDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
+import QREscrowDialog from "./QREscrowDialog";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -55,6 +56,10 @@ const EscrowDetailDialog = ({
   const setIsSecondDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSecondDialogOpen,
   );
+  const setIsQRDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsQRDialogOpen,
+  );
+  const isQRDialogOpen = useEscrowBoundedStore((state) => state.isQRDialogOpen);
 
   const { formatAddress, formatDollar, formatDateFromFirebase } =
     useFormatUtils();
@@ -147,7 +152,7 @@ const EscrowDetailDialog = ({
               <Button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsSecondDialogOpen(true);
+                  setIsQRDialogOpen(true);
                 }}
                 className="w-full mb-3"
                 variant="outline"
@@ -285,6 +290,12 @@ const EscrowDetailDialog = ({
       <FundEscrowDialog
         isSecondDialogOpen={isSecondDialogOpen}
         setIsSecondDialogOpen={setIsSecondDialogOpen}
+      />
+
+      {/* QR Dialog */}
+      <QREscrowDialog
+        isQRDialogOpen={isQRDialogOpen}
+        setIsQRDialogOpen={setIsQRDialogOpen}
       />
     </>
   );
