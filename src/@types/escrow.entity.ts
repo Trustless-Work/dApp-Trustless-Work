@@ -34,6 +34,12 @@ export interface Escrow {
   user: string;
 }
 
+export type RolesInEscrow =
+  | "issuer"
+  | "client"
+  | "disputeResolver"
+  | "serviceProvider";
+
 export type FundEscrowPayload = Pick<Escrow, "amount"> & {
   issuer: string;
 };
