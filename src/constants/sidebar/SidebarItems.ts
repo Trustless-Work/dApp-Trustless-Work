@@ -71,13 +71,6 @@ export const ItemsSidebar = {
       label: "Support",
       items: [
         {
-          title: "Request API key",
-          url: "/dashboard/request-api-key",
-          icon: FaWpforms,
-          isActive: true,
-          isExpandable: false,
-        },
-        {
           title: "Report an API Issue",
           url: "/dashboard/report-issue",
           icon: MdOutlineBugReport,
