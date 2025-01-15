@@ -6,6 +6,7 @@ import {
   getAllEscrowsByUser,
   updateEscrow,
 } from "@/components/modules/escrow/server/escrow-firebase";
+import { getBalance } from "@/components/modules/escrow/services/getBalance";
 
 const ESCROW_ACTIONS = {
   SET_ESCROWS: "escrows/set",
@@ -48,13 +49,32 @@ export const useGlobalEscrowsSlice: StateCreator<
     fetchAllEscrows: async ({ address, type = "client" }) => {
       set({ loadingEscrows: true }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
 
-      const escrows = await getAllEscrowsByUser({
+      const escrowsByUser = await getAllEscrowsByUser({
         address,
         type,
       });
 
+      const escrows = await Promise.all(
+        escrowsByUser.data.map(async (escrow: Escrow) => {
+          const response = await getBalance(escrow.contractId, address);
+
+          const balance = response.data.balance;
+          const plainBalance = JSON.parse(JSON.stringify(balance));
+
+          if (escrow.balance !== plainBalance) {
+            await updateEscrow({
+              escrowId: escrow.id,
+              payload: plainBalance,
+            });
+            escrow.balance = plainBalance;
+          }
+
+          return escrow;
+        }),
+      );
+
       set(
-        { escrows: escrows.data, totalEscrows: escrows.data?.length },
+        { escrows, totalEscrows: escrows?.length },
         false,
         ESCROW_ACTIONS.FETCH_ALL_ESCROWS,
       );
