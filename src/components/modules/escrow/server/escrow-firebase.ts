@@ -153,4 +153,65 @@ const updateEscrow = async ({
   }
 };
 
-export { addEscrow, getAllEscrowsByUser, updateEscrow };
+interface getUserRoleInEscrowProps {
+  contractId: string | undefined;
+  address: string;
+}
+
+const getUserRoleInEscrow = async ({
+  contractId,
+  address,
+}: getUserRoleInEscrowProps): Promise<{
+  success: boolean;
+  message: string;
+  role?: string;
+}> => {
+  const collectionRef = collection(db, "escrows");
+  const roles = [
+    "client",
+    "serviceProvider",
+    "platformAddress",
+    "releaseSigner",
+    "issuer",
+    "disputeResolver",
+  ];
+
+  try {
+    const escrowSnapshot = await getDocs(
+      query(collectionRef, where("contractId", "==", contractId)),
+    );
+
+    if (escrowSnapshot.empty) {
+      return {
+        success: false,
+        message: `No escrow found with contractId: ${contractId}`,
+      };
+    }
+
+    const escrowData = escrowSnapshot.docs[0].data();
+
+    for (const role of roles) {
+      if (escrowData[role] === address) {
+        return {
+          success: true,
+          message: `User is identified as ${role} in the escrow.`,
+          role,
+        };
+      }
+    }
+
+    return {
+      success: false,
+      message: `No role found for the provided address in escrow with contractId: ${contractId}`,
+    };
+  } catch (error: any) {
+    const errorMessage =
+      error.response && error.response.data
+        ? error.response.data.message
+        : "An error occurred during the role determination.";
+
+    return { success: false, message: errorMessage };
+  }
+};
+
+export { addEscrow, getAllEscrowsByUser, updateEscrow, getUserRoleInEscrow };
