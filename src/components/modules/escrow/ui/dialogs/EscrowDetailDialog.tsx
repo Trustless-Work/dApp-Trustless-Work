@@ -44,6 +44,7 @@ const EscrowDetailDialog = ({
     handleButtonClick,
     handleClose,
     areAllMilestonesCompleted,
+    role,
   } = useEscrowDetailDialog({
     setIsDialogOpen,
     setSelectedEscrow,
@@ -81,8 +82,7 @@ const EscrowDetailDialog = ({
                   {selectedEscrow.description}
                 </DialogDescription>
                 <DialogDescription>
-                  <strong>Role:</strong> {selectedEscrow.description}{" "}
-                  {/** TODO: Change role */}
+                  <strong>Role:</strong> {role}{" "}
                 </DialogDescription>
               </div>
             </div>

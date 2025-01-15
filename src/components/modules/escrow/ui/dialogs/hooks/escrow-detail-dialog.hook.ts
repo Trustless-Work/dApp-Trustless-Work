@@ -1,5 +1,9 @@
 import { Escrow, Milestone } from "@/@types/escrow.entity";
 import { statusMap, statusOptions } from "@/constants/escrow/StatusOptions";
+import { getUserRoleInEscrow } from "../../../server/escrow-firebase";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { useEffect, useState } from "react";
+import { useFormatUtils } from "@/utils/hook/format.hook";
 
 interface useEscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -12,6 +16,11 @@ const useEscrowDetailDialog = ({
   setSelectedEscrow,
   selectedEscrow,
 }: useEscrowDetailDialogProps) => {
+  const [role, setRole] = useState<string | undefined>(undefined);
+  const { formatText } = useFormatUtils();
+
+  const address = useGlobalAuthenticationStore((state) => state.address);
+
   const handleClose = () => {
     setIsDialogOpen(false);
     setSelectedEscrow(undefined);
@@ -28,6 +37,25 @@ const useEscrowDetailDialog = ({
       nextStatuses.includes(option.value),
     );
   };
+
+  const userRoleInEscrow = async () => {
+    const { contractId } = selectedEscrow || {};
+    const data = await getUserRoleInEscrow({ contractId, address });
+
+    return data;
+  };
+
+  useEffect(() => {
+    const fetchRole = async () => {
+      if (selectedEscrow) {
+        const roleData = await userRoleInEscrow();
+
+        setRole(formatText(roleData?.role));
+      }
+    };
+
+    fetchRole();
+  }, [selectedEscrow, userRoleInEscrow]);
 
   const getButtonLabel = (status: string | undefined): string => {
     const buttonLabels: Record<string, string> = {
@@ -64,6 +92,8 @@ const useEscrowDetailDialog = ({
     getFilteredStatusOptions,
     getButtonLabel,
     handleButtonClick,
+    userRoleInEscrow,
+    role,
   };
 };
 
