@@ -1,10 +1,4 @@
 import { Escrow, Milestone } from "@/@types/escrow.entity";
-import { useEffect } from "react";
-import { getBalance } from "../../../services/getBalance";
-import {
-  useGlobalAuthenticationStore,
-  useGlobalBoundedStore,
-} from "@/core/store/data";
 import { statusMap, statusOptions } from "@/constants/escrow/StatusOptions";
 
 interface useEscrowDetailDialogProps {
@@ -18,29 +12,6 @@ const useEscrowDetailDialog = ({
   setSelectedEscrow,
   selectedEscrow,
 }: useEscrowDetailDialogProps) => {
-  const address = useGlobalAuthenticationStore((state) => state.address);
-  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
-
-  useEffect(() => {
-    const fetchBalance = async () => {
-      if (selectedEscrow) {
-        const response = await getBalance(selectedEscrow?.contractId, address);
-
-        const balance = response.data.balance;
-        const plainBalance = JSON.parse(JSON.stringify(balance));
-
-        if (selectedEscrow.balance !== plainBalance) {
-          await updateEscrow({
-            escrowId: selectedEscrow.id,
-            payload: plainBalance,
-          });
-        }
-      }
-    };
-
-    fetchBalance();
-  }, [selectedEscrow]);
-
   const handleClose = () => {
     setIsDialogOpen(false);
     setSelectedEscrow(undefined);
