@@ -32,7 +32,7 @@ const addUser = async ({
       await setDoc(userDoc, {
         address,
         createdAt: new Date(),
-        saveEscrow: true,
+        saveEscrow: false,
       });
 
       return {
