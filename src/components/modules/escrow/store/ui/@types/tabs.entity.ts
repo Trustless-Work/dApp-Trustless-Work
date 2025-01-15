@@ -1,6 +1,6 @@
+import { RolesInEscrow } from "@/@types/escrow.entity";
+
 export interface TabsEscrowStore {
-  activeTab: "issuer" | "client" | "serviceProvider" | "disputeResolver";
-  setActiveTab: (
-    value: "issuer" | "client" | "serviceProvider" | "disputeResolver",
-  ) => void;
+  activeTab: RolesInEscrow;
+  setActiveTab: (value: RolesInEscrow) => void;
 }

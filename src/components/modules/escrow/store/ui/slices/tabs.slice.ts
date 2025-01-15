@@ -1,5 +1,6 @@
 import { StateCreator } from "zustand";
 import { TabsEscrowStore } from "../@types/tabs.entity";
+import { RolesInEscrow } from "@/@types/escrow.entity";
 
 export const useEscrowTabSlice: StateCreator<
   TabsEscrowStore,
@@ -12,8 +13,6 @@ export const useEscrowTabSlice: StateCreator<
     activeTab: "issuer",
 
     // Modifiers
-    setActiveTab: (
-      value: "issuer" | "client" | "serviceProvider" | "disputeResolver",
-    ) => set({ activeTab: value }),
+    setActiveTab: (value: RolesInEscrow) => set({ activeTab: value }),
   };
 };
