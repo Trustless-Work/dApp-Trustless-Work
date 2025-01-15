@@ -66,10 +66,9 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                 <TableRow>
                   <TableHead>Title</TableHead>
                   <TableHead>Description</TableHead>
-                  <TableHead>Amount</TableHead>
+                  <TableHead>Balance</TableHead>
                   <TableHead>Engagement</TableHead>
-                  <TableHead>Platform</TableHead>
-                  <TableHead>Platform Fee</TableHead>
+                  <TableHead>Service Provider</TableHead>
                   <TableHead>Client</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -85,12 +84,11 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         {escrow.title}
                       </TableCell>
                       <TableCell>{escrow.description}</TableCell>
-                      <TableCell>{escrow.amount}</TableCell>
+                      <TableCell>{escrow.balance}</TableCell>
                       <TableCell>{escrow.engagementId}</TableCell>
                       <TableCell>
-                        {formatAddress(escrow.platformAddress)}
+                        {formatAddress(escrow.serviceProvider)}
                       </TableCell>
-                      <TableCell>{escrow.platformFee}</TableCell>
                       <TableCell>{formatAddress(escrow.client)}</TableCell>
                       <TableCell>
                         <DropdownMenu>
