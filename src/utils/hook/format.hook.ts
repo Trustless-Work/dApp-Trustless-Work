@@ -34,5 +34,19 @@ export const useFormatUtils = () => {
     return `$${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
   };
 
-  return { formatAddress, formatDate, formatDateFromFirebase, formatDollar };
+  const formatText = (role: string | undefined = "") => {
+    return role
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      .replace(/([A-Z])/g, (match) => ` ${match}`)
+      .trim()
+      .toUpperCase();
+  };
+
+  return {
+    formatAddress,
+    formatDate,
+    formatDateFromFirebase,
+    formatDollar,
+    formatText,
+  };
 };
