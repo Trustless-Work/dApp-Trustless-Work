@@ -73,7 +73,10 @@ export const useInitializeEscrowHook = () => {
     setIsLoading(true);
 
     try {
-      const data = await initializeEscrow(payload, address);
+      const data = await initializeEscrow(
+        { ...payload, issuer: address },
+        address,
+      );
       if (data.status === "SUCCESS" || data.status === 201) {
         if (loggedUser?.saveEscrow) {
           await addEscrow(data.escrow, address, data.contract_id);
