@@ -45,7 +45,19 @@ export type FundEscrowPayload = Pick<Escrow, "amount"> & {
   issuer: string;
 };
 
+export type DistributeEscrowEarningsEscrowPayload = Pick<Escrow, "contractId"> &
+  Partial<Pick<Escrow, "serviceProvider" | "releaseSigner">> & {
+    signer: string;
+  };
+
 export type EscrowPayload = Omit<
   Escrow,
   "user" | "createdAt" | "updatedAt" | "id"
 >;
+
+export type ChangeMilestoneStatusPayload = {
+  contractId?: string;
+  milestoneIndex: string;
+  newStatus: MilestoneStatus;
+  serviceProvider?: string;
+};
