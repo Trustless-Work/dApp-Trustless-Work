@@ -4,6 +4,8 @@ import { getUserRoleInEscrow } from "../../../server/escrow-firebase";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useEffect, useState } from "react";
 import { useFormatUtils } from "@/utils/hook/format.hook";
+import { changeMilestoneStatus } from "../../../services/changeMilestoneStatus";
+import { distributeEscrowEarnings } from "../../../services/distributeEscrowEarnings";
 
 interface useEscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -20,6 +22,7 @@ const useEscrowDetailDialog = ({
   const { formatText } = useFormatUtils();
 
   const address = useGlobalAuthenticationStore((state) => state.address);
+  // const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
 
   const handleClose = () => {
     setIsDialogOpen(false);
@@ -67,23 +70,63 @@ const useEscrowDetailDialog = ({
     return buttonLabels[status || ""];
   };
 
-  const handleButtonClick = (milestone: Milestone) => {
+  const handleButtonClick = (selectedEscrow: Escrow, milestone: Milestone) => {
     switch (milestone.status) {
+      // ! PASAR A ZUSTAND, PARA ACTUALIZAR FIREBASE Y STATE GLOBAL
+
       case "pending":
-        console.log("Submitting milestone for review...");
+        changeMilestoneStatus({
+          contractId: selectedEscrow?.contractId,
+          milestoneIndex: "0",
+          newStatus: "completed",
+          // serviceProvider: selectedEscrow?.serviceProvider,
+          serviceProvider: address,
+        });
+
+        // updateEscrow({escrowId: selectedEscrow.id, payload: selectedEscrow.milestones[0]});
         break;
       case "forReview":
-        console.log("Approving or disputing milestone...");
+        changeMilestoneStatus({
+          contractId: selectedEscrow?.contractId,
+          milestoneIndex: "0",
+          newStatus: "approved",
+          serviceProvider: selectedEscrow?.serviceProvider,
+        });
+
+        // updateEscrow({escrowId: selectedEscrow.id, payload: selectedEscrow.milestones[0]});
         break;
       case "approved":
-        console.log("Releasing payment for milestone...");
+        changeMilestoneStatus({
+          contractId: selectedEscrow?.contractId,
+          milestoneIndex: "0",
+          newStatus: "forReview",
+          serviceProvider: selectedEscrow?.serviceProvider,
+        });
+
+        // updateEscrow({escrowId: selectedEscrow.id, payload: selectedEscrow.milestones[0]});
         break;
       case "inDispute":
-        console.log("Resolving dispute for milestone...");
+        changeMilestoneStatus({
+          contractId: selectedEscrow?.contractId,
+          milestoneIndex: "0",
+          newStatus: "forReview",
+          serviceProvider: selectedEscrow?.serviceProvider,
+        });
+
+        // updateEscrow({escrowId: selectedEscrow.id, payload: selectedEscrow.milestones[0]});
         break;
       default:
         console.log("No action available.");
     }
+  };
+
+  const distributeEscrowEarningsRelease = async () => {
+    distributeEscrowEarnings({
+      contractId: selectedEscrow?.contractId,
+      signer: address,
+      serviceProvider: selectedEscrow?.serviceProvider,
+      releaseSigner: selectedEscrow?.releaseSigner,
+    });
   };
 
   return {
@@ -94,6 +137,7 @@ const useEscrowDetailDialog = ({
     handleButtonClick,
     userRoleInEscrow,
     role,
+    distributeEscrowEarningsRelease,
   };
 };
 
