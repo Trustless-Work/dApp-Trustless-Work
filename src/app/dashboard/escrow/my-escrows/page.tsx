@@ -5,7 +5,6 @@ import Loader from "@/components/utils/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -21,8 +20,8 @@ import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFil
 const EscrowsPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
   const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
-
-  const [viewMode, setViewMode] = useState<"table" | "cards">("table");
+  const setActiveMode = useEscrowBoundedStore((state) => state.setActiveMode);
+  const activeMode = useEscrowBoundedStore((state) => state.activeMode);
 
   return (
     <>
@@ -61,9 +60,9 @@ const EscrowsPage = () => {
 
               <div className="flex items-center gap-2">
                 <Select
-                  value={viewMode}
+                  value={activeMode}
                   onValueChange={(value) =>
-                    setViewMode(value as "table" | "cards")
+                    setActiveMode(value as "table" | "cards")
                   }
                 >
                   <SelectTrigger className="w-32">
@@ -83,7 +82,7 @@ const EscrowsPage = () => {
                   <MyEscrowsFilter />
                 </CardContent>
               </Card>
-              {viewMode === "table" ? (
+              {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
                   <MyEscrowsTable type="issuer" />
                 </Card>
@@ -98,7 +97,7 @@ const EscrowsPage = () => {
                   <MyEscrowsFilter />
                 </CardContent>
               </Card>
-              {viewMode === "table" ? (
+              {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
                   <MyEscrowsTable type="client" />
                 </Card>
@@ -116,7 +115,7 @@ const EscrowsPage = () => {
                   <MyEscrowsFilter />
                 </CardContent>
               </Card>
-              {viewMode === "table" ? (
+              {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
                   <MyEscrowsTable type="serviceProvider" />
                 </Card>
@@ -134,7 +133,7 @@ const EscrowsPage = () => {
                   <MyEscrowsFilter />
                 </CardContent>
               </Card>
-              {viewMode === "table" ? (
+              {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
                   <MyEscrowsTable type="disputeResolver" />
                 </Card>
