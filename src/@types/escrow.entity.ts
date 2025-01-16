@@ -32,6 +32,7 @@ export interface Escrow {
   client: string;
   releaseSigner: string;
   user: string;
+  issuer: string;
 }
 
 export type RolesInEscrow =
