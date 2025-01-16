@@ -52,7 +52,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
     toggleRowExpansion,
   } = useMyEscrows({ type });
 
-  const { /*formatDateFromFirebase,*/ formatAddress } = useFormatUtils();
+  const { formatDateFromFirebase, formatAddress } = useFormatUtils();
 
   return (
     <div className="container mx-auto py-3">
@@ -70,6 +70,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                   <TableHead>Engagement</TableHead>
                   <TableHead>Service Provider</TableHead>
                   <TableHead>Client</TableHead>
+                  <TableHead>Created</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -90,6 +91,12 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         {formatAddress(escrow.serviceProvider)}
                       </TableCell>
                       <TableCell>{formatAddress(escrow.client)}</TableCell>
+                      <TableCell>
+                        {formatDateFromFirebase(
+                          escrow.createdAt.seconds,
+                          escrow.createdAt.nanoseconds,
+                        )}
+                      </TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
