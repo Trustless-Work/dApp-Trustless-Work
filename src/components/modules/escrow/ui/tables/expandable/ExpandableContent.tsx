@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Divider from "@/components/utils/Divider";
+import EntityCard from "../../dialogs/components/EntityCard";
 
 interface ExpandableContentProps {
   escrow: Escrow;
@@ -78,44 +79,35 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
         </div>
       </TableCell>
 
-      <div className="flex mt-8 ml-10 p-3 border rounded border-primary w-full h-full gap-5">
-        <div className="flex flex-col gap-5">
-          <div className="flex">
-            <strong className="mr-1">Title:</strong>
-            {escrow.title}
-          </div>
-          <div className="flex">
-            <strong className="mr-1">Title:</strong>
-            {escrow.title}
-          </div>
-          <div className="flex">
-            <strong className="mr-1">Title:</strong>
-            {escrow.title}
-          </div>
-          <div className="flex">
-            <strong className="mr-1">Title:</strong>
-            {escrow.title}
-          </div>
-        </div>
-        <div className="flex flex-col gap-5">
-          <div className="flex">
-            <strong className="mr-1">Title:</strong>
-            {escrow.title}
-          </div>
-          <div className="flex">
-            <strong className="mr-1">Title:</strong>
-            {escrow.title}
-          </div>
-          <div className="flex">
-            <strong className="mr-1">Title:</strong>
-            {escrow.title}
-          </div>
-          <div className="flex">
-            <strong className="mr-1">Title:</strong>
-            {escrow.title}
+      <TableCell colSpan={4} className="p-4">
+        <div className="flex mt-8  p-5 border rounded border-primary w-full h-full gap-5">
+          <div className="flex flex-col w-full gap-5">
+            <div className="flex gap-3 flex-col md:flex-row">
+              <EntityCard type="Client" entity={escrow.client} />
+              <EntityCard
+                type="Service Provider"
+                entity={escrow.serviceProvider}
+              />
+            </div>
+            <div className="flex gap-3 flex-col md:flex-row">
+              <EntityCard
+                type="Dispute Resolver"
+                entity={escrow.disputeResolver}
+              />
+              <EntityCard
+                type="Platform"
+                entity={escrow.platformAddress}
+                hasPercentage
+                percentage={escrow.platformFee}
+              />
+            </div>
+            <div className="flex gap-3 flex-col md:flex-row">
+              <EntityCard type="Issuer" entity={escrow.issuer} />
+              <EntityCard type="Release Signer" entity={escrow.releaseSigner} />
+            </div>
           </div>
         </div>
-      </div>
+      </TableCell>
     </>
   );
 };
