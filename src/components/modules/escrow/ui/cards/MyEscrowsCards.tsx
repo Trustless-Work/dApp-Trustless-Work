@@ -10,6 +10,7 @@ import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
+import { Progress } from "@/components/ui/progress";
 
 interface MyEscrowsCardsProps {
   type: "issuer" | "client" | "disputeResolver" | "serviceProvider";
@@ -72,7 +73,33 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                     <p className="mt-2 text-sm text-muted-foreground">
                       {formatAddress(escrow.client)}
                     </p>
-                    <p className="mt-1 text-xs text-muted-foreground text-end italic">
+
+                    <div className="flex flex-col gap-2 mt-4">
+                      <h3 className="mb-1 font-bold text-xs">Completed</h3>
+                      <div className="flex items-center gap-2">
+                        {(() => {
+                          const completedMilestones = escrow.milestones.filter(
+                            (milestone) => milestone.status === "completed",
+                          ).length;
+                          const totalMilestones = escrow.milestones.length;
+                          const progressPercentage =
+                            totalMilestones > 0
+                              ? (completedMilestones / totalMilestones) * 100
+                              : 0;
+
+                          return (
+                            <>
+                              <Progress value={progressPercentage} />
+                              <strong className="text-xs">
+                                {progressPercentage.toFixed(0)}%
+                              </strong>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </div>
+
+                    <p className="mt-3 text-xs text-muted-foreground text-end italic">
                       <strong>Created:</strong>{" "}
                       {formatDateFromFirebase(
                         escrow.createdAt.seconds,
