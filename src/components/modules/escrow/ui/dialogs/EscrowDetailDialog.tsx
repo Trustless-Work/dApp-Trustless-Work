@@ -45,6 +45,7 @@ const EscrowDetailDialog = ({
     handleClose,
     areAllMilestonesCompleted,
     role,
+    distributeEscrowEarningsRelease,
   } = useEscrowDetailDialog({
     setIsDialogOpen,
     setSelectedEscrow,
@@ -211,7 +212,9 @@ const EscrowDetailDialog = ({
                           milestone.status !== "forReview" && (
                             <Button
                               className="w-32"
-                              onClick={() => handleButtonClick(milestone)}
+                              onClick={() =>
+                                handleButtonClick(selectedEscrow, milestone)
+                              }
                             >
                               {getButtonLabel(milestone.status)}
                             </Button>
@@ -221,14 +224,18 @@ const EscrowDetailDialog = ({
                           <>
                             <Button
                               className="w-32 bg-green-800 hover:bg-green-700"
-                              onClick={() => handleButtonClick(milestone)}
+                              onClick={() =>
+                                handleButtonClick(selectedEscrow, milestone)
+                              }
                             >
                               Approve
                             </Button>
                             <Button
                               variant="destructive"
                               className="w-32"
-                              onClick={() => handleButtonClick(milestone)}
+                              onClick={() =>
+                                handleButtonClick(selectedEscrow, milestone)
+                              }
                             >
                               Start Dispute
                             </Button>
@@ -278,7 +285,11 @@ const EscrowDetailDialog = ({
               )}
             </p>
             {areAllMilestonesCompleted && (
-              <Button type="button" className="bg-green-800 hover:bg-green-700">
+              <Button
+                onClick={distributeEscrowEarningsRelease}
+                type="button"
+                className="bg-green-800 hover:bg-green-700"
+              >
                 Release
               </Button>
             )}
