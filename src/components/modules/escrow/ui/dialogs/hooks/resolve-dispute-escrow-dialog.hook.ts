@@ -75,7 +75,7 @@ const useResolveDisputeEscrowDialogHook = ({
   const handleOpen = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (Number(selectedEscrow?.balance) === 0) {
+    if (Number(selectedEscrow?.balance) !== 0) {
       setIsResolveDisputeDialogOpen(true);
     } else {
       toast({
