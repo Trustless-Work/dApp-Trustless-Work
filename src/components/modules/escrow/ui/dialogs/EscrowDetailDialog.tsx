@@ -30,6 +30,7 @@ import { Badge } from "@/components/ui/badge";
 import useDistributeEarningsEscrowDialogHook from "./hooks/distribute-earnings-escrow-dialog.hook";
 import useChangeStatusEscrowDialogHook from "./hooks/change-status-escrow-dialog.hook";
 import useChangeFlagEscrowDialogHook from "./hooks/change-flag-escrow-dialog.hook";
+import ProgressEscrow from "./components/ProgressEscrow";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -184,11 +185,20 @@ const EscrowDetailDialog = ({
                 Fund Escrow
               </Button>
 
+              {/* AQUI SE DEBE VALIDAR QUE SI EL ESCROW ESTA EN DISPUTA A NIVEL GLOBAL, NO SE HACE PORQUE LUEGO SERA POR MILESTONE */}
               {(role == "client" || role == "serviceProvider") &&
                 !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag && (
                   <Button variant="destructive" className="w-full mt-3">
                     Start Dispute
+                  </Button>
+                )}
+
+              {role == "disputeResolver" &&
+                !areAllMilestonesCompleted &&
+                !areAllMilestonesCompletedAndFlag && (
+                  <Button variant="destructive" className="w-full mt-3">
+                    Resolve Dispute
                   </Button>
                 )}
             </div>
@@ -286,32 +296,7 @@ const EscrowDetailDialog = ({
                         </div>
                       ))}
 
-                      <div className="flex flex-col gap-2 mt-4">
-                        <h3 className="mb-1 font-bold text-xs">Completed</h3>
-                        <div className="flex items-center gap-2">
-                          {(() => {
-                            const completedMilestones =
-                              selectedEscrow.milestones.filter(
-                                (milestone) => milestone.status === "completed",
-                              ).length;
-                            const totalMilestones =
-                              selectedEscrow.milestones.length;
-                            const progressPercentage =
-                              totalMilestones > 0
-                                ? (completedMilestones / totalMilestones) * 100
-                                : 0;
-
-                            return (
-                              <>
-                                <Progress value={progressPercentage} />
-                                <strong className="text-xs">
-                                  {progressPercentage.toFixed(0)}%
-                                </strong>
-                              </>
-                            );
-                          })()}
-                        </div>
-                      </div>
+                      <ProgressEscrow escrow={selectedEscrow} />
                     </div>
                   )}
                 </div>

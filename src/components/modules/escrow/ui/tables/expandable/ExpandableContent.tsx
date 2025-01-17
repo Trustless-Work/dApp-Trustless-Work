@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import Divider from "@/components/utils/Divider";
 import EntityCard from "../../dialogs/components/EntityCard";
+import ProgressEscrow from "../../dialogs/components/ProgressEscrow";
 
 interface ExpandableContentProps {
   escrow: Escrow;
@@ -57,25 +58,7 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
             </TableBody>
           </Table>
 
-          {(() => {
-            const completedMilestones = escrow.milestones.filter(
-              (milestone) => milestone.status === "completed",
-            ).length;
-            const totalMilestones = escrow.milestones.length;
-            const progressPercentage =
-              totalMilestones > 0
-                ? (completedMilestones / totalMilestones) * 100
-                : 0;
-
-            return (
-              <div className="flex gap-3 items-center mt-4">
-                <Progress value={progressPercentage} />
-                <strong className="text-xs">
-                  {progressPercentage.toFixed(0)}%
-                </strong>
-              </div>
-            );
-          })()}
+          <ProgressEscrow escrow={escrow} />
         </div>
       </TableCell>
 
