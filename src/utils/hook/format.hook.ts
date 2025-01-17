@@ -28,7 +28,9 @@ export const useFormatUtils = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const formatDollar = (amount: string): string => {
+  const formatDollar = (amount: string | undefined): string => {
+    if (!amount) return "$0.00";
+
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount)) return "$0.00";
     return `$${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
