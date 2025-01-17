@@ -33,13 +33,15 @@ export interface Escrow {
   releaseSigner: string;
   user: string;
   issuer: string;
+  disputeFlag?: boolean;
 }
 
 export type RolesInEscrow =
   | "issuer"
   | "client"
   | "disputeResolver"
-  | "serviceProvider";
+  | "serviceProvider"
+  | "releaseSigner";
 
 export type FundEscrowPayload = Pick<Escrow, "amount"> & {
   issuer: string;
@@ -61,3 +63,21 @@ export type ChangeMilestoneStatusPayload = {
   newStatus: MilestoneStatus;
   serviceProvider?: string;
 };
+
+export type ChangeMilestoneFlagPayload = Omit<
+  ChangeMilestoneStatusPayload,
+  "serviceProvider" | "newStatus"
+> & {
+  client?: string;
+  newFlag: boolean;
+};
+
+export type StartDisputePayload = Pick<Escrow, "contractId"> & {
+  signer: string;
+};
+
+export type ResolveDisputePayload = Pick<Escrow, "contractId"> &
+  Partial<Pick<Escrow, "disputeResolver">> & {
+    clientFunds: string;
+    serviceProviderFunds: string;
+  };

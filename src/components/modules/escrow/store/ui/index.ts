@@ -4,8 +4,15 @@ import { useEscrowDialogSlice } from "./slices/dialogs.slice";
 import { DialogEscrowStore } from "./@types/dialogs.entity";
 import { TabsEscrowStore } from "./@types/tabs.entity";
 import { useEscrowTabSlice } from "./slices/tabs.slice";
+import { useEscrowViewModeSlice } from "./slices/view-mode.slice";
+import { ViewModeEscrowStore } from "./@types/view-mode.entity";
+import { useEscrowLoadersSlice } from "./slices/loaders.slice";
+import { LoadersEscrowStore } from "./@types/loaders.entity";
 
-type GlobalState = DialogEscrowStore & TabsEscrowStore;
+type GlobalState = DialogEscrowStore &
+  TabsEscrowStore &
+  ViewModeEscrowStore &
+  LoadersEscrowStore;
 
 const devtoolsOptions: DevtoolsOptions = {
   name: "Global State",
@@ -40,6 +47,8 @@ export const useEscrowBoundedStore = create<GlobalState>()(
     (...a) => ({
       ...useEscrowDialogSlice(...a),
       ...useEscrowTabSlice(...a),
+      ...useEscrowViewModeSlice(...a),
+      ...useEscrowLoadersSlice(...a),
     }),
     devtoolsOptions,
   ),

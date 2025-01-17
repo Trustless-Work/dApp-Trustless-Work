@@ -1,9 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { PreferencesForm } from "../PreferencesSection";
 
 interface usePreferencesProps {
   onSave: (data: PreferencesForm) => void;
+}
+
+export interface PreferencesForm {
+  identification?: string;
+  saveEscrow: boolean;
 }
 
 const usePreferences = ({ onSave }: usePreferencesProps) => {

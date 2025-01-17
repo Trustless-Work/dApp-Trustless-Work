@@ -17,7 +17,6 @@ import {
 } from "firebase/firestore";
 import { z } from "zod";
 import { formSchema } from "../schema/initialize-escrow-schema";
-import { Escrow } from "@/@types/escrow.entity";
 
 interface addEscrowProps {
   payload: z.infer<typeof formSchema>;
@@ -113,14 +112,11 @@ interface updateEscrowProps {
 const updateEscrow = async ({
   escrowId,
   payload,
-}: updateEscrowProps): Promise<
-  | {
-      success: boolean;
-      message: string;
-      data?: any;
-    }
-  | Escrow
-> => {
+}: updateEscrowProps): Promise<{
+  success: boolean;
+  message: string;
+  data?: any;
+}> => {
   try {
     const docRef = doc(db, "escrows", escrowId);
     const updatesWithTimestamp = {

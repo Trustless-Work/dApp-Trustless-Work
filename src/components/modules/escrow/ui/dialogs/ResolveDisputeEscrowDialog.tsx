@@ -1,0 +1,108 @@
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { FormProvider } from "react-hook-form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import TooltipInfo from "@/components/utils/Tooltip";
+import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
+
+interface ResolveDisputeEscrowDialogProps {
+  isResolveDisputeDialogOpen: boolean;
+  setIsResolveDisputeDialogOpen: (value: boolean) => void;
+}
+
+const ResolveDisputeEscrowDialog = ({
+  isResolveDisputeDialogOpen,
+  setIsResolveDisputeDialogOpen,
+}: ResolveDisputeEscrowDialogProps) => {
+  const { form, onSubmit, handleClose } = useResolveDisputeEscrowDialogHook({
+    setIsResolveDisputeDialogOpen,
+  });
+
+  return (
+    <Dialog open={isResolveDisputeDialogOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Resolve Dispute - NAME and NAME</DialogTitle>
+          <DialogDescription>
+            You as a dispute resolver will be able to share the proceeds between
+            the two entities.
+          </DialogDescription>
+        </DialogHeader>
+        <FormProvider {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="grid gap-4 py-4"
+          >
+            <div className="flex flex-col ms-center gap-4">
+              <FormField
+                control={form.control}
+                name="clientFunds"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      Client Amount
+                      <TooltipInfo content="The amount for the client." />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="The amount for the client"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="serviceProviderFunds"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      Service Provider Amount
+                      <TooltipInfo content="The amount for the service provider." />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="The amount for the service provider"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <DialogFooter>
+              <Button type="submit">Resolve Conflicts</Button>
+            </DialogFooter>
+          </form>
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default ResolveDisputeEscrowDialog;

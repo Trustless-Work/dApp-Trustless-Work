@@ -1,18 +1,14 @@
+import { StartDisputePayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/wallet/walletKit";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
 import axios from "axios";
 
-interface EscrowPayload {
-  contractId: string;
-  engagementId: string;
-  signer: string;
-}
-
-export const completeEscrow = async (payload: EscrowPayload) => {
+export const startDispute = async (payload: StartDisputePayload) => {
   try {
-    const response = await http.post("/escrow/complete-escrow", payload);
+    const response = await http.post("/escrow/change-dispute-flag", payload);
+
     const { unsignedTransaction } = response.data;
     const { address } = await kit.getAddress();
     const { signedTxXdr } = await signTransaction(unsignedTransaction, {
@@ -23,8 +19,8 @@ export const completeEscrow = async (payload: EscrowPayload) => {
     const tx = await http.post("/helper/send-transaction", {
       signedXdr: signedTxXdr,
     });
-    const { data } = tx;
 
+    const { data } = tx;
     return data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {

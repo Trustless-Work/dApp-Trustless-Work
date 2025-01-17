@@ -16,8 +16,7 @@ import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import TooltipInfo from "@/components/utils/Tooltip";
 import { TbPigMoney } from "react-icons/tb";
-import { MdAttachMoney } from "react-icons/md";
-import { Progress } from "@/components/ui/progress";
+import { MdAttachMoney, MdOutlineCancel } from "react-icons/md";
 import { FaRegCopy, FaCheck } from "react-icons/fa";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import EntityCard from "./components/EntityCard";
@@ -25,6 +24,15 @@ import FundEscrowDialog from "./FundEscrowDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";
+import LoaderData from "@/components/utils/LoaderData";
+import { Badge } from "@/components/ui/badge";
+import useDistributeEarningsEscrowDialogHook from "./hooks/distribute-earnings-escrow-dialog.hook";
+import useChangeStatusEscrowDialogHook from "./hooks/change-status-escrow-dialog.hook";
+import useChangeFlagEscrowDialogHook from "./hooks/change-flag-escrow-dialog.hook";
+import ProgressEscrow from "./components/ProgressEscrow";
+import useStartDisputeEscrowDialogHook from "./hooks/start-dispute-escrow-dialog.hook";
+import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
+import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -40,17 +48,30 @@ const EscrowDetailDialog = ({
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
   const {
-    getButtonLabel,
-    handleButtonClick,
     handleClose,
     areAllMilestonesCompleted,
+    areAllMilestonesCompletedAndFlag,
     role,
-    distributeEscrowEarningsRelease,
   } = useEscrowDetailDialog({
     setIsDialogOpen,
     setSelectedEscrow,
     selectedEscrow,
   });
+
+  const { distributeEscrowEarningsSubmit } =
+    useDistributeEarningsEscrowDialogHook();
+
+  const setIsResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsResolveDisputeDialogOpen,
+  );
+
+  const { handleOpen } = useResolveDisputeEscrowDialogHook({
+    setIsResolveDisputeDialogOpen,
+  });
+
+  const { changeMilestoneStatusSubmit } = useChangeStatusEscrowDialogHook();
+  const { startDisputeSubmit } = useStartDisputeEscrowDialogHook();
+  const { changeMilestoneFlagSubmit } = useChangeFlagEscrowDialogHook();
 
   const isSecondDialogOpen = useEscrowBoundedStore(
     (state) => state.isSecondDialogOpen,
@@ -63,7 +84,15 @@ const EscrowDetailDialog = ({
   );
   const isQRDialogOpen = useEscrowBoundedStore((state) => state.isQRDialogOpen);
 
-  const { formatAddress, formatDollar, formatDateFromFirebase } =
+  const isChangingStatus = useEscrowBoundedStore(
+    (state) => state.isChangingStatus,
+  );
+
+  const isResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.isResolveDisputeDialogOpen,
+  );
+
+  const { formatAddress, formatText, formatDollar, formatDateFromFirebase } =
     useFormatUtils();
   const { copyText, copySuccess } = useCopyUtils();
 
@@ -83,7 +112,7 @@ const EscrowDetailDialog = ({
                   {selectedEscrow.description}
                 </DialogDescription>
                 <DialogDescription>
-                  <strong>Role:</strong> {role}{" "}
+                  <strong>Role:</strong> {formatText(role)}{" "}
                 </DialogDescription>
               </div>
             </div>
@@ -91,6 +120,25 @@ const EscrowDetailDialog = ({
 
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
             {/* Amount and Balance Cards */}
+
+            <Card
+              className={cn(
+                "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
+              )}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Status
+                  </p>
+                  <MdOutlineCancel size={30} />
+                </div>
+                <div className="mt-2 flex items-baseline">
+                  <h3 className="text-2xl font-semibold">In Dispute</h3>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card
               className={cn(
                 "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
@@ -169,6 +217,32 @@ const EscrowDetailDialog = ({
               >
                 Fund Escrow
               </Button>
+
+              {/* AQUI SE DEBE VALIDAR QUE SI EL ESCROW ESTA EN DISPUTA A NIVEL GLOBAL, NO SE HACE PORQUE LUEGO SERA POR MILESTONE */}
+              {(role == "client" || role == "serviceProvider") &&
+                !areAllMilestonesCompleted &&
+                !areAllMilestonesCompletedAndFlag &&
+                !selectedEscrow.disputeFlag && (
+                  <Button
+                    onClick={startDisputeSubmit}
+                    variant="destructive"
+                    className="w-full mt-3"
+                  >
+                    Start Dispute
+                  </Button>
+                )}
+
+              {role == "disputeResolver" &&
+                !areAllMilestonesCompleted &&
+                !areAllMilestonesCompletedAndFlag &&
+                selectedEscrow.disputeFlag && (
+                  <Button
+                    className="w-full mt-3 bg-green-800 hover:bg-green-700"
+                    onClick={(e) => handleOpen(e)}
+                  >
+                    Resolve Dispute
+                  </Button>
+                )}
             </div>
           </div>
 
@@ -176,10 +250,15 @@ const EscrowDetailDialog = ({
           <Card className={cn("overflow-hidden h-full")}>
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row gap-4">
-                <EntityCard type="Client" entity={selectedEscrow.client} />
+                <EntityCard
+                  type="Client"
+                  entity={selectedEscrow.client}
+                  inDispute={selectedEscrow.disputeFlag}
+                />
                 <EntityCard
                   type="Service Provider"
                   entity={selectedEscrow.serviceProvider}
+                  inDispute={selectedEscrow.disputeFlag}
                 />
                 <EntityCard
                   type="Dispute Resolver"
@@ -196,81 +275,77 @@ const EscrowDetailDialog = ({
               {/* Milestones */}
               <div className="flex justify-center w-full mt-5">
                 <div className="flex flex-col gap-4 py-4 w-full md:w-2/3">
-                  <div className="space-y-4">
-                    <label className="flex items-center">
-                      Milestones
-                      <TooltipInfo content="Key stages or deliverables for the escrow." />
-                    </label>
-                    {selectedEscrow.milestones.map((milestone, index) => (
-                      <div key={index} className="flex items-center space-x-4">
-                        <Input
-                          disabled
-                          value={milestone.description}
-                          placeholder="Milestone Description"
-                        />
-                        {milestone.status !== "completed" &&
-                          milestone.status !== "forReview" && (
-                            <Button
-                              className="w-32"
-                              onClick={() =>
-                                handleButtonClick(selectedEscrow, milestone)
-                              }
+                  {isChangingStatus ? (
+                    <LoaderData />
+                  ) : (
+                    <div className="space-y-4">
+                      <label className="flex items-center">
+                        Milestones
+                        <TooltipInfo content="Key stages or deliverables for the escrow." />
+                      </label>
+                      {selectedEscrow.milestones.map((milestone, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-4"
+                        >
+                          {milestone.flag ? (
+                            <Badge className="uppercase max-w-24">
+                              Approved
+                            </Badge>
+                          ) : (
+                            <Badge
+                              className="uppercase max-w-24"
+                              variant="outline"
                             >
-                              {getButtonLabel(milestone.status)}
-                            </Button>
+                              {milestone.status}
+                            </Badge>
                           )}
 
-                        {milestone.status === "forReview" && (
-                          <>
-                            <Button
-                              className="w-32 bg-green-800 hover:bg-green-700"
-                              onClick={() =>
-                                handleButtonClick(selectedEscrow, milestone)
-                              }
-                            >
-                              Approve
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              className="w-32"
-                              onClick={() =>
-                                handleButtonClick(selectedEscrow, milestone)
-                              }
-                            >
-                              Start Dispute
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    ))}
+                          <Input
+                            disabled
+                            value={milestone.description}
+                            placeholder="Milestone Description"
+                          />
 
-                    <div className="flex flex-col gap-2 mt-4">
-                      <h3 className="mb-1 font-bold text-xs">Completed</h3>
-                      <div className="flex items-center gap-2">
-                        {(() => {
-                          const completedMilestones =
-                            selectedEscrow.milestones.filter(
-                              (milestone) => milestone.status === "completed",
-                            ).length;
-                          const totalMilestones =
-                            selectedEscrow.milestones.length;
-                          const progressPercentage =
-                            totalMilestones > 0
-                              ? (completedMilestones / totalMilestones) * 100
-                              : 0;
+                          {role == "serviceProvider" &&
+                            milestone.status !== "completed" &&
+                            !milestone.flag && (
+                              <Button
+                                className="max-w-32"
+                                onClick={() =>
+                                  changeMilestoneStatusSubmit(
+                                    selectedEscrow,
+                                    milestone,
+                                    index,
+                                  )
+                                }
+                              >
+                                Complete
+                              </Button>
+                            )}
 
-                          return (
-                            <>
-                              <Progress value={progressPercentage} />
-                              <strong className="text-xs">
-                                {progressPercentage.toFixed(0)}%
-                              </strong>
-                            </>
-                          );
-                        })()}
-                      </div>
+                          {role == "client" &&
+                            milestone.status === "completed" &&
+                            !milestone.flag && (
+                              <Button
+                                className="max-w-32"
+                                onClick={() =>
+                                  changeMilestoneFlagSubmit(
+                                    selectedEscrow,
+                                    milestone,
+                                    index,
+                                  )
+                                }
+                              >
+                                Approve
+                              </Button>
+                            )}
+                        </div>
+                      ))}
+
+                      <ProgressEscrow escrow={selectedEscrow} />
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -284,15 +359,17 @@ const EscrowDetailDialog = ({
                 selectedEscrow.createdAt.nanoseconds,
               )}
             </p>
-            {areAllMilestonesCompleted && (
-              <Button
-                onClick={distributeEscrowEarningsRelease}
-                type="button"
-                className="bg-green-800 hover:bg-green-700"
-              >
-                Release
-              </Button>
-            )}
+            {areAllMilestonesCompleted &&
+              areAllMilestonesCompletedAndFlag &&
+              role === "releaseSigner" && (
+                <Button
+                  onClick={distributeEscrowEarningsSubmit}
+                  type="button"
+                  className="bg-green-800 hover:bg-green-700"
+                >
+                  Release Payment
+                </Button>
+              )}
           </div>
         </DialogContent>
       </Dialog>
@@ -307,6 +384,12 @@ const EscrowDetailDialog = ({
       <QREscrowDialog
         isQRDialogOpen={isQRDialogOpen}
         setIsQRDialogOpen={setIsQRDialogOpen}
+      />
+
+      {/* Resolve Dispute Dialog */}
+      <ResolveDisputeEscrowDialog
+        isResolveDisputeDialogOpen={isResolveDisputeDialogOpen}
+        setIsResolveDisputeDialogOpen={setIsResolveDisputeDialogOpen}
       />
     </>
   );

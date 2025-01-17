@@ -29,10 +29,8 @@ export const distributeEscrowEarnings = async (
     return data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      console.error("Axios Error:", error.response?.data || error.message);
-      throw new Error(
-        error.response?.data?.message || "Error in Axios request",
-      );
+      console.error("Axios Error:", error.response?.data.message);
+      throw new Error(error.response?.data?.message);
     } else {
       console.error("Unexpected Error:", error);
       throw new Error("Unexpected error occurred");

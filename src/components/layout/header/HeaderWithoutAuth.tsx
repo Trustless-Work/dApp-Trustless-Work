@@ -14,8 +14,7 @@ const HeaderWithoutAuth: React.FC<HeaderWithoutAuthProps> = ({
   highlightConnect,
 }) => {
   const { handleConnect, handleDisconnect } = useWalletUtils();
-  const { address, handleReportIssue, handleRequestApiKey } =
-    useHeaderWithoutAuth();
+  const { address, handleReportIssue } = useHeaderWithoutAuth();
 
   return (
     <div className="flex w-full justify-between items-center gap-2 px-4">

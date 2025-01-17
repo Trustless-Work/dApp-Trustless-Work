@@ -10,10 +10,15 @@ import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
-import { Progress } from "@/components/ui/progress";
+import ProgressEscrow from "../dialogs/components/ProgressEscrow";
 
 interface MyEscrowsCardsProps {
-  type: "issuer" | "client" | "disputeResolver" | "serviceProvider";
+  type:
+    | "issuer"
+    | "client"
+    | "disputeResolver"
+    | "serviceProvider"
+    | "releaseSigner";
 }
 
 const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
@@ -49,9 +54,9 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
               {currentData.map((escrow, index) => (
                 <Card
                   key={index}
-                  className={cn(
-                    "overflow-hidden cursor-pointer hover:shadow-lg",
-                  )}
+                  className={`overflow-hidden cursor-pointer hover:shadow-lg ${
+                    escrow.disputeFlag && "border-dashed border-destructive"
+                  }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsDialogOpen(true);
@@ -63,10 +68,18 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                       <p className="text-sm font-medium text-muted-foreground">
                         {escrow.title || "No title"}
                       </p>
-                      <FaStackOverflow size={30} />
+
+                      {!escrow.disputeFlag ? (
+                        <FaStackOverflow size={30} />
+                      ) : (
+                        <p className="font-bold text-sm text-muted-foreground">
+                          In Dispute
+                        </p>
+                      )}
                     </div>
                     <div className="mt-2 flex items-baseline">
                       <h3 className="text-2xl font-semibold">
+                        {formatDollar(escrow?.balance) || "N/A"} of{" "}
                         {formatDollar(escrow.amount) || "N/A"}
                       </h3>
                     </div>
@@ -74,30 +87,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                       {formatAddress(escrow.client)}
                     </p>
 
-                    <div className="flex flex-col gap-2 mt-4">
-                      <h3 className="mb-1 font-bold text-xs">Completed</h3>
-                      <div className="flex items-center gap-2">
-                        {(() => {
-                          const completedMilestones = escrow.milestones.filter(
-                            (milestone) => milestone.status === "completed",
-                          ).length;
-                          const totalMilestones = escrow.milestones.length;
-                          const progressPercentage =
-                            totalMilestones > 0
-                              ? (completedMilestones / totalMilestones) * 100
-                              : 0;
-
-                          return (
-                            <>
-                              <Progress value={progressPercentage} />
-                              <strong className="text-xs">
-                                {progressPercentage.toFixed(0)}%
-                              </strong>
-                            </>
-                          );
-                        })()}
-                      </div>
-                    </div>
+                    <ProgressEscrow escrow={escrow} />
 
                     <p className="mt-3 text-xs text-muted-foreground text-end italic">
                       <strong>Created:</strong>{" "}

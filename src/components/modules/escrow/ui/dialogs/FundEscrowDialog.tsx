@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import useFundEscrowDialog from "./hooks/fund-escrow-dialog.hook";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { FormProvider } from "react-hook-form";
 import {
@@ -30,11 +29,7 @@ const FundEscrowDialog = ({
   isSecondDialogOpen,
   setIsSecondDialogOpen,
 }: FundEscrowDialogProps) => {
-  const { form, onSubmit } = useFundEscrowDialogHook({
-    setIsSecondDialogOpen,
-  });
-
-  const { handleClose } = useFundEscrowDialog({
+  const { form, onSubmit, handleClose } = useFundEscrowDialogHook({
     setIsSecondDialogOpen,
   });
 

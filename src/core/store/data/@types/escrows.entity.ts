@@ -18,13 +18,9 @@ export interface EscrowGlobalStore {
     address: string,
     contractId: string,
   ) => Promise<Escrow | undefined>;
-  updateEscrow: (params: { escrowId: string; payload: Escrow }) => Promise<
-    | {
-        success: boolean;
-        message: string;
-        data?: any;
-      }
-    | Escrow
-  >;
+  updateEscrow: (params: {
+    escrowId: string;
+    payload: EscrowPayload;
+  }) => Promise<Escrow | undefined>;
   // deleteProduct: (escrowId: strin`g) => void;
 }

@@ -5,7 +5,6 @@ import Loader from "@/components/utils/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
-import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -21,8 +20,8 @@ import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFil
 const EscrowsPage = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
   const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
-
-  const [viewMode, setViewMode] = useState<"table" | "cards">("table");
+  const setActiveMode = useEscrowBoundedStore((state) => state.setActiveMode);
+  const activeMode = useEscrowBoundedStore((state) => state.activeMode);
 
   return (
     <>
@@ -32,7 +31,7 @@ const EscrowsPage = () => {
         <div className="flex gap-3 w-full h-full justify-between">
           <Tabs defaultValue="issuer" className="w-full">
             <div className="flex w-full justify-between items-center flex-col md:flex-row gap-16 md:gap-3">
-              <TabsList className="grid w-full sm:w-9/12 md:w-9/12 lg:w-3/5 grid-cols-2 sm:grid-cols-4 gap-4">
+              <TabsList className="grid w-full sm:w-9/12 md:w-9/12 lg:w-3/5 grid-cols-2 sm:grid-cols-5 gap-4">
                 <TabsTrigger
                   onClick={() => setActiveTab("issuer")}
                   value="issuer"
@@ -57,13 +56,19 @@ const EscrowsPage = () => {
                 >
                   Dispute Resolver
                 </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => setActiveTab("releaseSigner")}
+                  value="release-signer"
+                >
+                  Release Signer
+                </TabsTrigger>
               </TabsList>
 
               <div className="flex items-center gap-2">
                 <Select
-                  value={viewMode}
+                  value={activeMode}
                   onValueChange={(value) =>
-                    setViewMode(value as "table" | "cards")
+                    setActiveMode(value as "table" | "cards")
                   }
                 >
                   <SelectTrigger className="w-32">
@@ -83,7 +88,7 @@ const EscrowsPage = () => {
                   <MyEscrowsFilter />
                 </CardContent>
               </Card>
-              {viewMode === "table" ? (
+              {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
                   <MyEscrowsTable type="issuer" />
                 </Card>
@@ -98,7 +103,7 @@ const EscrowsPage = () => {
                   <MyEscrowsFilter />
                 </CardContent>
               </Card>
-              {viewMode === "table" ? (
+              {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
                   <MyEscrowsTable type="client" />
                 </Card>
@@ -116,7 +121,7 @@ const EscrowsPage = () => {
                   <MyEscrowsFilter />
                 </CardContent>
               </Card>
-              {viewMode === "table" ? (
+              {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
                   <MyEscrowsTable type="serviceProvider" />
                 </Card>
@@ -134,12 +139,27 @@ const EscrowsPage = () => {
                   <MyEscrowsFilter />
                 </CardContent>
               </Card>
-              {viewMode === "table" ? (
+              {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
                   <MyEscrowsTable type="disputeResolver" />
                 </Card>
               ) : (
                 <MyEscrowsCards type="disputeResolver" />
+              )}
+            </TabsContent>
+
+            <TabsContent value="release-signer" className="flex flex-col gap-3">
+              <Card className={cn("overflow-hidden")}>
+                <CardContent className="p-6">
+                  <MyEscrowsFilter />
+                </CardContent>
+              </Card>
+              {activeMode === "table" ? (
+                <Card className={cn("overflow-hidden")}>
+                  <MyEscrowsTable type="releaseSigner" />
+                </Card>
+              ) : (
+                <MyEscrowsCards type="releaseSigner" />
               )}
             </TabsContent>
           </Tabs>

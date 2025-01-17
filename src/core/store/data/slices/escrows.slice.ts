@@ -103,12 +103,34 @@ export const useGlobalEscrowsSlice: StateCreator<
     },
 
     updateEscrow: async ({ escrowId, payload }) => {
-      const escrowToUpdate = await updateEscrow({
+      set({ loadingEscrows: true }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
+
+      const updatedEscrowResponse = await updateEscrow({
         escrowId,
         payload: { ...payload, balance: payload.balance || 0 },
       });
 
-      return escrowToUpdate;
+      if (updatedEscrowResponse) {
+        const updatedEscrow: Escrow = updatedEscrowResponse.data;
+
+        set(
+          (state) => ({
+            escrows: state.escrows.map((escrow) =>
+              escrow.id === escrowId ? updatedEscrow : escrow,
+            ),
+          }),
+          false,
+          ESCROW_ACTIONS.UPDATE_ESCROW,
+        );
+
+        set(
+          { loadingEscrows: false },
+          false,
+          ESCROW_ACTIONS.SET_LOADING_ESCROWS,
+        );
+
+        return updatedEscrow;
+      }
     },
 
     //   fetchDeleteProduct: async (productId) => {
