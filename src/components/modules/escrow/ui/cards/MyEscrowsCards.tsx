@@ -55,9 +55,9 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
               {currentData.map((escrow, index) => (
                 <Card
                   key={index}
-                  className={cn(
-                    "overflow-hidden cursor-pointer hover:shadow-lg",
-                  )}
+                  className={`overflow-hidden cursor-pointer hover:shadow-lg ${
+                    escrow.disputeFlag && "border-dashed border-destructive"
+                  }`}
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsDialogOpen(true);
@@ -69,7 +69,14 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                       <p className="text-sm font-medium text-muted-foreground">
                         {escrow.title || "No title"}
                       </p>
-                      <FaStackOverflow size={30} />
+
+                      {!escrow.disputeFlag ? (
+                        <FaStackOverflow size={30} />
+                      ) : (
+                        <p className="font-bold text-sm text-muted-foreground">
+                          In Dispute
+                        </p>
+                      )}
                     </div>
                     <div className="mt-2 flex items-baseline">
                       <h3 className="text-2xl font-semibold">
