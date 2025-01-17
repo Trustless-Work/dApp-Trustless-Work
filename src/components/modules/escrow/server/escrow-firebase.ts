@@ -113,14 +113,11 @@ interface updateEscrowProps {
 const updateEscrow = async ({
   escrowId,
   payload,
-}: updateEscrowProps): Promise<
-  | {
-      success: boolean;
-      message: string;
-      data?: any;
-    }
-  | Escrow
-> => {
+}: updateEscrowProps): Promise<{
+  success: boolean;
+  message: string;
+  data?: any;
+}> => {
   try {
     const docRef = doc(db, "escrows", escrowId);
     const updatesWithTimestamp = {
