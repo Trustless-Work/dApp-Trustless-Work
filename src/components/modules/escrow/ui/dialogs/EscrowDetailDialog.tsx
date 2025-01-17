@@ -16,8 +16,7 @@ import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import TooltipInfo from "@/components/utils/Tooltip";
 import { TbPigMoney } from "react-icons/tb";
-import { MdAttachMoney } from "react-icons/md";
-import { Progress } from "@/components/ui/progress";
+import { MdAttachMoney, MdOutlineCancel } from "react-icons/md";
 import { FaRegCopy, FaCheck } from "react-icons/fa";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import EntityCard from "./components/EntityCard";
@@ -31,6 +30,7 @@ import useDistributeEarningsEscrowDialogHook from "./hooks/distribute-earnings-e
 import useChangeStatusEscrowDialogHook from "./hooks/change-status-escrow-dialog.hook";
 import useChangeFlagEscrowDialogHook from "./hooks/change-flag-escrow-dialog.hook";
 import ProgressEscrow from "./components/ProgressEscrow";
+import useStartDisputeEscrowDialogHook from "./hooks/start-dispute-escrow-dialog.hook";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -60,7 +60,7 @@ const EscrowDetailDialog = ({
     useDistributeEarningsEscrowDialogHook();
 
   const { changeMilestoneStatusSubmit } = useChangeStatusEscrowDialogHook();
-
+  const { startDisputeSubmit } = useStartDisputeEscrowDialogHook();
   const { changeMilestoneFlagSubmit } = useChangeFlagEscrowDialogHook();
 
   const isSecondDialogOpen = useEscrowBoundedStore(
@@ -106,6 +106,25 @@ const EscrowDetailDialog = ({
 
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
             {/* Amount and Balance Cards */}
+
+            <Card
+              className={cn(
+                "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
+              )}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Status
+                  </p>
+                  <MdOutlineCancel size={30} />
+                </div>
+                <div className="mt-2 flex items-baseline">
+                  <h3 className="text-2xl font-semibold">In Dispute</h3>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card
               className={cn(
                 "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
@@ -188,16 +207,22 @@ const EscrowDetailDialog = ({
               {/* AQUI SE DEBE VALIDAR QUE SI EL ESCROW ESTA EN DISPUTA A NIVEL GLOBAL, NO SE HACE PORQUE LUEGO SERA POR MILESTONE */}
               {(role == "client" || role == "serviceProvider") &&
                 !areAllMilestonesCompleted &&
-                !areAllMilestonesCompletedAndFlag && (
-                  <Button variant="destructive" className="w-full mt-3">
+                !areAllMilestonesCompletedAndFlag &&
+                !selectedEscrow.disputeFlag && (
+                  <Button
+                    onClick={startDisputeSubmit}
+                    variant="destructive"
+                    className="w-full mt-3"
+                  >
                     Start Dispute
                   </Button>
                 )}
 
               {role == "disputeResolver" &&
                 !areAllMilestonesCompleted &&
-                !areAllMilestonesCompletedAndFlag && (
-                  <Button variant="destructive" className="w-full mt-3">
+                !areAllMilestonesCompletedAndFlag &&
+                selectedEscrow.disputeFlag && (
+                  <Button className="w-full mt-3 bg-green-800 hover:bg-green-700">
                     Resolve Dispute
                   </Button>
                 )}
@@ -208,10 +233,15 @@ const EscrowDetailDialog = ({
           <Card className={cn("overflow-hidden h-full")}>
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row gap-4">
-                <EntityCard type="Client" entity={selectedEscrow.client} />
+                <EntityCard
+                  type="Client"
+                  entity={selectedEscrow.client}
+                  inDispute={selectedEscrow.disputeFlag}
+                />
                 <EntityCard
                   type="Service Provider"
                   entity={selectedEscrow.serviceProvider}
+                  inDispute={selectedEscrow.disputeFlag}
                 />
                 <EntityCard
                   type="Dispute Resolver"
