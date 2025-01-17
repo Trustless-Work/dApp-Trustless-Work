@@ -1,14 +1,8 @@
-import { Escrow, EscrowPayload, Milestone } from "@/@types/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 import { statusMap, statusOptions } from "@/constants/escrow/StatusOptions";
 import { getUserRoleInEscrow } from "../../../server/escrow-firebase";
-import {
-  useGlobalAuthenticationStore,
-  useGlobalBoundedStore,
-} from "@/core/store/data";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useEffect, useState } from "react";
-import { useEscrowBoundedStore } from "../../../store/ui";
-import { useToast } from "@/hooks/use-toast";
-import { changeMilestoneFlag } from "../../../services/changeMilestoneFlag";
 
 interface useEscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -22,13 +16,7 @@ const useEscrowDetailDialog = ({
   selectedEscrow,
 }: useEscrowDetailDialogProps) => {
   const [role, setRole] = useState<string | undefined>(undefined);
-  const { toast } = useToast();
-
   const address = useGlobalAuthenticationStore((state) => state.address);
-  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
-  const setIsChangingStatus = useEscrowBoundedStore(
-    (state) => state.setIsChangingStatus,
-  );
 
   const handleClose = () => {
     setIsDialogOpen(false);
