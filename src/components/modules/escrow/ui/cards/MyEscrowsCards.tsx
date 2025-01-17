@@ -73,6 +73,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                     </div>
                     <div className="mt-2 flex items-baseline">
                       <h3 className="text-2xl font-semibold">
+                        {formatDollar(escrow?.balance) || "N/A"} of{" "}
                         {formatDollar(escrow.amount) || "N/A"}
                       </h3>
                     </div>
