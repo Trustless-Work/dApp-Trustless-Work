@@ -17,7 +17,6 @@ import {
 } from "firebase/firestore";
 import { z } from "zod";
 import { formSchema } from "../schema/initialize-escrow-schema";
-import { Escrow } from "@/@types/escrow.entity";
 
 interface addEscrowProps {
   payload: z.infer<typeof formSchema>;

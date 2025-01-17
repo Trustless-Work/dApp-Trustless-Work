@@ -39,7 +39,7 @@ const useResolveDisputeEscrowDialogHook = ({
     try {
       const data = await resolveDispute({
         contractId: selectedEscrow?.contractId,
-        disputeResolver: selectedEscrow?.disputeResolver!,
+        disputeResolver: selectedEscrow?.disputeResolver,
         clientFunds: payload.clientFunds,
         serviceProviderFunds: payload.serviceProviderFunds,
       });
@@ -72,9 +72,7 @@ const useResolveDisputeEscrowDialogHook = ({
     }
   };
 
-  interface HandleOpenEvent extends MouseEvent<HTMLButtonElement> {}
-
-  const handleOpen = (e: HandleOpenEvent) => {
+  const handleOpen = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (Number(selectedEscrow?.balance) === 0) {

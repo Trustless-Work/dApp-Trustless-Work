@@ -1,6 +1,6 @@
 import { LuLayoutDashboard, LuContactRound } from "react-icons/lu";
 import { BookOpen } from "lucide-react";
-import { FaStackOverflow, FaWpforms } from "react-icons/fa";
+import { FaStackOverflow } from "react-icons/fa";
 import { MdOutlineBugReport } from "react-icons/md";
 import { GrHelpBook } from "react-icons/gr";
 

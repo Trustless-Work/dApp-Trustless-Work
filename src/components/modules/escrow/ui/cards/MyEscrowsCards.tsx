@@ -10,7 +10,6 @@ import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
-import { Progress, ProgressTwo } from "@/components/ui/progress";
 import ProgressEscrow from "../dialogs/components/ProgressEscrow";
 
 interface MyEscrowsCardsProps {

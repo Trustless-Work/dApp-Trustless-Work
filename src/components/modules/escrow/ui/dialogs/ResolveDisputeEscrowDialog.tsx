@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useGlobalBoundedStore } from "@/core/store/data";
 import { FormProvider } from "react-hook-form";
 import {
   FormControl,

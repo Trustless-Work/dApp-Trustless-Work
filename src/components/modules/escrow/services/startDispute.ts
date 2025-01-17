@@ -1,7 +1,4 @@
-import {
-  ChangeMilestoneFlagPayload,
-  StartDisputePayload,
-} from "@/@types/escrow.entity";
+import { StartDisputePayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/wallet/walletKit";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";

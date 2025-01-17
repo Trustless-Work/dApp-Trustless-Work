@@ -8,7 +8,7 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
-import { Escrow, EscrowPayload, Milestone } from "@/@types/escrow.entity";
+import { EscrowPayload } from "@/@types/escrow.entity";
 import { startDispute } from "../../../services/startDispute";
 
 const useStartDisputeEscrowDialogHook = () => {

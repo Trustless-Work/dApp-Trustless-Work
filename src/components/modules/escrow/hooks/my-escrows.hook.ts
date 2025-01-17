@@ -39,7 +39,7 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
     };
 
     fetchEscrows();
-  }, []);
+  });
 
   const toggleRowExpansion = (rowId: string) => {
     setExpandedRows((prev) =>
