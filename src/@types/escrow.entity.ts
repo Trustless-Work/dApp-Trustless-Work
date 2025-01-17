@@ -39,7 +39,8 @@ export type RolesInEscrow =
   | "issuer"
   | "client"
   | "disputeResolver"
-  | "serviceProvider";
+  | "serviceProvider"
+  | "releaseSigner";
 
 export type FundEscrowPayload = Pick<Escrow, "amount"> & {
   issuer: string;
@@ -60,4 +61,12 @@ export type ChangeMilestoneStatusPayload = {
   milestoneIndex: string;
   newStatus: MilestoneStatus;
   serviceProvider?: string;
+};
+
+export type ChangeMilestoneFlagPayload = Omit<
+  ChangeMilestoneStatusPayload,
+  "serviceProvider" | "newStatus"
+> & {
+  client?: string;
+  newFlag: boolean;
 };
