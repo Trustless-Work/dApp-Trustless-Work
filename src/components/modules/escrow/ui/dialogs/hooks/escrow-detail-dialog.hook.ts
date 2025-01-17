@@ -1,11 +1,20 @@
-import { Escrow, Milestone } from "@/@types/escrow.entity";
+import {
+  Escrow,
+  EscrowPayload,
+  Milestone,
+  MilestoneStatus,
+} from "@/@types/escrow.entity";
 import { statusMap, statusOptions } from "@/constants/escrow/StatusOptions";
 import { getUserRoleInEscrow } from "../../../server/escrow-firebase";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 import { useEffect, useState } from "react";
-import { useFormatUtils } from "@/utils/hook/format.hook";
 import { changeMilestoneStatus } from "../../../services/changeMilestoneStatus";
-import { distributeEscrowEarnings } from "../../../services/distributeEscrowEarnings";
+import { useEscrowBoundedStore } from "../../../store/ui";
+import { useToast } from "@/hooks/use-toast";
+import { changeMilestoneFlag } from "../../../services/changeMilestoneFlag";
 
 interface useEscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -19,10 +28,13 @@ const useEscrowDetailDialog = ({
   selectedEscrow,
 }: useEscrowDetailDialogProps) => {
   const [role, setRole] = useState<string | undefined>(undefined);
-  const { formatText } = useFormatUtils();
+  const { toast } = useToast();
 
   const address = useGlobalAuthenticationStore((state) => state.address);
-  // const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
+  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
+  const setIsChangingStatus = useEscrowBoundedStore(
+    (state) => state.setIsChangingStatus,
+  );
 
   const handleClose = () => {
     setIsDialogOpen(false);
@@ -33,6 +45,11 @@ const useEscrowDetailDialog = ({
     selectedEscrow?.milestones
       ?.map((milestone) => milestone.status)
       .every((status) => status === "completed") ?? false;
+
+  const areAllMilestonesCompletedAndFlag =
+    selectedEscrow?.milestones
+      ?.map((milestone) => milestone.flag)
+      .every((flag) => flag === true) ?? false;
 
   const getFilteredStatusOptions = (currentStatus: string | undefined) => {
     const nextStatuses = statusMap[currentStatus || ""] || [];
@@ -53,91 +70,114 @@ const useEscrowDetailDialog = ({
       if (selectedEscrow) {
         const roleData = await userRoleInEscrow();
 
-        setRole(formatText(roleData?.role));
+        setRole(roleData?.role);
       }
     };
 
     fetchRole();
   }, [selectedEscrow, userRoleInEscrow]);
 
-  const getButtonLabel = (status: string | undefined): string => {
-    const buttonLabels: Record<string, string> = {
-      pending: "Submit for Review",
-      approved: "Release Payment",
-      inDispute: "Resolve Dispute",
-    };
-
-    return buttonLabels[status || ""];
-  };
-
-  const handleButtonClick = (selectedEscrow: Escrow, milestone: Milestone) => {
+  const handleButtonClick = async (
+    selectedEscrow: Escrow,
+    milestone: Milestone,
+    index: number,
+  ) => {
     switch (milestone.status) {
-      // ! PASAR A ZUSTAND, PARA ACTUALIZAR FIREBASE Y STATE GLOBAL
-
       case "pending":
-        changeMilestoneStatus({
+        setIsChangingStatus(true);
+
+        await changeMilestoneStatus({
           contractId: selectedEscrow?.contractId,
-          milestoneIndex: "0",
+          milestoneIndex: index.toString(),
           newStatus: "completed",
-          // serviceProvider: selectedEscrow?.serviceProvider,
           serviceProvider: address,
         });
 
-        // updateEscrow({escrowId: selectedEscrow.id, payload: selectedEscrow.milestones[0]});
-        break;
-      case "forReview":
-        changeMilestoneStatus({
-          contractId: selectedEscrow?.contractId,
-          milestoneIndex: "0",
-          newStatus: "approved",
-          serviceProvider: selectedEscrow?.serviceProvider,
+        const updatedMilestonesStatus = selectedEscrow.milestones.map(
+          (m, i): Milestone =>
+            i === index
+              ? {
+                  ...m,
+                  status: "completed" as MilestoneStatus,
+                }
+              : m,
+        );
+
+        const updatedPayloadStatus: EscrowPayload = {
+          ...selectedEscrow,
+          milestones: updatedMilestonesStatus,
+        };
+
+        const responseStatus = await updateEscrow({
+          escrowId: selectedEscrow.id,
+          payload: updatedPayloadStatus,
         });
 
-        // updateEscrow({escrowId: selectedEscrow.id, payload: selectedEscrow.milestones[0]});
+        setIsChangingStatus(false);
+
+        if (responseStatus) {
+          handleClose();
+          toast({
+            title: "Success",
+            description: "The Milestone has been completed.",
+          });
+        }
+
         break;
-      case "approved":
-        changeMilestoneStatus({
+      case "completed":
+        setIsChangingStatus(true);
+
+        await changeMilestoneFlag({
           contractId: selectedEscrow?.contractId,
-          milestoneIndex: "0",
-          newStatus: "forReview",
-          serviceProvider: selectedEscrow?.serviceProvider,
+          milestoneIndex: index.toString(),
+          newFlag: true,
+          client: address,
         });
 
-        // updateEscrow({escrowId: selectedEscrow.id, payload: selectedEscrow.milestones[0]});
-        break;
-      case "inDispute":
-        changeMilestoneStatus({
-          contractId: selectedEscrow?.contractId,
-          milestoneIndex: "0",
-          newStatus: "forReview",
-          serviceProvider: selectedEscrow?.serviceProvider,
+        const updatedMilestonesFlag = selectedEscrow.milestones.map(
+          (m, i): Milestone =>
+            i === index
+              ? {
+                  ...m,
+                  flag: true,
+                }
+              : m,
+        );
+
+        const updatedPayloadFlag: EscrowPayload = {
+          ...selectedEscrow,
+          milestones: updatedMilestonesFlag,
+        };
+
+        const responseFlag = await updateEscrow({
+          escrowId: selectedEscrow.id,
+          payload: updatedPayloadFlag,
         });
 
-        // updateEscrow({escrowId: selectedEscrow.id, payload: selectedEscrow.milestones[0]});
+        setIsChangingStatus(false);
+
+        if (responseFlag) {
+          handleClose();
+          toast({
+            title: "Success",
+            description: "The Milestone has been approved.",
+          });
+        }
+
         break;
       default:
         console.log("No action available.");
     }
   };
 
-  const distributeEscrowEarningsRelease = async () => {
-    distributeEscrowEarnings({
-      contractId: selectedEscrow?.contractId,
-      signer: address,
-      serviceProvider: selectedEscrow?.serviceProvider,
-      releaseSigner: selectedEscrow?.releaseSigner,
-    });
-  };
-
   return {
     handleClose,
     areAllMilestonesCompleted,
+    areAllMilestonesCompletedAndFlag,
     getFilteredStatusOptions,
-    getButtonLabel,
     handleButtonClick,
     userRoleInEscrow,
     role,
-    distributeEscrowEarningsRelease,
   };
 };
 
