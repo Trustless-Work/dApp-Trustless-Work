@@ -75,3 +75,11 @@ export type ChangeMilestoneFlagPayload = Omit<
 export type StartDisputePayload = Pick<Escrow, "contractId"> & {
   signer: string;
 };
+
+export type ResolveDisputePayload = Pick<
+  Escrow,
+  "contractId" | "disputeResolver"
+> & {
+  clientFunds: string;
+  serviceProviderFunds: string;
+};
