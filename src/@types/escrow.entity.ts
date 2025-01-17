@@ -43,8 +43,8 @@ export type RolesInEscrow =
   | "serviceProvider"
   | "releaseSigner";
 
-export type FundEscrowPayload = Pick<Escrow, "amount"> & {
-  issuer: string;
+export type FundEscrowPayload = Pick<Escrow, "amount" | "contractId"> & {
+  signer: string;
 };
 
 export type DistributeEscrowEarningsEscrowPayload = Pick<Escrow, "contractId"> &
