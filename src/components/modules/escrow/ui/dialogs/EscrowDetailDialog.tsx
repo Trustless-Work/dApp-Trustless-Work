@@ -31,6 +31,8 @@ import useChangeStatusEscrowDialogHook from "./hooks/change-status-escrow-dialog
 import useChangeFlagEscrowDialogHook from "./hooks/change-flag-escrow-dialog.hook";
 import ProgressEscrow from "./components/ProgressEscrow";
 import useStartDisputeEscrowDialogHook from "./hooks/start-dispute-escrow-dialog.hook";
+import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
+import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -59,6 +61,14 @@ const EscrowDetailDialog = ({
   const { distributeEscrowEarningsSubmit } =
     useDistributeEarningsEscrowDialogHook();
 
+  const setIsResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsResolveDisputeDialogOpen,
+  );
+
+  const { handleOpen } = useResolveDisputeEscrowDialogHook({
+    setIsResolveDisputeDialogOpen,
+  });
+
   const { changeMilestoneStatusSubmit } = useChangeStatusEscrowDialogHook();
   const { startDisputeSubmit } = useStartDisputeEscrowDialogHook();
   const { changeMilestoneFlagSubmit } = useChangeFlagEscrowDialogHook();
@@ -76,6 +86,10 @@ const EscrowDetailDialog = ({
 
   const isChangingStatus = useEscrowBoundedStore(
     (state) => state.isChangingStatus,
+  );
+
+  const isResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.isResolveDisputeDialogOpen,
   );
 
   const { formatAddress, formatText, formatDollar, formatDateFromFirebase } =
@@ -222,7 +236,10 @@ const EscrowDetailDialog = ({
                 !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag &&
                 selectedEscrow.disputeFlag && (
-                  <Button className="w-full mt-3 bg-green-800 hover:bg-green-700">
+                  <Button
+                    className="w-full mt-3 bg-green-800 hover:bg-green-700"
+                    onClick={(e) => handleOpen(e)}
+                  >
                     Resolve Dispute
                   </Button>
                 )}
@@ -367,6 +384,12 @@ const EscrowDetailDialog = ({
       <QREscrowDialog
         isQRDialogOpen={isQRDialogOpen}
         setIsQRDialogOpen={setIsQRDialogOpen}
+      />
+
+      {/* Resolve Dispute Dialog */}
+      <ResolveDisputeEscrowDialog
+        isResolveDisputeDialogOpen={isResolveDisputeDialogOpen}
+        setIsResolveDisputeDialogOpen={setIsResolveDisputeDialogOpen}
       />
     </>
   );
