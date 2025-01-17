@@ -28,6 +28,8 @@ import QREscrowDialog from "./QREscrowDialog";
 import LoaderData from "@/components/utils/LoaderData";
 import { Badge } from "@/components/ui/badge";
 import useDistributeEarningsEscrowDialogHook from "./hooks/distribute-earnings-escrow-dialog.hook";
+import useChangeStatusEscrowDialogHook from "./hooks/change-status-escrow-dialog.hook";
+import useChangeFlagEscrowDialogHook from "./hooks/change-flag-escrow-dialog.hook";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -43,7 +45,6 @@ const EscrowDetailDialog = ({
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
   const {
-    handleButtonClick,
     handleClose,
     areAllMilestonesCompleted,
     areAllMilestonesCompletedAndFlag,
@@ -56,6 +57,10 @@ const EscrowDetailDialog = ({
 
   const { distributeEscrowEarningsSubmit } =
     useDistributeEarningsEscrowDialogHook();
+
+  const { changeMilestoneStatusSubmit } = useChangeStatusEscrowDialogHook();
+
+  const { changeMilestoneFlagSubmit } = useChangeFlagEscrowDialogHook();
 
   const isSecondDialogOpen = useEscrowBoundedStore(
     (state) => state.isSecondDialogOpen,
@@ -251,7 +256,7 @@ const EscrowDetailDialog = ({
                               <Button
                                 className="max-w-32"
                                 onClick={() =>
-                                  handleButtonClick(
+                                  changeMilestoneStatusSubmit(
                                     selectedEscrow,
                                     milestone,
                                     index,
@@ -268,7 +273,7 @@ const EscrowDetailDialog = ({
                               <Button
                                 className="max-w-32"
                                 onClick={() =>
-                                  handleButtonClick(
+                                  changeMilestoneFlagSubmit(
                                     selectedEscrow,
                                     milestone,
                                     index,
