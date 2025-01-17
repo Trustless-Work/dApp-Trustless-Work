@@ -13,7 +13,12 @@ import LoaderData from "@/components/utils/LoaderData";
 import { Progress } from "@/components/ui/progress";
 
 interface MyEscrowsCardsProps {
-  type: "issuer" | "client" | "disputeResolver" | "serviceProvider";
+  type:
+    | "issuer"
+    | "client"
+    | "disputeResolver"
+    | "serviceProvider"
+    | "releaseSigner";
 }
 
 const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
