@@ -31,7 +31,7 @@ const EscrowsPage = () => {
         <div className="flex gap-3 w-full h-full justify-between">
           <Tabs defaultValue="issuer" className="w-full">
             <div className="flex w-full justify-between items-center flex-col md:flex-row gap-16 md:gap-3">
-              <TabsList className="grid w-full sm:w-9/12 md:w-9/12 lg:w-3/5 grid-cols-2 sm:grid-cols-4 gap-4">
+              <TabsList className="grid w-full sm:w-9/12 md:w-9/12 lg:w-3/5 grid-cols-2 sm:grid-cols-5 gap-4">
                 <TabsTrigger
                   onClick={() => setActiveTab("issuer")}
                   value="issuer"
@@ -55,6 +55,12 @@ const EscrowsPage = () => {
                   value="dispute-resolver"
                 >
                   Dispute Resolver
+                </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => setActiveTab("releaseSigner")}
+                  value="release-signer"
+                >
+                  Release Signer
                 </TabsTrigger>
               </TabsList>
 
@@ -139,6 +145,21 @@ const EscrowsPage = () => {
                 </Card>
               ) : (
                 <MyEscrowsCards type="disputeResolver" />
+              )}
+            </TabsContent>
+
+            <TabsContent value="release-signer" className="flex flex-col gap-3">
+              <Card className={cn("overflow-hidden")}>
+                <CardContent className="p-6">
+                  <MyEscrowsFilter />
+                </CardContent>
+              </Card>
+              {activeMode === "table" ? (
+                <Card className={cn("overflow-hidden")}>
+                  <MyEscrowsTable type="releaseSigner" />
+                </Card>
+              ) : (
+                <MyEscrowsCards type="releaseSigner" />
               )}
             </TabsContent>
           </Tabs>
