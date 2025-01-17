@@ -2,10 +2,10 @@ import Header from "@/components/layout/header/Header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import SettingsSidebar from "./Sidebar";
 import useSettings from "./hooks/settings.hook";
-import ProfileSection from "./ProfileSection";
-import AppearanceSection from "./AppearanceSection";
-import PreferencesSection from "./PreferencesSection";
 import APIKeysSection from "./APIKeysSection";
+import ProfileSection from "./profileSection";
+import AppearanceSection from "./appearanceSection";
+import PreferencesSection from "./preferencesSection";
 
 const Settings = () => {
   const { currentTab, setCurrentTab, saveProfile, theme, toggleTheme } =

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { UserPayload } from "@/@types/user.entity";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { PreferencesForm } from "../PreferencesSection";
+import { PreferencesForm } from "./preferences-section.hook";
 
 const useSettings = () => {
   const [currentTab, setCurrentTab] = useState("profile");

@@ -10,17 +10,14 @@ import {
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import usePreferences from "./hooks/preferences-section.hook";
+import usePreferences, {
+  PreferencesForm,
+} from "./hooks/preferences-section.hook";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 interface PreferencesSectionProps {
   onSave: (data: PreferencesForm) => void;
-}
-
-export interface PreferencesForm {
-  identification?: string;
-  saveEscrow: boolean;
 }
 
 const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
