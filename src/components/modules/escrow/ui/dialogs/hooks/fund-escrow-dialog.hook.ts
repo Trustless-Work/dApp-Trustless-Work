@@ -60,14 +60,10 @@ const useFundEscrowDialogHook = ({
       }
     } catch (error: any) {
       setIsLoading(false);
-      const errorMessage =
-        error.response && error.response.data
-          ? error.response.data.message
-          : "An error occurred";
 
       toast({
         title: "Error",
-        description: errorMessage,
+        description: error.message,
         variant: "destructive",
       });
     }
