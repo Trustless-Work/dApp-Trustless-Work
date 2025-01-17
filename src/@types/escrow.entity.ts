@@ -33,6 +33,7 @@ export interface Escrow {
   releaseSigner: string;
   user: string;
   issuer: string;
+  disputeFlag?: boolean;
 }
 
 export type RolesInEscrow =
@@ -69,4 +70,8 @@ export type ChangeMilestoneFlagPayload = Omit<
 > & {
   client?: string;
   newFlag: boolean;
+};
+
+export type StartDisputePayload = Pick<Escrow, "contractId"> & {
+  signer: string;
 };
