@@ -9,7 +9,10 @@ import { formSchema } from "../../../schema/fund-escrow-schema";
 import { useToast } from "@/hooks/use-toast";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { fundEscrow } from "@/components/modules/escrow/services/fundEscrow";
-import { useGlobalAuthenticationStore, useGlobalBoundedStore } from "@/core/store/data";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
