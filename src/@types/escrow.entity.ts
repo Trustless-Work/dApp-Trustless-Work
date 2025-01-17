@@ -76,10 +76,8 @@ export type StartDisputePayload = Pick<Escrow, "contractId"> & {
   signer: string;
 };
 
-export type ResolveDisputePayload = Pick<
-  Escrow,
-  "contractId" | "disputeResolver"
-> & {
-  clientFunds: string;
-  serviceProviderFunds: string;
-};
+export type ResolveDisputePayload = Pick<Escrow, "contractId"> &
+  Partial<Pick<Escrow, "disputeResolver">> & {
+    clientFunds: string;
+    serviceProviderFunds: string;
+  };
