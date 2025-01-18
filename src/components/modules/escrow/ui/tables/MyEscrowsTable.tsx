@@ -23,10 +23,14 @@ import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/NoData";
 import { useEscrowBoundedStore } from "../../store/ui";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
-import { useGlobalBoundedStore } from "@/core/store/data";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
 import ExpandableContent from "./expandable/ExpandableContent";
 import { IoAlertCircleOutline } from "react-icons/io5";
+import SuccessDialog from "../dialogs/SuccessDialog";
 
 interface MyEscrowsTableProps {
   type:
@@ -46,6 +50,14 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
     (state) => state.setSelectedEscrow,
   );
   const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
+  const isSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessDialogOpen,
+  );
+  const setIsSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessDialogOpen,
+  );
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
+  const recentEscrowId = useGlobalBoundedStore((state) => state.recentEscrowId);
 
   const {
     currentData,
@@ -187,12 +199,19 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
       ) : (
         <NoData />
       )}
-
       {/* Dialog */}
       <EscrowDetailDialog
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
         setSelectedEscrow={setSelectedEscrow}
+      />
+      {/* Success Dialog */}
+      <SuccessDialog
+        isSuccessDialogOpen={isSuccessDialogOpen}
+        setIsSuccessDialogOpen={setIsSuccessDialogOpen}
+        title={`${loggedUser?.saveEscrow ? "Escrow initialized successfully" : "Escrow initialized successfully, but according to your settings, it was not saved"}`}
+        description="Now that your escrow is initialized, you will be able to view it directly in"
+        contractId={recentEscrowId}
       />
     </div>
   );
