@@ -30,7 +30,7 @@ import {
 import LoaderData from "@/components/utils/LoaderData";
 import ExpandableContent from "./expandable/ExpandableContent";
 import { IoAlertCircleOutline } from "react-icons/io5";
-import SuccessDialog from "../dialogs/SuccessDialog";
+import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
 
 interface MyEscrowsTableProps {
   type:
@@ -56,8 +56,14 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   const setIsSuccessDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
   );
+  const isSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessReleaseDialogOpen,
+  );
+  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessReleaseDialogOpen,
+  );
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
-  const recentEscrowId = useGlobalBoundedStore((state) => state.recentEscrowId);
+  const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
 
   const {
     currentData,
@@ -211,7 +217,15 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
         setIsSuccessDialogOpen={setIsSuccessDialogOpen}
         title={`${loggedUser?.saveEscrow ? "Escrow initialized successfully" : "Escrow initialized successfully, but according to your settings, it was not saved"}`}
         description="Now that your escrow is initialized, you will be able to view it directly in"
-        contractId={recentEscrowId}
+        recentEscrow={recentEscrow}
+      />
+      {/* Success Release Dialog */}
+      <SuccessReleaseDialog
+        isSuccessReleaseDialogOpen={isSuccessReleaseDialogOpen}
+        setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
+        title={"Escrow released successfully"}
+        description="Now that your escrow is released, you will be able to view it directly in"
+        recentEscrow={recentEscrow}
       />
     </div>
   );
