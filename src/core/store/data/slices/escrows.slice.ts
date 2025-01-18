@@ -36,7 +36,7 @@ export const useGlobalEscrowsSlice: StateCreator<
     escrowsToDelete: [],
     selectedEscrow: null,
     userRoleInEscrow: undefined,
-    recentEscrowId: undefined,
+    recentEscrow: undefined,
 
     // Modifiers
     setEscrows: (escrows: Escrow[]) =>
@@ -139,8 +139,8 @@ export const useGlobalEscrowsSlice: StateCreator<
     setUserRoleInEscrow: (role) =>
       set({ userRoleInEscrow: role }, false, ESCROW_ACTIONS.SET_USER_ROLE),
 
-    setRecentEscrowId: (escrowId) => {
-      set({ recentEscrowId: escrowId });
+    setRecentEscrow: (escrow: Escrow | undefined) => {
+      set({ recentEscrow: escrow });
     },
 
     //   fetchDeleteProduct: async (productId) => {
