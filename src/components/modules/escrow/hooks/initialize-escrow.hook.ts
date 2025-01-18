@@ -83,7 +83,7 @@ export const useInitializeEscrowHook = () => {
 
           toast({
             title: "Success",
-            description: data.message,
+            description: "Escrow initialized successfully",
           });
         } else {
           toast({
