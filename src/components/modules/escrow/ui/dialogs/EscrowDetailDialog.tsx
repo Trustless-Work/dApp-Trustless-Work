@@ -51,7 +51,7 @@ const EscrowDetailDialog = ({
     handleClose,
     areAllMilestonesCompleted,
     areAllMilestonesCompletedAndFlag,
-    role,
+    userRoleInEscrow,
   } = useEscrowDetailDialog({
     setIsDialogOpen,
     setSelectedEscrow,
@@ -116,7 +116,7 @@ const EscrowDetailDialog = ({
                   {selectedEscrow.description}
                 </DialogDescription>
                 <DialogDescription>
-                  <strong>Role:</strong> {formatText(role)}{" "}
+                  <strong>Role:</strong> {formatText(userRoleInEscrow)}{" "}
                 </DialogDescription>
               </div>
             </div>
@@ -223,7 +223,8 @@ const EscrowDetailDialog = ({
               </Button>
 
               {/* AQUI SE DEBE VALIDAR QUE SI EL ESCROW ESTA EN DISPUTA A NIVEL GLOBAL, NO SE HACE PORQUE LUEGO SERA POR MILESTONE */}
-              {(role == "client" || role == "serviceProvider") &&
+              {(userRoleInEscrow == "client" ||
+                userRoleInEscrow == "serviceProvider") &&
                 !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag &&
                 !selectedEscrow.disputeFlag && (
@@ -236,7 +237,7 @@ const EscrowDetailDialog = ({
                   </Button>
                 )}
 
-              {role == "disputeResolver" &&
+              {userRoleInEscrow == "disputeResolver" &&
                 !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag &&
                 selectedEscrow.disputeFlag && (
@@ -311,7 +312,7 @@ const EscrowDetailDialog = ({
                             placeholder="Milestone Description"
                           />
 
-                          {role == "serviceProvider" &&
+                          {userRoleInEscrow == "serviceProvider" &&
                             milestone.status !== "completed" &&
                             !milestone.flag && (
                               <Button
@@ -328,7 +329,7 @@ const EscrowDetailDialog = ({
                               </Button>
                             )}
 
-                          {role == "client" &&
+                          {userRoleInEscrow == "client" &&
                             milestone.status === "completed" &&
                             !milestone.flag && (
                               <Button
@@ -365,7 +366,7 @@ const EscrowDetailDialog = ({
             </p>
             {areAllMilestonesCompleted &&
               areAllMilestonesCompletedAndFlag &&
-              role === "releaseSigner" && (
+              userRoleInEscrow === "releaseSigner" && (
                 <Button
                   onClick={distributeEscrowEarningsSubmit}
                   type="button"
