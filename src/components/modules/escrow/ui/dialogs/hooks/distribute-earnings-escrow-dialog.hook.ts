@@ -9,7 +9,6 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { distributeEscrowEarnings } from "../../../services/distributeEscrowEarnings";
-import SuccessDialog from "../SuccessDialog";
 
 const useDistributeEarningsEscrowDialogHook = () => {
   const { toast } = useToast();
@@ -18,15 +17,19 @@ const useDistributeEarningsEscrowDialogHook = () => {
     (state) => state.setIsChangingStatus,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const isSuccessDialogOpen = useEscrowBoundedStore(
-    (state) => state.isSuccessDialogOpen,
+  const setIsDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsDialogOpen,
   );
-  const setIsSuccessDialogOpen = useEscrowBoundedStore(
-    (state) => state.setIsSuccessDialogOpen,
+  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessReleaseDialogOpen,
+  );
+  const setRecentEscrow = useGlobalBoundedStore(
+    (state) => state.setRecentEscrow,
   );
 
   const distributeEscrowEarningsSubmit = async () => {
     setIsChangingStatus(true);
+    setIsSuccessReleaseDialogOpen(false);
 
     try {
       const data = await distributeEscrowEarnings({
@@ -37,19 +40,11 @@ const useDistributeEarningsEscrowDialogHook = () => {
       });
 
       if (data.status === "SUCCESS" || data.status === 201) {
-        <SuccessDialog
-          isSuccessDialogOpen={isSuccessDialogOpen}
-          setIsSuccessDialogOpen={setIsSuccessDialogOpen}
-          title="Earnings distributed successfully."
-          description="The earnings have been distributed successfully."
-        />;
-      } else {
-        setIsChangingStatus(false);
-        toast({
-          title: "Error",
-          description: data.message || "An error occurred",
-          variant: "destructive",
-        });
+        setIsSuccessReleaseDialogOpen(true);
+        setIsDialogOpen(false);
+        if (selectedEscrow) {
+          setRecentEscrow(selectedEscrow);
+        }
       }
     } catch (error: any) {
       setIsChangingStatus(false);

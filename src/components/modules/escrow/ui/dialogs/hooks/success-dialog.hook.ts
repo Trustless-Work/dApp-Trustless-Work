@@ -9,13 +9,13 @@ interface useSuccessDialogProps {
 const useSuccessDialogHook = ({
   setIsSuccessDialogOpen,
 }: useSuccessDialogProps) => {
-  const setRecentEscrowId = useGlobalBoundedStore(
-    (state) => state.setRecentEscrowId,
+  const setRecentEscrow = useGlobalBoundedStore(
+    (state) => state.setRecentEscrow,
   );
 
   const handleClose = () => {
     setIsSuccessDialogOpen(false);
-    setRecentEscrowId(undefined);
+    setRecentEscrow(undefined);
   };
 
   return { handleClose };
