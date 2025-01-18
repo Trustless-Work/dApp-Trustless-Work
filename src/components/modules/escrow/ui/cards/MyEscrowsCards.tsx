@@ -8,9 +8,13 @@ import { Input } from "@/components/ui/input";
 import NoData from "@/components/utils/NoData";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
-import { useGlobalBoundedStore } from "@/core/store/data";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
 import ProgressEscrow from "../dialogs/components/ProgressEscrow";
+import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
 
 interface MyEscrowsCardsProps {
   type:
@@ -30,6 +34,20 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
     (state) => state.setSelectedEscrow,
   );
   const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
+  const isSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessDialogOpen,
+  );
+  const setIsSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessDialogOpen,
+  );
+  const isSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessReleaseDialogOpen,
+  );
+  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessReleaseDialogOpen,
+  );
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
+  const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
 
   const {
     currentData,
@@ -140,6 +158,24 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
         setSelectedEscrow={setSelectedEscrow}
+      />
+
+      {/* Success Dialog */}
+      <SuccessDialog
+        isSuccessDialogOpen={isSuccessDialogOpen}
+        setIsSuccessDialogOpen={setIsSuccessDialogOpen}
+        title={`${loggedUser?.saveEscrow ? "Escrow initialized successfully" : "Escrow initialized successfully, but according to your settings, it was not saved"}`}
+        description="Now that your escrow is initialized, you will be able to view it directly in"
+        recentEscrow={recentEscrow}
+      />
+
+      {/* Success Release Dialog */}
+      <SuccessReleaseDialog
+        isSuccessReleaseDialogOpen={isSuccessReleaseDialogOpen}
+        setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
+        title={"Escrow released successfully"}
+        description="Now that your escrow is released, you will be able to view it directly in"
+        recentEscrow={recentEscrow}
       />
     </>
   );
