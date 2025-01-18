@@ -15,16 +15,24 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
+import { useEscrowBoundedStore } from "../store/ui";
+import { useStepsStore } from "@/store/stepsStore/store";
 
 export const useInitializeEscrowHook = () => {
   const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
-  console.log(loggedUser);
   const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const { formData, setFormData, resetForm } = useEscrowFormStore();
   const router = useRouter();
+  const setIsSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessDialogOpen,
+  );
+  const resetSteps = useStepsStore((state) => state.resetSteps);
+  const setRecentEscrowId = useGlobalBoundedStore(
+    (state) => state.setRecentEscrowId,
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,6 +79,7 @@ export const useInitializeEscrowHook = () => {
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     setFormData(payload);
     setIsLoading(true);
+    setIsSuccessDialogOpen(false);
 
     try {
       const data = await initializeEscrow(
@@ -78,27 +87,19 @@ export const useInitializeEscrowHook = () => {
         address,
       );
       if (data.status === "SUCCESS" || data.status === 201) {
+        setIsSuccessDialogOpen(true);
         if (loggedUser?.saveEscrow) {
           await addEscrow(data.escrow, address, data.contract_id);
-
-          toast({
-            title: "Success",
-            description: "Escrow initialized successfully",
-          });
-        } else {
-          toast({
-            title: "Attention!",
-            description:
-              "According to your preferences, the escrow was not saved in our database. But it was sent to Stellar Network",
-            variant: "default",
-          });
         }
 
+        setRecentEscrowId(data.contract_id);
+        resetSteps();
         form.reset();
         resetForm();
         router.push("/dashboard/escrow/my-escrows");
         setIsLoading(false);
       } else {
+        resetSteps();
         setIsLoading(false);
         toast({
           title: "Error",
