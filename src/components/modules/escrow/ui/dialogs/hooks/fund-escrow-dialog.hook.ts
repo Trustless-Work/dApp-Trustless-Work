@@ -52,7 +52,7 @@ const useFundEscrowDialogHook = ({
 
         toast({
           title: "Success",
-          description: data.message,
+          description: "Escrow funded successfully",
         });
       } else {
         setIsFundingEscrow(false);
