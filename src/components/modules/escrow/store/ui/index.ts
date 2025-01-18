@@ -44,15 +44,12 @@ const devtoolsOptions: DevtoolsOptions = {
 
 export const useEscrowBoundedStore = create<GlobalState>()(
   devtools(
-    persist(
-      (...a) => ({
-        ...useEscrowDialogSlice(...a),
-        ...useEscrowTabSlice(...a),
-        ...useEscrowViewModeSlice(...a),
-        ...useEscrowLoadersSlice(...a),
-      }),
-      { name: "escrow-store" },
-    ),
+    (...a) => ({
+      ...useEscrowDialogSlice(...a),
+      ...useEscrowTabSlice(...a),
+      ...useEscrowViewModeSlice(...a),
+      ...useEscrowLoadersSlice(...a),
+    }),
     devtoolsOptions,
   ),
 );
