@@ -14,6 +14,7 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
+import { use } from "react";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
@@ -27,6 +28,15 @@ const useFundEscrowDialogHook = ({
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsFundingEscrow = useEscrowBoundedStore(
     (state) => state.setIsFundingEscrow,
+  );
+  const setIsDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsDialogOpen,
+  );
+  const fetchAllEscrows = useGlobalBoundedStore(
+    (state) => state.fetchAllEscrows,
+  );
+  const userRoleInEscrow = useGlobalBoundedStore(
+    (state) => state.userRoleInEscrow,
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,6 +59,8 @@ const useFundEscrowDialogHook = ({
         form.reset();
         setIsSecondDialogOpen(false);
         setIsFundingEscrow(false);
+        setIsDialogOpen(false);
+        fetchAllEscrows({ address, type: userRoleInEscrow || "client" });
 
         toast({
           title: "Success",
