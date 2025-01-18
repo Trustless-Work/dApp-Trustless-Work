@@ -7,14 +7,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "../../../schema/fund-escrow-schema";
 import { useToast } from "@/hooks/use-toast";
-import { useLoaderStore } from "@/store/utilsStore/store";
 import { fundEscrow } from "@/components/modules/escrow/services/fundEscrow";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
-import { use } from "react";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;

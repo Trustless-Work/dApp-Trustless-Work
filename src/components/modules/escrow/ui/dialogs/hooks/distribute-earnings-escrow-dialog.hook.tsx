@@ -9,6 +9,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { distributeEscrowEarnings } from "../../../services/distributeEscrowEarnings";
+import SuccessDialog from "../SuccessDialog";
 
 const useDistributeEarningsEscrowDialogHook = () => {
   const { toast } = useToast();
@@ -17,6 +18,12 @@ const useDistributeEarningsEscrowDialogHook = () => {
     (state) => state.setIsChangingStatus,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const isSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessDialogOpen,
+  );
+  const setIsSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessDialogOpen,
+  );
 
   const distributeEscrowEarningsSubmit = async () => {
     setIsChangingStatus(true);
@@ -29,13 +36,13 @@ const useDistributeEarningsEscrowDialogHook = () => {
         releaseSigner: selectedEscrow?.releaseSigner,
       });
 
-      console.log(data);
-
       if (data.status === "SUCCESS" || data.status === 201) {
-        toast({
-          title: "Success",
-          description: data.message,
-        });
+        <SuccessDialog
+          isSuccessDialogOpen={isSuccessDialogOpen}
+          setIsSuccessDialogOpen={setIsSuccessDialogOpen}
+          title="Earnings distributed successfully."
+          description="The earnings have been distributed successfully."
+        />;
       } else {
         setIsChangingStatus(false);
         toast({
