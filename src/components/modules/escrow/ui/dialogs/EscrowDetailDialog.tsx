@@ -88,6 +88,10 @@ const EscrowDetailDialog = ({
     (state) => state.isChangingStatus,
   );
 
+  const isStartingDispute = useEscrowBoundedStore(
+    (state) => state.isStartingDispute,
+  );
+
   const isResolveDisputeDialogOpen = useEscrowBoundedStore(
     (state) => state.isResolveDisputeDialogOpen,
   );
@@ -275,7 +279,7 @@ const EscrowDetailDialog = ({
               {/* Milestones */}
               <div className="flex justify-center w-full mt-5">
                 <div className="flex flex-col gap-4 py-4 w-full md:w-2/3">
-                  {isChangingStatus ? (
+                  {isChangingStatus || isStartingDispute ? (
                     <LoaderData />
                   ) : (
                     <div className="space-y-4">
