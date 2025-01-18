@@ -20,7 +20,7 @@ export const useInitializeEscrowHook = () => {
   const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
-
+  console.log(loggedUser);
   const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const { formData, setFormData, resetForm } = useEscrowFormStore();

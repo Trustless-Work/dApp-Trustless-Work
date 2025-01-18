@@ -32,7 +32,7 @@ const addUser = async ({
       await setDoc(userDoc, {
         address,
         createdAt: new Date(),
-        saveEscrow: false,
+        saveEscrow: true,
       });
 
       return {
@@ -41,6 +41,7 @@ const addUser = async ({
         data: {
           id: userDoc.id,
           address,
+          saveEscrow: true,
         },
       };
     } else {
