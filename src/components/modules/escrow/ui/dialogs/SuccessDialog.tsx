@@ -13,13 +13,15 @@ import Image from "next/image";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { cn } from "@/lib/utils";
-import { FaRegCopy } from "react-icons/fa";
 import { LuCheck, LuClipboard } from "react-icons/lu";
+import { Escrow } from "@/@types/escrow.entity";
+import EntityCard from "./components/EntityCard";
+import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
 
 interface SuccessDialogProps {
   title: string;
   description: string;
-  contractId?: string;
+  recentEscrow?: Escrow;
   isSuccessDialogOpen: boolean;
   setIsSuccessDialogOpen: (value: boolean) => void;
 }
@@ -27,7 +29,7 @@ interface SuccessDialogProps {
 const SuccessDialog = ({
   title,
   description,
-  contractId,
+  recentEscrow,
   isSuccessDialogOpen,
   setIsSuccessDialogOpen,
 }: SuccessDialogProps) => {
@@ -43,7 +45,7 @@ const SuccessDialog = ({
           <DialogDescription className="mb-5">
             {description}{" "}
             <Link
-              href={`https://stellar.expert/explorer/testnet/contract/${contractId}`}
+              href={`https://stellar.expert/explorer/testnet/contract/${recentEscrow?.contractId}`}
               className="text-primary"
               target="_blank"
             >
@@ -66,10 +68,12 @@ const SuccessDialog = ({
           <span className="font-bold mt-3">Escrow ID:</span>
           <div className="flex gap-3 items-center">
             <div className="flex flex-col items-center justify-center">
-              <p className="truncate text-xs">{formatAddress(contractId)}</p>
+              <p className="truncate text-xs">
+                {formatAddress(recentEscrow?.contractId)}
+              </p>
             </div>
             <button
-              onClick={() => copyText(contractId)}
+              onClick={() => copyText(recentEscrow?.contractId)}
               className="hover:bg-muted rounded-md transition-colors"
               title="Copy address"
             >
@@ -87,6 +91,99 @@ const SuccessDialog = ({
               )}
             </button>
           </div>
+        </div>
+
+        <DialogFooter>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+interface SuccessReleaseDialogProps {
+  title: string;
+  description: string;
+  recentEscrow?: Escrow;
+  isSuccessReleaseDialogOpen: boolean;
+  setIsSuccessReleaseDialogOpen: (value: boolean) => void;
+}
+
+export const SuccessReleaseDialog = ({
+  title,
+  description,
+  recentEscrow,
+  isSuccessReleaseDialogOpen,
+  setIsSuccessReleaseDialogOpen,
+}: SuccessReleaseDialogProps) => {
+  const { handleClose } = useSuccessReleaseDialogHook({
+    setIsSuccessReleaseDialogOpen,
+  });
+
+  const { formatDollar } = useFormatUtils();
+
+  // Percentage
+  const trustlessPercentage = 3;
+  const platformFee = Number(recentEscrow?.platformFee || 0);
+  const totalAmount = Number(recentEscrow?.amount || 0);
+  const serviceProviderPercentage = 100 - (trustlessPercentage + platformFee);
+
+  // Amount
+  const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
+  const platformAmount = totalAmount * platformFee;
+  const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
+
+  return (
+    <Dialog open={isSuccessReleaseDialogOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="mb-5">
+            {description}{" "}
+            <Link
+              href={`https://stellar.expert/explorer/testnet/contract/${recentEscrow?.contractId}`}
+              className="text-primary"
+              target="_blank"
+            >
+              Stellar Explorer
+            </Link>
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-between mt-5">
+          <p className="text-xs">
+            <span className="font-bold">Total Amount: </span>
+            {formatDollar(recentEscrow?.amount)}
+          </p>
+          <p className="text-xs">
+            <span className="font-bold">Total Balance:</span>{" "}
+            {formatDollar(recentEscrow?.balance)}
+          </p>
+        </div>
+        <div className="flex flex-col gap-4">
+          <EntityCard
+            type="Service Provider"
+            entity={recentEscrow?.serviceProvider!}
+            hasPercentage={true}
+            percentage={serviceProviderPercentage.toString()}
+            hasAmount={true}
+            amount={serviceProviderAmount.toString()}
+          />
+          <EntityCard
+            type="Trustless Work"
+            entity={"0x"}
+            hasPercentage={true}
+            percentage={trustlessPercentage.toString()}
+            hasAmount={true}
+            amount={trustlessAmount.toString()}
+          />
+          <EntityCard
+            type="Platform"
+            entity={recentEscrow?.platformAddress!}
+            hasPercentage={true}
+            percentage={platformFee.toString()}
+            hasAmount={true}
+            amount={platformAmount.toString()}
+          />
         </div>
 
         <DialogFooter>
