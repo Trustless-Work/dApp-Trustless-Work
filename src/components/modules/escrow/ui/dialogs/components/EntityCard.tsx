@@ -22,7 +22,7 @@ const EntityCard = ({
   return (
     <div className={`flex flex-col w-full`}>
       <h3 className="font-bold text-xs ml-2 mb-2 flex justify-between">
-        <span className={`${inDispute && "text-red-800"}`}>{type}</span>
+        <span className={`${inDispute && "text-destructive"}`}>{type}</span>
         {hasPercentage && (
           <span className="text-green-700 font-black">{percentage}%</span>
         )}
