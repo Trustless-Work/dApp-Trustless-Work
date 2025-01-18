@@ -1,4 +1,4 @@
-import { devtools, DevtoolsOptions } from "zustand/middleware";
+import { devtools, DevtoolsOptions, persist } from "zustand/middleware";
 import { create } from "zustand";
 import { useEscrowDialogSlice } from "./slices/dialogs.slice";
 import { DialogEscrowStore } from "./@types/dialogs.entity";
@@ -44,12 +44,15 @@ const devtoolsOptions: DevtoolsOptions = {
 
 export const useEscrowBoundedStore = create<GlobalState>()(
   devtools(
-    (...a) => ({
-      ...useEscrowDialogSlice(...a),
-      ...useEscrowTabSlice(...a),
-      ...useEscrowViewModeSlice(...a),
-      ...useEscrowLoadersSlice(...a),
-    }),
+    persist(
+      (...a) => ({
+        ...useEscrowDialogSlice(...a),
+        ...useEscrowTabSlice(...a),
+        ...useEscrowViewModeSlice(...a),
+        ...useEscrowLoadersSlice(...a),
+      }),
+      { name: "escrow-store" },
+    ),
     devtoolsOptions,
   ),
 );

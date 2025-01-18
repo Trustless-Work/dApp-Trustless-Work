@@ -13,6 +13,7 @@ export const useEscrowDialogSlice: StateCreator<
     isSecondDialogOpen: false,
     isQRDialogOpen: false,
     isResolveDisputeDialogOpen: false,
+    isSuccessDialogOpen: false,
 
     // Modifiers
     setIsDialogOpen: (value: boolean) => set({ isDialogOpen: value }),
@@ -21,5 +22,7 @@ export const useEscrowDialogSlice: StateCreator<
     setIsQRDialogOpen: (value: boolean) => set({ isQRDialogOpen: value }),
     setIsResolveDisputeDialogOpen: (value: boolean) =>
       set({ isResolveDisputeDialogOpen: value }),
+    setIsSuccessDialogOpen: (value: boolean) =>
+      set({ isSuccessDialogOpen: value }),
   };
 };
