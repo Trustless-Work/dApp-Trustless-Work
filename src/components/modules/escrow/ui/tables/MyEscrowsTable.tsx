@@ -26,6 +26,7 @@ import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
 import ExpandableContent from "./expandable/ExpandableContent";
+import { IoAlertCircleOutline } from "react-icons/io5";
 
 interface MyEscrowsTableProps {
   type:
@@ -135,6 +136,15 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           {expandedRows.includes(escrow.id) ? "-" : "+"}
                         </p>
                       </TableCell>
+                      {escrow.disputeFlag && (
+                        <TableCell>
+                          <IoAlertCircleOutline
+                            className="text-destructive"
+                            size={22}
+                            title="This escrow is in dispute"
+                          />
+                        </TableCell>
+                      )}
                     </TableRow>
                     {escrow.milestones && expandedRows.includes(escrow.id) && (
                       <TableRow>
