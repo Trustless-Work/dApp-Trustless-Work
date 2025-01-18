@@ -125,23 +125,25 @@ const EscrowDetailDialog = ({
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
             {/* Amount and Balance Cards */}
 
-            <Card
-              className={cn(
-                "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
-              )}
-            >
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-muted-foreground">
-                    Status
-                  </p>
-                  <MdOutlineCancel size={30} />
-                </div>
-                <div className="mt-2 flex items-baseline">
-                  <h3 className="text-2xl font-semibold">In Dispute</h3>
-                </div>
-              </CardContent>
-            </Card>
+            {selectedEscrow.disputeFlag && (
+              <Card
+                className={cn(
+                  "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
+                )}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Status
+                    </p>
+                    <MdOutlineCancel className="text-destructive" size={30} />
+                  </div>
+                  <div className="mt-2 flex items-baseline">
+                    <h3 className="text-2xl font-semibold">In Dispute</h3>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             <Card
               className={cn(
@@ -222,7 +224,6 @@ const EscrowDetailDialog = ({
                 Fund Escrow
               </Button>
 
-              {/* AQUI SE DEBE VALIDAR QUE SI EL ESCROW ESTA EN DISPUTA A NIVEL GLOBAL, NO SE HACE PORQUE LUEGO SERA POR MILESTONE */}
               {(userRoleInEscrow == "client" ||
                 userRoleInEscrow == "serviceProvider") &&
                 !areAllMilestonesCompleted &&
