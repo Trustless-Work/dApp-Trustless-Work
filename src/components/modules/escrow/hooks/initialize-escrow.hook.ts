@@ -30,8 +30,8 @@ export const useInitializeEscrowHook = () => {
     (state) => state.setIsSuccessDialogOpen,
   );
   const resetSteps = useStepsStore((state) => state.resetSteps);
-  const setRecentEscrowId = useGlobalBoundedStore(
-    (state) => state.setRecentEscrowId,
+  const setRecentEscrow = useGlobalBoundedStore(
+    (state) => state.setRecentEscrow,
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -82,17 +82,29 @@ export const useInitializeEscrowHook = () => {
     setIsSuccessDialogOpen(false);
 
     try {
+      const platformFeeDecimal = Number(payload.platformFee) / 100;
+
       const data = await initializeEscrow(
-        { ...payload, issuer: address },
+        {
+          ...payload,
+          platformFee: platformFeeDecimal.toString(),
+          issuer: address,
+        },
         address,
       );
+
       if (data.status === "SUCCESS" || data.status === 201) {
         setIsSuccessDialogOpen(true);
+
         if (loggedUser?.saveEscrow) {
-          await addEscrow(data.escrow, address, data.contract_id);
+          await addEscrow(
+            { ...data.escrow, platformFee: platformFeeDecimal.toString() },
+            address,
+            data.contract_id,
+          );
         }
 
-        setRecentEscrowId(data.contract_id);
+        setRecentEscrow({ ...data.escrow, contractId: data.contract_id });
         resetSteps();
         form.reset();
         resetForm();
@@ -101,6 +113,7 @@ export const useInitializeEscrowHook = () => {
       } else {
         resetSteps();
         setIsLoading(false);
+        setIsSuccessDialogOpen(false);
         toast({
           title: "Error",
           description: data.message || "An error occurred",
@@ -109,6 +122,7 @@ export const useInitializeEscrowHook = () => {
       }
     } catch (error: any) {
       setIsLoading(false);
+      setIsSuccessDialogOpen(false);
 
       toast({
         title: "Error",
