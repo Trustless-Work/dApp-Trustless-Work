@@ -1,4 +1,4 @@
-import { devtools, DevtoolsOptions, persist } from "zustand/middleware";
+import { devtools, DevtoolsOptions } from "zustand/middleware";
 import { create } from "zustand";
 import { useEscrowDialogSlice } from "./slices/dialogs.slice";
 import { DialogEscrowStore } from "./@types/dialogs.entity";
