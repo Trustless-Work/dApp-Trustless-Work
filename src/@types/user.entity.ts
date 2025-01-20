@@ -9,6 +9,7 @@ export interface User {
   phone?: string;
   country?: string;
   saveEscrow?: boolean;
+  useCase?: string;
 }
 
 export type UserPayload = Omit<User, "createdAt" | "updatedAt" | "id">;
