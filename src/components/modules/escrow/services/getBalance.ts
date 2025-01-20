@@ -1,10 +1,10 @@
 import http from "@/core/config/axios/http";
 import axios from "axios";
 
-export const getBalance = async (address: string, addresses: string[]) => {
+export const getBalance = async (signer: string, addresses: string[]) => {
   try {
     const response = await http.get("/helper/get-multiple-escrow-balance", {
-      params: { addresses, signer: address },
+      params: { addresses, signer },
     });
 
     return response;
