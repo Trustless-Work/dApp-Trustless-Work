@@ -98,7 +98,7 @@ const EscrowDetailDialog = ({
 
   const { formatAddress, formatText, formatDollar, formatDateFromFirebase } =
     useFormatUtils();
-  const { copyText, copySuccess } = useCopyUtils();
+  const { copyText, copiedKeyId } = useCopyUtils();
 
   if (!isDialogOpen || !selectedEscrow) return null;
 
@@ -192,11 +192,16 @@ const EscrowDetailDialog = ({
                 <div className="flex items-center justify-center">
                   {formatAddress(selectedEscrow.contractId)}
                   <button
-                    onClick={() => copyText(selectedEscrow.contractId)}
+                    onClick={() =>
+                      copyText(
+                        selectedEscrow?.contractId,
+                        selectedEscrow.contractId,
+                      )
+                    }
                     className="p-1.5 hover:bg-muted rounded-md transition-colors"
                     title="Copy Escrow ID"
                   >
-                    {copySuccess ? (
+                    {copiedKeyId ? (
                       <FaCheck className={cn("h-4 w-4 text-green-700")} />
                     ) : (
                       <FaRegCopy className={cn("h-4 w-4")} />
