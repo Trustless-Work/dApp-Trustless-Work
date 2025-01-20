@@ -123,7 +123,7 @@ export const SuccessReleaseDialog = ({
   const { formatDollar } = useFormatUtils();
 
   // Percentage
-  const trustlessPercentage = 3;
+  const trustlessPercentage = 0.3;
   const platformFee = Number(recentEscrow?.platformFee || 0);
   const totalAmount = Number(recentEscrow?.amount || 0);
   const serviceProviderPercentage = 100 - (trustlessPercentage + platformFee);
