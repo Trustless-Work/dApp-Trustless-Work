@@ -10,7 +10,7 @@ import { UserPayload } from "@/@types/user.entity";
 const AUTHENTICATION_ACTIONS = {
   CONNECT_WALLET: "authentication/connect",
   DISCONNECT_WALLET: "authentication/disconnect",
-  UPDATE_USER: "authentication/updateUser", // Nueva acción
+  UPDATE_USER: "authentication/updateUser",
 } as const;
 
 export const useGlobalAuthenticationSlice: StateCreator<
