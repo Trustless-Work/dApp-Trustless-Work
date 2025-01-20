@@ -6,7 +6,7 @@ POC of a decentralized application (dApp) to enhance trust in agency-client rela
 
 ---
 
-![image](https://github.com/user-attachments/assets/6488bb23-cd00-41b8-871a-ff616d5d0985)
+![image](https://github.com/user-attachments/assets/d0002030-97a6-4217-84c9-09ae850d985a)
 
 ---
 
