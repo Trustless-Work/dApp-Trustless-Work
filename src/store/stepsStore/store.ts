@@ -78,6 +78,6 @@ export const useStepsStore = create<StepsState>()(
 
     isFirstStep: () => get().currentStep === 1,
     isLastStep: () => get().currentStep === get().totalSteps,
-    resetSteps: () => set({ currentStep: 1, completedSteps: new Set() }),
+    resetSteps: () => set({ currentStep: 0, completedSteps: new Set() }),
   })),
 );

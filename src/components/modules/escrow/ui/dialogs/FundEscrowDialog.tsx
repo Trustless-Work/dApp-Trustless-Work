@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/Tooltip";
 import useFundEscrowDialogHook from "./hooks/fund-escrow-dialog.hook";
+import { useEscrowBoundedStore } from "../../store/ui";
+import LoaderData from "@/components/utils/LoaderData";
 
 interface FundEscrowDialogProps {
   isSecondDialogOpen: boolean;
@@ -34,6 +36,9 @@ const FundEscrowDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const isFundingEscrow = useEscrowBoundedStore(
+    (state) => state.isFundingEscrow,
+  );
 
   return (
     <Dialog open={isSecondDialogOpen} onOpenChange={handleClose}>
@@ -45,41 +50,46 @@ const FundEscrowDialog = ({
             securing them until the agreed conditions are met.
           </DialogDescription>
         </DialogHeader>
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="grid gap-4 py-4"
-          >
-            <div className="flex flex-col ms-center gap-4">
-              <FormField
-                control={form.control}
-                name="amount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      Amount
-                      <TooltipInfo content="The amount to be funded." />
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="The amount to be funded"
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
 
-            <DialogFooter>
-              <Button type="submit">Fund Escrow</Button>
-            </DialogFooter>
-          </form>
-        </FormProvider>
+        {isFundingEscrow ? (
+          <LoaderData />
+        ) : (
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="grid gap-4 py-4"
+            >
+              <div className="flex flex-col ms-center gap-4">
+                <FormField
+                  control={form.control}
+                  name="amount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center">
+                        Amount
+                        <TooltipInfo content="The amount to be funded." />
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="The amount to be funded"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <DialogFooter>
+                <Button type="submit">Fund Escrow</Button>
+              </DialogFooter>
+            </form>
+          </FormProvider>
+        )}
       </DialogContent>
     </Dialog>
   );

@@ -7,6 +7,7 @@ interface StepsState {
   setTotalSteps: (total: number) => void;
   toggleStep: (step: number) => void;
   isStepCompleted: (step: number) => boolean;
+  setCurrentStep: (step: number) => void;
 }
 
 export const useEscrowStepsStore = create<StepsState>((set, get) => ({
@@ -39,4 +40,6 @@ export const useEscrowStepsStore = create<StepsState>((set, get) => ({
     }),
 
   isStepCompleted: (step) => get().completedSteps.has(step),
+
+  setCurrentStep: (step) => set({ currentStep: step }),
 }));

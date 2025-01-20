@@ -17,6 +17,7 @@ const ESCROW_ACTIONS = {
   DELETE_PRODUCT: "escrows/delete",
   SET_ESCROW_TO_DELETE: "escrows/setToDelete",
   SET_LOADING_ESCROWS: "escrows/setLoading",
+  SET_USER_ROLE: "escrows/setUserRole",
 } as const;
 
 export const ESCROW_SLICE_NAME = "escrowSlice" as const;
@@ -34,6 +35,8 @@ export const useGlobalEscrowsSlice: StateCreator<
     loadingEscrows: false,
     escrowsToDelete: [],
     selectedEscrow: null,
+    userRoleInEscrow: undefined,
+    recentEscrow: undefined,
 
     // Modifiers
     setEscrows: (escrows: Escrow[]) =>
@@ -131,6 +134,13 @@ export const useGlobalEscrowsSlice: StateCreator<
 
         return updatedEscrow;
       }
+    },
+
+    setUserRoleInEscrow: (role) =>
+      set({ userRoleInEscrow: role }, false, ESCROW_ACTIONS.SET_USER_ROLE),
+
+    setRecentEscrow: (escrow: Escrow | undefined) => {
+      set({ recentEscrow: escrow });
     },
 
     //   fetchDeleteProduct: async (productId) => {

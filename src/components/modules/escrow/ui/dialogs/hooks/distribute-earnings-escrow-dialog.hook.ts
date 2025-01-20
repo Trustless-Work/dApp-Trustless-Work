@@ -17,9 +17,19 @@ const useDistributeEarningsEscrowDialogHook = () => {
     (state) => state.setIsChangingStatus,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const setIsDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsDialogOpen,
+  );
+  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessReleaseDialogOpen,
+  );
+  const setRecentEscrow = useGlobalBoundedStore(
+    (state) => state.setRecentEscrow,
+  );
 
   const distributeEscrowEarningsSubmit = async () => {
     setIsChangingStatus(true);
+    setIsSuccessReleaseDialogOpen(false);
 
     try {
       const data = await distributeEscrowEarnings({
@@ -29,20 +39,12 @@ const useDistributeEarningsEscrowDialogHook = () => {
         releaseSigner: selectedEscrow?.releaseSigner,
       });
 
-      console.log(data);
-
       if (data.status === "SUCCESS" || data.status === 201) {
-        toast({
-          title: "Success",
-          description: data.message,
-        });
-      } else {
-        setIsChangingStatus(false);
-        toast({
-          title: "Error",
-          description: data.message || "An error occurred",
-          variant: "destructive",
-        });
+        setIsSuccessReleaseDialogOpen(true);
+        setIsDialogOpen(false);
+        if (selectedEscrow) {
+          setRecentEscrow(selectedEscrow);
+        }
       }
     } catch (error: any) {
       setIsChangingStatus(false);

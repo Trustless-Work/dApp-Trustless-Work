@@ -15,16 +15,24 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
+import { useEscrowBoundedStore } from "../store/ui";
+import { useStepsStore } from "@/store/stepsStore/store";
 
 export const useInitializeEscrowHook = () => {
   const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
-
   const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const { formData, setFormData, resetForm } = useEscrowFormStore();
   const router = useRouter();
+  const setIsSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessDialogOpen,
+  );
+  const resetSteps = useStepsStore((state) => state.resetSteps);
+  const setRecentEscrow = useGlobalBoundedStore(
+    (state) => state.setRecentEscrow,
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,35 +79,41 @@ export const useInitializeEscrowHook = () => {
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     setFormData(payload);
     setIsLoading(true);
+    setIsSuccessDialogOpen(false);
 
     try {
+      const platformFeeDecimal = Number(payload.platformFee) / 100;
+
       const data = await initializeEscrow(
-        { ...payload, issuer: address },
+        {
+          ...payload,
+          platformFee: platformFeeDecimal.toString(),
+          issuer: address,
+        },
         address,
       );
-      if (data.status === "SUCCESS" || data.status === 201) {
-        if (loggedUser?.saveEscrow) {
-          await addEscrow(data.escrow, address, data.contract_id);
 
-          toast({
-            title: "Success",
-            description: data.message,
-          });
-        } else {
-          toast({
-            title: "Attention!",
-            description:
-              "According to your preferences, the escrow was not saved in our database. But it was sent to Stellar Network",
-            variant: "default",
-          });
+      if (data.status === "SUCCESS" || data.status === 201) {
+        setIsSuccessDialogOpen(true);
+
+        if (loggedUser?.saveEscrow) {
+          await addEscrow(
+            { ...data.escrow, platformFee: platformFeeDecimal.toString() },
+            address,
+            data.contract_id,
+          );
         }
 
+        setRecentEscrow({ ...data.escrow, contractId: data.contract_id });
+        resetSteps();
         form.reset();
         resetForm();
         router.push("/dashboard/escrow/my-escrows");
         setIsLoading(false);
       } else {
+        resetSteps();
         setIsLoading(false);
+        setIsSuccessDialogOpen(false);
         toast({
           title: "Error",
           description: data.message || "An error occurred",
@@ -108,6 +122,7 @@ export const useInitializeEscrowHook = () => {
       }
     } catch (error: any) {
       setIsLoading(false);
+      setIsSuccessDialogOpen(false);
 
       toast({
         title: "Error",

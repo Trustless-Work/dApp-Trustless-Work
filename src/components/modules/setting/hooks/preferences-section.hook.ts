@@ -15,7 +15,7 @@ const usePreferences = ({ onSave }: usePreferencesProps) => {
 
   const form = useForm<PreferencesForm>({
     defaultValues: {
-      saveEscrow: loggedUser?.saveEscrow || false,
+      saveEscrow: loggedUser?.saveEscrow || true,
     },
   });
 

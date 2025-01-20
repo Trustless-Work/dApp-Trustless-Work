@@ -23,9 +23,14 @@ import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/NoData";
 import { useEscrowBoundedStore } from "../../store/ui";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
-import { useGlobalBoundedStore } from "@/core/store/data";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
 import ExpandableContent from "./expandable/ExpandableContent";
+import { IoAlertCircleOutline } from "react-icons/io5";
+import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
 
 interface MyEscrowsTableProps {
   type:
@@ -45,6 +50,20 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
     (state) => state.setSelectedEscrow,
   );
   const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
+  const isSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessDialogOpen,
+  );
+  const setIsSuccessDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessDialogOpen,
+  );
+  const isSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessReleaseDialogOpen,
+  );
+  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessReleaseDialogOpen,
+  );
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
+  const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
 
   const {
     currentData,
@@ -135,6 +154,15 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           {expandedRows.includes(escrow.id) ? "-" : "+"}
                         </p>
                       </TableCell>
+                      {escrow.disputeFlag && (
+                        <TableCell>
+                          <IoAlertCircleOutline
+                            className="text-destructive"
+                            size={22}
+                            title="This escrow is in dispute"
+                          />
+                        </TableCell>
+                      )}
                     </TableRow>
                     {escrow.milestones && expandedRows.includes(escrow.id) && (
                       <TableRow>
@@ -177,12 +205,27 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
       ) : (
         <NoData />
       )}
-
       {/* Dialog */}
       <EscrowDetailDialog
         isDialogOpen={isDialogOpen}
         setIsDialogOpen={setIsDialogOpen}
         setSelectedEscrow={setSelectedEscrow}
+      />
+      {/* Success Dialog */}
+      <SuccessDialog
+        isSuccessDialogOpen={isSuccessDialogOpen}
+        setIsSuccessDialogOpen={setIsSuccessDialogOpen}
+        title={`${loggedUser?.saveEscrow ? "Escrow initialized successfully" : "Escrow initialized successfully, but according to your settings, it was not saved"}`}
+        description="Now that your escrow is initialized, you will be able to view it directly in"
+        recentEscrow={recentEscrow}
+      />
+      {/* Success Release Dialog */}
+      <SuccessReleaseDialog
+        isSuccessReleaseDialogOpen={isSuccessReleaseDialogOpen}
+        setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
+        title={"Escrow released successfully"}
+        description="Now that your escrow is released, you will be able to view it directly in"
+        recentEscrow={recentEscrow}
       />
     </div>
   );

@@ -7,12 +7,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "../../../schema/fund-escrow-schema";
 import { useToast } from "@/hooks/use-toast";
-import { useLoaderStore } from "@/store/utilsStore/store";
 import { fundEscrow } from "@/components/modules/escrow/services/fundEscrow";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
+import { useEscrowBoundedStore } from "../../../store/ui";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
@@ -23,8 +23,19 @@ const useFundEscrowDialogHook = ({
 }: useFundEscrowDialogProps) => {
   const { toast } = useToast();
   const { address } = useGlobalAuthenticationStore();
-  const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const setIsFundingEscrow = useEscrowBoundedStore(
+    (state) => state.setIsFundingEscrow,
+  );
+  const setIsDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsDialogOpen,
+  );
+  const fetchAllEscrows = useGlobalBoundedStore(
+    (state) => state.fetchAllEscrows,
+  );
+  const userRoleInEscrow = useGlobalBoundedStore(
+    (state) => state.userRoleInEscrow,
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,7 +45,7 @@ const useFundEscrowDialogHook = ({
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
+    setIsFundingEscrow(true);
 
     try {
       const data = await fundEscrow({
@@ -43,20 +54,18 @@ const useFundEscrowDialogHook = ({
         contractId: selectedEscrow!.contractId,
       });
       if (data.status === "SUCCESS" || data.status === 201) {
-        // ! Validate if the user has the preference in true
-        //await addEscrow(payload, address, data.contract_id);
-        // ! UPDATE ESCROW IN FIREBASE
-
         form.reset();
         setIsSecondDialogOpen(false);
-        setIsLoading(false);
+        setIsFundingEscrow(false);
+        setIsDialogOpen(false);
+        fetchAllEscrows({ address, type: userRoleInEscrow || "client" });
 
         toast({
           title: "Success",
-          description: data.message,
+          description: "Escrow funded successfully",
         });
       } else {
-        setIsLoading(false);
+        setIsFundingEscrow(false);
         toast({
           title: "Error",
           description: data.message || "An error occurred",
@@ -64,7 +73,7 @@ const useFundEscrowDialogHook = ({
         });
       }
     } catch (error: any) {
-      setIsLoading(false);
+      setIsFundingEscrow(false);
 
       toast({
         title: "Error",

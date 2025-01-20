@@ -1,8 +1,11 @@
 import { Escrow } from "@/@types/escrow.entity";
 import { statusMap, statusOptions } from "@/constants/escrow/StatusOptions";
 import { getUserRoleInEscrow } from "../../../server/escrow-firebase";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { useEffect, useState } from "react";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
+import { useEffect } from "react";
 
 interface useEscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -15,8 +18,13 @@ const useEscrowDetailDialog = ({
   setSelectedEscrow,
   selectedEscrow,
 }: useEscrowDetailDialogProps) => {
-  const [role, setRole] = useState<string | undefined>(undefined);
   const address = useGlobalAuthenticationStore((state) => state.address);
+  const userRoleInEscrow = useGlobalBoundedStore(
+    (state) => state.userRoleInEscrow,
+  );
+  const setUserRoleInEscrow = useGlobalBoundedStore(
+    (state) => state.setUserRoleInEscrow,
+  );
 
   const handleClose = () => {
     setIsDialogOpen(false);
@@ -40,7 +48,7 @@ const useEscrowDetailDialog = ({
     );
   };
 
-  const userRoleInEscrow = async () => {
+  const fetchUserRoleInEscrow = async () => {
     const { contractId } = selectedEscrow || {};
     const data = await getUserRoleInEscrow({ contractId, address });
 
@@ -50,9 +58,9 @@ const useEscrowDetailDialog = ({
   useEffect(() => {
     const fetchRole = async () => {
       if (selectedEscrow) {
-        const roleData = await userRoleInEscrow();
+        const roleData = await fetchUserRoleInEscrow();
 
-        setRole(roleData?.role);
+        setUserRoleInEscrow(roleData?.role);
       }
     };
 
@@ -64,8 +72,8 @@ const useEscrowDetailDialog = ({
     areAllMilestonesCompleted,
     areAllMilestonesCompletedAndFlag,
     getFilteredStatusOptions,
+    fetchUserRoleInEscrow,
     userRoleInEscrow,
-    role,
   };
 };
 
