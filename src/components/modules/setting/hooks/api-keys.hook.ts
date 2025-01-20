@@ -1,22 +1,41 @@
-import { UserPayload } from "@/@types/user.entity";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { useForm } from "react-hook-form";
+import { useToast } from "@/hooks/use-toast";
+import { useChangeUtils } from "@/utils/hook/input-visibility.hook";
+import { useState } from "react";
+import { requestApiKey } from "../services/requestApiKey";
 
 const useAPIKeys = () => {
+  const [showApiKey, setShowApiKey] = useState("password");
+  const { changeTypeInput } = useChangeUtils();
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
+  const address = useGlobalAuthenticationStore((state) => state.address);
+  const { toast } = useToast();
 
-  const form = useForm({
-    defaultValues: {
-      firstName: loggedUser?.firstName || "",
-      lastName: loggedUser?.lastName || "",
-    },
-  });
+  const onSubmit = async () => {
+    if (loggedUser?.useCase === "" || loggedUser?.useCase === null) {
+      toast({
+        title: "Error",
+        description: "You need to complete your use case first",
+        variant: "destructive",
+      });
+    }
 
-  const onSubmit = (data: UserPayload) => {
-    console.log(data);
+    const response = await requestApiKey(address);
+
+    if (!response) {
+      toast({
+        title: "Error",
+        description: "Error while requesting",
+        variant: "destructive",
+      });
+    }
   };
 
-  return { form, onSubmit };
+  const toggleVisibility = () => {
+    changeTypeInput({ type: showApiKey, setType: setShowApiKey });
+  };
+
+  return { onSubmit, showApiKey, toggleVisibility };
 };
 
 export default useAPIKeys;

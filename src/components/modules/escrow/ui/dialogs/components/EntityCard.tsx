@@ -3,7 +3,7 @@ import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 
 interface EntityCardProps {
-  entity: string;
+  entity?: string;
   type: string;
   hasPercentage?: boolean;
   hasAmount?: boolean;

@@ -75,7 +75,7 @@ interface getAllEscrowsByUserProps {
 
 const getAllEscrowsByUser = async ({
   address,
-  type, // ! issuer, client, disputeResolver or serviceProvider
+  type,
 }: getAllEscrowsByUserProps): Promise<{
   success: boolean;
   message?: string;

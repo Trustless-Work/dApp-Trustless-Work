@@ -13,7 +13,7 @@ type FlipCardProps = {
 
 const FlipCard = ({ children, codeExample }: FlipCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const { copyText, copySuccess } = useCopyUtils();
+  const { copyText, copiedKeyId } = useCopyUtils();
 
   return (
     <section className="relative w-full perspective-1000 mt-5">
@@ -41,17 +41,17 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
         <section className="w-full h-full backface-hidden flex flex-col items-center justify-center text-white rotate-y-180">
           <div className="w-full flex items-center justify-end gap-5">
             <button
-              onClick={() => copyText(codeExample)}
+              onClick={() => copyText(codeExample, codeExample)}
               className="cursor-pointer rounded-full shadow-lg scale-100 transition-all duration-300 hover:scale-125"
               title="Copy address"
             >
-              {copySuccess ? (
+              {copiedKeyId ? (
                 <LuCheck size={24} className="text-green-700" />
               ) : (
                 <LuClipboard
                   size={24}
                   className={cn(
-                    copySuccess
+                    copiedKeyId
                       ? "text-green-700"
                       : "dark:text-white text-muted-foreground",
                   )}

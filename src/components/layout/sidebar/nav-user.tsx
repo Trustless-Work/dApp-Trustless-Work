@@ -35,7 +35,7 @@ export const NavUser = () => {
   const name = useGlobalAuthenticationStore((state) => state.name);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const { formatAddress } = useFormatUtils();
-  const { copyText, copySuccess } = useCopyUtils();
+  const { copyText, copiedKeyId } = useCopyUtils();
   const { handleDisconnect } = useWalletUtils();
   const router = useRouter();
   const pathname = usePathname();
@@ -98,18 +98,18 @@ export const NavUser = () => {
                       </p>
 
                       <p className="text-xs text-green-700 h-2">
-                        {copySuccess && "Address copied!"}
+                        {copiedKeyId && "Address copied!"}
                       </p>
                     </div>
                     <button
-                      onClick={() => copyText(user.adress)}
+                      onClick={() => copyText(user.adress, user.adress)}
                       className="p-1.5 hover:bg-muted rounded-md transition-colors"
                       title="Copy address"
                     >
                       <FaRegCopy
                         className={cn(
                           "h-4 w-4",
-                          copySuccess
+                          copiedKeyId
                             ? "text-green-700"
                             : "text-muted-foreground",
                         )}
