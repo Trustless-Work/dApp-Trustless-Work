@@ -1,8 +1,12 @@
 export const initializeEscrowCode = `
-  export const initializeEscrow = async (payload: EscrowPayload) => {
+export const initializeEscrow = async (
+  payload: EscrowPayloadWithSigner,
+  address: string,
+) => {
   try {
-    const { address } = await kit.getAddress();
-    const payloadWithSigner: EscrowPayload = {
+
+    // Join the logged user as a signer 
+    const payloadWithSigner: EscrowPayloadWithSigner = {
       ...payload,
       signer: address,
     };
@@ -12,19 +16,23 @@ export const initializeEscrowCode = `
       payloadWithSigner,
     );
 
+    // Get the unsigned transaction
     const { unsignedTransaction } = response.data;
 
+    // Sign the transaction
     const { signedTxXdr } = await signTransaction(unsignedTransaction, {
       address,
       networkPassphrase: WalletNetwork.TESTNET,
     });
 
+    // Send the signed transaction
     const tx = await http.post("/helper/send-transaction", {
       signedXdr: signedTxXdr,
       returnValueIsRequired: true,
     });
 
     const { data } = tx;
+
     return data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
