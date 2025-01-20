@@ -17,6 +17,7 @@ const useProfile = ({ onSave }: useProfileProps) => {
       email: loggedUser?.email || "",
       phone: loggedUser?.phone || "",
       country: loggedUser?.country || "",
+      useCase: loggedUser?.useCase || "",
     },
   });
 
