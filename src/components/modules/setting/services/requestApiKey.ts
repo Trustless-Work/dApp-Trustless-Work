@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const requestApiKey = async (wallet: string) => {
   try {
-    const response = await http.post("/auth/request-api-key", wallet);
+    const response = await http.post("/auth/request-api-key", { wallet });
 
     return response;
   } catch (error: unknown) {
