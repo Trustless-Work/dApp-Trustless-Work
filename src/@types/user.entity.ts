@@ -10,6 +10,7 @@ export interface User {
   country?: string;
   saveEscrow?: boolean;
   useCase?: string;
+  apiKey?: string[];
 }
 
 export type UserPayload = Omit<User, "createdAt" | "updatedAt" | "id">;
