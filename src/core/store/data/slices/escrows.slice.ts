@@ -66,13 +66,16 @@ export const useGlobalEscrowsSlice: StateCreator<
       }
 
       const response = await getBalance(address, contractIds);
-      const balances = response.data.balances;
+      const balances = response.data;
 
       const escrows = await Promise.all(
         escrowsByUser.data.map(async (escrow: Escrow) => {
-          const plainBalance = JSON.parse(
-            JSON.stringify(balances[escrow.contractId ?? ""]),
+          const matchedBalance = balances.find(
+            (item: { address: string; balance: number }) =>
+              item.address === escrow.contractId,
           );
+
+          const plainBalance = matchedBalance ? matchedBalance.balance : 0;
 
           if (escrow.balance !== plainBalance) {
             await updateEscrow({
@@ -87,11 +90,10 @@ export const useGlobalEscrowsSlice: StateCreator<
       );
 
       set(
-        { escrows, totalEscrows: escrows?.length },
+        { escrows, loadingEscrows: false },
         false,
-        ESCROW_ACTIONS.FETCH_ALL_ESCROWS,
+        ESCROW_ACTIONS.SET_ESCROWS,
       );
-      set({ loadingEscrows: false }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
     },
 
     addEscrow: async (payload, address, contractId) => {
