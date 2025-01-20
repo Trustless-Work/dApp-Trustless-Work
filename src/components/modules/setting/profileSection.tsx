@@ -14,6 +14,7 @@ import useProfile from "./hooks/profile-section.hook";
 import { UserPayload } from "@/@types/user.entity";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import TooltipInfo from "@/components/utils/Tooltip";
 
 interface ProfileSectionProps {
   onSave: (data: UserPayload) => void;
@@ -115,6 +116,23 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
                     <FormLabel>Country</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter your country" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="useCase"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      Use Case
+                      <TooltipInfo content="Your company or even if you are testing..." />
+                    </FormLabel>
+
+                    <FormControl>
+                      <Input placeholder="Specify your use case" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
