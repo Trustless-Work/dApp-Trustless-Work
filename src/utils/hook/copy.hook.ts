@@ -1,17 +1,21 @@
 import { useState } from "react";
 
 export const useCopyUtils = () => {
-  const [copySuccess, setCopySuccess] = useState(false);
+  const [copiedKeyId, setCopiedKeyId] = useState<string | null>(null);
 
-  const copyText = async (text: string | undefined) => {
+  const copyText = async (id: string | undefined, text: string | undefined) => {
     try {
-      await navigator.clipboard.writeText(text!);
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
+      if (!text) throw new Error("Text is undefined");
+      await navigator.clipboard.writeText(text);
+
+      if (!id) throw new Error("Id is undefined");
+
+      setCopiedKeyId(id);
+      setTimeout(() => setCopiedKeyId(null), 2000);
     } catch (error) {
-      console.error("Failed to copy address:", error);
+      console.error("Failed to copy text:", error);
     }
   };
 
-  return { copyText, setCopySuccess, copySuccess };
+  return { copyText, copiedKeyId };
 };
