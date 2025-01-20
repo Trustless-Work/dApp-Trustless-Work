@@ -30,12 +30,20 @@ const EntityCard = ({
 
         <div className="flex gap-3">
           <div className="flex">
-            <p className="mr-1 font-bold">Fee:</p>
-            {hasPercentage && <span>{percentage}%</span>}
+            {hasPercentage && (
+              <>
+                <p className="mr-1 font-bold">Fee:</p>
+                <span>{percentage}%</span>
+              </>
+            )}
           </div>
           <div className="flex">
-            <p className="mr-1 font-bold">Amount:</p>
-            {hasAmount && <span>{formatDollar(amount)}</span>}
+            {hasAmount && (
+              <>
+                <p className="mr-1 font-bold">Amount:</p>
+                <span>{formatDollar(amount)}</span>
+              </>
+            )}
           </div>
         </div>
       </div>
