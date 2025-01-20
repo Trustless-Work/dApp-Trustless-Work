@@ -1,6 +1,5 @@
 "use client";
 
-import { Form, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,16 +7,12 @@ import { cn } from "@/lib/utils";
 import useAPIKeys from "./hooks/api-keys.hook";
 import Link from "next/link";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 const APIKeysSection = () => {
-  const { form, onSubmit, showApiKey, toggleVisibility } = useAPIKeys();
+  const { onSubmit, showApiKey, toggleVisibility } = useAPIKeys();
   const { copyText, copiedKeyId } = useCopyUtils();
-
-  const apiKeys = [
-    { id: "1", key: "api-key-1" },
-    { id: "2", key: "api-key-2" },
-    { id: "3", key: "api-key-3" },
-  ]; // Ejemplo de claves de API.
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
 
   return (
     <Card className={cn("overflow-hidden")}>
@@ -39,7 +34,7 @@ const APIKeysSection = () => {
           </div>
 
           <div className="flex flex-col w-1/6 gap-3">
-            <Button className="w-full" type="submit">
+            <Button className="w-full" type="button" onClick={onSubmit}>
               Request an API Key
             </Button>
             <Button
@@ -52,29 +47,22 @@ const APIKeysSection = () => {
           </div>
         </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="flex flex-col gap-4">
-              {apiKeys.map((apiKey) => (
-                <FormItem key={apiKey.id} className="flex items-center gap-4">
-                  <FormControl className="flex-grow">
-                    <Input
-                      type={showApiKey}
-                      disabled
-                      defaultValue={apiKey.key}
-                    />
-                  </FormControl>
-                  <Button
-                    variant="outline"
-                    onClick={() => copyText(apiKey.id, apiKey.key)}
-                  >
-                    {copiedKeyId === apiKey.id ? "Copied!" : "Copy"}
-                  </Button>
-                </FormItem>
-              ))}
+        <div className="flex flex-col gap-4 w-3/6 mt-5">
+          {loggedUser?.apiKey?.map((apiKey, index) => (
+            <div key={index} className="flex items-center gap-4">
+              <div className="flex-grow">
+                <Input type={showApiKey} disabled defaultValue={apiKey} />
+              </div>
+              <Button
+                className="!mt-0"
+                variant="outline"
+                onClick={() => copyText(index.toString(), apiKey)}
+              >
+                {copiedKeyId === index.toString() ? "Copied!" : "Copy"}
+              </Button>
             </div>
-          </form>
-        </Form>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
