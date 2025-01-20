@@ -17,7 +17,6 @@ import {
 } from "firebase/firestore";
 import { z } from "zod";
 import { formSchema } from "../schema/initialize-escrow-schema";
-import { RolesInEscrow } from "@/@types/escrow.entity";
 
 interface addEscrowProps {
   payload: z.infer<typeof formSchema>;
@@ -71,7 +70,7 @@ const addEscrow = async ({
 
 interface getAllEscrowsByUserProps {
   address: string;
-  type: RolesInEscrow;
+  type: string;
 }
 
 const getAllEscrowsByUser = async ({

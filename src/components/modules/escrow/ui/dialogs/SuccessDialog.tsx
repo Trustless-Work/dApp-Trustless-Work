@@ -164,7 +164,7 @@ export const SuccessReleaseDialog = ({
         <div className="flex flex-col gap-4">
           <EntityCard
             type="Service Provider"
-            entity={recentEscrow?.serviceProvider!}
+            entity={recentEscrow?.serviceProvider}
             hasPercentage={true}
             percentage={serviceProviderPercentage.toString()}
             hasAmount={true}
@@ -180,7 +180,7 @@ export const SuccessReleaseDialog = ({
           />
           <EntityCard
             type="Platform"
-            entity={recentEscrow?.platformAddress!}
+            entity={recentEscrow?.platformAddress}
             hasPercentage={true}
             percentage={platformFee.toString()}
             hasAmount={true}
