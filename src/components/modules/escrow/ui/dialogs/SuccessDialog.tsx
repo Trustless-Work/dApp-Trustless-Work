@@ -34,7 +34,7 @@ const SuccessDialog = ({
   setIsSuccessDialogOpen,
 }: SuccessDialogProps) => {
   const { handleClose } = useSuccessDialogHook({ setIsSuccessDialogOpen });
-  const { copyText, copySuccess } = useCopyUtils();
+  const { copyText, copiedKeyId } = useCopyUtils();
   const { formatAddress } = useFormatUtils();
 
   return (
@@ -73,17 +73,19 @@ const SuccessDialog = ({
               </p>
             </div>
             <button
-              onClick={() => copyText(recentEscrow?.contractId)}
+              onClick={() =>
+                copyText(recentEscrow?.contractId, recentEscrow?.contractId)
+              }
               className="hover:bg-muted rounded-md transition-colors"
               title="Copy address"
             >
-              {copySuccess ? (
+              {copiedKeyId ? (
                 <LuCheck size={15} className="text-green-700" />
               ) : (
                 <LuClipboard
                   size={15}
                   className={cn(
-                    copySuccess
+                    copiedKeyId
                       ? "text-green-700"
                       : "dark:text-white text-muted-foreground",
                   )}
