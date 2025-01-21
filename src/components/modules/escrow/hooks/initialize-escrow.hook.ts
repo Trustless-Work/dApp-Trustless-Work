@@ -7,7 +7,7 @@ import { useLoaderStore } from "@/store/utilsStore/store";
 import { useEscrowFormStore } from "@/store/escrowFormStore/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { formSchema } from "../schema/initialize-escrow-schema";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
@@ -32,6 +32,14 @@ export const useInitializeEscrowHook = () => {
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
+  const getAllUsers = useGlobalAuthenticationStore(
+    (state) => state.getAllUsers,
+  );
+  const users = useGlobalAuthenticationStore((state) => state.users);
+
+  useEffect(() => {
+    getAllUsers();
+  }, [getAllUsers]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -136,6 +144,15 @@ export const useInitializeEscrowHook = () => {
     setFormData({ [name]: value });
   };
 
+  const userOptions = useMemo(() => {
+    const options = users.map((user) => ({
+      value: user.address,
+      label: `${user.firstName} ${user.lastName}`,
+    }));
+
+    return [{ value: "", label: "Select an User" }, ...options];
+  }, [users]);
+
   return {
     form,
     milestones,
@@ -143,5 +160,6 @@ export const useInitializeEscrowHook = () => {
     handleAddMilestone,
     handleRemoveMilestone,
     handleFieldChange,
+    userOptions,
   };
 };
