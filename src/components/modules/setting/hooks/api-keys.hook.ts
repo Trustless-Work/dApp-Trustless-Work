@@ -1,7 +1,7 @@
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useToast } from "@/hooks/use-toast";
 import { useChangeUtils } from "@/utils/hook/input-visibility.hook";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { requestApiKey } from "../services/requestApiKey";
 import { getUser } from "../../auth/server/authentication-firebase";
 import { removeApiKey } from "../server/api-key-firebase";

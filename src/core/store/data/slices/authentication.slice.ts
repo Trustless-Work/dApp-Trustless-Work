@@ -6,7 +6,6 @@ import {
   updateUser,
 } from "@/components/modules/auth/server/authentication-firebase";
 import { UserPayload } from "@/@types/user.entity";
-import { removeApiKey } from "@/components/modules/setting/server/api-key-firebase";
 
 const AUTHENTICATION_ACTIONS = {
   CONNECT_WALLET: "authentication/connect",
@@ -20,7 +19,7 @@ export const useGlobalAuthenticationSlice: StateCreator<
   [["zustand/devtools", never]],
   [],
   AuthenticationGlobalStore
-> = (set, get) => {
+> = (set) => {
   return {
     // Stores
     address: "",
