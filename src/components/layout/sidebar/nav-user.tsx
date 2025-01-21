@@ -90,7 +90,10 @@ export const NavUser = () => {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {loggedUser?.firstName?.charAt(0)}{" "}
+                    {loggedUser?.lastName ? loggedUser.lastName.charAt(0) : ""}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
@@ -122,16 +125,18 @@ export const NavUser = () => {
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
             {loggedUser?.identification && (
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <HiOutlineIdentification />
-                  <span className="truncate">
-                    Identification - {loggedUser?.identification}
-                  </span>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <HiOutlineIdentification />
+                    <span className="truncate">
+                      Identification - {loggedUser?.identification}
+                    </span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </>
             )}
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
