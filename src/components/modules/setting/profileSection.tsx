@@ -15,15 +15,20 @@ import { UserPayload } from "@/@types/user.entity";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import TooltipInfo from "@/components/utils/Tooltip";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { useFormatUtils } from "@/utils/hook/format.hook";
 
 interface ProfileSectionProps {
   onSave: (data: UserPayload) => void;
 }
 
 const ProfileSection = ({ onSave }: ProfileSectionProps) => {
-  const { form, onSubmit } = useProfile({
+  const { form, onSubmit, handleProfileImageUpload } = useProfile({
     onSave,
   });
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
+  const { formatDateFromFirebase } = useFormatUtils();
 
   return (
     <Card className={cn("overflow-hidden")}>
@@ -31,14 +36,42 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
         <div className="flex w-full justify-between">
           <h1 className="text-3xl font-bold mb-4">Profile</h1>
           <p className="italic text-sm">
-            {" "}
-            {/* <strong>Created:</strong>{formatDateFromFirebase(loggedUser?.createdAt.)} */}
+            <strong className="mr-1">Created:</strong>
+            {formatDateFromFirebase(
+              loggedUser?.createdAt?.seconds ?? 0,
+              loggedUser?.createdAt?.nanoseconds ?? 0,
+            )}
           </p>
         </div>
         <p className="text-gray-500 mb-4">
           Manage your personal details, update preferences, and customize your
           experience here.
         </p>
+
+        <div className="flex w-full justify-center items-center my-10">
+          <Avatar className="h-60 w-60 rounded-full relative cursor-pointer">
+            <label className="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 hover:opacity-100 transition-opacity rounded-full z-10">
+              <span className="text-sm font-bold">Change Photo</span>
+              <Input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleProfileImageUpload(file);
+                }}
+              />
+            </label>
+            <AvatarImage
+              src={loggedUser?.profileImage}
+              alt={loggedUser?.firstName}
+            />
+            <AvatarFallback className="rounded-lg">
+              {loggedUser?.firstName?.charAt(0)}{" "}
+              {loggedUser?.lastName ? loggedUser.lastName.charAt(0) : ""}
+            </AvatarFallback>
+          </Avatar>
+        </div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
