@@ -6,13 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "../../../schema/fund-escrow-schema";
-import { useToast } from "@/hooks/use-toast";
 import { fundEscrow } from "@/components/modules/escrow/services/fundEscrow";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
+import { toast } from "@/hooks/use-toast";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
@@ -21,7 +21,6 @@ interface useFundEscrowDialogProps {
 const useFundEscrowDialogHook = ({
   setIsSecondDialogOpen,
 }: useFundEscrowDialogProps) => {
-  const { toast } = useToast();
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsFundingEscrow = useEscrowBoundedStore(

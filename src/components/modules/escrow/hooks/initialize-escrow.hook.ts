@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { initializeEscrow } from "@/components/modules/escrow/services/initializeEscrow";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { useEscrowFormStore } from "@/store/escrowFormStore/store";
@@ -22,7 +22,6 @@ export const useInitializeEscrowHook = () => {
   const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
-  const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const { formData, setFormData, resetForm } = useEscrowFormStore();
   const router = useRouter();

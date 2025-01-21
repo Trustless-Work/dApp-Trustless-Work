@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useToast } from "@/hooks/use-toast";
 import {
   collection,
   addDoc,
@@ -12,12 +11,12 @@ import {
 } from "firebase/firestore/lite";
 import { firebaseDB } from "../../../../../firebase";
 import { formSchema } from "../schema/request-api-key-schema";
+import { toast } from "@/hooks/use-toast";
 
 type FormValues = z.infer<typeof formSchema>;
 
 export const useRequestApiKeyForm = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

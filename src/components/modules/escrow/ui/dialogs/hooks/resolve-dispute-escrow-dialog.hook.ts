@@ -5,13 +5,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useToast } from "@/hooks/use-toast";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { resolveDispute } from "../../../services/resolveDispute";
 import { ResolveDisputePayload } from "@/@types/escrow.entity";
 import { MouseEvent } from "react";
 import { getFormSchema } from "../../../schema/resolve-dispute-escrow-schema";
+import { toast } from "@/hooks/use-toast";
 
 interface useResolveDisputeEscrowDialogProps {
   setIsResolveDisputeDialogOpen: (value: boolean) => void;
@@ -20,7 +20,6 @@ interface useResolveDisputeEscrowDialogProps {
 const useResolveDisputeEscrowDialogHook = ({
   setIsResolveDisputeDialogOpen,
 }: useResolveDisputeEscrowDialogProps) => {
-  const { toast } = useToast();
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const formSchema = getFormSchema(selectedEscrow);

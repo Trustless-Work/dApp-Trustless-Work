@@ -2,7 +2,6 @@
 
 "use client";
 
-import { useToast } from "@/hooks/use-toast";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
@@ -10,9 +9,9 @@ import {
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { Escrow, EscrowPayload, Milestone } from "@/@types/escrow.entity";
 import { changeMilestoneFlag } from "../../../services/changeMilestoneFlag";
+import { toast } from "@/hooks/use-toast";
 
 const useChangeFlagEscrowDialogHook = () => {
-  const { toast } = useToast();
   const { address } = useGlobalAuthenticationStore();
   const setIsChangingStatus = useEscrowBoundedStore(
     (state) => state.setIsChangingStatus,

@@ -2,7 +2,6 @@
 
 "use client";
 
-import { useToast } from "@/hooks/use-toast";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
@@ -10,9 +9,9 @@ import {
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { EscrowPayload } from "@/@types/escrow.entity";
 import { startDispute } from "../../../services/startDispute";
+import { toast } from "@/hooks/use-toast";
 
 const useStartDisputeEscrowDialogHook = () => {
-  const { toast } = useToast();
   const { address } = useGlobalAuthenticationStore();
   const setIsStartingDispute = useEscrowBoundedStore(
     (state) => state.setIsStartingDispute,

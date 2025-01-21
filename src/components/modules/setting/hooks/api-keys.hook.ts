@@ -1,10 +1,10 @@
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { useToast } from "@/hooks/use-toast";
 import { useChangeUtils } from "@/utils/hook/input-visibility.hook";
 import { useState } from "react";
 import { requestApiKey } from "../services/requestApiKey";
 import { getUser } from "../../auth/server/authentication-firebase";
 import { removeApiKey } from "../server/api-key-firebase";
+import { toast } from "@/hooks/use-toast";
 
 const useAPIKeys = () => {
   const [showApiKey, setShowApiKey] = useState("password");
@@ -12,7 +12,6 @@ const useAPIKeys = () => {
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
-  const { toast } = useToast();
 
   const onSubmit = async () => {
     if (loggedUser?.useCase === "" || loggedUser?.useCase === null) {

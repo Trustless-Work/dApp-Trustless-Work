@@ -10,12 +10,11 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { db } from "@/core/config/firebase/firebase";
 import { formSchema } from "../schema/contact-schema";
 
 export const useContact = () => {
-  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
