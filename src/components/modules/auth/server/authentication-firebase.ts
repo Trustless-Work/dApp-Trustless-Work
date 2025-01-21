@@ -9,6 +9,7 @@ import {
   collection,
   updateDoc,
   serverTimestamp,
+  getDocs,
 } from "firebase/firestore";
 
 interface addUserProps {
@@ -149,4 +150,50 @@ const updateUser = async ({
   }
 };
 
-export { addUser, getUser, updateUser };
+const getAllUsers = async (): Promise<{
+  success: boolean;
+  message: string;
+  data?: any[];
+}> => {
+  const collectionRef = collection(db, "users");
+
+  try {
+    const querySnapshot = await getDocs(collectionRef);
+
+    if (querySnapshot.empty) {
+      return {
+        success: false,
+        message: "No users found",
+      };
+    }
+
+    const users = querySnapshot.docs
+      .map((doc) => {
+        const userData = doc.data();
+        if (!userData.firstName || userData.firstName.trim() === "") {
+          return null;
+        }
+
+        return {
+          id: doc.id,
+          ...userData,
+        };
+      })
+      .filter((user) => user !== null);
+
+    return {
+      success: true,
+      message: "Users retrieved successfully",
+      data: users,
+    };
+  } catch (error: any) {
+    const errorMessage =
+      error.response && error.response.data
+        ? error.response.data.message
+        : "An error occurred";
+
+    return { success: false, message: errorMessage };
+  }
+};
+
+export { addUser, getUser, updateUser, getAllUsers };
