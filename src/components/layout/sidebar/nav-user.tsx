@@ -54,7 +54,7 @@ export const NavUser = () => {
         ? `${loggedUser.firstName} ${loggedUser.lastName}`
         : loggedUser?.firstName || loggedUser?.lastName || "Without Name",
     adress: address,
-    avatar: "https://avatars.githubusercontent.com/u/512548?s=60",
+    avatar: loggedUser?.profileImage,
   };
 
   return (
@@ -68,7 +68,10 @@ export const NavUser = () => {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  {loggedUser?.firstName?.charAt(0)}{" "}
+                  {loggedUser?.lastName ? loggedUser.lastName.charAt(0) : ""}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
