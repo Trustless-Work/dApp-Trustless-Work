@@ -13,21 +13,6 @@ import { Input } from "@/components/ui/input";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useInitializeEscrowHook } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
 import TooltipInfo from "@/components/utils/Tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { ChevronsUpDown } from "lucide-react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { useState } from "react";
 import SelectField from "@/components/utils/SelectSearch";
 
 const InitializeEscrowForm = () => {
@@ -38,35 +23,8 @@ const InitializeEscrowForm = () => {
     handleAddMilestone,
     handleRemoveMilestone,
     handleFieldChange,
+    userOptions,
   } = useInitializeEscrowHook();
-
-  const [disputeResolverStatus, setDisputeResolverStatus] = useState<
-    string | undefined
-  >(form.watch("disputeResolver"));
-
-  const handleSelectStatus = (selectedValue: string) => {
-    setDisputeResolverStatus(selectedValue);
-    form.setValue("disputeResolver", selectedValue); // Sync the form value
-  };
-
-  const statusOptions = [
-    {
-      value: "GA2RRI2CB4ISIARVJEVQOMZX4PLQK4X6BDC3EWXJBRTNB4GCEIQWIQ7V",
-      label: "Joel",
-    },
-    {
-      value: "GA2RRI2CB4ISIARVJEVQOMZX4PLQK4X6BDC3EWXJBRTNB4GCEIQWIQ7V",
-      label: "Armando",
-    },
-    {
-      value: "GA2RRI2CB4ISIARVJEVQOMZX4PLQK4X6BDC3EWXJBRTNB4GCEIQWIQ7V",
-      label: "Caleb",
-    },
-    {
-      value: "GA2RRI2CB4ISIARVJEVQOMZX4PLQK4X6BDC3EWXJBRTNB4GCEIQWIQ7V",
-      label: "Alberto",
-    },
-  ];
 
   return (
     <Form {...form}>
@@ -123,52 +81,20 @@ const InitializeEscrowForm = () => {
             )}
           />
 
-          <FormField
+          <SelectField
             control={form.control}
             name="client"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Client
-                  <TooltipInfo content="Address of the client initiating the escrow." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Alice Address"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("client", e.target.value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Client"
+            tooltipContent="Address of the client initiating the escrow."
+            options={userOptions}
           />
 
-          <FormField
+          <SelectField
             control={form.control}
             name="serviceProvider"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Service Provider
-                  <TooltipInfo content="Address of the service provider for this escrow." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Bob Address"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("serviceProvider", e.target.value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Service Provider"
+            tooltipContent="Address of the service provider for this escrow."
+            options={userOptions}
           />
         </div>
 
@@ -197,28 +123,12 @@ const InitializeEscrowForm = () => {
             )}
           />
 
-          <FormField
+          <SelectField
             control={form.control}
             name="platformAddress"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Platform Address
-                  <TooltipInfo content="Public key of the platform managing the escrow." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Platform Public Key"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("platformAddress", e.target.value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Platform Address"
+            tooltipContent="Public key of the platform managing the escrow."
+            options={userOptions}
           />
         </div>
 
@@ -279,7 +189,7 @@ const InitializeEscrowForm = () => {
             name="releaseSigner"
             label="Release Signer"
             tooltipContent="Entity authorized to release funds from escrow."
-            options={statusOptions}
+            options={userOptions}
           />
 
           <SelectField
@@ -287,7 +197,7 @@ const InitializeEscrowForm = () => {
             name="disputeResolver"
             label="Dispute Resolver"
             tooltipContent="Entity responsible for resolving disputes."
-            options={statusOptions}
+            options={userOptions}
           />
         </div>
 
