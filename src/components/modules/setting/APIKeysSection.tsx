@@ -8,9 +8,11 @@ import useAPIKeys from "./hooks/api-keys.hook";
 import Link from "next/link";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 const APIKeysSection = () => {
-  const { onSubmit, showApiKey, toggleVisibility } = useAPIKeys();
+  const { onSubmit, showApiKey, toggleVisibility, handleRemoveAPiKey } =
+    useAPIKeys();
   const { copyText, copiedKeyId } = useCopyUtils();
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
 
@@ -47,7 +49,7 @@ const APIKeysSection = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 w-3/6 mt-5">
+        <div className="flex flex-col gap-4 w-2/3 mt-5">
           {loggedUser?.apiKey?.map((apiKey, index) => (
             <div key={index} className="flex items-center gap-4">
               <div className="flex-grow">
@@ -59,6 +61,12 @@ const APIKeysSection = () => {
                 onClick={() => copyText(index.toString(), apiKey)}
               >
                 {copiedKeyId === index.toString() ? "Copied!" : "Copy"}
+              </Button>
+              <Button
+                onClick={() => handleRemoveAPiKey(apiKey)}
+                className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
+              >
+                <FaRegTrashCan className="h-5 w-5" />
               </Button>
             </div>
           ))}
