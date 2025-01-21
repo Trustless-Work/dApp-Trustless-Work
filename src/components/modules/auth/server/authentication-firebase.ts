@@ -13,10 +13,12 @@ import {
 
 interface addUserProps {
   address: string;
+  profileImage?: string;
 }
 
 const addUser = async ({
   address,
+  profileImage = "",
 }: addUserProps): Promise<{
   success: boolean;
   message: string;
@@ -31,6 +33,7 @@ const addUser = async ({
     if (!userSnapshot.exists()) {
       await setDoc(userDoc, {
         address,
+        profileImage,
         createdAt: new Date(),
         saveEscrow: true,
       });
@@ -41,6 +44,7 @@ const addUser = async ({
         data: {
           id: userDoc.id,
           address,
+          profileImage,
           saveEscrow: true,
         },
       };
