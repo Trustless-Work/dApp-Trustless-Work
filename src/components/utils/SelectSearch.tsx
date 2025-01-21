@@ -28,7 +28,7 @@ interface SelectFieldProps {
   name: string;
   label: string;
   tooltipContent: string;
-  options: { value: string; label: string }[];
+  options: { value: string | undefined; label: string }[];
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({
@@ -49,7 +49,10 @@ const SelectField: React.FC<SelectFieldProps> = ({
         const [selected, setSelected] = useState(selectedOption || options[0]);
         const [open, setOpen] = useState(false);
 
-        const handleSelect = (option: { value: string; label: string }) => {
+        const handleSelect = (option: {
+          value: string | undefined;
+          label: string;
+        }) => {
           setSelected(option);
           field.onChange(option.value);
           setOpen(false);
