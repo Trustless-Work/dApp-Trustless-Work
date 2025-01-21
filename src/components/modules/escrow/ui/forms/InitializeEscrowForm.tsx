@@ -13,6 +13,22 @@ import { Input } from "@/components/ui/input";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useInitializeEscrowHook } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
 import TooltipInfo from "@/components/utils/Tooltip";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { useState } from "react";
+import SelectField from "@/components/utils/SelectSearch";
 
 const InitializeEscrowForm = () => {
   const {
@@ -23,6 +39,34 @@ const InitializeEscrowForm = () => {
     handleRemoveMilestone,
     handleFieldChange,
   } = useInitializeEscrowHook();
+
+  const [disputeResolverStatus, setDisputeResolverStatus] = useState<
+    string | undefined
+  >(form.watch("disputeResolver"));
+
+  const handleSelectStatus = (selectedValue: string) => {
+    setDisputeResolverStatus(selectedValue);
+    form.setValue("disputeResolver", selectedValue); // Sync the form value
+  };
+
+  const statusOptions = [
+    {
+      value: "GA2RRI2CB4ISIARVJEVQOMZX4PLQK4X6BDC3EWXJBRTNB4GCEIQWIQ7V",
+      label: "Joel",
+    },
+    {
+      value: "GA2RRI2CB4ISIARVJEVQOMZX4PLQK4X6BDC3EWXJBRTNB4GCEIQWIQ7V",
+      label: "Armando",
+    },
+    {
+      value: "GA2RRI2CB4ISIARVJEVQOMZX4PLQK4X6BDC3EWXJBRTNB4GCEIQWIQ7V",
+      label: "Caleb",
+    },
+    {
+      value: "GA2RRI2CB4ISIARVJEVQOMZX4PLQK4X6BDC3EWXJBRTNB4GCEIQWIQ7V",
+      label: "Alberto",
+    },
+  ];
 
   return (
     <Form {...form}>
@@ -230,52 +274,20 @@ const InitializeEscrowForm = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <FormField
+          <SelectField
             control={form.control}
             name="releaseSigner"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Release Signer
-                  <TooltipInfo content="Entity authorized to release funds from escrow." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter the release signer"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("releaseSigner", e.target.value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Release Signer"
+            tooltipContent="Entity authorized to release funds from escrow."
+            options={statusOptions}
           />
 
-          <FormField
+          <SelectField
             control={form.control}
             name="disputeResolver"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Dispute Resolver
-                  <TooltipInfo content="Entity responsible for resolving disputes." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter the dispute resolver"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("disputeResolver", e.target.value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Dispute Resolver"
+            tooltipContent="Entity responsible for resolving disputes."
+            options={statusOptions}
           />
         </div>
 
