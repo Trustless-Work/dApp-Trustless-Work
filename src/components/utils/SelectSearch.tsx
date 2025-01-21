@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import {
   FormControl,
   FormField,
@@ -22,6 +22,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
+import { useInitializeEscrowHook } from "../modules/escrow/hooks/initialize-escrow.hook";
 
 interface SelectFieldProps {
   control: any;
@@ -38,6 +39,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
   tooltipContent,
   options,
 }) => {
+  const { handleFieldChange } = useInitializeEscrowHook();
+
   return (
     <FormField
       control={control}
@@ -55,6 +58,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
         }) => {
           setSelected(option);
           field.onChange(option.value);
+          handleFieldChange(name, option.value);
           setOpen(false);
         };
 
