@@ -21,23 +21,23 @@ const useAPIKeys = () => {
         description: "You need to complete your use case first",
         variant: "destructive",
       });
-    }
-
-    const response = await requestApiKey(address);
-    const { data } = await getUser({ address });
-    await updateUser(address, data);
-
-    if (response) {
-      toast({
-        title: "Success",
-        description: "Your API key has been generated",
-      });
     } else {
-      toast({
-        title: "Error",
-        description: "Error while requesting",
-        variant: "destructive",
-      });
+      const response = await requestApiKey(address);
+      const { data } = await getUser({ address });
+      await updateUser(address, data);
+
+      if (response) {
+        toast({
+          title: "Success",
+          description: "Your API key has been generated",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Error while requesting",
+          variant: "destructive",
+        });
+      }
     }
   };
 
