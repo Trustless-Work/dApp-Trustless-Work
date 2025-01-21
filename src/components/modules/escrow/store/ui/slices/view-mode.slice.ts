@@ -9,7 +9,7 @@ export const useEscrowViewModeSlice: StateCreator<
 > = (set) => {
   return {
     // Stores
-    activeMode: "table",
+    activeMode: "cards",
 
     // Modifiers
     setActiveMode: (value: "table" | "cards") => set({ activeMode: value }),
