@@ -23,13 +23,13 @@ export const ItemsSidebar = {
           isActive: true,
           isExpandable: false,
         },
-        {
-          title: "Contacts",
-          url: "/dashboard/contact",
-          icon: LuContactRound,
-          isActive: true,
-          isExpandable: false,
-        },
+        // {
+        //   title: "Contacts",
+        //   url: "/dashboard/contact",
+        //   icon: LuContactRound,
+        //   isActive: true,
+        //   isExpandable: false,
+        // },
       ],
     },
     {

@@ -15,7 +15,7 @@ const HelpPage = () => {
       {isLoading ? (
         <Loader isLoading={isLoading} />
       ) : (
-        <div className="flex flex-col gap-3 w-full md:w-2/3">
+        <div className="flex flex-col gap-3 w-full">
           <Card className={cn("overflow-hidden")}>
             <CardContent className="p-6">
               <h1 className="text-4xl font-bold">Help Center</h1>
