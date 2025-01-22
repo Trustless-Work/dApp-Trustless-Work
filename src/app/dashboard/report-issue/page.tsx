@@ -10,23 +10,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const ReportIssuePage = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>
-        <Card className="w-full max-w-2xl mx-auto bg-muted/50">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold">
-              Report an API Issue
-            </CardTitle>
-            <CardDescription>
-              Fill in the details below to report an API issue.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ReportIssueForm />
-          </CardContent>
+        <Card className={cn("overflow-hidden")}>
+          <div className="p-6">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold">
+                Report an API Issue
+              </CardTitle>
+              <CardDescription>
+                Fill in the details below to report an API issue.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ReportIssueForm />
+            </CardContent>
+          </div>
         </Card>
       </WrapperForm>
     </Bounded>
