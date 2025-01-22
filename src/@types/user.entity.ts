@@ -14,6 +14,7 @@ export interface User {
   useCase?: string;
   apiKey?: string[];
   profileImage?: string;
+  address?: string;
 }
 
 export type UserPayload = Omit<User, "createdAt" | "updatedAt" | "id">;

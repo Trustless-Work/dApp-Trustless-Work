@@ -13,6 +13,9 @@ import { Input } from "@/components/ui/input";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useInitializeEscrowHook } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
 import TooltipInfo from "@/components/utils/Tooltip";
+import SelectField from "@/components/utils/SelectSearch";
+import { useState } from "react";
+import { Switch } from "@/components/ui/switch";
 
 const InitializeEscrowForm = () => {
   const {
@@ -22,7 +25,20 @@ const InitializeEscrowForm = () => {
     handleAddMilestone,
     handleRemoveMilestone,
     handleFieldChange,
+    userOptions,
   } = useInitializeEscrowHook();
+
+  const [showSelect, setShowSelect] = useState({
+    client: false,
+    serviceProvider: false,
+    platformAddress: false,
+    releaseSigner: false,
+    disputeResolver: false,
+  });
+
+  const toggleField = (field: string, value: boolean) => {
+    setShowSelect((prev) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <Form {...form}>
@@ -84,43 +100,76 @@ const InitializeEscrowForm = () => {
             name="client"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center">
-                  Client
-                  <TooltipInfo content="Address of the client initiating the escrow." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Alice Address"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("client", e.target.value);
-                    }}
+                <FormLabel className="flex items-center justify-between">
+                  <span className="flex items-center">Client</span>
+                  <Switch
+                    checked={showSelect.client}
+                    onCheckedChange={(value) => toggleField("client", value)}
+                    title="Show Users List?"
                   />
+                </FormLabel>
+
+                <FormControl>
+                  {showSelect.client ? (
+                    <SelectField
+                      control={form.control}
+                      name="client"
+                      label=""
+                      tooltipContent=""
+                      options={userOptions}
+                    />
+                  ) : (
+                    <Input
+                      placeholder="Enter client address"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleFieldChange("client", e.target.value);
+                      }}
+                    />
+                  )}
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="serviceProvider"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center">
-                  Service Provider
-                  <TooltipInfo content="Address of the service provider for this escrow." />
+                <FormLabel className="flex items-center justify-between">
+                  <span className="flex items-center">
+                    Service Provider
+                    <TooltipInfo content="Address of the service provider for this escrow." />
+                  </span>
+                  <Switch
+                    checked={showSelect.serviceProvider}
+                    onCheckedChange={(value) =>
+                      toggleField("serviceProvider", value)
+                    }
+                    title="Show Users List?"
+                  />
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Bob Address"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("serviceProvider", e.target.value);
-                    }}
-                  />
+                  {showSelect.serviceProvider ? (
+                    <SelectField
+                      control={form.control}
+                      name="serviceProvider"
+                      label=""
+                      tooltipContent=""
+                      options={userOptions}
+                    />
+                  ) : (
+                    <Input
+                      placeholder="Enter service provider address"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleFieldChange("serviceProvider", e.target.value);
+                      }}
+                    />
+                  )}
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -158,19 +207,38 @@ const InitializeEscrowForm = () => {
             name="platformAddress"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center">
-                  Platform Address
-                  <TooltipInfo content="Public key of the platform managing the escrow." />
+                <FormLabel className="flex items-center justify-between">
+                  <span className="flex items-center">
+                    Platform Address
+                    <TooltipInfo content="Public key of the platform managing the escrow." />
+                  </span>
+                  <Switch
+                    checked={showSelect.platformAddress}
+                    onCheckedChange={(value) =>
+                      toggleField("platformAddress", value)
+                    }
+                    title="Show Users List?"
+                  />
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Platform Public Key"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("platformAddress", e.target.value);
-                    }}
-                  />
+                  {showSelect.platformAddress ? (
+                    <SelectField
+                      control={form.control}
+                      name="platformAddress"
+                      label=""
+                      tooltipContent=""
+                      options={userOptions}
+                    />
+                  ) : (
+                    <Input
+                      placeholder="Enter service provider address"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleFieldChange("platformAddress", e.target.value);
+                      }}
+                    />
+                  )}
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -235,19 +303,38 @@ const InitializeEscrowForm = () => {
             name="releaseSigner"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center">
-                  Release Signer
-                  <TooltipInfo content="Entity authorized to release funds from escrow." />
+                <FormLabel className="flex items-center justify-between">
+                  <span className="flex items-center">
+                    Release Signer
+                    <TooltipInfo content="Entity authorized to release funds from escrow." />
+                  </span>
+                  <Switch
+                    checked={showSelect.releaseSigner}
+                    onCheckedChange={(value) =>
+                      toggleField("releaseSigner", value)
+                    }
+                    title="Show Users List?"
+                  />
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter the release signer"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("releaseSigner", e.target.value);
-                    }}
-                  />
+                  {showSelect.releaseSigner ? (
+                    <SelectField
+                      control={form.control}
+                      name="releaseSigner"
+                      label=""
+                      tooltipContent=""
+                      options={userOptions}
+                    />
+                  ) : (
+                    <Input
+                      placeholder="Enter service provider address"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleFieldChange("releaseSigner", e.target.value);
+                      }}
+                    />
+                  )}
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -259,19 +346,38 @@ const InitializeEscrowForm = () => {
             name="disputeResolver"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center">
-                  Dispute Resolver
-                  <TooltipInfo content="Entity responsible for resolving disputes." />
+                <FormLabel className="flex items-center justify-between">
+                  <span className="flex items-center">
+                    Dispute Resolver
+                    <TooltipInfo content="Entity responsible for resolving disputes." />
+                  </span>
+                  <Switch
+                    checked={showSelect.disputeResolver}
+                    onCheckedChange={(value) =>
+                      toggleField("disputeResolver", value)
+                    }
+                    title="Show Users List?"
+                  />
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter the dispute resolver"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("disputeResolver", e.target.value);
-                    }}
-                  />
+                  {showSelect.disputeResolver ? (
+                    <SelectField
+                      control={form.control}
+                      name="disputeResolver"
+                      label=""
+                      tooltipContent=""
+                      options={userOptions}
+                    />
+                  ) : (
+                    <Input
+                      placeholder="Enter service provider address"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleFieldChange("disputeResolver", e.target.value);
+                      }}
+                    />
+                  )}
                 </FormControl>
                 <FormMessage />
               </FormItem>
