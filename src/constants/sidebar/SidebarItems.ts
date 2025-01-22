@@ -1,4 +1,4 @@
-import { LuLayoutDashboard, LuContactRound } from "react-icons/lu";
+import { LuLayoutDashboard } from "react-icons/lu";
 import { BookOpen } from "lucide-react";
 import { FaStackOverflow } from "react-icons/fa";
 import { MdOutlineBugReport } from "react-icons/md";
