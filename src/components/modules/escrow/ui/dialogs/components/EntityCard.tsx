@@ -1,6 +1,9 @@
+import { User } from "@/@types/user.entity";
+import { getUserByWallet } from "@/components/modules/auth/server/authentication-firebase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { useFormatUtils } from "@/utils/hook/format.hook";
+import { useEffect, useState } from "react";
 
 interface EntityCardProps {
   entity?: string;
@@ -22,29 +25,39 @@ const EntityCard = ({
   inDispute,
 }: EntityCardProps) => {
   const { formatAddress, formatDollar } = useFormatUtils();
+  const [user, setUser] = useState<User | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (entity) {
+        try {
+          const fetchedUser = await getUserByWallet({ address: entity });
+          setUser(fetchedUser.data);
+        } catch (error) {
+          console.error("Error fetching user:", error);
+        }
+      }
+    };
+    fetchUser();
+  }, [entity]);
 
   return (
-    <div className={`flex flex-col w-full`}>
+    <div className="flex flex-col w-full">
       <div className="text-xs ml-2 mb-2 flex justify-between">
-        <span className={`${inDispute && "text-destructive"}`}>{type}</span>
-
+        <span className={`${inDispute ? "text-destructive" : ""}`}>{type}</span>
         <div className="flex gap-3">
-          <div className="flex">
-            {hasPercentage && (
-              <>
-                <p className="mr-1 font-bold">Fee:</p>
-                <span>{percentage}%</span>
-              </>
-            )}
-          </div>
-          <div className="flex">
-            {hasAmount && (
-              <>
-                <p className="mr-1 font-bold">Amount:</p>
-                <span>{formatDollar(amount)}</span>
-              </>
-            )}
-          </div>
+          {hasPercentage && (
+            <div className="flex">
+              <p className="mr-1 font-bold">Fee:</p>
+              <span className="text-green-700">{percentage}%</span>
+            </div>
+          )}
+          {hasAmount && (
+            <div className="flex">
+              <p className="mr-1 font-bold">Amount:</p>
+              <span className="text-green-700">{formatDollar(amount)}</span>
+            </div>
+          )}
         </div>
       </div>
       <SidebarMenuButton
@@ -53,12 +66,17 @@ const EntityCard = ({
       >
         <Avatar className="h-8 w-8 rounded-lg">
           {type === "Trustless Work" ? (
-            <AvatarImage src={"/logo.png"} alt={"name"} />
+            <AvatarImage src="/logo.png" alt="Trustless Work Logo" />
+          ) : user?.profileImage ? (
+            <AvatarImage
+              src={user.profileImage}
+              alt={`${user.firstName} ${user.lastName}`}
+            />
           ) : (
-            <>
-              <AvatarImage src={""} alt={"name"} />
-              <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-            </>
+            <AvatarFallback className="rounded-lg">
+              {user?.firstName?.[0] || "?"}
+              {user?.lastName?.[0] || "?"}
+            </AvatarFallback>
           )}
         </Avatar>
         <div className="grid flex-1 text-left text-sm leading-tight">
@@ -71,7 +89,9 @@ const EntityCard = ({
             </>
           ) : (
             <>
-              <span className="truncate text-xs font-semibold">{"name"}</span>
+              <span className="truncate text-xs font-semibold">
+                {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
+              </span>
               <span className="truncate text-xs">{formatAddress(entity)}</span>
             </>
           )}
