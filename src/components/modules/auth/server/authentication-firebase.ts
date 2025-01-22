@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { UserPayload } from "@/@types/user.entity";
+import { User, UserPayload } from "@/@types/user.entity";
 import { db } from "@/core/config/firebase/firebase";
 import {
   doc,
@@ -196,4 +196,41 @@ const getAllUsers = async (): Promise<{
   }
 };
 
-export { addUser, getUser, updateUser, getAllUsers };
+interface getUserByWalletProps {
+  address: string;
+}
+
+const getUserByWallet = async ({
+  address,
+}: getUserByWalletProps): Promise<{
+  success: boolean;
+  message: string;
+  data?: User;
+}> => {
+  try {
+    const userDoc = doc(db, "users", address);
+    const userSnapshot = await getDoc(userDoc);
+
+    if (userSnapshot.exists()) {
+      return {
+        success: true,
+        message: `User with wallet ${address} found successfully`,
+        data: userSnapshot.data() as User,
+      };
+    } else {
+      return {
+        success: false,
+        message: `User with wallet ${address} not found`,
+      };
+    }
+  } catch (error: any) {
+    const errorMessage =
+      error.response && error.response.data
+        ? error.response.data.message
+        : "An error occurred";
+
+    return { success: false, message: errorMessage };
+  }
+};
+
+export { addUser, getUser, updateUser, getAllUsers, getUserByWallet };
