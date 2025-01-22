@@ -1,4 +1,6 @@
-import React, { use, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import React, { useState } from "react";
 import {
   FormControl,
   FormField,
@@ -40,28 +42,23 @@ const SelectField: React.FC<SelectFieldProps> = ({
   options,
 }) => {
   const { handleFieldChange } = useInitializeEscrowHook();
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(options[0]);
+
+  const handleSelect = (option: {
+    value: string | undefined;
+    label: string;
+  }) => {
+    setSelected(option);
+    handleFieldChange(name, option.value);
+    setOpen(false);
+  };
 
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => {
-        const selectedOption = options.find(
-          (option) => option.value === field.value,
-        );
-        const [selected, setSelected] = useState(selectedOption || options[0]);
-        const [open, setOpen] = useState(false);
-
-        const handleSelect = (option: {
-          value: string | undefined;
-          label: string;
-        }) => {
-          setSelected(option);
-          field.onChange(option.value);
-          handleFieldChange(name, option.value);
-          setOpen(false);
-        };
-
         return (
           <FormItem>
             <FormLabel className="flex items-center">
@@ -91,7 +88,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
                         {options.map((option) => (
                           <CommandItem
                             key={option.value}
-                            onSelect={() => handleSelect(option)}
+                            onSelect={() => {
+                              setSelected(option);
+                              field.onChange(option.value);
+                              handleSelect(option);
+                            }}
                           >
                             {option.label}
                           </CommandItem>
