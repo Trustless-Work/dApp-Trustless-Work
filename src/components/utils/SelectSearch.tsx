@@ -61,10 +61,12 @@ const SelectField: React.FC<SelectFieldProps> = ({
       render={({ field }) => {
         return (
           <FormItem>
-            <FormLabel className="flex items-center">
-              {label}
-              <TooltipInfo content={tooltipContent} />
-            </FormLabel>
+            {label && (
+              <FormLabel className="flex items-center">
+                {label}
+                {tooltipContent && <TooltipInfo content={tooltipContent} />}
+              </FormLabel>
+            )}
             <FormControl>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
