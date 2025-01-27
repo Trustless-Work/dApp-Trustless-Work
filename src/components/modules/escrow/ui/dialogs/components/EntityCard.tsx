@@ -90,8 +90,11 @@ const EntityCard = ({
           ) : (
             <>
               <span className="truncate text-xs font-semibold">
-                {user ? `${user.firstName} ${user.lastName}` : "Loading..."}
+                {user && (user.firstName || user.lastName)
+                  ? `${user.firstName} ${user.lastName}`
+                  : "Unknown"}
               </span>
+
               <span className="truncate text-xs">{formatAddress(entity)}</span>
             </>
           )}
