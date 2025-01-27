@@ -18,15 +18,17 @@ import TooltipInfo from "@/components/utils/Tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useFormatUtils } from "@/utils/hook/format.hook";
+import { Trash2 } from "lucide-react";
 
 interface ProfileSectionProps {
   onSave: (data: UserPayload) => void;
 }
 
 const ProfileSection = ({ onSave }: ProfileSectionProps) => {
-  const { form, onSubmit, handleProfileImageUpload } = useProfile({
-    onSave,
-  });
+  const { form, onSubmit, handleProfileImageUpload, handleProfileImageDelete } =
+    useProfile({
+      onSave,
+    });
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const { formatDateFromFirebase } = useFormatUtils();
 
@@ -48,7 +50,7 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
           experience here.
         </p>
 
-        <div className="flex w-full justify-center items-center my-10">
+        <div className="flex w-full justify-center items-center mt-10">
           <Avatar className="h-60 w-60 rounded-full relative cursor-pointer">
             <label className="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 hover:opacity-100 transition-opacity rounded-full z-10">
               <span className="text-sm font-bold">Change Photo</span>
@@ -67,10 +69,22 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
               alt={loggedUser?.firstName}
             />
             <AvatarFallback className="rounded-lg">
-              {loggedUser?.firstName?.charAt(0)}{" "}
-              {loggedUser?.lastName ? loggedUser.lastName.charAt(0) : ""}
+              {loggedUser?.firstName ? loggedUser.firstName?.charAt(0) : "?"}{" "}
+              {loggedUser?.lastName ? loggedUser.lastName.charAt(0) : "?"}
             </AvatarFallback>
           </Avatar>
+        </div>
+
+        <div className="flex w-full justify-center items-center mb-10">
+          {loggedUser?.profileImage && (
+            <Button
+              variant="destructive"
+              className="mt-4"
+              onClick={handleProfileImageDelete}
+            >
+              <Trash2 className="h-5 w-5" />
+            </Button>
+          )}
         </div>
 
         <Form {...form}>
