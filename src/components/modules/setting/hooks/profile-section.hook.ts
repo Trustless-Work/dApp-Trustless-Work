@@ -1,6 +1,11 @@
 import { UserPayload } from "@/@types/user.entity";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import { useForm } from "react-hook-form";
 import { firebaseStorage } from "../../../../../firebase";
 import { v4 } from "uuid";
@@ -69,7 +74,37 @@ const useProfile = ({ onSave }: useProfileProps) => {
     }
   };
 
-  return { form, onSubmit, handleProfileImageUpload };
+  const handleProfileImageDelete = async () => {
+    try {
+      if (!loggedUser?.profileImage) {
+        toast({
+          title: "No image found",
+          description: "No profile image to delete.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const storageRef = ref(firebaseStorage, loggedUser.profileImage);
+      await deleteObject(storageRef);
+
+      await updateUser(address, { ...loggedUser, profileImage: "" });
+
+      toast({
+        title: "Success",
+        description: "Profile photo deleted successfully.",
+      });
+    } catch (error) {
+      console.error("Error deleting photo:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete photo. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  return { form, onSubmit, handleProfileImageUpload, handleProfileImageDelete };
 };
 
 export default useProfile;
