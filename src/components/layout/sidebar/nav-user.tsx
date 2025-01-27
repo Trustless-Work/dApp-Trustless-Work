@@ -69,8 +69,10 @@ export const NavUser = () => {
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">
-                  {loggedUser?.firstName?.charAt(0)}{" "}
-                  {loggedUser?.lastName ? loggedUser.lastName.charAt(0) : ""}
+                  {loggedUser?.firstName
+                    ? loggedUser.firstName?.charAt(0)
+                    : "?"}{" "}
+                  {loggedUser?.lastName ? loggedUser.lastName.charAt(0) : "?"}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -91,8 +93,10 @@ export const NavUser = () => {
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={user.avatar} alt={user.name} />
                   <AvatarFallback className="rounded-lg">
-                    {loggedUser?.firstName?.charAt(0)}{" "}
-                    {loggedUser?.lastName ? loggedUser.lastName.charAt(0) : ""}
+                    {loggedUser?.firstName
+                      ? loggedUser.firstName?.charAt(0)
+                      : "?"}{" "}
+                    {loggedUser?.lastName ? loggedUser.lastName.charAt(0) : "?"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
