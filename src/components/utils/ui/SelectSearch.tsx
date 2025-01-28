@@ -7,14 +7,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "../../ui/form";
 import TooltipInfo from "./Tooltip";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { ChevronsUpDown } from "lucide-react";
 import {
   Command,
@@ -23,8 +23,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "../ui/command";
-import { useInitializeEscrow } from "../modules/escrow/hooks/initialize-escrow.hook";
+} from "../../ui/command";
+import { useInitializeEscrow } from "../../modules/escrow/hooks/initialize-escrow.hook";
 
 interface SelectFieldProps {
   control: any;
