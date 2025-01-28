@@ -37,6 +37,7 @@ export type RolesInEscrow =
   | "serviceProvider"
   | "releaseSigner";
 
+// Payloads
 export type FundEscrowPayload = Pick<Escrow, "amount" | "contractId"> & {
   signer: string;
 };
