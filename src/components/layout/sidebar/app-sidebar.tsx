@@ -10,7 +10,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { ItemsSidebar } from "@/constants/sidebar/SidebarItems";
+import { ItemsSidebar } from "@/components/layout/sidebar/constants/sidebar-items.constant";
 import NavMain from "./nav-main";
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
