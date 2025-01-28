@@ -8,7 +8,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { distributeEscrowEarnings } from "../../../services/distribute-escrow-earnings.service";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 
 const useDistributeEarningsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();

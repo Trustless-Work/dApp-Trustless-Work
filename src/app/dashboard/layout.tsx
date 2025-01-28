@@ -4,7 +4,7 @@ import AppSidebar from "@/components/layout/sidebar/app-sidebar";
 import Footer from "@/components/layout/footer/Footer";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import Header from "@/components/layout/header/Header";
-import useLayoutDashboard from "@/hooks/use-layout-dashboard";
+import useLayoutDashboard from "@/hooks/layout-dashboard.hook";
 import { redirect } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 

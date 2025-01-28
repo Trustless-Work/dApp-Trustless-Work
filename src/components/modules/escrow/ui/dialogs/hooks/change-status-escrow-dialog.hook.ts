@@ -14,7 +14,7 @@ import {
   MilestoneStatus,
 } from "@/@types/escrow.entity";
 import { changeMilestoneStatus } from "../../../services/change-milestone-status.service";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 
 const useChangeStatusEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();

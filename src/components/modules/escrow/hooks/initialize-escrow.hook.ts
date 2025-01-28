@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 import { initializeEscrow } from "@/components/modules/escrow/services/initialize-escrow.service";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { useEscrowFormStore } from "@/store/escrowFormStore/store";

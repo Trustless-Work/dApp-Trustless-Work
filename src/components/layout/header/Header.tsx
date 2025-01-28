@@ -4,7 +4,7 @@ import ThemeToggle from "./ThemeToggle";
 import { Breadcrumb, BreadcrumbList } from "../../ui/breadcrumb";
 import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { SidebarTrigger } from "../../ui/sidebar";
-import useIsMobile from "@/hooks/use-mobile";
+import useIsMobile from "@/hooks/mobile.hook";
 import { cn } from "@/lib/utils";
 import useHeader from "./hooks/header.hook";
 import Link from "next/link";

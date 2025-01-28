@@ -9,7 +9,7 @@ import {
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { EscrowPayload } from "@/@types/escrow.entity";
 import { startDispute } from "../../../services/start-dispute.service";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 
 const useStartDisputeEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();

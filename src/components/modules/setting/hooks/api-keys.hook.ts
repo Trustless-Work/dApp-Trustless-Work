@@ -4,7 +4,7 @@ import { useState } from "react";
 import { requestApiKey } from "../services/requestApiKey";
 import { getUser } from "../../auth/server/authentication.firebase";
 import { removeApiKey } from "../server/api-key-firebase";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 
 const useAPIKeys = () => {
   const [showApiKey, setShowApiKey] = useState("password");

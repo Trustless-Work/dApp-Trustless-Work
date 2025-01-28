@@ -10,7 +10,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 import { db } from "@/core/config/firebase/firebase";
 import { formSchema, WalletType } from "../schema/contact-schema";
 

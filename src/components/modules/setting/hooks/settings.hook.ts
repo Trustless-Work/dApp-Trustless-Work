@@ -1,6 +1,6 @@
 import { useThemeStore } from "@/store/themeStore/store";
 import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 import { UserPayload } from "@/@types/user.entity";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { PreferencesForm } from "./preferences-section.hook";

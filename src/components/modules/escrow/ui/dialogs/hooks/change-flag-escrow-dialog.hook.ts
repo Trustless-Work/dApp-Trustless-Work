@@ -9,7 +9,7 @@ import {
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { Escrow, EscrowPayload, Milestone } from "@/@types/escrow.entity";
 import { changeMilestoneFlag } from "../../../services/change-mileston-flag.service";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 
 const useChangeFlagEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
