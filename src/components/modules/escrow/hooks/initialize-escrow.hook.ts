@@ -2,7 +2,7 @@
 "use client";
 
 import { toast } from "@/hooks/use-toast";
-import { initializeEscrow } from "@/components/modules/escrow/services/initializeEscrow";
+import { initializeEscrow } from "@/components/modules/escrow/services/initialize-escrow.service";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { useEscrowFormStore } from "@/store/escrowFormStore/store";
 import { zodResolver } from "@hookform/resolvers/zod";

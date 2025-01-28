@@ -7,7 +7,7 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
-import { distributeEscrowEarnings } from "../../../services/distributeEscrowEarnings";
+import { distributeEscrowEarnings } from "../../../services/distribute-escrow-earnings.service";
 import { toast } from "@/hooks/use-toast";
 
 const useDistributeEarningsEscrowDialogHook = () => {

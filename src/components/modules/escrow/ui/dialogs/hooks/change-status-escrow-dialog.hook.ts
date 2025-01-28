@@ -13,7 +13,7 @@ import {
   Milestone,
   MilestoneStatus,
 } from "@/@types/escrow.entity";
-import { changeMilestoneStatus } from "../../../services/changeMilestoneStatus";
+import { changeMilestoneStatus } from "../../../services/change-milestone-status.service";
 import { toast } from "@/hooks/use-toast";
 
 const useChangeStatusEscrowDialogHook = () => {

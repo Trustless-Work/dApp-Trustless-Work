@@ -8,7 +8,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { Escrow, EscrowPayload, Milestone } from "@/@types/escrow.entity";
-import { changeMilestoneFlag } from "../../../services/changeMilestoneFlag";
+import { changeMilestoneFlag } from "../../../services/change-mileston-flag.service";
 import { toast } from "@/hooks/use-toast";
 
 const useChangeFlagEscrowDialogHook = () => {

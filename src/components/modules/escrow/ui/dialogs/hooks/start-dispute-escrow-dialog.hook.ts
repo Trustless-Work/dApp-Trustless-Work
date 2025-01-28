@@ -8,7 +8,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { EscrowPayload } from "@/@types/escrow.entity";
-import { startDispute } from "../../../services/startDispute";
+import { startDispute } from "../../../services/start-dispute.service";
 import { toast } from "@/hooks/use-toast";
 
 const useStartDisputeEscrowDialogHook = () => {

@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { useGlobalBoundedStore } from "@/core/store/data";
-import { resolveDispute } from "../../../services/resolveDispute";
+import { resolveDispute } from "../../../services/resolve-dispute.service";
 import { ResolveDisputePayload } from "@/@types/escrow.entity";
 import { MouseEvent } from "react";
 import { getFormSchema } from "../../../schema/resolve-dispute-escrow.schema";
