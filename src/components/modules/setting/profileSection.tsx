@@ -65,6 +65,7 @@ const ProfileSection = ({ onSave }: ProfileSectionProps) => {
               />
             </label>
             <AvatarImage
+              className="object-cover"
               src={loggedUser?.profileImage}
               alt={loggedUser?.firstName}
             />
