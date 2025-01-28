@@ -7,7 +7,7 @@ import Loader from "@/components/utils/Loader";
 import { cn } from "@/lib/utils";
 import { useLoaderStore } from "@/store/utilsStore/store";
 
-const HelpPage = () => {
+const HelpPage: React.FC = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
 
   return (

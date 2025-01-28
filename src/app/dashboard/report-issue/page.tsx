@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-const ReportIssuePage = () => {
+const ReportIssuePage: React.FC = () => {
   return (
     <Bounded center={true}>
       <WrapperForm>

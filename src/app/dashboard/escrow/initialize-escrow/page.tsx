@@ -4,7 +4,7 @@ import CreateEscrow from "@/components/modules/escrow/CreateEscrow";
 import { EscrowSteps } from "@/components/modules/escrow/ui/steps/EscrowStepper";
 import InitEscrow from "@/components/modules/escrow/InitEscrow";
 
-const InitializeEscrowPage = () => {
+const InitializeEscrowPage: React.FC = () => {
   const steps = [
     {
       title: "Create Escrow",

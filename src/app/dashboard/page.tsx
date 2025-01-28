@@ -2,7 +2,7 @@ import { Chart } from "@/components/ui/chart";
 import MetricsSection from "@/components/modules/dashboard/MetricSection";
 import RecentSales from "@/components/modules/dashboard/RecentSales";
 
-const DashboardPage = () => {
+const DashboardPage: React.FC = () => {
   const chartData = [
     { name: "Jan", value: 4500 },
     { name: "Feb", value: 4000 },
@@ -37,11 +37,6 @@ const DashboardPage = () => {
             <RecentSales />
           </div>
         </div>
-        {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <div className="col-span-4">
-            <Progress value={50} label="Progress" />
-          </div>
-        </div> */}
       </div>
     </div>
   );
