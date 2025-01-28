@@ -27,11 +27,11 @@ import {
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { cn } from "@/lib/utils";
-import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import Link from "next/link";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { useWallet } from "@/wallet/hooks/wallet.hook";
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();
@@ -40,7 +40,7 @@ export const NavUser = () => {
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const { formatAddress } = useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
-  const { handleDisconnect } = useWalletUtils();
+  const { handleDisconnect } = useWallet();
   const router = useRouter();
   const pathname = usePathname();
 

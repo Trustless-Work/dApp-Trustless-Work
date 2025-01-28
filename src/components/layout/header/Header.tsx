@@ -2,16 +2,16 @@
 
 import ThemeToggle from "./ThemeToggle";
 import { Breadcrumb, BreadcrumbList } from "../../ui/breadcrumb";
-import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { SidebarTrigger } from "../../ui/sidebar";
 import useIsMobile from "@/hooks/mobile.hook";
 import { cn } from "@/lib/utils";
 import useHeader from "./hooks/header.hook";
 import Link from "next/link";
 import { ArrowBigLeft } from "lucide-react";
+import { useWallet } from "@/wallet/hooks/wallet.hook";
 
 const Header = () => {
-  const { handleConnect, handleDisconnect } = useWalletUtils();
+  const { handleConnect, handleDisconnect } = useWallet();
   const isMobile = useIsMobile();
   const { pathName, getBreadCrumbs, address } = useHeader();
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useWalletUtils } from "@/utils/hook/wallet.hook";
+import { useWallet } from "@/wallet/hooks/wallet.hook";
 import useHeaderWithoutAuth from "./hooks/header-without-auth.hook";
 import ThemeToggle from "./ThemeToggle";
 import Image from "next/image";
@@ -13,7 +13,7 @@ interface HeaderWithoutAuthProps {
 const HeaderWithoutAuth: React.FC<HeaderWithoutAuthProps> = ({
   highlightConnect,
 }) => {
-  const { handleConnect, handleDisconnect } = useWalletUtils();
+  const { handleConnect, handleDisconnect } = useWallet();
   const { address, handleReportIssue } = useHeaderWithoutAuth();
 
   return (
