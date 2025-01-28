@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { useThemeStore } from "@/store/themeStore/store";
 import { MoonStar, Sun } from "lucide-react";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
 const ThemeToggle = () => {
-  const { theme, toggleTheme } = useThemeStore();
+  const theme = useGlobalUIBoundedStore((state) => state.theme);
+  const toggleTheme = useGlobalUIBoundedStore((state) => state.toggleTheme);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

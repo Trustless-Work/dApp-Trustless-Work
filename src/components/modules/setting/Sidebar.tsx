@@ -1,6 +1,6 @@
 "use client";
 
-import { useThemeStore } from "@/store/themeStore/store";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
 interface SettingsSidebarProps {
   currentTab: string;
@@ -13,7 +13,7 @@ const SettingsSidebar = ({
   onTabChange,
   className,
 }: SettingsSidebarProps) => {
-  const { theme } = useThemeStore();
+  const theme = useGlobalUIBoundedStore((state) => state.theme);
 
   return (
     <aside
