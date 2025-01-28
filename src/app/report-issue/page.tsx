@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 
-const ReportIssueWithoutAuthPage = () => {
+const ReportIssueWithoutAuthPage: React.FC = () => {
   return (
     <>
       <HeaderWithoutAuth />
