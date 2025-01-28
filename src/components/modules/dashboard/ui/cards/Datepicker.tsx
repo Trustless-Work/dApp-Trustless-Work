@@ -4,10 +4,14 @@ import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
-import { Button } from "../../ui/button";
-import { Calendar } from "../../ui/calender";
-import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
-import { useState } from "react";
+import { Button } from "../../../../ui/button";
+import { Calendar } from "../../../../ui/calender";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../../../ui/popover";
+import useDashboard from "../../hooks/dashboard.hook";
 
 interface DateRangePickerProps {
   className?: string;
@@ -20,12 +24,7 @@ const DateRangePicker = ({
   date,
   onChange,
 }: DateRangePickerProps) => {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>(date);
-
-  const handleSelect = (range: DateRange | undefined) => {
-    setDateRange(range);
-    onChange?.(range);
-  };
+  const { dateRange, handleSelect } = useDashboard({ date, onChange });
 
   return (
     <div className={cn("grid gap-2", className)}>

@@ -1,6 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../../ui/card";
 import SalesItem from "./SalesItem";
 
+// todo: delete it
 export interface SaleItem {
   name: string;
   email: string;
@@ -9,6 +10,7 @@ export interface SaleItem {
 }
 
 const RecentSales = () => {
+  // Mock data
   const sales: SaleItem[] = [
     {
       name: "Olivia Martin",

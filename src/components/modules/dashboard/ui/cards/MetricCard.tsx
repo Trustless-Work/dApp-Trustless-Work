@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Card, CardContent } from "../../ui/card";
+import { Card, CardContent } from "../../../../ui/card";
 
 interface MetricCardProps {
   title: string;
