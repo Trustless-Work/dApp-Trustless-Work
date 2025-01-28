@@ -15,9 +15,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import TooltipInfo from "@/components/utils/Tooltip";
-import { TbPigMoney } from "react-icons/tb";
-import { MdAttachMoney, MdOutlineCancel } from "react-icons/md";
-import { FaRegCopy, FaCheck } from "react-icons/fa";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import EntityCard from "./components/EntityCard";
 import FundEscrowDialog from "./FundEscrowDialog";
@@ -33,6 +30,7 @@ import ProgressEscrow from "./components/ProgressEscrow";
 import useStartDisputeEscrowDialogHook from "./hooks/start-dispute-escrow-dialog.hook";
 import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
 import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
+import { Ban, Check, CircleDollarSign, Copy, Wallet } from "lucide-react";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -136,7 +134,7 @@ const EscrowDetailDialog = ({
                     <p className="text-sm font-medium text-muted-foreground">
                       Status
                     </p>
-                    <MdOutlineCancel className="text-destructive" size={30} />
+                    <Ban className="text-destructive" size={30} />
                   </div>
                   <div className="mt-2 flex items-baseline">
                     <h3 className="text-2xl font-semibold">In Dispute</h3>
@@ -155,7 +153,7 @@ const EscrowDetailDialog = ({
                   <p className="text-sm font-medium text-muted-foreground">
                     Amount
                   </p>
-                  <MdAttachMoney size={30} />
+                  <CircleDollarSign size={30} />
                 </div>
                 <div className="mt-2 flex items-baseline">
                   <h3 className="text-2xl font-semibold">
@@ -175,7 +173,7 @@ const EscrowDetailDialog = ({
                   <p className="text-sm font-medium text-muted-foreground">
                     Balance
                   </p>
-                  <TbPigMoney size={30} />
+                  <Wallet size={30} />
                 </div>
                 <div className="mt-2 flex items-baseline">
                   <h3 className="text-2xl font-semibold">
@@ -202,9 +200,9 @@ const EscrowDetailDialog = ({
                     title="Copy Escrow ID"
                   >
                     {copiedKeyId ? (
-                      <FaCheck className={cn("h-4 w-4 text-green-700")} />
+                      <Check className={cn("h-4 w-4 text-green-700")} />
                     ) : (
-                      <FaRegCopy className={cn("h-4 w-4")} />
+                      <Copy className={cn("h-4 w-4")} />
                     )}
                   </button>
                 </div>

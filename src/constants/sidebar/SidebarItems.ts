@@ -1,8 +1,10 @@
-import { LuLayoutDashboard } from "react-icons/lu";
-import { BookOpen } from "lucide-react";
-import { FaStackOverflow } from "react-icons/fa";
-import { MdOutlineBugReport } from "react-icons/md";
-import { GrHelpBook } from "react-icons/gr";
+import {
+  BookOpen,
+  Bug,
+  CircleHelp,
+  Layers,
+  LayoutDashboard,
+} from "lucide-react";
 
 export const ItemsSidebar = {
   teams: [
@@ -19,7 +21,7 @@ export const ItemsSidebar = {
         {
           title: "Dashboard",
           url: "/dashboard",
-          icon: LuLayoutDashboard,
+          icon: LayoutDashboard,
           isActive: true,
           isExpandable: false,
         },
@@ -38,7 +40,7 @@ export const ItemsSidebar = {
         {
           title: "Escrows",
           url: "/dashboard/escrow/my-escrows",
-          icon: FaStackOverflow,
+          icon: Layers,
           isActive: false,
           isExpandable: false,
         },
@@ -73,14 +75,14 @@ export const ItemsSidebar = {
         {
           title: "Report an API Issue",
           url: "/dashboard/report-issue",
-          icon: MdOutlineBugReport,
+          icon: Bug,
           isActive: true,
           isExpandable: false,
         },
         {
           title: "Help",
           url: "/dashboard/help",
-          icon: GrHelpBook,
+          icon: CircleHelp,
           isActive: true,
           isExpandable: false,
         },

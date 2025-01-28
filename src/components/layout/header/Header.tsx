@@ -8,7 +8,7 @@ import useIsMobile from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import useHeader from "./hooks/header.hook";
 import Link from "next/link";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { ArrowBigLeft } from "lucide-react";
 
 const Header = () => {
   const { handleConnect, handleDisconnect } = useWalletUtils();
@@ -38,7 +38,7 @@ const Header = () => {
                 href={"/dashboard"}
                 className="flex items-center gap-2 text-sm font-bold border-2 border-gray-200 dark:border-gray-600 rounded-md p-2"
               >
-                <IoMdArrowRoundBack />
+                <ArrowBigLeft />
                 Back
               </Link>
             )}

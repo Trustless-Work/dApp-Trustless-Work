@@ -8,7 +8,7 @@ import useAPIKeys from "./hooks/api-keys.hook";
 import Link from "next/link";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { FaRegTrashCan } from "react-icons/fa6";
+import { Trash2 } from "lucide-react";
 
 const APIKeysSection = () => {
   const { onSubmit, showApiKey, toggleVisibility, handleRemoveAPiKey } =
@@ -66,7 +66,7 @@ const APIKeysSection = () => {
                 onClick={() => handleRemoveAPiKey(apiKey)}
                 className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
               >
-                <FaRegTrashCan className="h-5 w-5" />
+                <Trash2 className="h-5 w-5" />
               </Button>
             </div>
           ))}

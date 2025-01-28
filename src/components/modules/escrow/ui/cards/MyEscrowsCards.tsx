@@ -2,7 +2,6 @@ import { useFormatUtils } from "@/utils/hook/format.hook";
 import useMyEscrows from "../../hooks/my-escrows.hook";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { FaStackOverflow } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import NoData from "@/components/utils/NoData";
@@ -15,6 +14,7 @@ import {
 import LoaderData from "@/components/utils/LoaderData";
 import ProgressEscrow from "../dialogs/components/ProgressEscrow";
 import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
+import { Layers } from "lucide-react";
 
 interface MyEscrowsCardsProps {
   type:
@@ -88,7 +88,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                       </p>
 
                       {!escrow.disputeFlag ? (
-                        <FaStackOverflow size={30} />
+                        <Layers size={30} />
                       ) : (
                         <p className="font-bold text-sm text-muted-foreground">
                           In Dispute

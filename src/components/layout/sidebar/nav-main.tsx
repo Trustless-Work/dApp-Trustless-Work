@@ -14,7 +14,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { IconType } from "react-icons/lib";
 import Link from "next/link";
 
 const NavMain = ({
@@ -25,7 +24,7 @@ const NavMain = ({
     items: {
       title: string;
       url: string;
-      icon?: IconType | LucideIcon;
+      icon?: LucideIcon;
       isActive?: boolean;
       isExternal?: boolean;
       isExpandable?: boolean;

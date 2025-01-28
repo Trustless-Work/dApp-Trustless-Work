@@ -1,4 +1,4 @@
-import { AiOutlineFileSearch } from "react-icons/ai";
+import { ArchiveX } from "lucide-react";
 
 interface NoDataProps {
   isCard?: boolean;
@@ -9,7 +9,7 @@ const NoData = ({ isCard }: NoDataProps) => {
     <div
       className={`flex flex-col justify-center items-center my-5 gap-3 text-gray-500 ${isCard && "py-3"}`}
     >
-      <AiOutlineFileSearch size={50} />
+      <ArchiveX size={50} />
       <h1 className="text-lg">No Data Available</h1>
     </div>
   );

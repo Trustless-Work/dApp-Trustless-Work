@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
-import { TbDeviceDesktopCode } from "react-icons/tb";
-import { LuClipboard, LuSquareUserRound, LuCheck } from "react-icons/lu";
 import CodeBlock from "@/components/utils/Code/CodeBlock";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { cn } from "@/lib/utils";
+import { Check, CodeXml, Copy, SquareUser, User } from "lucide-react";
 
 type FlipCardProps = {
   children: React.ReactNode;
@@ -30,7 +29,7 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
                 className="cursor-pointer scale-100 p-2 text-muted-foreground dark:text-white rounded-full transition-all duration-300 hover:scale-125"
                 onClick={() => setIsFlipped(true)}
               >
-                <TbDeviceDesktopCode size={24} title="Developer Mode" />
+                <CodeXml size={24} />
               </button>
             </div>
           )}
@@ -46,10 +45,10 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
               title="Copy address"
             >
               {copiedKeyId ? (
-                <LuCheck size={24} className="text-green-700" />
+                <Check size={24} className="text-green-700" />
               ) : (
-                <LuClipboard
-                  size={24}
+                <Copy
+                  size={21}
                   className={cn(
                     copiedKeyId
                       ? "text-green-700"
@@ -62,9 +61,8 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
               className="cursor-pointerrounded-full shadow-lg transition-all duration-300 scale-100 hover:scale-125"
               onClick={() => setIsFlipped(false)}
             >
-              <LuSquareUserRound
+              <SquareUser
                 size={24}
-                title="User Mode"
                 className="dark:text-white text-muted-foreground"
               />
             </button>
