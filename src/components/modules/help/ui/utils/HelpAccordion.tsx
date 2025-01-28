@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { helpItems } from "@/constants/help/HelpItems";
+import { helpItems } from "@/components/modules/help/constants/help-items.constant";
 
 const HelpAccordion = () => {
   return (
