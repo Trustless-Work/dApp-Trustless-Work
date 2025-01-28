@@ -1,5 +1,5 @@
 import { Bounded } from "@/components/layout/Bounded";
-import HelpAccordion from "@/components/modules/help/HelpAccordion";
+import HelpAccordion from "@/components/modules/help/ui/utils/HelpAccordion";
 import { Card, CardContent } from "@/components/ui/card";
 import Loader from "@/components/utils/Loader";
 import { cn } from "@/lib/utils";
