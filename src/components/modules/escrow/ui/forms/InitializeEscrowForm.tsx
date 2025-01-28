@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
-import TooltipInfo from "@/components/utils/Tooltip";
-import SelectField from "@/components/utils/SelectSearch";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
+import SelectField from "@/components/utils/ui/SelectSearch";
 import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Trash2 } from "lucide-react";

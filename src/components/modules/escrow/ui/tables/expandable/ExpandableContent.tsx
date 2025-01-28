@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Divider from "@/components/utils/Divider";
+import Divider from "@/components/utils/ui/Divider";
 import EntityCard from "../../dialogs/cards/EntityCard";
 import ProgressEscrow from "../../dialogs/utils/ProgressEscrow";
 

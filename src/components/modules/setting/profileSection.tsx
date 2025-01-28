@@ -14,7 +14,7 @@ import useProfile from "./hooks/profile-section.hook";
 import { UserPayload } from "@/@types/user.entity";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import TooltipInfo from "@/components/utils/Tooltip";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useFormatUtils } from "@/utils/hook/format.hook";

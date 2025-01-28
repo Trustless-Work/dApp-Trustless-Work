@@ -1,5 +1,5 @@
 import { useLoaderStore } from "@/store/utilsStore/store";
-import Loader from "@/components/utils/Loader";
+import Loader from "@/components/utils/ui/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";

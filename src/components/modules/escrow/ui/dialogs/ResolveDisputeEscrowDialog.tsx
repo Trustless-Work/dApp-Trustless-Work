@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import TooltipInfo from "@/components/utils/Tooltip";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
 
 interface ResolveDisputeEscrowDialogProps {
