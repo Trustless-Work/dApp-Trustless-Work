@@ -22,7 +22,7 @@ const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
       </div>
     );
   }
-  return null; // Ensure it returns null if not loading
+  return null;
 };
 
 export default Loader;
