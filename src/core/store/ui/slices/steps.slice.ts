@@ -1,27 +1,19 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { StateCreator } from "zustand";
+import { StepsGlobalUIStore } from "../@types/steps.entity";
 
-interface StepsState {
-  currentStep: number;
-  totalSteps: number;
-  completedSteps: Set<number>;
-  setCurrentStep: (step: number) => void;
-  setTotalSteps: (total: number) => void;
-  toggleStep: (step: number) => void;
-  isStepCompleted: (step: number) => boolean;
-  nextStep: () => void;
-  previousStep: () => void;
-  isFirstStep: () => boolean;
-  isLastStep: () => boolean;
-  resetSteps: () => void;
-}
-
-export const useStepsStore = create<StepsState>()(
-  devtools((set, get) => ({
+export const useStepsSlice: StateCreator<
+  StepsGlobalUIStore,
+  [["zustand/devtools", never]],
+  [],
+  StepsGlobalUIStore
+> = (set, get) => {
+  return {
+    // Stores
     currentStep: 1,
     totalSteps: 1,
     completedSteps: new Set<number>(),
 
+    // Modifiers
     setCurrentStep: (step: number) => {
       if (step >= 1 && step <= get().totalSteps) {
         set({ currentStep: step });
@@ -79,5 +71,5 @@ export const useStepsStore = create<StepsState>()(
     isFirstStep: () => get().currentStep === 1,
     isLastStep: () => get().currentStep === get().totalSteps,
     resetSteps: () => set({ currentStep: 0, completedSteps: new Set() }),
-  })),
-);
+  };
+};
