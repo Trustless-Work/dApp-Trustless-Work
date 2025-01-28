@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { formSchema } from "../schema/report-issue-schema";
+import { formSchema } from "../schema/report-issue.schema";
 import { addReportIssue } from "../server/report-issue.firebase";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { toast } from "@/hooks/use-toast";

@@ -3,7 +3,7 @@
 
 import { db } from "@/core/config/firebase/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { formSchema } from "../schema/report-issue-schema";
+import { formSchema } from "../schema/report-issue.schema";
 import { z } from "zod";
 
 interface addReportIssueProps {
