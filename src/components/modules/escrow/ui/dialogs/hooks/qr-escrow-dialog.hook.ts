@@ -4,9 +4,7 @@ interface useQREscrowDialogProps {
   setIsQRDialogOpen: (value: boolean) => void;
 }
 
-const useQREscrowDialogHook = ({
-  setIsQRDialogOpen,
-}: useQREscrowDialogProps) => {
+const useQREscrowDialog = ({ setIsQRDialogOpen }: useQREscrowDialogProps) => {
   const handleClose = () => {
     setIsQRDialogOpen(false);
   };
@@ -14,4 +12,4 @@ const useQREscrowDialogHook = ({
   return { handleClose };
 };
 
-export default useQREscrowDialogHook;
+export default useQREscrowDialog;

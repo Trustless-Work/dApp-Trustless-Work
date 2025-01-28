@@ -17,7 +17,7 @@ interface useResolveDisputeEscrowDialogProps {
   setIsResolveDisputeDialogOpen: (value: boolean) => void;
 }
 
-const useResolveDisputeEscrowDialogHook = ({
+const useResolveDisputeEscrowDialog = ({
   setIsResolveDisputeDialogOpen,
 }: useResolveDisputeEscrowDialogProps) => {
   const setIsLoading = useLoaderStore((state) => state.setIsLoading);
@@ -92,4 +92,4 @@ const useResolveDisputeEscrowDialogHook = ({
   return { onSubmit, form, handleClose, handleOpen };
 };
 
-export default useResolveDisputeEscrowDialogHook;
+export default useResolveDisputeEscrowDialog;

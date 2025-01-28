@@ -10,7 +10,7 @@ import { useEscrowBoundedStore } from "../../../store/ui";
 import { distributeEscrowEarnings } from "../../../services/distribute-escrow-earnings.service";
 import { toast } from "@/hooks/use-toast";
 
-const useDistributeEarningsEscrowDialogHook = () => {
+const useDistributeEarningsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
   const setIsChangingStatus = useEscrowBoundedStore(
     (state) => state.setIsChangingStatus,
@@ -59,4 +59,4 @@ const useDistributeEarningsEscrowDialogHook = () => {
   return { distributeEscrowEarningsSubmit };
 };
 
-export default useDistributeEarningsEscrowDialogHook;
+export default useDistributeEarningsEscrowDialog;

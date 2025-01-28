@@ -18,7 +18,7 @@ interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
 }
 
-const useFundEscrowDialogHook = ({
+const useFundEscrowDialog = ({
   setIsSecondDialogOpen,
 }: useFundEscrowDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
@@ -89,4 +89,4 @@ const useFundEscrowDialogHook = ({
   return { onSubmit, form, handleClose };
 };
 
-export default useFundEscrowDialogHook;
+export default useFundEscrowDialog;

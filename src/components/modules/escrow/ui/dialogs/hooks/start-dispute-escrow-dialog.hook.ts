@@ -11,7 +11,7 @@ import { EscrowPayload } from "@/@types/escrow.entity";
 import { startDispute } from "../../../services/start-dispute.service";
 import { toast } from "@/hooks/use-toast";
 
-const useStartDisputeEscrowDialogHook = () => {
+const useStartDisputeEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
   const setIsStartingDispute = useEscrowBoundedStore(
     (state) => state.setIsStartingDispute,
@@ -71,4 +71,4 @@ const useStartDisputeEscrowDialogHook = () => {
   return { startDisputeSubmit };
 };
 
-export default useStartDisputeEscrowDialogHook;
+export default useStartDisputeEscrowDialog;
