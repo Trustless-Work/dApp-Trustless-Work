@@ -17,7 +17,7 @@ import MyEscrowsTable from "@/components/modules/escrow/ui/tables/MyEscrowsTable
 import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
 import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFilter";
 
-const EscrowsPage = () => {
+const EscrowsPage: React.FC = () => {
   const isLoading = useLoaderStore((state) => state.isLoading);
   const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
   const setActiveMode = useEscrowBoundedStore((state) => state.setActiveMode);
