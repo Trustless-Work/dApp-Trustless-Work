@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import useHeader from "./hooks/header.hook";
 import Link from "next/link";
 import { ArrowBigLeft } from "lucide-react";
-import { useWallet } from "@/wallet/hooks/wallet.hook";
+import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 
 const Header = () => {
   const { handleConnect, handleDisconnect } = useWallet();

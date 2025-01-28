@@ -1,6 +1,6 @@
 import { DistributeEscrowEarningsEscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
-import { kit } from "@/wallet/walletKit";
+import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
 import axios from "axios";

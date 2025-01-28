@@ -31,7 +31,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { useWallet } from "@/wallet/hooks/wallet.hook";
+import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();

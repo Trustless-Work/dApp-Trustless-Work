@@ -1,6 +1,6 @@
 "use client";
 
-import { useWallet } from "@/wallet/hooks/wallet.hook";
+import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 import useHeaderWithoutAuth from "./hooks/header-without-auth.hook";
 import ThemeToggle from "./ThemeToggle";
 import Image from "next/image";
