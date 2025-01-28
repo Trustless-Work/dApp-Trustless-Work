@@ -3,7 +3,6 @@
 
 import { toast } from "@/hooks/toast.hook";
 import { initializeEscrow } from "@/components/modules/escrow/services/initialize-escrow.service";
-import { useLoaderStore } from "@/store/utilsStore/store";
 import { useEscrowFormStore } from "@/store/escrowFormStore/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,19 +15,19 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../store/ui";
-import { useStepsStore } from "@/store/stepsStore/store";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
 export const useInitializeEscrow = () => {
   const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
-  const setIsLoading = useLoaderStore((state) => state.setIsLoading);
+  const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
   const { formData, setFormData, resetForm } = useEscrowFormStore();
   const router = useRouter();
   const setIsSuccessDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
   );
-  const resetSteps = useStepsStore((state) => state.resetSteps);
+  const resetSteps = useGlobalUIBoundedStore((state) => state.resetSteps);
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );

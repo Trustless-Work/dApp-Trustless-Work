@@ -1,4 +1,3 @@
-import { useLoaderStore } from "@/store/utilsStore/store";
 import Loader from "@/components/utils/ui/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -14,9 +13,10 @@ import { useEscrowBoundedStore } from "@/components/modules/escrow/store/ui";
 import MyEscrowsTable from "@/components/modules/escrow/ui/tables/MyEscrowsTable";
 import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
 import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFilter";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
 const MyEscrows = () => {
-  const isLoading = useLoaderStore((state) => state.isLoading);
+  const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
   const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
   const setActiveMode = useEscrowBoundedStore((state) => state.setActiveMode);
   const activeMode = useEscrowBoundedStore((state) => state.activeMode);
