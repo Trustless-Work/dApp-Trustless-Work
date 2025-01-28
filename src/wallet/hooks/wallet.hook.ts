@@ -25,8 +25,28 @@ export const useWallet = () => {
     disconnectWalletStore();
   };
 
+  const handleConnect = async () => {
+    try {
+      await connectWallet();
+    } catch (error) {
+      console.error("Error connecting wallet:", error);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    try {
+      if (disconnectWallet) {
+        await disconnectWallet();
+      }
+    } catch (error) {
+      console.error("Error disconnecting wallet:", error);
+    }
+  };
+
   return {
     connectWallet,
     disconnectWallet,
+    handleConnect,
+    handleDisconnect,
   };
 };
