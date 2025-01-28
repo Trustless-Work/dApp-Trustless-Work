@@ -1,5 +1,5 @@
 import { User } from "@/@types/user.entity";
-import { getUserByWallet } from "@/components/modules/auth/server/authentication-firebase";
+import { getUserByWallet } from "@/components/modules/auth/server/authentication.firebase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { useFormatUtils } from "@/utils/hook/format.hook";

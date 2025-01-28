@@ -5,7 +5,7 @@ import {
   addEscrow,
   getAllEscrowsByUser,
   updateEscrow,
-} from "@/components/modules/escrow/server/escrow-firebase";
+} from "@/components/modules/escrow/server/escrow.firebase";
 import { getBalance } from "@/components/modules/escrow/services/getBalance";
 
 const ESCROW_ACTIONS = {

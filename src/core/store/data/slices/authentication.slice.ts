@@ -5,7 +5,7 @@ import {
   getAllUsers,
   getUser,
   updateUser,
-} from "@/components/modules/auth/server/authentication-firebase";
+} from "@/components/modules/auth/server/authentication.firebase";
 import { UserPayload } from "@/@types/user.entity";
 
 const AUTHENTICATION_ACTIONS = {
