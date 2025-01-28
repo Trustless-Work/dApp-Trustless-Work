@@ -44,17 +44,15 @@ export const useFormatUtils = () => {
       .toUpperCase();
   };
 
-  // Format percentage changes
-  function formatPercentage(value: number): string {
+  const formatPercentage = (value: number): string => {
     return `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`;
-  }
+  };
 
-  // Format large numbers with k/m suffix
-  function formatNumber(num: number): string {
+  const formatNumber = (num: number): string => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}m`;
     if (num >= 1000) return `${(num / 1000).toFixed(0)}k`;
     return num.toString();
-  }
+  };
 
   return {
     formatAddress,
