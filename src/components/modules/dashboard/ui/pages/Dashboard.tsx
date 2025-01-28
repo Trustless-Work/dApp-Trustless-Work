@@ -1,7 +1,7 @@
 import { Chart } from "@/components/ui/chart";
 import MetricsSection from "../cards/MetricSection";
 import RecentSales from "../cards/RecentSales";
-import DateRangePicker from "../cards/Datepicker";
+import DateRangePicker from "../utils/Datepicker";
 
 const Dashboard = () => {
   // Mock Data
