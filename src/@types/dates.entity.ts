@@ -1,9 +1,6 @@
-export type UpdatedAt = {
+export interface CreatedAt {
   seconds: number;
   nanoseconds: number;
-};
+}
 
-export type CreatedAt = {
-  seconds: number;
-  nanoseconds: number;
-};
+export interface UpdatedAt extends CreatedAt {}
