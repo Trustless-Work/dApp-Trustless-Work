@@ -1,8 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { formatCurrency } from "@/lib/utils";
 import { SaleItem } from "./RecentSales";
+import { useFormatUtils } from "@/utils/hook/format.hook";
 
 const SalesItem = ({ sale, i }: { sale: SaleItem; i: number }) => {
+  const { formatDollar } = useFormatUtils();
+
   return (
     <div key={i} className="flex items-center">
       <Avatar className="h-9 w-9">
@@ -18,7 +20,7 @@ const SalesItem = ({ sale, i }: { sale: SaleItem; i: number }) => {
         <p className="text-sm font-medium">{sale.name}</p>
         <p className="text-sm text-muted-foreground">{sale.email}</p>
       </div>
-      <div className="ml-auto font-medium">{formatCurrency(sale.amount)}</div>
+      <div className="ml-auto font-medium">{formatDollar(sale.amount)}</div>
     </div>
   );
 };

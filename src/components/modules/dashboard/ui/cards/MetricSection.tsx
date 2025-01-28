@@ -1,13 +1,15 @@
 import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
-import { formatCurrency, formatNumber, formatPercentage } from "@/lib/utils";
 import MetricCard from "./MetricCard";
+import { useFormatUtils } from "@/utils/hook/format.hook";
 
 const MetricsSection = () => {
+  const { formatDollar, formatPercentage, formatNumber } = useFormatUtils();
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <MetricCard
         title="Total Revenue"
-        value={formatCurrency(45231.89)}
+        value={formatDollar("45231.8")}
         subValue={`${formatPercentage(20.1)} from last month`}
         icon={<DollarSign className="h-4 w-4" />}
       />

@@ -5,7 +5,7 @@ import SalesItem from "./SalesItem";
 export interface SaleItem {
   name: string;
   email: string;
-  amount: number;
+  amount: string;
   avatarSrc?: string;
 }
 
@@ -15,22 +15,22 @@ const RecentSales = () => {
     {
       name: "Olivia Martin",
       email: "olivia.martin@email.com",
-      amount: 1999.0,
+      amount: "1999.0",
     },
     {
       name: "Jackson Lee",
       email: "jackson.lee@email.com",
-      amount: 39.0,
+      amount: "39.0",
     },
     {
       name: "Jackson Lee",
       email: "jackson.lee@email.com",
-      amount: 39.0,
+      amount: "39.0",
     },
     {
       name: "Jackson Lee",
       email: "jackson.lee@email.com",
-      amount: 39.0,
+      amount: "39.0",
     },
   ];
 

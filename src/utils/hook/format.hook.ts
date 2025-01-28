@@ -28,10 +28,10 @@ export const useFormatUtils = () => {
     return `${day}/${month}/${year}`;
   };
 
-  const formatDollar = (amount: string | undefined): string => {
+  const formatDollar = (amount: string | undefined | number): string => {
     if (!amount) return "$0.00";
 
-    const parsedAmount = parseFloat(amount);
+    const parsedAmount = parseFloat(amount.toString());
     if (isNaN(parsedAmount)) return "$0.00";
     return `$${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
   };
@@ -44,11 +44,25 @@ export const useFormatUtils = () => {
       .toUpperCase();
   };
 
+  // Format percentage changes
+  function formatPercentage(value: number): string {
+    return `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`;
+  }
+
+  // Format large numbers with k/m suffix
+  function formatNumber(num: number): string {
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}m`;
+    if (num >= 1000) return `${(num / 1000).toFixed(0)}k`;
+    return num.toString();
+  }
+
   return {
     formatAddress,
     formatDate,
     formatDateFromFirebase,
     formatDollar,
     formatText,
+    formatPercentage,
+    formatNumber,
   };
 };
