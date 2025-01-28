@@ -1,9 +1,5 @@
+import { IssueType } from "@/@types/issue.entity";
 import { z } from "zod";
-
-export enum IssueType {
-  Bug = "Bug",
-  Recommendation = "Recommendation",
-}
 
 export const formSchema = z.object({
   name: z.string().min(3, {
