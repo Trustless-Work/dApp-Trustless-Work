@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
-import CodeBlock from "@/components/utils/ui/code/CodeBlock";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { cn } from "@/lib/utils";
-import { Check, CodeXml, Copy, SquareUser, User } from "lucide-react";
+import { Check, CodeXml, Copy, SquareUser } from "lucide-react";
+import CodeBlock from "./CodeBlock";
 
 type FlipCardProps = {
   children: React.ReactNode;

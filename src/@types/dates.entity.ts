@@ -3,4 +3,4 @@ export interface CreatedAt {
   nanoseconds: number;
 }
 
-export interface UpdatedAt extends CreatedAt {}
+export type UpdatedAt = CreatedAt;

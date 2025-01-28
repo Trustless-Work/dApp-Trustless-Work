@@ -4,12 +4,6 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 
-const SpaceGrotesk = localFont({
-  src: "./fonts/SpaceGrotesk.ttf",
-  variable: "---space-grotesk",
-  weight: "100 900",
-});
-
 const Exo2 = localFont({
   src: "./fonts/Exo2.ttf",
   variable: "---exo-2",
