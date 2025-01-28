@@ -7,8 +7,10 @@ import {
 import { create } from "zustand";
 import { ThemeGlobalUIStore } from "./@types/theme.entity";
 import { useThemeSlice } from "./slices/theme.slice";
+import { LoaderGlobalUIStore } from "./@types/loader.entity";
+import { useLoaderSlice } from "./slices/loader.slice";
 
-type GlobalUIState = ThemeGlobalUIStore;
+type GlobalUIState = ThemeGlobalUIStore & LoaderGlobalUIStore;
 
 const devtoolsOptions: DevtoolsOptions = {
   name: "Global UI State",
@@ -43,6 +45,7 @@ export const useGlobalUIBoundedStore = create<GlobalUIState>()(
     devtools(
       (...a) => ({
         ...useThemeSlice(...a),
+        ...useLoaderSlice(...a),
       }),
       devtoolsOptions,
     ),
