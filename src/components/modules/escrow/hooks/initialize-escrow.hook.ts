@@ -8,7 +8,7 @@ import { useEscrowFormStore } from "@/store/escrowFormStore/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo } from "react";
-import { formSchema } from "../schema/initialize-escrow-schema";
+import { formSchema } from "../schema/initialize-escrow.schema";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import {

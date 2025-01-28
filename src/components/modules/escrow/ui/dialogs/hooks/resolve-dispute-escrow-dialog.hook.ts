@@ -10,7 +10,7 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import { resolveDispute } from "../../../services/resolveDispute";
 import { ResolveDisputePayload } from "@/@types/escrow.entity";
 import { MouseEvent } from "react";
-import { getFormSchema } from "../../../schema/resolve-dispute-escrow-schema";
+import { getFormSchema } from "../../../schema/resolve-dispute-escrow.schema";
 import { toast } from "@/hooks/use-toast";
 
 interface useResolveDisputeEscrowDialogProps {
