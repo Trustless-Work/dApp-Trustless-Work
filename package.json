@@ -44,7 +44,6 @@
     "react-day-picker": "^9.4.4",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
-    "react-icons": "^5.4.0",
     "react-loader-spinner": "^6.1.6",
     "react-qr-code": "^2.0.15",
     "react-syntax-highlighter": "^15.6.1",
