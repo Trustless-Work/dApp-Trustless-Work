@@ -18,7 +18,7 @@ import {
 import { useEscrowBoundedStore } from "../store/ui";
 import { useStepsStore } from "@/store/stepsStore/store";
 
-export const useInitializeEscrowHook = () => {
+export const useInitializeEscrow = () => {
   const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);

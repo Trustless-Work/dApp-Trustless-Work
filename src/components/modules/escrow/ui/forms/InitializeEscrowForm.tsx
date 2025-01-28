@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useInitializeEscrowHook } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
+import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
 import TooltipInfo from "@/components/utils/Tooltip";
 import SelectField from "@/components/utils/SelectSearch";
 import { useState } from "react";
@@ -26,7 +26,7 @@ const InitializeEscrowForm = () => {
     handleRemoveMilestone,
     handleFieldChange,
     userOptions,
-  } = useInitializeEscrowHook();
+  } = useInitializeEscrow();
 
   const [showSelect, setShowSelect] = useState({
     client: false,

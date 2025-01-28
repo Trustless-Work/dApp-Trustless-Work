@@ -24,7 +24,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { useInitializeEscrowHook } from "../modules/escrow/hooks/initialize-escrow.hook";
+import { useInitializeEscrow } from "../modules/escrow/hooks/initialize-escrow.hook";
 
 interface SelectFieldProps {
   control: any;
@@ -41,7 +41,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   tooltipContent,
   options,
 }) => {
-  const { handleFieldChange } = useInitializeEscrowHook();
+  const { handleFieldChange } = useInitializeEscrow();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(options[0]);
 
