@@ -1,6 +1,6 @@
 "use client";
 
-import FlipCard from "@/components/utils/Code/FlipCard";
+import FlipCard from "@/components/utils/code/FlipCard";
 import Loader from "@/components/utils/Loader";
 import { useLoaderStore } from "@/store/utilsStore/store";
 import { initializeEscrowCode } from "../../code/initialize.code";

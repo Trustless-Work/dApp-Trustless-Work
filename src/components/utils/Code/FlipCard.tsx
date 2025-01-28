@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import CodeBlock from "@/components/utils/Code/CodeBlock";
+import CodeBlock from "@/components/utils/code/CodeBlock";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { cn } from "@/lib/utils";
 import { Check, CodeXml, Copy, SquareUser, User } from "lucide-react";
