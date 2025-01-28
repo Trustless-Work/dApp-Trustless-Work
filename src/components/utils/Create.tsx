@@ -9,7 +9,7 @@ interface CreateButtonProps {
 
 const CreateButton = ({ label, url, className }: CreateButtonProps) => {
   return (
-    <Link className="" href={url}>
+    <Link href={url}>
       <Button className={className}>{label}</Button>
     </Link>
   );
