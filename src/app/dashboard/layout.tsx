@@ -12,6 +12,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();
   const { label } = useLayoutDashboard();
 
+  // Authentication check
   if (address === "") {
     redirect("/");
   }
