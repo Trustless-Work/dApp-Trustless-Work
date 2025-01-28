@@ -3,10 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { formSchema, IssueType } from "../schema/report-issue-schema";
-import { addReportIssue } from "../server/report-issue-firebase";
+import { formSchema } from "../schema/report-issue-schema";
+import { addReportIssue } from "../server/report-issue.firebase";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { toast } from "@/hooks/use-toast";
+import { IssueType } from "@/@types/issue.entity";
 
 export const useSendReportIssue = () => {
   const { address } = useGlobalAuthenticationStore();
