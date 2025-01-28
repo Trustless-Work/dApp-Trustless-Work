@@ -8,10 +8,10 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { Escrow, EscrowPayload, Milestone } from "@/@types/escrow.entity";
-import { changeMilestoneFlag } from "../../../services/changeMilestoneFlag";
-import { toast } from "@/hooks/use-toast";
+import { changeMilestoneFlag } from "../../../services/change-mileston-flag.service";
+import { toast } from "@/hooks/toast.hook";
 
-const useChangeFlagEscrowDialogHook = () => {
+const useChangeFlagEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
   const setIsChangingStatus = useEscrowBoundedStore(
     (state) => state.setIsChangingStatus,
@@ -84,4 +84,4 @@ const useChangeFlagEscrowDialogHook = () => {
   return { changeMilestoneFlagSubmit };
 };
 
-export default useChangeFlagEscrowDialogHook;
+export default useChangeFlagEscrowDialog;

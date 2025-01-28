@@ -1,10 +1,10 @@
 "use client";
 
-import CreateEscrow from "@/components/modules/escrow/CreateEscrow";
+import CreateEscrow from "@/components/modules/escrow/ui/pages/CreateEscrow";
 import { EscrowSteps } from "@/components/modules/escrow/ui/steps/EscrowStepper";
-import InitEscrow from "@/components/modules/escrow/InitEscrow";
+import InitEscrow from "@/components/modules/escrow/ui/pages/InitEscrow";
 
-const InitializeEscrowPage = () => {
+const InitializeEscrowPage: React.FC = () => {
   const steps = [
     {
       title: "Create Escrow",

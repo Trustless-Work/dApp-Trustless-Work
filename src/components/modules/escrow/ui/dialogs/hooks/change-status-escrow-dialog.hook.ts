@@ -13,10 +13,10 @@ import {
   Milestone,
   MilestoneStatus,
 } from "@/@types/escrow.entity";
-import { changeMilestoneStatus } from "../../../services/changeMilestoneStatus";
-import { toast } from "@/hooks/use-toast";
+import { changeMilestoneStatus } from "../../../services/change-milestone-status.service";
+import { toast } from "@/hooks/toast.hook";
 
-const useChangeStatusEscrowDialogHook = () => {
+const useChangeStatusEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
   const setIsChangingStatus = useEscrowBoundedStore(
     (state) => state.setIsChangingStatus,
@@ -89,4 +89,4 @@ const useChangeStatusEscrowDialogHook = () => {
   return { changeMilestoneStatusSubmit };
 };
 
-export default useChangeStatusEscrowDialogHook;
+export default useChangeStatusEscrowDialog;

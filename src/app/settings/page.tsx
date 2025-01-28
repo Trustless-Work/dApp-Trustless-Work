@@ -2,7 +2,7 @@
 
 import Settings from "@/components/modules/setting/Settings";
 
-const SettingsPage = () => {
+const SettingsPage: React.FC = () => {
   return <Settings />;
 };
 

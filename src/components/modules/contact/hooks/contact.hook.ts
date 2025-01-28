@@ -10,9 +10,9 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 import { db } from "@/core/config/firebase/firebase";
-import { formSchema } from "../schema/contact-schema";
+import { formSchema, WalletType } from "../schema/contact-schema";
 
 export const useContact = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,5 +64,10 @@ export const useContact = () => {
     }
   };
 
-  return { form, onSubmit };
+  const typeOptions = Object.values(WalletType).map((value) => ({
+    value,
+    label: value,
+  }));
+
+  return { form, onSubmit, typeOptions };
 };

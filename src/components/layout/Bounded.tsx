@@ -9,9 +9,7 @@ type BoundedProps = {
 export const Bounded = ({ children, center, className }: BoundedProps) => {
   return (
     <div
-      className={`flex px-2  font-[family-name:var(--font-geist-sans)] flex-1 ${
-        center && "justify-center"
-      } ${className}`}
+      className={`flex px-2 flex-1 ${center && "justify-center"} ${className}`}
     >
       {children}
     </div>

@@ -1,5 +1,5 @@
 import { db } from "@/core/config/firebase/firebase";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 import { doc, setDoc } from "firebase/firestore";
 
 interface useAppearanceProps {

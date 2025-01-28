@@ -10,12 +10,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { useInitializeEscrowHook } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
-import TooltipInfo from "@/components/utils/Tooltip";
-import SelectField from "@/components/utils/SelectSearch";
+import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
+import SelectField from "@/components/utils/ui/SelectSearch";
 import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
+import { Trash2 } from "lucide-react";
 
 const InitializeEscrowForm = () => {
   const {
@@ -26,7 +26,7 @@ const InitializeEscrowForm = () => {
     handleRemoveMilestone,
     handleFieldChange,
     userOptions,
-  } = useInitializeEscrowHook();
+  } = useInitializeEscrow();
 
   const [showSelect, setShowSelect] = useState({
     client: false,
@@ -417,7 +417,7 @@ const InitializeEscrowForm = () => {
                 className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
                 disabled={index === 0}
               >
-                <FaRegTrashCan className="h-5 w-5" />
+                <Trash2 className="h-5 w-5" />
               </Button>
             </div>
           ))}

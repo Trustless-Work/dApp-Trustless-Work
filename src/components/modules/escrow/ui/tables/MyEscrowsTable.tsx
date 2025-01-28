@@ -15,21 +15,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { CircleAlert, MoreHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import useMyEscrows from "../../hooks/my-escrows.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { Escrow } from "@/@types/escrow.entity";
-import NoData from "@/components/utils/NoData";
+import NoData from "@/components/utils/ui/NoData";
 import { useEscrowBoundedStore } from "../../store/ui";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import LoaderData from "@/components/utils/LoaderData";
+import LoaderData from "@/components/utils/ui/LoaderData";
 import ExpandableContent from "./expandable/ExpandableContent";
-import { IoAlertCircleOutline } from "react-icons/io5";
 import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
 
 interface MyEscrowsTableProps {
@@ -156,11 +155,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                       </TableCell>
                       {escrow.disputeFlag && (
                         <TableCell>
-                          <IoAlertCircleOutline
-                            className="text-destructive"
-                            size={22}
-                            title="This escrow is in dispute"
-                          />
+                          <CircleAlert className="text-destructive" size={22} />
                         </TableCell>
                       )}
                     </TableRow>

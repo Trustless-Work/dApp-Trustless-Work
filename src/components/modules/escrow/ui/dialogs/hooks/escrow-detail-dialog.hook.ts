@@ -1,6 +1,9 @@
 import { Escrow } from "@/@types/escrow.entity";
-import { statusMap, statusOptions } from "@/constants/escrow/StatusOptions";
-import { getUserRoleInEscrow } from "../../../server/escrow-firebase";
+import {
+  statusMap,
+  statusOptions,
+} from "@/components/modules/escrow/constants/status-options.constant";
+import { getUserRoleInEscrow } from "../../../server/escrow.firebase";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,

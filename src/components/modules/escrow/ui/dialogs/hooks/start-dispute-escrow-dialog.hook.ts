@@ -8,10 +8,10 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { EscrowPayload } from "@/@types/escrow.entity";
-import { startDispute } from "../../../services/startDispute";
-import { toast } from "@/hooks/use-toast";
+import { startDispute } from "../../../services/start-dispute.service";
+import { toast } from "@/hooks/toast.hook";
 
-const useStartDisputeEscrowDialogHook = () => {
+const useStartDisputeEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
   const setIsStartingDispute = useEscrowBoundedStore(
     (state) => state.setIsStartingDispute,
@@ -71,4 +71,4 @@ const useStartDisputeEscrowDialogHook = () => {
   return { startDisputeSubmit };
 };
 
-export default useStartDisputeEscrowDialogHook;
+export default useStartDisputeEscrowDialog;

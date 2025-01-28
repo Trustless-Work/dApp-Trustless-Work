@@ -2,20 +2,21 @@ import { useFormatUtils } from "@/utils/hook/format.hook";
 import useMyEscrows from "../../hooks/my-escrows.hook";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { FaStackOverflow } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import NoData from "@/components/utils/NoData";
+import NoData from "@/components/utils/ui/NoData";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import LoaderData from "@/components/utils/LoaderData";
-import ProgressEscrow from "../dialogs/components/ProgressEscrow";
+import LoaderData from "@/components/utils/ui/LoaderData";
+import ProgressEscrow from "../dialogs/utils/ProgressEscrow";
 import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
+import { Layers } from "lucide-react";
 
+// todo: unify this based on the roles
 interface MyEscrowsCardsProps {
   type:
     | "issuer"
@@ -88,7 +89,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                       </p>
 
                       {!escrow.disputeFlag ? (
-                        <FaStackOverflow size={30} />
+                        <Layers size={30} />
                       ) : (
                         <p className="font-bold text-sm text-muted-foreground">
                           In Dispute

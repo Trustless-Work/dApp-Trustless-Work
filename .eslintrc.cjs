@@ -13,7 +13,7 @@ module.exports = {
     "node_modules",
     ".eslintrc.cjs",
     "src/components/ui/*",
-    "src/hooks/use-toast.ts",
+    "src/hooks/toast.hook.ts",
   ],
   parser: "@typescript-eslint/parser",
   plugins: ["prettier"],

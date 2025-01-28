@@ -26,14 +26,9 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { useContact } from "./hooks/contact.hook";
-import { WalletType } from "./schema/contact-schema";
 
 const ContactForm = () => {
-  const { form, onSubmit } = useContact();
-  const typeOptions = Object.values(WalletType).map((value) => ({
-    value,
-    label: value,
-  }));
+  const { form, onSubmit, typeOptions } = useContact();
 
   return (
     <Form {...form}>

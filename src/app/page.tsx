@@ -3,7 +3,7 @@
 import { Bounded } from "@/components/layout/Bounded";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <>
       <HeaderWithoutAuth />

@@ -13,10 +13,10 @@ import Image from "next/image";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { cn } from "@/lib/utils";
-import { LuCheck, LuClipboard } from "react-icons/lu";
 import { Escrow } from "@/@types/escrow.entity";
-import EntityCard from "./components/EntityCard";
+import EntityCard from "./cards/EntityCard";
 import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
+import { Check, Copy } from "lucide-react";
 
 interface SuccessDialogProps {
   title: string;
@@ -80,9 +80,9 @@ const SuccessDialog = ({
               title="Copy address"
             >
               {copiedKeyId ? (
-                <LuCheck size={15} className="text-green-700" />
+                <Check size={15} className="text-green-700" />
               ) : (
-                <LuClipboard
+                <Copy
                   size={15}
                   className={cn(
                     copiedKeyId

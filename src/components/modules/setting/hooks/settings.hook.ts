@@ -1,13 +1,15 @@
-import { useThemeStore } from "@/store/themeStore/store";
 import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 import { UserPayload } from "@/@types/user.entity";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { PreferencesForm } from "./preferences-section.hook";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
 const useSettings = () => {
   const [currentTab, setCurrentTab] = useState("profile");
-  const { theme, toggleTheme } = useThemeStore();
+
+  const theme = useGlobalUIBoundedStore((state) => state.theme);
+  const toggleTheme = useGlobalUIBoundedStore((state) => state.toggleTheme);
   const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);

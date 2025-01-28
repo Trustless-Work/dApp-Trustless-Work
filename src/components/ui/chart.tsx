@@ -1,5 +1,6 @@
 "use client";
 
+import { useFormatUtils } from "@/utils/hook/format.hook";
 import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import {
   Bar,
@@ -9,7 +10,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { formatCurrency } from "@/lib/utils";
 
 interface ChartData {
   name: string;
@@ -23,6 +23,8 @@ interface ChartProps {
 }
 
 export function Chart({ title, data, className }: ChartProps) {
+  const { formatDollar } = useFormatUtils();
+
   return (
     <Card className={className}>
       <CardHeader>
@@ -66,7 +68,7 @@ export function Chart({ title, data, className }: ChartProps) {
                               {payload[0].payload.name}
                             </span>
                             <span className="font-bold text-muted-foreground">
-                              {formatCurrency(payload[0].value as number)}
+                              {formatDollar(Number(payload[0].value))}
                             </span>
                           </div>
                         </div>

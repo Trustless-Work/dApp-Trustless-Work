@@ -17,10 +17,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import TooltipInfo from "@/components/utils/Tooltip";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useFundEscrowDialogHook from "./hooks/fund-escrow-dialog.hook";
 import { useEscrowBoundedStore } from "../../store/ui";
-import LoaderData from "@/components/utils/LoaderData";
+import LoaderData from "@/components/utils/ui/LoaderData";
 
 interface FundEscrowDialogProps {
   isSecondDialogOpen: boolean;

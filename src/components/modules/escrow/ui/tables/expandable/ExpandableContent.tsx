@@ -8,9 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Divider from "@/components/utils/Divider";
-import EntityCard from "../../dialogs/components/EntityCard";
-import ProgressEscrow from "../../dialogs/components/ProgressEscrow";
+import Divider from "@/components/utils/ui/Divider";
+import EntityCard from "../../dialogs/cards/EntityCard";
+import ProgressEscrow from "../../dialogs/utils/ProgressEscrow";
 
 interface ExpandableContentProps {
   escrow: Escrow;

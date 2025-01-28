@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { toast } from "@/hooks/use-toast";
-import { initializeEscrow } from "@/components/modules/escrow/services/initializeEscrow";
-import { useLoaderStore } from "@/store/utilsStore/store";
-import { useEscrowFormStore } from "@/store/escrowFormStore/store";
+import { toast } from "@/hooks/toast.hook";
+import { initializeEscrow } from "@/components/modules/escrow/services/initialize-escrow.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo } from "react";
-import { formSchema } from "../schema/initialize-escrow-schema";
+import { formSchema } from "../schema/initialize-escrow.schema";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import {
@@ -16,19 +14,21 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../store/ui";
-import { useStepsStore } from "@/store/stepsStore/store";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
-export const useInitializeEscrowHook = () => {
+export const useInitializeEscrow = () => {
   const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
-  const setIsLoading = useLoaderStore((state) => state.setIsLoading);
-  const { formData, setFormData, resetForm } = useEscrowFormStore();
+  const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
+  const formData = useEscrowBoundedStore((state) => state.formData);
+  const setFormData = useEscrowBoundedStore((state) => state.setFormData);
+  const resetForm = useEscrowBoundedStore((state) => state.resetForm);
   const router = useRouter();
   const setIsSuccessDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
   );
-  const resetSteps = useStepsStore((state) => state.resetSteps);
+  const resetSteps = useGlobalUIBoundedStore((state) => state.resetSteps);
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );

@@ -1,12 +1,12 @@
 "use client";
 
-import { MdOutlineLightMode } from "react-icons/md";
-import { LuMoonStar } from "react-icons/lu";
 import { useEffect } from "react";
-import { useThemeStore } from "@/store/themeStore/store";
+import { MoonStar, Sun } from "lucide-react";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
 const ThemeToggle = () => {
-  const { theme, toggleTheme } = useThemeStore();
+  const theme = useGlobalUIBoundedStore((state) => state.theme);
+  const toggleTheme = useGlobalUIBoundedStore((state) => state.toggleTheme);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -18,9 +18,9 @@ const ThemeToggle = () => {
   return (
     <button onClick={() => toggleTheme()}>
       {theme === "dark" ? (
-        <MdOutlineLightMode className="text-yellow-700" size={30} />
+        <Sun className="text-yellow-700" size={30} />
       ) : (
-        <LuMoonStar className="text-gray-700" size={30} />
+        <MoonStar className="text-gray-700" size={30} />
       )}
     </button>
   );

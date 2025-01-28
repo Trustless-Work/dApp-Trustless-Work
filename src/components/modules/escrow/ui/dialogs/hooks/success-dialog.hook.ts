@@ -6,7 +6,7 @@ interface useSuccessDialogProps {
   setIsSuccessDialogOpen: (value: boolean) => void;
 }
 
-const useSuccessDialogHook = ({
+const useSuccessDialog = ({
   setIsSuccessDialogOpen,
 }: useSuccessDialogProps) => {
   const setRecentEscrow = useGlobalBoundedStore(
@@ -21,4 +21,4 @@ const useSuccessDialogHook = ({
   return { handleClose };
 };
 
-export default useSuccessDialogHook;
+export default useSuccessDialog;

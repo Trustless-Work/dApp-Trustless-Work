@@ -1,6 +1,13 @@
 "use client";
 
-import { ChevronsUpDown, CreditCard } from "lucide-react";
+import {
+  ChevronsUpDown,
+  Copy,
+  CreditCard,
+  IdCard,
+  LogOut,
+  Settings,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -19,15 +26,12 @@ import {
 } from "@/components/ui/sidebar";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
-import { FaRegCopy } from "react-icons/fa";
 import { cn } from "@/lib/utils";
-import { useWalletUtils } from "@/utils/hook/wallet.hook";
-import { IoLogOutOutline, IoSettingsOutline } from "react-icons/io5";
 import Link from "next/link";
-import { HiOutlineIdentification } from "react-icons/hi2";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();
@@ -36,7 +40,7 @@ export const NavUser = () => {
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const { formatAddress } = useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
-  const { handleDisconnect } = useWalletUtils();
+  const { handleDisconnect } = useWallet();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -116,7 +120,7 @@ export const NavUser = () => {
                       className="p-1.5 hover:bg-muted rounded-md transition-colors"
                       title="Copy address"
                     >
-                      <FaRegCopy
+                      <Copy
                         className={cn(
                           "h-4 w-4",
                           copiedKeyId
@@ -134,7 +138,7 @@ export const NavUser = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
-                    <HiOutlineIdentification />
+                    <IdCard />
                     <span className="truncate">
                       Identification - {loggedUser?.identification}
                     </span>
@@ -153,7 +157,7 @@ export const NavUser = () => {
             <DropdownMenuGroup>
               <Link href="/settings">
                 <DropdownMenuItem>
-                  <IoSettingsOutline />
+                  <Settings />
                   Settings
                 </DropdownMenuItem>
               </Link>
@@ -161,7 +165,7 @@ export const NavUser = () => {
             <DropdownMenuSeparator />
             <button className="w-full" onClick={handleDisconnect}>
               <DropdownMenuItem>
-                <IoLogOutOutline />
+                <LogOut />
                 Disconnect
               </DropdownMenuItem>
             </button>

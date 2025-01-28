@@ -1,12 +1,6 @@
 import { CreatedAt, UpdatedAt } from "./dates.entity";
 
-export type MilestoneStatus =
-  | "cancelled"
-  | "completed"
-  | "forReview"
-  | "inDispute"
-  | "approved"
-  | "pending";
+export type MilestoneStatus = "completed" | "approved" | "pending";
 
 export type Milestone = {
   description: string;
@@ -43,6 +37,7 @@ export type RolesInEscrow =
   | "serviceProvider"
   | "releaseSigner";
 
+// Payloads
 export type FundEscrowPayload = Pick<Escrow, "amount" | "contractId"> & {
   signer: string;
 };

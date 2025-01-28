@@ -5,20 +5,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { formSchema } from "../../../schema/fund-escrow-schema";
-import { fundEscrow } from "@/components/modules/escrow/services/fundEscrow";
+import { formSchema } from "../../../schema/fund-escrow.schema";
+import { fundEscrow } from "@/components/modules/escrow/services/fund-escrow.service";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
 }
 
-const useFundEscrowDialogHook = ({
+const useFundEscrowDialog = ({
   setIsSecondDialogOpen,
 }: useFundEscrowDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
@@ -89,4 +89,4 @@ const useFundEscrowDialogHook = ({
   return { onSubmit, form, handleClose };
 };
 
-export default useFundEscrowDialogHook;
+export default useFundEscrowDialog;

@@ -2,16 +2,16 @@
 
 import ThemeToggle from "./ThemeToggle";
 import { Breadcrumb, BreadcrumbList } from "../../ui/breadcrumb";
-import { useWalletUtils } from "@/utils/hook/wallet.hook";
 import { SidebarTrigger } from "../../ui/sidebar";
-import useIsMobile from "@/hooks/use-mobile";
+import useIsMobile from "@/hooks/mobile.hook";
 import { cn } from "@/lib/utils";
 import useHeader from "./hooks/header.hook";
 import Link from "next/link";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { ArrowBigLeft } from "lucide-react";
+import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 
 const Header = () => {
-  const { handleConnect, handleDisconnect } = useWalletUtils();
+  const { handleConnect, handleDisconnect } = useWallet();
   const isMobile = useIsMobile();
   const { pathName, getBreadCrumbs, address } = useHeader();
 
@@ -38,7 +38,7 @@ const Header = () => {
                 href={"/dashboard"}
                 className="flex items-center gap-2 text-sm font-bold border-2 border-gray-200 dark:border-gray-600 rounded-md p-2"
               >
-                <IoMdArrowRoundBack />
+                <ArrowBigLeft />
                 Back
               </Link>
             )}

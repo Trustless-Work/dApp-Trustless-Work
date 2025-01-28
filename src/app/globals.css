@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -109,21 +105,21 @@ body {
   transform: rotateY(180deg);
 }
 
-/* Scrollbar personalización */
+/* Scrollbar  */
 ::-webkit-scrollbar {
-  width: 12px; /* Ancho de la barra */
-  height: 12px; /* Alto de la barra horizontal */
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f4f4f5; /* Color del track */
+  background: #f4f4f5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #006be4; /* Color del pulgar */
-  border-radius: 5px; /* Bordes redondeados */
+  background: #006be4;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #71717a; /* Color al pasar el cursor */
+  background: #71717a;
 }

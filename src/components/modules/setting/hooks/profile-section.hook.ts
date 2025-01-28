@@ -9,7 +9,7 @@ import {
 import { useForm } from "react-hook-form";
 import { firebaseStorage } from "../../../../../firebase";
 import { v4 } from "uuid";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/toast.hook";
 
 interface useProfileProps {
   onSave: (data: UserPayload) => void;
