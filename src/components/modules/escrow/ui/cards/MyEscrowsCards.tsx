@@ -12,10 +12,11 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import LoaderData from "@/components/utils/LoaderData";
-import ProgressEscrow from "../dialogs/components/ProgressEscrow";
+import ProgressEscrow from "../dialogs/utils/ProgressEscrow";
 import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
 import { Layers } from "lucide-react";
 
+// todo: unify this based on the roles
 interface MyEscrowsCardsProps {
   type:
     | "issuer"

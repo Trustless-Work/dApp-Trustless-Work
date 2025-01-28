@@ -14,7 +14,7 @@ import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { cn } from "@/lib/utils";
 import { Escrow } from "@/@types/escrow.entity";
-import EntityCard from "./components/EntityCard";
+import EntityCard from "./cards/EntityCard";
 import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
 import { Check, Copy } from "lucide-react";
 
