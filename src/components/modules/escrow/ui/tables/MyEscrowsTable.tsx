@@ -15,7 +15,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { CircleAlert, MoreHorizontal } from "lucide-react";
+import {
+  CircleAlert,
+  CircleCheckBig,
+  MoreHorizontal,
+  TriangleAlert,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import useMyEscrows from "../../hooks/my-escrows.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
@@ -98,74 +103,124 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentData.map((escrow: Escrow) => (
-                  <React.Fragment key={escrow.id}>
-                    <TableRow
-                      className="animate-fade-in"
-                      onClick={() => toggleRowExpansion(escrow.id)}
-                    >
-                      <TableCell className="font-medium">
-                        {escrow.title}
-                      </TableCell>
-                      <TableCell>{escrow.description}</TableCell>
-                      <TableCell>{escrow.balance}</TableCell>
-                      <TableCell>{escrow.engagementId}</TableCell>
-                      <TableCell>
-                        {formatAddress(escrow.serviceProvider)}
-                      </TableCell>
-                      <TableCell>{formatAddress(escrow.client)}</TableCell>
-                      <TableCell>
-                        {formatDateFromFirebase(
-                          escrow.createdAt.seconds,
-                          escrow.createdAt.nanoseconds,
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <span className="sr-only">Open menu</span>
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setIsDialogOpen(true);
-                                setSelectedEscrow(escrow);
-                              }}
-                            >
-                              More Details
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                      <TableCell>
-                        <p
-                          className="w-5 h-5 cursor-pointer border border-gray-400 dark:border-gray-500 rounded-lg flex justify-center items-center"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleRowExpansion(escrow.id);
-                          }}
-                        >
-                          {expandedRows.includes(escrow.id) ? "-" : "+"}
-                        </p>
-                      </TableCell>
-                      {escrow.disputeFlag && (
-                        <TableCell>
-                          <CircleAlert className="text-destructive" size={22} />
+                {currentData.map((escrow: Escrow) => {
+                  // todo: use these constants in zusntand
+                  const completedMilestones = escrow.milestones.filter(
+                    (milestone) => milestone.status === "completed",
+                  ).length;
+
+                  const approvedMilestones = escrow.milestones.filter(
+                    (milestone) => milestone.flag === true,
+                  ).length;
+
+                  const totalMilestones = escrow.milestones.length;
+
+                  const progressPercentageCompleted =
+                    totalMilestones > 0
+                      ? (completedMilestones / totalMilestones) * 100
+                      : 0;
+
+                  const progressPercentageApproved =
+                    totalMilestones > 0
+                      ? (approvedMilestones / totalMilestones) * 100
+                      : 0;
+
+                  const pendingRelease =
+                    progressPercentageCompleted === 100 &&
+                    progressPercentageApproved === 100 &&
+                    !escrow.releaseFlag;
+
+                  return (
+                    <React.Fragment key={escrow.id}>
+                      <TableRow
+                        className="animate-fade-in"
+                        onClick={() => toggleRowExpansion(escrow.id)}
+                      >
+                        <TableCell className="font-medium">
+                          {escrow.title}
                         </TableCell>
-                      )}
-                    </TableRow>
-                    {escrow.milestones && expandedRows.includes(escrow.id) && (
-                      <TableRow>
-                        <ExpandableContent escrow={escrow} />
+                        <TableCell>{escrow.description}</TableCell>
+                        <TableCell>{escrow.balance}</TableCell>
+                        <TableCell>{escrow.engagementId}</TableCell>
+                        <TableCell>
+                          {formatAddress(escrow.serviceProvider)}
+                        </TableCell>
+                        <TableCell>{formatAddress(escrow.client)}</TableCell>
+                        <TableCell>
+                          {formatDateFromFirebase(
+                            escrow.createdAt.seconds,
+                            escrow.createdAt.nanoseconds,
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setIsDialogOpen(true);
+                                  setSelectedEscrow(escrow);
+                                }}
+                              >
+                                More Details
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                        <TableCell>
+                          <p
+                            className="w-5 h-5 cursor-pointer border border-gray-400 dark:border-gray-500 rounded-lg flex justify-center items-center"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleRowExpansion(escrow.id);
+                            }}
+                          >
+                            {expandedRows.includes(escrow.id) ? "-" : "+"}
+                          </p>
+                        </TableCell>
+                        {escrow.disputeFlag && (
+                          <TableCell title="Escrow in Dispute">
+                            <CircleAlert
+                              className="text-destructive"
+                              size={22}
+                            />
+                          </TableCell>
+                        )}
+
+                        {pendingRelease && (
+                          <TableCell title="Escrow pending release">
+                            <TriangleAlert
+                              size={22}
+                              className="text-yellow-600"
+                            />
+                          </TableCell>
+                        )}
+
+                        {escrow.releaseFlag && (
+                          <TableCell title="Escrow released">
+                            <CircleCheckBig
+                              className="text-green-800"
+                              size={22}
+                            />
+                          </TableCell>
+                        )}
                       </TableRow>
-                    )}
-                  </React.Fragment>
-                ))}
+                      {escrow.milestones &&
+                        expandedRows.includes(escrow.id) && (
+                          <TableRow>
+                            <ExpandableContent escrow={escrow} />
+                          </TableRow>
+                        )}
+                    </React.Fragment>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
