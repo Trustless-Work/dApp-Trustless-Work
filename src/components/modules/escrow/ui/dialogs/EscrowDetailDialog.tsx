@@ -279,6 +279,10 @@ const EscrowDetailDialog = ({
                   hasPercentage
                   percentage={selectedEscrow.platformFee}
                 />
+                <EntityCard
+                  type="Release Signer"
+                  entity={selectedEscrow.releaseSigner}
+                />
               </div>
 
               {/* Milestones */}
