@@ -4,7 +4,6 @@ import {
   CircleHelp,
   Layers,
   LayoutDashboard,
-  Radio,
 } from "lucide-react";
 
 export const ItemsSidebar = {
