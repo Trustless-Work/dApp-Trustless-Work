@@ -65,6 +65,11 @@ export const ItemsSidebar = {
               url: "https://www.trustlesswork.com/",
               isExternal: true,
             },
+            {
+              title: "Stellar Expert",
+              url: "https://stellar.expert/explorer/testnet",
+              isExternal: true,
+            },
           ],
         },
       ],

@@ -23,7 +23,7 @@ const CreateEscrowPage = () => {
             <span className="text-primary font-bold">
               The escrow that holds funds
             </span>{" "}
-            and enforces the conditions <br /> of the agreement
+            and enforces the conditions <br /> of the agreement{" "}
             <strong>between the Service Provider and the Signer.</strong>
           </p>
         </div>
