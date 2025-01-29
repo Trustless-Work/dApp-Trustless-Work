@@ -14,7 +14,13 @@ import {
 import LoaderData from "@/components/utils/ui/LoaderData";
 import ProgressEscrow from "../dialogs/utils/ProgressEscrow";
 import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
-import { Layers } from "lucide-react";
+import {
+  CircleAlert,
+  CircleCheckBig,
+  CircleX,
+  Layers,
+  TriangleAlert,
+} from "lucide-react";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -70,54 +76,117 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
         <div className="py-3">
           <div className="flex flex-col">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {currentData.map((escrow, index) => (
-                <Card
-                  key={index}
-                  className={`overflow-hidden cursor-pointer hover:shadow-lg ${
-                    escrow.disputeFlag && "border-dashed border-destructive"
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsDialogOpen(true);
-                    setSelectedEscrow(escrow);
-                  }}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-muted-foreground">
-                        {escrow.title || "No title"}
+              {currentData.map((escrow, index) => {
+                // todo: use these constants in zusntand
+                const completedMilestones = escrow.milestones.filter(
+                  (milestone) => milestone.status === "completed",
+                ).length;
+
+                const approvedMilestones = escrow.milestones.filter(
+                  (milestone) => milestone.flag === true,
+                ).length;
+
+                const totalMilestones = escrow.milestones.length;
+
+                const progressPercentageCompleted =
+                  totalMilestones > 0
+                    ? (completedMilestones / totalMilestones) * 100
+                    : 0;
+
+                const progressPercentageApproved =
+                  totalMilestones > 0
+                    ? (approvedMilestones / totalMilestones) * 100
+                    : 0;
+
+                // Check if both are 100% and releaseFlag is false
+                const pendingRelease =
+                  progressPercentageCompleted === 100 &&
+                  progressPercentageApproved === 100 &&
+                  !escrow.releaseFlag;
+
+                return (
+                  <Card
+                    key={index}
+                    className="overflow-hidden cursor-pointer hover:shadow-lg"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsDialogOpen(true);
+                      setSelectedEscrow(escrow);
+                    }}
+                  >
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-muted-foreground truncate">
+                          {escrow.title || "No title"}
+                        </p>
+
+                        <div className="flex items-center gap-1 md:gap-3">
+                          {!escrow.disputeFlag &&
+                            !escrow.releaseFlag &&
+                            !pendingRelease && (
+                              <>
+                                <p className="font-bold text-sm">Working</p>
+                                <Layers size={30} />
+                              </>
+                            )}
+                          {escrow.disputeFlag && (
+                            <>
+                              <p className="font-bold text-sm text-destructive">
+                                In Dispute
+                              </p>
+                              <CircleAlert
+                                size={30}
+                                className="text-destructive"
+                              />
+                            </>
+                          )}
+                          {pendingRelease && (
+                            <>
+                              <p className="font-bold text-sm text-yellow-600">
+                                Pending Release
+                              </p>
+                              <TriangleAlert
+                                size={30}
+                                className="text-yellow-600"
+                              />
+                            </>
+                          )}
+                          {escrow.releaseFlag && (
+                            <>
+                              <p className="font-bold text-sm text-green-800">
+                                Released
+                              </p>
+                              <CircleCheckBig
+                                className="text-green-800"
+                                size={30}
+                              />
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="mt-2 flex items-baseline">
+                        <h3 className="text-2xl font-semibold">
+                          {formatDollar(escrow?.balance) || "N/A"} of{" "}
+                          {formatDollar(escrow.amount) || "N/A"}
+                        </h3>
+                      </div>
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        {formatAddress(escrow.client)}
                       </p>
 
-                      {!escrow.disputeFlag ? (
-                        <Layers size={30} />
-                      ) : (
-                        <p className="font-bold text-sm text-muted-foreground">
-                          In Dispute
-                        </p>
-                      )}
-                    </div>
-                    <div className="mt-2 flex items-baseline">
-                      <h3 className="text-2xl font-semibold">
-                        {formatDollar(escrow?.balance) || "N/A"} of{" "}
-                        {formatDollar(escrow.amount) || "N/A"}
-                      </h3>
-                    </div>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {formatAddress(escrow.client)}
-                    </p>
+                      <ProgressEscrow escrow={escrow} />
 
-                    <ProgressEscrow escrow={escrow} />
-
-                    <p className="mt-3 text-xs text-muted-foreground text-end italic">
-                      <strong>Created:</strong>{" "}
-                      {formatDateFromFirebase(
-                        escrow.createdAt.seconds,
-                        escrow.createdAt.nanoseconds,
-                      )}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+                      <p className="mt-3 text-xs text-muted-foreground text-end italic">
+                        <strong>Created:</strong>{" "}
+                        {formatDateFromFirebase(
+                          escrow.createdAt.seconds,
+                          escrow.createdAt.nanoseconds,
+                        )}
+                      </p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
 
             <div className="flex justify-end items-center gap-4 mt-10 mb-3 px-3">
