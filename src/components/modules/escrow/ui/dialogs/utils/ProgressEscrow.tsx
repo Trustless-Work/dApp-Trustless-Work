@@ -77,10 +77,8 @@ const ProgressEscrow = ({ escrow }: ProgressEscrowProps) => {
                   <strong className="text-xs">
                     {progressPercentageCompleted.toFixed(0)}%
                   </strong>
-                  <ProgressTwo
-                    value1={progressPercentageCompleted}
-                    value2={progressPercentageApproved}
-                  />
+                  <Progress value={progressPercentageCompleted} />
+                  <ProgressTwo value={progressPercentageApproved} />
                   <strong className="text-xs">
                     {progressPercentageApproved.toFixed(0)}%
                   </strong>
