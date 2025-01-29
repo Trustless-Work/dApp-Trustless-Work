@@ -4,6 +4,7 @@ import {
   CircleHelp,
   Layers,
   LayoutDashboard,
+  Radio,
 } from "lucide-react";
 
 export const ItemsSidebar = {
@@ -63,6 +64,11 @@ export const ItemsSidebar = {
             {
               title: "Website",
               url: "https://www.trustlesswork.com/",
+              isExternal: true,
+            },
+            {
+              title: "Stellar Expert",
+              url: "https://stellar.expert/explorer/testnet",
               isExternal: true,
             },
           ],
