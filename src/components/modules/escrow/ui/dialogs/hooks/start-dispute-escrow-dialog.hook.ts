@@ -31,7 +31,7 @@ const useStartDisputeEscrowDialog = () => {
     if (!selectedEscrow) return;
 
     try {
-      await startDispute({
+      const data = await startDispute({
         contractId: selectedEscrow?.contractId,
         signer: address,
       });
@@ -48,9 +48,10 @@ const useStartDisputeEscrowDialog = () => {
 
       setIsStartingDispute(false);
 
-      if (responseFlag) {
+      if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
         setIsDialogOpen(false);
         setSelectedEscrow(undefined);
+        setIsDialogOpen(false);
 
         toast({
           title: "Success",
