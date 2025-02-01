@@ -49,7 +49,7 @@ const EscrowDetailDialog = ({
     handleClose,
     areAllMilestonesCompleted,
     areAllMilestonesCompletedAndFlag,
-    userRoleInEscrow,
+    userRolesInEscrow,
   } = useEscrowDetailDialog({
     setIsDialogOpen,
     setSelectedEscrow,
@@ -114,7 +114,8 @@ const EscrowDetailDialog = ({
                   {selectedEscrow.description}
                 </DialogDescription>
                 <DialogDescription>
-                  <strong>Role:</strong> {formatText(userRoleInEscrow)}{" "}
+                  <strong>Roles:</strong>{" "}
+                  {userRolesInEscrow.map((role) => formatText(role)).join(", ")}
                 </DialogDescription>
               </div>
             </div>
@@ -227,27 +228,23 @@ const EscrowDetailDialog = ({
                 Fund Escrow
               </Button>
 
-              {(userRoleInEscrow == "client" ||
-                userRoleInEscrow == "serviceProvider") &&
+              {(userRolesInEscrow.includes("client") ||
+                userRolesInEscrow.includes("serviceProvider")) &&
                 !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag &&
                 !selectedEscrow.disputeFlag && (
-                  <Button
-                    onClick={startDisputeSubmit}
-                    variant="destructive"
-                    className="w-full mt-3"
-                  >
+                  <Button onClick={startDisputeSubmit} variant="destructive">
                     Start Dispute
                   </Button>
                 )}
 
-              {userRoleInEscrow == "disputeResolver" &&
+              {userRolesInEscrow.includes("disputeResolver") &&
                 !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag &&
                 selectedEscrow.disputeFlag && (
                   <Button
-                    className="w-full mt-3 bg-green-800 hover:bg-green-700"
-                    onClick={(e) => handleOpen(e)}
+                    onClick={handleOpen}
+                    className="bg-green-800 hover:bg-green-700"
                   >
                     Resolve Dispute
                   </Button>
@@ -320,7 +317,7 @@ const EscrowDetailDialog = ({
                             placeholder="Milestone Description"
                           />
 
-                          {userRoleInEscrow == "serviceProvider" &&
+                          {userRolesInEscrow.includes("disputeResolver") &&
                             milestone.status !== "completed" &&
                             !milestone.flag && (
                               <Button
@@ -337,7 +334,7 @@ const EscrowDetailDialog = ({
                               </Button>
                             )}
 
-                          {userRoleInEscrow == "client" &&
+                          {userRolesInEscrow.includes("client") &&
                             milestone.status === "completed" &&
                             !milestone.flag && (
                               <Button
@@ -374,7 +371,7 @@ const EscrowDetailDialog = ({
             </p>
             {areAllMilestonesCompleted &&
               areAllMilestonesCompletedAndFlag &&
-              userRoleInEscrow === "releaseSigner" && (
+              userRolesInEscrow.includes("releaseSigner") && (
                 <Button
                   onClick={distributeEscrowEarningsSubmit}
                   type="button"
