@@ -27,6 +27,7 @@ const EntityCard = ({
   const { formatAddress, formatDollar } = useFormatUtils();
   const [user, setUser] = useState<User | undefined>(undefined);
 
+  // todo: save this in zustand, in order to avoid fetching the same user multiple times
   useEffect(() => {
     const fetchUser = async () => {
       if (entity) {
