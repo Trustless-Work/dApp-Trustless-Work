@@ -84,7 +84,24 @@ Follow the steps below to get started with this project:
 Make sure to set up the following environment variable in your `.env` file:
 
 ```
+
+# Branch Main -> v.1 API
 NEXT_PUBLIC_API_URL=https://api.trustlesswork.com
+
+# Branch Develop -> v.2 API
+NEXT_PUBLIC_API_URL=https://dev.api.trustlesswork.com
+
+# See API Key Video
+NEXT_PUBLIC_API_KEY=
+
+# See Firebase Video
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+
 ```
 
 ## Wallet Requirements
