@@ -36,7 +36,7 @@ const ResolveDisputeEscrowDialog = ({
     <Dialog open={isResolveDisputeDialogOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Resolve Dispute - NAME and NAME</DialogTitle>
+          <DialogTitle>Resolve Dispute</DialogTitle>
           <DialogDescription>
             You as a dispute resolver will be able to share the proceeds between
             the two entities.
