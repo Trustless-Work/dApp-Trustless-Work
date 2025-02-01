@@ -104,6 +104,18 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 
 ```
 
+### API Key Video
+
+Tutorial Video
+
+https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
+
+
+### Firebase Video
+
+Tutorial Video
+
+
 ## Wallet Requirements
 
 To use this project, you must have one of the following wallets installed:
