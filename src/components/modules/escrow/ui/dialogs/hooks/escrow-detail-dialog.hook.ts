@@ -22,11 +22,11 @@ const useEscrowDetailDialog = ({
   selectedEscrow,
 }: useEscrowDetailDialogProps) => {
   const address = useGlobalAuthenticationStore((state) => state.address);
-  const userRoleInEscrow = useGlobalBoundedStore(
-    (state) => state.userRoleInEscrow,
+  const userRolesInEscrow = useGlobalBoundedStore(
+    (state) => state.userRolesInEscrow,
   );
-  const setUserRoleInEscrow = useGlobalBoundedStore(
-    (state) => state.setUserRoleInEscrow,
+  const setUserRolesInEscrow = useGlobalBoundedStore(
+    (state) => state.setUserRolesInEscrow,
   );
 
   const handleClose = () => {
@@ -59,16 +59,15 @@ const useEscrowDetailDialog = ({
   };
 
   useEffect(() => {
-    const fetchRole = async () => {
+    const fetchRoles = async () => {
       if (selectedEscrow) {
         const roleData = await fetchUserRoleInEscrow();
-
-        setUserRoleInEscrow(roleData?.role);
+        setUserRolesInEscrow(roleData?.roles || []);
       }
     };
 
-    fetchRole();
-  }, [selectedEscrow, userRoleInEscrow]);
+    fetchRoles();
+  }, [selectedEscrow]);
 
   return {
     handleClose,
@@ -76,7 +75,7 @@ const useEscrowDetailDialog = ({
     areAllMilestonesCompletedAndFlag,
     getFilteredStatusOptions,
     fetchUserRoleInEscrow,
-    userRoleInEscrow,
+    userRolesInEscrow,
   };
 };
 
