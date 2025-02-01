@@ -30,7 +30,14 @@ import ProgressEscrow from "./utils/ProgressEscrow";
 import useStartDisputeEscrowDialogHook from "./hooks/start-dispute-escrow-dialog.hook";
 import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
 import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
-import { Ban, Check, CircleDollarSign, Copy, Wallet } from "lucide-react";
+import {
+  Ban,
+  Check,
+  CircleCheckBig,
+  CircleDollarSign,
+  Copy,
+  Wallet,
+} from "lucide-react";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -124,8 +131,6 @@ const EscrowDetailDialog = ({
           </DialogHeader>
 
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
-            {/* Amount and Balance Cards */}
-
             {selectedEscrow.disputeFlag && (
               <Card
                 className={cn(
@@ -146,6 +151,27 @@ const EscrowDetailDialog = ({
               </Card>
             )}
 
+            {selectedEscrow.releaseFlag && (
+              <Card
+                className={cn(
+                  "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
+                )}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Status
+                    </p>
+                    <CircleCheckBig className="text-green-800" size={30} />
+                  </div>
+                  <div className="mt-2 flex items-baseline">
+                    <h3 className="text-2xl font-semibold">Released</h3>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Amount and Balance Cards */}
             <Card
               className={cn(
                 "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
@@ -232,9 +258,8 @@ const EscrowDetailDialog = ({
 
               {(userRolesInEscrow.includes("client") ||
                 userRolesInEscrow.includes("serviceProvider")) &&
-                (activeTab === "client" || activeTab === "serviceProvider") &&
-                !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag &&
+                (activeTab === "client" || activeTab === "serviceProvider") &&
                 !selectedEscrow.disputeFlag && (
                   <Button
                     onClick={startDisputeSubmit}
@@ -247,12 +272,11 @@ const EscrowDetailDialog = ({
 
               {userRolesInEscrow.includes("disputeResolver") &&
                 activeTab === "disputeResolver" &&
-                !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag &&
                 selectedEscrow.disputeFlag && (
                   <Button
                     onClick={handleOpen}
-                    className="bg-green-800 hover:bg-green-700"
+                    className="bg-green-800 hover:bg-green-700 mt-3"
                   >
                     Resolve Dispute
                   </Button>
