@@ -86,6 +86,7 @@ Make sure to set up the following environment variable in your `.env` file:
 ```
 
 # Branch Main -> v.1 API
+# ! OBSOLETE FOR THIS dApp VERSION !
 NEXT_PUBLIC_API_URL=https://api.trustlesswork.com
 
 # Branch Develop -> v.2 API
