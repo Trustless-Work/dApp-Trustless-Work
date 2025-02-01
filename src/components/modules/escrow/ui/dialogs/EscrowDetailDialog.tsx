@@ -94,6 +94,8 @@ const EscrowDetailDialog = ({
     (state) => state.isResolveDisputeDialogOpen,
   );
 
+  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+
   const { formatAddress, formatText, formatDollar, formatDateFromFirebase } =
     useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
@@ -230,15 +232,21 @@ const EscrowDetailDialog = ({
 
               {(userRolesInEscrow.includes("client") ||
                 userRolesInEscrow.includes("serviceProvider")) &&
+                (activeTab === "client" || activeTab === "serviceProvider") &&
                 !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag &&
                 !selectedEscrow.disputeFlag && (
-                  <Button onClick={startDisputeSubmit} variant="destructive">
+                  <Button
+                    onClick={startDisputeSubmit}
+                    variant="destructive"
+                    className="mt-3"
+                  >
                     Start Dispute
                   </Button>
                 )}
 
               {userRolesInEscrow.includes("disputeResolver") &&
+                activeTab === "disputeResolver" &&
                 !areAllMilestonesCompleted &&
                 !areAllMilestonesCompletedAndFlag &&
                 selectedEscrow.disputeFlag && (
@@ -318,6 +326,7 @@ const EscrowDetailDialog = ({
                           />
 
                           {userRolesInEscrow.includes("disputeResolver") &&
+                            activeTab === "serviceProvider" &&
                             milestone.status !== "completed" &&
                             !milestone.flag && (
                               <Button
@@ -335,6 +344,7 @@ const EscrowDetailDialog = ({
                             )}
 
                           {userRolesInEscrow.includes("client") &&
+                            activeTab === "client" &&
                             milestone.status === "completed" &&
                             !milestone.flag && (
                               <Button
@@ -371,7 +381,8 @@ const EscrowDetailDialog = ({
             </p>
             {areAllMilestonesCompleted &&
               areAllMilestonesCompletedAndFlag &&
-              userRolesInEscrow.includes("releaseSigner") && (
+              userRolesInEscrow.includes("releaseSigner") &&
+              activeTab === "releaseSigner" && (
                 <Button
                   onClick={distributeEscrowEarningsSubmit}
                   type="button"
@@ -379,6 +390,11 @@ const EscrowDetailDialog = ({
                 >
                   Release Payment
                 </Button>
+              )}
+
+            {userRolesInEscrow.includes("platformAddress") &&
+              activeTab === "platformAddress" && (
+                <Button variant="outline">Edit</Button>
               )}
           </div>
         </DialogContent>
