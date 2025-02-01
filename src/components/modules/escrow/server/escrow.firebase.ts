@@ -160,7 +160,7 @@ const getUserRoleInEscrow = async ({
 }: getUserRoleInEscrowProps): Promise<{
   success: boolean;
   message: string;
-  role?: string;
+  roles?: string[];
 }> => {
   const collectionRef = collection(db, "escrows");
   const roles = [
@@ -186,19 +186,20 @@ const getUserRoleInEscrow = async ({
 
     const escrowData = escrowSnapshot.docs[0].data();
 
-    for (const role of roles) {
-      if (escrowData[role] === address) {
-        return {
-          success: true,
-          message: `User is identified as ${role} in the escrow.`,
-          role,
-        };
-      }
+    const userRoles = roles.filter((role) => escrowData[role] === address);
+
+    if (userRoles.length > 0) {
+      return {
+        success: true,
+        message: `User has roles: ${userRoles.join(", ")}`,
+        roles: userRoles,
+      };
     }
 
     return {
       success: false,
-      message: `No role found for the provided address in escrow with contractId: ${contractId}`,
+      message: `Error`,
+      roles: [],
     };
   } catch (error: any) {
     const errorMessage =
