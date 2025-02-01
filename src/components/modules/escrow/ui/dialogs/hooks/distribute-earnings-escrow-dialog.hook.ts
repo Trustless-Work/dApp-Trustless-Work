@@ -27,6 +27,10 @@ const useDistributeEarningsEscrowDialog = () => {
     (state) => state.setRecentEscrow,
   );
   const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
+  const fetchAllEscrows = useGlobalBoundedStore(
+    (state) => state.fetchAllEscrows,
+  );
+  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
 
   const distributeEscrowEarningsSubmit = async () => {
     setIsChangingStatus(true);
@@ -54,6 +58,7 @@ const useDistributeEarningsEscrowDialog = () => {
 
       if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
         setIsSuccessReleaseDialogOpen(true);
+        fetchAllEscrows({ address, type: activeTab || "client" });
         setIsDialogOpen(false);
         if (selectedEscrow) {
           setRecentEscrow(selectedEscrow);

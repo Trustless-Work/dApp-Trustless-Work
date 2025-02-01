@@ -28,7 +28,8 @@ interface MyEscrowsCardsProps {
     | "client"
     | "disputeResolver"
     | "serviceProvider"
-    | "releaseSigner";
+    | "releaseSigner"
+    | "platformAddress";
 }
 
 const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {

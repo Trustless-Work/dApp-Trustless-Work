@@ -42,7 +42,8 @@ interface MyEscrowsTableProps {
     | "client"
     | "disputeResolver"
     | "serviceProvider"
-    | "releaseSigner";
+    | "releaseSigner"
+    | "platformAddress";
 }
 
 const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {

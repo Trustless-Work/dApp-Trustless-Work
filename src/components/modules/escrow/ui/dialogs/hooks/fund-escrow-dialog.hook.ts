@@ -32,9 +32,7 @@ const useFundEscrowDialog = ({
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
-  const userRoleInEscrow = useGlobalBoundedStore(
-    (state) => state.userRoleInEscrow,
-  );
+  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,7 +55,7 @@ const useFundEscrowDialog = ({
         setIsSecondDialogOpen(false);
         setIsFundingEscrow(false);
         setIsDialogOpen(false);
-        fetchAllEscrows({ address, type: userRoleInEscrow || "client" });
+        fetchAllEscrows({ address, type: activeTab || "client" });
 
         toast({
           title: "Success",

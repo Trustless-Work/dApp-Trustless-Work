@@ -28,8 +28,8 @@ const MyEscrows = () => {
       ) : (
         <div className="flex gap-3 w-full h-full justify-between">
           <Tabs defaultValue="issuer" className="w-full">
-            <div className="flex w-full justify-between items-center flex-col md:flex-row gap-16 md:gap-3">
-              <TabsList className="grid w-full sm:w-9/12 md:w-9/12 lg:w-3/5 grid-cols-2 sm:grid-cols-5 gap-4">
+            <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-16 md:gap-3">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-4">
                 <TabsTrigger
                   onClick={() => setActiveTab("issuer")}
                   value="issuer"
@@ -60,9 +60,15 @@ const MyEscrows = () => {
                 >
                   Release Signer
                 </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => setActiveTab("platformAddress")}
+                  value="platform-address"
+                >
+                  Platform Address
+                </TabsTrigger>
               </TabsList>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mt-10 sm:mt-10 xl:mt-10 2xl:mt-0">
                 <Select
                   value={activeMode}
                   onValueChange={(value) =>
@@ -158,6 +164,24 @@ const MyEscrows = () => {
                 </Card>
               ) : (
                 <MyEscrowsCards type="releaseSigner" />
+              )}
+            </TabsContent>
+
+            <TabsContent
+              value="platform-address"
+              className="flex flex-col gap-3"
+            >
+              <Card className={cn("overflow-hidden")}>
+                <CardContent className="p-6">
+                  <MyEscrowsFilter />
+                </CardContent>
+              </Card>
+              {activeMode === "table" ? (
+                <Card className={cn("overflow-hidden")}>
+                  <MyEscrowsTable type="platformAddress" />
+                </Card>
+              ) : (
+                <MyEscrowsCards type="platformAddress" />
               )}
             </TabsContent>
           </Tabs>

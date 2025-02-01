@@ -30,7 +30,14 @@ import ProgressEscrow from "./utils/ProgressEscrow";
 import useStartDisputeEscrowDialogHook from "./hooks/start-dispute-escrow-dialog.hook";
 import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
 import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
-import { Ban, Check, CircleDollarSign, Copy, Wallet } from "lucide-react";
+import {
+  Ban,
+  Check,
+  CircleCheckBig,
+  CircleDollarSign,
+  Copy,
+  Wallet,
+} from "lucide-react";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -49,7 +56,7 @@ const EscrowDetailDialog = ({
     handleClose,
     areAllMilestonesCompleted,
     areAllMilestonesCompletedAndFlag,
-    userRoleInEscrow,
+    userRolesInEscrow,
   } = useEscrowDetailDialog({
     setIsDialogOpen,
     setSelectedEscrow,
@@ -94,6 +101,8 @@ const EscrowDetailDialog = ({
     (state) => state.isResolveDisputeDialogOpen,
   );
 
+  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+
   const { formatAddress, formatText, formatDollar, formatDateFromFirebase } =
     useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
@@ -114,15 +123,14 @@ const EscrowDetailDialog = ({
                   {selectedEscrow.description}
                 </DialogDescription>
                 <DialogDescription>
-                  <strong>Role:</strong> {formatText(userRoleInEscrow)}{" "}
+                  <strong>Roles:</strong>{" "}
+                  {userRolesInEscrow.map((role) => formatText(role)).join(", ")}
                 </DialogDescription>
               </div>
             </div>
           </DialogHeader>
 
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
-            {/* Amount and Balance Cards */}
-
             {selectedEscrow.disputeFlag && (
               <Card
                 className={cn(
@@ -143,6 +151,27 @@ const EscrowDetailDialog = ({
               </Card>
             )}
 
+            {selectedEscrow.releaseFlag && (
+              <Card
+                className={cn(
+                  "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
+                )}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Status
+                    </p>
+                    <CircleCheckBig className="text-green-800" size={30} />
+                  </div>
+                  <div className="mt-2 flex items-baseline">
+                    <h3 className="text-2xl font-semibold">Released</h3>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Amount and Balance Cards */}
             <Card
               className={cn(
                 "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
@@ -227,27 +256,27 @@ const EscrowDetailDialog = ({
                 Fund Escrow
               </Button>
 
-              {(userRoleInEscrow == "client" ||
-                userRoleInEscrow == "serviceProvider") &&
-                !areAllMilestonesCompleted &&
+              {(userRolesInEscrow.includes("client") ||
+                userRolesInEscrow.includes("serviceProvider")) &&
                 !areAllMilestonesCompletedAndFlag &&
+                (activeTab === "client" || activeTab === "serviceProvider") &&
                 !selectedEscrow.disputeFlag && (
                   <Button
                     onClick={startDisputeSubmit}
                     variant="destructive"
-                    className="w-full mt-3"
+                    className="mt-3"
                   >
                     Start Dispute
                   </Button>
                 )}
 
-              {userRoleInEscrow == "disputeResolver" &&
-                !areAllMilestonesCompleted &&
+              {userRolesInEscrow.includes("disputeResolver") &&
+                activeTab === "disputeResolver" &&
                 !areAllMilestonesCompletedAndFlag &&
                 selectedEscrow.disputeFlag && (
                   <Button
-                    className="w-full mt-3 bg-green-800 hover:bg-green-700"
-                    onClick={(e) => handleOpen(e)}
+                    onClick={handleOpen}
+                    className="bg-green-800 hover:bg-green-700 mt-3"
                   >
                     Resolve Dispute
                   </Button>
@@ -320,7 +349,8 @@ const EscrowDetailDialog = ({
                             placeholder="Milestone Description"
                           />
 
-                          {userRoleInEscrow == "serviceProvider" &&
+                          {userRolesInEscrow.includes("disputeResolver") &&
+                            activeTab === "serviceProvider" &&
                             milestone.status !== "completed" &&
                             !milestone.flag && (
                               <Button
@@ -337,7 +367,8 @@ const EscrowDetailDialog = ({
                               </Button>
                             )}
 
-                          {userRoleInEscrow == "client" &&
+                          {userRolesInEscrow.includes("client") &&
+                            activeTab === "client" &&
                             milestone.status === "completed" &&
                             !milestone.flag && (
                               <Button
@@ -374,7 +405,8 @@ const EscrowDetailDialog = ({
             </p>
             {areAllMilestonesCompleted &&
               areAllMilestonesCompletedAndFlag &&
-              userRoleInEscrow === "releaseSigner" && (
+              userRolesInEscrow.includes("releaseSigner") &&
+              activeTab === "releaseSigner" && (
                 <Button
                   onClick={distributeEscrowEarningsSubmit}
                   type="button"
@@ -382,6 +414,11 @@ const EscrowDetailDialog = ({
                 >
                   Release Payment
                 </Button>
+              )}
+
+            {userRolesInEscrow.includes("platformAddress") &&
+              activeTab === "platformAddress" && (
+                <Button variant="outline">Edit</Button>
               )}
           </div>
         </DialogContent>

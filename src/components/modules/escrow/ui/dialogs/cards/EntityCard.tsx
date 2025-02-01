@@ -27,6 +27,7 @@ const EntityCard = ({
   const { formatAddress, formatDollar } = useFormatUtils();
   const [user, setUser] = useState<User | undefined>(undefined);
 
+  // todo: save this in zustand, in order to avoid fetching the same user multiple times
   useEffect(() => {
     const fetchUser = async () => {
       if (entity) {
@@ -44,7 +45,9 @@ const EntityCard = ({
   return (
     <div className="flex flex-col w-full">
       <div className="text-xs ml-2 mb-2 flex justify-between">
-        <span className={`${inDispute ? "text-destructive" : ""}`}>{type}</span>
+        <span className={`${inDispute ? "text-destructive font-bold" : ""}`}>
+          {type}
+        </span>
         <div className="flex gap-3">
           {hasPercentage && (
             <div className="flex">
