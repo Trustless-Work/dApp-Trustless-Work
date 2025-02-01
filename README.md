@@ -106,14 +106,16 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 
 ### API Key Video
 
-Tutorial Video
+[dApp Trustless Work](https://dapp.trustlesswork.com)
 
 https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
 
 
 ### Firebase Video
 
-Tutorial Video
+[Firebase](https://firebase.google.com)
+
+https://github.com/user-attachments/assets/96d35cee-5e57-41cd-afe5-0389f13c7c94
 
 
 ## Wallet Requirements
