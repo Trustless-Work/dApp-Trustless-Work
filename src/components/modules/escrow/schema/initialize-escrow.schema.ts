@@ -1,7 +1,7 @@
 import { useValidData } from "@/utils/hook/valid-data.hook";
 import { z } from "zod";
 
-export const getFormSchema = () => {
+export const GetFormSchema = () => {
   const { isValidWallet } = useValidData();
 
   return z.object({

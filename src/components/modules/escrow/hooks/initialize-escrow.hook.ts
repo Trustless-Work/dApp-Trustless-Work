@@ -14,7 +14,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../store/ui";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
-import { getFormSchema } from "../schema/initialize-escrow.schema";
+import { GetFormSchema } from "../schema/initialize-escrow.schema";
 
 export const useInitializeEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -44,7 +44,7 @@ export const useInitializeEscrow = () => {
     (state) => state.getAllUsers,
   );
   const users = useGlobalAuthenticationStore((state) => state.users);
-  const formSchema = getFormSchema();
+  const formSchema = GetFormSchema();
 
   useEffect(() => {
     getAllUsers();

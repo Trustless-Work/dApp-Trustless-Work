@@ -9,7 +9,6 @@ import Link from "next/link";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Trash2 } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useSettingBoundedStore } from "./store/ui";
 import SkeletonAPIKey from "./ui/utils/SkeletonAPIKey";
 
