@@ -416,6 +416,7 @@ const InitializeEscrowForm = () => {
               {index === milestones.length - 1 && (
                 <div className="flex justify-end">
                   <Button
+                    disabled={milestone.description === ""}
                     className="w-full md:w-1/4"
                     variant="outline"
                     onClick={handleAddMilestone}
