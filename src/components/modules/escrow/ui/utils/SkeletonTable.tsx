@@ -24,20 +24,14 @@ const SkeletonTable = () => {
               <Skeleton className="h-6 w-20" />
             </TableHead>
             <TableHead>
-              <Skeleton className="h-6 w-24" />
-            </TableHead>
-            <TableHead>
-              <Skeleton className="h-6 w-28" />
-            </TableHead>
-            <TableHead>
-              <Skeleton className="h-6 w-28" />
+              <Skeleton className="h-6 w-32" />
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {[...Array(5)].map((_, i) => (
             <TableRow key={i}>
-              {[...Array(6)].map((_, j) => (
+              {[...Array(4)].map((_, j) => (
                 <TableCell key={j}>
                   <Skeleton className="h-6 w-full" />
                 </TableCell>
