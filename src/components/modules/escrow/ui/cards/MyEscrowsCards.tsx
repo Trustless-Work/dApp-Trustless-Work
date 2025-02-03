@@ -11,7 +11,6 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import LoaderData from "@/components/utils/ui/LoaderData";
 import ProgressEscrow from "../dialogs/utils/ProgressEscrow";
 import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
 import {
@@ -20,6 +19,7 @@ import {
   Layers,
   TriangleAlert,
 } from "lucide-react";
+import SkeletonCards from "../utils/SkeletonCards";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -71,7 +71,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
   return (
     <>
       {loadingEscrows ? (
-        <LoaderData />
+        <SkeletonCards />
       ) : currentData.length !== 0 ? (
         <div className="py-3">
           <div className="flex flex-col">

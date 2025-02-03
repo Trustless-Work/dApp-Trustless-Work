@@ -21,7 +21,6 @@ import FundEscrowDialog from "./FundEscrowDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";
-import LoaderData from "@/components/utils/ui/LoaderData";
 import { Badge } from "@/components/ui/badge";
 import useDistributeEarningsEscrowDialogHook from "./hooks/distribute-earnings-escrow-dialog.hook";
 import useChangeStatusEscrowDialogHook from "./hooks/change-status-escrow-dialog.hook";
@@ -38,6 +37,7 @@ import {
   Copy,
   Wallet,
 } from "lucide-react";
+import SkeletonMilestones from "./utils/SkeletonMilestones";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -318,7 +318,7 @@ const EscrowDetailDialog = ({
               <div className="flex justify-center w-full mt-5">
                 <div className="flex flex-col gap-4 py-4 w-full md:w-2/3">
                   {isChangingStatus || isStartingDispute ? (
-                    <LoaderData />
+                    <SkeletonMilestones />
                   ) : (
                     <div className="space-y-4">
                       <label className="flex items-center">

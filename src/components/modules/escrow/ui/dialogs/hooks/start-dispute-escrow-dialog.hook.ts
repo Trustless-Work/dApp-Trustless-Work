@@ -51,7 +51,6 @@ const useStartDisputeEscrowDialog = () => {
       if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
         setIsDialogOpen(false);
         setSelectedEscrow(undefined);
-        setIsDialogOpen(false);
 
         toast({
           title: "Success",

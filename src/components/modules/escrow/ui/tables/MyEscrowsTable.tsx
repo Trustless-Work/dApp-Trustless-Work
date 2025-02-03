@@ -32,9 +32,9 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import LoaderData from "@/components/utils/ui/LoaderData";
 import ExpandableContent from "./expandable/ExpandableContent";
 import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
+import SkeletonTable from "../utils/SkeletonTable";
 
 interface MyEscrowsTableProps {
   type:
@@ -86,7 +86,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   return (
     <div className="container mx-auto py-3">
       {loadingEscrows ? (
-        <LoaderData />
+        <SkeletonTable />
       ) : currentData.length !== 0 ? (
         <>
           <div className="rounded-lg p-3">
