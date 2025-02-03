@@ -391,35 +391,41 @@ const InitializeEscrowForm = () => {
             <TooltipInfo content="Key stages or deliverables for the escrow." />
           </FormLabel>
           {milestones.map((milestone, index) => (
-            <div key={index} className="flex items-center space-x-4">
-              <Input
-                placeholder="Milestone Description"
-                value={milestone.description}
-                onChange={(e) => {
-                  const updatedMilestones = [...milestones];
-                  updatedMilestones[index].description = e.target.value;
-                  form.setValue("milestones", updatedMilestones);
-                  handleFieldChange("milestones", updatedMilestones);
-                }}
-              />
+            <>
+              <div key={index} className="flex items-center space-x-4">
+                <Input
+                  placeholder="Milestone Description"
+                  value={milestone.description}
+                  onChange={(e) => {
+                    const updatedMilestones = [...milestones];
+                    updatedMilestones[index].description = e.target.value;
+                    form.setValue("milestones", updatedMilestones);
+                    handleFieldChange("milestones", updatedMilestones);
+                  }}
+                />
 
-              <Button
-                className="w-full md:w-1/4"
-                variant="outline"
-                onClick={handleAddMilestone}
-                type="button"
-              >
-                Add Item
-              </Button>
+                <Button
+                  onClick={() => handleRemoveMilestone(index)}
+                  className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
+                  disabled={index === 0}
+                >
+                  <Trash2 className="h-5 w-5" />
+                </Button>
+              </div>
 
-              <Button
-                onClick={() => handleRemoveMilestone(index)}
-                className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
-                disabled={index === 0}
-              >
-                <Trash2 className="h-5 w-5" />
-              </Button>
-            </div>
+              {index === milestones.length - 1 && (
+                <div className="flex justify-end">
+                  <Button
+                    className="w-full md:w-1/4"
+                    variant="outline"
+                    onClick={handleAddMilestone}
+                    type="button"
+                  >
+                    Add Item
+                  </Button>
+                </div>
+              )}
+            </>
           ))}
         </div>
 
