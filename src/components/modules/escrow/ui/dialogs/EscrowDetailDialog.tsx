@@ -38,6 +38,7 @@ import {
   Wallet,
 } from "lucide-react";
 import SkeletonMilestones from "./utils/SkeletonMilestones";
+import EditMilestonesDialog from "./EditMilestonesDialog";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -99,6 +100,13 @@ const EscrowDetailDialog = ({
 
   const isResolveDisputeDialogOpen = useEscrowBoundedStore(
     (state) => state.isResolveDisputeDialogOpen,
+  );
+
+  const setIsEditMilestoneDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsEditMilestoneDialogOpen,
+  );
+  const isEditMilestoneDialogOpen = useEscrowBoundedStore(
+    (state) => state.isEditMilestoneDialogOpen,
   );
 
   const activeTab = useEscrowBoundedStore((state) => state.activeTab);
@@ -418,7 +426,15 @@ const EscrowDetailDialog = ({
 
             {userRolesInEscrow.includes("platformAddress") &&
               activeTab === "platformAddress" && (
-                <Button variant="outline">Edit</Button>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsEditMilestoneDialogOpen(true);
+                  }}
+                  variant="outline"
+                >
+                  Edit
+                </Button>
               )}
           </div>
         </DialogContent>
@@ -440,6 +456,12 @@ const EscrowDetailDialog = ({
       <ResolveDisputeEscrowDialog
         isResolveDisputeDialogOpen={isResolveDisputeDialogOpen}
         setIsResolveDisputeDialogOpen={setIsResolveDisputeDialogOpen}
+      />
+
+      {/* Edit Milestones Dialog */}
+      <EditMilestonesDialog
+        isEditMilestoneDialogOpen={isEditMilestoneDialogOpen}
+        setIsEditMilestoneDialogOpen={setIsEditMilestoneDialogOpen}
       />
     </>
   );
