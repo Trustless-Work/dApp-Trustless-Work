@@ -9,12 +9,17 @@ import Link from "next/link";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Trash2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSettingBoundedStore } from "./store/ui";
 
 const APIKeysSection = () => {
   const { onSubmit, showApiKey, toggleVisibility, handleRemoveAPiKey } =
     useAPIKeys();
   const { copyText, copiedKeyId } = useCopyUtils();
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
+  const isRequestingAPIKey = useSettingBoundedStore(
+    (state) => state.isRequestingAPIKey,
+  );
 
   return (
     <Card className={cn("overflow-hidden")}>
@@ -70,6 +75,17 @@ const APIKeysSection = () => {
               </Button>
             </div>
           ))}
+
+          {/* Skeleton */}
+          {isRequestingAPIKey && (
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
