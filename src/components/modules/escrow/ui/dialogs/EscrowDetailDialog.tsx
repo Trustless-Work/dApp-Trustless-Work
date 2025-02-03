@@ -21,7 +21,6 @@ import FundEscrowDialog from "./FundEscrowDialog";
 import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";
-import LoaderData from "@/components/utils/ui/LoaderData";
 import { Badge } from "@/components/ui/badge";
 import useDistributeEarningsEscrowDialogHook from "./hooks/distribute-earnings-escrow-dialog.hook";
 import useChangeStatusEscrowDialogHook from "./hooks/change-status-escrow-dialog.hook";

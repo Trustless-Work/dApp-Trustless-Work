@@ -20,8 +20,6 @@ import {
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useFundEscrowDialogHook from "./hooks/fund-escrow-dialog.hook";
 import { useEscrowBoundedStore } from "../../store/ui";
-import LoaderData from "@/components/utils/ui/LoaderData";
-import { Skeleton } from "@/components/ui/skeleton";
 import SkeletonFundEscrow from "./utils/SkeletonFundEscrow";
 
 interface FundEscrowDialogProps {
