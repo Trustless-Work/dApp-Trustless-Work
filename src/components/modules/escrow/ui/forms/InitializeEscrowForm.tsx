@@ -26,19 +26,10 @@ const InitializeEscrowForm = () => {
     handleRemoveMilestone,
     handleFieldChange,
     userOptions,
+    showSelect,
+    toggleField,
+    isAnyMilestoneEmpty,
   } = useInitializeEscrow();
-
-  const [showSelect, setShowSelect] = useState({
-    client: false,
-    serviceProvider: false,
-    platformAddress: false,
-    releaseSigner: false,
-    disputeResolver: false,
-  });
-
-  const toggleField = (field: string, value: boolean) => {
-    setShowSelect((prev) => ({ ...prev, [field]: value }));
-  };
 
   return (
     <Form {...form}>
@@ -416,7 +407,7 @@ const InitializeEscrowForm = () => {
               {index === milestones.length - 1 && (
                 <div className="flex justify-end">
                   <Button
-                    disabled={milestone.description === ""}
+                    disabled={isAnyMilestoneEmpty}
                     className="w-full md:w-1/4"
                     variant="outline"
                     onClick={handleAddMilestone}
@@ -431,7 +422,11 @@ const InitializeEscrowForm = () => {
         </div>
 
         <div className="flex justify-start">
-          <Button className="w-full md:w-1/4" type="submit">
+          <Button
+            className="w-full md:w-1/4"
+            type="submit"
+            disabled={isAnyMilestoneEmpty}
+          >
             Initialize Escrow
           </Button>
         </div>
