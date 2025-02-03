@@ -13,6 +13,7 @@ import { formSchema } from "../../../schema/edit-milestone.schema";
 import { Milestone } from "@/@types/escrow.entity";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
+import { editMilestones } from "../../../services/edit-milestones.service";
 
 interface useEditMilestonesDialogProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
@@ -70,11 +71,8 @@ const useEditMilestonesDialog = ({
         milestones: payload.milestones,
       };
 
-      const data = { status: "201" };
-      // const data = await updateEscrow({
-      //   escrowId: selectedEscrow.id,
-      //   payload: updatedEscrow,
-      // })
+      //const data = { status: "201" };
+      const data = await editMilestones(updatedEscrow);
 
       const response = await updateEscrow({
         escrowId: selectedEscrow.id,
