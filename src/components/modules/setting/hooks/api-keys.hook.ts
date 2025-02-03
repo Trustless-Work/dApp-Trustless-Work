@@ -5,6 +5,7 @@ import { requestApiKey } from "../services/requestApiKey";
 import { getUser } from "../../auth/server/authentication.firebase";
 import { removeApiKey } from "../server/api-key-firebase";
 import { toast } from "@/hooks/toast.hook";
+import { useSettingBoundedStore } from "../store/ui";
 
 const useAPIKeys = () => {
   const [showApiKey, setShowApiKey] = useState("password");
@@ -12,14 +13,21 @@ const useAPIKeys = () => {
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
+  const setIsRequestingAPIKey = useSettingBoundedStore(
+    (state) => state.setIsRequestingAPIKey,
+  );
 
   const onSubmit = async () => {
-    if (loggedUser?.useCase === "" || loggedUser?.useCase === null) {
+    setIsRequestingAPIKey(true);
+
+    if (loggedUser?.useCase === "" || !loggedUser?.useCase) {
       toast({
         title: "Error",
         description: "You need to complete your use case first",
         variant: "destructive",
       });
+
+      setIsRequestingAPIKey(false);
     } else {
       const response = await requestApiKey(address);
       const { data } = await getUser({ address });
@@ -37,6 +45,8 @@ const useAPIKeys = () => {
           variant: "destructive",
         });
       }
+
+      setIsRequestingAPIKey(false);
     }
   };
 
