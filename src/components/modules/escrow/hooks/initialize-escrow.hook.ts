@@ -6,7 +6,6 @@ import { initializeEscrow } from "@/components/modules/escrow/services/initializ
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo } from "react";
-import { formSchema } from "../schema/initialize-escrow.schema";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import {
@@ -15,6 +14,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../store/ui";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
+import { getFormSchema } from "../schema/initialize-escrow.schema";
 
 export const useInitializeEscrow = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -36,6 +36,7 @@ export const useInitializeEscrow = () => {
     (state) => state.getAllUsers,
   );
   const users = useGlobalAuthenticationStore((state) => state.users);
+  const formSchema = getFormSchema();
 
   useEffect(() => {
     getAllUsers();
