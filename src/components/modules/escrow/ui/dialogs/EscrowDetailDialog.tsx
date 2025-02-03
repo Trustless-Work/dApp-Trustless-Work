@@ -38,6 +38,7 @@ import {
   Copy,
   Wallet,
 } from "lucide-react";
+import SkeletonMilestones from "./utils/SkeletonMilestones";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -318,7 +319,7 @@ const EscrowDetailDialog = ({
               <div className="flex justify-center w-full mt-5">
                 <div className="flex flex-col gap-4 py-4 w-full md:w-2/3">
                   {isChangingStatus || isStartingDispute ? (
-                    <LoaderData />
+                    <SkeletonMilestones />
                   ) : (
                     <div className="space-y-4">
                       <label className="flex items-center">
