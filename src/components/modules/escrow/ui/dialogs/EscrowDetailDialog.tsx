@@ -349,7 +349,7 @@ const EscrowDetailDialog = ({
                             placeholder="Milestone Description"
                           />
 
-                          {userRolesInEscrow.includes("disputeResolver") &&
+                          {userRolesInEscrow.includes("serviceProvider") &&
                             activeTab === "serviceProvider" &&
                             milestone.status !== "completed" &&
                             !milestone.flag && (
