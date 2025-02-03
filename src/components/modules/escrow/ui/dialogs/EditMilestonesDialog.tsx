@@ -102,6 +102,7 @@ const EditMilestonesDialog = ({
 
                       {index === milestones.length - 1 && (
                         <Button
+                          disabled={milestone.description === ""}
                           className="w-full md:w-1/4"
                           variant="outline"
                           onClick={handleAddMilestone}
