@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
-import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Trash2 } from "lucide-react";
 
@@ -26,19 +25,10 @@ const InitializeEscrowForm = () => {
     handleRemoveMilestone,
     handleFieldChange,
     userOptions,
+    showSelect,
+    toggleField,
+    isAnyMilestoneEmpty,
   } = useInitializeEscrow();
-
-  const [showSelect, setShowSelect] = useState({
-    client: false,
-    serviceProvider: false,
-    platformAddress: false,
-    releaseSigner: false,
-    disputeResolver: false,
-  });
-
-  const toggleField = (field: string, value: boolean) => {
-    setShowSelect((prev) => ({ ...prev, [field]: value }));
-  };
 
   return (
     <Form {...form}>
@@ -391,40 +381,51 @@ const InitializeEscrowForm = () => {
             <TooltipInfo content="Key stages or deliverables for the escrow." />
           </FormLabel>
           {milestones.map((milestone, index) => (
-            <div key={index} className="flex items-center space-x-4">
-              <Input
-                placeholder="Milestone Description"
-                value={milestone.description}
-                onChange={(e) => {
-                  const updatedMilestones = [...milestones];
-                  updatedMilestones[index].description = e.target.value;
-                  form.setValue("milestones", updatedMilestones);
-                  handleFieldChange("milestones", updatedMilestones);
-                }}
-              />
+            <>
+              <div key={index} className="flex items-center space-x-4">
+                <Input
+                  placeholder="Milestone Description"
+                  value={milestone.description}
+                  onChange={(e) => {
+                    const updatedMilestones = [...milestones];
+                    updatedMilestones[index].description = e.target.value;
+                    form.setValue("milestones", updatedMilestones);
+                    handleFieldChange("milestones", updatedMilestones);
+                  }}
+                />
 
-              <Button
-                className="w-full md:w-1/4"
-                variant="outline"
-                onClick={handleAddMilestone}
-                type="button"
-              >
-                Add Item
-              </Button>
+                <Button
+                  onClick={() => handleRemoveMilestone(index)}
+                  className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
+                  disabled={index === 0}
+                >
+                  <Trash2 className="h-5 w-5" />
+                </Button>
+              </div>
 
-              <Button
-                onClick={() => handleRemoveMilestone(index)}
-                className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
-                disabled={index === 0}
-              >
-                <Trash2 className="h-5 w-5" />
-              </Button>
-            </div>
+              {index === milestones.length - 1 && (
+                <div className="flex justify-end">
+                  <Button
+                    disabled={isAnyMilestoneEmpty}
+                    className="w-full md:w-1/4"
+                    variant="outline"
+                    onClick={handleAddMilestone}
+                    type="button"
+                  >
+                    Add Item
+                  </Button>
+                </div>
+              )}
+            </>
           ))}
         </div>
 
         <div className="flex justify-start">
-          <Button className="w-full md:w-1/4" type="submit">
+          <Button
+            className="w-full md:w-1/4"
+            type="submit"
+            disabled={isAnyMilestoneEmpty}
+          >
             Initialize Escrow
           </Button>
         </div>

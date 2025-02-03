@@ -12,6 +12,7 @@ export const useEscrowDialogSlice: StateCreator<
     isDialogOpen: false,
     isSecondDialogOpen: false,
     isQRDialogOpen: false,
+    isEditMilestoneDialogOpen: false,
     isResolveDisputeDialogOpen: false,
     isSuccessDialogOpen: false,
     isSuccessReleaseDialogOpen: false,
@@ -21,6 +22,8 @@ export const useEscrowDialogSlice: StateCreator<
     setIsSecondDialogOpen: (value: boolean) =>
       set({ isSecondDialogOpen: value }),
     setIsQRDialogOpen: (value: boolean) => set({ isQRDialogOpen: value }),
+    setIsEditMilestoneDialogOpen: (value: boolean) =>
+      set({ isEditMilestoneDialogOpen: value }),
     setIsResolveDisputeDialogOpen: (value: boolean) =>
       set({ isResolveDisputeDialogOpen: value }),
     setIsSuccessDialogOpen: (value: boolean) =>

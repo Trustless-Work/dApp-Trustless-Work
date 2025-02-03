@@ -2,6 +2,7 @@
 
 "use server";
 
+import { EscrowPayload } from "@/@types/escrow.entity";
 import { db } from "@/core/config/firebase/firebase";
 import {
   addDoc,
@@ -15,11 +16,9 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { z } from "zod";
-import { formSchema } from "../schema/initialize-escrow.schema";
 
 interface addEscrowProps {
-  payload: z.infer<typeof formSchema>;
+  payload: EscrowPayload;
   address: string;
   contractId: string;
 }
