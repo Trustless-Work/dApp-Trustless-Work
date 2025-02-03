@@ -29,13 +29,12 @@ const EditMilestonesDialog = ({
 
   return (
     <Dialog open={isEditMilestoneDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Editing - {selectedEscrow?.title}</DialogTitle>
           <DialogDescription>
-            You will be able to edit the Escrow milestones, both add and delete.
-            But you will not be able to do it when one of them is already
-            completed or approved.
+            You can edit escrow milestones, but not if they're completed or
+            approved.
           </DialogDescription>
         </DialogHeader>
 
