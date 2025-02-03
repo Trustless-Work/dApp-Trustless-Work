@@ -5,7 +5,7 @@ import { toast } from "@/hooks/toast.hook";
 import { initializeEscrow } from "@/components/modules/escrow/services/initialize-escrow.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import {
@@ -17,6 +17,14 @@ import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { getFormSchema } from "../schema/initialize-escrow.schema";
 
 export const useInitializeEscrow = () => {
+  const [showSelect, setShowSelect] = useState({
+    client: false,
+    serviceProvider: false,
+    platformAddress: false,
+    releaseSigner: false,
+    disputeResolver: false,
+  });
+
   const { address } = useGlobalAuthenticationStore();
   const addEscrow = useGlobalBoundedStore((state) => state.addEscrow);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
@@ -69,6 +77,9 @@ export const useInitializeEscrow = () => {
   }, [formData, form]);
 
   const milestones = form.watch("milestones");
+  const isAnyMilestoneEmpty = milestones.some(
+    (milestone) => milestone.description === "",
+  );
 
   const handleAddMilestone = () => {
     const currentMilestones = form.getValues("milestones");
@@ -154,6 +165,10 @@ export const useInitializeEscrow = () => {
     return [{ value: "", label: "Select an User" }, ...options];
   }, [users]);
 
+  const toggleField = (field: string, value: boolean) => {
+    setShowSelect((prev) => ({ ...prev, [field]: value }));
+  };
+
   return {
     form,
     milestones,
@@ -162,5 +177,8 @@ export const useInitializeEscrow = () => {
     handleRemoveMilestone,
     handleFieldChange,
     userOptions,
+    showSelect,
+    toggleField,
+    isAnyMilestoneEmpty,
   };
 };
