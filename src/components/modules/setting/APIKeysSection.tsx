@@ -11,6 +11,7 @@ import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Trash2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSettingBoundedStore } from "./store/ui";
+import SkeletonAPIKey from "./ui/utils/SkeletonAPIKey";
 
 const APIKeysSection = () => {
   const { onSubmit, showApiKey, toggleVisibility, handleRemoveAPiKey } =
@@ -77,15 +78,7 @@ const APIKeysSection = () => {
           ))}
 
           {/* Skeleton */}
-          {isRequestingAPIKey && (
-            <div className="flex items-center space-x-4">
-              <Skeleton className="h-12 w-12 rounded-full" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-[250px]" />
-                <Skeleton className="h-4 w-[200px]" />
-              </div>
-            </div>
-          )}
+          {isRequestingAPIKey && <SkeletonAPIKey />}
         </div>
       </CardContent>
     </Card>
