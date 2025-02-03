@@ -20,6 +20,7 @@ import {
   Layers,
   TriangleAlert,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -71,7 +72,17 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
   return (
     <>
       {loadingEscrows ? (
-        <LoaderData />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className="flex flex-col gap-4 mb-2">
+              <Skeleton className="h-44 w-full rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-full md:w-2/4" />
+                <Skeleton className="h-4 w-full md:w-2/4" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : currentData.length !== 0 ? (
         <div className="py-3">
           <div className="flex flex-col">
