@@ -31,6 +31,7 @@ const EditMilestonesDialog = ({
     milestones,
     handleAddMilestone,
     handleRemoveMilestone,
+    isAnyMilestoneEmpty,
   } = useEditMilestonesDialog({
     setIsEditMilestoneDialogOpen,
   });
@@ -98,7 +99,7 @@ const EditMilestonesDialog = ({
 
                     {index === milestones.length - 1 && (
                       <Button
-                        disabled={milestone.description === ""}
+                        disabled={isAnyMilestoneEmpty}
                         className="w-full md:w-1/4"
                         variant="outline"
                         onClick={handleAddMilestone}
@@ -113,7 +114,11 @@ const EditMilestonesDialog = ({
             </div>
 
             <DialogFooter>
-              <Button type="button" onClick={() => onSubmit(form.getValues())}>
+              <Button
+                disabled={isAnyMilestoneEmpty}
+                type="button"
+                onClick={() => onSubmit(form.getValues())}
+              >
                 Save
               </Button>
             </DialogFooter>

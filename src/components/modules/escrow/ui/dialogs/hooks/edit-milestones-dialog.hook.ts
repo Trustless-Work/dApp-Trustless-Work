@@ -44,6 +44,9 @@ const useEditMilestonesDialog = ({
   });
 
   const milestones: Milestone[] = form.watch("milestones");
+  const isAnyMilestoneEmpty = milestones.some(
+    (milestone) => milestone.description === "",
+  );
 
   const handleAddMilestone = () => {
     const currentMilestones = form.getValues("milestones");
@@ -113,6 +116,7 @@ const useEditMilestonesDialog = ({
     milestones,
     handleAddMilestone,
     handleRemoveMilestone,
+    isAnyMilestoneEmpty,
   };
 };
 
