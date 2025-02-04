@@ -39,6 +39,8 @@ import {
 } from "lucide-react";
 import SkeletonMilestones from "./utils/SkeletonMilestones";
 import EditMilestonesDialog from "./EditMilestonesDialog";
+import { SuccessReleaseDialog } from "./SuccessDialog";
+import { toast } from "@/hooks/toast.hook";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -108,6 +110,12 @@ const EscrowDetailDialog = ({
   const isEditMilestoneDialogOpen = useEscrowBoundedStore(
     (state) => state.isEditMilestoneDialogOpen,
   );
+  const isSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessReleaseDialogOpen,
+  );
+  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessReleaseDialogOpen,
+  );
 
   const activeTab = useEscrowBoundedStore((state) => state.activeTab);
 
@@ -172,8 +180,16 @@ const EscrowDetailDialog = ({
                     </p>
                     <CircleCheckBig className="text-green-800" size={30} />
                   </div>
-                  <div className="mt-2 flex items-baseline">
+                  <div className="mt-2 flex items-baseline justify-between">
                     <h3 className="text-2xl font-semibold">Released</h3>
+                    <Button
+                      variant="link"
+                      type="button"
+                      onClick={() => setIsSuccessReleaseDialogOpen(true)}
+                      className="text-xs text-muted-foreground my-0 p-0 h-auto"
+                    >
+                      See Details
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -269,13 +285,31 @@ const EscrowDetailDialog = ({
                 !areAllMilestonesCompletedAndFlag &&
                 (activeTab === "client" || activeTab === "serviceProvider") &&
                 !selectedEscrow.disputeFlag && (
-                  <Button
-                    onClick={startDisputeSubmit}
-                    variant="destructive"
-                    className="mt-3"
+                  <div
+                    onClick={() => {
+                      if (Number(selectedEscrow.balance) === 0) {
+                        toast({
+                          title: "Cannot start dispute",
+                          description: "The escrow balance is 0",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                    className="w-full cursor-pointer"
                   >
-                    Start Dispute
-                  </Button>
+                    <Button
+                      disabled={Number(selectedEscrow.balance) === 0}
+                      onClick={() => {
+                        if (Number(selectedEscrow.balance) !== 0) {
+                          startDisputeSubmit();
+                        }
+                      }}
+                      variant="destructive"
+                      className="mt-3 pointer-events-none w-full"
+                    >
+                      Start Dispute
+                    </Button>
+                  </div>
                 )}
 
               {userRolesInEscrow.includes("disputeResolver") &&
@@ -462,6 +496,14 @@ const EscrowDetailDialog = ({
       <EditMilestonesDialog
         isEditMilestoneDialogOpen={isEditMilestoneDialogOpen}
         setIsEditMilestoneDialogOpen={setIsEditMilestoneDialogOpen}
+      />
+
+      {/* Success Release Dialog */}
+      <SuccessReleaseDialog
+        isSuccessReleaseDialogOpen={isSuccessReleaseDialogOpen}
+        setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
+        title=""
+        description="Now that your escrow is released, you will be able to view it directly in"
       />
     </>
   );

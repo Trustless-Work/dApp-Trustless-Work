@@ -15,6 +15,8 @@ export const initializeEscrow = async (
   address: string,
 ) => {
   try {
+    console.log(payload);
+
     const payloadWithSigner: EscrowPayloadWithSigner = {
       ...payload,
       signer: address,

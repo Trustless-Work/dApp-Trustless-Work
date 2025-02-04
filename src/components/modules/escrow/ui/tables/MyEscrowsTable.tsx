@@ -274,7 +274,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
       <SuccessReleaseDialog
         isSuccessReleaseDialogOpen={isSuccessReleaseDialogOpen}
         setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
-        title={"Escrow released successfully"}
+        title={"Escrow released"}
         description="Now that your escrow is released, you will be able to view it directly in"
         recentEscrow={recentEscrow}
       />
