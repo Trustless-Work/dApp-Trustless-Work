@@ -293,17 +293,14 @@ const EscrowDetailDialog = ({
                           description: "The escrow balance is 0",
                           variant: "destructive",
                         });
+                      } else {
+                        startDisputeSubmit();
                       }
                     }}
                     className="w-full cursor-pointer"
                   >
                     <Button
                       disabled={Number(selectedEscrow.balance) === 0}
-                      onClick={() => {
-                        if (Number(selectedEscrow.balance) !== 0) {
-                          startDisputeSubmit();
-                        }
-                      }}
                       variant="destructive"
                       className="mt-3 pointer-events-none w-full"
                     >
