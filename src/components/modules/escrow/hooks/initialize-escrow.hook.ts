@@ -101,7 +101,7 @@ export const useInitializeEscrow = () => {
     setIsSuccessDialogOpen(false);
 
     try {
-      const platformFeeDecimal = Number(payload.platformFee) / 100;
+      const platformFeeDecimal = Number(payload.platformFee);
 
       const data = await initializeEscrow(
         {
