@@ -17,6 +17,7 @@ import { Escrow } from "@/@types/escrow.entity";
 import EntityCard from "./cards/EntityCard";
 import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
 import { Check, Copy } from "lucide-react";
+import { useGlobalBoundedStore } from "@/core/store/data";
 
 interface SuccessDialogProps {
   title: string;
@@ -122,17 +123,20 @@ export const SuccessReleaseDialog = ({
     setIsSuccessReleaseDialogOpen,
   });
 
+  const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const escrow = selectedEscrow || recentEscrow;
+
   const { formatDollar } = useFormatUtils();
 
   // Percentage
   const trustlessPercentage = 0.3;
-  const platformFee = Number(recentEscrow?.platformFee || 0);
-  const totalAmount = Number(recentEscrow?.amount || 0);
+  const platformFee = Number(escrow?.platformFee || 0);
+  const totalAmount = Number(escrow?.amount || 0);
   const serviceProviderPercentage = 100 - (trustlessPercentage + platformFee);
 
   // Amount
   const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
-  const platformAmount = totalAmount * platformFee;
+  const platformAmount = totalAmount;
   const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
 
   return (
@@ -143,7 +147,7 @@ export const SuccessReleaseDialog = ({
           <DialogDescription className="mb-5">
             {description}{" "}
             <Link
-              href={`https://stellar.expert/explorer/testnet/contract/${recentEscrow?.contractId}`}
+              href={`https://stellar.expert/explorer/testnet/contract/${escrow?.contractId}`}
               className="text-primary"
               target="_blank"
             >
@@ -154,17 +158,19 @@ export const SuccessReleaseDialog = ({
         <div className="flex justify-between mt-5">
           <p className="text-xs">
             <span className="font-bold">Total Amount: </span>
-            {formatDollar(recentEscrow?.amount)}
+            {formatDollar(escrow?.amount)}
           </p>
-          <p className="text-xs">
-            <span className="font-bold">Total Balance:</span>{" "}
-            {formatDollar(recentEscrow?.balance)}
-          </p>
+          {recentEscrow && (
+            <p className="text-xs">
+              <span className="font-bold">Total Balance:</span>{" "}
+              {formatDollar(escrow?.balance)}
+            </p>
+          )}
         </div>
         <div className="flex flex-col gap-4">
           <EntityCard
             type="Service Provider"
-            entity={recentEscrow?.serviceProvider}
+            entity={escrow?.serviceProvider}
             hasPercentage={true}
             percentage={serviceProviderPercentage.toString()}
             hasAmount={true}
@@ -180,7 +186,7 @@ export const SuccessReleaseDialog = ({
           />
           <EntityCard
             type="Platform"
-            entity={recentEscrow?.platformAddress}
+            entity={escrow?.platformAddress}
             hasPercentage={true}
             percentage={platformFee.toString()}
             hasAmount={true}
