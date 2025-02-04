@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import SkeletonMilestones from "./utils/SkeletonMilestones";
 import EditMilestonesDialog from "./EditMilestonesDialog";
+import { SuccessReleaseDialog } from "./SuccessDialog";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -108,6 +109,12 @@ const EscrowDetailDialog = ({
   const isEditMilestoneDialogOpen = useEscrowBoundedStore(
     (state) => state.isEditMilestoneDialogOpen,
   );
+  const isSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessReleaseDialogOpen,
+  );
+  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessReleaseDialogOpen,
+  );
 
   const activeTab = useEscrowBoundedStore((state) => state.activeTab);
 
@@ -172,8 +179,16 @@ const EscrowDetailDialog = ({
                     </p>
                     <CircleCheckBig className="text-green-800" size={30} />
                   </div>
-                  <div className="mt-2 flex items-baseline">
+                  <div className="mt-2 flex items-baseline justify-between">
                     <h3 className="text-2xl font-semibold">Released</h3>
+                    <Button
+                      variant="link"
+                      type="button"
+                      onClick={() => setIsSuccessReleaseDialogOpen(true)}
+                      className="text-xs text-muted-foreground my-0 p-0 h-auto"
+                    >
+                      See Details
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -270,6 +285,7 @@ const EscrowDetailDialog = ({
                 (activeTab === "client" || activeTab === "serviceProvider") &&
                 !selectedEscrow.disputeFlag && (
                   <Button
+                    disabled={Number(selectedEscrow.balance) === 0}
                     onClick={startDisputeSubmit}
                     variant="destructive"
                     className="mt-3"
@@ -462,6 +478,14 @@ const EscrowDetailDialog = ({
       <EditMilestonesDialog
         isEditMilestoneDialogOpen={isEditMilestoneDialogOpen}
         setIsEditMilestoneDialogOpen={setIsEditMilestoneDialogOpen}
+      />
+
+      {/* Success Release Dialog */}
+      <SuccessReleaseDialog
+        isSuccessReleaseDialogOpen={isSuccessReleaseDialogOpen}
+        setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
+        title=""
+        description="Now that your escrow is released, you will be able to view it directly in"
       />
     </>
   );
