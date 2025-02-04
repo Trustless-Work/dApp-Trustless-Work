@@ -40,6 +40,7 @@ import {
 import SkeletonMilestones from "./utils/SkeletonMilestones";
 import EditMilestonesDialog from "./EditMilestonesDialog";
 import { SuccessReleaseDialog } from "./SuccessDialog";
+import { toast } from "@/hooks/toast.hook";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -284,14 +285,31 @@ const EscrowDetailDialog = ({
                 !areAllMilestonesCompletedAndFlag &&
                 (activeTab === "client" || activeTab === "serviceProvider") &&
                 !selectedEscrow.disputeFlag && (
-                  <Button
-                    disabled={Number(selectedEscrow.balance) === 0}
-                    onClick={startDisputeSubmit}
-                    variant="destructive"
-                    className="mt-3"
+                  <div
+                    onClick={() => {
+                      if (Number(selectedEscrow.balance) === 0) {
+                        toast({
+                          title: "Cannot start dispute",
+                          description: "The escrow balance is 0",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                    className="w-full cursor-pointer"
                   >
-                    Start Dispute
-                  </Button>
+                    <Button
+                      disabled={Number(selectedEscrow.balance) === 0}
+                      onClick={() => {
+                        if (Number(selectedEscrow.balance) !== 0) {
+                          startDisputeSubmit();
+                        }
+                      }}
+                      variant="destructive"
+                      className="mt-3 pointer-events-none w-full"
+                    >
+                      Start Dispute
+                    </Button>
+                  </div>
                 )}
 
               {userRolesInEscrow.includes("disputeResolver") &&
