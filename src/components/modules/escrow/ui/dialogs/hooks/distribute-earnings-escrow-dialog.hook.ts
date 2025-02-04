@@ -60,6 +60,7 @@ const useDistributeEarningsEscrowDialog = () => {
         setIsSuccessReleaseDialogOpen(true);
         fetchAllEscrows({ address, type: activeTab || "client" });
         setIsDialogOpen(false);
+        setIsChangingStatus(false);
         if (selectedEscrow) {
           setRecentEscrow(selectedEscrow);
         }
