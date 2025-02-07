@@ -10,7 +10,7 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { formSchema } from "../../../schema/edit-milestone.schema";
-import { Escrow, EscrowPayload, Milestone } from "@/@types/escrow.entity";
+import { EscrowPayload, Milestone } from "@/@types/escrow.entity";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
 import { editMilestones } from "../../../services/edit-milestones.service";
