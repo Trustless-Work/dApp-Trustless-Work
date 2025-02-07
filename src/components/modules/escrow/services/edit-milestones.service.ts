@@ -1,13 +1,16 @@
-import { EscrowPayload } from "@/@types/escrow.entity";
+import { EditMilestonesPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
 import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
 import { signTransaction } from "@stellar/freighter-api";
 import axios from "axios";
 
-export const editMilestones = async (payload: EscrowPayload) => {
+export const editMilestones = async (payload: EditMilestonesPayload) => {
   try {
-    const response = await http.post("/escrow/fund-escrow", payload);
+    const response = await http.put(
+      "/escrow/update-escrow-by-contract-id",
+      payload,
+    );
 
     const { unsignedTransaction } = response.data;
     const { address } = await kit.getAddress();
