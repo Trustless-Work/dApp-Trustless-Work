@@ -10,7 +10,7 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { formSchema } from "../../../schema/edit-milestone.schema";
-import { Milestone } from "@/@types/escrow.entity";
+import { Escrow, EscrowPayload, Milestone } from "@/@types/escrow.entity";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
 import { editMilestones } from "../../../services/edit-milestones.service";
@@ -70,19 +70,28 @@ const useEditMilestonesDialog = ({
 
     try {
       const updatedEscrow = {
-        ...selectedEscrow,
+        ...JSON.parse(JSON.stringify(selectedEscrow)),
         milestones: payload.milestones,
       };
 
-      //const data = { status: "201" };
-      const data = await editMilestones(updatedEscrow);
+      delete updatedEscrow.createdAt;
+      delete updatedEscrow.updatedAt;
+      delete updatedEscrow.id;
+
+      const newPayload = {
+        escrow: updatedEscrow as EscrowPayload,
+        signer: address,
+        contractId: selectedEscrow.contractId || "",
+      };
+
+      const data = await editMilestones(newPayload);
 
       const response = await updateEscrow({
         escrowId: selectedEscrow.id,
         payload: updatedEscrow,
       });
 
-      if (data.status === "SUCCESS" /*|| data.status === 201*/ && response) {
+      if ((data.status === "SUCCESS" || data.status === 201) && response) {
         fetchAllEscrows({ address, type: activeTab || "client" });
         setIsEditMilestoneDialogOpen(false);
         setIsDialogOpen(false);
