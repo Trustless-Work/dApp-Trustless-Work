@@ -37,6 +37,8 @@ export const useGlobalEscrowsSlice: StateCreator<
     selectedEscrow: null,
     userRolesInEscrow: [],
     recentEscrow: undefined,
+    clientFunds: "",
+    serviceProviderFunds: "",
 
     // Modifiers
     setEscrows: (escrows: Escrow[]) =>
@@ -155,25 +157,12 @@ export const useGlobalEscrowsSlice: StateCreator<
       set({ recentEscrow: escrow });
     },
 
-    //   fetchDeleteProduct: async (productId) => {
-    //     const ok = await fetchDeleteProduct({ productId });
+    setClientFunds: (clientFunds: string) => {
+      set({ clientFunds });
+    },
 
-    //     if (ok) {
-    //       set(
-    //         (state) => ({
-    //           products: state.products.filter((p) => p.id !== productId),
-    //         }),
-    //         false,
-    //         ESCROW_ACTIONS.DELETE_PRODUCT,
-    //       );
-    //     }
-    //   },
-
-    //   setProductsToDelete: (products) =>
-    //     set(
-    //       { productsToDelete: products },
-    //       false,
-    //       ESCROW_ACTIONS.SET_PRODUCTS_TO_DELETE,
-    //     ),
+    setServiceProviderFunds: (serviceProviderFunds: string) => {
+      set({ serviceProviderFunds });
+    },
   };
 };
