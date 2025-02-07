@@ -32,6 +32,7 @@ export const useInitializeEscrow = () => {
   const formData = useEscrowBoundedStore((state) => state.formData);
   const setFormData = useEscrowBoundedStore((state) => state.setFormData);
   const resetForm = useEscrowBoundedStore((state) => state.resetForm);
+  const setCurrentStep = useEscrowBoundedStore((state) => state.setCurrentStep);
   const router = useRouter();
   const setIsSuccessDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
@@ -125,12 +126,14 @@ export const useInitializeEscrow = () => {
 
         setRecentEscrow({ ...data.escrow, contractId: data.contract_id });
         resetSteps();
+        setCurrentStep(1);
         form.reset();
         resetForm();
         router.push("/dashboard/escrow/my-escrows");
         setIsLoading(false);
       } else {
         resetSteps();
+        setCurrentStep(1);
         setIsLoading(false);
         setIsSuccessDialogOpen(false);
         toast({
