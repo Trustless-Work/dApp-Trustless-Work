@@ -14,6 +14,8 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useEscrowBoundedStore } from "../../store/ui";
+import SkeletonEditMilestones from "./utils/SkeletonEditMilestones";
 
 interface FundEscrowDialogProps {
   isEditMilestoneDialogOpen: boolean;
@@ -37,6 +39,10 @@ const EditMilestonesDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const isEditingMilestones = useEscrowBoundedStore(
+    (state) => state.isEditingMilestones,
+  );
+
   if (!selectedEscrow) return null;
 
   return (
@@ -50,81 +56,84 @@ const EditMilestonesDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        {/* todo: add skeleton */}
-        {/* {false ? (
-          <SkeletonFundEscrow />
-        ) : ( */}
-        <Form {...form}>
-          <div className="grid gap-4 py-4">
-            <div className="flex flex-col ms-center gap-4">
-              <div className="space-y-4">
-                <FormLabel className="flex items-center">
-                  Milestones
-                  <TooltipInfo content="Key stages or deliverables for the escrow." />
-                </FormLabel>
-                {milestones.map((milestone, index) => (
-                  <>
-                    <div key={index} className="flex items-center space-x-4">
-                      {milestone.flag ? (
-                        <Badge className="uppercase max-w-24">Approved</Badge>
-                      ) : (
-                        <Badge className="uppercase max-w-24" variant="outline">
-                          {milestone.status}
-                        </Badge>
+        {isEditingMilestones ? (
+          <SkeletonEditMilestones />
+        ) : (
+          <Form {...form}>
+            <div className="grid gap-4 py-4">
+              <div className="flex flex-col ms-center gap-4">
+                <div className="space-y-4">
+                  <FormLabel className="flex items-center">
+                    Milestones
+                    <TooltipInfo content="Key stages or deliverables for the escrow." />
+                  </FormLabel>
+                  {milestones.map((milestone, index) => (
+                    <>
+                      <div key={index} className="flex items-center space-x-4">
+                        {milestone.flag ? (
+                          <Badge className="uppercase max-w-24">Approved</Badge>
+                        ) : (
+                          <Badge
+                            className="uppercase max-w-24"
+                            variant="outline"
+                          >
+                            {milestone.status}
+                          </Badge>
+                        )}
+
+                        <Input
+                          disabled={"approved_flag" in milestone}
+                          placeholder="Milestone Description"
+                          value={milestone.description}
+                          onChange={(e) => {
+                            const updatedMilestones = [...milestones];
+                            updatedMilestones[index].description =
+                              e.target.value;
+                            form.setValue("milestones", updatedMilestones);
+                          }}
+                        />
+
+                        <Button
+                          onClick={() => handleRemoveMilestone(index)}
+                          className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
+                          disabled={
+                            index === 0 ||
+                            milestone.status === "completed" ||
+                            milestone.flag
+                          }
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </Button>
+                      </div>
+
+                      {index === milestones.length - 1 && (
+                        <Button
+                          disabled={isAnyMilestoneEmpty}
+                          className="w-full md:w-1/4"
+                          variant="outline"
+                          onClick={handleAddMilestone}
+                          type="button"
+                        >
+                          Add Item
+                        </Button>
                       )}
-
-                      <Input
-                        disabled={"approved_flag" in milestone}
-                        placeholder="Milestone Description"
-                        value={milestone.description}
-                        onChange={(e) => {
-                          const updatedMilestones = [...milestones];
-                          updatedMilestones[index].description = e.target.value;
-                          form.setValue("milestones", updatedMilestones);
-                        }}
-                      />
-
-                      <Button
-                        onClick={() => handleRemoveMilestone(index)}
-                        className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
-                        disabled={
-                          index === 0 ||
-                          milestone.status === "completed" ||
-                          milestone.flag
-                        }
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </Button>
-                    </div>
-
-                    {index === milestones.length - 1 && (
-                      <Button
-                        disabled={isAnyMilestoneEmpty}
-                        className="w-full md:w-1/4"
-                        variant="outline"
-                        onClick={handleAddMilestone}
-                        type="button"
-                      >
-                        Add Item
-                      </Button>
-                    )}
-                  </>
-                ))}
+                    </>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <DialogFooter>
-              <Button
-                disabled={isAnyMilestoneEmpty}
-                type="button"
-                onClick={() => onSubmit(form.getValues())}
-              >
-                Save
-              </Button>
-            </DialogFooter>
-          </div>
-        </Form>
-        {/* )} */}
+              <DialogFooter>
+                <Button
+                  disabled={isAnyMilestoneEmpty}
+                  type="button"
+                  onClick={() => onSubmit(form.getValues())}
+                >
+                  Save
+                </Button>
+              </DialogFooter>
+            </div>
+          </Form>
+        )}
       </DialogContent>
     </Dialog>
   );
