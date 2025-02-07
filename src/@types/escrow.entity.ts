@@ -78,3 +78,9 @@ export type ResolveDisputePayload = Pick<Escrow, "contractId"> &
     clientFunds: string;
     serviceProviderFunds: string;
   };
+
+export type EditMilestonesPayload = {
+  contractId: string;
+  escrow: EscrowPayload;
+  signer: string;
+};
