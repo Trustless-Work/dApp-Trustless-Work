@@ -14,6 +14,7 @@ export const useEscrowLoadersSlice: StateCreator<
     isStartingDispute: false,
     isFundingEscrow: false,
     isEditingMilestones: false,
+    isResolvingDispute: false,
 
     // Modifiers
     setIsChangingStatus: (value: boolean) => set({ isChangingStatus: value }),
@@ -23,5 +24,7 @@ export const useEscrowLoadersSlice: StateCreator<
     setIsFundingEscrow: (value: boolean) => set({ isFundingEscrow: value }),
     setIsEditingMilestones: (value: boolean) =>
       set({ isEditingMilestones: value }),
+    setIsResolvingDispute: (value: boolean) =>
+      set({ isResolvingDispute: value }),
   };
 };
