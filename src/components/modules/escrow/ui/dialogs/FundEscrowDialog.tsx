@@ -21,6 +21,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useFundEscrowDialogHook from "./hooks/fund-escrow-dialog.hook";
 import { useEscrowBoundedStore } from "../../store/ui";
 import SkeletonFundEscrow from "./utils/SkeletonFundEscrow";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface FundEscrowDialogProps {
   isSecondDialogOpen: boolean;
@@ -79,6 +80,41 @@ const FundEscrowDialog = ({
                         />
                       </FormControl>
                       <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="paymentMethod"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Payment Method</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          defaultValue="wallet"
+                          className="flex justify-between"
+                        >
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="wallet" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Pay with Wallet
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="card" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Pay with Card (via MoonPay)
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
                     </FormItem>
                   )}
                 />
