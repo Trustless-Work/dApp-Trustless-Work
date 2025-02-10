@@ -38,12 +38,34 @@ const useFundEscrowDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       amount: "",
+      paymentMethod: "",
     },
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     setIsFundingEscrow(true);
 
+    if (payload.paymentMethod === "card") {
+      payByMoonpay(payload);
+    } else {
+      payByWallet(payload);
+    }
+  };
+
+  const payByMoonpay = async (payload: z.infer<typeof formSchema>) => {
+    const deployedMoonPayUrl = "https://trustless-payment.vercel.app";
+
+    const params = new URLSearchParams({
+      contractId: selectedEscrow?.contractId || "",
+      amount: payload.amount,
+      engagementId: selectedEscrow?.engagementId || "",
+      callbackUrl: `${window.location.origin}/api/moonpay-callback`,
+    });
+
+    window.location.href = `${deployedMoonPayUrl}?${params.toString()}`;
+  };
+
+  const payByWallet = async (payload: z.infer<typeof formSchema>) => {
     try {
       const data = await fundEscrow({
         signer: address,
