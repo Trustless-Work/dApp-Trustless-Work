@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+import MoonpayClientProvider from "@/providers/MoonpayClientProvider";
 
 const Exo2 = localFont({
   src: "./fonts/Exo2.ttf",
@@ -23,13 +24,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(Exo2.variable, "antialiased")}>
-        <div className="relative flex min-h-screen w-full">
-          <div className="flex-1 flex flex-col w-full">
-            <div className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
-              {children}
+        <MoonpayClientProvider>
+          <div className="relative flex min-h-screen w-full">
+            <div className="flex-1 flex flex-col w-full">
+              <div className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
+                {children}
+              </div>
             </div>
           </div>
-        </div>
+        </MoonpayClientProvider>
         <Toaster />
       </body>
     </html>
