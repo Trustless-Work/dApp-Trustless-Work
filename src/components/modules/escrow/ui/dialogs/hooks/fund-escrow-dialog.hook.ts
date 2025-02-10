@@ -53,7 +53,7 @@ const useFundEscrowDialog = ({
   };
 
   const payByMoonpay = async (payload: z.infer<typeof formSchema>) => {
-    const deployedMoonPayUrl = "https://trustless-payment.vercel.app";
+    const deployedMoonPayUrl = `https://buy-sandbox.moonpay.com/?apiKey=${process.env.NEXT_PUBLIC_MOONPAY_API_KEY}&theme=dark&defaultCurrencyCode=eth&baseCurrencyAmount=${payload.amount}&colorCode=%237d01ff`;
 
     const params = new URLSearchParams({
       contractId: selectedEscrow?.contractId || "",
@@ -62,7 +62,13 @@ const useFundEscrowDialog = ({
       callbackUrl: `${window.location.origin}/api/moonpay-callback`,
     });
 
-    window.location.href = `${deployedMoonPayUrl}?${params.toString()}`;
+    const fullUrl = `${deployedMoonPayUrl}&${params.toString()}`;
+
+    window.open(
+      fullUrl,
+      "moonpayPopup",
+      "width=500,height=600,scrollbars=yes,resizable=yes",
+    );
   };
 
   const payByWallet = async (payload: z.infer<typeof formSchema>) => {
