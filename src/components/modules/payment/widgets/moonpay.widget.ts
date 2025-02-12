@@ -23,6 +23,8 @@ export const MoonPayWidget = ({
         "https://static.moonpay.com/web-sdk/v1/moonpay-web-sdk.min.js";
       script.async = true;
       script.onload = () => {
+        if (typeof window === "undefined") return;
+
         const moonpaySdk = (window as any).MoonPayWebSdk.init({
           flow: "buy",
           environment: "sandbox",
@@ -40,6 +42,7 @@ export const MoonPayWidget = ({
             onClose();
           },
         });
+
         moonpaySdk.show();
       };
       document.body.appendChild(script);

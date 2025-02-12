@@ -12,6 +12,8 @@ export const useGenerateMoonPayUrl = async (
 ) => {
   //const address = useGlobalAuthenticationStore((state) => state.address);
 
+  if (typeof window === "undefined") return;
+
   const params = new URLSearchParams({
     apiKey: MOONPAY_CONFIG.apiKey,
     currencyCode: MOONPAY_CONFIG.currency,

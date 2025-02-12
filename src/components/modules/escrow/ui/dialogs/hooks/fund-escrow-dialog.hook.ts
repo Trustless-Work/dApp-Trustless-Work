@@ -55,6 +55,8 @@ const useFundEscrowDialog = ({
   const payByMoonpay = async (payload: z.infer<typeof formSchema>) => {
     const deployedMoonPayUrl = `https://buy-sandbox.moonpay.com/?apiKey=${process.env.NEXT_PUBLIC_MOONPAY_API_KEY}&theme=dark&defaultCurrencyCode=eth&baseCurrencyAmount=${payload.amount}&colorCode=%237d01ff`;
 
+    if (typeof window === "undefined") return;
+
     const params = new URLSearchParams({
       contractId: selectedEscrow?.contractId || "",
       amount: payload.amount,
