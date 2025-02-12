@@ -162,6 +162,18 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                               />
                             </>
                           )}
+
+                          {escrow.resolvedFlag && (
+                            <>
+                              <p className="font-bold text-sm text-green-800">
+                                Resolved
+                              </p>
+                              <CircleCheckBig
+                                className="text-green-800"
+                                size={30}
+                              />
+                            </>
+                          )}
                         </div>
                       </div>
                       <div className="mt-2 flex items-baseline">
