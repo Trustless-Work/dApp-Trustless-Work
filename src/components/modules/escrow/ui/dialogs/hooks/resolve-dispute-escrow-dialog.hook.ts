@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { resolveDispute } from "../../../services/resolve-dispute.service";
-import { ResolveDisputePayload } from "@/@types/escrow.entity";
+import { EscrowPayload, ResolveDisputePayload } from "@/@types/escrow.entity";
 import { MouseEvent } from "react";
 import { getFormSchema } from "../../../schema/resolve-dispute-escrow.schema";
 import { toast } from "@/hooks/toast.hook";
@@ -23,6 +23,7 @@ const useResolveDisputeEscrowDialog = ({
   const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const formSchema = getFormSchema(selectedEscrow);
+  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,6 +36,8 @@ const useResolveDisputeEscrowDialog = ({
   const onSubmit = async (payload: ResolveDisputePayload) => {
     setIsLoading(true);
 
+    if (!selectedEscrow) return;
+
     try {
       const data = await resolveDispute({
         contractId: selectedEscrow?.contractId,
@@ -43,7 +46,17 @@ const useResolveDisputeEscrowDialog = ({
         serviceProviderFunds: payload.serviceProviderFunds,
       });
 
-      if (data.status === "SUCCESS" || data.status === 201) {
+      const updatedPayload: EscrowPayload = {
+        ...selectedEscrow,
+        resolvedFlag: true,
+      };
+
+      const responseFlag = await updateEscrow({
+        escrowId: selectedEscrow.id,
+        payload: updatedPayload,
+      });
+
+      if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
         form.reset();
         setIsResolveDisputeDialogOpen(false);
         setIsLoading(false);
