@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import {
-  CheckCheck,
   CircleAlert,
   CircleCheckBig,
+  Handshake,
   MoreHorizontal,
   TriangleAlert,
 } from "lucide-react";
@@ -216,7 +216,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
 
                         {escrow.resolvedFlag && (
                           <TableCell title="Escrow released">
-                            <CheckCheck className="text-green-800" size={22} />
+                            <Handshake className="text-green-800" size={22} />
                           </TableCell>
                         )}
                       </TableRow>

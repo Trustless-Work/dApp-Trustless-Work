@@ -14,9 +14,9 @@ import {
 import ProgressEscrow from "../dialogs/utils/ProgressEscrow";
 import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
 import {
-  CheckCheck,
   CircleAlert,
   CircleCheckBig,
+  Handshake,
   Layers,
   TriangleAlert,
 } from "lucide-react";
@@ -169,10 +169,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                               <p className="font-bold text-sm text-green-800">
                                 Resolved
                               </p>
-                              <CheckCheck
-                                className="text-green-800"
-                                size={30}
-                              />
+                              <Handshake className="text-green-800" size={30} />
                             </>
                           )}
                         </div>
