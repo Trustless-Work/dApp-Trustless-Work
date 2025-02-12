@@ -14,6 +14,7 @@ import {
 import ProgressEscrow from "../dialogs/utils/ProgressEscrow";
 import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
 import {
+  CheckCheck,
   CircleAlert,
   CircleCheckBig,
   Layers,
@@ -168,7 +169,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                               <p className="font-bold text-sm text-green-800">
                                 Resolved
                               </p>
-                              <CircleCheckBig
+                              <CheckCheck
                                 className="text-green-800"
                                 size={30}
                               />

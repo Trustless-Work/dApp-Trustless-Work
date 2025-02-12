@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import {
+  CheckCheck,
   CircleAlert,
   CircleCheckBig,
   MoreHorizontal,
@@ -210,6 +211,12 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                               className="text-green-800"
                               size={22}
                             />
+                          </TableCell>
+                        )}
+
+                        {escrow.resolvedFlag && (
+                          <TableCell title="Escrow released">
+                            <CheckCheck className="text-green-800" size={22} />
                           </TableCell>
                         )}
                       </TableRow>
