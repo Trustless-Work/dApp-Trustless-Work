@@ -35,6 +35,7 @@ import {
   CircleCheckBig,
   CircleDollarSign,
   Copy,
+  Handshake,
   Wallet,
 } from "lucide-react";
 import SkeletonMilestones from "./utils/SkeletonMilestones";
@@ -182,6 +183,35 @@ const EscrowDetailDialog = ({
                   </div>
                   <div className="mt-2 flex items-baseline justify-between">
                     <h3 className="text-2xl font-semibold">Released</h3>
+                    <Button
+                      variant="link"
+                      type="button"
+                      onClick={() => setIsSuccessReleaseDialogOpen(true)}
+                      className="text-xs text-muted-foreground my-0 p-0 h-auto"
+                    >
+                      See Details
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {selectedEscrow.resolvedFlag && (
+              <Card
+                className={cn(
+                  "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
+                )}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Status
+                    </p>
+                    <Handshake className="text-green-800" size={30} />
+                  </div>
+                  <div className="mt-2 flex items-baseline justify-between">
+                    <h3 className="text-2xl font-semibold">Resolved</h3>
+                    {/* todo: poner modal de resolved success */}
                     <Button
                       variant="link"
                       type="button"

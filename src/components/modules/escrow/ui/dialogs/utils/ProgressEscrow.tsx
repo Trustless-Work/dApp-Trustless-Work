@@ -27,7 +27,8 @@ const ProgressEscrow = ({ escrow }: ProgressEscrowProps) => {
   const pendingRelease =
     progressPercentageCompleted === 100 &&
     progressPercentageApproved === 100 &&
-    !escrow.releaseFlag;
+    !escrow.releaseFlag &&
+    !escrow.resolvedFlag;
 
   const isFinished =
     progressPercentageCompleted === 100 && progressPercentageApproved === 100;
@@ -43,7 +44,7 @@ const ProgressEscrow = ({ escrow }: ProgressEscrowProps) => {
                 <h3 className="mb-1 font-bold text-xs">Approved</h3>
               </>
             );
-          } else if (escrow.releaseFlag) {
+          } else if (escrow.releaseFlag || escrow.resolvedFlag) {
             return <h3 className="mb-1 font-bold text-xs h-8" />;
           }
         })()}

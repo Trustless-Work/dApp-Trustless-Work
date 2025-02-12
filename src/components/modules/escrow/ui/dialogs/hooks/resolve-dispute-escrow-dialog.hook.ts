@@ -49,6 +49,7 @@ const useResolveDisputeEscrowDialog = ({
       const updatedPayload: EscrowPayload = {
         ...selectedEscrow,
         resolvedFlag: true,
+        disputeFlag: false,
       };
 
       const responseFlag = await updateEscrow({
