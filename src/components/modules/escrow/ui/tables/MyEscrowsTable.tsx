@@ -39,7 +39,7 @@ import SkeletonTable from "../utils/SkeletonTable";
 interface MyEscrowsTableProps {
   type:
     | "issuer"
-    | "client"
+    | "approver"
     | "disputeResolver"
     | "serviceProvider"
     | "releaseSigner"
@@ -98,7 +98,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                   <TableHead>Balance</TableHead>
                   <TableHead>Engagement</TableHead>
                   <TableHead>Service Provider</TableHead>
-                  <TableHead>Client</TableHead>
+                  <TableHead>Approver</TableHead>
                   <TableHead>Created</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -146,7 +146,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         <TableCell>
                           {formatAddress(escrow.serviceProvider)}
                         </TableCell>
-                        <TableCell>{formatAddress(escrow.client)}</TableCell>
+                        <TableCell>{formatAddress(escrow.approver)}</TableCell>
                         <TableCell>
                           {formatDateFromFirebase(
                             escrow.createdAt.seconds,

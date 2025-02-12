@@ -50,16 +50,16 @@ const ResolveDisputeEscrowDialog = ({
             <div className="flex flex-col ms-center gap-4">
               <FormField
                 control={form.control}
-                name="clientFunds"
+                name="approverFunds"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex items-center">
-                      Client Amount
-                      <TooltipInfo content="The amount for the client." />
+                      Approver Amount
+                      <TooltipInfo content="The amount for the approver." />
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="The amount for the client"
+                        placeholder="The amount for the approver"
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);

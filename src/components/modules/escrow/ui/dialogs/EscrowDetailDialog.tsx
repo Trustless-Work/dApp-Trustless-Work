@@ -280,10 +280,10 @@ const EscrowDetailDialog = ({
                 Fund Escrow
               </Button>
 
-              {(userRolesInEscrow.includes("client") ||
+              {(userRolesInEscrow.includes("approver") ||
                 userRolesInEscrow.includes("serviceProvider")) &&
                 !areAllMilestonesCompletedAndFlag &&
-                (activeTab === "client" || activeTab === "serviceProvider") &&
+                (activeTab === "approver" || activeTab === "serviceProvider") &&
                 !selectedEscrow.disputeFlag && (
                   <div
                     onClick={() => {
@@ -328,8 +328,8 @@ const EscrowDetailDialog = ({
             <CardContent className="p-6">
               <div className="flex flex-col md:flex-row gap-4">
                 <EntityCard
-                  type="Client"
-                  entity={selectedEscrow.client}
+                  type="Approver"
+                  entity={selectedEscrow.approver}
                   inDispute={selectedEscrow.disputeFlag}
                 />
                 <EntityCard
@@ -406,8 +406,8 @@ const EscrowDetailDialog = ({
                               </Button>
                             )}
 
-                          {userRolesInEscrow.includes("client") &&
-                            activeTab === "client" &&
+                          {userRolesInEscrow.includes("approver") &&
+                            activeTab === "approver" &&
                             milestone.status === "completed" &&
                             !milestone.flag && (
                               <Button

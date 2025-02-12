@@ -25,7 +25,7 @@ import SkeletonCards from "../utils/SkeletonCards";
 interface MyEscrowsCardsProps {
   type:
     | "issuer"
-    | "client"
+    | "approver"
     | "disputeResolver"
     | "serviceProvider"
     | "releaseSigner"
@@ -171,7 +171,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                         </h3>
                       </div>
                       <p className="mt-2 text-sm text-muted-foreground">
-                        {formatAddress(escrow.client)}
+                        {formatAddress(escrow.approver)}
                       </p>
 
                       <ProgressEscrow escrow={escrow} />

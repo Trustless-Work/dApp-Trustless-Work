@@ -37,10 +37,10 @@ const MyEscrows = () => {
                   Initiated Escrows
                 </TabsTrigger>
                 <TabsTrigger
-                  onClick={() => setActiveTab("client")}
-                  value="client"
+                  onClick={() => setActiveTab("approver")}
+                  value="approver"
                 >
-                  Client
+                  Approver
                 </TabsTrigger>
                 <TabsTrigger
                   onClick={() => setActiveTab("serviceProvider")}
@@ -101,7 +101,7 @@ const MyEscrows = () => {
               )}
             </TabsContent>
 
-            <TabsContent value="client" className="flex flex-col gap-3">
+            <TabsContent value="approver" className="flex flex-col gap-3">
               <Card className={cn("overflow-hidden")}>
                 <CardContent className="p-6">
                   <MyEscrowsFilter />
@@ -109,10 +109,10 @@ const MyEscrows = () => {
               </Card>
               {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <MyEscrowsTable type="client" />
+                  <MyEscrowsTable type="approver" />
                 </Card>
               ) : (
-                <MyEscrowsCards type="client" />
+                <MyEscrowsCards type="approver" />
               )}
             </TabsContent>
 

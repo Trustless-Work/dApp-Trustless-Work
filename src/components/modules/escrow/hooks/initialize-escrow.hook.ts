@@ -18,7 +18,7 @@ import { GetFormSchema } from "../schema/initialize-escrow.schema";
 
 export const useInitializeEscrow = () => {
   const [showSelect, setShowSelect] = useState({
-    client: false,
+    approver: false,
     serviceProvider: false,
     platformAddress: false,
     releaseSigner: false,
@@ -53,7 +53,7 @@ export const useInitializeEscrow = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      client: "",
+      approver: "",
       engagementId: "",
       title: "",
       description: "",

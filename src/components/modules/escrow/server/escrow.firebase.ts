@@ -163,7 +163,7 @@ const getUserRoleInEscrow = async ({
 }> => {
   const collectionRef = collection(db, "escrows");
   const roles = [
-    "client",
+    "approver",
     "serviceProvider",
     "platformAddress",
     "releaseSigner",

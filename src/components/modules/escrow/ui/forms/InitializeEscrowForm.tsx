@@ -87,34 +87,34 @@ const InitializeEscrowForm = () => {
 
           <FormField
             control={form.control}
-            name="client"
+            name="approver"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
-                  <span className="flex items-center">Client</span>
+                  <span className="flex items-center">Approver</span>
                   <Switch
-                    checked={showSelect.client}
-                    onCheckedChange={(value) => toggleField("client", value)}
+                    checked={showSelect.approver}
+                    onCheckedChange={(value) => toggleField("approver", value)}
                     title="Show Users List?"
                   />
                 </FormLabel>
 
                 <FormControl>
-                  {showSelect.client ? (
+                  {showSelect.approver ? (
                     <SelectField
                       control={form.control}
-                      name="client"
+                      name="approver"
                       label=""
                       tooltipContent=""
                       options={userOptions}
                     />
                   ) : (
                     <Input
-                      placeholder="Enter client address"
+                      placeholder="Enter approver address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("client", e.target.value);
+                        handleFieldChange("approver", e.target.value);
                       }}
                     />
                   )}

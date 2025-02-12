@@ -58,7 +58,7 @@ const useDistributeEarningsEscrowDialog = () => {
 
       if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
         setIsSuccessReleaseDialogOpen(true);
-        fetchAllEscrows({ address, type: activeTab || "client" });
+        fetchAllEscrows({ address, type: activeTab || "approver" });
         setIsDialogOpen(false);
         setIsChangingStatus(false);
         if (selectedEscrow) {

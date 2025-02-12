@@ -27,7 +27,7 @@ const useResolveDisputeEscrowDialog = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      clientFunds: "",
+      approverFunds: "",
       serviceProviderFunds: "",
     },
   });
@@ -39,7 +39,7 @@ const useResolveDisputeEscrowDialog = ({
       const data = await resolveDispute({
         contractId: selectedEscrow?.contractId,
         disputeResolver: selectedEscrow?.disputeResolver,
-        clientFunds: payload.clientFunds,
+        approverFunds: payload.approverFunds,
         serviceProviderFunds: payload.serviceProviderFunds,
       });
 

@@ -49,7 +49,7 @@ export const useGlobalEscrowsSlice: StateCreator<
         ESCROW_ACTIONS.SET_SELECTED_ESCROW,
       ),
 
-    fetchAllEscrows: async ({ address, type = "client" }) => {
+    fetchAllEscrows: async ({ address, type = "approver" }) => {
       set({ loadingEscrows: true }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
 
       const escrowsByUser = await getAllEscrowsByUser({

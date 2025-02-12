@@ -5,13 +5,13 @@ export const GetFormSchema = () => {
   const { isValidWallet } = useValidData();
 
   return z.object({
-    client: z
+    approver: z
       .string()
       .min(1, {
-        message: "Client is required.",
+        message: "Approver is required.",
       })
       .refine((value) => isValidWallet(value), {
-        message: "Client must be a valid wallet.",
+        message: "Approver must be a valid wallet.",
       }),
     engagementId: z.string().min(1, {
       message: "Engagement is required.",
