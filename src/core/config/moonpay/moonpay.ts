@@ -6,7 +6,7 @@ const MOONPAY_CONFIG = {
   currency: "usdc_xlm",
 };
 
-export const generateMoonPayUrl = async (
+export const useGenerateMoonPayUrl = async (
   contractId: string,
   amount: number,
 ) => {

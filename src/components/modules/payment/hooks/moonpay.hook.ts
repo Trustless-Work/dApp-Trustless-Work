@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState } from "react";
 import { useToast } from "@/hooks/toast.hook";
 import { processPaymentCallback } from "../services/moonpay.service";
@@ -17,7 +19,7 @@ export const useMoonPay = () => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to process payment",
+        description: `Failed to process payment, ${error}`,
         variant: "destructive",
       });
     } finally {
