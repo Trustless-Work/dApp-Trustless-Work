@@ -40,7 +40,10 @@ import {
 } from "lucide-react";
 import SkeletonMilestones from "./utils/SkeletonMilestones";
 import EditMilestonesDialog from "./EditMilestonesDialog";
-import { SuccessReleaseDialog } from "./SuccessDialog";
+import {
+  SuccessReleaseDialog,
+  SuccessResolveDisputeDialog,
+} from "./SuccessDialog";
 import { toast } from "@/hooks/toast.hook";
 
 interface EscrowDetailDialogProps {
@@ -116,6 +119,13 @@ const EscrowDetailDialog = ({
   );
   const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessReleaseDialogOpen,
+  );
+
+  const isSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessResolveDisputeDialogOpen,
+  );
+  const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
 
   const activeTab = useEscrowBoundedStore((state) => state.activeTab);
@@ -211,11 +221,10 @@ const EscrowDetailDialog = ({
                   </div>
                   <div className="mt-2 flex items-baseline justify-between">
                     <h3 className="text-2xl font-semibold">Resolved</h3>
-                    {/* todo: poner modal de resolved success */}
                     <Button
                       variant="link"
                       type="button"
-                      onClick={() => setIsSuccessReleaseDialogOpen(true)}
+                      onClick={() => setIsSuccessResolveDisputeDialogOpen(true)}
                       className="text-xs text-muted-foreground my-0 p-0 h-auto"
                     >
                       See Details
@@ -531,6 +540,16 @@ const EscrowDetailDialog = ({
         setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
         title=""
         description="Now that your escrow is released, you will be able to view it directly in"
+      />
+
+      {/* Success Resolved Dialog */}
+      <SuccessResolveDisputeDialog
+        isSuccessResolveDisputeDialogOpen={isSuccessResolveDisputeDialogOpen}
+        setIsSuccessResolveDisputeDialogOpen={
+          setIsSuccessResolveDisputeDialogOpen
+        }
+        title=""
+        description="Now that your escrow is resolved, you will be able to view it directly in"
       />
     </>
   );
