@@ -12,7 +12,10 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import ProgressEscrow from "../dialogs/utils/ProgressEscrow";
-import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
+import SuccessDialog, {
+  SuccessReleaseDialog,
+  SuccessResolveDisputeDialog,
+} from "../dialogs/SuccessDialog";
 import {
   CircleAlert,
   CircleCheckBig,
@@ -53,6 +56,12 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
   );
   const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessReleaseDialogOpen,
+  );
+  const isSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessResolveDisputeDialogOpen,
+  );
+  const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
@@ -256,6 +265,17 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
         setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
         title={"Escrow released"}
         description="Now that your escrow is released, you will be able to view it directly in"
+        recentEscrow={recentEscrow}
+      />
+
+      {/* Success Resolve Dispute Dialog */}
+      <SuccessResolveDisputeDialog
+        isSuccessResolveDisputeDialogOpen={isSuccessResolveDisputeDialogOpen}
+        setIsSuccessResolveDisputeDialogOpen={
+          setIsSuccessResolveDisputeDialogOpen
+        }
+        title={"Escrow's dispute resolved"}
+        description="Now that your escrow's dispute is resolved, you will be able to view it directly in"
         recentEscrow={recentEscrow}
       />
     </>

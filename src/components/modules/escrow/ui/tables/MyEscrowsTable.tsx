@@ -34,7 +34,10 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import ExpandableContent from "./expandable/ExpandableContent";
-import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
+import SuccessDialog, {
+  SuccessReleaseDialog,
+  SuccessResolveDisputeDialog,
+} from "../dialogs/SuccessDialog";
 import SkeletonTable from "../utils/SkeletonTable";
 
 interface MyEscrowsTableProps {
@@ -67,6 +70,12 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   );
   const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessReleaseDialogOpen,
+  );
+  const isSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessResolveDisputeDialogOpen,
+  );
+  const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
@@ -283,6 +292,17 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
         setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
         title={"Escrow released"}
         description="Now that your escrow is released, you will be able to view it directly in"
+        recentEscrow={recentEscrow}
+      />
+
+      {/* Success Resolve Dispute Dialog */}
+      <SuccessResolveDisputeDialog
+        isSuccessResolveDisputeDialogOpen={isSuccessResolveDisputeDialogOpen}
+        setIsSuccessResolveDisputeDialogOpen={
+          setIsSuccessResolveDisputeDialogOpen
+        }
+        title={"Escrow's dispute resolved"}
+        description="Now that your escrow's dispute is resolved, you will be able to view it directly in"
         recentEscrow={recentEscrow}
       />
     </div>

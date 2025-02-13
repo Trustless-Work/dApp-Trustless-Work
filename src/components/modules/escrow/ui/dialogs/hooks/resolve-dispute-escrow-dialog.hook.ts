@@ -5,13 +5,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useGlobalBoundedStore } from "@/core/store/data";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 import { resolveDispute } from "../../../services/resolve-dispute.service";
 import { EscrowPayload, ResolveDisputePayload } from "@/@types/escrow.entity";
 import { MouseEvent } from "react";
 import { getFormSchema } from "../../../schema/resolve-dispute-escrow.schema";
 import { toast } from "@/hooks/toast.hook";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
+import { useEscrowBoundedStore } from "../../../store/ui";
 
 interface useResolveDisputeEscrowDialogProps {
   setIsResolveDisputeDialogOpen: (value: boolean) => void;
@@ -20,8 +24,28 @@ interface useResolveDisputeEscrowDialogProps {
 const useResolveDisputeEscrowDialog = ({
   setIsResolveDisputeDialogOpen,
 }: useResolveDisputeEscrowDialogProps) => {
-  const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
+  const setIsResolvingDispute = useEscrowBoundedStore(
+    (state) => state.setIsResolvingDispute,
+  );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const setIsDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsDialogOpen,
+  );
+  const fetchAllEscrows = useGlobalBoundedStore(
+    (state) => state.fetchAllEscrows,
+  );
+  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+  const address = useGlobalAuthenticationStore((state) => state.address);
+  const setRecentEscrow = useGlobalBoundedStore(
+    (state) => state.setRecentEscrow,
+  );
+  const setClientFunds = useGlobalBoundedStore((state) => state.setClientFunds);
+  const setServiceProviderFunds = useGlobalBoundedStore(
+    (state) => state.setServiceProviderFunds,
+  );
+  const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessResolveDisputeDialogOpen,
+  );
   const formSchema = getFormSchema(selectedEscrow);
   const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
 
@@ -34,7 +58,7 @@ const useResolveDisputeEscrowDialog = ({
   });
 
   const onSubmit = async (payload: ResolveDisputePayload) => {
-    setIsLoading(true);
+    setIsResolvingDispute(true);
 
     if (!selectedEscrow) return;
 
@@ -60,14 +84,23 @@ const useResolveDisputeEscrowDialog = ({
       if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
         form.reset();
         setIsResolveDisputeDialogOpen(false);
-        setIsLoading(false);
+        setIsResolvingDispute(false);
+        setIsDialogOpen(false);
+        fetchAllEscrows({ address, type: activeTab || "client" });
+        setClientFunds(payload.clientFunds);
+        setServiceProviderFunds(payload.serviceProviderFunds);
+        setIsSuccessResolveDisputeDialogOpen(true);
+
+        if (selectedEscrow) {
+          setRecentEscrow(selectedEscrow);
+        }
 
         toast({
           title: "Success",
           description: data.message,
         });
       } else {
-        setIsLoading(false);
+        setIsResolvingDispute(false);
         toast({
           title: "Error",
           description: data.message || "An error occurred",
@@ -75,7 +108,7 @@ const useResolveDisputeEscrowDialog = ({
         });
       }
     } catch (error: any) {
-      setIsLoading(false);
+      setIsResolvingDispute(false);
 
       toast({
         title: "Error",
