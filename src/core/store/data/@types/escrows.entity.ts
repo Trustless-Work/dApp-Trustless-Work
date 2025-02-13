@@ -10,7 +10,7 @@ export interface EscrowGlobalStore {
   escrowsToDelete: string[];
   userRolesInEscrow: string[];
   recentEscrow: Escrow | undefined;
-  clientFunds: string;
+  approverFunds: string;
   serviceProviderFunds: string;
 
   setEscrows: (escrows: Escrow[]) => void;
@@ -28,7 +28,7 @@ export interface EscrowGlobalStore {
   }) => Promise<Escrow | undefined>;
   setUserRolesInEscrow: (roles: string[]) => void;
   setRecentEscrow: (escrow: Escrow | undefined) => void;
-  setClientFunds: (clientFunds: string) => void;
+  setApproverFunds: (approverFunds: string) => void;
   setServiceProviderFunds: (serviceProviderFunds: string) => void;
   // deleteProduct: (escrowId: strin`g) => void;
 }

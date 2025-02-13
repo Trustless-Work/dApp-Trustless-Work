@@ -225,10 +225,10 @@ export const SuccessResolveDisputeDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const clientFunds = useGlobalBoundedStore((state) => state.clientFunds);
-  const serviceProviderFunds = useGlobalBoundedStore(
-    (state) => state.serviceProviderFunds,
-  );
+  const approverFunds = useGlobalBoundedStore((state) => state.approverFunds);
+  // const serviceProviderFunds = useGlobalBoundedStore(
+  //   (state) => state.serviceProviderFunds,
+  // );
   const escrow = selectedEscrow || recentEscrow;
 
   const { formatDollar } = useFormatUtils();
@@ -240,16 +240,19 @@ export const SuccessResolveDisputeDialog = ({
   const platformFee = Number(escrow?.platformFee || 0);
 
   const remainingPercentage = 100 - (trustlessPercentage + platformFee);
-  const clientPercentage = Math.min(Number(clientFunds), remainingPercentage);
+  const approverPercentage = Math.min(
+    Number(approverFunds),
+    remainingPercentage,
+  );
   const serviceProviderPercentage = Math.max(
     0,
-    remainingPercentage - clientPercentage,
+    remainingPercentage - approverPercentage,
   );
 
   // Corrected amounts
   const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
   const platformAmount = (totalAmount * platformFee) / 100;
-  const clientAmount = (totalAmount * clientPercentage) / 100;
+  const clientAmount = (totalAmount * approverPercentage) / 100;
   const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
 
   return (
@@ -291,9 +294,9 @@ export const SuccessResolveDisputeDialog = ({
           />
           <EntityCard
             type="Client"
-            entity={escrow?.client}
+            entity={escrow?.approver}
             hasPercentage={true}
-            percentage={clientPercentage.toString()}
+            percentage={approverPercentage.toString()}
             hasAmount={true}
             amount={clientAmount.toString()}
           />

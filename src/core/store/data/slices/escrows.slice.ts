@@ -37,7 +37,7 @@ export const useGlobalEscrowsSlice: StateCreator<
     selectedEscrow: null,
     userRolesInEscrow: [],
     recentEscrow: undefined,
-    clientFunds: "",
+    approverFunds: "",
     serviceProviderFunds: "",
 
     // Modifiers
@@ -157,8 +157,8 @@ export const useGlobalEscrowsSlice: StateCreator<
       set({ recentEscrow: escrow });
     },
 
-    setClientFunds: (clientFunds: string) => {
-      set({ clientFunds });
+    setApproverFunds: (approverFunds: string) => {
+      set({ approverFunds });
     },
 
     setServiceProviderFunds: (serviceProviderFunds: string) => {

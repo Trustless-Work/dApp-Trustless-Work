@@ -39,7 +39,9 @@ const useResolveDisputeEscrowDialog = ({
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
-  const setClientFunds = useGlobalBoundedStore((state) => state.setClientFunds);
+  const setApproverFunds = useGlobalBoundedStore(
+    (state) => state.setApproverFunds,
+  );
   const setServiceProviderFunds = useGlobalBoundedStore(
     (state) => state.setServiceProviderFunds,
   );
@@ -87,7 +89,7 @@ const useResolveDisputeEscrowDialog = ({
         setIsResolvingDispute(false);
         setIsDialogOpen(false);
         fetchAllEscrows({ address, type: activeTab || "client" });
-        setClientFunds(payload.clientFunds);
+        setApproverFunds(payload.approverFunds);
         setServiceProviderFunds(payload.serviceProviderFunds);
         setIsSuccessResolveDisputeDialogOpen(true);
 
