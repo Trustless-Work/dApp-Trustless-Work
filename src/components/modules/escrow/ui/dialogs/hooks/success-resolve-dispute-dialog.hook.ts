@@ -12,7 +12,9 @@ const useSuccessResolveDisputeDialog = ({
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
-  const setClientFunds = useGlobalBoundedStore((state) => state.setClientFunds);
+  const setApproverFunds = useGlobalBoundedStore(
+    (state) => state.setApproverFunds,
+  );
   const setServiceProviderFunds = useGlobalBoundedStore(
     (state) => state.setServiceProviderFunds,
   );
@@ -20,7 +22,7 @@ const useSuccessResolveDisputeDialog = ({
   const handleClose = () => {
     setIsSuccessResolveDisputeDialogOpen(false);
     setRecentEscrow(undefined);
-    setClientFunds("");
+    setApproverFunds("");
     setServiceProviderFunds("");
   };
 

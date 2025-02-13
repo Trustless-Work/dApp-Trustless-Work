@@ -14,7 +14,7 @@ import { EscrowPayload, ResolveDisputePayload } from "@/@types/escrow.entity";
 import { MouseEvent } from "react";
 import { getFormSchema } from "../../../schema/resolve-dispute-escrow.schema";
 import { toast } from "@/hooks/toast.hook";
-import { useGlobalUIBoundedStore } from "@/core/store/ui";
+//import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { useEscrowBoundedStore } from "../../../store/ui";
 
 interface useResolveDisputeEscrowDialogProps {
