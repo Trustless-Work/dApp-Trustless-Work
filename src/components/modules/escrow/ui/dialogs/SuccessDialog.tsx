@@ -226,34 +226,41 @@ export const SuccessResolveDisputeDialog = ({
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const approverFunds = useGlobalBoundedStore((state) => state.approverFunds);
-  // const serviceProviderFunds = useGlobalBoundedStore(
-  //   (state) => state.serviceProviderFunds,
-  // );
+  const serviceProviderFunds = useGlobalBoundedStore(
+    (state) => state.serviceProviderFunds,
+  );
   const escrow = selectedEscrow || recentEscrow;
 
   const { formatDollar } = useFormatUtils();
 
   // Percentage
-  // Percentages for dispute resolution
   const totalAmount = Number(escrow?.amount || 0);
   const trustlessPercentage = 0.3;
   const platformFee = Number(escrow?.platformFee || 0);
 
   const remainingPercentage = 100 - (trustlessPercentage + platformFee);
-  const approverPercentage = Math.min(
-    Number(approverFunds),
-    remainingPercentage,
-  );
-  const serviceProviderPercentage = Math.max(
-    0,
-    remainingPercentage - approverPercentage,
-  );
 
-  // Corrected amounts
+  // Amounts
   const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
   const platformAmount = (totalAmount * platformFee) / 100;
-  const clientAmount = (totalAmount * approverPercentage) / 100;
-  const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
+
+  // Total funds available for approver and service provider
+  const totalAvailableFunds = totalAmount - (trustlessAmount + platformAmount);
+
+  const approverPercentage =
+    totalAvailableFunds > 0
+      ? Math.round(
+          (Number(approverFunds) / totalAvailableFunds) * remainingPercentage,
+        )
+      : 0;
+
+  const serviceProviderPercentage =
+    totalAvailableFunds > 0
+      ? Math.round(
+          (Number(serviceProviderFunds) / totalAvailableFunds) *
+            remainingPercentage,
+        )
+      : 0;
 
   return (
     <Dialog open={isSuccessResolveDisputeDialogOpen} onOpenChange={handleClose}>
@@ -290,15 +297,15 @@ export const SuccessResolveDisputeDialog = ({
             hasPercentage={true}
             percentage={serviceProviderPercentage.toString()}
             hasAmount={true}
-            amount={serviceProviderAmount.toString()}
+            amount={serviceProviderFunds.toString()}
           />
           <EntityCard
-            type="Client"
+            type="Approver"
             entity={escrow?.approver}
             hasPercentage={true}
             percentage={approverPercentage.toString()}
             hasAmount={true}
-            amount={clientAmount.toString()}
+            amount={approverFunds.toString()}
           />
           <EntityCard
             type="Trustless Work"
