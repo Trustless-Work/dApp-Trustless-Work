@@ -4,8 +4,10 @@ import { create } from "zustand";
 import { useGlobalEscrowsSlice } from "./slices/escrows.slice";
 import { useGlobalAuthenticationSlice } from "./slices/authentication.slice";
 import { AuthenticationGlobalStore } from "./@types/authentication.entity";
+import { useGlobalTokensSlice } from "./slices/tokens.slice";
+import { TokenGlobalStore } from "./@types/tokens.entity";
 
-type GlobalState = EscrowGlobalStore;
+type GlobalState = EscrowGlobalStore & TokenGlobalStore;
 type AuthState = AuthenticationGlobalStore;
 
 const devtoolsOptions: DevtoolsOptions = {
@@ -40,6 +42,7 @@ export const useGlobalBoundedStore = create<GlobalState>()(
   devtools(
     (...a) => ({
       ...useGlobalEscrowsSlice(...a),
+      ...useGlobalTokensSlice(...a),
     }),
     devtoolsOptions,
   ),
