@@ -45,15 +45,19 @@ export const useInitializeEscrow = () => {
     (state) => state.getAllUsers,
   );
   const users = useGlobalAuthenticationStore((state) => state.users);
+  const getAllTokens = useGlobalBoundedStore((state) => state.getAllTokens);
+  const tokens = useGlobalBoundedStore((state) => state.tokens);
   const formSchema = GetFormSchema();
 
   useEffect(() => {
     getAllUsers();
-  }, [getAllUsers]);
+    getAllTokens();
+  }, [getAllUsers, getAllTokens]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      token: "",
       approver: "",
       engagementId: "",
       title: "",
@@ -117,6 +121,7 @@ export const useInitializeEscrow = () => {
         setIsSuccessDialogOpen(true);
 
         if (loggedUser?.saveEscrow) {
+          // todo: aqui cuando el contracto me devuelva el token, entonces automaticamente se le pasa al firebase y lo estaria guardando
           await addEscrow(
             { ...data.escrow, platformFee: platformFeeDecimal.toString() },
             address,
@@ -168,6 +173,15 @@ export const useInitializeEscrow = () => {
     return [{ value: "", label: "Select an User" }, ...options];
   }, [users]);
 
+  const tokenOptions = useMemo(() => {
+    const options = tokens.map((token) => ({
+      value: token.token,
+      label: token.name,
+    }));
+
+    return [{ value: "", label: "Select a Token" }, ...options];
+  }, [tokens]);
+
   const toggleField = (field: string, value: boolean) => {
     setShowSelect((prev) => ({ ...prev, [field]: value }));
   };
@@ -180,6 +194,7 @@ export const useInitializeEscrow = () => {
     handleRemoveMilestone,
     handleFieldChange,
     userOptions,
+    tokenOptions,
     showSelect,
     toggleField,
     isAnyMilestoneEmpty,
