@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { db } from "@/core/config/firebase/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
