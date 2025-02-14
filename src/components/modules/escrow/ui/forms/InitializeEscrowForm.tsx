@@ -15,6 +15,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { Switch } from "@/components/ui/switch";
 import { Trash2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 const InitializeEscrowForm = () => {
   const {
@@ -25,6 +26,7 @@ const InitializeEscrowForm = () => {
     handleRemoveMilestone,
     handleFieldChange,
     userOptions,
+    tokenOptions,
     showSelect,
     toggleField,
     isAnyMilestoneEmpty,
@@ -36,7 +38,7 @@ const InitializeEscrowForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-6"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="title"
@@ -63,20 +65,20 @@ const InitializeEscrowForm = () => {
 
           <FormField
             control={form.control}
-            name="description"
+            name="engagementId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  Description
-                  <TooltipInfo content="Description that clearly explains the purpose of the escrow." />
+                  Engagement
+                  <TooltipInfo content="Unique identifier for this escrow engagement." />
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Escrow description"
+                    placeholder="Enter identifier"
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
-                      handleFieldChange("description", e.target.value);
+                      handleFieldChange("engagementId", e.target.value);
                     }}
                   />
                 </FormControl>
@@ -85,13 +87,26 @@ const InitializeEscrowForm = () => {
             )}
           />
 
+          <SelectField
+            control={form.control}
+            name="token"
+            label="Token"
+            tooltipContent="Token to be used for the escrow."
+            options={tokenOptions}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="approver"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
-                  <span className="flex items-center">Approver</span>
+                  <span className="flex items-center">
+                    Approver
+                    <TooltipInfo content="Address of the approver milestones." />
+                  </span>
                   <Switch
                     checked={showSelect.approver}
                     onCheckedChange={(value) => toggleField("approver", value)}
@@ -105,7 +120,7 @@ const InitializeEscrowForm = () => {
                       control={form.control}
                       name="approver"
                       label=""
-                      tooltipContent=""
+                      tooltipContent="A"
                       options={userOptions}
                     />
                   ) : (
@@ -160,126 +175,6 @@ const InitializeEscrowForm = () => {
                       }}
                     />
                   )}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="engagementId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Engagement
-                  <TooltipInfo content="Unique identifier for this escrow engagement." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter identifier"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("engagementId", e.target.value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="platformAddress"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center justify-between">
-                  <span className="flex items-center">
-                    Platform Address
-                    <TooltipInfo content="Public key of the platform managing the escrow." />
-                  </span>
-                  <Switch
-                    checked={showSelect.platformAddress}
-                    onCheckedChange={(value) =>
-                      toggleField("platformAddress", value)
-                    }
-                    title="Show Users List?"
-                  />
-                </FormLabel>
-                <FormControl>
-                  {showSelect.platformAddress ? (
-                    <SelectField
-                      control={form.control}
-                      name="platformAddress"
-                      label=""
-                      tooltipContent=""
-                      options={userOptions}
-                    />
-                  ) : (
-                    <Input
-                      placeholder="Enter service provider address"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleFieldChange("platformAddress", e.target.value);
-                      }}
-                    />
-                  )}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="platformFee"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Platform Fee
-                  <TooltipInfo content="Fee charged by the platform for this escrow." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter platform fee"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("platformFee", e.target.value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="amount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Amount
-                  <TooltipInfo content="Total amount to be held in escrow." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="string"
-                    placeholder="Enter the escrow amount"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("amount", e.target.value);
-                    }}
-                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -374,6 +269,130 @@ const InitializeEscrowForm = () => {
             )}
           />
         </div>
+
+        <div className="grid grid-cols-10 gap-4">
+          <div className="col-span-5">
+            <FormField
+              control={form.control}
+              name="platformAddress"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center justify-between">
+                    <span className="flex items-center">
+                      Platform Address
+                      <TooltipInfo content="Public key of the platform managing the escrow." />
+                    </span>
+                    <Switch
+                      checked={showSelect.platformAddress}
+                      onCheckedChange={(value) =>
+                        toggleField("platformAddress", value)
+                      }
+                      title="Show Users List?"
+                    />
+                  </FormLabel>
+                  <FormControl>
+                    {showSelect.platformAddress ? (
+                      <SelectField
+                        control={form.control}
+                        name="platformAddress"
+                        label=""
+                        tooltipContent=""
+                        options={userOptions}
+                      />
+                    ) : (
+                      <Input
+                        placeholder="Enter service provider address"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleFieldChange("platformAddress", e.target.value);
+                        }}
+                      />
+                    )}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="col-span-2">
+            <FormField
+              control={form.control}
+              name="platformFee"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center">
+                    Platform Fee
+                    <TooltipInfo content="Fee charged by the platform for this escrow." />
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter platform fee"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleFieldChange("platformFee", e.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="col-span-3">
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center">
+                    Amount
+                    <TooltipInfo content="Total amount to be held in escrow." />
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="string"
+                      placeholder="Enter the escrow amount"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleFieldChange("amount", e.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="flex items-center">
+                Description
+                <TooltipInfo content="Description that clearly explains the purpose of the escrow." />
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Escrow description"
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleFieldChange("description", e.target.value);
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="space-y-4">
           <FormLabel className="flex items-center">
