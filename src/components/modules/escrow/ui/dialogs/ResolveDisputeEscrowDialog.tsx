@@ -20,6 +20,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
 import SkeletonResolveDispute from "./utils/SkeletonResolveDispute";
 import { useEscrowBoundedStore } from "../../store/ui";
+import { DollarSign } from "lucide-react";
 
 interface ResolveDisputeEscrowDialogProps {
   isResolveDisputeDialogOpen: boolean;
@@ -43,8 +44,12 @@ const ResolveDisputeEscrowDialog = ({
         <DialogHeader>
           <DialogTitle>Resolve Dispute</DialogTitle>
           <DialogDescription>
-            You as a dispute resolver will be able to share the proceeds between
-            the two entities.
+            You, as the dispute resolver, will be able to split the proceeds
+            between the two entities. It is important to know that the funds
+            will be shared based on the{" "}
+            <strong>Platform Fee and the Trustless Work Fee.</strong>
+            That is, of the total of both entities, each will receive less for
+            these deductions.
           </DialogDescription>
         </DialogHeader>
 
@@ -63,17 +68,24 @@ const ResolveDisputeEscrowDialog = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center">
-                        Client Amount
-                        <TooltipInfo content="The amount for the client." />
+                        Approver Amount
+                        <TooltipInfo content="The amount for the approver." />
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="The amount for the client"
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                          }}
-                        />
+                        <div className="relative">
+                          <DollarSign
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                            size={18}
+                          />
+                          <Input
+                            className="pl-10"
+                            placeholder="The amount for the approver"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                            }}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -90,13 +102,20 @@ const ResolveDisputeEscrowDialog = ({
                         <TooltipInfo content="The amount for the service provider." />
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="The amount for the service provider"
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                          }}
-                        />
+                        <div className="relative">
+                          <DollarSign
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                            size={18}
+                          />
+                          <Input
+                            className="pl-10"
+                            placeholder="The amount for the service provider"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                            }}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
