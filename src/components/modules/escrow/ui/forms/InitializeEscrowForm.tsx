@@ -91,7 +91,10 @@ const InitializeEscrowForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
-                  <span className="flex items-center">Approver</span>
+                  <span className="flex items-center">
+                    Approver
+                    <TooltipInfo content="Address of the approver for this escrow." />
+                  </span>
                   <Switch
                     checked={showSelect.approver}
                     onCheckedChange={(value) => toggleField("approver", value)}
@@ -221,7 +224,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      placeholder="Enter platform address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
