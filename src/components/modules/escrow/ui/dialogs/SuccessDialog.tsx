@@ -139,8 +139,8 @@ export const SuccessReleaseDialog = ({
 
   // Amount
   const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
-  const platformAmount = totalAmount;
   const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
+  const platformAmount = (totalAmount * platformFee) / 100;
 
   return (
     <Dialog open={isSuccessReleaseDialogOpen} onOpenChange={handleClose}>
