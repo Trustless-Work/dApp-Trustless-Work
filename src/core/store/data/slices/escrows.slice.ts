@@ -44,7 +44,7 @@ export const useGlobalEscrowsSlice: StateCreator<
     setEscrows: (escrows: Escrow[]) =>
       set({ escrows }, false, ESCROW_ACTIONS.SET_ESCROWS),
 
-    setSelectedEscrow: (escrow: Escrow) =>
+    setSelectedEscrow: (escrow: Escrow | undefined) =>
       set(
         { selectedEscrow: escrow },
         false,

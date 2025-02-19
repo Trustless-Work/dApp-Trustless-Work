@@ -24,4 +24,5 @@ export interface EscrowGlobalStore {
   }) => Promise<Escrow | undefined>;
   setUserRolesInEscrow: (roles: string[]) => void;
   setRecentEscrow: (escrow: Escrow | undefined) => void;
+  setSelectedEscrow: (escrow: Escrow | undefined) => void;
 }
