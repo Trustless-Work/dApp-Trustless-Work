@@ -213,6 +213,8 @@ interface SuccessResolveDisputeProps {
   setIsSuccessResolveDisputeDialogOpen: (value: boolean) => void;
 }
 
+// ! EN EL MODAL SOLO ESTA BIEN EL DE TRUSTLESS, EL RESTO NINGUNO
+// ! EN LAS TRANSFERENCIAS CREO QUE SE ESTAN PASANDO MAL
 export const SuccessResolveDisputeDialog = ({
   title,
   description,
@@ -225,10 +227,8 @@ export const SuccessResolveDisputeDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const approverFunds = useGlobalBoundedStore((state) => state.approverFunds);
-  const serviceProviderFunds = useGlobalBoundedStore(
-    (state) => state.serviceProviderFunds,
-  );
+  const approverFunds = selectedEscrow?.approverFunds || "0";
+  const serviceProviderFunds = selectedEscrow?.serviceProviderFunds || "0";
   const escrow = selectedEscrow || recentEscrow;
 
   const { formatDollar } = useFormatUtils();
