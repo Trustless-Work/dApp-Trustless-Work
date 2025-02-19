@@ -14,7 +14,7 @@ import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initializ
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { Switch } from "@/components/ui/switch";
-import { DollarSign, Percent, Trash2 } from "lucide-react";
+import { DollarSign, Trash2 } from "lucide-react";
 
 const InitializeEscrowForm = () => {
   const {
