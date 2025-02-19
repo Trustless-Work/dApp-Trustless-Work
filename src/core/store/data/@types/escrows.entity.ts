@@ -10,12 +10,8 @@ export interface EscrowGlobalStore {
   escrowsToDelete: string[];
   userRolesInEscrow: string[];
   recentEscrow: Escrow | undefined;
-  approverFunds: string;
-  serviceProviderFunds: string;
 
   setEscrows: (escrows: Escrow[]) => void;
-  setSelectedEscrow: (selectedEscrow?: Escrow) => void;
-  // setEscrowsToDelete: (escrows: string[]) => void;
   fetchAllEscrows: (params: { address: string; type: string }) => void;
   addEscrow: (
     payload: EscrowPayload,
@@ -28,7 +24,4 @@ export interface EscrowGlobalStore {
   }) => Promise<Escrow | undefined>;
   setUserRolesInEscrow: (roles: string[]) => void;
   setRecentEscrow: (escrow: Escrow | undefined) => void;
-  setApproverFunds: (approverFunds: string) => void;
-  setServiceProviderFunds: (serviceProviderFunds: string) => void;
-  // deleteProduct: (escrowId: strin`g) => void;
 }
