@@ -17,6 +17,7 @@ const usePreferences = ({ onSave }: usePreferencesProps) => {
     defaultValues: {
       saveEscrow: loggedUser?.saveEscrow || true,
     },
+    mode: "onChange",
   });
 
   const saveEscrow = form.watch("saveEscrow");

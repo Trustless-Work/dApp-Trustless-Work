@@ -50,6 +50,7 @@ const useResolveDisputeEscrowDialog = ({
       approverFunds: "",
       serviceProviderFunds: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (payload: ResolveDisputePayload) => {

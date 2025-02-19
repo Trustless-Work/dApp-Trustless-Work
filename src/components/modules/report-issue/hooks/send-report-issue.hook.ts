@@ -25,6 +25,7 @@ export const useSendReportIssue = () => {
       email: "",
       description: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
