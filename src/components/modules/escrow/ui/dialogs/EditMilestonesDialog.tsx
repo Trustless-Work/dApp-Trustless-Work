@@ -68,8 +68,11 @@ const EditMilestonesDialog = ({
                     <TooltipInfo content="Key stages or deliverables for the escrow." />
                   </FormLabel>
                   {milestones.map((milestone, index) => (
-                    <>
-                      <div key={index} className="flex items-center space-x-4">
+                    <div
+                      key={`milestone-${index}`}
+                      className="flex flex-col gap-4"
+                    >
+                      <div className="flex items-center space-x-4">
                         {milestone.flag ? (
                           <Badge className="uppercase max-w-24">Approved</Badge>
                         ) : (
@@ -117,7 +120,7 @@ const EditMilestonesDialog = ({
                           Add Item
                         </Button>
                       )}
-                    </>
+                    </div>
                   ))}
                 </div>
               </div>
