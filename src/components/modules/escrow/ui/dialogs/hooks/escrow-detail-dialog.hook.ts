@@ -8,7 +8,7 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 interface useEscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -21,7 +21,7 @@ const useEscrowDetailDialog = ({
   setSelectedEscrow,
   selectedEscrow,
 }: useEscrowDetailDialogProps) => {
-  const address = useGlobalAuthenticationStore((state) => state.address);
+  const { address } = useGlobalAuthenticationStore();
   const userRolesInEscrow = useGlobalBoundedStore(
     (state) => state.userRolesInEscrow,
   );
@@ -29,10 +29,10 @@ const useEscrowDetailDialog = ({
     (state) => state.setUserRolesInEscrow,
   );
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsDialogOpen(false);
     setSelectedEscrow(undefined);
-  };
+  }, [setIsDialogOpen, setSelectedEscrow]);
 
   const areAllMilestonesCompleted =
     selectedEscrow?.milestones
@@ -44,19 +44,18 @@ const useEscrowDetailDialog = ({
       ?.map((milestone) => milestone.flag)
       .every((flag) => flag === true) ?? false;
 
-  const getFilteredStatusOptions = (currentStatus: string | undefined) => {
+  const getFilteredStatusOptions = useCallback((currentStatus: string | undefined) => {
     const nextStatuses = statusMap[currentStatus || ""] || [];
     return statusOptions.filter((option) =>
       nextStatuses.includes(option.value),
     );
-  };
+  }, []);
 
-  const fetchUserRoleInEscrow = async () => {
+  const fetchUserRoleInEscrow = useCallback(async () => {
     const { contractId } = selectedEscrow || {};
     const data = await getUserRoleInEscrow({ contractId, address });
-
     return data;
-  };
+  }, [selectedEscrow, address]);
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -67,7 +66,7 @@ const useEscrowDetailDialog = ({
     };
 
     fetchRoles();
-  }, [selectedEscrow]);
+  }, [selectedEscrow, fetchUserRoleInEscrow, setUserRolesInEscrow]);
 
   return {
     handleClose,
