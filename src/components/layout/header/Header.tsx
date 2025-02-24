@@ -7,13 +7,15 @@ import useIsMobile from "@/hooks/mobile.hook";
 import { cn } from "@/lib/utils";
 import useHeader from "./hooks/header.hook";
 import Link from "next/link";
-import { ArrowBigLeft } from "lucide-react";
+import { ArrowBigLeft, CircleHelp } from "lucide-react";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
+import { useJoyride } from "@/hooks/joyride.hook";
 
 const Header = () => {
   const { handleConnect, handleDisconnect } = useWallet();
   const isMobile = useIsMobile();
   const { pathName, getBreadCrumbs, address } = useHeader();
+  const { setRun } = useJoyride();
 
   return (
     <header className="flex flex-1 h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mb-4">
@@ -45,6 +47,17 @@ const Header = () => {
 
             <div className="flex gap-5 ml-auto">
               <ThemeToggle />
+
+              {pathName === "/dashboard/escrow/my-escrows" && (
+                <button
+                  className="btn-dark"
+                  type="button"
+                  onClick={() => setRun(true)}
+                >
+                  <CircleHelp size={29} />
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={handleDisconnect}
