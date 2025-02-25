@@ -7,7 +7,7 @@ import useIsMobile from "@/hooks/mobile.hook";
 import { cn } from "@/lib/utils";
 import useHeader from "./hooks/header.hook";
 import Link from "next/link";
-import { ArrowBigLeft, CircleHelp } from "lucide-react";
+import { ArrowBigLeft } from "lucide-react";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 
 const Header = () => {
