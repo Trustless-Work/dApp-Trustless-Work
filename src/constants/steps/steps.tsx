@@ -29,7 +29,10 @@ export const steps = [
     content: (
       <h2>
         Here you can see all the escrows you've created or are involved in
-        depending on your role.
+        depending on your role. See more details about a specific escrow by
+        clicking on it. There you'll be able to see the status, parties
+        involved, the current balance and also do some actions like Fund,
+        Release, etc.
       </h2>
     ),
     placement: "auto" as Placement,
