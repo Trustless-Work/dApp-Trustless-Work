@@ -14,13 +14,19 @@ import MyEscrowsTable from "@/components/modules/escrow/ui/tables/MyEscrowsTable
 import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
 import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFilter";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
-import JoyrideTutorial from "@/components/utils/ui/Joyride";
+import Joyride from "react-joyride";
+import { steps } from "@/constants/steps/steps";
+import { useState } from "react";
+import { CircleHelp } from "lucide-react";
 
 const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
   const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
   const setActiveMode = useEscrowBoundedStore((state) => state.setActiveMode);
   const activeMode = useEscrowBoundedStore((state) => state.activeMode);
+  const theme = useGlobalUIBoundedStore((state) => state.theme);
+
+  const [run, setRun] = useState(false);
 
   return (
     <>
@@ -28,7 +34,40 @@ const MyEscrows = () => {
         <Loader isLoading={isLoading} />
       ) : (
         <>
-          <JoyrideTutorial />
+          <Joyride
+            run={run}
+            steps={steps}
+            continuous
+            showSkipButton
+            hideCloseButton
+            callback={(data) => {
+              const { status } = data;
+              if (status === "skipped" || status === "finished") {
+                setRun(false);
+              }
+            }}
+            disableOverlayClose
+            styles={{
+              options:
+                theme === "dark"
+                  ? {
+                      backgroundColor: "#19191B",
+                      overlayColor: "rgba(0, 0, 0, 0.80)",
+                      primaryColor: "#006BE4",
+                      textColor: "#FFF",
+                      width: 500,
+                      zIndex: 1000,
+                    }
+                  : {
+                      backgroundColor: "#FFFFFF",
+                      overlayColor: "rgba(0, 0, 0, 0.60)",
+                      primaryColor: "#006BE4",
+                      textColor: "#000",
+                      width: 500,
+                      zIndex: 1000,
+                    },
+            }}
+          />
 
           <div className="flex gap-3 w-full h-full justify-between">
             <Tabs defaultValue="issuer" className="w-full">
@@ -91,6 +130,15 @@ const MyEscrows = () => {
                     </SelectContent>
                   </Select>
                 </div>
+
+                <button
+                  title="Help"
+                  className="btn-dark"
+                  type="button"
+                  onClick={() => setRun(true)}
+                >
+                  <CircleHelp size={29} />
+                </button>
               </div>
 
               <TabsContent value="issuer" className="flex flex-col gap-3">
