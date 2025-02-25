@@ -28,6 +28,7 @@ const MyEscrowsFilter = () => {
           className="mr-auto w-full md:w-auto"
           label="Create Escrow"
           url={"/dashboard/escrow/initialize-escrow"}
+          id="step-2"
         />
       </div>
 

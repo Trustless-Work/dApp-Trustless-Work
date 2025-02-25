@@ -94,7 +94,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   const { formatDateFromFirebase, formatAddress } = useFormatUtils();
 
   return (
-    <div className="container mx-auto py-3">
+    <div className="container mx-auto py-3" id="step-3">
       {loadingEscrows ? (
         <SkeletonTable />
       ) : currentData.length !== 0 ? (

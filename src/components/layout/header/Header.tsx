@@ -45,6 +45,7 @@ const Header = () => {
 
             <div className="flex gap-5 ml-auto">
               <ThemeToggle />
+
               <button
                 type="button"
                 onClick={handleDisconnect}
