@@ -1,10 +1,6 @@
-import { useFormatUtils } from "@/utils/hook/format.hook";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import NoData from "@/components/utils/ui/NoData";
-import SkeletonCards from "../utils/SkeletonCards";
 import { Contact } from "@/@types/contact.entity";
 
 interface MyContactsCardsProps {
