@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
-import { useEscrowBoundedStore } from "../modules/escrow/store/ui";
+import { useEscrowBoundedStore } from "../modules/escrow/store";
 
 export interface StepItem {
   title: string;

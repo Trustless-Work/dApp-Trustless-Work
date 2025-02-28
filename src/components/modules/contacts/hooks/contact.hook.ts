@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,11 +12,25 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { useEffect, useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/toast.hook";
 import { db } from "@/core/config/firebase/firebase";
 import { formSchema, WalletType } from "../schema/contact-schema";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
-export const useContact = () => {
+export const useMyContact = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const setIsSuccessDialogOpen = useGlobalUIBoundedStore(
+    (state) => state.setIsSuccessDialogOpen,
+  );
+  const { address } = useGlobalAuthenticationStore();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -27,10 +43,12 @@ export const useContact = () => {
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    try {
-      const userId = "USER_ID";
-      const userRef = doc(db, "users", userId);
+    setIsLoading(true);
+    setIsSuccessDialogOpen(false);
 
+    try {
+      const userId = address || "USER_ID";
+      const userRef = doc(db, "users", userId);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {
@@ -47,28 +65,40 @@ export const useContact = () => {
       }
 
       form.reset();
+      setIsSuccessDialogOpen(true);
+      router.push("/dashboard/contacts");
+
       toast({
         title: "Success",
         description: "Contact saved successfully",
       });
     } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data
-          ? error.response.data.message
-          : "An error occurred";
-
       toast({
         title: "Error",
-        description: errorMessage,
+        description: error.message || "An error occurred",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const typeOptions = Object.values(WalletType).map((value) => ({
-    value,
-    label: value,
-  }));
+  const handleFieldChange = (name: string, value: any) => {
+    form.setValue(name as any, value);
+  };
 
-  return { form, onSubmit, typeOptions };
+  const typeOptions = useMemo(() => {
+    return Object.values(WalletType).map((value) => ({
+      value,
+      label: value,
+    }));
+  }, []);
+
+  return {
+    form,
+    onSubmit,
+    handleFieldChange,
+    typeOptions,
+    isLoading,
+  };
 };
