@@ -12,22 +12,16 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/toast.hook";
 import { db } from "@/core/config/firebase/firebase";
 import { formSchema, WalletType } from "../schema/contact-schema";
-import {
-  useGlobalAuthenticationStore,
-  useGlobalBoundedStore,
-} from "@/core/store/data";
-import { useGlobalUIBoundedStore } from "@/core/store/ui";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 export const useMyContact = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const setIsSuccessDialogOpen = useGlobalUIBoundedStore(
-    (state) => state.setIsSuccessDialogOpen,
-  );
+
   const { address } = useGlobalAuthenticationStore();
   const router = useRouter();
 
@@ -44,7 +38,6 @@ export const useMyContact = () => {
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    setIsSuccessDialogOpen(false);
 
     try {
       const userId = address || "USER_ID";
@@ -65,7 +58,6 @@ export const useMyContact = () => {
       }
 
       form.reset();
-      setIsSuccessDialogOpen(true);
       router.push("/dashboard/contacts");
 
       toast({
