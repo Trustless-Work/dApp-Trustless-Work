@@ -25,10 +25,10 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import { useContact } from "./hooks/contact.hook";
+import { useMyContact } from "./hooks/contact.hook";
 
 const ContactForm = () => {
-  const { form, onSubmit, typeOptions } = useContact();
+  const { form, onSubmit, typeOptions } = useMyContact();
 
   return (
     <Form {...form}>
