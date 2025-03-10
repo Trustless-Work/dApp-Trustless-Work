@@ -16,7 +16,7 @@ export interface Escrow {
   updatedAt: UpdatedAt;
   contractId?: string;
   balance?: string;
-  token: string;
+  trustline?: string;
   milestones: Milestone[];
   serviceProvider: string;
   engagementId: string;
@@ -55,7 +55,7 @@ export type DistributeEscrowEarningsEscrowPayload = Pick<Escrow, "contractId"> &
 
 export type EscrowPayload = Omit<
   Escrow,
-  "user" | "createdAt" | "updatedAt" | "id"
+  "user" | "createdAt" | "updatedAt" | "id" | "trustline"
 >;
 
 export type ChangeMilestoneStatusPayload = {
