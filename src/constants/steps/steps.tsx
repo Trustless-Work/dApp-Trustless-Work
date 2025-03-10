@@ -25,7 +25,7 @@ export const steps = [
         <h2>Here you can understand how to use our API!</h2>
       </>
     ),
-    placement: "center",
+    placement: "center" as Placement,
     target: "body",
   },
   {
