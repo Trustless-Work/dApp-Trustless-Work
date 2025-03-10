@@ -234,7 +234,9 @@ const EscrowDetailDialog = ({
             <div className="flex flex-col justify-center w-full md:w-1/5">
               <p className="text-center mb-3 text-sm">
                 <span className="uppercase font-bold">
-                  {selectedEscrow.token || "No Token"} | Escrow ID:
+                  {/* todo: show the trustlline's name, not the token */}
+                  {/* {selectedEscrow.trustline || "No Trustline"} |  */}
+                  Escrow ID:
                 </span>
                 <div className="flex items-center justify-center">
                   {formatAddress(selectedEscrow.contractId)}
