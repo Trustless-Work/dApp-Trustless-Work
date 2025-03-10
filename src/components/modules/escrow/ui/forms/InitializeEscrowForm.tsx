@@ -26,7 +26,7 @@ const InitializeEscrowForm = () => {
     handleRemoveMilestone,
     handleFieldChange,
     userOptions,
-    tokenOptions,
+    trustlineOptions,
     showSelect,
     toggleField,
     isAnyMilestoneEmpty,
@@ -89,10 +89,10 @@ const InitializeEscrowForm = () => {
 
           <SelectField
             control={form.control}
-            name="token"
-            label="Token"
-            tooltipContent="Token to be used for the escrow."
-            options={tokenOptions}
+            name="trustline"
+            label="Trustline"
+            tooltipContent="Trustline to be used for the escrow."
+            options={trustlineOptions}
           />
         </div>
 
@@ -175,141 +175,6 @@ const InitializeEscrowForm = () => {
                       }}
                     />
                   )}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="engagementId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Engagement
-                  <TooltipInfo content="Unique identifier for this escrow engagement." />
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter identifier"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("engagementId", e.target.value);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="platformAddress"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center justify-between">
-                  <span className="flex items-center">
-                    Platform Address
-                    <TooltipInfo content="Public key of the platform managing the escrow." />
-                  </span>
-                  <Switch
-                    checked={showSelect.platformAddress}
-                    onCheckedChange={(value) =>
-                      toggleField("platformAddress", value)
-                    }
-                    title="Show Users List?"
-                  />
-                </FormLabel>
-                <FormControl>
-                  {showSelect.platformAddress ? (
-                    <SelectField
-                      control={form.control}
-                      name="platformAddress"
-                      label=""
-                      tooltipContent=""
-                      options={userOptions}
-                    />
-                  ) : (
-                    <Input
-                      placeholder="Enter platform address"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleFieldChange("platformAddress", e.target.value);
-                      }}
-                    />
-                  )}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="platformFee"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Platform Fee
-                  <TooltipInfo content="Fee charged by the platform for this escrow." />
-                </FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <DollarSign
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                      size={18}
-                    />
-                    <Input
-                      className="pl-10"
-                      placeholder="Enter platform fee"
-                      value={field.value !== "" ? `${field.value}%` : ""}
-                      onChange={(e) => {
-                        const rawValue = e.target.value.replace(/\D/g, "");
-                        field.onChange(rawValue);
-                        handleFieldChange("platformFee", rawValue);
-                      }}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="amount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Amount
-                  <TooltipInfo content="Total amount to be held in escrow." />
-                </FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <DollarSign
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                      size={18}
-                    />
-                    <Input
-                      type="string"
-                      className="pl-10"
-                      placeholder="Enter the escrow amount"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleFieldChange("amount", e.target.value);
-                      }}
-                    />
-                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -462,14 +327,22 @@ const InitializeEscrowForm = () => {
                     <TooltipInfo content="Fee charged by the platform for this escrow." />
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter platform fee"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleFieldChange("platformFee", e.target.value);
-                      }}
-                    />
+                    <div className="relative">
+                      <DollarSign
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                        size={18}
+                      />
+                      <Input
+                        className="pl-10"
+                        placeholder="Enter platform fee"
+                        value={field.value !== "" ? `${field.value}%` : ""}
+                        onChange={(e) => {
+                          const rawValue = e.target.value.replace(/\D/g, "");
+                          field.onChange(rawValue);
+                          handleFieldChange("platformFee", rawValue);
+                        }}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -488,15 +361,22 @@ const InitializeEscrowForm = () => {
                     <TooltipInfo content="Total amount to be held in escrow." />
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      type="string"
-                      placeholder="Enter the escrow amount"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleFieldChange("amount", e.target.value);
-                      }}
-                    />
+                    <div className="relative">
+                      <DollarSign
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                        size={18}
+                      />
+                      <Input
+                        type="string"
+                        className="pl-10"
+                        placeholder="Enter the escrow amount"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleFieldChange("amount", e.target.value);
+                        }}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
