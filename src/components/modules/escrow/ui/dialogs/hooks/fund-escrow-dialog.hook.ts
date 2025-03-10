@@ -39,6 +39,7 @@ const useFundEscrowDialog = ({
     defaultValues: {
       amount: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {

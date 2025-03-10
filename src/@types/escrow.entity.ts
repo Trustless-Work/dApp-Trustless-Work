@@ -1,4 +1,4 @@
-import { CreatedAt, UpdatedAt } from "./dates.entity";
+import type { CreatedAt, UpdatedAt } from "./dates.entity";
 
 export type MilestoneStatus = "completed" | "approved" | "pending";
 
@@ -31,6 +31,8 @@ export interface Escrow {
   disputeFlag?: boolean;
   releaseFlag?: boolean;
   resolvedFlag?: boolean;
+  approverFunds?: string;
+  serviceProviderFunds?: string;
 }
 
 export type RolesInEscrow =
@@ -86,3 +88,8 @@ export type EditMilestonesPayload = {
   escrow: EscrowPayload;
   signer: string;
 };
+
+export interface BalanceItem {
+  address: string;
+  balance: number;
+}

@@ -83,7 +83,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       {loadingEscrows ? (
         <SkeletonCards />
       ) : currentData.length !== 0 ? (
-        <div className="py-3">
+        <div className="py-3" id="step-3">
           <div className="flex flex-col">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {currentData.map((escrow, index) => {

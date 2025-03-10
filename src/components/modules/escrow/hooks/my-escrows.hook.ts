@@ -2,7 +2,7 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 
 interface useMyEscrowsProps {
   type: string;
@@ -19,6 +19,9 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(15);
+  const [isLoading, setIsLoading] = useState(false);
+  const fetchingRef = useRef(false);
+  const lastFetchKey = useRef("");
 
   const totalPages = Math.ceil(totalEscrows / itemsPerPage);
 
@@ -31,15 +34,40 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
     );
   }, [escrows, currentPage, itemsPerPage]);
 
+  const memoizedFetchEscrows = useCallback(async () => {
+    if (!address || fetchingRef.current) return;
+    const fetchKey = `${address}-${type}`;
+    if (fetchKey === lastFetchKey.current) return;
+    try {
+      fetchingRef.current = true;
+      lastFetchKey.current = fetchKey;
+      setIsLoading(true);
+      await fetchAllEscrows({ address, type });
+    } catch (error) {
+      console.error("[MyEscrows] Error fetching escrows:", error);
+    } finally {
+      setIsLoading(false);
+      fetchingRef.current = false;
+    }
+  }, [address, type, fetchAllEscrows]);
+
   useEffect(() => {
-    const fetchEscrows = async () => {
-      if (address) {
-        fetchAllEscrows({ address, type });
-      }
+    let timeoutId: NodeJS.Timeout;
+
+    const debouncedFetch = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        memoizedFetchEscrows();
+      }, 100);
     };
 
-    fetchEscrows();
-  }, []);
+    debouncedFetch();
+
+    return () => {
+      clearTimeout(timeoutId);
+      fetchingRef.current = false;
+    };
+  }, [memoizedFetchEscrows]);
 
   const toggleRowExpansion = (rowId: string) => {
     setExpandedRows((prev) =>
@@ -66,6 +94,7 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
     itemsPerPageOptions,
     toggleRowExpansion,
     expandedRows,
+    isLoading,
   };
 };
 

@@ -41,6 +41,7 @@ const useEditMilestonesDialog = ({
     defaultValues: {
       milestones: selectedEscrow?.milestones || [{ description: "" }],
     },
+    mode: "onChange",
   });
 
   const milestones: Milestone[] = form.watch("milestones");

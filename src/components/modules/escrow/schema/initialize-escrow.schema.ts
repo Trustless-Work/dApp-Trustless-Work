@@ -47,7 +47,8 @@ export const GetFormSchema = () => {
         message: "Platform fee is required.",
       })
       .regex(/^[1-9][0-9]*$/, {
-        message: "Platform fee must be a number greater than 0.",
+        message:
+          "Platform fee must be a whole number greater than 0 (no decimals).",
       }),
     amount: z
       .string()
@@ -55,7 +56,7 @@ export const GetFormSchema = () => {
         message: "Amount is required.",
       })
       .regex(/^[1-9][0-9]*$/, {
-        message: "Amount must be a number greater than 0.",
+        message: "Amount must be a whole number greater than 0 (no decimals).",
       }),
     releaseSigner: z
       .string()

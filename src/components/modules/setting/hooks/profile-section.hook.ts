@@ -31,6 +31,7 @@ const useProfile = ({ onSave }: useProfileProps) => {
       useCase: loggedUser?.useCase || "",
       profileImage: loggedUser?.profileImage || "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = (data: UserPayload) => {

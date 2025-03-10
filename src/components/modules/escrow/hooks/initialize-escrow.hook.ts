@@ -70,6 +70,7 @@ export const useInitializeEscrow = () => {
       disputeResolver: "",
       milestones: [{ description: "" }],
     },
+    mode: "onChange",
   });
 
   // Load stored form data when component mounts

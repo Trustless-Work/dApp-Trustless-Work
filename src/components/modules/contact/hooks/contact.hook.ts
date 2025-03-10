@@ -23,6 +23,7 @@ export const useContact = () => {
       email: "",
       address: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {

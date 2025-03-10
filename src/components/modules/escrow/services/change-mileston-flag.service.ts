@@ -9,7 +9,10 @@ export const changeMilestoneFlag = async (
   payload: ChangeMilestoneFlagPayload,
 ) => {
   try {
-    const response = await http.post("/escrow/change-milestone-flag", payload);
+    const response = await http.post(
+      "/escrow/change-milestone-approved-flag",
+      payload,
+    );
 
     const { unsignedTransaction } = response.data;
     const { address } = await kit.getAddress();

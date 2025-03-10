@@ -14,7 +14,6 @@ import { EscrowPayload, ResolveDisputePayload } from "@/@types/escrow.entity";
 import { MouseEvent } from "react";
 import { getFormSchema } from "../../../schema/resolve-dispute-escrow.schema";
 import { toast } from "@/hooks/toast.hook";
-//import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { useEscrowBoundedStore } from "../../../store/ui";
 
 interface useResolveDisputeEscrowDialogProps {
@@ -39,12 +38,6 @@ const useResolveDisputeEscrowDialog = ({
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
-  const setApproverFunds = useGlobalBoundedStore(
-    (state) => state.setApproverFunds,
-  );
-  const setServiceProviderFunds = useGlobalBoundedStore(
-    (state) => state.setServiceProviderFunds,
-  );
   const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
@@ -57,6 +50,7 @@ const useResolveDisputeEscrowDialog = ({
       approverFunds: "",
       serviceProviderFunds: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (payload: ResolveDisputePayload) => {
@@ -76,6 +70,8 @@ const useResolveDisputeEscrowDialog = ({
         ...selectedEscrow,
         resolvedFlag: true,
         disputeFlag: false,
+        approverFunds: payload.approverFunds,
+        serviceProviderFunds: payload.serviceProviderFunds,
       };
 
       const responseFlag = await updateEscrow({
@@ -89,8 +85,6 @@ const useResolveDisputeEscrowDialog = ({
         setIsResolvingDispute(false);
         setIsDialogOpen(false);
         fetchAllEscrows({ address, type: activeTab || "client" });
-        setApproverFunds(payload.approverFunds);
-        setServiceProviderFunds(payload.serviceProviderFunds);
         setIsSuccessResolveDisputeDialogOpen(true);
 
         if (selectedEscrow) {
