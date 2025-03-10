@@ -5,8 +5,8 @@ export const GetFormSchema = () => {
   const { isValidWallet } = useValidData();
 
   return z.object({
-    token: z.string().min(1, {
-      message: "Token is required.",
+    trustline: z.string().min(1, {
+      message: "Trustline is required.",
     }),
     approver: z
       .string()
