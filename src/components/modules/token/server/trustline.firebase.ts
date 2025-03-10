@@ -3,12 +3,12 @@
 import { db } from "@/core/config/firebase/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
-const getAllTokens = async (): Promise<{
+const getAllTrustlines = async (): Promise<{
   success: boolean;
   message: string;
   data?: any[];
 }> => {
-  const collectionRef = collection(db, "tokens");
+  const collectionRef = collection(db, "trustlines");
 
   try {
     const querySnapshot = await getDocs(collectionRef);
@@ -16,28 +16,28 @@ const getAllTokens = async (): Promise<{
     if (querySnapshot.empty) {
       return {
         success: false,
-        message: "No tokens found",
+        message: "No trustlines found",
       };
     }
 
-    const tokens = querySnapshot.docs
+    const trustlines = querySnapshot.docs
       .map((doc) => {
-        const tokenData = doc.data();
-        if (!tokenData.name || !tokenData.token) {
+        const trustlineData = doc.data();
+        if (!trustlineData.name || !trustlineData.trustline) {
           return null;
         }
 
         return {
           id: doc.id,
-          ...tokenData,
+          ...trustlineData,
         };
       })
-      .filter((token) => token !== null);
+      .filter((trustline) => trustline !== null);
 
     return {
       success: true,
-      message: "Tokens retrieved successfully",
-      data: tokens,
+      message: "Trustlines retrieved successfully",
+      data: trustlines,
     };
   } catch (error: any) {
     const errorMessage =
@@ -49,4 +49,4 @@ const getAllTokens = async (): Promise<{
   }
 };
 
-export { getAllTokens };
+export { getAllTrustlines };
