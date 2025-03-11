@@ -1,4 +1,5 @@
 import type { CreatedAt, UpdatedAt } from "./dates.entity";
+import { Trustline } from "./trustline.entity";
 
 export type MilestoneStatus = "completed" | "approved" | "pending";
 
@@ -16,7 +17,7 @@ export interface Escrow {
   updatedAt: UpdatedAt;
   contractId?: string;
   balance?: string;
-  trustline?: string;
+  trustline?: Trustline;
   milestones: Milestone[];
   serviceProvider: string;
   engagementId: string;
