@@ -109,6 +109,10 @@ export const useInitializeEscrow = () => {
     setIsLoading(true);
     setIsSuccessDialogOpen(false);
 
+    const trustlineObject = trustlines.find(
+      (tl) => tl.trustline === payload.trustline,
+    );
+
     try {
       const platformFeeDecimal = Number(payload.platformFee);
       const data = await initializeEscrow(
@@ -116,16 +120,13 @@ export const useInitializeEscrow = () => {
           ...payload,
           platformFee: platformFeeDecimal.toString(),
           issuer: address,
+          trustlineDecimals: trustlineObject?.trustlineDecimals,
         },
         address,
       );
 
       if (data.status === "SUCCESS" || data.status === 201) {
         setIsSuccessDialogOpen(true);
-
-        const trustlineObject = trustlines.find(
-          (tl) => tl.trustline === payload.trustline,
-        );
 
         if (loggedUser?.saveEscrow) {
           await addEscrow(
