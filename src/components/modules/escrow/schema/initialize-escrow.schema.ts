@@ -5,9 +5,14 @@ export const GetFormSchema = () => {
   const { isValidWallet } = useValidData();
 
   return z.object({
-    trustline: z.string().min(1, {
-      message: "Trustline is required.",
+    trustline: z.object({
+      name: z.string().min(1, { message: "Trustline name is required." }),
+      trustline: z.string().min(1, { message: "Trustline ID is required." }),
+      trustlineDecimals: z
+        .number()
+        .min(0, { message: "Decimals must be a positive number." }),
     }),
+
     approver: z
       .string()
       .min(1, {
