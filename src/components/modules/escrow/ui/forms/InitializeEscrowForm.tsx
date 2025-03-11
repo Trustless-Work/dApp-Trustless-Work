@@ -327,22 +327,15 @@ const InitializeEscrowForm = () => {
                     <TooltipInfo content="Fee charged by the platform for this escrow." />
                   </FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <DollarSign
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                        size={18}
-                      />
-                      <Input
-                        className="pl-10"
-                        placeholder="Enter platform fee"
-                        value={field.value !== "" ? `${field.value}%` : ""}
-                        onChange={(e) => {
-                          const rawValue = e.target.value.replace(/\D/g, "");
-                          field.onChange(rawValue);
-                          handleFieldChange("platformFee", rawValue);
-                        }}
-                      />
-                    </div>
+                    <Input
+                      placeholder="Enter platform fee"
+                      value={field.value !== "" ? `${field.value}%` : ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/\D/g, "");
+                        field.onChange(rawValue);
+                        handleFieldChange("platformFee", rawValue);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
