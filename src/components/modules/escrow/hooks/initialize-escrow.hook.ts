@@ -60,7 +60,7 @@ export const useInitializeEscrow = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      trustline: { name: "", trustline: "", trustlineDecimals: 0 },
+      trustline: "",
       approver: "",
       engagementId: "",
       title: "",
@@ -111,7 +111,6 @@ export const useInitializeEscrow = () => {
 
     try {
       const platformFeeDecimal = Number(payload.platformFee);
-      console.log(payload);
       const data = await initializeEscrow(
         {
           ...payload,
@@ -124,12 +123,16 @@ export const useInitializeEscrow = () => {
       if (data.status === "SUCCESS" || data.status === 201) {
         setIsSuccessDialogOpen(true);
 
+        const trustlineObject = trustlines.find(
+          (tl) => tl.trustline === payload.trustline,
+        );
+
         if (loggedUser?.saveEscrow) {
           await addEscrow(
             {
               ...data.escrow,
               platformFee: platformFeeDecimal.toString(),
-              trustline: payload.trustline,
+              trustline: trustlineObject,
             },
             address,
             data.contract_id,
@@ -182,11 +185,7 @@ export const useInitializeEscrow = () => {
 
   const trustlineOptions = useMemo(() => {
     const options = trustlines.map((trustline: Trustline) => ({
-      value: {
-        name: trustline.name,
-        trustlineDecimals: trustline.trustlineDecimals,
-        trustline: trustline.trustline,
-      },
+      value: trustline.trustline,
       label: trustline.name,
     }));
 
