@@ -331,7 +331,13 @@ const InitializeEscrowForm = () => {
                       placeholder="Enter platform fee"
                       value={field.value !== "" ? `${field.value}%` : ""}
                       onChange={(e) => {
-                        const rawValue = e.target.value.replace(/\D/g, "");
+                        let rawValue = e.target.value;
+                        rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+                        if (rawValue.split(".").length > 2) {
+                          rawValue = rawValue.slice(0, -1);
+                        }
+
                         field.onChange(rawValue);
                         handleFieldChange("platformFee", rawValue);
                       }}
