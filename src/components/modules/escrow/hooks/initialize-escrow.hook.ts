@@ -60,7 +60,7 @@ export const useInitializeEscrow = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      trustline: "",
+      trustline: { name: "", trustline: "", trustlineDecimals: 0 },
       approver: "",
       engagementId: "",
       title: "",
@@ -105,15 +105,13 @@ export const useInitializeEscrow = () => {
   };
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    console.log("submitting escrow", payload);
-
     setFormData(payload);
     setIsLoading(true);
     setIsSuccessDialogOpen(false);
 
     try {
       const platformFeeDecimal = Number(payload.platformFee);
-
+      console.log(payload);
       const data = await initializeEscrow(
         {
           ...payload,
@@ -184,7 +182,11 @@ export const useInitializeEscrow = () => {
 
   const trustlineOptions = useMemo(() => {
     const options = trustlines.map((trustline: Trustline) => ({
-      value: trustline.trustline,
+      value: {
+        name: trustline.name,
+        trustlineDecimals: trustline.trustlineDecimals,
+        trustline: trustline.trustline,
+      },
       label: trustline.name,
     }));
 
