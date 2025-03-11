@@ -280,14 +280,17 @@ const EscrowDetailDialog = ({
 
               {(userRolesInEscrow.includes("approver") ||
                 userRolesInEscrow.includes("serviceProvider")) &&
-                !areAllMilestonesCompletedAndFlag &&
                 (activeTab === "approver" || activeTab === "serviceProvider") &&
-                !selectedEscrow.disputeFlag && (
+                !selectedEscrow.disputeFlag &&
+                !selectedEscrow.resolvedFlag && (
                   <button
                     type="button"
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
-                        if (Number(selectedEscrow.balance) === 0) {
+                        if (
+                          Number(selectedEscrow.balance) === 0 ||
+                          !selectedEscrow.balance
+                        ) {
                           toast({
                             title: "Cannot start dispute",
                             description: "The escrow balance is 0",
@@ -299,7 +302,10 @@ const EscrowDetailDialog = ({
                       }
                     }}
                     onClick={() => {
-                      if (Number(selectedEscrow.balance) === 0) {
+                      if (
+                        Number(selectedEscrow.balance) === 0 ||
+                        !selectedEscrow.balance
+                      ) {
                         toast({
                           title: "Cannot start dispute",
                           description: "The escrow balance is 0",
@@ -312,7 +318,10 @@ const EscrowDetailDialog = ({
                     className="w-full cursor-pointer"
                   >
                     <Button
-                      disabled={Number(selectedEscrow.balance) === 0}
+                      disabled={
+                        Number(selectedEscrow.balance) === 0 ||
+                        !selectedEscrow.balance
+                      }
                       variant="destructive"
                       className="mt-3 pointer-events-none w-full"
                     >
