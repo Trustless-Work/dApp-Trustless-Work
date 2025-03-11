@@ -18,6 +18,7 @@ import EntityCard from "./cards/EntityCard";
 import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
 import { Check, Copy } from "lucide-react";
 import { useGlobalBoundedStore } from "@/core/store/data";
+import useSuccessResolveDisputeDialog from "./hooks/success-resolve-dispute-dialog.hook";
 
 interface SuccessDialogProps {
   title: string;
@@ -104,6 +105,8 @@ const SuccessDialog = ({
   );
 };
 
+export default SuccessDialog;
+
 interface SuccessReleaseDialogProps {
   title: string;
   description: string;
@@ -136,8 +139,8 @@ export const SuccessReleaseDialog = ({
 
   // Amount
   const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
-  const platformAmount = totalAmount;
   const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
+  const platformAmount = (totalAmount * platformFee) / 100;
 
   return (
     <Dialog open={isSuccessReleaseDialogOpen} onOpenChange={handleClose}>
@@ -202,4 +205,130 @@ export const SuccessReleaseDialog = ({
   );
 };
 
-export default SuccessDialog;
+interface SuccessResolveDisputeProps {
+  title: string;
+  description: string;
+  recentEscrow?: Escrow;
+  isSuccessResolveDisputeDialogOpen: boolean;
+  setIsSuccessResolveDisputeDialogOpen: (value: boolean) => void;
+}
+
+// ! EN EL MODAL SOLO ESTA BIEN EL DE TRUSTLESS, EL RESTO NINGUNO
+// ! EN LAS TRANSFERENCIAS CREO QUE SE ESTAN PASANDO MAL
+export const SuccessResolveDisputeDialog = ({
+  title,
+  description,
+  recentEscrow,
+  isSuccessResolveDisputeDialogOpen,
+  setIsSuccessResolveDisputeDialogOpen,
+}: SuccessResolveDisputeProps) => {
+  const { handleClose } = useSuccessResolveDisputeDialog({
+    setIsSuccessResolveDisputeDialogOpen,
+  });
+
+  const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const approverFunds = selectedEscrow?.approverFunds || "0";
+  const serviceProviderFunds = selectedEscrow?.serviceProviderFunds || "0";
+  const escrow = selectedEscrow || recentEscrow;
+
+  const { formatDollar } = useFormatUtils();
+
+  // Percentage
+  const totalAmount = Number(escrow?.amount || 0);
+  const trustlessPercentage = 0.3;
+  const platformFee = Number(escrow?.platformFee || 0);
+
+  const remainingPercentage = 100 - (trustlessPercentage + platformFee);
+
+  // Amounts
+  const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
+  const platformAmount = (totalAmount * platformFee) / 100;
+
+  // Total funds available for approver and service provider
+  const totalAvailableFunds = totalAmount - (trustlessAmount + platformAmount);
+
+  const approverPercentage =
+    totalAvailableFunds > 0
+      ? Math.round(
+          (Number(approverFunds) / totalAvailableFunds) * remainingPercentage,
+        )
+      : 0;
+
+  const serviceProviderPercentage =
+    totalAvailableFunds > 0
+      ? Math.round(
+          (Number(serviceProviderFunds) / totalAvailableFunds) *
+            remainingPercentage,
+        )
+      : 0;
+
+  return (
+    <Dialog open={isSuccessResolveDisputeDialogOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="mb-5">
+            {description}{" "}
+            <Link
+              href={`https://stellar.expert/explorer/testnet/contract/${escrow?.contractId}`}
+              className="text-primary"
+              target="_blank"
+            >
+              Stellar Explorer
+            </Link>
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-between mt-5">
+          <p className="text-xs">
+            <span className="font-bold">Total Amount: </span>
+            {formatDollar(escrow?.amount)}
+          </p>
+          {recentEscrow && (
+            <p className="text-xs">
+              <span className="font-bold">Total Balance:</span>{" "}
+              {formatDollar(escrow?.balance)}
+            </p>
+          )}
+        </div>
+        <div className="flex flex-col gap-4">
+          <EntityCard
+            type="Service Provider"
+            entity={escrow?.serviceProvider}
+            hasPercentage={true}
+            percentage={serviceProviderPercentage.toString()}
+            hasAmount={true}
+            amount={serviceProviderFunds.toString()}
+          />
+          <EntityCard
+            type="Approver"
+            entity={escrow?.approver}
+            hasPercentage={true}
+            percentage={approverPercentage.toString()}
+            hasAmount={true}
+            amount={approverFunds.toString()}
+          />
+          <EntityCard
+            type="Trustless Work"
+            entity={"0x"}
+            hasPercentage={true}
+            percentage={trustlessPercentage.toString()}
+            hasAmount={true}
+            amount={trustlessAmount.toString()}
+          />
+          <EntityCard
+            type="Platform"
+            entity={escrow?.platformAddress}
+            hasPercentage={true}
+            percentage={platformFee.toString()}
+            hasAmount={true}
+            amount={platformAmount.toString()}
+          />
+        </div>
+
+        <DialogFooter>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};

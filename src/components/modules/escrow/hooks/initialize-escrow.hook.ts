@@ -18,7 +18,7 @@ import { GetFormSchema } from "../schema/initialize-escrow.schema";
 
 export const useInitializeEscrow = () => {
   const [showSelect, setShowSelect] = useState({
-    client: false,
+    approver: false,
     serviceProvider: false,
     platformAddress: false,
     releaseSigner: false,
@@ -32,6 +32,7 @@ export const useInitializeEscrow = () => {
   const formData = useEscrowBoundedStore((state) => state.formData);
   const setFormData = useEscrowBoundedStore((state) => state.setFormData);
   const resetForm = useEscrowBoundedStore((state) => state.resetForm);
+  const setCurrentStep = useEscrowBoundedStore((state) => state.setCurrentStep);
   const router = useRouter();
   const setIsSuccessDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
@@ -53,7 +54,7 @@ export const useInitializeEscrow = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      client: "",
+      approver: "",
       engagementId: "",
       title: "",
       description: "",
@@ -65,6 +66,7 @@ export const useInitializeEscrow = () => {
       disputeResolver: "",
       milestones: [{ description: "" }],
     },
+    mode: "onChange",
   });
 
   // Load stored form data when component mounts
@@ -125,12 +127,14 @@ export const useInitializeEscrow = () => {
 
         setRecentEscrow({ ...data.escrow, contractId: data.contract_id });
         resetSteps();
+        setCurrentStep(1);
         form.reset();
         resetForm();
         router.push("/dashboard/escrow/my-escrows");
         setIsLoading(false);
       } else {
         resetSteps();
+        setCurrentStep(1);
         setIsLoading(false);
         setIsSuccessDialogOpen(false);
         toast({

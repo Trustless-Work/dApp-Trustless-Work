@@ -28,7 +28,7 @@ export const initializeEscrow = async (
     // Send the signed transaction
     const tx = await http.post("/helper/send-transaction", {
       signedXdr: signedTxXdr,
-      returnValueIsRequired: true,
+      returnEscrowDataIsRequired: true,
     });
 
     const { data } = tx;

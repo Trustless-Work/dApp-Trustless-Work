@@ -3,38 +3,38 @@ import { z } from "zod";
 
 export const getFormSchema = (selectedEscrow: Escrow | null) => {
   return z.object({
-    clientFunds: z
+    approverFunds: z
       .string()
       .min(1, {
-        message: "Client funds is required.",
+        message: "Approver funds is required.",
       })
       .refine((value) => !isNaN(Number(value)) && Number(value) > 0, {
-        message: "Client funds must be a valid number.",
+        message: "Approver funds must be a valid number.",
       })
       .refine(
         (value) => {
-          const clientFunds = parseFloat(value);
+          const approverFunds = parseFloat(value);
 
           return (
             selectedEscrow !== null &&
-            clientFunds < Number(selectedEscrow.balance)
+            approverFunds < Number(selectedEscrow.balance)
           );
         },
         {
-          message: "Clients funds cannot exceed the balance.",
+          message: "Approvers funds cannot exceed the balance.",
         },
       )
       .refine(
         (value) => {
-          const clientFunds = parseFloat(value);
+          const approverFunds = parseFloat(value);
 
           return (
             selectedEscrow !== null &&
-            clientFunds < Number(selectedEscrow.amount)
+            approverFunds < Number(selectedEscrow.amount)
           );
         },
         {
-          message: "Clients funds cannot exceed the amount.",
+          message: "Approvers funds cannot exceed the amount.",
         },
       ),
     serviceProviderFunds: z

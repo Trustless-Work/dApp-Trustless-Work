@@ -1,4 +1,4 @@
-import { CreatedAt, UpdatedAt } from "./dates.entity";
+import type { CreatedAt, UpdatedAt } from "./dates.entity";
 
 export type MilestoneStatus = "completed" | "approved" | "pending";
 
@@ -23,17 +23,20 @@ export interface Escrow {
   amount: string;
   platformAddress: string;
   platformFee: string;
-  client: string;
+  approver: string;
   releaseSigner: string;
   user: string;
   issuer: string;
   disputeFlag?: boolean;
   releaseFlag?: boolean;
+  resolvedFlag?: boolean;
+  approverFunds?: string;
+  serviceProviderFunds?: string;
 }
 
 export type RolesInEscrow =
   | "issuer"
-  | "client"
+  | "approver"
   | "disputeResolver"
   | "serviceProvider"
   | "releaseSigner"
@@ -65,7 +68,7 @@ export type ChangeMilestoneFlagPayload = Omit<
   ChangeMilestoneStatusPayload,
   "serviceProvider" | "newStatus"
 > & {
-  client?: string;
+  approver?: string;
   newFlag: boolean;
 };
 
@@ -75,7 +78,7 @@ export type StartDisputePayload = Pick<Escrow, "contractId"> & {
 
 export type ResolveDisputePayload = Pick<Escrow, "contractId"> &
   Partial<Pick<Escrow, "disputeResolver">> & {
-    clientFunds: string;
+    approverFunds: string;
     serviceProviderFunds: string;
   };
 
@@ -84,3 +87,8 @@ export type EditMilestonesPayload = {
   escrow: EscrowPayload;
   signer: string;
 };
+
+export interface BalanceItem {
+  address: string;
+  balance: number;
+}

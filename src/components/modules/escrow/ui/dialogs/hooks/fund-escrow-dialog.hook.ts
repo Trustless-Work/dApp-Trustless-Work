@@ -40,6 +40,7 @@ const useFundEscrowDialog = ({
       amount: "",
       paymentMethod: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
@@ -85,7 +86,7 @@ const useFundEscrowDialog = ({
         setIsSecondDialogOpen(false);
         setIsFundingEscrow(false);
         setIsDialogOpen(false);
-        fetchAllEscrows({ address, type: activeTab || "client" });
+        fetchAllEscrows({ address, type: activeTab || "approver" });
 
         toast({
           title: "Success",

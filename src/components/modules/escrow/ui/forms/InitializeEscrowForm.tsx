@@ -14,7 +14,7 @@ import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initializ
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { Switch } from "@/components/ui/switch";
-import { Trash2 } from "lucide-react";
+import { DollarSign, Trash2 } from "lucide-react";
 
 const InitializeEscrowForm = () => {
   const {
@@ -87,34 +87,37 @@ const InitializeEscrowForm = () => {
 
           <FormField
             control={form.control}
-            name="client"
+            name="approver"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
-                  <span className="flex items-center">Client</span>
+                  <span className="flex items-center">
+                    Approver
+                    <TooltipInfo content="Address of the approver for this escrow." />
+                  </span>
                   <Switch
-                    checked={showSelect.client}
-                    onCheckedChange={(value) => toggleField("client", value)}
+                    checked={showSelect.approver}
+                    onCheckedChange={(value) => toggleField("approver", value)}
                     title="Show Users List?"
                   />
                 </FormLabel>
 
                 <FormControl>
-                  {showSelect.client ? (
+                  {showSelect.approver ? (
                     <SelectField
                       control={form.control}
-                      name="client"
+                      name="approver"
                       label=""
                       tooltipContent=""
                       options={userOptions}
                     />
                   ) : (
                     <Input
-                      placeholder="Enter client address"
+                      placeholder="Enter approver address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("client", e.target.value);
+                        handleFieldChange("approver", e.target.value);
                       }}
                     />
                   )}
@@ -221,7 +224,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      placeholder="Enter platform address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -247,14 +250,22 @@ const InitializeEscrowForm = () => {
                   <TooltipInfo content="Fee charged by the platform for this escrow." />
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter platform fee"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("platformFee", e.target.value);
-                    }}
-                  />
+                  <div className="relative">
+                    <DollarSign
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      size={18}
+                    />
+                    <Input
+                      className="pl-10"
+                      placeholder="Enter platform fee"
+                      value={field.value !== "" ? `${field.value}%` : ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/\D/g, "");
+                        field.onChange(rawValue);
+                        handleFieldChange("platformFee", rawValue);
+                      }}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -271,15 +282,22 @@ const InitializeEscrowForm = () => {
                   <TooltipInfo content="Total amount to be held in escrow." />
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    type="string"
-                    placeholder="Enter the escrow amount"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      handleFieldChange("amount", e.target.value);
-                    }}
-                  />
+                  <div className="relative">
+                    <DollarSign
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      size={18}
+                    />
+                    <Input
+                      type="string"
+                      className="pl-10"
+                      placeholder="Enter the escrow amount"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleFieldChange("amount", e.target.value);
+                      }}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
