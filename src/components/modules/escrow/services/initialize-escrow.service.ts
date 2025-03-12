@@ -8,6 +8,7 @@ import axios from "axios";
 
 interface EscrowPayloadWithSigner extends EscrowPayload {
   signer?: string;
+  trustlineDecimals: number | undefined;
 }
 
 export const initializeEscrow = async (
