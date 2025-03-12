@@ -45,7 +45,7 @@ const InitializeEscrowForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  Title
+                  Title<span className="text-destructive ml-1">*</span>
                   <TooltipInfo content="Significant title for escrow." />
                 </FormLabel>
                 <FormControl>
@@ -69,7 +69,7 @@ const InitializeEscrowForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  Engagement
+                  Engagement<span className="text-destructive ml-1">*</span>
                   <TooltipInfo content="Unique identifier for this escrow engagement." />
                 </FormLabel>
                 <FormControl>
@@ -88,6 +88,7 @@ const InitializeEscrowForm = () => {
           />
 
           <SelectField
+            required
             control={form.control}
             name="trustline"
             label="Trustline"
@@ -104,7 +105,7 @@ const InitializeEscrowForm = () => {
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
                   <span className="flex items-center">
-                    Approver
+                    Approver<span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Address of the approver for this escrow." />
                   </span>
                   <Switch
@@ -146,6 +147,7 @@ const InitializeEscrowForm = () => {
                 <FormLabel className="flex items-center justify-between">
                   <span className="flex items-center">
                     Service Provider
+                    <span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Address of the service provider for this escrow." />
                   </span>
                   <Switch
@@ -191,6 +193,7 @@ const InitializeEscrowForm = () => {
                 <FormLabel className="flex items-center justify-between">
                   <span className="flex items-center">
                     Release Signer
+                    <span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Entity authorized to release funds from escrow." />
                   </span>
                   <Switch
@@ -234,6 +237,7 @@ const InitializeEscrowForm = () => {
                 <FormLabel className="flex items-center justify-between">
                   <span className="flex items-center">
                     Dispute Resolver
+                    <span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Entity responsible for resolving disputes." />
                   </span>
                   <Switch
@@ -279,7 +283,8 @@ const InitializeEscrowForm = () => {
                 <FormItem>
                   <FormLabel className="flex items-center justify-between">
                     <span className="flex items-center">
-                      Platform Address
+                      Platform Address{" "}
+                      <span className="text-destructive ml-1">*</span>
                       <TooltipInfo content="Public key of the platform managing the escrow." />
                     </span>
                     <Switch
@@ -323,7 +328,7 @@ const InitializeEscrowForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center">
-                    Platform Fee
+                    Platform Fee<span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Fee charged by the platform for this escrow." />
                   </FormLabel>
                   <FormControl>
@@ -356,7 +361,7 @@ const InitializeEscrowForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center">
-                    Amount
+                    Amount<span className="text-destructive ml-1">*</span>
                     <TooltipInfo content="Total amount to be held in escrow." />
                   </FormLabel>
                   <FormControl>
@@ -390,7 +395,7 @@ const InitializeEscrowForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex items-center">
-                Description
+                Description<span className="text-destructive ml-1">*</span>
                 <TooltipInfo content="Description that clearly explains the purpose of the escrow." />
               </FormLabel>
               <FormControl>
@@ -410,7 +415,7 @@ const InitializeEscrowForm = () => {
 
         <div className="space-y-4">
           <FormLabel className="flex items-center">
-            Milestones
+            Milestones<span className="text-destructive ml-1">*</span>
             <TooltipInfo content="Key stages or deliverables for the escrow." />
           </FormLabel>
           {milestones.map((milestone, index) => (
