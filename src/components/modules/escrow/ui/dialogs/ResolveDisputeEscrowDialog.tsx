@@ -68,7 +68,8 @@ const ResolveDisputeEscrowDialog = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center">
-                        Approver Amount
+                        Approver Amount{" "}
+                        <span className="text-destructive ml-1">*</span>
                         <TooltipInfo content="The amount for the approver." />
                       </FormLabel>
                       <FormControl>
@@ -98,7 +99,8 @@ const ResolveDisputeEscrowDialog = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center">
-                        Service Provider Amount
+                        Service Provider Amount{" "}
+                        <span className="text-destructive ml-1">*</span>
                         <TooltipInfo content="The amount for the service provider." />
                       </FormLabel>
                       <FormControl>

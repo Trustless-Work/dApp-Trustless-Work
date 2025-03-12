@@ -233,28 +233,31 @@ const EscrowDetailDialog = ({
             {/* Escrow ID and Actions */}
             <div className="flex flex-col justify-center w-full md:w-1/5">
               <p className="text-center mb-3 text-sm">
-                <span className="uppercase font-bold">Escrow ID:</span>
+                <span className="uppercase font-bold">
+                  {selectedEscrow.trustline?.name || "No Trustline"} | Escrow
+                  ID:
+                </span>
+                <div className="flex items-center justify-center">
+                  {formatAddress(selectedEscrow.contractId)}
+                  <button
+                    onClick={() =>
+                      copyText(
+                        selectedEscrow?.contractId,
+                        selectedEscrow.contractId,
+                      )
+                    }
+                    className="p-1.5 hover:bg-muted rounded-md transition-colors"
+                    title="Copy Escrow ID"
+                  >
+                    {copiedKeyId ? (
+                      <Check className={cn("h-4 w-4 text-green-700")} />
+                    ) : (
+                      <Copy className={cn("h-4 w-4")} />
+                    )}
+                  </button>
+                </div>
               </p>
-              <div className="flex items-center justify-center">
-                <span>{formatAddress(selectedEscrow.contractId)}</span>
-                <button
-                  type="button"
-                  onClick={() =>
-                    copyText(
-                      selectedEscrow?.contractId,
-                      selectedEscrow.contractId,
-                    )
-                  }
-                  className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                  title="Copy Escrow ID"
-                >
-                  {copiedKeyId ? (
-                    <Check className={cn("h-4 w-4 text-green-700")} />
-                  ) : (
-                    <Copy className={cn("h-4 w-4")} />
-                  )}
-                </button>
-              </div>
+
               <Button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -277,14 +280,17 @@ const EscrowDetailDialog = ({
 
               {(userRolesInEscrow.includes("approver") ||
                 userRolesInEscrow.includes("serviceProvider")) &&
-                !areAllMilestonesCompletedAndFlag &&
                 (activeTab === "approver" || activeTab === "serviceProvider") &&
-                !selectedEscrow.disputeFlag && (
+                !selectedEscrow.disputeFlag &&
+                !selectedEscrow.resolvedFlag && (
                   <button
                     type="button"
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
-                        if (Number(selectedEscrow.balance) === 0) {
+                        if (
+                          Number(selectedEscrow.balance) === 0 ||
+                          !selectedEscrow.balance
+                        ) {
                           toast({
                             title: "Cannot start dispute",
                             description: "The escrow balance is 0",
@@ -296,7 +302,10 @@ const EscrowDetailDialog = ({
                       }
                     }}
                     onClick={() => {
-                      if (Number(selectedEscrow.balance) === 0) {
+                      if (
+                        Number(selectedEscrow.balance) === 0 ||
+                        !selectedEscrow.balance
+                      ) {
                         toast({
                           title: "Cannot start dispute",
                           description: "The escrow balance is 0",
@@ -309,7 +318,10 @@ const EscrowDetailDialog = ({
                     className="w-full cursor-pointer"
                   >
                     <Button
-                      disabled={Number(selectedEscrow.balance) === 0}
+                      disabled={
+                        Number(selectedEscrow.balance) === 0 ||
+                        !selectedEscrow.balance
+                      }
                       variant="destructive"
                       className="mt-3 pointer-events-none w-full"
                     >
@@ -320,7 +332,7 @@ const EscrowDetailDialog = ({
 
               {userRolesInEscrow.includes("disputeResolver") &&
                 activeTab === "disputeResolver" &&
-                !areAllMilestonesCompletedAndFlag &&
+                !selectedEscrow.resolvedFlag &&
                 selectedEscrow.disputeFlag && (
                   <Button
                     onClick={handleOpen}
