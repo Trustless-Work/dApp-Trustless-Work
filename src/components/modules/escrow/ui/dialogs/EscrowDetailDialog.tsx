@@ -332,7 +332,7 @@ const EscrowDetailDialog = ({
 
               {userRolesInEscrow.includes("disputeResolver") &&
                 activeTab === "disputeResolver" &&
-                !areAllMilestonesCompletedAndFlag &&
+                !selectedEscrow.resolvedFlag &&
                 selectedEscrow.disputeFlag && (
                   <Button
                     onClick={handleOpen}
