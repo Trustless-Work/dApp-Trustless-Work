@@ -1,9 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,29 +11,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
+import { useCreateContact } from "../../hooks/actions-contact.hook";
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  address: z.string().min(5, "Address must be at least 5 characters"),
-});
-
-export default function CreateContactForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      lastName: "",
-      email: "",
-      address: "",
-    },
-  });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Handle form submission
-  }
+const CreateContactForm = () => {
+  const { form, onSubmit } = useCreateContact();
 
   return (
     <Form {...form}>
@@ -122,11 +99,17 @@ export default function CreateContactForm() {
         </div>
 
         <div className="flex justify-start">
-          <Button className="w-full md:w-1/4" type="submit">
+          <Button
+            className="w-full md:w-1/4"
+            type="submit"
+            onClick={() => console.log("Ejecutado")}
+          >
             Create Contact
           </Button>
         </div>
       </form>
     </Form>
   );
-}
+};
+
+export default CreateContactForm;

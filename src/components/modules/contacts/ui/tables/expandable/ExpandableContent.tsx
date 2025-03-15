@@ -1,13 +1,5 @@
-import { Contact } from "@/@types/contact.entity";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import Divider from "@/components/utils/ui/Divider";
+import { TableCell } from "@/components/ui/table";
+import type { Contact } from "@/@types/contact.entity";
 
 interface ExpandableContentProps {
   contact: Contact;
@@ -15,32 +7,54 @@ interface ExpandableContentProps {
 
 const ExpandableContent = ({ contact }: ExpandableContentProps) => {
   return (
-    <TableRow>
-      <TableCell colSpan={4} className="p-4">
-        <h3 className="mb-1 font-bold text-xs">Contact Details</h3>
-        <Divider type="horizontal" />
-        <div className="flex flex-col">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Last Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Address</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell>{contact.name}</TableCell>
-                <TableCell>{contact.lastName}</TableCell>
-                <TableCell>{contact.email}</TableCell>
-                <TableCell>{contact.address}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+    <TableCell colSpan={9} className="bg-muted/30">
+      <div className="p-4">
+        <h3 className="text-sm font-semibold mb-4">Contact Details</h3>
+        <div className="border rounded border-primary p-6">
+          <div className="grid grid-cols-2 gap-8">
+            <div>
+              <h4 className="text-sm font-semibold mb-4">
+                Personal Information
+              </h4>
+              <div className="space-y-3">
+                <div className="grid grid-cols-3 gap-4">
+                  <span className="text-sm text-muted-foreground">
+                    Full Name:
+                  </span>
+                  <span className="text-sm col-span-2">{`${contact.name} ${contact.lastName}`}</span>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <span className="text-sm text-muted-foreground">Email:</span>
+                  <span className="text-sm col-span-2">{contact.email}</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold mb-4">Additional Details</h4>
+              <div className="space-y-3">
+                <div className="grid grid-cols-3 gap-4">
+                  <span className="text-sm text-muted-foreground">
+                    Address:
+                  </span>
+                  <span className="text-sm col-span-2 truncate">
+                    {contact.address}
+                  </span>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <span className="text-sm text-muted-foreground">
+                    Created:
+                  </span>
+                  <span className="text-sm col-span-2">
+                    {new Date().toLocaleDateString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </TableCell>
-    </TableRow>
+      </div>
+    </TableCell>
   );
 };
 

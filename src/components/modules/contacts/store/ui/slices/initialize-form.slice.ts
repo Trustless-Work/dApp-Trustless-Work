@@ -15,6 +15,7 @@ export const useContactInitializeFormSlice: StateCreator<
     lastName: "",
     email: "",
     address: "",
+    category: ["personal"],
   };
 
   return {

@@ -6,20 +6,13 @@ export interface ContactGlobalStore {
   contacts: Contact[];
   totalContacts: number;
   loadingContacts: boolean;
-  selectedContact: Contact | null;
   contactsToDelete: string[];
-  recentContact: Contact | undefined;
-
   setContacts: (contacts: Contact[]) => void;
-  fetchAllContacts: (params: { userId: string }) => void;
-  addContact: (
-    payload: ContactPayload,
-    userId: string,
-  ) => Promise<Contact | undefined>;
-  updateContact: (params: {
-    contactId: string;
-    payload: ContactPayload;
-  }) => Promise<Contact | undefined>;
-  setRecentContact: (contact: Contact | undefined) => void;
-  setSelectedContact: (contact: Contact | undefined) => void;
+  fetchAllContactsByUser: (params: {
+    address: string;
+    type: "personal" | "favorites";
+  }) => void;
+  addContact: (payload: ContactPayload) => Promise<Contact | undefined>;
+  updateContact: (contactId: string, payload: ContactPayload) => Promise<void>;
+  toggleContactStatus: (contactId: string) => Promise<void>;
 }

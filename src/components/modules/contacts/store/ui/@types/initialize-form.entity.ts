@@ -1,16 +1,12 @@
-import { Contact } from "@/@types/contact.entity";
+import { Contact, ContactCategory } from "@/@types/contact.entity";
 
 export type ContactFormData = Pick<
   Contact,
-  "name" | "lastName" | "email" | "address"
+  "name" | "lastName" | "email" | "address" | "category"
 >;
 
 export interface InitializeFormContactStore {
-  name: string;
-  lastName: string;
-  email: string;
-  address: string;
   formData: ContactFormData;
-  setFormData: (data: Partial<ContactFormData | null>) => void;
+  setFormData: (data: Partial<ContactFormData>) => void;
   resetForm: () => void;
 }

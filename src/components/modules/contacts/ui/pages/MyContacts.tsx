@@ -16,45 +16,32 @@ import { useContactBoundedStore } from "@/components/modules/contacts/store/ui";
 import MyContactsTable from "@/components/modules/contacts/ui/tables/MyContactTable";
 import MyContactsCards from "@/components/modules/contacts/ui/cards/MyContactsCards";
 import MyContactsFilter from "@/components/modules/contacts/ui/filters/MyContactsFilter";
-
-// Datos quemados de ejemplo
-const sampleContacts = [
-  {
-    id: "1",
-    name: "John",
-    lastName: "Doe",
-    email: "johndoe@example.com",
-    address: "123 Main St, City",
-  },
-  {
-    id: "2",
-    name: "Jane",
-    lastName: "Smith",
-    email: "janesmith@example.com",
-    address: "456 Oak St, Town",
-  },
-  {
-    id: "3",
-    name: "Alice",
-    lastName: "Johnson",
-    email: "alicej@example.com",
-    address: "789 Pine St, Village",
-  },
-];
+import useMyContacts from "@/components/modules/contacts/hooks/my-contacts.hook";
+import { ContactCategory } from "@/@types/contact.entity";
 
 const ContactsDashboard = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
   const setActiveTab = useContactBoundedStore((state) => state.setActiveTab);
   const setActiveMode = useContactBoundedStore((state) => state.setActiveMode);
   const activeMode = useContactBoundedStore((state) => state.activeMode);
+  const activeTab = useContactBoundedStore(
+    (state) => state.activeTab as ContactCategory,
+  );
+
+  const { currentData, isLoading: contactsLoading } = useMyContacts({
+    type: activeTab,
+  });
+
+  const filteredContacts =
+    currentData?.filter((contact) => contact.status === true) || [];
 
   return (
     <>
-      {isLoading ? (
-        <Loader isLoading={isLoading} />
+      {isLoading || contactsLoading ? (
+        <Loader isLoading={isLoading || contactsLoading} />
       ) : (
         <div className="flex gap-3 w-full h-full justify-between">
-          <Tabs defaultValue="personal" className="w-full">
+          <Tabs defaultValue={activeTab} className="w-full">
             <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-16 md:gap-3">
               <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-4">
                 <TabsTrigger
@@ -97,10 +84,13 @@ const ContactsDashboard = () => {
               </Card>
               {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <MyContactsTable type="personal" contacts={sampleContacts} />
+                  <MyContactsTable
+                    type="personal"
+                    contacts={filteredContacts}
+                  />
                 </Card>
               ) : (
-                <MyContactsCards type="personal" contacts={sampleContacts} />
+                <MyContactsCards type="personal" contacts={filteredContacts} />
               )}
             </TabsContent>
 
@@ -112,10 +102,13 @@ const ContactsDashboard = () => {
               </Card>
               {activeMode === "table" ? (
                 <Card className={cn("overflow-hidden")}>
-                  <MyContactsTable type="favorites" contacts={sampleContacts} />
+                  <MyContactsTable
+                    type="favorites"
+                    contacts={filteredContacts}
+                  />
                 </Card>
               ) : (
-                <MyContactsCards type="favorites" contacts={sampleContacts} />
+                <MyContactsCards type="favorites" contacts={filteredContacts} />
               )}
             </TabsContent>
           </Tabs>

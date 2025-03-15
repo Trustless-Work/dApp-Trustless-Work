@@ -8,11 +8,17 @@ import { useContactTabSlice } from "./slices/tabs.slice";
 import { TabsContactStore } from "./@types/tabs.entity";
 import { StepsContactStore } from "./@types/steps.entity";
 import { useContactStepsSlice } from "./slices/steps.slice";
+import { useContactDialogSlice } from "./slices/dialogs.slice";
+import { DialogContactStore } from "./@types/dialogs.entity";
+import { useLoadersContactSlice } from "./slices/loaders.slice";
+import { LoadersContactStore } from "./@types/loaders.entity";
 
 type GlobalState = InitializeFormContactStore &
   ViewModeContactStore &
   TabsContactStore &
-  StepsContactStore;
+  StepsContactStore &
+  DialogContactStore &
+  LoadersContactStore;
 
 const devtoolsOptions: DevtoolsOptions = {
   name: "Global State",
@@ -49,6 +55,8 @@ export const useContactBoundedStore = create<GlobalState>()(
       ...useContactViewModeSlice(...a),
       ...useContactTabSlice(...a),
       ...useContactStepsSlice(...a),
+      ...useContactDialogSlice(...a),
+      ...useLoadersContactSlice(...a),
     }),
     devtoolsOptions,
   ),

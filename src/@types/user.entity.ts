@@ -1,4 +1,5 @@
 import { CreatedAt, UpdatedAt } from "./dates.entity";
+import { Contact } from "./contact.entity";
 
 export interface User {
   id: string;
@@ -15,6 +16,7 @@ export interface User {
   apiKey?: string[];
   profileImage?: string;
   address?: string;
+  contacts?: Contact[];
 }
 
 export type UserPayload = Omit<User, "createdAt" | "updatedAt" | "id">;
