@@ -1,9 +1,30 @@
+import Image from "next/image";
 import { Placement } from "react-joyride";
 
 export const steps = [
   {
     title: <strong>Welcome to Trustless Work!</strong>,
-    content: <h2>Here you can understand how to use our API!</h2>,
+    content: (
+      <>
+        <div
+          style={{
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "3rem",
+          }}
+        >
+          <Image
+            src="/logo.png"
+            alt="Trustless Work Logo"
+            width={100}
+            height={100}
+            style={{ marginBottom: "10px" }}
+          />
+        </div>
+        <h2>Here you can understand how to use our API!</h2>
+      </>
+    ),
     placement: "center" as Placement,
     target: "body",
   },

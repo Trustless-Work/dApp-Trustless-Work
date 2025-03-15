@@ -32,6 +32,8 @@ interface SelectFieldProps {
   label: string;
   tooltipContent: string;
   options: { value: string | undefined; label: string }[];
+  className?: string;
+  required?: boolean;
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({
@@ -40,6 +42,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
   label,
   tooltipContent,
   options,
+  className,
+  required,
 }) => {
   const { handleFieldChange } = useInitializeEscrow();
   const [open, setOpen] = useState(false);
@@ -60,10 +64,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
       name={name}
       render={({ field }) => {
         return (
-          <FormItem>
+          <FormItem className={className}>
             {label && (
               <FormLabel className="flex items-center">
-                {label}
+                {label}{" "}
+                {required && <span className="text-destructive ml-1">*</span>}
                 {tooltipContent && <TooltipInfo content={tooltipContent} />}
               </FormLabel>
             )}
@@ -73,7 +78,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
                   <Button
                     variant="outline"
                     role="combobox"
-                    className="w-full justify-between"
+                    className="w-full justify-between font-normal"
                     aria-expanded={open}
                     onClick={() => setOpen(!open)}
                   >

@@ -15,6 +15,7 @@ import {
 import { useEscrowBoundedStore } from "../store/ui";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { GetFormSchema } from "../schema/initialize-escrow.schema";
+import { Trustline } from "@/@types/trustline.entity";
 
 export const useInitializeEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -45,15 +46,21 @@ export const useInitializeEscrow = () => {
     (state) => state.getAllUsers,
   );
   const users = useGlobalAuthenticationStore((state) => state.users);
+  const getAllTrustlines = useGlobalBoundedStore(
+    (state) => state.getAllTrustlines,
+  );
+  const trustlines = useGlobalBoundedStore((state) => state.trustlines);
   const formSchema = GetFormSchema();
 
   useEffect(() => {
     getAllUsers();
-  }, [getAllUsers]);
+    getAllTrustlines();
+  }, [getAllUsers, getAllTrustlines]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      trustline: "",
       approver: "",
       engagementId: "",
       title: "",
@@ -102,14 +109,18 @@ export const useInitializeEscrow = () => {
     setIsLoading(true);
     setIsSuccessDialogOpen(false);
 
+    const trustlineObject = trustlines.find(
+      (tl) => tl.trustline === payload.trustline,
+    );
+
     try {
       const platformFeeDecimal = Number(payload.platformFee);
-
       const data = await initializeEscrow(
         {
           ...payload,
           platformFee: platformFeeDecimal.toString(),
           issuer: address,
+          trustlineDecimals: trustlineObject?.trustlineDecimals,
         },
         address,
       );
@@ -119,7 +130,11 @@ export const useInitializeEscrow = () => {
 
         if (loggedUser?.saveEscrow) {
           await addEscrow(
-            { ...data.escrow, platformFee: platformFeeDecimal.toString() },
+            {
+              ...data.escrow,
+              platformFee: platformFeeDecimal.toString(),
+              trustline: trustlineObject,
+            },
             address,
             data.contract_id,
           );
@@ -169,6 +184,15 @@ export const useInitializeEscrow = () => {
     return [{ value: "", label: "Select an User" }, ...options];
   }, [users]);
 
+  const trustlineOptions = useMemo(() => {
+    const options = trustlines.map((trustline: Trustline) => ({
+      value: trustline.trustline,
+      label: trustline.name,
+    }));
+
+    return [{ value: "", label: "Select a Trustline" }, ...options];
+  }, [trustlines]);
+
   const toggleField = (field: string, value: boolean) => {
     setShowSelect((prev) => ({ ...prev, [field]: value }));
   };
@@ -181,6 +205,7 @@ export const useInitializeEscrow = () => {
     handleRemoveMilestone,
     handleFieldChange,
     userOptions,
+    trustlineOptions,
     showSelect,
     toggleField,
     isAnyMilestoneEmpty,
