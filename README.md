@@ -141,4 +141,4 @@ _It's important to note that we are using Husky. This means that when you run a 
 
 ## **Thanks to all the contributors who have made this project possible!**
 
-[![Contributors](https://contrib.rocks/image?repo=Tico4Chain-Coders/dApp-Trustless-Work)](https://github.com/Tico4Chain-Coders/dApp-Trustless-Work/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=Trustless-Work/dApp-Trustless-Work)](https://github.com/Trustless-Work/dApp-Trustless-Work/graphs/contributors)
