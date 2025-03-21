@@ -44,7 +44,7 @@ export function StatusBreakdownTable() {
   );
 
   // Calculate total for percentage
-  const total = statusCounts.reduce((sum, item) => sum + item.count, 0);
+  const total = statusCounts.reduce((sum, item) => sum + item.count, 0) || 1;
 
   return (
     <Table>

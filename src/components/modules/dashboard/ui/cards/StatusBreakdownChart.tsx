@@ -13,6 +13,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { EscrowStatus } from "@/@types/escrow-section.entity";
 
 export function StatusBreakdownChart() {
   const statusCounts = useEscrowStore((state) => state.statusCounts);
@@ -64,7 +65,7 @@ export function StatusBreakdownChart() {
             {chartData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={getStatusColor(entry.name as any)}
+                fill={getStatusColor(entry.name as EscrowStatus)}
               />
             ))}
           </Pie>
