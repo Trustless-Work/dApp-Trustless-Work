@@ -2,6 +2,7 @@ import { Chart } from "@/components/ui/chart";
 import MetricsSection from "../cards/MetricSection";
 import RecentSales from "../cards/RecentSales";
 import DateRangePicker from "../utils/Datepicker";
+import { EscrowSection } from "../cards/EscrowSection";
 
 const Dashboard = () => {
   // Mock Data
@@ -36,6 +37,9 @@ const Dashboard = () => {
             <RecentSales />
           </div>
         </div>
+      </div>
+      <div className="mt-10">
+        <EscrowSection />
       </div>
     </div>
   );
