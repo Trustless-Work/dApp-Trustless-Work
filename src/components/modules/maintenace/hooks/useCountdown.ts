@@ -1,14 +1,21 @@
+/* eslint-disable prettier/prettier */
 import { useState, useEffect } from "react";
-
 interface Countdown {
   hours: number;
   minutes: number;
 }
 
 const useCountdown = (initialHours: number, initialMinutes: number) => {
+  const hours =
+    initialHours ||
+    parseInt(process.env.NEXT_PUBLIC_COUNTDOWN_HOURS || "2", 10);
+  const minutes =
+    initialMinutes ||
+    parseInt(process.env.NEXT_PUBLIC_COUNTDOWN_MINUTES || "30", 10);
+
   const [time, setTime] = useState<Countdown>({
-    hours: initialHours,
-    minutes: initialMinutes,
+    hours,
+    minutes,
   });
 
   useEffect(() => {
