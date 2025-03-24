@@ -5,7 +5,17 @@ import { Clock } from "lucide-react";
 import useCountdown from "../hooks/useCountdown";
 
 const CountdownTimer = () => {
-  const remainingTime = useCountdown(2, 30, 0);
+  const hours = parseInt(process.env.NEXT_PUBLIC_COUNTDOWN_HOURS || "0", 10);
+  const minutes = parseInt(
+    process.env.NEXT_PUBLIC_COUNTDOWN_MINUTES || "0",
+    10,
+  );
+  const seconds = parseInt(
+    process.env.NEXT_PUBLIC_COUNTDOWN_SECONDS || "0",
+    10,
+  );
+
+  const remainingTime = useCountdown(hours, minutes, seconds);
 
   return (
     <Card className="p-6 mt-8 w-full max-w-2xl">
