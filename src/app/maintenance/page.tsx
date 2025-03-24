@@ -1,13 +1,13 @@
 "use client";
 
 import { Bounded } from "@/components/layout/Bounded";
-import HeaderManitenace from "@/components/layout/header/HeaderMaintenace";
+import HeaderMaintenance from "@/components/layout/header/HeaderMaintenance";
 import CountdownTimer from "@/components/modules/maintenace/ui/CountdownTimer";
 
 const Maintenance: React.FC = () => {
   return (
     <>
-      <HeaderManitenace />
+      <HeaderMaintenance />
       <Bounded center={true} className="mt-20">
         <div className="flex flex-col justify-center items-center w-full mt-10 md:mt-16 gap-4 text-center">
           <h1 className="text-5xl md:text-6xl font-bold">
