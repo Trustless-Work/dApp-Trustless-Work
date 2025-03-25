@@ -135,7 +135,6 @@ export const SuccessReleaseDialog = ({
   const trustlessPercentage = 0.3;
   const platformFee = Number(escrow?.platformFee || 0);
   const totalAmount = Number(escrow?.amount || 0);
-  const serviceProviderPercentage = 100 - (trustlessPercentage + platformFee);
 
   // Amount
   const platformAmount = (totalAmount * platformFee) / 100;
