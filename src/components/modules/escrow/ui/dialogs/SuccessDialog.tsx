@@ -19,6 +19,7 @@ import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
 import { Check, Copy } from "lucide-react";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import useSuccessResolveDisputeDialog from "./hooks/success-resolve-dispute-dialog.hook";
+import { platform } from "os";
 
 interface SuccessDialogProps {
   title: string;
@@ -175,17 +176,17 @@ export const SuccessReleaseDialog = ({
             type="Service Provider"
             entity={escrow?.serviceProvider}
             hasPercentage={true}
-            percentage={serviceProviderPercentage.toString()}
+            percentage={"testeo1%"}
             hasAmount={true}
-            amount={serviceProviderAmount.toString()}
+            amount={"testeo1"}
           />
           <EntityCard
             type="Trustless Work"
             entity={"0x"}
             hasPercentage={true}
-            percentage={trustlessPercentage.toString()}
+            percentage={"testeo2%"}
             hasAmount={true}
-            amount={trustlessAmount.toString()}
+            amount={"testeo2"}
           />
           <EntityCard
             type="Platform"
@@ -213,8 +214,6 @@ interface SuccessResolveDisputeProps {
   setIsSuccessResolveDisputeDialogOpen: (value: boolean) => void;
 }
 
-// ! EN EL MODAL SOLO ESTA BIEN EL DE TRUSTLESS, EL RESTO NINGUNO
-// ! EN LAS TRANSFERENCIAS CREO QUE SE ESTAN PASANDO MAL
 export const SuccessResolveDisputeDialog = ({
   title,
   description,
@@ -234,33 +233,62 @@ export const SuccessResolveDisputeDialog = ({
   const { formatDollar } = useFormatUtils();
 
   // Percentage
+  // const totalAmount = Number(escrow?.amount || 0);
+  // const trustlessPercentage = 0.3;
+  // const platformFee = Number(escrow?.platformFee || 0);
+
+  // const remainingPercentage = 100 - (trustlessPercentage + platformFee);
+
+  // // Amounts
+  // const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
+  // const platformAmount = (totalAmount * platformFee) / 100;
+
+  // // Total funds available for approver and service provider
+  // const totalAvailableFunds = totalAmount - (trustlessAmount + platformAmount);  
+
+  // const totalAmount = Number(escrow?.amount || 0);
+  // //percentages
+  // const trustlessPercentage = 0.3; //WORK HERE
+  // const platformPercentage = Number(escrow?.platformFee);
+  // const serviceproviderPercentage = 100 - (trustlessPercentage + platformPercentage);
+  // const approverPercentageRaw = 100 - (trustlessPercentage + platformPercentage);
+
+  // //Amounts
+  // const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
+  // const platformAmount = (totalAmount * platformPercentage) / 100;
+  // const serviceProviderAmount = (totalAmount * serviceproviderPercentage) / 100;
+  // const approverAmount = (totalAmount * approverPercentageRaw) / 100;
+
+
+  /////////
+
+
+  //FIX LATER
   const totalAmount = Number(escrow?.amount || 0);
-  const trustlessPercentage = 0.3;
-  const platformFee = Number(escrow?.platformFee || 0);
 
-  const remainingPercentage = 100 - (trustlessPercentage + platformFee);
+const trustlessPercentage = 0.3; // Fee  Trustless Work
+const platformPercentage = Number(escrow?.platformFee); // Fee  plataform
 
-  // Amounts
-  const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
-  const platformAmount = (totalAmount * platformFee) / 100;
+const approverAmount = Number(escrow?.approverFunds || "0"); // 
+const serviceProviderAmount = Number(escrow?.serviceProviderFunds || "0"); 
 
-  // Total funds available for approver and service provider
-  const totalAvailableFunds = totalAmount - (trustlessAmount + platformAmount);
+if (Math.abs((approverAmount + serviceProviderAmount) - totalAmount) > 0.01) {
+  console.warn("La suma de las cantidades asignadas no coincide con el monto total");
+}
 
-  const approverPercentage =
-    totalAvailableFunds > 0
-      ? Math.round(
-          (Number(approverFunds) / totalAvailableFunds) * remainingPercentage,
-        )
-      : 0;
+const approverTrustlessFee = (approverAmount * trustlessPercentage) / 100;
+const approverPlatformFee = (approverAmount * platformPercentage) / 100;
+const approverFinalAmount = approverAmount - approverTrustlessFee - approverPlatformFee;
 
-  const serviceProviderPercentage =
-    totalAvailableFunds > 0
-      ? Math.round(
-          (Number(serviceProviderFunds) / totalAvailableFunds) *
-            remainingPercentage,
-        )
-      : 0;
+const serviceProviderTrustlessFee = (serviceProviderAmount * trustlessPercentage) / 100;
+const serviceProviderPlatformFee = (serviceProviderAmount * platformPercentage) / 100;
+const serviceProviderFinalAmount = serviceProviderAmount - serviceProviderTrustlessFee - serviceProviderPlatformFee;
+
+
+const totalTrustlessFee = approverTrustlessFee + serviceProviderTrustlessFee;
+const totalPlatformFee = approverPlatformFee + serviceProviderPlatformFee;
+console.log("Dispute Aproveder Founds:"+escrow?.approverFunds);
+
 
   return (
     <Dialog open={isSuccessResolveDisputeDialogOpen} onOpenChange={handleClose}>
@@ -291,38 +319,40 @@ export const SuccessResolveDisputeDialog = ({
           )}
         </div>
         <div className="flex flex-col gap-4">
-          <EntityCard
-            type="Service Provider"
-            entity={escrow?.serviceProvider}
-            hasPercentage={true}
-            percentage={serviceProviderPercentage.toString()}
-            hasAmount={true}
-            amount={serviceProviderFunds.toString()}
-          />
-          <EntityCard
-            type="Approver"
-            entity={escrow?.approver}
-            hasPercentage={true}
-            percentage={approverPercentage.toString()}
-            hasAmount={true}
-            amount={approverFunds.toString()}
-          />
-          <EntityCard
-            type="Trustless Work"
-            entity={"0x"}
-            hasPercentage={true}
-            percentage={trustlessPercentage.toString()}
-            hasAmount={true}
-            amount={trustlessAmount.toString()}
-          />
-          <EntityCard
-            type="Platform"
-            entity={escrow?.platformAddress}
-            hasPercentage={true}
-            percentage={platformFee.toString()}
-            hasAmount={true}
-            amount={platformAmount.toString()}
-          />
+        <EntityCard
+          type="Service Provider"
+          entity={escrow?.serviceProvider}
+          hasPercentage={true}
+          percentage={platformPercentage.toString()}
+          hasAmount={true}
+          amount={serviceProviderFinalAmount.toFixed(2)}
+        />
+        <EntityCard
+          type="Approver"
+          entity={escrow?.approver}
+          hasPercentage={true}
+          percentage={platformPercentage.toString()}
+          hasAmount={true}
+          amount={approverFinalAmount.toFixed(2)}
+        />
+        <EntityCard
+          type="Trustless Work"
+          entity={"0x"}
+          hasPercentage={true}
+          percentage={trustlessPercentage.toString()}
+          hasAmount={true}
+          amount={totalTrustlessFee.toFixed(2)}
+        />
+        <EntityCard
+          type="Platform"
+          entity={escrow?.platformAddress}
+          hasPercentage={true}
+          percentage={platformPercentage.toString()}
+          hasAmount={true}
+          amount={totalPlatformFee.toFixed(2)}
+        />
+      
+        
         </div>
 
         <DialogFooter>
