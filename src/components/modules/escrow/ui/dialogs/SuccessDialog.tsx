@@ -132,7 +132,6 @@ export const SuccessReleaseDialog = ({
   const { formatDollar } = useFormatUtils();
 
   // Percentage
-  const trustlessPercentage = 0.3;
   const platformFee = Number(escrow?.platformFee || 0);
   const totalAmount = Number(escrow?.amount || 0);
 
