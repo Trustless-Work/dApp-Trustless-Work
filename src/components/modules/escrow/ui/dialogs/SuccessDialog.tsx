@@ -19,7 +19,6 @@ import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
 import { Check, Copy } from "lucide-react";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import useSuccessResolveDisputeDialog from "./hooks/success-resolve-dispute-dialog.hook";
-import { platform } from "os";
 
 interface SuccessDialogProps {
   title: string;
