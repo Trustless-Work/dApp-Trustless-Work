@@ -41,7 +41,7 @@ const ResolveDisputeEscrowDialog = ({
   });
 
   const isResolvingDispute = useEscrowBoundedStore(
-    (state) => state.isResolvingDispute
+    (state) => state.isResolvingDispute,
   );
 
   // Get the `selectedEscrow` from the global state
@@ -49,7 +49,9 @@ const ResolveDisputeEscrowDialog = ({
   const escrow = selectedEscrow || recentEscrow; // Use `selectedEscrow` first, fallback to `recentEscrow`
 
   const [approverNet, setApproverNet] = useState<number | null>(null);
-  const [serviceProviderNet, setServiceProviderNet] = useState<number | null>(null);
+  const [serviceProviderNet, setServiceProviderNet] = useState<number | null>(
+    null,
+  );
 
   const trustlessWorkFee = 0.003;
 
@@ -67,12 +69,17 @@ const ResolveDisputeEscrowDialog = ({
 
     // Get fund values
     const approverFunds = parseFloat(form.getValues("approverFunds")) || 0;
-    const serviceProviderFunds = parseFloat(form.getValues("serviceProviderFunds")) || 0;
+    const serviceProviderFunds =
+      parseFloat(form.getValues("serviceProviderFunds")) || 0;
 
     console.log("Approver Funds:", approverFunds);
     console.log("Service Provider Funds:", serviceProviderFunds);
 
-    if (isNaN(approverFunds) || isNaN(serviceProviderFunds) || isNaN(platformFee)) {
+    if (
+      isNaN(approverFunds) ||
+      isNaN(serviceProviderFunds) ||
+      isNaN(platformFee)
+    ) {
       console.warn("Invalid values detected. Skipping calculations.");
       setApproverNet(null);
       setServiceProviderNet(null);
@@ -94,7 +101,10 @@ const ResolveDisputeEscrowDialog = ({
     setServiceProviderNet(serviceProviderFunds - serviceProviderDeductions);
 
     console.log("Approver Net:", approverFunds - approverDeductions);
-    console.log("Service Provider Net:", serviceProviderFunds - serviceProviderDeductions);
+    console.log(
+      "Service Provider Net:",
+      serviceProviderFunds - serviceProviderDeductions,
+    );
   }, [form.watch("approverFunds"), form.watch("serviceProviderFunds"), escrow]);
 
   if (!escrow) {
@@ -188,11 +198,14 @@ const ResolveDisputeEscrowDialog = ({
                         <strong>Approver Net:</strong> ${approverNet.toFixed(2)}
                       </p>
                       <p>
-                        <strong>Service Provider Net:</strong> ${serviceProviderNet.toFixed(2)}
+                        <strong>Service Provider Net:</strong> $
+                        {serviceProviderNet.toFixed(2)}
                       </p>
                     </>
                   ) : (
-                    <p className="text-gray-400">Enter values to see the calculation</p>
+                    <p className="text-gray-400">
+                      Enter values to see the calculation
+                    </p>
                   )}
                 </div>
                 <Button type="submit">Resolve Conflicts</Button>
