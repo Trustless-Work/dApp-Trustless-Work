@@ -79,14 +79,17 @@ const ResolveDisputeEscrowDialog = ({
     }
 
     const approverDeductions =
-      parsedApproverFunds * (platformFee / 100) + parsedApproverFunds * trustlessWorkFee;
+      parsedApproverFunds * (platformFee / 100) +
+      parsedApproverFunds * trustlessWorkFee;
 
     const serviceProviderDeductions =
       parsedServiceProviderFunds * (platformFee / 100) +
       parsedServiceProviderFunds * trustlessWorkFee;
 
     setApproverNet(parsedApproverFunds - approverDeductions);
-    setServiceProviderNet(parsedServiceProviderFunds - serviceProviderDeductions);
+    setServiceProviderNet(
+      parsedServiceProviderFunds - serviceProviderDeductions,
+    );
   }, [approverFunds, serviceProviderFunds, escrow]);
 
   if (!escrow) {
@@ -127,8 +130,15 @@ const ResolveDisputeEscrowDialog = ({
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                          <Input className="pl-10" placeholder="The amount for the approver" {...field} />
+                          <DollarSign
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                            size={18}
+                          />
+                          <Input
+                            className="pl-10"
+                            placeholder="The amount for the approver"
+                            {...field}
+                          />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -147,8 +157,15 @@ const ResolveDisputeEscrowDialog = ({
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                          <Input className="pl-10" placeholder="The amount for the service provider" {...field} />
+                          <DollarSign
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                            size={18}
+                          />
+                          <Input
+                            className="pl-10"
+                            placeholder="The amount for the service provider"
+                            {...field}
+                          />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -161,11 +178,18 @@ const ResolveDisputeEscrowDialog = ({
                 <div className="text-sm text-white bg-gray-800 p-2 rounded-md">
                   {approverNet !== null && serviceProviderNet !== null ? (
                     <>
-                      <p><strong>Approver Net:</strong> ${approverNet.toFixed(2)}</p>
-                      <p><strong>Service Provider Net:</strong> ${serviceProviderNet.toFixed(2)}</p>
+                      <p>
+                        <strong>Approver Net:</strong> ${approverNet.toFixed(2)}
+                      </p>
+                      <p>
+                        <strong>Service Provider Net:</strong> $
+                        {serviceProviderNet.toFixed(2)}
+                      </p>
                     </>
                   ) : (
-                    <p className="text-gray-400">Enter values to see the calculation</p>
+                    <p className="text-gray-400">
+                      Enter values to see the calculation
+                    </p>
                   )}
                 </div>
                 <Button type="submit">Resolve Conflicts</Button>
