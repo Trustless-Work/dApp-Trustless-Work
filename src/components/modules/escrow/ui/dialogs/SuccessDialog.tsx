@@ -138,8 +138,6 @@ export const SuccessReleaseDialog = ({
   const serviceProviderPercentage = 100 - (trustlessPercentage + platformFee);
 
   // Amount
-  const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
-  const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
   const platformAmount = (totalAmount * platformFee) / 100;
 
   return (
@@ -225,41 +223,9 @@ export const SuccessResolveDisputeDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const approverFunds = selectedEscrow?.approverFunds || "0";
-  const serviceProviderFunds = selectedEscrow?.serviceProviderFunds || "0";
   const escrow = selectedEscrow || recentEscrow;
 
   const { formatDollar } = useFormatUtils();
-
-  // Percentage
-  // const totalAmount = Number(escrow?.amount || 0);
-  // const trustlessPercentage = 0.3;
-  // const platformFee = Number(escrow?.platformFee || 0);
-
-  // const remainingPercentage = 100 - (trustlessPercentage + platformFee);
-
-  // // Amounts
-  // const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
-  // const platformAmount = (totalAmount * platformFee) / 100;
-
-  // // Total funds available for approver and service provider
-  // const totalAvailableFunds = totalAmount - (trustlessAmount + platformAmount);
-
-  // const totalAmount = Number(escrow?.amount || 0);
-  // //percentages
-  // const trustlessPercentage = 0.3; //WORK HERE
-  // const platformPercentage = Number(escrow?.platformFee);
-  // const serviceproviderPercentage = 100 - (trustlessPercentage + platformPercentage);
-  // const approverPercentageRaw = 100 - (trustlessPercentage + platformPercentage);
-
-  // //Amounts
-  // const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
-  // const platformAmount = (totalAmount * platformPercentage) / 100;
-  // const serviceProviderAmount = (totalAmount * serviceproviderPercentage) / 100;
-  // const approverAmount = (totalAmount * approverPercentageRaw) / 100;
-
-  /////////
-
   //FIX LATER
   const totalAmount = Number(escrow?.amount || 0);
 
@@ -291,7 +257,6 @@ export const SuccessResolveDisputeDialog = ({
 
   const totalTrustlessFee = approverTrustlessFee + serviceProviderTrustlessFee;
   const totalPlatformFee = approverPlatformFee + serviceProviderPlatformFee;
-  console.log("Dispute Aproveder Founds:" + escrow?.approverFunds);
 
   return (
     <Dialog open={isSuccessResolveDisputeDialogOpen} onOpenChange={handleClose}>

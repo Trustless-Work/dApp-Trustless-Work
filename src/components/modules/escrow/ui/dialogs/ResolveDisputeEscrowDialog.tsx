@@ -21,14 +21,14 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
 import SkeletonResolveDispute from "./utils/SkeletonResolveDispute";
 import { useEscrowBoundedStore } from "../../store/ui";
-import { useGlobalBoundedStore } from "@/core/store/data"; // Import global store
+import { useGlobalBoundedStore } from "@/core/store/data";
 import { DollarSign } from "lucide-react";
 import type { Escrow } from "../../../../../@types/escrow.entity";
 
 interface ResolveDisputeEscrowDialogProps {
   isResolveDisputeDialogOpen: boolean;
   setIsResolveDisputeDialogOpen: (value: boolean) => void;
-  recentEscrow?: Escrow; // Used as a fallback if `selectedEscrow` is not available
+  recentEscrow?: Escrow;
 }
 
 const ResolveDisputeEscrowDialog = ({
@@ -44,9 +44,8 @@ const ResolveDisputeEscrowDialog = ({
     (state) => state.isResolvingDispute,
   );
 
-  // Get the `selectedEscrow` from the global state
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const escrow = selectedEscrow || recentEscrow; // Use `selectedEscrow` first, fallback to `recentEscrow`
+  const escrow = selectedEscrow || recentEscrow;
 
   const [approverNet, setApproverNet] = useState<number | null>(null);
   const [serviceProviderNet, setServiceProviderNet] = useState<number | null>(
@@ -55,60 +54,43 @@ const ResolveDisputeEscrowDialog = ({
 
   const trustlessWorkFee = 0.003;
 
+  const approverFunds = form.watch("approverFunds");
+  const serviceProviderFunds = form.watch("serviceProviderFunds");
+
   useEffect(() => {
     if (!escrow) {
       console.warn("Escrow is undefined. Skipping calculations.");
       return;
     }
 
-    console.log("Escrow Data:", escrow);
+    const platformFee = parseFloat(escrow?.platformFee || "0");
 
-    // Convert `platformFee` to a safe number
-    const platformFee = parseFloat(escrow?.platformFee || "0"); // Ensures a valid value
-    console.log("Platform Fee:", platformFee);
-
-    // Get fund values
-    const approverFunds = parseFloat(form.getValues("approverFunds")) || 0;
-    const serviceProviderFunds =
-      parseFloat(form.getValues("serviceProviderFunds")) || 0;
-
-    console.log("Approver Funds:", approverFunds);
-    console.log("Service Provider Funds:", serviceProviderFunds);
+    const parsedApproverFunds = parseFloat(approverFunds) || 0;
+    const parsedServiceProviderFunds = parseFloat(serviceProviderFunds) || 0;
 
     if (
-      isNaN(approverFunds) ||
-      isNaN(serviceProviderFunds) ||
+      isNaN(parsedApproverFunds) ||
+      isNaN(parsedServiceProviderFunds) ||
       isNaN(platformFee)
     ) {
-      console.warn("Invalid values detected. Skipping calculations.");
       setApproverNet(null);
       setServiceProviderNet(null);
       return;
     }
 
-    // Calculate deductions
     const approverDeductions =
-      approverFunds * (platformFee / 100) + approverFunds * trustlessWorkFee;
+      parsedApproverFunds * (platformFee / 100) + parsedApproverFunds * trustlessWorkFee;
+
     const serviceProviderDeductions =
-      serviceProviderFunds * (platformFee / 100) +
-      serviceProviderFunds * trustlessWorkFee;
+      parsedServiceProviderFunds * (platformFee / 100) +
+      parsedServiceProviderFunds * trustlessWorkFee;
 
-    console.log("Approver Deductions:", approverDeductions);
-    console.log("Service Provider Deductions:", serviceProviderDeductions);
-
-    // Compute final net amounts
-    setApproverNet(approverFunds - approverDeductions);
-    setServiceProviderNet(serviceProviderFunds - serviceProviderDeductions);
-
-    console.log("Approver Net:", approverFunds - approverDeductions);
-    console.log(
-      "Service Provider Net:",
-      serviceProviderFunds - serviceProviderDeductions,
-    );
-  }, [form.watch("approverFunds"), form.watch("serviceProviderFunds"), escrow]);
+    setApproverNet(parsedApproverFunds - approverDeductions);
+    setServiceProviderNet(parsedServiceProviderFunds - serviceProviderDeductions);
+  }, [approverFunds, serviceProviderFunds, escrow]);
 
   if (!escrow) {
-    return null; // Prevent rendering if `escrow` is not available
+    return null;
   }
 
   return (
@@ -145,22 +127,14 @@ const ResolveDisputeEscrowDialog = ({
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <DollarSign
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                            size={18}
-                          />
-                          <Input
-                            className="pl-10"
-                            placeholder="The amount for the approver"
-                            {...field}
-                          />
+                          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                          <Input className="pl-10" placeholder="The amount for the approver" {...field} />
                         </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="serviceProviderFunds"
@@ -173,15 +147,8 @@ const ResolveDisputeEscrowDialog = ({
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <DollarSign
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                            size={18}
-                          />
-                          <Input
-                            className="pl-10"
-                            placeholder="The amount for the service provider"
-                            {...field}
-                          />
+                          <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+                          <Input className="pl-10" placeholder="The amount for the service provider" {...field} />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -194,18 +161,11 @@ const ResolveDisputeEscrowDialog = ({
                 <div className="text-sm text-white bg-gray-800 p-2 rounded-md">
                   {approverNet !== null && serviceProviderNet !== null ? (
                     <>
-                      <p>
-                        <strong>Approver Net:</strong> ${approverNet.toFixed(2)}
-                      </p>
-                      <p>
-                        <strong>Service Provider Net:</strong> $
-                        {serviceProviderNet.toFixed(2)}
-                      </p>
+                      <p><strong>Approver Net:</strong> ${approverNet.toFixed(2)}</p>
+                      <p><strong>Service Provider Net:</strong> ${serviceProviderNet.toFixed(2)}</p>
                     </>
                   ) : (
-                    <p className="text-gray-400">
-                      Enter values to see the calculation
-                    </p>
+                    <p className="text-gray-400">Enter values to see the calculation</p>
                   )}
                 </div>
                 <Button type="submit">Resolve Conflicts</Button>
