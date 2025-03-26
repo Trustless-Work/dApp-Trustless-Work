@@ -45,7 +45,7 @@ import {
 } from "./SuccessDialog";
 import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
-import { useEscrowAmounts } from "../dialogs/hooks/useEscrowAmounts";
+import { useEscrowAmounts } from "./hooks/use-escrow-amounts";
 import { useEffect } from "react";
 
 interface EscrowDetailDialogProps {
