@@ -117,6 +117,26 @@ https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
 
 https://github.com/user-attachments/assets/96d35cee-5e57-41cd-afe5-0389f13c7c94
 
+## Firebase Steps
+
+When you already have the Database, please create a collection called ```trustlines``` and insert the data below:
+
+```
+name
+"USDC"
+(string)
+
+
+trustline
+"GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5"
+(string)
+
+
+trustlineDecimals
+10000000
+(number)
+```
+
 ## Wallet Requirements
 
 To use this project, you must have one of the following wallets installed:
