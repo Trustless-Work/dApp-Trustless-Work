@@ -119,7 +119,7 @@ https://github.com/user-attachments/assets/96d35cee-5e57-41cd-afe5-0389f13c7c94
 
 ## Firebase Steps
 
-When you already have the Database, please create a collection called ```trustlines``` and insert the data below:
+When you already have the Database, please create a collection called `trustlines` and insert the data below:
 
 ```
 name
