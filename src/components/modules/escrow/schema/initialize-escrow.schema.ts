@@ -5,13 +5,17 @@ export const GetFormSchema = () => {
   const { isValidWallet } = useValidData();
 
   return z.object({
-    client: z
+    trustline: z.string().min(1, {
+      message: "Trustline is required.",
+    }),
+
+    approver: z
       .string()
       .min(1, {
-        message: "Client is required.",
+        message: "Approver is required.",
       })
       .refine((value) => isValidWallet(value), {
-        message: "Client must be a valid wallet.",
+        message: "Approver must be a valid wallet.",
       }),
     engagementId: z.string().min(1, {
       message: "Engagement is required.",
@@ -43,8 +47,9 @@ export const GetFormSchema = () => {
       .min(1, {
         message: "Platform fee is required.",
       })
-      .regex(/^[1-9][0-9]*$/, {
-        message: "Platform fee must be a number greater than 0.",
+      .regex(/^\d+(\.\d{1})?$/, {
+        message:
+          "Platform fee must be a number with at most one decimal place.",
       }),
     amount: z
       .string()
@@ -52,7 +57,7 @@ export const GetFormSchema = () => {
         message: "Amount is required.",
       })
       .regex(/^[1-9][0-9]*$/, {
-        message: "Amount must be a number greater than 0.",
+        message: "Amount must be a whole number greater than 0 (no decimals).",
       }),
     releaseSigner: z
       .string()

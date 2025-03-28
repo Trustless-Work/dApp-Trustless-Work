@@ -12,10 +12,14 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import ProgressEscrow from "../dialogs/utils/ProgressEscrow";
-import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
+import SuccessDialog, {
+  SuccessReleaseDialog,
+  SuccessResolveDisputeDialog,
+} from "../dialogs/SuccessDialog";
 import {
   CircleAlert,
   CircleCheckBig,
+  Handshake,
   Layers,
   TriangleAlert,
 } from "lucide-react";
@@ -25,7 +29,7 @@ import SkeletonCards from "../utils/SkeletonCards";
 interface MyEscrowsCardsProps {
   type:
     | "issuer"
-    | "client"
+    | "approver"
     | "disputeResolver"
     | "serviceProvider"
     | "releaseSigner"
@@ -53,6 +57,12 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
   const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessReleaseDialogOpen,
   );
+  const isSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessResolveDisputeDialogOpen,
+  );
+  const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessResolveDisputeDialogOpen,
+  );
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
 
@@ -73,7 +83,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       {loadingEscrows ? (
         <SkeletonCards />
       ) : currentData.length !== 0 ? (
-        <div className="py-3">
+        <div className="py-3" id="step-3">
           <div className="flex flex-col">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {currentData.map((escrow, index) => {
@@ -123,6 +133,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                         <div className="flex items-center gap-1 md:gap-3">
                           {!escrow.disputeFlag &&
                             !escrow.releaseFlag &&
+                            !escrow.resolvedFlag &&
                             !pendingRelease && (
                               <>
                                 <p className="font-bold text-sm">Working</p>
@@ -162,6 +173,15 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                               />
                             </>
                           )}
+
+                          {escrow.resolvedFlag && (
+                            <>
+                              <p className="font-bold text-sm text-green-800">
+                                Resolved
+                              </p>
+                              <Handshake className="text-green-800" size={30} />
+                            </>
+                          )}
                         </div>
                       </div>
                       <div className="mt-2 flex items-baseline">
@@ -171,7 +191,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                         </h3>
                       </div>
                       <p className="mt-2 text-sm text-muted-foreground">
-                        {formatAddress(escrow.client)}
+                        {formatAddress(escrow.approver)}
                       </p>
 
                       <ProgressEscrow escrow={escrow} />
@@ -245,6 +265,17 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
         setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
         title={"Escrow released"}
         description="Now that your escrow is released, you will be able to view it directly in"
+        recentEscrow={recentEscrow}
+      />
+
+      {/* Success Resolve Dispute Dialog */}
+      <SuccessResolveDisputeDialog
+        isSuccessResolveDisputeDialogOpen={isSuccessResolveDisputeDialogOpen}
+        setIsSuccessResolveDisputeDialogOpen={
+          setIsSuccessResolveDisputeDialogOpen
+        }
+        title={"Escrow's dispute resolved"}
+        description="Now that your escrow's dispute is resolved, you will be able to view it directly in"
         recentEscrow={recentEscrow}
       />
     </>

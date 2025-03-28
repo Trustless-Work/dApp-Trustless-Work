@@ -22,6 +22,7 @@ import useFundEscrowDialogHook from "./hooks/fund-escrow-dialog.hook";
 import { useEscrowBoundedStore } from "../../store/ui";
 import SkeletonFundEscrow from "./utils/SkeletonFundEscrow";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { DollarSign } from "lucide-react";
 
 interface FundEscrowDialogProps {
   isSecondDialogOpen: boolean;
@@ -67,17 +68,24 @@ const FundEscrowDialog = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center">
-                        Amount
+                        Amount <span className="text-destructive ml-1">*</span>
                         <TooltipInfo content="The amount to be funded." />
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="The amount to be funded"
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                          }}
-                        />
+                        <div className="relative">
+                          <DollarSign
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                            size={18}
+                          />
+                          <Input
+                            className="pl-10"
+                            placeholder="The amount to be funded"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                            }}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

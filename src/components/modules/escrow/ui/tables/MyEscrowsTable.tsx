@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import {
   CircleAlert,
   CircleCheckBig,
+  Handshake,
   MoreHorizontal,
   TriangleAlert,
 } from "lucide-react";
@@ -33,13 +34,16 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import ExpandableContent from "./expandable/ExpandableContent";
-import SuccessDialog, { SuccessReleaseDialog } from "../dialogs/SuccessDialog";
+import SuccessDialog, {
+  SuccessReleaseDialog,
+  SuccessResolveDisputeDialog,
+} from "../dialogs/SuccessDialog";
 import SkeletonTable from "../utils/SkeletonTable";
 
 interface MyEscrowsTableProps {
   type:
     | "issuer"
-    | "client"
+    | "approver"
     | "disputeResolver"
     | "serviceProvider"
     | "releaseSigner"
@@ -67,6 +71,12 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessReleaseDialogOpen,
   );
+  const isSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.isSuccessResolveDisputeDialogOpen,
+  );
+  const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+    (state) => state.setIsSuccessResolveDisputeDialogOpen,
+  );
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
 
@@ -84,7 +94,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   const { formatDateFromFirebase, formatAddress } = useFormatUtils();
 
   return (
-    <div className="container mx-auto py-3">
+    <div className="container mx-auto py-3" id="step-3">
       {loadingEscrows ? (
         <SkeletonTable />
       ) : currentData.length !== 0 ? (
@@ -98,7 +108,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                   <TableHead>Balance</TableHead>
                   <TableHead>Engagement</TableHead>
                   <TableHead>Service Provider</TableHead>
-                  <TableHead>Client</TableHead>
+                  <TableHead>Approver</TableHead>
                   <TableHead>Created</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -146,7 +156,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         <TableCell>
                           {formatAddress(escrow.serviceProvider)}
                         </TableCell>
-                        <TableCell>{formatAddress(escrow.client)}</TableCell>
+                        <TableCell>{formatAddress(escrow.approver)}</TableCell>
                         <TableCell>
                           {formatDateFromFirebase(
                             escrow.createdAt.seconds,
@@ -210,6 +220,12 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                               className="text-green-800"
                               size={22}
                             />
+                          </TableCell>
+                        )}
+
+                        {escrow.resolvedFlag && (
+                          <TableCell title="Escrow released">
+                            <Handshake className="text-green-800" size={22} />
                           </TableCell>
                         )}
                       </TableRow>
@@ -276,6 +292,17 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
         setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
         title={"Escrow released"}
         description="Now that your escrow is released, you will be able to view it directly in"
+        recentEscrow={recentEscrow}
+      />
+
+      {/* Success Resolve Dispute Dialog */}
+      <SuccessResolveDisputeDialog
+        isSuccessResolveDisputeDialogOpen={isSuccessResolveDisputeDialogOpen}
+        setIsSuccessResolveDisputeDialogOpen={
+          setIsSuccessResolveDisputeDialogOpen
+        }
+        title={"Escrow's dispute resolved"}
+        description="Now that your escrow's dispute is resolved, you will be able to view it directly in"
         recentEscrow={recentEscrow}
       />
     </div>

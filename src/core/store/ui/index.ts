@@ -11,10 +11,13 @@ import { LoaderGlobalUIStore } from "./@types/loader.entity";
 import { useLoaderSlice } from "./slices/loader.slice";
 import { StepsGlobalUIStore } from "./@types/steps.entity";
 import { useStepsSlice } from "./slices/steps.slice";
+import { useTutorialSlice } from "./slices/tutorial.slice";
+import { TutorialGlobalUIStore } from "./@types/tutorial.entity";
 
 type GlobalUIState = ThemeGlobalUIStore &
   LoaderGlobalUIStore &
-  StepsGlobalUIStore;
+  StepsGlobalUIStore &
+  TutorialGlobalUIStore;
 
 const devtoolsOptions: DevtoolsOptions = {
   name: "Global UI State",
@@ -51,6 +54,7 @@ export const useGlobalUIBoundedStore = create<GlobalUIState>()(
         ...useThemeSlice(...a),
         ...useLoaderSlice(...a),
         ...useStepsSlice(...a),
+        ...useTutorialSlice(...a),
       }),
       devtoolsOptions,
     ),

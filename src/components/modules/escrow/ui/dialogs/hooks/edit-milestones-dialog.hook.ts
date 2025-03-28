@@ -41,6 +41,7 @@ const useEditMilestonesDialog = ({
     defaultValues: {
       milestones: selectedEscrow?.milestones || [{ description: "" }],
     },
+    mode: "onChange",
   });
 
   const milestones: Milestone[] = form.watch("milestones");
@@ -92,7 +93,7 @@ const useEditMilestonesDialog = ({
       });
 
       if ((data.status === "SUCCESS" || data.status === 201) && response) {
-        fetchAllEscrows({ address, type: activeTab || "client" });
+        fetchAllEscrows({ address, type: activeTab || "approver" });
         setIsEditMilestoneDialogOpen(false);
         setIsDialogOpen(false);
 

@@ -2,7 +2,7 @@ import { Escrow, Milestone } from "@/@types/escrow.entity";
 
 export type EscrowFormData = Pick<
   Escrow,
-  | "client"
+  | "approver"
   | "engagementId"
   | "serviceProvider"
   | "platformAddress"
@@ -14,7 +14,7 @@ export type EscrowFormData = Pick<
 >;
 
 export interface InitializeFormEscrowStore {
-  client: string;
+  approver: string;
   engagementId: string;
   serviceProvider: string;
   platformAddress: string;

@@ -8,6 +8,7 @@ import axios from "axios";
 
 interface EscrowPayloadWithSigner extends EscrowPayload {
   signer?: string;
+  trustlineDecimals: number | undefined;
 }
 
 export const initializeEscrow = async (
@@ -15,8 +16,6 @@ export const initializeEscrow = async (
   address: string,
 ) => {
   try {
-    console.log(payload);
-
     const payloadWithSigner: EscrowPayloadWithSigner = {
       ...payload,
       signer: address,
@@ -36,7 +35,7 @@ export const initializeEscrow = async (
 
     const tx = await http.post("/helper/send-transaction", {
       signedXdr: signedTxXdr,
-      returnValueIsRequired: true,
+      returnEscrowDataIsRequired: true,
     });
 
     const { data } = tx;

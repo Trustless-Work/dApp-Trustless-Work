@@ -36,7 +36,7 @@ const useChangeFlagEscrowDialog = () => {
         contractId: selectedEscrow?.contractId,
         milestoneIndex: index.toString(),
         newFlag: true,
-        client: address,
+        approver: address,
       });
 
       const updatedMilestonesFlag = selectedEscrow.milestones.map(

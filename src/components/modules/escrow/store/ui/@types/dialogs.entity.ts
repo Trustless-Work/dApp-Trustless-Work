@@ -6,6 +6,7 @@ export interface DialogEscrowStore {
   isResolveDisputeDialogOpen: boolean;
   isSuccessDialogOpen: boolean;
   isSuccessReleaseDialogOpen: boolean;
+  isSuccessResolveDisputeDialogOpen: boolean;
   setIsDialogOpen: (value: boolean) => void;
   setIsSecondDialogOpen: (value: boolean) => void;
   setIsQRDialogOpen: (value: boolean) => void;
@@ -13,4 +14,5 @@ export interface DialogEscrowStore {
   setIsResolveDisputeDialogOpen: (value: boolean) => void;
   setIsSuccessDialogOpen: (value: boolean) => void;
   setIsSuccessReleaseDialogOpen: (value: boolean) => void;
+  setIsSuccessResolveDisputeDialogOpen: (value: boolean) => void;
 }
