@@ -228,7 +228,7 @@ export const SuccessResolveDisputeDialog = ({
   const escrow = selectedEscrow || recentEscrow;
 
   const { formatDollar } = useFormatUtils();
-  const totalAmount = Number(escrow?.amount || 0);
+  //const totalAmount = Number(escrow?.amount || 0);
 
   const trustlessPercentage = 0.3;
   const platformPercentage = Number(escrow?.platformFee);
