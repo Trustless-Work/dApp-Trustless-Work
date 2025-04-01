@@ -24,6 +24,8 @@ import { useEscrowBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { DollarSign } from "lucide-react";
 import type { Escrow } from "../../../../../@types/escrow.entity";
+import { useFormatUtils } from "@/utils/hook/format.hook";
+import { Card } from "@/components/ui/card";
 
 interface ResolveDisputeEscrowDialogProps {
   isResolveDisputeDialogOpen: boolean;
@@ -39,6 +41,8 @@ const ResolveDisputeEscrowDialog = ({
   const { form, onSubmit, handleClose } = useResolveDisputeEscrowDialogHook({
     setIsResolveDisputeDialogOpen,
   });
+
+  const { formatDollar } = useFormatUtils();
 
   const isResolvingDispute = useEscrowBoundedStore(
     (state) => state.isResolvingDispute,
@@ -174,24 +178,26 @@ const ResolveDisputeEscrowDialog = ({
                 />
               </div>
 
-              <DialogFooter className="flex flex-col sm:flex-row sm:justify-between items-center">
-                <div className="text-sm text-white bg-gray-800 p-2 rounded-md">
+              <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-between items-center">
+                <Card className="text-sm text-white p-2 rounded-md px-5">
                   {approverNet !== null && serviceProviderNet !== null ? (
-                    <>
-                      <p>
-                        <strong>Approver Net:</strong> ${approverNet.toFixed(2)}
-                      </p>
-                      <p>
-                        <strong>Service Provider Net:</strong> $
-                        {serviceProviderNet.toFixed(2)}
-                      </p>
-                    </>
+                    <div className="flex flex-col gap-2">
+                      <div className="flex gap-2 items-center">
+                        <strong>Approver Net:</strong>
+                        {formatDollar(approverNet.toFixed(2).toString())}
+                      </div>
+
+                      <div className="flex gap-2 items-center">
+                        <strong>Service Provider Net:</strong>
+                        {formatDollar(serviceProviderNet.toFixed(2).toString())}
+                      </div>
+                    </div>
                   ) : (
                     <p className="text-gray-400">
                       Enter values to see the calculation
                     </p>
                   )}
-                </div>
+                </Card>
                 <Button type="submit">Resolve Conflicts</Button>
               </DialogFooter>
             </form>
