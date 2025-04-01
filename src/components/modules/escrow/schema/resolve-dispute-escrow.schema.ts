@@ -1,7 +1,6 @@
-import { Escrow } from "@/@types/escrow.entity";
 import { z } from "zod";
 
-export const getFormSchema = (selectedEscrow: Escrow | null) => {
+export const getFormSchema = () => {
   return z.object({
     approverFunds: z
       .string()
