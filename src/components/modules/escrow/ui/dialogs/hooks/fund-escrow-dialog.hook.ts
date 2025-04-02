@@ -3,7 +3,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "../../../schema/fund-escrow.schema";
 import { fundEscrow } from "@/components/modules/escrow/services/fund-escrow.service";
