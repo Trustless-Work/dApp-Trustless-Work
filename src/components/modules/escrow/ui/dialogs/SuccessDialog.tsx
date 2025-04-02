@@ -134,10 +134,10 @@ export const SuccessReleaseDialog = ({
   // Percentage
   const trustlessPercentage = 0.3;
   const platformFee = Number(escrow?.platformFee || 0);
-  const totalAmount = Number(escrow?.amount || 0);
   const serviceProviderPercentage = 100 - (trustlessPercentage + platformFee);
 
   // Amount
+  const totalAmount = Number(escrow?.amount || 0);
   const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
   const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
   const platformAmount = (totalAmount * platformFee) / 100;
@@ -213,8 +213,6 @@ interface SuccessResolveDisputeProps {
   setIsSuccessResolveDisputeDialogOpen: (value: boolean) => void;
 }
 
-// ! EN EL MODAL SOLO ESTA BIEN EL DE TRUSTLESS, EL RESTO NINGUNO
-// ! EN LAS TRANSFERENCIAS CREO QUE SE ESTAN PASANDO MAL
 export const SuccessResolveDisputeDialog = ({
   title,
   description,
@@ -227,40 +225,33 @@ export const SuccessResolveDisputeDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const approverFunds = selectedEscrow?.approverFunds || "0";
-  const serviceProviderFunds = selectedEscrow?.serviceProviderFunds || "0";
   const escrow = selectedEscrow || recentEscrow;
 
   const { formatDollar } = useFormatUtils();
+  //const totalAmount = Number(escrow?.amount || 0);
 
-  // Percentage
-  const totalAmount = Number(escrow?.amount || 0);
   const trustlessPercentage = 0.3;
-  const platformFee = Number(escrow?.platformFee || 0);
+  const platformPercentage = Number(escrow?.platformFee);
 
-  const remainingPercentage = 100 - (trustlessPercentage + platformFee);
+  const approverAmount = Number(escrow?.approverFunds || "0");
+  const serviceProviderAmount = Number(escrow?.serviceProviderFunds || "0");
 
-  // Amounts
-  const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
-  const platformAmount = (totalAmount * platformFee) / 100;
+  const approverTrustlessFee = (approverAmount * trustlessPercentage) / 100;
+  const approverPlatformFee = (approverAmount * platformPercentage) / 100;
+  const approverFinalAmount =
+    approverAmount - approverTrustlessFee - approverPlatformFee;
 
-  // Total funds available for approver and service provider
-  const totalAvailableFunds = totalAmount - (trustlessAmount + platformAmount);
+  const serviceProviderTrustlessFee =
+    (serviceProviderAmount * trustlessPercentage) / 100;
+  const serviceProviderPlatformFee =
+    (serviceProviderAmount * platformPercentage) / 100;
+  const serviceProviderFinalAmount =
+    serviceProviderAmount -
+    serviceProviderTrustlessFee -
+    serviceProviderPlatformFee;
 
-  const approverPercentage =
-    totalAvailableFunds > 0
-      ? Math.round(
-          (Number(approverFunds) / totalAvailableFunds) * remainingPercentage,
-        )
-      : 0;
-
-  const serviceProviderPercentage =
-    totalAvailableFunds > 0
-      ? Math.round(
-          (Number(serviceProviderFunds) / totalAvailableFunds) *
-            remainingPercentage,
-        )
-      : 0;
+  const totalTrustlessFee = approverTrustlessFee + serviceProviderTrustlessFee;
+  const totalPlatformFee = approverPlatformFee + serviceProviderPlatformFee;
 
   return (
     <Dialog open={isSuccessResolveDisputeDialogOpen} onOpenChange={handleClose}>
@@ -295,17 +286,17 @@ export const SuccessResolveDisputeDialog = ({
             type="Service Provider"
             entity={escrow?.serviceProvider}
             hasPercentage={true}
-            percentage={serviceProviderPercentage.toString()}
+            percentage={platformPercentage.toString()}
             hasAmount={true}
-            amount={serviceProviderFunds.toString()}
+            amount={serviceProviderFinalAmount.toFixed(2)}
           />
           <EntityCard
             type="Approver"
             entity={escrow?.approver}
             hasPercentage={true}
-            percentage={approverPercentage.toString()}
+            percentage={platformPercentage.toString()}
             hasAmount={true}
-            amount={approverFunds.toString()}
+            amount={approverFinalAmount.toFixed(2)}
           />
           <EntityCard
             type="Trustless Work"
@@ -313,15 +304,15 @@ export const SuccessResolveDisputeDialog = ({
             hasPercentage={true}
             percentage={trustlessPercentage.toString()}
             hasAmount={true}
-            amount={trustlessAmount.toString()}
+            amount={totalTrustlessFee.toFixed(2)}
           />
           <EntityCard
             type="Platform"
             entity={escrow?.platformAddress}
             hasPercentage={true}
-            percentage={platformFee.toString()}
+            percentage={platformPercentage.toString()}
             hasAmount={true}
-            amount={platformAmount.toString()}
+            amount={totalPlatformFee.toFixed(2)}
           />
         </div>
 

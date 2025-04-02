@@ -41,7 +41,7 @@ const useResolveDisputeEscrowDialog = ({
   const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
     (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
-  const formSchema = getFormSchema(selectedEscrow);
+  const formSchema = getFormSchema();
   const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
 
   const form = useForm<z.infer<typeof formSchema>>({
