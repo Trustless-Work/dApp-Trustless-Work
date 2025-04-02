@@ -39,6 +39,7 @@ const FundEscrowDialog = ({
     onSubmit,
     handleClose,
     paymentMethod,
+    amount,
     showMoonpay,
     setShowMoonpay,
   } = useFundEscrowDialogHook({
@@ -55,6 +56,7 @@ const FundEscrowDialog = ({
       <MoonpayWidget
         visible={showMoonpay}
         wallet={selectedEscrow?.contractId || ""}
+        amount={amount}
       />
 
       <Dialog open={isSecondDialogOpen} onOpenChange={handleClose}>
