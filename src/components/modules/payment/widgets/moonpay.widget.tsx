@@ -8,21 +8,25 @@ const MoonPayBuyWidget = dynamic(
 interface MoonpayWidgetProps {
   visible: boolean;
   wallet: string;
+  amount?: string;
 }
 
-export const MoonpayWidget = ({ visible, wallet }: MoonpayWidgetProps) => {
+export const MoonpayWidget = ({
+  visible,
+  wallet,
+  amount,
+}: MoonpayWidgetProps) => {
   return (
     <MoonPayBuyWidget
       variant="overlay"
       baseCurrencyCode="usd"
-      baseCurrencyAmount="100"
+      baseCurrencyAmount={amount}
       defaultCurrencyCode="usdc_xlm"
       visible={visible}
       currencyCode="usdc_xlm"
-      redirectURL="dsadsasad"
+      redirectURL="https://moonpay.com"
       walletAddress={wallet}
       onClose={() => {
-        console.log("closed");
         return Promise.resolve();
       }}
     />
