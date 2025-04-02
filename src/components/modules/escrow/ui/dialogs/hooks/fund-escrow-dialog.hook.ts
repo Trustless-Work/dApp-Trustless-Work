@@ -3,7 +3,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "../../../schema/fund-escrow.schema";
 import { fundEscrow } from "@/components/modules/escrow/services/fund-escrow.service";
@@ -13,7 +13,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
@@ -46,7 +46,22 @@ const useFundEscrowDialog = ({
     mode: "onChange",
   });
 
+  const amount = form.watch("amount");
   const paymentMethod = form.watch("paymentMethod");
+  const setError = form.setError;
+  const clearErrors = form.clearErrors;
+
+  useEffect(() => {
+    if (paymentMethod === "card" && parseInt(amount, 10) < 20) {
+      setError("amount", {
+        type: "custom",
+        message:
+          "For card payments by Moonpay, the amount must be at least $20.",
+      });
+    } else {
+      clearErrors("amount");
+    }
+  }, [paymentMethod, amount, setError, clearErrors]);
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     setIsFundingEscrow(true);
@@ -95,6 +110,7 @@ const useFundEscrowDialog = ({
     form,
     handleClose,
     paymentMethod,
+    amount,
     showMoonpay,
     setShowMoonpay,
   };
