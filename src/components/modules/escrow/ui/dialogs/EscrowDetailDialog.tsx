@@ -46,7 +46,6 @@ import {
 import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
 import { useEffect } from "react";
-import Divider from "@/components/utils/ui/Divider";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
