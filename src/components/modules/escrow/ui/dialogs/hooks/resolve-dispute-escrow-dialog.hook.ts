@@ -43,6 +43,12 @@ const useResolveDisputeEscrowDialog = ({
   );
   const formSchema = getFormSchema();
   const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
+  const setServiceProviderResolve = useEscrowBoundedStore(
+    (state) => state.setServiceProviderResolve,
+  );
+  const setApproverResolve = useEscrowBoundedStore(
+    (state) => state.setApproverResolve,
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -81,6 +87,8 @@ const useResolveDisputeEscrowDialog = ({
 
       if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
         form.reset();
+        setServiceProviderResolve(payload.serviceProviderFunds);
+        setApproverResolve(payload.approverFunds);
         setIsResolveDisputeDialogOpen(false);
         setIsResolvingDispute(false);
         setIsDialogOpen(false);
@@ -129,6 +137,8 @@ const useResolveDisputeEscrowDialog = ({
   };
 
   const handleClose = () => {
+    setServiceProviderResolve("");
+    setApproverResolve("");
     setIsResolveDisputeDialogOpen(false);
   };
 
