@@ -12,6 +12,8 @@ export const useEscrowAmountSlice: StateCreator<
     serviceProviderAmount: 0,
     platformFeeAmount: 0,
     trustlessWorkAmount: 0,
+    serviceProviderResolve: "",
+    approverResolve: "",
 
     // Modifiers
     setAmounts: (totalAmount, platformFee) => {
@@ -24,6 +26,14 @@ export const useEscrowAmountSlice: StateCreator<
         platformFeeAmount: (totalAmount * platformFee) / 100,
         trustlessWorkAmount: (totalAmount * trustlessPercentage) / 100,
       });
+    },
+
+    setServiceProviderResolve: (value) => {
+      set({ serviceProviderResolve: value });
+    },
+
+    setApproverResolve: (value) => {
+      set({ approverResolve: value });
     },
   };
 };
