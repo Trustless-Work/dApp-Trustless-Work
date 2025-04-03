@@ -132,10 +132,14 @@ export const SuccessReleaseDialog = ({
   const { formatDollar } = useFormatUtils();
 
   // Percentage
+  const trustlessPercentage = 0.3;
   const platformFee = Number(escrow?.platformFee || 0);
-  const totalAmount = Number(escrow?.amount || 0);
+  const serviceProviderPercentage = 100 - (trustlessPercentage + platformFee);
 
   // Amount
+  const totalAmount = Number(escrow?.amount || 0);
+  const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
+  const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
   const platformAmount = (totalAmount * platformFee) / 100;
 
   return (
@@ -171,17 +175,17 @@ export const SuccessReleaseDialog = ({
             type="Service Provider"
             entity={escrow?.serviceProvider}
             hasPercentage={true}
-            percentage={"testeo1%"}
+            percentage={serviceProviderPercentage.toString()}
             hasAmount={true}
-            amount={"testeo1"}
+            amount={serviceProviderAmount.toString()}
           />
           <EntityCard
             type="Trustless Work"
             entity={"0x"}
             hasPercentage={true}
-            percentage={"testeo2%"}
+            percentage={trustlessPercentage.toString()}
             hasAmount={true}
-            amount={"testeo2"}
+            amount={trustlessAmount.toString()}
           />
           <EntityCard
             type="Platform"
@@ -224,20 +228,13 @@ export const SuccessResolveDisputeDialog = ({
   const escrow = selectedEscrow || recentEscrow;
 
   const { formatDollar } = useFormatUtils();
-  //FIX LATER
-  const totalAmount = Number(escrow?.amount || 0);
+  //const totalAmount = Number(escrow?.amount || 0);
 
-  const trustlessPercentage = 0.3; // Fee  Trustless Work
-  const platformPercentage = Number(escrow?.platformFee); // Fee  plataform
+  const trustlessPercentage = 0.3;
+  const platformPercentage = Number(escrow?.platformFee);
 
-  const approverAmount = Number(escrow?.approverFunds || "0"); //
+  const approverAmount = Number(escrow?.approverFunds || "0");
   const serviceProviderAmount = Number(escrow?.serviceProviderFunds || "0");
-
-  if (Math.abs(approverAmount + serviceProviderAmount - totalAmount) > 0.01) {
-    console.warn(
-      "La suma de las cantidades asignadas no coincide con el monto total",
-    );
-  }
 
   const approverTrustlessFee = (approverAmount * trustlessPercentage) / 100;
   const approverPlatformFee = (approverAmount * platformPercentage) / 100;

@@ -51,6 +51,7 @@ export const GetFormSchema = () => {
         message:
           "Platform fee must be a number with at most one decimal place.",
       }),
+
     amount: z
       .string()
       .min(1, {

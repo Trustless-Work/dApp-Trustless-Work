@@ -13,6 +13,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
+import { useEffect, useState } from "react";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
@@ -21,6 +22,8 @@ interface useFundEscrowDialogProps {
 const useFundEscrowDialog = ({
   setIsSecondDialogOpen,
 }: useFundEscrowDialogProps) => {
+  const [showMoonpay, setShowMoonpay] = useState(false);
+
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsFundingEscrow = useEscrowBoundedStore(
@@ -43,38 +46,25 @@ const useFundEscrowDialog = ({
     mode: "onChange",
   });
 
+  const amount = form.watch("amount");
+  const paymentMethod = form.watch("paymentMethod");
+  const setError = form.setError;
+  const clearErrors = form.clearErrors;
+
+  useEffect(() => {
+    if (paymentMethod === "card" && parseInt(amount, 10) < 20) {
+      setError("amount", {
+        type: "custom",
+        message:
+          "For card payments by Moonpay, the amount must be at least $20.",
+      });
+    } else {
+      clearErrors("amount");
+    }
+  }, [paymentMethod, amount, setError, clearErrors]);
+
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     setIsFundingEscrow(true);
-
-    if (payload.paymentMethod === "card") {
-      payByMoonpay(payload);
-    } else {
-      payByWallet(payload);
-    }
-  };
-
-  const payByMoonpay = async (payload: z.infer<typeof formSchema>) => {
-    const deployedMoonPayUrl = `https://buy-sandbox.moonpay.com/?apiKey=${process.env.NEXT_PUBLIC_MOONPAY_API_KEY}&theme=dark&defaultCurrencyCode=eth&baseCurrencyAmount=${payload.amount}&colorCode=%237d01ff`;
-
-    if (typeof window === "undefined") return;
-
-    const params = new URLSearchParams({
-      contractId: selectedEscrow?.contractId || "",
-      amount: payload.amount,
-      engagementId: selectedEscrow?.engagementId || "",
-      callbackUrl: `${window.location.origin}/api/moonpay-callback`,
-    });
-
-    const fullUrl = `${deployedMoonPayUrl}&${params.toString()}`;
-
-    window.open(
-      fullUrl,
-      "moonpayPopup",
-      "width=500,height=600,scrollbars=yes,resizable=yes",
-    );
-  };
-
-  const payByWallet = async (payload: z.infer<typeof formSchema>) => {
     try {
       const data = await fundEscrow({
         signer: address,
@@ -115,7 +105,15 @@ const useFundEscrowDialog = ({
     setIsSecondDialogOpen(false);
   };
 
-  return { onSubmit, form, handleClose };
+  return {
+    onSubmit,
+    form,
+    handleClose,
+    paymentMethod,
+    amount,
+    showMoonpay,
+    setShowMoonpay,
+  };
 };
 
 export default useFundEscrowDialog;
