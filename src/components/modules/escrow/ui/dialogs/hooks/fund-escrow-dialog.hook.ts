@@ -13,6 +13,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
+import { useEffect, useState } from "react";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen: (value: boolean) => void;
@@ -21,6 +22,8 @@ interface useFundEscrowDialogProps {
 const useFundEscrowDialog = ({
   setIsSecondDialogOpen,
 }: useFundEscrowDialogProps) => {
+  const [showMoonpay, setShowMoonpay] = useState(false);
+
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsFundingEscrow = useEscrowBoundedStore(
@@ -38,13 +41,30 @@ const useFundEscrowDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       amount: "",
+      paymentMethod: "",
     },
     mode: "onChange",
   });
 
+  const amount = form.watch("amount");
+  const paymentMethod = form.watch("paymentMethod");
+  const setError = form.setError;
+  const clearErrors = form.clearErrors;
+
+  useEffect(() => {
+    if (paymentMethod === "card" && parseInt(amount, 10) < 20) {
+      setError("amount", {
+        type: "custom",
+        message:
+          "For card payments by Moonpay, the amount must be at least $20.",
+      });
+    } else {
+      clearErrors("amount");
+    }
+  }, [paymentMethod, amount, setError, clearErrors]);
+
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     setIsFundingEscrow(true);
-
     try {
       const data = await fundEscrow({
         signer: address,
@@ -85,7 +105,15 @@ const useFundEscrowDialog = ({
     setIsSecondDialogOpen(false);
   };
 
-  return { onSubmit, form, handleClose };
+  return {
+    onSubmit,
+    form,
+    handleClose,
+    paymentMethod,
+    amount,
+    showMoonpay,
+    setShowMoonpay,
+  };
 };
 
 export default useFundEscrowDialog;
