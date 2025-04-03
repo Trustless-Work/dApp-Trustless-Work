@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import MoonpayClientProvider from "@/providers/MoonpayClientProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 const Exo2 = localFont({
   src: "./fonts/Exo2.ttf",
@@ -24,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(Exo2.variable, "antialiased")}>
+        <Analytics />
         <MoonpayClientProvider>
           <div className="relative flex min-h-screen w-full">
             <div className="flex-1 flex flex-col w-full">
