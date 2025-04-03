@@ -45,7 +45,6 @@ import {
 } from "./SuccessDialog";
 import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
-import { useEscrowAmounts } from "./hooks/use-escrow-amounts";
 import { useEffect } from "react";
 
 interface EscrowDetailDialogProps {
@@ -86,8 +85,17 @@ const EscrowDetailDialog = ({
   const { formatAddress, formatText, formatDollar, formatDateFromFirebase } =
     useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
-  const { serviceProvider, platformFee, trustlessWork, setAmounts } =
-    useEscrowAmounts();
+  const serviceProviderAmount = useEscrowBoundedStore(
+    (state) => state.serviceProviderAmount,
+  );
+  const platformFeeAmount = useEscrowBoundedStore(
+    (state) => state.platformFeeAmount,
+  );
+  const trustlessWorkAmount = useEscrowBoundedStore(
+    (state) => state.trustlessWorkAmount,
+  );
+  const setAmounts = useEscrowBoundedStore((state) => state.setAmounts);
+
   const totalAmount = Number(selectedEscrow?.amount || 0);
   const platformFeePercentage = Number(selectedEscrow?.platformFee || 0);
 
@@ -458,7 +466,6 @@ const EscrowDetailDialog = ({
               </div>
             </CardContent>
           </Card>
-          {/* work here */}
           <div className="flex w-full justify-between">
             <p className="italic text-sm">
               <span className="font-bold mr-1">Created:</span>
@@ -467,17 +474,18 @@ const EscrowDetailDialog = ({
                 selectedEscrow.createdAt.nanoseconds,
               )}
             </p>
-            {!selectedEscrow.releaseFlag && (
+            {!selectedEscrow.releaseFlag && !selectedEscrow.resolvedFlag && (
               <>
                 <p className="text-sm">
                   <strong>Service Provider:</strong> $
-                  {serviceProvider.toFixed(2)}
+                  {serviceProviderAmount.toFixed(2)}
                 </p>
                 <p className="text-sm">
-                  <strong>Platform Fee:</strong> ${platformFee.toFixed(2)}
+                  <strong>Platform Fee:</strong> ${platformFeeAmount.toFixed(2)}
                 </p>
                 <p className="text-sm">
-                  <strong>Trustless Work:</strong> ${trustlessWork.toFixed(2)}
+                  <strong>Trustless Work:</strong> $
+                  {trustlessWorkAmount.toFixed(2)}
                 </p>
               </>
             )}
