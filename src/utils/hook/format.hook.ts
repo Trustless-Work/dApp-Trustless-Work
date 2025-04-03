@@ -35,6 +35,9 @@ export const useFormatUtils = () => {
 
     const parsedAmount = parseFloat(amount.toString());
     if (isNaN(parsedAmount)) return "$0.00";
+
+    // ! ALL THE DECIMALS
+    //return `$${parsedAmount.toString().replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
     return `$${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
   };
 

@@ -25,6 +25,7 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import { DollarSign } from "lucide-react";
 import type { Escrow } from "../../../../../@types/escrow.entity";
 import { useFormatUtils } from "@/utils/hook/format.hook";
+import { Card } from "@/components/ui/card";
 
 interface ResolveDisputeEscrowDialogProps {
   isResolveDisputeDialogOpen: boolean;
@@ -56,6 +57,9 @@ const ResolveDisputeEscrowDialog = ({
   );
   const [isEqualToAmount, setIsEqualToAmount] = useState<boolean>(false);
   const [isMissing, setIsMissing] = useState<number>(0);
+  const [totalPlatformAmount, setTotalPlatformAmount] = useState<number>(0);
+  const [totalTrustlessWorkAmount, setTotalTrustlessWorkAmount] =
+    useState<number>(0);
 
   const trustlessWorkFee = 0.003;
 
@@ -63,10 +67,21 @@ const ResolveDisputeEscrowDialog = ({
   const serviceProviderFunds = form.watch("serviceProviderFunds");
 
   useEffect(() => {
-    const platformFee = parseFloat(escrow?.platformFee || "0");
-
+    const platformFee = parseFloat(escrow?.platformFee || "0") / 100;
     const parsedApproverFunds = parseFloat(approverFunds) || 0;
     const parsedServiceProviderFunds = parseFloat(serviceProviderFunds) || 0;
+
+    setTotalPlatformAmount(
+      selectedEscrow?.amount && !isNaN(Number(selectedEscrow.amount))
+        ? Number(selectedEscrow.amount) * platformFee
+        : 0,
+    );
+
+    setTotalTrustlessWorkAmount(
+      selectedEscrow?.amount && !isNaN(Number(selectedEscrow.amount))
+        ? Number(selectedEscrow.amount) * trustlessWorkFee
+        : 0,
+    );
 
     if (
       isNaN(parsedApproverFunds) ||
@@ -109,7 +124,7 @@ const ResolveDisputeEscrowDialog = ({
 
   return (
     <Dialog open={isResolveDisputeDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Resolve Dispute</DialogTitle>
           <DialogDescription>
@@ -122,20 +137,34 @@ const ResolveDisputeEscrowDialog = ({
             </strong>
           </DialogDescription>
 
-          <p className="text-end text-sm text-gray-400 p-0">
-            <span className="font-extrabold">Balance:</span>{" "}
-            {formatDollar(escrow.balance)}
-          </p>
+          <Card className="grid grid-cols-1 gap-4 !mt-4 p-4">
+            <p className="text-sm text-gray-400 p-0">
+              <span className="font-extrabold">Total Balance:</span>{" "}
+              {formatDollar(escrow.balance)}
+            </p>
 
-          <p className="text-end text-sm text-gray-400 p-0">
-            <span className="font-extrabold">Approver Net:</span>{" "}
-            {formatDollar(approverNet?.toFixed(2).toString())}
-          </p>
+            <div className="grid grid-cols-2 gap-4">
+              <p className="text-sm text-gray-400 p-0">
+                <span className="font-extrabold">Approver Net:</span>{" "}
+                {formatDollar(approverNet?.toString())}
+              </p>
 
-          <p className="text-end text-sm text-gray-400 p-0">
-            <span className="font-extrabold">Service Provider Net:</span>{" "}
-            {formatDollar(serviceProviderNet?.toFixed(2).toString())}
-          </p>
+              <p className="text-sm text-gray-400 p-0">
+                <span className="font-extrabold">Service Provider Net:</span>{" "}
+                {formatDollar(serviceProviderNet?.toString())}
+              </p>
+
+              <p className="text-sm text-gray-400 p-0">
+                <span className="font-extrabold">Platform Net:</span>{" "}
+                {formatDollar(totalPlatformAmount?.toString())}
+              </p>
+
+              <p className="text-sm text-gray-400 p-0">
+                <span className="font-extrabold">Trustless Work Net:</span>{" "}
+                {formatDollar(totalTrustlessWorkAmount?.toString())}
+              </p>
+            </div>
+          </Card>
         </DialogHeader>
 
         {isResolvingDispute ? (
