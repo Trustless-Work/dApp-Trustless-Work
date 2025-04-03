@@ -24,10 +24,13 @@ export const MoonpayWidget = ({
       visible={visible}
       redirectURL="https://moonpay.com/"
       walletAddress={wallet}
+      // showWalletAddressForm="true"
+      //showOnlyCurrencies="btc,eth,usdt,usdc,sol"
       showOnlyCurrencies="usdc_xlm"
-      onClose={() => {
-        return Promise.resolve();
-      }}
+
+      // onClose={() => {
+      //   return Promise.resolve();
+      // }}
     />
   );
 };
