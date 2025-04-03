@@ -13,6 +13,7 @@ interface EntityCardProps {
   percentage?: string;
   amount?: string;
   inDispute?: boolean;
+  isNet?: boolean;
 }
 
 const EntityCard = ({
@@ -23,6 +24,7 @@ const EntityCard = ({
   percentage,
   amount,
   inDispute,
+  isNet,
 }: EntityCardProps) => {
   const { formatAddress, formatDollar } = useFormatUtils();
   const [user, setUser] = useState<User | undefined>(undefined);
@@ -57,7 +59,7 @@ const EntityCard = ({
           )}
           {hasAmount && (
             <div className="flex">
-              <p className="mr-1 font-bold">Amount:</p>
+              <p className="mr-1 font-bold">{isNet && "Net"} Amount:</p>
               <span className="text-green-700">{formatDollar(amount)}</span>
             </div>
           )}
