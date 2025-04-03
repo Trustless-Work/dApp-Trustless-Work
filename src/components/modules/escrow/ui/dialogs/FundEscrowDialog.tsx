@@ -127,7 +127,7 @@ const FundEscrowDialog = ({
                                 <RadioGroupItem value="wallet" />
                               </FormControl>
                               <FormLabel className="font-normal">
-                                Pay with Wallet
+                                Pay by Wallet
                               </FormLabel>
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
@@ -135,7 +135,7 @@ const FundEscrowDialog = ({
                                 <RadioGroupItem value="card" />
                               </FormControl>
                               <FormLabel className="font-normal">
-                                Pay with Card (via MoonPay)
+                                Pay by Card (via MoonPay)
                               </FormLabel>
                             </FormItem>
                           </RadioGroup>
