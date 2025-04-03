@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form";
 import { firebaseStorage } from "../../../../../firebase";
 import { v4 } from "uuid";
 import { toast } from "@/hooks/toast.hook";
+import formSchema from "../schema/profile.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 interface useProfileProps {
   onSave: (data: UserPayload) => void;
@@ -20,7 +23,8 @@ const useProfile = ({ onSave }: useProfileProps) => {
   const address = useGlobalAuthenticationStore((state) => state.address);
   const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       identification: loggedUser?.identification || "",
       firstName: loggedUser?.firstName || "",
