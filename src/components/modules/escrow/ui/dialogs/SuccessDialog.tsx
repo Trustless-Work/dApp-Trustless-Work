@@ -19,6 +19,7 @@ import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
 import { Check, Copy } from "lucide-react";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import useSuccessResolveDisputeDialog from "./hooks/success-resolve-dispute-dialog.hook";
+import { useEscrowBoundedStore } from "../../store/ui";
 
 interface SuccessDialogProps {
   title: string;
@@ -225,33 +226,53 @@ export const SuccessResolveDisputeDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const escrow = selectedEscrow || recentEscrow;
+  const serviceProviderResolveFromStore = useEscrowBoundedStore(
+    (state) => state.serviceProviderResolve,
+  );
+  const approverResolveFromStore = useEscrowBoundedStore(
+    (state) => state.approverResolve,
+  );
 
+  const serviceProviderResolve =
+    serviceProviderResolveFromStore && serviceProviderResolveFromStore !== ""
+      ? serviceProviderResolveFromStore
+      : selectedEscrow?.serviceProviderFunds;
+
+  const approverResolve =
+    approverResolveFromStore && approverResolveFromStore !== ""
+      ? approverResolveFromStore
+      : selectedEscrow?.approverFunds;
+
+  const escrow = selectedEscrow || recentEscrow;
   const { formatDollar } = useFormatUtils();
-  //const totalAmount = Number(escrow?.amount || 0);
 
   const trustlessPercentage = 0.3;
+  const trustlessWorkFee = 0.003;
   const platformPercentage = Number(escrow?.platformFee);
 
-  const approverAmount = Number(escrow?.approverFunds || "0");
-  const serviceProviderAmount = Number(escrow?.serviceProviderFunds || "0");
+  const trustlessWorkAmount = Number(escrow?.amount) * trustlessWorkFee;
+  const platformFee = parseFloat(escrow?.platformFee || "0");
 
-  const approverTrustlessFee = (approverAmount * trustlessPercentage) / 100;
-  const approverPlatformFee = (approverAmount * platformPercentage) / 100;
-  const approverFinalAmount =
-    approverAmount - approverTrustlessFee - approverPlatformFee;
+  const parsedApproverFunds = parseFloat(approverResolve || "0") || 0;
+  const parsedServiceProviderFunds =
+    parseFloat(serviceProviderResolve || "0") || 0;
 
-  const serviceProviderTrustlessFee =
-    (serviceProviderAmount * trustlessPercentage) / 100;
-  const serviceProviderPlatformFee =
-    (serviceProviderAmount * platformPercentage) / 100;
-  const serviceProviderFinalAmount =
-    serviceProviderAmount -
-    serviceProviderTrustlessFee -
-    serviceProviderPlatformFee;
+  const approverDeductions =
+    parsedApproverFunds * (platformFee / 100) +
+    parsedApproverFunds * trustlessWorkFee;
 
-  const totalTrustlessFee = approverTrustlessFee + serviceProviderTrustlessFee;
-  const totalPlatformFee = approverPlatformFee + serviceProviderPlatformFee;
+  const serviceProviderDeductions =
+    parsedServiceProviderFunds * (platformFee / 100) +
+    parsedServiceProviderFunds * trustlessWorkFee;
+
+  const approverNet = parsedApproverFunds - approverDeductions;
+  const serviceProviderNet =
+    parsedServiceProviderFunds - serviceProviderDeductions;
+
+  const totalPlatformAmount =
+    selectedEscrow?.amount && !isNaN(Number(selectedEscrow.amount))
+      ? Number(selectedEscrow.amount) * (platformFee / 100)
+      : 0;
 
   return (
     <Dialog open={isSuccessResolveDisputeDialogOpen} onOpenChange={handleClose}>
@@ -285,18 +306,18 @@ export const SuccessResolveDisputeDialog = ({
           <EntityCard
             type="Service Provider"
             entity={escrow?.serviceProvider}
-            hasPercentage={true}
-            percentage={platformPercentage.toString()}
+            hasPercentage={false}
             hasAmount={true}
-            amount={serviceProviderFinalAmount.toFixed(2)}
+            isNet={true}
+            amount={serviceProviderNet.toString()}
           />
           <EntityCard
             type="Approver"
             entity={escrow?.approver}
-            hasPercentage={true}
-            percentage={platformPercentage.toString()}
+            hasPercentage={false}
             hasAmount={true}
-            amount={approverFinalAmount.toFixed(2)}
+            isNet={true}
+            amount={approverNet.toString()}
           />
           <EntityCard
             type="Trustless Work"
@@ -304,7 +325,7 @@ export const SuccessResolveDisputeDialog = ({
             hasPercentage={true}
             percentage={trustlessPercentage.toString()}
             hasAmount={true}
-            amount={totalTrustlessFee.toFixed(2)}
+            amount={trustlessWorkAmount.toString()}
           />
           <EntityCard
             type="Platform"
@@ -312,7 +333,7 @@ export const SuccessResolveDisputeDialog = ({
             hasPercentage={true}
             percentage={platformPercentage.toString()}
             hasAmount={true}
-            amount={totalPlatformFee.toFixed(2)}
+            amount={totalPlatformAmount.toString()}
           />
         </div>
 
