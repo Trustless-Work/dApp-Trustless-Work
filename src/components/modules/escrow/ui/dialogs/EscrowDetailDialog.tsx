@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
 import type { Escrow } from "@/@types/escrow.entity";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
@@ -46,6 +46,7 @@ import {
 import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
 import { useEffect } from "react";
+import Divider from "@/components/utils/ui/Divider";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -466,8 +467,8 @@ const EscrowDetailDialog = ({
               </div>
             </CardContent>
           </Card>
-          <div className="flex w-full justify-between">
-            <p className="italic text-sm">
+          <div className="flex sm:flex-row flex-col w-full justify-between mb-80 sm:mb-0">
+            <p className="italic text-sm sm:mb-0 mb-3">
               <span className="font-bold mr-1">Created:</span>
               {formatDateFromFirebase(
                 selectedEscrow.createdAt.seconds,
@@ -475,19 +476,26 @@ const EscrowDetailDialog = ({
               )}
             </p>
             {!selectedEscrow.releaseFlag && !selectedEscrow.resolvedFlag && (
-              <>
-                <p className="text-sm">
-                  <strong>Service Provider:</strong> $
-                  {serviceProviderAmount.toFixed(2)}
-                </p>
-                <p className="text-sm">
-                  <strong>Platform Fee:</strong> ${platformFeeAmount.toFixed(2)}
-                </p>
-                <p className="text-sm">
-                  <strong>Trustless Work:</strong> $
-                  {trustlessWorkAmount.toFixed(2)}
-                </p>
-              </>
+              <Card className="flex gap-10 items-center p-5">
+                <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 pr-3">
+                  Release Amount Distribution
+                </CardTitle>
+
+                <div className="flex gap-10 sm:flex-row flex-col">
+                  <p className="text-sm">
+                    <strong>Service Provider:</strong> $
+                    {serviceProviderAmount.toFixed(2)}
+                  </p>
+                  <p className="text-sm">
+                    <strong>Platform Fee:</strong> $
+                    {platformFeeAmount.toFixed(2)}
+                  </p>
+                  <p className="text-sm">
+                    <strong>Trustless Work:</strong> $
+                    {trustlessWorkAmount.toFixed(2)}
+                  </p>
+                </div>
+              </Card>
             )}
             {areAllMilestonesCompleted &&
               areAllMilestonesCompletedAndFlag &&
