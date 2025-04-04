@@ -36,6 +36,7 @@ export interface Escrow {
   serviceProviderFunds?: string;
   receiver?: string;
   receiverMemo?: number;
+  disputeStartedBy?: string;
 }
 
 export type RolesInEscrow =
