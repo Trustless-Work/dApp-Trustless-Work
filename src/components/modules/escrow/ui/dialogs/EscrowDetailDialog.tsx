@@ -405,7 +405,7 @@ const EscrowDetailDialog = ({
                         key={`${milestone.description}-${milestone.status}`}
                         className="flex items-center space-x-4"
                       >
-                        {milestone.flag ? (
+                        {milestone.approved_flag ? (
                           <Badge className="uppercase max-w-24">Approved</Badge>
                         ) : (
                           <Badge
@@ -425,7 +425,7 @@ const EscrowDetailDialog = ({
                         {userRolesInEscrow.includes("serviceProvider") &&
                           activeTab === "serviceProvider" &&
                           milestone.status !== "completed" &&
-                          !milestone.flag && (
+                          !milestone.approved_flag && (
                             <Button
                               className="max-w-32"
                               onClick={() =>
@@ -443,7 +443,7 @@ const EscrowDetailDialog = ({
                         {userRolesInEscrow.includes("approver") &&
                           activeTab === "approver" &&
                           milestone.status === "completed" &&
-                          !milestone.flag && (
+                          !milestone.approved_flag && (
                             <Button
                               className="max-w-32"
                               onClick={() =>

@@ -6,7 +6,7 @@ export type MilestoneStatus = "completed" | "approved" | "pending";
 export type Milestone = {
   description: string;
   status?: MilestoneStatus;
-  flag?: boolean;
+  approved_flag?: boolean;
 };
 
 export interface Escrow {

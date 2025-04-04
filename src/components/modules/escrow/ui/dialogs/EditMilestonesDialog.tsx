@@ -73,7 +73,7 @@ const EditMilestonesDialog = ({
                       className="flex flex-col gap-4"
                     >
                       <div className="flex items-center space-x-4">
-                        {milestone.flag ? (
+                        {milestone.approved_flag ? (
                           <Badge className="uppercase max-w-24">Approved</Badge>
                         ) : (
                           <Badge
@@ -102,7 +102,7 @@ const EditMilestonesDialog = ({
                           disabled={
                             index === 0 ||
                             milestone.status === "completed" ||
-                            milestone.flag
+                            milestone.approved_flag
                           }
                         >
                           <Trash2 className="h-5 w-5" />
