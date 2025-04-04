@@ -34,6 +34,8 @@ export interface Escrow {
   resolvedFlag?: boolean;
   approverFunds?: string;
   serviceProviderFunds?: string;
+  receiver?: string;
+  receiverMemo?: number;
 }
 
 export type RolesInEscrow =
