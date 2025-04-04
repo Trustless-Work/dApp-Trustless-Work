@@ -85,10 +85,6 @@ Make sure to set up the following environment variable in your `.env` file:
 
 ```
 
-# Branch Main -> v.1 API
-# ! OBSOLETE FOR THIS dApp VERSION !
-NEXT_PUBLIC_API_URL=https://api.trustlesswork.com
-
 # Branch Develop -> v.2 API
 NEXT_PUBLIC_API_URL=https://dev.api.trustlesswork.com
 
@@ -102,6 +98,15 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
 NEXT_PUBLIC_FIREBASE_APP_ID=
+
+# MOONPAY -> If you won't use Moonpay, skip these env
+NEXT_PUBLIC_MOONPAY_API_KEY=
+MOONPAY_SECRET_KEY=
+
+# MAINTANANCE MODE
+NEXT_PUBLIC_MAINTENANCE_MODE=false
+NEXT_PUBLIC_COUNTDOWN_HOURS=2
+NEXT_PUBLIC_COUNTDOWN_MINUTES=30
 
 ```
 
@@ -129,6 +134,24 @@ name
 
 trustline
 "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5"
+(string)
+
+
+trustlineDecimals
+10000000
+(number)
+```
+
+and
+
+```
+name
+"EURC"
+(string)
+
+
+trustline
+"GB3Q6QDZYTHWT7E5PVS3W7FUT5GVAFC5KSZFFLPU25GO7VTC3NM2ZTVO"
 (string)
 
 
