@@ -65,13 +65,15 @@ const useFundEscrowDialog = ({
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     setIsFundingEscrow(true);
+
     try {
-      const data = await fundEscrow({
+      const response = await fundEscrow({
         signer: address,
         amount: payload.amount,
         contractId: selectedEscrow!.contractId,
       });
-      if (data.status === "SUCCESS" || data.status === 201) {
+
+      if (response.status === "SUCCESS" || response.status === 201) {
         form.reset();
         setIsSecondDialogOpen(false);
         setIsFundingEscrow(false);
@@ -86,7 +88,7 @@ const useFundEscrowDialog = ({
         setIsFundingEscrow(false);
         toast({
           title: "Error",
-          description: data.message || "An error occurred",
+          description: response.message || "An error occurred",
           variant: "destructive",
         });
       }
