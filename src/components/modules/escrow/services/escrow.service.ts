@@ -3,11 +3,7 @@ import type {
   EscrowPayload,
   BalanceItem,
 } from "@/@types/escrow.entity";
-import {
-  getAllEscrowsByUser,
-  updateEscrow,
-  addEscrow,
-} from "../server/escrow.firebase";
+import { getAllEscrowsByUser, updateEscrow } from "../server/escrow.firebase";
 import { getBalance } from "./get-balance.service";
 
 export const fetchAllEscrows = async ({
@@ -49,15 +45,6 @@ export const fetchAllEscrows = async ({
       return escrow;
     }),
   );
-};
-
-export const addNewEscrow = async (
-  payload: EscrowPayload,
-  address: string,
-  contractId: string,
-): Promise<Escrow | undefined> => {
-  const response = await addEscrow({ payload, address, contractId });
-  return response?.data;
 };
 
 export const updateExistingEscrow = async ({
