@@ -320,8 +320,54 @@ const InitializeEscrowForm = () => {
               )}
             />
           </div>
+          <div className="col-span-5">
+            <FormField
+              control={form.control}
+              name="receiver"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center justify-between">
+                    <span className="flex items-center">
+                      Receiver <span className="text-destructive ml-1">*</span>
+                      <TooltipInfo content="Reciever wallet address." />
+                    </span>
+                    <Switch
+                      checked={showSelect.receiver}
+                      onCheckedChange={(value) =>
+                        toggleField("receiver", value)
+                      }
+                      title="Show Users List?"
+                    />
+                  </FormLabel>
+                  <FormControl>
+                    {showSelect.receiver ? (
+                      <SelectField
+                        control={form.control}
+                        name="receiver"
+                        label=""
+                        tooltipContent=""
+                        options={userOptions}
+                      />
+                    ) : (
+                      <Input
+                        placeholder="Enter reciever address"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleFieldChange("receiver", e.target.value);
+                        }}
+                      />
+                    )}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
 
-          <div className="col-span-2">
+        <div className="grid grid-cols-10 gap-4">
+          <div className="col-span-3">
             <FormField
               control={form.control}
               name="platformFee"
@@ -381,6 +427,33 @@ const InitializeEscrowForm = () => {
                         }}
                       />
                     </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="col-span-4">
+            <FormField
+              control={form.control}
+              name="receiverMemo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex items-center">
+                    Receiver Memo
+                    <TooltipInfo content="Total receiver Memo to be held in escrow." />
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Enter the escrow receiver Memo"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleFieldChange("receiverMemo", e.target.value);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
