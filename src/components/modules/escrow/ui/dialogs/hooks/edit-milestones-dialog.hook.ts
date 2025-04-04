@@ -85,14 +85,9 @@ const useEditMilestonesDialog = ({
         contractId: selectedEscrow.contractId || "",
       };
 
-      const data = await editMilestones(newPayload);
+      const response = await editMilestones(newPayload);
 
-      const response = await updateEscrow({
-        escrowId: selectedEscrow.id,
-        payload: updatedEscrow,
-      });
-
-      if ((data.status === "SUCCESS" || data.status === 201) && response) {
+      if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });
         setIsEditMilestoneDialogOpen(false);
         setIsDialogOpen(false);
