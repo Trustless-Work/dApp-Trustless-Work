@@ -137,6 +137,24 @@ trustlineDecimals
 (number)
 ```
 
+and
+
+```
+name
+"EURC"
+(string)
+
+
+trustline
+"GB3Q6QDZYTHWT7E5PVS3W7FUT5GVAFC5KSZFFLPU25GO7VTC3NM2ZTVO"
+(string)
+
+
+trustlineDecimals
+10000000
+(number)
+```
+
 ## Wallet Requirements
 
 To use this project, you must have one of the following wallets installed:
