@@ -140,7 +140,7 @@ const EscrowDetailDialog = ({
                   "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
                 )}
               >
-                <CardContent className="p-6">
+                <CardContent className="p-6 min-h-36">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-muted-foreground">
                       Status
@@ -148,7 +148,15 @@ const EscrowDetailDialog = ({
                     <Ban className="text-destructive" size={30} />
                   </div>
                   <div className="mt-2 flex items-baseline">
-                    <h3 className="text-2xl font-semibold">In Dispute</h3>
+                    <h3 className="text-2xl font-semibold">
+                      In Dispute
+                      <p className="text-sm text-muted-foreground mt-2">
+                        <span className="font-bold">By: </span>
+                        {selectedEscrow.disputeStartedBy === "serviceProvider"
+                          ? "Service Provider"
+                          : "Approver"}
+                      </p>
+                    </h3>
                   </div>
                 </CardContent>
               </Card>
@@ -160,7 +168,7 @@ const EscrowDetailDialog = ({
                   "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
                 )}
               >
-                <CardContent className="p-6">
+                <CardContent className="p-6 min-h-36">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-muted-foreground">
                       Status
@@ -190,7 +198,7 @@ const EscrowDetailDialog = ({
                   "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
                 )}
               >
-                <CardContent className="p-6">
+                <CardContent className="p-6 min-h-36">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-muted-foreground">
                       Status
@@ -220,7 +228,7 @@ const EscrowDetailDialog = ({
                 "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
               )}
             >
-              <CardContent className="p-6">
+              <CardContent className="p-6 min-h-36">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-muted-foreground">
                     Amount
@@ -240,7 +248,7 @@ const EscrowDetailDialog = ({
                 "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
               )}
             >
-              <CardContent className="p-6">
+              <CardContent className="p-6 min-h-36">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-muted-foreground">
                     Balance

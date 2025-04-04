@@ -24,6 +24,7 @@ const useStartDisputeEscrowDialog = () => {
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
+  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
   const activeTab = useEscrowBoundedStore((state) => state.activeTab);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
@@ -43,6 +44,13 @@ const useStartDisputeEscrowDialog = () => {
       if (response.status === "SUCCESS") {
         setIsDialogOpen(false);
         setSelectedEscrow(undefined);
+        updateEscrow({
+          escrowId: selectedEscrow.id,
+          payload: {
+            ...selectedEscrow,
+            disputeStartedBy: activeTab,
+          },
+        });
         fetchAllEscrows({ address, type: activeTab || "client" });
 
         toast({
