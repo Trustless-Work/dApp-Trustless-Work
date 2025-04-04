@@ -24,6 +24,7 @@ export const useInitializeEscrow = () => {
     platformAddress: false,
     releaseSigner: false,
     disputeResolver: false,
+    receiver: false,
   });
 
   const { address } = useGlobalAuthenticationStore();
@@ -65,8 +66,10 @@ export const useInitializeEscrow = () => {
       description: "",
       serviceProvider: "",
       platformAddress: "",
+      receiver: "",
       platformFee: "",
       amount: "",
+      receiverMemo: "",
       releaseSigner: "",
       disputeResolver: "",
       milestones: [{ description: "" }],
@@ -119,27 +122,13 @@ export const useInitializeEscrow = () => {
           platformFee: platformFeeDecimal.toString(),
           issuer: address,
           trustlineDecimals: trustlineObject?.trustlineDecimals,
-          receiver: address,
-          receiverMemo: 123456789,
+          receiverMemo: Number(payload.receiverMemo),
         },
         address,
       );
 
       if (data.status === "SUCCESS" || data.status === 201) {
         setIsSuccessDialogOpen(true);
-
-        // if (loggedUser?.saveEscrow) {
-        //   await addEscrow(
-        //     {
-        //       ...data.escrow,
-        //       platformFee: platformFeeDecimal.toString(),
-        //       trustline: trustlineObject,
-        //     },
-        //     address,
-        //     data.contract_id,
-        //   );
-        // }
-
         setRecentEscrow({ ...data.escrow, contractId: data.contract_id });
         resetSteps();
         setCurrentStep(1);
