@@ -27,7 +27,6 @@ const useEditMilestonesDialog = ({
   const setIsEditingMilestones = useEscrowBoundedStore(
     (state) => state.setIsEditingMilestones,
   );
-  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );

@@ -116,7 +116,7 @@ const ResolveDisputeEscrowDialog = ({
         parsedServiceProviderFunds -
         parseFloat(escrow?.balance || "0"),
     );
-  }, [approverFunds, serviceProviderFunds, escrow]);
+  }, [approverFunds, serviceProviderFunds, escrow, selectedEscrow?.amount]);
 
   if (!escrow) {
     return null;
