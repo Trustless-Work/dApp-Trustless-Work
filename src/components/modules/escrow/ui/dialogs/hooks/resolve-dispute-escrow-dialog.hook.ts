@@ -10,7 +10,7 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { resolveDispute } from "../../../services/resolve-dispute.service";
-import { EscrowPayload, ResolveDisputePayload } from "@/@types/escrow.entity";
+import { ResolveDisputePayload } from "@/@types/escrow.entity";
 import { MouseEvent } from "react";
 import { getFormSchema } from "../../../schema/resolve-dispute-escrow.schema";
 import { toast } from "@/hooks/toast.hook";
@@ -42,7 +42,6 @@ const useResolveDisputeEscrowDialog = ({
     (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
   const formSchema = getFormSchema();
-  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
   const setServiceProviderResolve = useEscrowBoundedStore(
     (state) => state.setServiceProviderResolve,
   );
@@ -65,27 +64,14 @@ const useResolveDisputeEscrowDialog = ({
     if (!selectedEscrow) return;
 
     try {
-      const data = await resolveDispute({
+      const response = await resolveDispute({
         contractId: selectedEscrow?.contractId,
         disputeResolver: selectedEscrow?.disputeResolver,
         approverFunds: payload.approverFunds,
         serviceProviderFunds: payload.serviceProviderFunds,
       });
 
-      const updatedPayload: EscrowPayload = {
-        ...selectedEscrow,
-        resolvedFlag: true,
-        disputeFlag: false,
-        approverFunds: payload.approverFunds,
-        serviceProviderFunds: payload.serviceProviderFunds,
-      };
-
-      const responseFlag = await updateEscrow({
-        escrowId: selectedEscrow.id,
-        payload: updatedPayload,
-      });
-
-      if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
+      if (response.status === "SUCCESS") {
         form.reset();
         setServiceProviderResolve(payload.serviceProviderFunds);
         setApproverResolve(payload.approverFunds);
@@ -101,13 +87,13 @@ const useResolveDisputeEscrowDialog = ({
 
         toast({
           title: "Success",
-          description: data.message,
+          description: response.message,
         });
       } else {
         setIsResolvingDispute(false);
         toast({
           title: "Error",
-          description: data.message || "An error occurred",
+          description: response.message || "An error occurred",
           variant: "destructive",
         });
       }
