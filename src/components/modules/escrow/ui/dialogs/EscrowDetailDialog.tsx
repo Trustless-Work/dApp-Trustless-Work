@@ -46,6 +46,7 @@ import {
 import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
 import { useEffect } from "react";
+import Link from "next/link";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -112,9 +113,15 @@ const EscrowDetailDialog = ({
           <DialogHeader>
             <div className="md:w-2/4 w-full">
               <div className="flex flex-col gap-2">
-                <DialogTitle className="text-xl">
-                  {selectedEscrow.title} - {selectedEscrow.engagementId}
-                </DialogTitle>
+                <Link
+                  href={`https://stellar.expert/explorer/testnet/contract/${selectedEscrow.contractId}`}
+                  target="_blank"
+                  className="hover:underline"
+                >
+                  <DialogTitle className="text-xl">
+                    {selectedEscrow.title} - {selectedEscrow.engagementId}
+                  </DialogTitle>
+                </Link>
                 <DialogDescription>
                   {selectedEscrow.description}
                 </DialogDescription>
@@ -499,6 +506,7 @@ const EscrowDetailDialog = ({
             {areAllMilestonesCompleted &&
               areAllMilestonesCompletedAndFlag &&
               userRolesInEscrow.includes("releaseSigner") &&
+              !selectedEscrow.releaseFlag &&
               activeTab === "releaseSigner" && (
                 <Button
                   onClick={distributeEscrowEarningsSubmit}
