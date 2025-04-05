@@ -11,7 +11,7 @@ const ProgressEscrow = ({ escrow }: ProgressEscrowProps) => {
   ).length;
 
   const approvedMilestones = escrow.milestones.filter(
-    (milestone) => milestone.flag === true,
+    (milestone) => milestone.approved_flag === true,
   ).length;
 
   const totalMilestones = escrow.milestones.length;

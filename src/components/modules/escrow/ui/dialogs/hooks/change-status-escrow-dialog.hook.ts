@@ -7,12 +7,7 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
-import {
-  Escrow,
-  EscrowPayload,
-  Milestone,
-  MilestoneStatus,
-} from "@/@types/escrow.entity";
+import { Escrow, Milestone } from "@/@types/escrow.entity";
 import { changeMilestoneStatus } from "../../../services/change-milestone-status.service";
 import { toast } from "@/hooks/toast.hook";
 
@@ -27,7 +22,10 @@ const useChangeStatusEscrowDialog = () => {
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
-  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
+  const fetchAllEscrows = useGlobalBoundedStore(
+    (state) => state.fetchAllEscrows,
+  );
+  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
 
   const changeMilestoneStatusSubmit = async (
     selectedEscrow: Escrow,
@@ -37,38 +35,18 @@ const useChangeStatusEscrowDialog = () => {
     setIsChangingStatus(true);
 
     try {
-      await changeMilestoneStatus({
+      const response = await changeMilestoneStatus({
         contractId: selectedEscrow?.contractId,
         milestoneIndex: index.toString(),
         newStatus: "completed",
         serviceProvider: address,
       });
 
-      const updatedMilestonesStatus = selectedEscrow.milestones.map(
-        (m, i): Milestone =>
-          i === index
-            ? {
-                ...m,
-                status: "completed" as MilestoneStatus,
-              }
-            : m,
-      );
-
-      const updatedPayloadStatus: EscrowPayload = {
-        ...selectedEscrow,
-        milestones: updatedMilestonesStatus,
-      };
-
-      const responseStatus = await updateEscrow({
-        escrowId: selectedEscrow.id,
-        payload: updatedPayloadStatus,
-      });
-
-      setIsChangingStatus(false);
-
-      if (responseStatus) {
+      if (response.status === "SUCCESS") {
+        setIsChangingStatus(false);
         setIsDialogOpen(false);
         setSelectedEscrow(undefined);
+        fetchAllEscrows({ address, type: activeTab || "serviceProvider" });
 
         toast({
           title: "Success",

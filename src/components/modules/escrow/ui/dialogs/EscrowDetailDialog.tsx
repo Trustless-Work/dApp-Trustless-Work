@@ -46,6 +46,7 @@ import {
 import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
 import { useEffect } from "react";
+import Link from "next/link";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -112,9 +113,15 @@ const EscrowDetailDialog = ({
           <DialogHeader>
             <div className="md:w-2/4 w-full">
               <div className="flex flex-col gap-2">
-                <DialogTitle className="text-xl">
-                  {selectedEscrow.title} - {selectedEscrow.engagementId}
-                </DialogTitle>
+                <Link
+                  href={`https://stellar.expert/explorer/testnet/contract/${selectedEscrow.contractId}`}
+                  target="_blank"
+                  className="hover:underline"
+                >
+                  <DialogTitle className="text-xl">
+                    {selectedEscrow.title} - {selectedEscrow.engagementId}
+                  </DialogTitle>
+                </Link>
                 <DialogDescription>
                   {selectedEscrow.description}
                 </DialogDescription>
@@ -133,7 +140,7 @@ const EscrowDetailDialog = ({
                   "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
                 )}
               >
-                <CardContent className="p-6">
+                <CardContent className="p-6 min-h-36">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-muted-foreground">
                       Status
@@ -141,7 +148,15 @@ const EscrowDetailDialog = ({
                     <Ban className="text-destructive" size={30} />
                   </div>
                   <div className="mt-2 flex items-baseline">
-                    <h3 className="text-2xl font-semibold">In Dispute</h3>
+                    <h3 className="text-2xl font-semibold">
+                      In Dispute
+                      <p className="text-sm text-muted-foreground mt-2">
+                        <span className="font-bold">By: </span>
+                        {selectedEscrow.disputeStartedBy === "serviceProvider"
+                          ? "Service Provider"
+                          : "Approver"}
+                      </p>
+                    </h3>
                   </div>
                 </CardContent>
               </Card>
@@ -153,7 +168,7 @@ const EscrowDetailDialog = ({
                   "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
                 )}
               >
-                <CardContent className="p-6">
+                <CardContent className="p-6 min-h-36">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-muted-foreground">
                       Status
@@ -183,7 +198,7 @@ const EscrowDetailDialog = ({
                   "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
                 )}
               >
-                <CardContent className="p-6">
+                <CardContent className="p-6 min-h-36">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-muted-foreground">
                       Status
@@ -213,7 +228,7 @@ const EscrowDetailDialog = ({
                 "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
               )}
             >
-              <CardContent className="p-6">
+              <CardContent className="p-6 min-h-36">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-muted-foreground">
                     Amount
@@ -233,7 +248,7 @@ const EscrowDetailDialog = ({
                 "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
               )}
             >
-              <CardContent className="p-6">
+              <CardContent className="p-6 min-h-36">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-muted-foreground">
                     Balance
@@ -405,7 +420,7 @@ const EscrowDetailDialog = ({
                         key={`${milestone.description}-${milestone.status}`}
                         className="flex items-center space-x-4"
                       >
-                        {milestone.flag ? (
+                        {milestone.approved_flag ? (
                           <Badge className="uppercase max-w-24">Approved</Badge>
                         ) : (
                           <Badge
@@ -425,7 +440,7 @@ const EscrowDetailDialog = ({
                         {userRolesInEscrow.includes("serviceProvider") &&
                           activeTab === "serviceProvider" &&
                           milestone.status !== "completed" &&
-                          !milestone.flag && (
+                          !milestone.approved_flag && (
                             <Button
                               className="max-w-32"
                               onClick={() =>
@@ -443,7 +458,7 @@ const EscrowDetailDialog = ({
                         {userRolesInEscrow.includes("approver") &&
                           activeTab === "approver" &&
                           milestone.status === "completed" &&
-                          !milestone.flag && (
+                          !milestone.approved_flag && (
                             <Button
                               className="max-w-32"
                               onClick={() =>
@@ -499,6 +514,7 @@ const EscrowDetailDialog = ({
             {areAllMilestonesCompleted &&
               areAllMilestonesCompletedAndFlag &&
               userRolesInEscrow.includes("releaseSigner") &&
+              !selectedEscrow.releaseFlag &&
               activeTab === "releaseSigner" && (
                 <Button
                   onClick={distributeEscrowEarningsSubmit}

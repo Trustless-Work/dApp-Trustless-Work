@@ -13,11 +13,6 @@ export interface EscrowGlobalStore {
 
   setEscrows: (escrows: Escrow[]) => void;
   fetchAllEscrows: (params: { address: string; type: string }) => void;
-  addEscrow: (
-    payload: EscrowPayload,
-    address: string,
-    contractId: string,
-  ) => Promise<Escrow | undefined>;
   updateEscrow: (params: {
     escrowId: string;
     payload: EscrowPayload;

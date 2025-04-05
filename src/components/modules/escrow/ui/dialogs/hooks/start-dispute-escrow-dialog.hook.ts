@@ -7,7 +7,6 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
-import { EscrowPayload } from "@/@types/escrow.entity";
 import { startDispute } from "../../../services/start-dispute.service";
 import { toast } from "@/hooks/toast.hook";
 
@@ -22,7 +21,11 @@ const useStartDisputeEscrowDialog = () => {
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
+  const fetchAllEscrows = useGlobalBoundedStore(
+    (state) => state.fetchAllEscrows,
+  );
   const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
+  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
   const startDisputeSubmit = async () => {
@@ -31,26 +34,24 @@ const useStartDisputeEscrowDialog = () => {
     if (!selectedEscrow) return;
 
     try {
-      const data = await startDispute({
+      const response = await startDispute({
         contractId: selectedEscrow?.contractId,
         signer: address,
       });
 
-      const updatedPayload: EscrowPayload = {
-        ...selectedEscrow,
-        disputeFlag: true,
-      };
-
-      const responseFlag = await updateEscrow({
-        escrowId: selectedEscrow.id,
-        payload: updatedPayload,
-      });
-
       setIsStartingDispute(false);
 
-      if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
+      if (response.status === "SUCCESS") {
         setIsDialogOpen(false);
         setSelectedEscrow(undefined);
+        updateEscrow({
+          escrowId: selectedEscrow.id,
+          payload: {
+            ...selectedEscrow,
+            disputeStartedBy: activeTab,
+          },
+        });
+        fetchAllEscrows({ address, type: activeTab || "client" });
 
         toast({
           title: "Success",

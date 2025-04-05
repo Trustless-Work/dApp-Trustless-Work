@@ -9,7 +9,6 @@ import {
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { distributeEscrowEarnings } from "../../../services/distribute-escrow-earnings.service";
 import { toast } from "@/hooks/toast.hook";
-import { EscrowPayload } from "@/@types/escrow.entity";
 
 const useDistributeEarningsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -26,7 +25,6 @@ const useDistributeEarningsEscrowDialog = () => {
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
-  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
@@ -39,28 +37,19 @@ const useDistributeEarningsEscrowDialog = () => {
     if (!selectedEscrow) return;
 
     try {
-      const data = await distributeEscrowEarnings({
+      const response = await distributeEscrowEarnings({
         contractId: selectedEscrow?.contractId,
         signer: address,
         serviceProvider: selectedEscrow?.serviceProvider,
         releaseSigner: selectedEscrow?.releaseSigner,
       });
 
-      const updatedPayload: EscrowPayload = {
-        ...selectedEscrow,
-        releaseFlag: true,
-      };
-
-      const responseFlag = await updateEscrow({
-        escrowId: selectedEscrow.id,
-        payload: updatedPayload,
-      });
-
-      if ((data.status === "SUCCESS" || data.status === 201) && responseFlag) {
+      if (response.status === "SUCCESS") {
         setIsSuccessReleaseDialogOpen(true);
         fetchAllEscrows({ address, type: activeTab || "approver" });
         setIsDialogOpen(false);
         setIsChangingStatus(false);
+
         if (selectedEscrow) {
           setRecentEscrow(selectedEscrow);
         }

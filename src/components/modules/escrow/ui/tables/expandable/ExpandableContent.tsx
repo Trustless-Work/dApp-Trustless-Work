@@ -28,7 +28,7 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
               <TableRow>
                 <TableHead>Description</TableHead>
                 {/* <TableHead>Amount</TableHead> */}
-                <TableHead>In Dispute</TableHead>
+                {/* <TableHead>In Dispute</TableHead> */}
                 <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
@@ -37,8 +37,8 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
                 <TableRow key={index}>
                   <TableCell>{milestone.description}</TableCell>
                   {/* <TableCell>amount</TableCell> */}
-                  <TableCell>
-                    {milestone.flag ? (
+                  {/* <TableCell>
+                    {milestone.approved_flag ? (
                       <Badge variant="destructive" className="uppercase">
                         Yes
                       </Badge>
@@ -47,7 +47,7 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
                         No
                       </Badge>
                     )}
-                  </TableCell>
+                  </TableCell> */}
 
                   <TableCell>
                     <Badge className="uppercase">{milestone.status}</Badge>

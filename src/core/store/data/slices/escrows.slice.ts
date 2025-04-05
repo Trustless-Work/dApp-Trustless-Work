@@ -3,7 +3,6 @@ import type { EscrowGlobalStore } from "../@types/escrows.entity";
 import type { Escrow } from "@/@types/escrow.entity";
 import {
   fetchAllEscrows,
-  addNewEscrow,
   updateExistingEscrow,
 } from "@/components/modules/escrow/services/escrow.service";
 
@@ -67,20 +66,6 @@ export const useGlobalEscrowsSlice: StateCreator<
         );
         throw error;
       }
-    },
-
-    addEscrow: async (payload, address, contractId) => {
-      const newEscrow = await addNewEscrow(payload, address, contractId);
-      if (newEscrow) {
-        set(
-          (state) => ({
-            escrows: [newEscrow, ...state.escrows],
-          }),
-          false,
-          ESCROW_ACTIONS.ADD_ESCROW,
-        );
-      }
-      return newEscrow;
     },
 
     updateEscrow: async ({ escrowId, payload }) => {
