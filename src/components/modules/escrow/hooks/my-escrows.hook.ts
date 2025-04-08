@@ -55,10 +55,40 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         escrow.title?.toLowerCase().includes(searchQuery) ||
         escrow.description?.toLowerCase().includes(searchQuery);
 
+      // todo: use these constants in zusntand
+      const completedMilestones = escrow.milestones.filter(
+        (milestone) => milestone.status === "completed",
+      ).length;
+
+      const approvedMilestones = escrow.milestones.filter(
+        (milestone) => milestone.approved_flag === true,
+      ).length;
+
+      const totalMilestones = escrow.milestones.length;
+
+      const progressPercentageCompleted =
+        totalMilestones > 0 ? (completedMilestones / totalMilestones) * 100 : 0;
+
+      const progressPercentageApproved =
+        totalMilestones > 0 ? (approvedMilestones / totalMilestones) * 100 : 0;
+
+      // Check if both are 100% and releaseFlag is false
+      const pendingRelease =
+        progressPercentageCompleted === 100 &&
+        progressPercentageApproved === 100 &&
+        !escrow.releaseFlag;
+
       // Soporte para flags (released, resolved, inDispute) o "all"
       let matchesStatus = true;
       if (statusFilter && statusFilter !== "all") {
         switch (statusFilter) {
+          case "working":
+            matchesStatus =
+              !escrow.releaseFlag && !escrow.resolvedFlag && !pendingRelease;
+            break;
+          case "pendingRelease":
+            matchesStatus = pendingRelease;
+            break;
           case "released":
             matchesStatus = escrow.releaseFlag === true;
             break;
