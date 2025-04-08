@@ -34,7 +34,6 @@ const MyEscrows = () => {
   const isMoonpayWidgetOpen = useEscrowBoundedStore(
     (state) => state.isMoonpayWidgetOpen,
   );
-  const { amount } = useFundEscrowDialog({});
 
   return (
     <>
@@ -45,7 +44,6 @@ const MyEscrows = () => {
           <MoonpayWidget
             visible={isMoonpayWidgetOpen}
             wallet={selectedEscrow?.contractId || ""}
-            amount={amount}
           />
 
           <Joyride
