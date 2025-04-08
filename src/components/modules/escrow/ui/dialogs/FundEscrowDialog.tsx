@@ -34,31 +34,24 @@ const FundEscrowDialog = ({
   isSecondDialogOpen,
   setIsSecondDialogOpen,
 }: FundEscrowDialogProps) => {
-  const {
-    form,
-    onSubmit,
-    handleClose,
-    paymentMethod,
-    amount,
-    showMoonpay,
-    setShowMoonpay,
-  } = useFundEscrowDialogHook({
-    setIsSecondDialogOpen,
-  });
+  const { form, onSubmit, handleClose, paymentMethod, setIsDialogOpen } =
+    useFundEscrowDialogHook({
+      setIsSecondDialogOpen,
+    });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const isFundingEscrow = useEscrowBoundedStore(
     (state) => state.isFundingEscrow,
   );
+  const isMoonpayWidgetOpen = useEscrowBoundedStore(
+    (state) => state.isMoonpayWidgetOpen,
+  );
+  const setIsMoonpayWidgetOpen = useEscrowBoundedStore(
+    (state) => state.setIsMoonpayWidgetOpen,
+  );
 
   return (
     <>
-      <MoonpayWidget
-        visible={showMoonpay}
-        wallet={selectedEscrow?.contractId || ""}
-        amount={amount}
-      />
-
       <Dialog open={isSecondDialogOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -149,7 +142,11 @@ const FundEscrowDialog = ({
                   {paymentMethod === "card" ? (
                     <Button
                       type="button"
-                      onClick={() => setShowMoonpay(!showMoonpay)}
+                      onClick={() => {
+                        setIsDialogOpen(false);
+                        setIsSecondDialogOpen(false);
+                        setIsMoonpayWidgetOpen(!isMoonpayWidgetOpen);
+                      }}
                     >
                       Fund Escrow
                     </Button>

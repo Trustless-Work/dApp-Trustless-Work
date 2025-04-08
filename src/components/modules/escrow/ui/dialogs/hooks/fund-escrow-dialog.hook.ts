@@ -16,14 +16,12 @@ import { toast } from "@/hooks/toast.hook";
 import { useEffect, useState } from "react";
 
 interface useFundEscrowDialogProps {
-  setIsSecondDialogOpen: (value: boolean) => void;
+  setIsSecondDialogOpen?: (value: boolean) => void;
 }
 
 const useFundEscrowDialog = ({
   setIsSecondDialogOpen,
 }: useFundEscrowDialogProps) => {
-  const [showMoonpay, setShowMoonpay] = useState(false);
-
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsFundingEscrow = useEscrowBoundedStore(
@@ -75,7 +73,7 @@ const useFundEscrowDialog = ({
 
       if (response.status === "SUCCESS" || response.status === 201) {
         form.reset();
-        setIsSecondDialogOpen(false);
+        setIsSecondDialogOpen?.(false);
         setIsFundingEscrow(false);
         setIsDialogOpen(false);
         fetchAllEscrows({ address, type: activeTab || "approver" });
@@ -104,7 +102,7 @@ const useFundEscrowDialog = ({
   };
 
   const handleClose = () => {
-    setIsSecondDialogOpen(false);
+    setIsSecondDialogOpen?.(false);
   };
 
   return {
@@ -113,8 +111,7 @@ const useFundEscrowDialog = ({
     handleClose,
     paymentMethod,
     amount,
-    showMoonpay,
-    setShowMoonpay,
+    setIsDialogOpen,
   };
 };
 
