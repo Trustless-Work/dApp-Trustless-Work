@@ -44,6 +44,10 @@ export const useEscrowFilter = () => {
       // Statuses
       case "all":
         return "All Statuses";
+      case "working":
+        return "Working";
+      case "pendingRelease":
+        return "Pending Release";
       case "released":
         return "Released";
       case "resolved":
