@@ -20,7 +20,6 @@ import { useState } from "react";
 import { CircleHelp } from "lucide-react";
 import { MoonpayWidget } from "@/components/modules/payment/widgets/moonpay.widget";
 import { useGlobalBoundedStore } from "@/core/store/data";
-import useFundEscrowDialog from "../dialogs/hooks/fund-escrow-dialog.hook";
 
 const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
