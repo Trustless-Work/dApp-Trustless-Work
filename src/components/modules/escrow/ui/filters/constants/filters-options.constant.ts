@@ -8,6 +8,8 @@ export const amountOptionsFilters = [
 
 export const statusOptionsFilters = [
   { label: "All statuses", value: "all" },
+  { label: "Working", value: "working" },
+  { label: "Pending Release", value: "pendingRelease" },
   { label: "Released", value: "released" },
   { label: "Resolved", value: "resolved" },
   { label: "In Dispute", value: "inDispute" },
