@@ -2,7 +2,7 @@ import { FundEscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
 import axios from "axios";
-import { sendTransaction, signTransaction } from "@/lib/stellar-wallet-kit";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
 
 export const fundEscrow = async (payload: FundEscrowPayload) => {
   try {
@@ -13,11 +13,11 @@ export const fundEscrow = async (payload: FundEscrowPayload) => {
 
     const signedTxXdr = await signTransaction({ unsignedTransaction, address });
 
-    const { data } = await sendTransaction({
+    const tx = await http.post("/helper/send-transaction", {
       signedXdr: signedTxXdr,
-      returnEscrowDataIsRequired: true,
     });
 
+    const { data } = tx;
     return data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
