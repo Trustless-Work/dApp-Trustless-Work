@@ -7,6 +7,7 @@ export interface DialogEscrowStore {
   isSuccessDialogOpen: boolean;
   isSuccessReleaseDialogOpen: boolean;
   isSuccessResolveDisputeDialogOpen: boolean;
+  isMoonpayWidgetOpen: boolean;
   setIsDialogOpen: (value: boolean) => void;
   setIsSecondDialogOpen: (value: boolean) => void;
   setIsQRDialogOpen: (value: boolean) => void;
@@ -15,4 +16,5 @@ export interface DialogEscrowStore {
   setIsSuccessDialogOpen: (value: boolean) => void;
   setIsSuccessReleaseDialogOpen: (value: boolean) => void;
   setIsSuccessResolveDisputeDialogOpen: (value: boolean) => void;
+  setIsMoonpayWidgetOpen: (value: boolean) => void;
 }

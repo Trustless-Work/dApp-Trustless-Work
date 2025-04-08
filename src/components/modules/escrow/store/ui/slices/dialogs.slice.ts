@@ -17,6 +17,7 @@ export const useEscrowDialogSlice: StateCreator<
     isSuccessDialogOpen: false,
     isSuccessReleaseDialogOpen: false,
     isSuccessResolveDisputeDialogOpen: false,
+    isMoonpayWidgetOpen: false,
 
     // Modifiers
     setIsDialogOpen: (value: boolean) => set({ isDialogOpen: value }),
@@ -33,5 +34,7 @@ export const useEscrowDialogSlice: StateCreator<
       set({ isSuccessReleaseDialogOpen: value }),
     setIsSuccessResolveDisputeDialogOpen: (value: boolean) =>
       set({ isSuccessResolveDisputeDialogOpen: value }),
+    setIsMoonpayWidgetOpen: (value: boolean) =>
+      set({ isMoonpayWidgetOpen: value }),
   };
 };
