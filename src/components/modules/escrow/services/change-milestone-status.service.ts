@@ -1,31 +1,28 @@
 import { ChangeMilestoneStatusPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
-import { WalletNetwork } from "@creit.tech/stellar-wallets-kit";
-import { signTransaction } from "@stellar/freighter-api";
 import axios from "axios";
+import { sendTransaction, signTransaction } from "@/lib/stellar-wallet-kit";
 
 export const changeMilestoneStatus = async (
   payload: ChangeMilestoneStatusPayload,
 ) => {
   try {
+    const { address } = await kit.getAddress();
+
     const response = await http.post(
       "/escrow/change-milestone-status",
       payload,
     );
-
     const { unsignedTransaction } = response.data;
-    const { address } = await kit.getAddress();
-    const { signedTxXdr } = await signTransaction(unsignedTransaction, {
-      address,
-      networkPassphrase: WalletNetwork.TESTNET,
-    });
 
-    const tx = await http.post("/helper/send-transaction", {
+    const signedTxXdr = await signTransaction({ unsignedTransaction, address });
+
+    const { data } = await sendTransaction({
       signedXdr: signedTxXdr,
+      returnEscrowDataIsRequired: true,
     });
 
-    const { data } = tx;
     return data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
