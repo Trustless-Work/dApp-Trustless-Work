@@ -68,8 +68,11 @@ export const GetFormSchema = () => {
       }),
     receiverMemo: z
       .string()
-      .min(1, { message: "Receiver Memo must be at least 1." })
-      .regex(/^[1-9][0-9]*$/, {
+      .optional()
+      .refine((val) => !val || val.length >= 1, {
+        message: "Receiver Memo must be at least 1.",
+      })
+      .refine((val) => !val || /^[1-9][0-9]*$/.test(val), {
         message:
           "Receiver Memo must be a whole number greater than 0 (no decimals).",
       }),
