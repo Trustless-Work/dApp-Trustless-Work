@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useEscrowBoundedStore } from "../../escrow/store/ui";
 
 const MoonPayBuyWidget = dynamic(
   () => import("@moonpay/moonpay-react").then((mod) => mod.MoonPayBuyWidget),
@@ -8,29 +9,33 @@ const MoonPayBuyWidget = dynamic(
 interface MoonpayWidgetProps {
   visible: boolean;
   wallet: string;
-  amount: string;
 }
 
-export const MoonpayWidget = ({
-  visible,
-  wallet,
-  amount,
-}: MoonpayWidgetProps) => {
+export const MoonpayWidget = ({ visible, wallet }: MoonpayWidgetProps) => {
+  const setIsMoonpayWidgetOpen = useEscrowBoundedStore(
+    (state) => state.setIsMoonpayWidgetOpen,
+  );
+  const amountMoonpay = useEscrowBoundedStore((state) => state.amountMoonpay);
+
   return (
     <MoonPayBuyWidget
+      // ! In order for the wallet to appear correctly, the wallet and these 2 properties must match in the same chain, for exmaple:
+      // defaultCurrencyCode="eth"
+      // showOnlyCurrencies="eth"
+      // walletAddress="0x59bFeA666108ab2c7f85485A8029d87A3D0DAcB2"
+
       variant="overlay"
       baseCurrencyCode="usd"
-      baseCurrencyAmount={amount}
+      baseCurrencyAmount={amountMoonpay}
       visible={visible}
       redirectURL="https://moonpay.com/"
       walletAddress={wallet}
-      // showWalletAddressForm="true"
-      //showOnlyCurrencies="btc,eth,usdt,usdc,sol"
+      defaultCurrencyCode="usdc_xlm"
       showOnlyCurrencies="usdc_xlm"
-
-      // onClose={() => {
-      //   return Promise.resolve();
-      // }}
+      onClose={() => {
+        setIsMoonpayWidgetOpen(false);
+        return Promise.resolve();
+      }}
     />
   );
 };

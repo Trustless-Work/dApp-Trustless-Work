@@ -18,15 +18,21 @@ import Joyride from "react-joyride";
 import { steps } from "@/constants/steps/steps";
 import { useState } from "react";
 import { CircleHelp } from "lucide-react";
+import { MoonpayWidget } from "@/components/modules/payment/widgets/moonpay.widget";
+import { useGlobalBoundedStore } from "@/core/store/data";
 
 const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
   const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
   const setActiveMode = useEscrowBoundedStore((state) => state.setActiveMode);
+  const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const activeMode = useEscrowBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 
   const [run, setRun] = useState(false);
+  const isMoonpayWidgetOpen = useEscrowBoundedStore(
+    (state) => state.isMoonpayWidgetOpen,
+  );
 
   return (
     <>
@@ -34,6 +40,11 @@ const MyEscrows = () => {
         <Loader isLoading={isLoading} />
       ) : (
         <>
+          <MoonpayWidget
+            visible={isMoonpayWidgetOpen}
+            wallet={selectedEscrow?.contractId || ""}
+          />
+
           <Joyride
             run={run}
             steps={steps}

@@ -13,17 +13,15 @@ import {
 } from "@/core/store/data";
 import { useEscrowBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface useFundEscrowDialogProps {
-  setIsSecondDialogOpen: (value: boolean) => void;
+  setIsSecondDialogOpen?: (value: boolean) => void;
 }
 
 const useFundEscrowDialog = ({
   setIsSecondDialogOpen,
 }: useFundEscrowDialogProps) => {
-  const [showMoonpay, setShowMoonpay] = useState(false);
-
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsFundingEscrow = useEscrowBoundedStore(
@@ -36,6 +34,9 @@ const useFundEscrowDialog = ({
     (state) => state.fetchAllEscrows,
   );
   const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+  const setAmountMoonpay = useEscrowBoundedStore(
+    (state) => state.setAmountMoonpay,
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,6 +51,10 @@ const useFundEscrowDialog = ({
   const paymentMethod = form.watch("paymentMethod");
   const setError = form.setError;
   const clearErrors = form.clearErrors;
+
+  useEffect(() => {
+    setAmountMoonpay(amount);
+  }, [amount, setAmountMoonpay]);
 
   useEffect(() => {
     if (paymentMethod === "card" && parseInt(amount, 10) < 20) {
@@ -75,7 +80,7 @@ const useFundEscrowDialog = ({
 
       if (response.status === "SUCCESS" || response.status === 201) {
         form.reset();
-        setIsSecondDialogOpen(false);
+        setIsSecondDialogOpen?.(false);
         setIsFundingEscrow(false);
         setIsDialogOpen(false);
         fetchAllEscrows({ address, type: activeTab || "approver" });
@@ -104,7 +109,7 @@ const useFundEscrowDialog = ({
   };
 
   const handleClose = () => {
-    setIsSecondDialogOpen(false);
+    setIsSecondDialogOpen?.(false);
   };
 
   return {
@@ -113,8 +118,7 @@ const useFundEscrowDialog = ({
     handleClose,
     paymentMethod,
     amount,
-    showMoonpay,
-    setShowMoonpay,
+    setIsDialogOpen,
   };
 };
 

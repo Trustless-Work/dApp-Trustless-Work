@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { useEscrowBoundedStore } from "../../store/ui";
 import SkeletonEditMilestones from "./utils/SkeletonEditMilestones";
 
-interface FundEscrowDialogProps {
+interface EditEscrowDialogProps {
   isEditMilestoneDialogOpen: boolean;
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
 }
@@ -25,7 +25,7 @@ interface FundEscrowDialogProps {
 const EditMilestonesDialog = ({
   isEditMilestoneDialogOpen,
   setIsEditMilestoneDialogOpen,
-}: FundEscrowDialogProps) => {
+}: EditEscrowDialogProps) => {
   const {
     form,
     onSubmit,
