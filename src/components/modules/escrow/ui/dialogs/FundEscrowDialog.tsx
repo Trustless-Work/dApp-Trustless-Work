@@ -23,7 +23,6 @@ import { useEscrowBoundedStore } from "../../store/ui";
 import SkeletonFundEscrow from "./utils/SkeletonFundEscrow";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DollarSign } from "lucide-react";
-import { MoonpayWidget } from "@/components/modules/payment/widgets/moonpay.widget";
 
 interface FundEscrowDialogProps {
   isSecondDialogOpen: boolean;
