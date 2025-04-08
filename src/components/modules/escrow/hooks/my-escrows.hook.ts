@@ -28,7 +28,21 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
   const currentData = useMemo(() => {
     if (!escrows) return [];
 
-    return escrows.slice(
+    const sorted = [...escrows].sort((a, b) => {
+      const aTimestamp = a.updatedAt || a.createdAt;
+      const bTimestamp = b.updatedAt || b.createdAt;
+
+      const aDate = new Date(
+        aTimestamp.seconds * 1000 + aTimestamp.nanoseconds / 1e6,
+      );
+      const bDate = new Date(
+        bTimestamp.seconds * 1000 + bTimestamp.nanoseconds / 1e6,
+      );
+
+      return bDate.getTime() - aDate.getTime();
+    });
+
+    return sorted.slice(
       (currentPage - 1) * itemsPerPage,
       currentPage * itemsPerPage,
     );
