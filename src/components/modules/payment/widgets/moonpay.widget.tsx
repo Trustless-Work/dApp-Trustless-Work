@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useEscrowBoundedStore } from "../../escrow/store/ui";
 
 const MoonPayBuyWidget = dynamic(
   () => import("@moonpay/moonpay-react").then((mod) => mod.MoonPayBuyWidget),
@@ -8,29 +9,28 @@ const MoonPayBuyWidget = dynamic(
 interface MoonpayWidgetProps {
   visible: boolean;
   wallet: string;
-  amount: string;
 }
 
-export const MoonpayWidget = ({
-  visible,
-  wallet,
-  amount,
-}: MoonpayWidgetProps) => {
+export const MoonpayWidget = ({ visible, wallet }: MoonpayWidgetProps) => {
+  const setIsMoonpayWidgetOpen = useEscrowBoundedStore(
+    (state) => state.setIsMoonpayWidgetOpen,
+  );
+  const amountMoonpay = useEscrowBoundedStore((state) => state.amountMoonpay);
+
   return (
     <MoonPayBuyWidget
       variant="overlay"
       baseCurrencyCode="usd"
-      baseCurrencyAmount={amount}
+      baseCurrencyAmount={amountMoonpay}
       visible={visible}
       redirectURL="https://moonpay.com/"
       walletAddress={wallet}
-      // showWalletAddressForm="true"
-      //showOnlyCurrencies="btc,eth,usdt,usdc,sol"
-      showOnlyCurrencies="usdc_xlm"
-
-      // onClose={() => {
-      //   return Promise.resolve();
-      // }}
+      showOnlyCurrencies="btc,eth,usdt,usdc,sol"
+      //showOnlyCurrencies="usdc_xlm"
+      onClose={() => {
+        setIsMoonpayWidgetOpen(false);
+        return Promise.resolve();
+      }}
     />
   );
 };
