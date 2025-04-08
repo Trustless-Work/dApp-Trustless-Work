@@ -2,6 +2,7 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
+import { useSearchParams } from "next/navigation";
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 
 interface useMyEscrowsProps {
@@ -23,6 +24,12 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
   const fetchingRef = useRef(false);
   const lastFetchKey = useRef("");
 
+  // Filters and pagination
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("q")?.toLowerCase() || "";
+  const statusFilter = searchParams.get("status") || "";
+  const amountFilter = searchParams.get("amount") || "";
+
   const totalPages = Math.ceil(totalEscrows / itemsPerPage);
 
   const currentData = useMemo(() => {
@@ -42,11 +49,58 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
       return bDate.getTime() - aDate.getTime();
     });
 
-    return sorted.slice(
+    const filtered = sorted.filter((escrow) => {
+      const matchesSearch =
+        !searchQuery ||
+        escrow.title?.toLowerCase().includes(searchQuery) ||
+        escrow.description?.toLowerCase().includes(searchQuery);
+
+      // Soporte para flags (released, resolved, inDispute) o "all"
+      let matchesStatus = true;
+      if (statusFilter && statusFilter !== "all") {
+        switch (statusFilter) {
+          case "released":
+            matchesStatus = escrow.releaseFlag === true;
+            break;
+          case "resolved":
+            matchesStatus = escrow.resolvedFlag === true;
+            break;
+          case "inDispute":
+            matchesStatus = escrow.disputeFlag === true;
+            break;
+          default:
+            matchesStatus = true;
+        }
+      }
+
+      // Soporte para rangos de monto o "all"
+      let matchesAmount = true;
+      const amount = parseFloat(escrow.amount);
+      if (!isNaN(amount) && amountFilter && amountFilter !== "all") {
+        if (amountFilter.includes("+")) {
+          const min = parseFloat(amountFilter.replace("+", ""));
+          matchesAmount = amount >= min;
+        } else {
+          const [min, max] = amountFilter.split("-").map(Number);
+          matchesAmount = amount >= min && amount <= max;
+        }
+      }
+
+      return matchesSearch && matchesStatus && matchesAmount;
+    });
+
+    return filtered.slice(
       (currentPage - 1) * itemsPerPage,
       currentPage * itemsPerPage,
     );
-  }, [escrows, currentPage, itemsPerPage]);
+  }, [
+    escrows,
+    searchQuery,
+    statusFilter,
+    amountFilter,
+    currentPage,
+    itemsPerPage,
+  ]);
 
   const memoizedFetchEscrows = useCallback(async () => {
     if (!address || fetchingRef.current) return;

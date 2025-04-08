@@ -9,17 +9,46 @@ import {
 import CreateButton from "@/components/utils/ui/Create";
 import Divider from "@/components/utils/ui/Divider";
 import { Search, Trash2 } from "lucide-react";
+import { useEscrowFilter } from "./hooks/escrow-filter.hook";
+import {
+  amountOptionsFilters,
+  statusOptionsFilters,
+} from "./constants/filters-options.constant";
 
 const MyEscrowsFilter = () => {
+  const {
+    search,
+    status,
+    amountRange,
+    searchParams,
+    setSearch,
+    updateQuery,
+    deleteParams,
+    mapNameParams,
+  } = useEscrowFilter();
+
   return (
     <form className="flex flex-col space-y-5">
       <div className="flex flex-col md:flex-row justify-between w-full gap-10">
         <div className="flex flex-col md:flex-row gap-10">
           <div className="flex items-center space-x-2">
-            <Input id="search" placeholder="Search..." />
+            <Input
+              id="search"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
             <Search className="h-5 w-5" />
           </div>
-          <Button variant="destructive" className="flex items-center space-x-2">
+          <Button
+            variant="destructive"
+            className="flex items-center space-x-2"
+            onClick={(e) => {
+              e.preventDefault();
+
+              deleteParams();
+            }}
+          >
             <Trash2 className="h-5 w-5" />
           </Button>
         </div>
@@ -34,35 +63,45 @@ const MyEscrowsFilter = () => {
 
       <Divider type="horizontal" />
 
-      <div className="flex flex-col md:flex-row gap-3">
-        <div className="flex flex-col">
-          <label className="text-xs font-bold mb-2 ml-2" htmlFor="select1">
-            Filter 1
+      <div className="flex flex-col md:flex-row gap-3 w-1/3">
+        <div className="flex flex-col w-full">
+          <label className="text-xs font-bold mb-2 ml-2" htmlFor="status">
+            Status
           </label>
-          <Select>
+          <Select
+            value={status}
+            onValueChange={(value) => updateQuery("status", value)}
+          >
             <SelectTrigger>
-              <span>Select an option</span>
+              {mapNameParams(searchParams.get("status") || "")}
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="option1">Opción 1</SelectItem>
-              <SelectItem value="option2">Opción 2</SelectItem>
-              <SelectItem value="option3">Opción 3</SelectItem>
+              {statusOptionsFilters.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
 
-        <div className="flex flex-col">
-          <label className="text-xs font-bold mb-2 ml-2" htmlFor="select1">
-            Filter 2
+        <div className="flex flex-col w-full">
+          <label className="text-xs font-bold mb-2 ml-2" htmlFor="amount">
+            Amount Range
           </label>
-          <Select>
+          <Select
+            value={amountRange}
+            onValueChange={(value) => updateQuery("amount", value)}
+          >
             <SelectTrigger>
-              <span>Select an option</span>
+              {mapNameParams(searchParams.get("amount") || "")}
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="optionA">Opción A</SelectItem>
-              <SelectItem value="optionB">Opción B</SelectItem>
-              <SelectItem value="optionC">Opción C</SelectItem>
+              {amountOptionsFilters.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
