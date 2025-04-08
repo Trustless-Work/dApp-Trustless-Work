@@ -525,6 +525,8 @@ const EscrowDetailDialog = ({
                 </Button>
               )}
             {userRolesInEscrow.includes("platformAddress") &&
+              !selectedEscrow?.disputeFlag &&
+              !selectedEscrow?.resolvedFlag &&
               activeTab === "platformAddress" && (
                 <Button
                   onClick={(e) => {
