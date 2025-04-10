@@ -60,13 +60,14 @@ POC of a decentralized application (dApp) to enhance trust in agency-client rela
 Follow the steps below to get started with this project:
 
 ## Summary
+
 1. Install dependencies.
 2. Format code.
 3. Set enviroment variables.
-  1. API KEY
-  2. Firebase
-4. Firebase collections.
-5. Run the project!  
+4. API KEY
+5. Firebase
+6. Firebase collections.
+7. Run the project!
 
 ## Installation
 
