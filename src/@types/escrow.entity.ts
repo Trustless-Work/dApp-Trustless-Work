@@ -7,6 +7,7 @@ export type Milestone = {
   description: string;
   status?: MilestoneStatus;
   approved_flag?: boolean;
+  evidence?: string;
 };
 
 export interface Escrow {
@@ -62,7 +63,10 @@ export type EscrowPayload = Omit<
   "user" | "createdAt" | "updatedAt" | "id" | "trustline"
 >;
 
-export type ChangeMilestoneStatusPayload = {
+export type ChangeMilestoneStatusPayload = Omit<
+  Milestone,
+  "description" | "status" | "approved_flag"
+> & {
   contractId?: string;
   milestoneIndex: string;
   newStatus: MilestoneStatus;
