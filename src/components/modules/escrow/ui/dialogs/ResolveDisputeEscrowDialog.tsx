@@ -20,7 +20,7 @@ import {
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
 import SkeletonResolveDispute from "./utils/SkeletonResolveDispute";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { DollarSign } from "lucide-react";
 import type { Escrow } from "../../../../../@types/escrow.entity";
@@ -44,7 +44,7 @@ const ResolveDisputeEscrowDialog = ({
 
   const { formatDollar } = useFormatUtils();
 
-  const isResolvingDispute = useEscrowBoundedStore(
+  const isResolvingDispute = useEscrowUIBoundedStore(
     (state) => state.isResolvingDispute,
   );
 

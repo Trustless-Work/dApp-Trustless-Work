@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEscrowBoundedStore } from "@/components/modules/escrow/store/ui";
+import { useEscrowUIBoundedStore } from "@/components/modules/escrow/store/ui";
 import MyEscrowsTable from "@/components/modules/escrow/ui/tables/MyEscrowsTable";
 import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
 import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFilter";
@@ -23,14 +23,14 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 
 const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
-  const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
-  const setActiveMode = useEscrowBoundedStore((state) => state.setActiveMode);
+  const setActiveTab = useEscrowUIBoundedStore((state) => state.setActiveTab);
+  const setActiveMode = useEscrowUIBoundedStore((state) => state.setActiveMode);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const activeMode = useEscrowBoundedStore((state) => state.activeMode);
+  const activeMode = useEscrowUIBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 
   const [run, setRun] = useState(false);
-  const isMoonpayWidgetOpen = useEscrowBoundedStore(
+  const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
     (state) => state.isMoonpayWidgetOpen,
   );
 

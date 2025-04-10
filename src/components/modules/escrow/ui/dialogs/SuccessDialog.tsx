@@ -19,7 +19,7 @@ import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
 import { Check, Copy } from "lucide-react";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import useSuccessResolveDisputeDialog from "./hooks/success-resolve-dispute-dialog.hook";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 
 interface SuccessDialogProps {
   title: string;
@@ -226,10 +226,10 @@ export const SuccessResolveDisputeDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const serviceProviderResolveFromStore = useEscrowBoundedStore(
+  const serviceProviderResolveFromStore = useEscrowUIBoundedStore(
     (state) => state.serviceProviderResolve,
   );
-  const approverResolveFromStore = useEscrowBoundedStore(
+  const approverResolveFromStore = useEscrowUIBoundedStore(
     (state) => state.approverResolve,
   );
 
