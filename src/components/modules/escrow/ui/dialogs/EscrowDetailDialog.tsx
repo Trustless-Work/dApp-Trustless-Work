@@ -481,7 +481,7 @@ const EscrowDetailDialog = ({
               </div>
             </CardContent>
           </Card>
-          <div className="flex sm:flex-row flex-col w-full justify-between mb-80 sm:mb-0">
+          <div className="flex sm:flex-row flex-col w-full justify-between items-center mb-80 sm:mb-0">
             <p className="italic text-sm sm:mb-0 mb-3">
               <span className="font-bold mr-1">Created:</span>
               {formatDateFromFirebase(
