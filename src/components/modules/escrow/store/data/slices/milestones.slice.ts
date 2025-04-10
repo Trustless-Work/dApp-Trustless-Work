@@ -11,9 +11,11 @@ export const useEscrowMilestoneSlice: StateCreator<
   return {
     // Stores
     completingMilestone: null,
+    milestoneIndex: null,
 
     // Modifiers
     setCompletingMilestone: (value: Milestone | null) =>
       set({ completingMilestone: value }),
+    setMilestoneIndex: (value: number | null) => set({ milestoneIndex: value }),
   };
 };
