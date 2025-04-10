@@ -46,7 +46,7 @@ const CompleteMilestoneDialog = ({
   return (
     <>
       <Dialog open={isCompleteMilestoneDialogOpen} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[550px]">
           <DialogHeader>
             <DialogTitle className="truncate">
               Complete Milestone - {completingMilestone?.description}
