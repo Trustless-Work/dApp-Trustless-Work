@@ -51,7 +51,7 @@ const devtoolsOptions: DevtoolsOptions = {
   },
 };
 
-export const useEscrowBoundedStore = create<GlobalState>()(
+export const useEscrowUIBoundedStore = create<GlobalState>()(
   devtools(
     (...a) => ({
       ...useEscrowDialogSlice(...a),
