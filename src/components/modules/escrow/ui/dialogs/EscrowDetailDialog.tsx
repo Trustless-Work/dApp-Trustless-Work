@@ -18,12 +18,11 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import EntityCard from "./cards/EntityCard";
 import FundEscrowDialog from "./FundEscrowDialog";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";
 import { Badge } from "@/components/ui/badge";
 import useDistributeEarningsEscrowDialogHook from "./hooks/distribute-earnings-escrow-dialog.hook";
-import useChangeStatusEscrowDialogHook from "./hooks/change-status-escrow-dialog.hook";
 import useChangeFlagEscrowDialogHook from "./hooks/change-flag-escrow-dialog.hook";
 import ProgressEscrow from "./utils/ProgressEscrow";
 import useStartDisputeEscrowDialogHook from "./hooks/start-dispute-escrow-dialog.hook";
@@ -50,6 +49,8 @@ import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
 import { useEffect } from "react";
 import Link from "next/link";
+import CompleteMilestoneDialog from "./CompleteMilestoneDialog";
+import { useEscrowBoundedStore } from "../../store/data";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -64,7 +65,7 @@ const EscrowDetailDialog = ({
 }: EscrowDetailDialogProps) => {
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const dialogStates = useEscrowDialogs();
-  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
   const {
     handleClose,
@@ -82,23 +83,26 @@ const EscrowDetailDialog = ({
   const { handleOpen } = useResolveDisputeEscrowDialogHook({
     setIsResolveDisputeDialogOpen: dialogStates.resolveDispute.setIsOpen,
   });
-  const { changeMilestoneStatusSubmit } = useChangeStatusEscrowDialogHook();
+
+  const setCompletingMilestone = useEscrowBoundedStore(
+    (state) => state.setCompletingMilestone,
+  );
   const { startDisputeSubmit } = useStartDisputeEscrowDialogHook();
   const { changeMilestoneFlagSubmit } = useChangeFlagEscrowDialogHook();
 
   const { formatAddress, formatText, formatDollar, formatDateFromFirebase } =
     useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
-  const serviceProviderAmount = useEscrowBoundedStore(
+  const serviceProviderAmount = useEscrowUIBoundedStore(
     (state) => state.serviceProviderAmount,
   );
-  const platformFeeAmount = useEscrowBoundedStore(
+  const platformFeeAmount = useEscrowUIBoundedStore(
     (state) => state.platformFeeAmount,
   );
-  const trustlessWorkAmount = useEscrowBoundedStore(
+  const trustlessWorkAmount = useEscrowUIBoundedStore(
     (state) => state.trustlessWorkAmount,
   );
-  const setAmounts = useEscrowBoundedStore((state) => state.setAmounts);
+  const setAmounts = useEscrowUIBoundedStore((state) => state.setAmounts);
 
   const totalAmount = Number(selectedEscrow?.amount || 0);
   const platformFeePercentage = Number(selectedEscrow?.platformFee || 0);
@@ -446,13 +450,11 @@ const EscrowDetailDialog = ({
                           !milestone.approved_flag && (
                             <Button
                               className="max-w-32"
-                              onClick={() =>
-                                changeMilestoneStatusSubmit(
-                                  selectedEscrow,
-                                  milestone,
-                                  milestoneIndex,
-                                )
-                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setCompletingMilestone(milestone);
+                                dialogStates.completeMilestone.setIsOpen(true);
+                              }}
                             >
                               <PackageCheck />
                               Complete
@@ -585,6 +587,13 @@ const EscrowDetailDialog = ({
         }
         title=""
         description="Now that your escrow is resolved, you will be able to view it directly in"
+      />
+
+      <CompleteMilestoneDialog
+        isCompleteMilestoneDialogOpen={dialogStates.completeMilestone.isOpen}
+        setIsCompleteMilestoneDialogOpen={
+          dialogStates.completeMilestone.setIsOpen
+        }
       />
     </>
   );
