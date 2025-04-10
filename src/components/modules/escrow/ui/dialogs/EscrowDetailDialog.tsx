@@ -87,6 +87,9 @@ const EscrowDetailDialog = ({
   const setCompletingMilestone = useEscrowBoundedStore(
     (state) => state.setCompletingMilestone,
   );
+  const setMilestoneIndex = useEscrowBoundedStore(
+    (state) => state.setMilestoneIndex,
+  );
   const { startDisputeSubmit } = useStartDisputeEscrowDialogHook();
   const { changeMilestoneFlagSubmit } = useChangeFlagEscrowDialogHook();
 
@@ -453,6 +456,7 @@ const EscrowDetailDialog = ({
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setCompletingMilestone(milestone);
+                                setMilestoneIndex(milestoneIndex);
                                 dialogStates.completeMilestone.setIsOpen(true);
                               }}
                             >
@@ -556,6 +560,13 @@ const EscrowDetailDialog = ({
         setIsSecondDialogOpen={dialogStates.second.setIsOpen}
       />
 
+      <CompleteMilestoneDialog
+        isCompleteMilestoneDialogOpen={dialogStates.completeMilestone.isOpen}
+        setIsCompleteMilestoneDialogOpen={
+          dialogStates.completeMilestone.setIsOpen
+        }
+      />
+
       <QREscrowDialog
         isQRDialogOpen={dialogStates.qr.isOpen}
         setIsQRDialogOpen={dialogStates.qr.setIsOpen}
@@ -587,13 +598,6 @@ const EscrowDetailDialog = ({
         }
         title=""
         description="Now that your escrow is resolved, you will be able to view it directly in"
-      />
-
-      <CompleteMilestoneDialog
-        isCompleteMilestoneDialogOpen={dialogStates.completeMilestone.isOpen}
-        setIsCompleteMilestoneDialogOpen={
-          dialogStates.completeMilestone.setIsOpen
-        }
       />
     </>
   );
