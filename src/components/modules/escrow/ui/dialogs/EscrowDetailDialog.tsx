@@ -32,10 +32,13 @@ import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-di
 import {
   Ban,
   Check,
+  CheckCheck,
   CircleCheckBig,
   CircleDollarSign,
   Copy,
   Handshake,
+  PackageCheck,
+  Pencil,
   Wallet,
 } from "lucide-react";
 import EditMilestonesDialog from "./EditMilestonesDialog";
@@ -451,6 +454,7 @@ const EscrowDetailDialog = ({
                                 )
                               }
                             >
+                              <PackageCheck />
                               Complete
                             </Button>
                           )}
@@ -469,6 +473,7 @@ const EscrowDetailDialog = ({
                                 )
                               }
                             >
+                              <CheckCheck />
                               Approve
                             </Button>
                           )}
@@ -521,6 +526,7 @@ const EscrowDetailDialog = ({
                   type="button"
                   className="bg-green-800 hover:bg-green-700"
                 >
+                  <CircleDollarSign />
                   Release Payment
                 </Button>
               )}
@@ -535,6 +541,7 @@ const EscrowDetailDialog = ({
                   }}
                   variant="outline"
                 >
+                  <Pencil />
                   Edit
                 </Button>
               )}
