@@ -55,20 +55,13 @@ const useChangeMilestoneStatusDialogHook = ({
     evidence,
   }: Pick<ChangeMilestoneStatusPayload, "evidence">) => {
     setIsChangingStatus(true);
-    console.log({
-      contractId: selectedEscrow?.contractId,
-      milestoneIndex: milestoneIndex?.toString() || "0",
-      newStatus: "completed",
-      serviceProvider: address,
-      evidence,
-    });
     try {
       const response = await changeMilestoneStatus({
         contractId: selectedEscrow?.contractId,
         milestoneIndex: milestoneIndex?.toString() || "0",
         newStatus: "completed",
         serviceProvider: address,
-        evidence,
+        newEvidence: evidence,
       });
 
       if (response.status === "SUCCESS") {

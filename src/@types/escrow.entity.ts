@@ -70,6 +70,7 @@ export type ChangeMilestoneStatusPayload = Omit<
   contractId?: string;
   milestoneIndex: string;
   newStatus: MilestoneStatus;
+  newEvidence?: string;
   serviceProvider?: string;
 };
 
