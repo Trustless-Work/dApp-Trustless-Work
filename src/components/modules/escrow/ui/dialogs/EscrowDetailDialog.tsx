@@ -35,7 +35,10 @@ import {
   CircleCheckBig,
   CircleDollarSign,
   Copy,
+  FileCheck2,
   Handshake,
+  LetterText,
+  Link2,
   PackageCheck,
   Pencil,
   Wallet,
@@ -51,6 +54,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import CompleteMilestoneDialog from "./CompleteMilestoneDialog";
 import { useEscrowBoundedStore } from "../../store/data";
+import { useValidData } from "@/utils/hook/valid-data.hook";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -69,6 +73,8 @@ const EscrowDetailDialog = ({
 
   const {
     handleClose,
+    setEvidenceVisibleMap,
+    evidenceVisibleMap,
     areAllMilestonesCompleted,
     areAllMilestonesCompletedAndFlag,
     userRolesInEscrow,
@@ -77,6 +83,8 @@ const EscrowDetailDialog = ({
     setSelectedEscrow,
     selectedEscrow,
   });
+
+  const { isValidUrl } = useValidData();
 
   const { distributeEscrowEarningsSubmit } =
     useDistributeEarningsEscrowDialogHook();
@@ -121,7 +129,7 @@ const EscrowDetailDialog = ({
       <Dialog open={isDialogOpen} onOpenChange={handleClose}>
         <DialogContent className="w-11/12 md:w-2/3 h-auto max-h-screen overflow-y-auto">
           <DialogHeader>
-            <div className="md:w-2/4 w-full">
+            <div className="w-full">
               <div className="flex flex-col gap-2">
                 <Link
                   href={`https://stellar.expert/explorer/testnet/contract/${selectedEscrow.contractId}`}
@@ -136,8 +144,21 @@ const EscrowDetailDialog = ({
                   {selectedEscrow.description}
                 </DialogDescription>
                 <DialogDescription>
-                  <strong>Roles:</strong>{" "}
-                  {userRolesInEscrow.map((role) => formatText(role)).join(", ")}
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex gap-2">
+                      <strong>Roles: </strong>
+                      {userRolesInEscrow
+                        .map((role) => formatText(role))
+                        .join(", ")}
+                    </div>
+
+                    <div className="border-r-2" />
+
+                    <div className="flex gap-2">
+                      <strong className="truncate">Memo:</strong>
+                      {selectedEscrow?.receiverMemo}
+                    </div>
+                  </div>
                 </DialogDescription>
               </div>
             </div>
@@ -415,11 +436,12 @@ const EscrowDetailDialog = ({
                   type="Release Signer"
                   entity={selectedEscrow.releaseSigner}
                 />
+                <EntityCard type="Reciever" entity={selectedEscrow.receiver} />
               </div>
 
               {/* Milestones */}
               <div className="flex justify-center w-full mt-5">
-                <div className="flex flex-col gap-4 py-4 w-full md:w-2/3">
+                <div className="flex flex-col gap-4 py-4 w-full md:w-4/5">
                   <label htmlFor="milestones" className="flex items-center">
                     Milestones
                     <TooltipInfo content="Key stages or deliverables for the escrow." />
@@ -443,8 +465,11 @@ const EscrowDetailDialog = ({
 
                         <Input
                           disabled
-                          value={milestone.description}
-                          placeholder="Milestone Description"
+                          value={
+                            !evidenceVisibleMap[milestoneIndex]
+                              ? milestone.description
+                              : milestone.evidence
+                          }
                         />
 
                         {userRolesInEscrow.includes("serviceProvider") &&
@@ -464,6 +489,67 @@ const EscrowDetailDialog = ({
                               Complete
                             </Button>
                           )}
+
+                        {milestone.evidence &&
+                          (() => {
+                            const result = isValidUrl(milestone.evidence);
+
+                            return (
+                              <>
+                                <Button
+                                  title={
+                                    !evidenceVisibleMap[milestoneIndex]
+                                      ? "Show Evidence"
+                                      : "Show Description"
+                                  }
+                                  className="max-w-20"
+                                  variant="ghost"
+                                  onClick={() => {
+                                    setEvidenceVisibleMap((prev) => ({
+                                      ...prev,
+                                      [milestoneIndex]: !prev[milestoneIndex],
+                                    }));
+                                  }}
+                                >
+                                  {!evidenceVisibleMap[milestoneIndex] ? (
+                                    <FileCheck2 />
+                                  ) : (
+                                    <LetterText />
+                                  )}
+                                </Button>
+
+                                {evidenceVisibleMap[milestoneIndex] &&
+                                  (result === true ||
+                                    (result &&
+                                      typeof result === "object" &&
+                                      result.warning)) && (
+                                    <Link
+                                      href={milestone.evidence}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      <Button
+                                        title={
+                                          result === true
+                                            ? "Open Evidence"
+                                            : "Open Evidence (Not Secure)"
+                                        }
+                                        className="max-w-20"
+                                        variant="ghost"
+                                      >
+                                        <Link2
+                                          className={
+                                            result === true
+                                              ? ""
+                                              : "text-destructive"
+                                          }
+                                        />
+                                      </Button>
+                                    </Link>
+                                  )}
+                              </>
+                            );
+                          })()}
 
                         {userRolesInEscrow.includes("approver") &&
                           activeTab === "approver" &&
