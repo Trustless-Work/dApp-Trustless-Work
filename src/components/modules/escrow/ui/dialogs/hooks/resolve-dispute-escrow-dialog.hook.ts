@@ -42,8 +42,8 @@ const useResolveDisputeEscrowDialog = ({
     (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
   const formSchema = getFormSchema();
-  const setServiceProviderResolve = useEscrowUIBoundedStore(
-    (state) => state.setServiceProviderResolve,
+  const setReceiverResolve = useEscrowUIBoundedStore(
+    (state) => state.setReceiverResolve,
   );
   const setApproverResolve = useEscrowUIBoundedStore(
     (state) => state.setApproverResolve,
@@ -53,7 +53,7 @@ const useResolveDisputeEscrowDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       approverFunds: "",
-      serviceProviderFunds: "",
+      receiverFunds: "",
     },
     mode: "onChange",
   });
@@ -68,12 +68,12 @@ const useResolveDisputeEscrowDialog = ({
         contractId: selectedEscrow?.contractId,
         disputeResolver: selectedEscrow?.disputeResolver,
         approverFunds: payload.approverFunds,
-        serviceProviderFunds: payload.serviceProviderFunds,
+        receiverFunds: payload.receiverFunds,
       });
 
       if (response.status === "SUCCESS") {
         form.reset();
-        setServiceProviderResolve(payload.serviceProviderFunds);
+        setReceiverResolve(payload.receiverFunds);
         setApproverResolve(payload.approverFunds);
         setIsResolveDisputeDialogOpen(false);
         setIsResolvingDispute(false);
@@ -123,7 +123,7 @@ const useResolveDisputeEscrowDialog = ({
   };
 
   const handleClose = () => {
-    setServiceProviderResolve("");
+    setReceiverResolve("");
     setApproverResolve("");
     setIsResolveDisputeDialogOpen(false);
   };
