@@ -84,7 +84,7 @@ const MyEscrows = () => {
             <Tabs defaultValue="issuer" className="w-full">
               <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-16 md:gap-3">
                 <TabsList
-                  className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-4"
+                  className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-7 gap-4"
                   id="step-1"
                 >
                   <TabsTrigger
@@ -123,9 +123,15 @@ const MyEscrows = () => {
                   >
                     Platform Address
                   </TabsTrigger>
+                  <TabsTrigger
+                    onClick={() => setActiveTab("receiver")}
+                    value="receiver"
+                  >
+                    Receiver
+                  </TabsTrigger>
                 </TabsList>
 
-                <div className="flex items-center gap-2 mt-10 sm:mt-10 xl:mt-10 2xl:mt-0">
+                <div className="flex items-center gap-2 mt-20 sm:mt-10 xl:mt-10 2xl:mt-0">
                   <Select
                     value={activeMode}
                     onValueChange={(value) =>
@@ -251,6 +257,21 @@ const MyEscrows = () => {
                   </Card>
                 ) : (
                   <MyEscrowsCards type="platformAddress" />
+                )}
+              </TabsContent>
+
+              <TabsContent value="receiver" className="flex flex-col gap-3">
+                <Card className={cn("overflow-hidden")}>
+                  <CardContent className="p-6">
+                    <MyEscrowsFilter />
+                  </CardContent>
+                </Card>
+                {activeMode === "table" ? (
+                  <Card className={cn("overflow-hidden")}>
+                    <MyEscrowsTable type="receiver" />
+                  </Card>
+                ) : (
+                  <MyEscrowsCards type="receiver" />
                 )}
               </TabsContent>
             </Tabs>
