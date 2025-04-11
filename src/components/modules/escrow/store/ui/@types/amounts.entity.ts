@@ -1,12 +1,12 @@
 export interface AmountEscrowStore {
-  serviceProviderAmount: number;
+  receiverAmount: number;
   platformFeeAmount: number;
   trustlessWorkAmount: number;
-  serviceProviderResolve: string;
+  receiverResolve: string;
   approverResolve: string;
   amountMoonpay: string;
   setAmounts: (totalAmount: number, platformFee: number) => void;
-  setServiceProviderResolve: (value: string) => void;
+  setReceiverResolve: (value: string) => void;
   setApproverResolve: (value: string) => void;
   setAmountMoonpay: (value: string) => void;
 }
