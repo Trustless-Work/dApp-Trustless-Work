@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import { PackageCheck, TypeOutline } from "lucide-react";
+import { PackageCheck } from "lucide-react";
 import useCompleteMilestoneDialogHook from "./hooks/change-status-escrow-dialog.hook";
 import { useEscrowBoundedStore } from "../../store/data";
 import SkeletonCompleteMilestone from "./utils/SkeletonCompleteMilestone";
