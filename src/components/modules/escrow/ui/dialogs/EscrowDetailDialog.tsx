@@ -32,15 +32,19 @@ import {
   Ban,
   Check,
   CheckCheck,
+  CheckCheckIcon,
   CircleCheckBig,
   CircleDollarSign,
+  CircleDollarSignIcon,
   Copy,
   FileCheck2,
+  Flame,
   Handshake,
   LetterText,
   Link2,
   PackageCheck,
   Pencil,
+  QrCode,
   Wallet,
 } from "lucide-react";
 import EditMilestonesDialog from "./EditMilestonesDialog";
@@ -104,8 +108,8 @@ const EscrowDetailDialog = ({
   const { formatAddress, formatText, formatDollar, formatDateFromFirebase } =
     useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
-  const serviceProviderAmount = useEscrowUIBoundedStore(
-    (state) => state.serviceProviderAmount,
+  const receiverAmount = useEscrowUIBoundedStore(
+    (state) => state.receiverAmount,
   );
   const platformFeeAmount = useEscrowUIBoundedStore(
     (state) => state.platformFeeAmount,
@@ -330,6 +334,7 @@ const EscrowDetailDialog = ({
                 className="w-full mb-3"
                 variant="outline"
               >
+                <QrCode />
                 Show QR Address
               </Button>
               <Button
@@ -339,6 +344,7 @@ const EscrowDetailDialog = ({
                 }}
                 className="w-full"
               >
+                <CircleDollarSignIcon />
                 Fund Escrow
               </Button>
 
@@ -389,6 +395,7 @@ const EscrowDetailDialog = ({
                       variant="destructive"
                       className="mt-3 pointer-events-none w-full"
                     >
+                      <Flame />
                       Start Dispute
                     </Button>
                   </button>
@@ -402,6 +409,7 @@ const EscrowDetailDialog = ({
                     onClick={handleOpen}
                     className="bg-green-800 hover:bg-green-700 mt-3"
                   >
+                    <Handshake />
                     Resolve Dispute
                   </Button>
                 )}
@@ -594,8 +602,7 @@ const EscrowDetailDialog = ({
 
                 <div className="flex gap-10 sm:flex-row flex-col">
                   <p className="text-sm">
-                    <strong>Service Provider:</strong> $
-                    {serviceProviderAmount.toFixed(2)}
+                    <strong>Receiver:</strong> ${receiverAmount.toFixed(2)}
                   </p>
                   <p className="text-sm">
                     <strong>Platform Fee:</strong> $
