@@ -11,7 +11,7 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowBoundedStore } from "../../../store/ui";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
 import { useEffect } from "react";
 
@@ -24,17 +24,17 @@ const useFundEscrowDialog = ({
 }: useFundEscrowDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const setIsFundingEscrow = useEscrowBoundedStore(
+  const setIsFundingEscrow = useEscrowUIBoundedStore(
     (state) => state.setIsFundingEscrow,
   );
-  const setIsDialogOpen = useEscrowBoundedStore(
+  const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
-  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
-  const setAmountMoonpay = useEscrowBoundedStore(
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+  const setAmountMoonpay = useEscrowUIBoundedStore(
     (state) => state.setAmountMoonpay,
   );
 

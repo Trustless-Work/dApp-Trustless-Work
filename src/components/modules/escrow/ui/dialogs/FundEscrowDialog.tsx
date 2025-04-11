@@ -19,10 +19,10 @@ import {
 } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useFundEscrowDialogHook from "./hooks/fund-escrow-dialog.hook";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import SkeletonFundEscrow from "./utils/SkeletonFundEscrow";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { DollarSign } from "lucide-react";
+import { CircleDollarSignIcon, DollarSign } from "lucide-react";
 
 interface FundEscrowDialogProps {
   isSecondDialogOpen: boolean;
@@ -39,13 +39,13 @@ const FundEscrowDialog = ({
     });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const isFundingEscrow = useEscrowBoundedStore(
+  const isFundingEscrow = useEscrowUIBoundedStore(
     (state) => state.isFundingEscrow,
   );
-  const isMoonpayWidgetOpen = useEscrowBoundedStore(
+  const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
     (state) => state.isMoonpayWidgetOpen,
   );
-  const setIsMoonpayWidgetOpen = useEscrowBoundedStore(
+  const setIsMoonpayWidgetOpen = useEscrowUIBoundedStore(
     (state) => state.setIsMoonpayWidgetOpen,
   );
 
@@ -147,10 +147,14 @@ const FundEscrowDialog = ({
                         setIsMoonpayWidgetOpen(!isMoonpayWidgetOpen);
                       }}
                     >
+                      <CircleDollarSignIcon />
                       Fund Escrow
                     </Button>
                   ) : (
-                    <Button type="submit">Fund Escrow</Button>
+                    <Button type="submit">
+                      <CircleDollarSignIcon />
+                      Fund Escrow
+                    </Button>
                   )}
                 </DialogFooter>
               </form>

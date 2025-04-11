@@ -6,17 +6,17 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowBoundedStore } from "../../../store/ui";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { Escrow, Milestone } from "@/@types/escrow.entity";
 import { changeMilestoneFlag } from "../../../services/change-mileston-flag.service";
 import { toast } from "@/hooks/toast.hook";
 
 const useChangeFlagEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
-  const setIsChangingStatus = useEscrowBoundedStore(
+  const setIsChangingStatus = useEscrowUIBoundedStore(
     (state) => state.setIsChangingStatus,
   );
-  const setIsDialogOpen = useEscrowBoundedStore(
+  const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
   const setSelectedEscrow = useGlobalBoundedStore(
@@ -25,7 +25,7 @@ const useChangeFlagEscrowDialog = () => {
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
-  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
   const changeMilestoneFlagSubmit = async (
     selectedEscrow: Escrow,

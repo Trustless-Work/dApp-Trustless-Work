@@ -6,16 +6,16 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowBoundedStore } from "../../../store/ui";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { startDispute } from "../../../services/start-dispute.service";
 import { toast } from "@/hooks/toast.hook";
 
 const useStartDisputeEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
-  const setIsStartingDispute = useEscrowBoundedStore(
+  const setIsStartingDispute = useEscrowUIBoundedStore(
     (state) => state.setIsStartingDispute,
   );
-  const setIsDialogOpen = useEscrowBoundedStore(
+  const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
   const setSelectedEscrow = useGlobalBoundedStore(
@@ -25,7 +25,7 @@ const useStartDisputeEscrowDialog = () => {
     (state) => state.fetchAllEscrows,
   );
   const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
-  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
   const startDisputeSubmit = async () => {

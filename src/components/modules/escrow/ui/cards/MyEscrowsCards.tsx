@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import NoData from "@/components/utils/ui/NoData";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
@@ -33,34 +33,35 @@ interface MyEscrowsCardsProps {
     | "disputeResolver"
     | "serviceProvider"
     | "releaseSigner"
-    | "platformAddress";
+    | "platformAddress"
+    | "receiver";
 }
 
 const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
-  const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
-  const setIsDialogOpen = useEscrowBoundedStore(
+  const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
+  const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
   const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
-  const isSuccessDialogOpen = useEscrowBoundedStore(
+  const isSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.isSuccessDialogOpen,
   );
-  const setIsSuccessDialogOpen = useEscrowBoundedStore(
+  const setIsSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
   );
-  const isSuccessReleaseDialogOpen = useEscrowBoundedStore(
+  const isSuccessReleaseDialogOpen = useEscrowUIBoundedStore(
     (state) => state.isSuccessReleaseDialogOpen,
   );
-  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+  const setIsSuccessReleaseDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessReleaseDialogOpen,
   );
-  const isSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+  const isSuccessResolveDisputeDialogOpen = useEscrowUIBoundedStore(
     (state) => state.isSuccessResolveDisputeDialogOpen,
   );
-  const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+  const setIsSuccessResolveDisputeDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);

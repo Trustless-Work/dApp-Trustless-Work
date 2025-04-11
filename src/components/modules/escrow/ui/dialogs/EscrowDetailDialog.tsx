@@ -18,12 +18,11 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import EntityCard from "./cards/EntityCard";
 import FundEscrowDialog from "./FundEscrowDialog";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";
 import { Badge } from "@/components/ui/badge";
 import useDistributeEarningsEscrowDialogHook from "./hooks/distribute-earnings-escrow-dialog.hook";
-import useChangeStatusEscrowDialogHook from "./hooks/change-status-escrow-dialog.hook";
 import useChangeFlagEscrowDialogHook from "./hooks/change-flag-escrow-dialog.hook";
 import ProgressEscrow from "./utils/ProgressEscrow";
 import useStartDisputeEscrowDialogHook from "./hooks/start-dispute-escrow-dialog.hook";
@@ -32,10 +31,19 @@ import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-di
 import {
   Ban,
   Check,
+  CheckCheck,
   CircleCheckBig,
   CircleDollarSign,
+  CircleDollarSignIcon,
   Copy,
+  FileCheck2,
+  Flame,
   Handshake,
+  LetterText,
+  Link2,
+  PackageCheck,
+  Pencil,
+  QrCode,
   Wallet,
 } from "lucide-react";
 import EditMilestonesDialog from "./EditMilestonesDialog";
@@ -47,6 +55,9 @@ import { toast } from "@/hooks/toast.hook";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
 import { useEffect } from "react";
 import Link from "next/link";
+import CompleteMilestoneDialog from "./CompleteMilestoneDialog";
+import { useEscrowBoundedStore } from "../../store/data";
+import { useValidData } from "@/utils/hook/valid-data.hook";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -61,10 +72,12 @@ const EscrowDetailDialog = ({
 }: EscrowDetailDialogProps) => {
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const dialogStates = useEscrowDialogs();
-  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
   const {
     handleClose,
+    setEvidenceVisibleMap,
+    evidenceVisibleMap,
     areAllMilestonesCompleted,
     areAllMilestonesCompletedAndFlag,
     userRolesInEscrow,
@@ -74,28 +87,36 @@ const EscrowDetailDialog = ({
     selectedEscrow,
   });
 
+  const { isValidUrl } = useValidData();
+
   const { distributeEscrowEarningsSubmit } =
     useDistributeEarningsEscrowDialogHook();
   const { handleOpen } = useResolveDisputeEscrowDialogHook({
     setIsResolveDisputeDialogOpen: dialogStates.resolveDispute.setIsOpen,
   });
-  const { changeMilestoneStatusSubmit } = useChangeStatusEscrowDialogHook();
+
+  const setCompletingMilestone = useEscrowBoundedStore(
+    (state) => state.setCompletingMilestone,
+  );
+  const setMilestoneIndex = useEscrowBoundedStore(
+    (state) => state.setMilestoneIndex,
+  );
   const { startDisputeSubmit } = useStartDisputeEscrowDialogHook();
   const { changeMilestoneFlagSubmit } = useChangeFlagEscrowDialogHook();
 
   const { formatAddress, formatText, formatDollar, formatDateFromFirebase } =
     useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
-  const serviceProviderAmount = useEscrowBoundedStore(
-    (state) => state.serviceProviderAmount,
+  const receiverAmount = useEscrowUIBoundedStore(
+    (state) => state.receiverAmount,
   );
-  const platformFeeAmount = useEscrowBoundedStore(
+  const platformFeeAmount = useEscrowUIBoundedStore(
     (state) => state.platformFeeAmount,
   );
-  const trustlessWorkAmount = useEscrowBoundedStore(
+  const trustlessWorkAmount = useEscrowUIBoundedStore(
     (state) => state.trustlessWorkAmount,
   );
-  const setAmounts = useEscrowBoundedStore((state) => state.setAmounts);
+  const setAmounts = useEscrowUIBoundedStore((state) => state.setAmounts);
 
   const totalAmount = Number(selectedEscrow?.amount || 0);
   const platformFeePercentage = Number(selectedEscrow?.platformFee || 0);
@@ -111,7 +132,7 @@ const EscrowDetailDialog = ({
       <Dialog open={isDialogOpen} onOpenChange={handleClose}>
         <DialogContent className="w-11/12 md:w-2/3 h-auto max-h-screen overflow-y-auto">
           <DialogHeader>
-            <div className="md:w-2/4 w-full">
+            <div className="w-full">
               <div className="flex flex-col gap-2">
                 <Link
                   href={`https://stellar.expert/explorer/testnet/contract/${selectedEscrow.contractId}`}
@@ -126,8 +147,21 @@ const EscrowDetailDialog = ({
                   {selectedEscrow.description}
                 </DialogDescription>
                 <DialogDescription>
-                  <strong>Roles:</strong>{" "}
-                  {userRolesInEscrow.map((role) => formatText(role)).join(", ")}
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex gap-2">
+                      <strong>Roles: </strong>
+                      {userRolesInEscrow
+                        .map((role) => formatText(role))
+                        .join(", ")}
+                    </div>
+
+                    <div className="border-r-2" />
+
+                    <div className="flex gap-2">
+                      <strong className="truncate">Memo:</strong>
+                      {selectedEscrow?.receiverMemo}
+                    </div>
+                  </div>
                 </DialogDescription>
               </div>
             </div>
@@ -299,6 +333,7 @@ const EscrowDetailDialog = ({
                 className="w-full mb-3"
                 variant="outline"
               >
+                <QrCode />
                 Show QR Address
               </Button>
               <Button
@@ -308,6 +343,7 @@ const EscrowDetailDialog = ({
                 }}
                 className="w-full"
               >
+                <CircleDollarSignIcon />
                 Fund Escrow
               </Button>
 
@@ -358,6 +394,7 @@ const EscrowDetailDialog = ({
                       variant="destructive"
                       className="mt-3 pointer-events-none w-full"
                     >
+                      <Flame />
                       Start Dispute
                     </Button>
                   </button>
@@ -371,6 +408,7 @@ const EscrowDetailDialog = ({
                     onClick={handleOpen}
                     className="bg-green-800 hover:bg-green-700 mt-3"
                   >
+                    <Handshake />
                     Resolve Dispute
                   </Button>
                 )}
@@ -405,11 +443,12 @@ const EscrowDetailDialog = ({
                   type="Release Signer"
                   entity={selectedEscrow.releaseSigner}
                 />
+                <EntityCard type="Reciever" entity={selectedEscrow.receiver} />
               </div>
 
               {/* Milestones */}
               <div className="flex justify-center w-full mt-5">
-                <div className="flex flex-col gap-4 py-4 w-full md:w-2/3">
+                <div className="flex flex-col gap-4 py-4 w-full md:w-4/5">
                   <label htmlFor="milestones" className="flex items-center">
                     Milestones
                     <TooltipInfo content="Key stages or deliverables for the escrow." />
@@ -433,8 +472,11 @@ const EscrowDetailDialog = ({
 
                         <Input
                           disabled
-                          value={milestone.description}
-                          placeholder="Milestone Description"
+                          value={
+                            !evidenceVisibleMap[milestoneIndex]
+                              ? milestone.description
+                              : milestone.evidence
+                          }
                         />
 
                         {userRolesInEscrow.includes("serviceProvider") &&
@@ -443,17 +485,78 @@ const EscrowDetailDialog = ({
                           !milestone.approved_flag && (
                             <Button
                               className="max-w-32"
-                              onClick={() =>
-                                changeMilestoneStatusSubmit(
-                                  selectedEscrow,
-                                  milestone,
-                                  milestoneIndex,
-                                )
-                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setCompletingMilestone(milestone);
+                                setMilestoneIndex(milestoneIndex);
+                                dialogStates.completeMilestone.setIsOpen(true);
+                              }}
                             >
+                              <PackageCheck />
                               Complete
                             </Button>
                           )}
+
+                        {milestone.evidence &&
+                          (() => {
+                            const result = isValidUrl(milestone.evidence);
+
+                            return (
+                              <>
+                                <Button
+                                  title={
+                                    !evidenceVisibleMap[milestoneIndex]
+                                      ? "Show Evidence"
+                                      : "Show Description"
+                                  }
+                                  className="max-w-20"
+                                  variant="ghost"
+                                  onClick={() => {
+                                    setEvidenceVisibleMap((prev) => ({
+                                      ...prev,
+                                      [milestoneIndex]: !prev[milestoneIndex],
+                                    }));
+                                  }}
+                                >
+                                  {!evidenceVisibleMap[milestoneIndex] ? (
+                                    <FileCheck2 />
+                                  ) : (
+                                    <LetterText />
+                                  )}
+                                </Button>
+
+                                {evidenceVisibleMap[milestoneIndex] &&
+                                  (result === true ||
+                                    (result &&
+                                      typeof result === "object" &&
+                                      result.warning)) && (
+                                    <Link
+                                      href={milestone.evidence}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      <Button
+                                        title={
+                                          result === true
+                                            ? "Open Evidence"
+                                            : "Open Evidence (Not Secure)"
+                                        }
+                                        className="max-w-20"
+                                        variant="ghost"
+                                      >
+                                        <Link2
+                                          className={
+                                            result === true
+                                              ? ""
+                                              : "text-destructive"
+                                          }
+                                        />
+                                      </Button>
+                                    </Link>
+                                  )}
+                              </>
+                            );
+                          })()}
 
                         {userRolesInEscrow.includes("approver") &&
                           activeTab === "approver" &&
@@ -469,6 +572,7 @@ const EscrowDetailDialog = ({
                                 )
                               }
                             >
+                              <CheckCheck />
                               Approve
                             </Button>
                           )}
@@ -481,7 +585,7 @@ const EscrowDetailDialog = ({
               </div>
             </CardContent>
           </Card>
-          <div className="flex sm:flex-row flex-col w-full justify-between mb-80 sm:mb-0">
+          <div className="flex sm:flex-row flex-col w-full justify-between items-center mb-80 sm:mb-0">
             <p className="italic text-sm sm:mb-0 mb-3">
               <span className="font-bold mr-1">Created:</span>
               {formatDateFromFirebase(
@@ -497,8 +601,7 @@ const EscrowDetailDialog = ({
 
                 <div className="flex gap-10 sm:flex-row flex-col">
                   <p className="text-sm">
-                    <strong>Service Provider:</strong> $
-                    {serviceProviderAmount.toFixed(2)}
+                    <strong>Receiver:</strong> ${receiverAmount.toFixed(2)}
                   </p>
                   <p className="text-sm">
                     <strong>Platform Fee:</strong> $
@@ -521,6 +624,7 @@ const EscrowDetailDialog = ({
                   type="button"
                   className="bg-green-800 hover:bg-green-700"
                 >
+                  <CircleDollarSign />
                   Release Payment
                 </Button>
               )}
@@ -535,6 +639,7 @@ const EscrowDetailDialog = ({
                   }}
                   variant="outline"
                 >
+                  <Pencil />
                   Edit
                 </Button>
               )}
@@ -545,6 +650,13 @@ const EscrowDetailDialog = ({
       <FundEscrowDialog
         isSecondDialogOpen={dialogStates.second.isOpen}
         setIsSecondDialogOpen={dialogStates.second.setIsOpen}
+      />
+
+      <CompleteMilestoneDialog
+        isCompleteMilestoneDialogOpen={dialogStates.completeMilestone.isOpen}
+        setIsCompleteMilestoneDialogOpen={
+          dialogStates.completeMilestone.setIsOpen
+        }
       />
 
       <QREscrowDialog

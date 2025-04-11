@@ -14,5 +14,27 @@ export const useValidData = () => {
     return true;
   };
 
-  return { isValidWallet };
+  const isValidUrl = (
+    text: string,
+  ): boolean | { valid: true; warning: true } => {
+    if (typeof text !== "string") return false;
+
+    const trimmed = text.trim();
+
+    const urlRegex = /^(https?:\/\/)([\w.-]+)(:\d+)?(\/[^\s]*)?$/i;
+
+    const match = trimmed.match(urlRegex);
+    if (!match) return false;
+
+    const protocol = match[1];
+    if (protocol === "https://") {
+      return true;
+    } else if (protocol === "http://") {
+      return { valid: true, warning: true };
+    }
+
+    return false;
+  };
+
+  return { isValidWallet, isValidUrl };
 };

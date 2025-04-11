@@ -215,7 +215,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      placeholder="Enter release signer address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -259,7 +259,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      placeholder="Enter dispute resolver address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -305,7 +305,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      placeholder="Enter platform address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);

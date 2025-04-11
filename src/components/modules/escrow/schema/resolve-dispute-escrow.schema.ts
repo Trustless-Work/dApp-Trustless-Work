@@ -10,13 +10,13 @@ export const getFormSchema = () => {
       .refine((value) => !isNaN(Number(value)), {
         message: "Approver funds must be a valid number.",
       }),
-    serviceProviderFunds: z
+    receiverFunds: z
       .string()
       .min(1, {
-        message: "Service Provider funds is required.",
+        message: "Receiver funds is required.",
       })
       .refine((value) => !isNaN(Number(value)), {
-        message: "Service Provider funds must be a valid number.",
+        message: "Receiver funds must be a valid number.",
       }),
   });
 };

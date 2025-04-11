@@ -4,7 +4,7 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface EscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -26,6 +26,9 @@ const useEscrowDetailDialog = ({
   );
   const fetchingRef = useRef(false);
   const lastFetchKey = useRef("");
+  const [evidenceVisibleMap, setEvidenceVisibleMap] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   const handleClose = useCallback(() => {
     setIsDialogOpen(false);
@@ -87,6 +90,8 @@ const useEscrowDetailDialog = ({
 
   return {
     handleClose,
+    setEvidenceVisibleMap,
+    evidenceVisibleMap,
     areAllMilestonesCompleted,
     areAllMilestonesCompletedAndFlag,
     userRolesInEscrow,

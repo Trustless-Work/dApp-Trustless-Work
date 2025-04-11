@@ -2,10 +2,10 @@
 
 import { Bounded } from "@/components/layout/Bounded";
 import { Button } from "@/components/ui/button";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 
 const CreateEscrowPage = () => {
-  const toggleStep = useEscrowBoundedStore((state) => state.toggleStep);
+  const toggleStep = useEscrowUIBoundedStore((state) => state.toggleStep);
 
   const handleStart = async () => {
     toggleStep(2);

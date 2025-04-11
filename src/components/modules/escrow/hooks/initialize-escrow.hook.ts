@@ -12,7 +12,7 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowBoundedStore } from "../store/ui";
+import { useEscrowUIBoundedStore } from "../store/ui";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { GetFormSchema } from "../schema/initialize-escrow.schema";
 import { Trustline } from "@/@types/trustline.entity";
@@ -29,12 +29,14 @@ export const useInitializeEscrow = () => {
 
   const { address } = useGlobalAuthenticationStore();
   const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
-  const formData = useEscrowBoundedStore((state) => state.formData);
-  const setFormData = useEscrowBoundedStore((state) => state.setFormData);
-  const resetForm = useEscrowBoundedStore((state) => state.resetForm);
-  const setCurrentStep = useEscrowBoundedStore((state) => state.setCurrentStep);
+  const formData = useEscrowUIBoundedStore((state) => state.formData);
+  const setFormData = useEscrowUIBoundedStore((state) => state.setFormData);
+  const resetForm = useEscrowUIBoundedStore((state) => state.resetForm);
+  const setCurrentStep = useEscrowUIBoundedStore(
+    (state) => state.setCurrentStep,
+  );
   const router = useRouter();
-  const setIsSuccessDialogOpen = useEscrowBoundedStore(
+  const setIsSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
   );
   const resetSteps = useGlobalUIBoundedStore((state) => state.resetSteps);

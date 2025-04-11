@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { StepButton } from "./StepButton";
 import { StepContent } from "./StepContent";
 import { Card, CardContent } from "@/components/ui/card";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 
 export interface StepItem {
   title: string;
@@ -19,10 +19,12 @@ export interface EscrowStepsProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const EscrowSteps = React.forwardRef<HTMLDivElement, EscrowStepsProps>(
   ({ items, className, ...props }, ref) => {
-    const currentStep = useEscrowBoundedStore((state) => state.currentStep);
-    const setTotalSteps = useEscrowBoundedStore((state) => state.setTotalSteps);
-    const toggleStep = useEscrowBoundedStore((state) => state.toggleStep);
-    const isStepCompleted = useEscrowBoundedStore(
+    const currentStep = useEscrowUIBoundedStore((state) => state.currentStep);
+    const setTotalSteps = useEscrowUIBoundedStore(
+      (state) => state.setTotalSteps,
+    );
+    const toggleStep = useEscrowUIBoundedStore((state) => state.toggleStep);
+    const isStepCompleted = useEscrowUIBoundedStore(
       (state) => state.isStepCompleted,
     );
 

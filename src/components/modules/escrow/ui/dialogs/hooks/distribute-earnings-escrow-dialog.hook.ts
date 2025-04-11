@@ -6,20 +6,20 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowBoundedStore } from "../../../store/ui";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { distributeEscrowEarnings } from "../../../services/distribute-escrow-earnings.service";
 import { toast } from "@/hooks/toast.hook";
 
 const useDistributeEarningsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
-  const setIsChangingStatus = useEscrowBoundedStore(
+  const setIsChangingStatus = useEscrowUIBoundedStore(
     (state) => state.setIsChangingStatus,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const setIsDialogOpen = useEscrowBoundedStore(
+  const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
-  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+  const setIsSuccessReleaseDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessReleaseDialogOpen,
   );
   const setRecentEscrow = useGlobalBoundedStore(
@@ -28,7 +28,7 @@ const useDistributeEarningsEscrowDialog = () => {
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
-  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
   const distributeEscrowEarningsSubmit = async () => {
     setIsChangingStatus(true);
