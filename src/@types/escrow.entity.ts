@@ -34,7 +34,7 @@ export interface Escrow {
   releaseFlag?: boolean;
   resolvedFlag?: boolean;
   approverFunds?: string;
-  serviceProviderFunds?: string;
+  receiverFunds?: string;
   receiver?: string;
   receiverMemo?: number;
   disputeStartedBy?: string;
@@ -90,7 +90,7 @@ export type StartDisputePayload = Pick<Escrow, "contractId"> & {
 export type ResolveDisputePayload = Pick<Escrow, "contractId"> &
   Partial<Pick<Escrow, "disputeResolver">> & {
     approverFunds: string;
-    serviceProviderFunds: string;
+    receiverFunds: string;
   };
 
 export type EditMilestonesPayload = {
