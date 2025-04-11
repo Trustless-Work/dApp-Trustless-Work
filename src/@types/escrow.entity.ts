@@ -46,7 +46,8 @@ export type RolesInEscrow =
   | "disputeResolver"
   | "serviceProvider"
   | "releaseSigner"
-  | "platformAddress";
+  | "platformAddress"
+  | "receiver";
 
 // Payloads
 export type FundEscrowPayload = Pick<Escrow, "amount" | "contractId"> & {
