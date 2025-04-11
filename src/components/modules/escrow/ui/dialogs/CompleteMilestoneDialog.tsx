@@ -77,20 +77,13 @@ const CompleteMilestoneDialog = ({
                           <TooltipInfo content="The evidence that you've completed the milestone." />
                         </FormLabel>
                         <FormControl>
-                          <div className="relative">
-                            <TypeOutline
-                              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                              size={18}
-                            />
-                            <Textarea
-                              className="pl-10"
-                              placeholder="The evidence of your work"
-                              {...field}
-                              onChange={(e) => {
-                                field.onChange(e);
-                              }}
-                            />
-                          </div>
+                          <Textarea
+                            placeholder="The evidence of your work"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

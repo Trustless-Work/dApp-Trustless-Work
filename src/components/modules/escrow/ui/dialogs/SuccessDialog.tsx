@@ -135,12 +135,12 @@ export const SuccessReleaseDialog = ({
   // Percentage
   const trustlessPercentage = 0.3;
   const platformFee = Number(escrow?.platformFee || 0);
-  const serviceProviderPercentage = 100 - (trustlessPercentage + platformFee);
+  const receiverPercentage = 100 - (trustlessPercentage + platformFee);
 
   // Amount
   const totalAmount = Number(escrow?.amount || 0);
   const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
-  const serviceProviderAmount = (totalAmount * serviceProviderPercentage) / 100;
+  const receiverAmount = (totalAmount * receiverPercentage) / 100;
   const platformAmount = (totalAmount * platformFee) / 100;
 
   return (
@@ -173,12 +173,12 @@ export const SuccessReleaseDialog = ({
         </div>
         <div className="flex flex-col gap-4">
           <EntityCard
-            type="Service Provider"
-            entity={escrow?.serviceProvider}
+            type="Receiver"
+            entity={escrow?.receiver}
             hasPercentage={true}
-            percentage={serviceProviderPercentage.toString()}
+            percentage={receiverPercentage.toString()}
             hasAmount={true}
-            amount={serviceProviderAmount.toString()}
+            amount={receiverAmount.toString()}
           />
           <EntityCard
             type="Trustless Work"
@@ -226,17 +226,17 @@ export const SuccessResolveDisputeDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const serviceProviderResolveFromStore = useEscrowUIBoundedStore(
-    (state) => state.serviceProviderResolve,
+  const receiverResolveFromStore = useEscrowUIBoundedStore(
+    (state) => state.receiverResolve,
   );
   const approverResolveFromStore = useEscrowUIBoundedStore(
     (state) => state.approverResolve,
   );
 
-  const serviceProviderResolve =
-    serviceProviderResolveFromStore && serviceProviderResolveFromStore !== ""
-      ? serviceProviderResolveFromStore
-      : selectedEscrow?.serviceProviderFunds;
+  const receiverResolve =
+    receiverResolveFromStore && receiverResolveFromStore !== ""
+      ? receiverResolveFromStore
+      : selectedEscrow?.receiverFunds;
 
   const approverResolve =
     approverResolveFromStore && approverResolveFromStore !== ""
@@ -254,20 +254,18 @@ export const SuccessResolveDisputeDialog = ({
   const platformFee = parseFloat(escrow?.platformFee || "0");
 
   const parsedApproverFunds = parseFloat(approverResolve || "0") || 0;
-  const parsedServiceProviderFunds =
-    parseFloat(serviceProviderResolve || "0") || 0;
+  const parsedReceiverFunds = parseFloat(receiverResolve || "0") || 0;
 
   const approverDeductions =
     parsedApproverFunds * (platformFee / 100) +
     parsedApproverFunds * trustlessWorkFee;
 
-  const serviceProviderDeductions =
-    parsedServiceProviderFunds * (platformFee / 100) +
-    parsedServiceProviderFunds * trustlessWorkFee;
+  const receiverDeductions =
+    parsedReceiverFunds * (platformFee / 100) +
+    parsedReceiverFunds * trustlessWorkFee;
 
   const approverNet = parsedApproverFunds - approverDeductions;
-  const serviceProviderNet =
-    parsedServiceProviderFunds - serviceProviderDeductions;
+  const receiverNet = parsedReceiverFunds - receiverDeductions;
 
   const totalPlatformAmount =
     selectedEscrow?.amount && !isNaN(Number(selectedEscrow.amount))
@@ -304,12 +302,12 @@ export const SuccessResolveDisputeDialog = ({
         </div>
         <div className="flex flex-col gap-4">
           <EntityCard
-            type="Service Provider"
-            entity={escrow?.serviceProvider}
+            type="Receiver"
+            entity={escrow?.receiver}
             hasPercentage={false}
             hasAmount={true}
             isNet={true}
-            amount={serviceProviderNet.toString()}
+            amount={receiverNet.toString()}
           />
           <EntityCard
             type="Approver"

@@ -22,7 +22,11 @@ import useFundEscrowDialogHook from "./hooks/fund-escrow-dialog.hook";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import SkeletonFundEscrow from "./utils/SkeletonFundEscrow";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { DollarSign } from "lucide-react";
+import {
+  CircleDollarSign,
+  CircleDollarSignIcon,
+  DollarSign,
+} from "lucide-react";
 
 interface FundEscrowDialogProps {
   isSecondDialogOpen: boolean;
@@ -147,10 +151,14 @@ const FundEscrowDialog = ({
                         setIsMoonpayWidgetOpen(!isMoonpayWidgetOpen);
                       }}
                     >
+                      <CircleDollarSignIcon />
                       Fund Escrow
                     </Button>
                   ) : (
-                    <Button type="submit">Fund Escrow</Button>
+                    <Button type="submit">
+                      <CircleDollarSignIcon />
+                      Fund Escrow
+                    </Button>
                   )}
                 </DialogFooter>
               </form>
