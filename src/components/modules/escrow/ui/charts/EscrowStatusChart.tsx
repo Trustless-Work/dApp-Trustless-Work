@@ -7,7 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useStatusChartData } from "../../hooks/use-status-chart.hook-data";
+import { useStatusChartData } from "../../hooks/use-status-chart-data.hook";
 
 type StatusCounts = {
   name: string;
