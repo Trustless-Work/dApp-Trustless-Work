@@ -51,7 +51,7 @@
     "react-loader-spinner": "^6.1.6",
     "react-qr-code": "^2.0.15",
     "react-syntax-highlighter": "^15.6.1",
-    "recharts": "^2.15.0",
+    "recharts": "^2.15.2",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.0.5",
