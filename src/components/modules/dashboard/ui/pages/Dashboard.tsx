@@ -1,44 +1,33 @@
-import { Chart } from "@/components/ui/chart";
-import MetricsSection from "../cards/MetricSection";
-import RecentSales from "../cards/RecentSales";
-import DateRangePicker from "../utils/Datepicker";
+// src/components/modules/dashboard/ui/pages/Dashboard.tsx
+"use client";
 
-const Dashboard = () => {
-  // Mock Data
-  const chartData = [
-    { name: "Jan", value: 4500 },
-    { name: "Feb", value: 4000 },
-    { name: "Mar", value: 6000 },
-    { name: "Apr", value: 2000 },
-    { name: "May", value: 3000 },
-    { name: "Jun", value: 4000 },
-    { name: "Jul", value: 3500 },
-    { name: "Aug", value: 4200 },
-    { name: "Sep", value: 4000 },
-    { name: "Oct", value: 3200 },
-    { name: "Nov", value: 3000 },
-    { name: "Dec", value: 2800 },
-  ];
+import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { useEscrowDashboardData } from "../../hooks/use-escrow-dashboard-data.hook";
+import { EscrowStatusChart } from "../charts/EscrowStatusChart";
+import { EscrowReleaseTrendChart } from "../charts/EscrowReleaseTrendChart";
+import { EscrowVolumeTrendChart } from "../charts/EscrowVolumeTrendChart";
+import { TopEscrowsList } from "../lists/TopEscrowsList";
+import Loader from "@/components/utils/ui/Loader";
+
+export default function Dashboard() {
+  const address = useGlobalAuthenticationStore((state) => state.address);
+  const data = useEscrowDashboardData({ address });
+
+  if (!data) {
+    return <Loader isLoading={true} />;
+  }
+
+  const { statusCounts, releaseTrend, volumeTrend, top5ByValue } = data;
 
   return (
-    <div className="flex flex-col">
-      <div className="flex w-full items-center justify-end mb-3">
-        <DateRangePicker />
-      </div>
-
-      <div className="space-y-4">
-        <MetricsSection />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <div className="col-span-4">
-            <Chart title="Overview" data={chartData} />
-          </div>
-          <div className="col-span-4 lg:col-span-3">
-            <RecentSales />
-          </div>
-        </div>
-      </div>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Escrow Dashboard</h1>
+      <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <EscrowStatusChart data={statusCounts} />
+        <EscrowReleaseTrendChart data={releaseTrend} />
+        <EscrowVolumeTrendChart data={volumeTrend} />
+        <TopEscrowsList data={top5ByValue} />
+      </section>
     </div>
   );
-};
-
-export default Dashboard;
+}
