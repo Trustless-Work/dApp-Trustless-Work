@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import type { Escrow } from "@/@types/escrow.entity";
-import { fetchAllEscrows } from "../services/escrow.service";
+import { fetchAllEscrows } from "../../escrow/services/escrow.service";
 
 type DashboardData = {
   statusCounts: { name: string; count: number }[];
