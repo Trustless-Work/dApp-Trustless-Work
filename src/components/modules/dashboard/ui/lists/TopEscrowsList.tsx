@@ -1,4 +1,3 @@
-// src/components/modules/dashboard/ui/lists/TopEscrowsList.tsx
 "use client";
 
 import {
@@ -11,47 +10,16 @@ import {
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
-
-type Escrow = {
-  id: string;
-  title: string;
-  amount: string;
-  createdAt: {
-    seconds: number;
-  };
-  releaseFlag: boolean;
-  disputeFlag: boolean;
-  resolvedFlag: boolean;
-};
+import { useTopEscrowTableData } from "../../hooks/use-top-escrow-table-data.hook";
+import type { Escrow } from "@/@types/escrow.entity";
 
 type Props = {
   data: Escrow[];
 };
 
-function getStatus(escrow: Escrow): string {
-  if (escrow.releaseFlag) return "Released";
-  if (escrow.disputeFlag) return "Disputed";
-  if (escrow.resolvedFlag) return "Resolved";
-  return "Pending";
-}
-
-function getStatusVariant(
-  status: string,
-): "default" | "secondary" | "destructive" | "outline" {
-  switch (status) {
-    case "Released":
-      return "default";
-    case "Disputed":
-      return "destructive";
-    case "Resolved":
-      return "secondary";
-    default:
-      return "outline";
-  }
-}
-
 export function TopEscrowsList({ data }: Props) {
+  const rows = useTopEscrowTableData(data);
+
   return (
     <Card>
       <CardHeader>
@@ -68,29 +36,16 @@ export function TopEscrowsList({ data }: Props) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((escrow) => {
-              const status = getStatus(escrow);
-              const variant = getStatusVariant(status);
-              const date = format(
-                new Date(escrow.createdAt.seconds * 1000),
-                "dd MMM yyyy",
-              );
-              const amount = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-              }).format(parseFloat(escrow.amount));
-
-              return (
-                <TableRow key={escrow.id}>
-                  <TableCell className="font-medium">{escrow.title}</TableCell>
-                  <TableCell className="text-right">{amount}</TableCell>
-                  <TableCell className="text-center">
-                    <Badge variant={variant}>{status}</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">{date}</TableCell>
-                </TableRow>
-              );
-            })}
+            {rows.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell className="font-medium">{row.title}</TableCell>
+                <TableCell className="text-right">{row.amount}</TableCell>
+                <TableCell className="text-center">
+                  <Badge variant={row.badgeVariant}>{row.status}</Badge>
+                </TableCell>
+                <TableCell className="text-right">{row.created}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>

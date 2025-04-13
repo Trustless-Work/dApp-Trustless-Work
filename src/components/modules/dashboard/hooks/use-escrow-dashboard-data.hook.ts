@@ -22,6 +22,7 @@ export const useEscrowDashboardData = ({
   useEffect(() => {
     const fetchData = async () => {
       const escrows = await fetchAllEscrows({ address, type });
+      console.log(escrows);
 
       setData({
         statusCounts: getStatusCounts(escrows),
@@ -33,6 +34,7 @@ export const useEscrowDashboardData = ({
 
     if (address) fetchData();
   }, [address, type]);
+  console.log("Dashboard data", data);
 
   return data;
 };
