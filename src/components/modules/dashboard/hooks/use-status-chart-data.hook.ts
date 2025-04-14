@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ChartConfig } from "@/components/ui/chart";
+import { getStatusColor } from "../utils/escrow-status.util";
 
 type StatusCounts = {
   name: string;
@@ -14,20 +15,20 @@ export function useStatusChartData(data: StatusCounts) {
 
   const formattedData = React.useMemo(
     () =>
-      data.map((item, i) => ({
+      data.map((item) => ({
         ...item,
-        fill: `hsl(var(--chart-${i + 1}))`,
+        fill: getStatusColor(item.name),
       })),
     [data],
   );
 
   const chartConfig = React.useMemo(() => {
     return Object.fromEntries(
-      data.map((item, i) => [
+      data.map((item) => [
         item.name.toLowerCase(),
         {
           label: item.name,
-          color: `hsl(var(--chart-${i + 1}))`,
+          color: getStatusColor(item.name),
         },
       ]),
     ) as ChartConfig;

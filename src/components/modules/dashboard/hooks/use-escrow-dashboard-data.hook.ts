@@ -8,6 +8,10 @@ type DashboardData = {
   top5ByValue: Escrow[];
   releaseTrend: { date: string; count: number }[];
   volumeTrend: { date: string; value: number }[];
+  totalEscrows: number;
+  totalResolved: number;
+  resolvedPercentage: number;
+  isPositive: boolean;
 };
 
 export const useEscrowDashboardData = ({
@@ -22,19 +26,21 @@ export const useEscrowDashboardData = ({
   useEffect(() => {
     const fetchData = async () => {
       const escrows = await fetchAllEscrows({ address, type });
-      console.log(escrows);
 
       setData({
         statusCounts: getStatusCounts(escrows),
         top5ByValue: getTop5ByValue(escrows),
         releaseTrend: getReleaseTrend(escrows),
         volumeTrend: getVolumeTrend(escrows),
+        totalEscrows: escrows.length,
+        totalResolved: escrows.filter((e) => e.resolvedFlag).length,
+        resolvedPercentage: getResolvedPercentage(escrows),
+        isPositive: getIsPositive(getResolvedPercentage(escrows)),
       });
     };
 
     if (address) fetchData();
   }, [address, type]);
-  console.log("Dashboard data", data);
 
   return data;
 };
@@ -91,4 +97,13 @@ const getVolumeTrend = (escrows: Escrow[]) => {
   });
 
   return Array.from(map.entries()).map(([date, value]) => ({ date, value }));
+};
+
+const getResolvedPercentage = (escrows: Escrow[]): number => {
+  if (escrows.length === 0) return 0;
+  const resolvedCount = escrows.filter((e) => e.resolvedFlag).length;
+  return Math.round((resolvedCount / escrows.length) * 100);
+};
+const getIsPositive = (resolvedPercentage: number): boolean => {
+  return resolvedPercentage >= 50;
 };

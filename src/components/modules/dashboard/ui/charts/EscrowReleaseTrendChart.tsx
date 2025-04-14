@@ -27,9 +27,7 @@ export function EscrowReleaseTrendChart({ data }: { data: ReleaseTrend }) {
   return (
     <Card>
       <CardHeader className="pb-0">
-        <CardTitle className="text-lg font-medium">
-          Escrow Release Trend
-        </CardTitle>
+        <CardTitle>Escrow Release Trend</CardTitle>
       </CardHeader>
       <CardContent className="pt-4">
         <ChartContainer config={chartConfig} className="h-[250px] w-full">

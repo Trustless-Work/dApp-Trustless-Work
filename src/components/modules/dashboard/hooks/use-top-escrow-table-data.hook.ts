@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import type { Escrow } from "@/@types/escrow.entity";
 import { BadgeProps } from "@/components/ui/badge";
+import { getStatus, getStatusVariant } from "../utils/escrow-status.util";
 
 type TableRow = {
   id: string;
@@ -10,26 +11,6 @@ type TableRow = {
   badgeVariant: BadgeProps["variant"];
   created: string;
 };
-
-function getStatus(escrow: Escrow): string {
-  if (escrow.releaseFlag) return "Released";
-  if (escrow.disputeFlag) return "Disputed";
-  if (escrow.resolvedFlag) return "Resolved";
-  return "Pending";
-}
-
-function getStatusVariant(status: string): BadgeProps["variant"] {
-  switch (status) {
-    case "Released":
-      return "default";
-    case "Disputed":
-      return "destructive";
-    case "Resolved":
-      return "secondary";
-    default:
-      return "outline";
-  }
-}
 
 export function useTopEscrowTableData(data: Escrow[]): TableRow[] {
   return data.map((escrow) => {

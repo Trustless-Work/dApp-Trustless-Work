@@ -1,4 +1,3 @@
-// src/components/modules/dashboard/ui/charts/EscrowVolumeTrendChart.tsx
 "use client";
 
 import {
