@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
-import { useEscrowBoundedStore } from "../modules/escrow/store/ui";
+import { useEscrowUIBoundedStore } from "../modules/escrow/store/ui";
 
 export interface StepItem {
   title: string;
@@ -17,10 +17,12 @@ export interface StepsProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
   ({ items, className, ...props }, ref) => {
-    const currentStep = useEscrowBoundedStore((state) => state.currentStep);
-    const setTotalSteps = useEscrowBoundedStore((state) => state.setTotalSteps);
-    const toggleStep = useEscrowBoundedStore((state) => state.toggleStep);
-    const isStepCompleted = useEscrowBoundedStore(
+    const currentStep = useEscrowUIBoundedStore((state) => state.currentStep);
+    const setTotalSteps = useEscrowUIBoundedStore(
+      (state) => state.setTotalSteps,
+    );
+    const toggleStep = useEscrowUIBoundedStore((state) => state.toggleStep);
+    const isStepCompleted = useEscrowUIBoundedStore(
       (state) => state.isStepCompleted,
     );
 

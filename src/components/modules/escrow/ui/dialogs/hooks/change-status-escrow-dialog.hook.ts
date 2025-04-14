@@ -2,55 +2,78 @@
 
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowBoundedStore } from "../../../store/ui";
-import { Escrow, Milestone } from "@/@types/escrow.entity";
-import { changeMilestoneStatus } from "../../../services/change-milestone-status.service";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
+import { formSchema } from "../../../schema/complete-milestone.schema";
+import { useEscrowBoundedStore } from "../../../store/data";
+import { changeMilestoneStatus } from "../../../services/change-milestone-status.service";
+import { ChangeMilestoneStatusPayload } from "@/@types/escrow.entity";
 
-const useChangeStatusEscrowDialog = () => {
+interface changeMilestoneStatusDialogHook {
+  setIsCompleteMilestoneDialogOpen: (value: boolean) => void;
+}
+
+const useChangeMilestoneStatusDialogHook = ({
+  setIsCompleteMilestoneDialogOpen,
+}: changeMilestoneStatusDialogHook) => {
   const { address } = useGlobalAuthenticationStore();
-  const setIsChangingStatus = useEscrowBoundedStore(
+  const setIsChangingStatus = useEscrowUIBoundedStore(
     (state) => state.setIsChangingStatus,
   );
-  const setIsDialogOpen = useEscrowBoundedStore(
+  const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
+  const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const completingMilestone = useEscrowBoundedStore(
+    (state) => state.completingMilestone,
+  );
+  const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
-  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
-  const changeMilestoneStatusSubmit = async (
-    selectedEscrow: Escrow,
-    milestone: Milestone,
-    index: number,
-  ) => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      evidence: "",
+    },
+    mode: "onChange",
+  });
+
+  const onSubmit = async ({
+    evidence,
+  }: Pick<ChangeMilestoneStatusPayload, "evidence">) => {
     setIsChangingStatus(true);
-
     try {
       const response = await changeMilestoneStatus({
         contractId: selectedEscrow?.contractId,
-        milestoneIndex: index.toString(),
+        milestoneIndex: milestoneIndex?.toString() || "0",
         newStatus: "completed",
         serviceProvider: address,
+        newEvidence: evidence,
       });
 
       if (response.status === "SUCCESS") {
         setIsChangingStatus(false);
         setIsDialogOpen(false);
+        setIsCompleteMilestoneDialogOpen(false);
         setSelectedEscrow(undefined);
         fetchAllEscrows({ address, type: activeTab || "serviceProvider" });
 
         toast({
           title: "Success",
-          description: `The Milestone ${milestone.description} has been completed.`,
+          description: `The Milestone ${completingMilestone?.description} has been completed.`,
         });
       }
     } catch (error: any) {
@@ -64,7 +87,16 @@ const useChangeStatusEscrowDialog = () => {
     }
   };
 
-  return { changeMilestoneStatusSubmit };
+  const handleClose = () => {
+    setIsCompleteMilestoneDialogOpen?.(false);
+  };
+
+  return {
+    form,
+    onSubmit,
+    handleClose,
+    setIsDialogOpen,
+  };
 };
 
-export default useChangeStatusEscrowDialog;
+export default useChangeMilestoneStatusDialogHook;

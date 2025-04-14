@@ -20,7 +20,7 @@ import {
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
 import SkeletonResolveDispute from "./utils/SkeletonResolveDispute";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { DollarSign } from "lucide-react";
 import type { Escrow } from "../../../../../@types/escrow.entity";
@@ -44,7 +44,7 @@ const ResolveDisputeEscrowDialog = ({
 
   const { formatDollar } = useFormatUtils();
 
-  const isResolvingDispute = useEscrowBoundedStore(
+  const isResolvingDispute = useEscrowUIBoundedStore(
     (state) => state.isResolvingDispute,
   );
 
@@ -52,9 +52,7 @@ const ResolveDisputeEscrowDialog = ({
   const escrow = selectedEscrow || recentEscrow;
 
   const [approverNet, setApproverNet] = useState<number | null>(null);
-  const [serviceProviderNet, setServiceProviderNet] = useState<number | null>(
-    null,
-  );
+  const [receiverNet, setReceiverNet] = useState<number | null>(null);
   const [isEqualToAmount, setIsEqualToAmount] = useState<boolean>(false);
   const [isMissing, setIsMissing] = useState<number>(0);
   const [totalPlatformAmount, setTotalPlatformAmount] = useState<number>(0);
@@ -64,12 +62,12 @@ const ResolveDisputeEscrowDialog = ({
   const trustlessWorkFee = 0.003;
 
   const approverFunds = form.watch("approverFunds");
-  const serviceProviderFunds = form.watch("serviceProviderFunds");
+  const receiverFunds = form.watch("receiverFunds");
 
   useEffect(() => {
     const platformFee = parseFloat(escrow?.platformFee || "0") / 100;
     const parsedApproverFunds = parseFloat(approverFunds) || 0;
-    const parsedServiceProviderFunds = parseFloat(serviceProviderFunds) || 0;
+    const parsedReceiverFunds = parseFloat(receiverFunds) || 0;
 
     setTotalPlatformAmount(
       selectedEscrow?.amount && !isNaN(Number(selectedEscrow.amount))
@@ -85,11 +83,11 @@ const ResolveDisputeEscrowDialog = ({
 
     if (
       isNaN(parsedApproverFunds) ||
-      isNaN(parsedServiceProviderFunds) ||
+      isNaN(parsedReceiverFunds) ||
       isNaN(platformFee)
     ) {
       setApproverNet(null);
-      setServiceProviderNet(null);
+      setReceiverNet(null);
       return;
     }
 
@@ -97,26 +95,24 @@ const ResolveDisputeEscrowDialog = ({
       parsedApproverFunds * (platformFee / 100) +
       parsedApproverFunds * trustlessWorkFee;
 
-    const serviceProviderDeductions =
-      parsedServiceProviderFunds * (platformFee / 100) +
-      parsedServiceProviderFunds * trustlessWorkFee;
+    const receiverDeductions =
+      parsedReceiverFunds * (platformFee / 100) +
+      parsedReceiverFunds * trustlessWorkFee;
 
     setApproverNet(parsedApproverFunds - approverDeductions);
-    setServiceProviderNet(
-      parsedServiceProviderFunds - serviceProviderDeductions,
-    );
+    setReceiverNet(parsedReceiverFunds - receiverDeductions);
 
     setIsEqualToAmount(
-      parsedApproverFunds + parsedServiceProviderFunds ===
+      parsedApproverFunds + parsedReceiverFunds ===
         parseFloat(escrow?.balance || "0"),
     );
 
     setIsMissing(
       parsedApproverFunds +
-        parsedServiceProviderFunds -
+        parsedReceiverFunds -
         parseFloat(escrow?.balance || "0"),
     );
-  }, [approverFunds, serviceProviderFunds, escrow, selectedEscrow?.amount]);
+  }, [approverFunds, receiverFunds, escrow, selectedEscrow?.amount]);
 
   if (!escrow) {
     return null;
@@ -150,8 +146,8 @@ const ResolveDisputeEscrowDialog = ({
               </p>
 
               <p className="text-sm text-gray-400 p-0">
-                <span className="font-extrabold">Service Provider Net:</span>{" "}
-                {formatDollar(serviceProviderNet?.toString())}
+                <span className="font-extrabold">Receiver Net:</span>{" "}
+                {formatDollar(receiverNet?.toString())}
               </p>
 
               <p className="text-sm text-gray-400 p-0">
@@ -205,13 +201,13 @@ const ResolveDisputeEscrowDialog = ({
                 />
                 <FormField
                   control={form.control}
-                  name="serviceProviderFunds"
+                  name="receiverFunds"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex items-center">
-                        Service Provider Amount{" "}
+                        Receiver Amount{" "}
                         <span className="text-destructive ml-1">*</span>
-                        <TooltipInfo content="The amount for the service provider." />
+                        <TooltipInfo content="The amount for the receiver." />
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
@@ -221,7 +217,7 @@ const ResolveDisputeEscrowDialog = ({
                           />
                           <Input
                             className="pl-10"
-                            placeholder="The amount for the service provider"
+                            placeholder="The amount for the receiver"
                             {...field}
                           />
                         </div>

@@ -14,7 +14,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
 import { Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import SkeletonEditMilestones from "./utils/SkeletonEditMilestones";
 
 interface EditEscrowDialogProps {
@@ -39,7 +39,7 @@ const EditMilestonesDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const isEditingMilestones = useEscrowBoundedStore(
+  const isEditingMilestones = useEscrowUIBoundedStore(
     (state) => state.isEditingMilestones,
   );
 
