@@ -10,6 +10,8 @@ type DashboardData = {
   volumeTrend: { date: string; value: number }[];
   totalEscrows: number;
   totalResolved: number;
+  totalReleased: number;
+  totalInDispute: number;
   resolvedPercentage: number;
   isPositive: boolean;
 };
@@ -34,6 +36,8 @@ export const useEscrowDashboardData = ({
         volumeTrend: getVolumeTrend(escrows),
         totalEscrows: escrows.length,
         totalResolved: escrows.filter((e) => e.resolvedFlag).length,
+        totalReleased: escrows.filter((e) => e.releaseFlag).length,
+        totalInDispute: escrows.filter((e) => e.disputeFlag).length,
         resolvedPercentage: getResolvedPercentage(escrows),
         isPositive: getIsPositive(getResolvedPercentage(escrows)),
       });
