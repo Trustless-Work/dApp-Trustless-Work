@@ -159,7 +159,7 @@ const EscrowDetailDialog = ({
 
                     <div className="flex gap-2">
                       <strong className="truncate">Memo:</strong>
-                      {selectedEscrow?.receiverMemo}
+                      {selectedEscrow?.receiverMemo || "No memo configured"}
                     </div>
                   </div>
                 </DialogDescription>
