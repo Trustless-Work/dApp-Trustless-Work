@@ -431,7 +431,7 @@ const InitializeEscrowForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  Receiver Memo
+                  Receiver Memo (opcional)
                   <TooltipInfo content="Total receiver Memo to be held in escrow." />
                 </FormLabel>
                 <FormControl>

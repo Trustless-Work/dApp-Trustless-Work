@@ -14,8 +14,15 @@ import {
   amountOptionsFilters,
   statusOptionsFilters,
 } from "./constants/filters-options.constant";
+import { getRoleActionIcons } from "@/utils/get-role-actions";
+import { useEscrowUIBoundedStore } from "../../store/ui";
+import { useFormatUtils } from "@/utils/hook/format.hook";
+import Link from "next/link";
 
 const MyEscrowsFilter = () => {
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+
+  const { formatText } = useFormatUtils();
   const {
     search,
     status,
@@ -63,47 +70,69 @@ const MyEscrowsFilter = () => {
 
       <Divider type="horizontal" />
 
-      <div className="flex flex-col md:flex-row gap-3 w-full md:w-1/3">
-        <div className="flex flex-col w-full">
-          <label className="text-xs font-bold mb-2 ml-2" htmlFor="status">
-            Status
-          </label>
-          <Select
-            value={status}
-            onValueChange={(value) => updateQuery("status", value)}
-          >
-            <SelectTrigger>
-              {mapNameParams(searchParams.get("status") || "")}
-            </SelectTrigger>
-            <SelectContent>
-              {statusOptionsFilters.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      <div className="flex flex-col justify-between md:flex-row gap-3 w-full">
+        <div className="flex w-1/3 gap-4">
+          <div className="flex flex-col w-full">
+            <label
+              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+              htmlFor="status"
+            >
+              Status
+            </label>
+            <Select
+              value={status}
+              onValueChange={(value) => updateQuery("status", value)}
+            >
+              <SelectTrigger>
+                {mapNameParams(searchParams.get("status") || "")}
+              </SelectTrigger>
+              <SelectContent>
+                {statusOptionsFilters.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col w-full">
+            <label
+              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+              htmlFor="amount"
+            >
+              Amount Range
+            </label>
+            <Select
+              value={amountRange}
+              onValueChange={(value) => updateQuery("amount", value)}
+            >
+              <SelectTrigger>
+                {mapNameParams(searchParams.get("amount") || "")}
+              </SelectTrigger>
+              <SelectContent>
+                {amountOptionsFilters.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
-        <div className="flex flex-col w-full">
-          <label className="text-xs font-bold mb-2 ml-2" htmlFor="amount">
-            Amount Range
-          </label>
-          <Select
-            value={amountRange}
-            onValueChange={(value) => updateQuery("amount", value)}
+        <div className="flex flex-col gap-4">
+          <Link
+            href="/dashboard/help#roles"
+            className="text-xs text-muted-foreground font-bold text-end hover:underline"
           >
-            <SelectTrigger>
-              {mapNameParams(searchParams.get("amount") || "")}
-            </SelectTrigger>
-            <SelectContent>
-              {amountOptionsFilters.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            Actions in{" "}
+            <span className="capitalize">"{formatText(activeTab)}"</span>
+          </Link>
+
+          <div className="flex gap-4 justify-end">
+            {getRoleActionIcons(activeTab)}
+          </div>
         </div>
       </div>
     </form>

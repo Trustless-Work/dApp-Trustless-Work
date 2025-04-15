@@ -18,7 +18,6 @@ export const VideoCard = ({ video }: { video: Video }) => {
           <iframe
             className="w-full h-full"
             src={`https://www.youtube.com/embed/${video.videoId}?autoplay=1`}
-            title={video.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>

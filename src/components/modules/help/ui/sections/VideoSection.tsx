@@ -1,5 +1,5 @@
 import { videos } from "../../constants/video-items.constant";
-import { VideoCard } from "./VideoCard";
+import { VideoCard } from "../utils/VideoCard";
 
 export const VideoSection = () => {
   return (

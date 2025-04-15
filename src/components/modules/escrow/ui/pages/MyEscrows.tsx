@@ -20,6 +20,7 @@ import { useState } from "react";
 import { CircleHelp } from "lucide-react";
 import { MoonpayWidget } from "@/components/modules/payment/widgets/moonpay.widget";
 import { useGlobalBoundedStore } from "@/core/store/data";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
@@ -148,14 +149,15 @@ const MyEscrows = () => {
                   </Select>
                 </div>
 
-                <button
-                  title="Help"
-                  className="btn-dark"
-                  type="button"
-                  onClick={() => setRun(true)}
-                >
-                  <CircleHelp size={29} />
-                </button>
+                <TooltipInfo content="Help">
+                  <button
+                    className="btn-dark"
+                    type="button"
+                    onClick={() => setRun(true)}
+                  >
+                    <CircleHelp size={29} />
+                  </button>
+                </TooltipInfo>
               </div>
 
               <TabsContent value="issuer" className="flex flex-col gap-3">

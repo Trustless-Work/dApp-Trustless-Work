@@ -39,6 +39,7 @@ import SuccessDialog, {
   SuccessResolveDisputeDialog,
 } from "../dialogs/SuccessDialog";
 import SkeletonTable from "../utils/SkeletonTable";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 interface MyEscrowsTableProps {
   type:
@@ -198,36 +199,44 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           </p>
                         </TableCell>
                         {escrow.disputeFlag && (
-                          <TableCell title="Escrow in Dispute">
-                            <CircleAlert
-                              className="text-destructive"
-                              size={22}
-                            />
-                          </TableCell>
+                          <TooltipInfo content="Escrow in Dispute">
+                            <TableCell>
+                              <CircleAlert
+                                className="text-destructive"
+                                size={22}
+                              />
+                            </TableCell>
+                          </TooltipInfo>
                         )}
 
                         {pendingRelease && (
-                          <TableCell title="Escrow pending release">
-                            <TriangleAlert
-                              size={22}
-                              className="text-yellow-600"
-                            />
-                          </TableCell>
+                          <TooltipInfo content="Escrow pending release">
+                            <TableCell>
+                              <TriangleAlert
+                                size={22}
+                                className="text-yellow-600"
+                              />
+                            </TableCell>
+                          </TooltipInfo>
                         )}
 
                         {escrow.releaseFlag && (
-                          <TableCell title="Escrow released">
-                            <CircleCheckBig
-                              className="text-green-800"
-                              size={22}
-                            />
-                          </TableCell>
+                          <TooltipInfo content="Escrow released">
+                            <TableCell>
+                              <CircleCheckBig
+                                className="text-green-800"
+                                size={22}
+                              />
+                            </TableCell>
+                          </TooltipInfo>
                         )}
 
                         {escrow.resolvedFlag && (
-                          <TableCell title="Escrow released">
-                            <Handshake className="text-green-800" size={22} />
-                          </TableCell>
+                          <TooltipInfo content="Escrow resolved">
+                            <TableCell>
+                              <Handshake className="text-green-800" size={22} />
+                            </TableCell>
+                          </TooltipInfo>
                         )}
                       </TableRow>
                       {escrow.milestones &&

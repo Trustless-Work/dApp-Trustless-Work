@@ -20,6 +20,7 @@ import { Check, Copy } from "lucide-react";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import useSuccessResolveDisputeDialog from "./hooks/success-resolve-dispute-dialog.hook";
 import { useEscrowUIBoundedStore } from "../../store/ui";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 interface SuccessDialogProps {
   title: string;
@@ -80,20 +81,21 @@ const SuccessDialog = ({
                 copyText(recentEscrow?.contractId, recentEscrow?.contractId)
               }
               className="hover:bg-muted rounded-md transition-colors"
-              title="Copy address"
             >
-              {copiedKeyId ? (
-                <Check size={15} className="text-green-700" />
-              ) : (
-                <Copy
-                  size={15}
-                  className={cn(
-                    copiedKeyId
-                      ? "text-green-700"
-                      : "dark:text-white text-muted-foreground",
-                  )}
-                />
-              )}
+              <TooltipInfo content="Copy address">
+                {copiedKeyId ? (
+                  <Check size={15} className="text-green-700" />
+                ) : (
+                  <Copy
+                    size={15}
+                    className={cn(
+                      copiedKeyId
+                        ? "text-green-700"
+                        : "dark:text-white text-muted-foreground",
+                    )}
+                  />
+                )}
+              </TooltipInfo>
             </button>
           </div>
         </div>

@@ -38,8 +38,7 @@ export const useFormatUtils = () => {
     return role
       .replace(/([a-z])([A-Z])/g, "$1 $2")
       .replace(/([A-Z])/g, (match) => ` ${match}`)
-      .trim()
-      .toUpperCase();
+      .trim();
   };
 
   const formatPercentage = (value: number): string => {
