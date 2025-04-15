@@ -191,9 +191,9 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                           {formatDollar(escrow.amount) || "N/A"}
                         </h3>
                       </div>
-                      {/* <p className="mt-2 text-sm text-muted-foreground">
-                        {formatAddress(escrow.approver)}
-                      </p> */}
+                      <p className="mt-2 text-sm text-muted-foreground truncate">
+                        {escrow.description || "No description"}
+                      </p>
 
                       <ProgressEscrow escrow={escrow} />
 
