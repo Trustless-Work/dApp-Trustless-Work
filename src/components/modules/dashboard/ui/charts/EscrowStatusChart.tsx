@@ -1,7 +1,13 @@
 "use client";
 
 import { Label, Pie, PieChart } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -18,14 +24,14 @@ export function EscrowStatusChart({ data }: { data: StatusCounts }) {
   const { total, formattedData, chartConfig } = useStatusChartData(data);
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader className="items-center pb-0">
         <CardTitle>Escrow Status</CardTitle>
       </CardHeader>
       <CardContent className="pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square h-[250px]"
         >
           <PieChart>
             <ChartTooltip
@@ -72,6 +78,22 @@ export function EscrowStatusChart({ data }: { data: StatusCounts }) {
           </PieChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter>
+        <div className="flex justify-center gap-4 w-full">
+          {formattedData.map((entry, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <div
+                className="w-4 h-4 rounded-full"
+                style={{ backgroundColor: entry.fill }}
+              ></div>
+              <span className="text-sm font-medium">{entry.name}</span>
+              <span className="text-sm text-muted-foreground">
+                {entry.count}
+              </span>
+            </div>
+          ))}
+        </div>
+      </CardFooter>
     </Card>
   );
 }
