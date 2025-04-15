@@ -56,7 +56,7 @@ const Header = () => {
           <div className="flex gap-5 ml-auto">
             <ThemeToggle />
 
-            <Button variant="outline" onClick={handleDisconnect}>
+            <Button variant="outline" onClick={handleConnect}>
               <LogIn /> Connect
             </Button>
           </div>
