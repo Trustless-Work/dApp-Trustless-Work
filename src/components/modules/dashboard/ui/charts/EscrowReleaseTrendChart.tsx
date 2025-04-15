@@ -1,23 +1,17 @@
 "use client";
 
-import {
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-} from "recharts";
+import { XAxis, BarChart, Bar, CartesianGrid, Cell } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { parse, format } from "date-fns";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useReleaseTrendChartData } from "../../hooks/use-release-trend-chart-data.hook";
+import { useReleaseTrendChartData } from "../../hooks/release-trend-chart-data.hook";
 
 type ReleaseTrend = {
-  date: string;
+  month: string;
   count: number;
 }[];
 
@@ -26,41 +20,36 @@ export function EscrowReleaseTrendChart({ data }: { data: ReleaseTrend }) {
 
   return (
     <Card>
-      <CardHeader className="pb-0">
+      <CardHeader>
         <CardTitle>Escrow Release Trend</CardTitle>
       </CardHeader>
-      <CardContent className="pt-4">
+      <CardContent>
         <ChartContainer config={chartConfig} className="h-[250px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={formatted}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="hsl(var(--border))"
-              />
-              <XAxis
-                dataKey="date"
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={{ stroke: "hsl(var(--border))" }}
-              />
-              <YAxis
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={{ stroke: "hsl(var(--border))" }}
-              />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Line
-                type="monotone"
-                dataKey="count"
-                stroke="hsl(var(--foreground))"
-                strokeWidth={2}
-                dot={{ r: 3, fill: "hsl(var(--foreground))" }}
-                activeDot={{ r: 5 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <BarChart accessibilityLayer data={formatted}>
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => {
+                const date = parse(value, "yyyy-MM", new Date());
+                return format(date, "MMM yyyy").toUpperCase();
+              }}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Bar dataKey="count" radius={8}>
+              {formatted.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={`hsl(var(--chart-${(index % 6) + 1}))`}
+                />
+              ))}
+            </Bar>
+          </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>

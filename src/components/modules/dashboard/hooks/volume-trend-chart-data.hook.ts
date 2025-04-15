@@ -9,7 +9,7 @@ type VolumeTrend = {
 export function useVolumeTrendChartData(data: VolumeTrend) {
   const chartConfig: ChartConfig = {
     date: { label: "Date" },
-    value: { label: "Total Volume", color: "hsl(var(--chart-2))" },
+    value: { label: "Total Volume", color: "hsl(var(--chart-1))" },
   };
 
   const formatted = React.useMemo(() => data, [data]);
