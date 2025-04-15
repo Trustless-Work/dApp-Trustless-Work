@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Escrow } from "@/@types/escrow.entity";
 import { toast } from "@/hooks/toast.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 interface EscrowIDActionProps {
   selectedEscrow: Escrow;
@@ -49,13 +50,14 @@ export const EscrowIDActions = ({
               copyText(selectedEscrow?.contractId, selectedEscrow.contractId)
             }
             className="p-1.5 hover:bg-muted rounded-md transition-colors"
-            title="Copy Escrow ID"
           >
-            {copiedKeyId ? (
-              <Check className={cn("h-4 w-4 text-green-700")} />
-            ) : (
-              <Copy className={cn("h-4 w-4")} />
-            )}
+            <TooltipInfo content="Copy Escrow ID">
+              {copiedKeyId ? (
+                <Check className={cn("h-4 w-4 text-green-700")} />
+              ) : (
+                <Copy className={cn("h-4 w-4")} />
+              )}
+            </TooltipInfo>
           </button>
         </div>
       </p>

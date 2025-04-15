@@ -126,27 +126,30 @@ export const Milestones = ({
 
                   return (
                     <>
-                      <Button
-                        title={
+                      <TooltipInfo
+                        content={
                           !evidenceVisibleMap[milestoneIndex]
                             ? "Show Evidence"
                             : "Show Description"
                         }
-                        className="max-w-20 mt-4 md:mt-0"
-                        variant="ghost"
-                        onClick={() => {
-                          setEvidenceVisibleMap((prev) => ({
-                            ...prev,
-                            [milestoneIndex]: !prev[milestoneIndex],
-                          }));
-                        }}
                       >
-                        {!evidenceVisibleMap[milestoneIndex] ? (
-                          <FileCheck2 />
-                        ) : (
-                          <LetterText />
-                        )}
-                      </Button>
+                        <Button
+                          className="max-w-20 mt-4 md:mt-0"
+                          variant="ghost"
+                          onClick={() => {
+                            setEvidenceVisibleMap((prev) => ({
+                              ...prev,
+                              [milestoneIndex]: !prev[milestoneIndex],
+                            }));
+                          }}
+                        >
+                          {!evidenceVisibleMap[milestoneIndex] ? (
+                            <FileCheck2 />
+                          ) : (
+                            <LetterText />
+                          )}
+                        </Button>
+                      </TooltipInfo>
 
                       {evidenceVisibleMap[milestoneIndex] &&
                         (result === true ||
@@ -158,21 +161,21 @@ export const Milestones = ({
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Button
-                              title={
-                                result === true
-                                  ? "Open Evidence"
-                                  : "Open Evidence (Not Secure)"
+                            <TooltipInfo
+                              content={
+                                !evidenceVisibleMap[milestoneIndex]
+                                  ? "Show Evidence"
+                                  : "Show Description"
                               }
-                              className="max-w-20"
-                              variant="ghost"
                             >
-                              <Link2
-                                className={
-                                  result === true ? "" : "text-destructive"
-                                }
-                              />
-                            </Button>
+                              <Button className="max-w-20" variant="ghost">
+                                <Link2
+                                  className={
+                                    result === true ? "" : "text-destructive"
+                                  }
+                                />
+                              </Button>
+                            </TooltipInfo>
                           </Link>
                         )}
                     </>

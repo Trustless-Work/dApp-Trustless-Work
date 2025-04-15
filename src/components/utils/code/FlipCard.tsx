@@ -4,6 +4,7 @@ import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { cn } from "@/lib/utils";
 import { Check, CodeXml, Copy, SquareUser } from "lucide-react";
 import CodeBlock from "./CodeBlock";
+import TooltipInfo from "../ui/Tooltip";
 
 type FlipCardProps = {
   children: React.ReactNode;
@@ -39,24 +40,25 @@ const FlipCard = ({ children, codeExample }: FlipCardProps) => {
         {/* Back Side */}
         <section className="w-full h-full backface-hidden flex flex-col items-center justify-center text-white rotate-y-180">
           <div className="w-full flex items-center justify-end gap-5">
-            <button
-              onClick={() => copyText(codeExample, codeExample)}
-              className="cursor-pointer rounded-full shadow-lg scale-100 transition-all duration-300 hover:scale-125"
-              title="Copy address"
-            >
-              {copiedKeyId ? (
-                <Check size={24} className="text-green-700" />
-              ) : (
-                <Copy
-                  size={21}
-                  className={cn(
-                    copiedKeyId
-                      ? "text-green-700"
-                      : "dark:text-white text-muted-foreground",
-                  )}
-                />
-              )}
-            </button>
+            <TooltipInfo content="Copy Code">
+              <button
+                onClick={() => copyText(codeExample, codeExample)}
+                className="cursor-pointer rounded-full shadow-lg scale-100 transition-all duration-300 hover:scale-125"
+              >
+                {copiedKeyId ? (
+                  <Check size={24} className="text-green-700" />
+                ) : (
+                  <Copy
+                    size={21}
+                    className={cn(
+                      copiedKeyId
+                        ? "text-green-700"
+                        : "dark:text-white text-muted-foreground",
+                    )}
+                  />
+                )}
+              </button>
+            </TooltipInfo>
             <button
               className="cursor-pointerrounded-full shadow-lg transition-all duration-300 scale-100 hover:scale-125"
               onClick={() => setIsFlipped(false)}

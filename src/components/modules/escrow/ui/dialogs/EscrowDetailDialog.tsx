@@ -102,7 +102,7 @@ const EscrowDetailDialog = ({
                 </DialogDescription>
                 <DialogDescription>
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 uppercase">
                       <strong>Roles: </strong>
                       {userRolesInEscrow
                         .map((role) => formatText(role))
