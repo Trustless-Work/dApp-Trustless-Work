@@ -457,7 +457,7 @@ const EscrowDetailDialog = ({
                     (milestone, milestoneIndex) => (
                       <div
                         key={`${milestone.description}-${milestone.status}`}
-                        className="flex flex-col items-center space-x-4"
+                        className="flex flex-col sm:flex-row items-center space-x-4"
                       >
                         {milestone.approved_flag ? (
                           <Badge className="uppercase max-w-24 mb-4 md:mb-0">
