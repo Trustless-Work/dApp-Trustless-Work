@@ -449,10 +449,30 @@ const EscrowDetailDialog = ({
               {/* Milestones */}
               <div className="flex justify-center w-full mt-5">
                 <div className="flex flex-col gap-4 py-4 w-full md:w-4/5">
-                  <label htmlFor="milestones" className="flex items-center">
-                    Milestones
-                    <TooltipInfo content="Key stages or deliverables for the escrow." />
-                  </label>
+                  <div className="flex w-full justify-between">
+                    <label htmlFor="milestones" className="flex items-center">
+                      Milestones
+                      <TooltipInfo content="Key stages or deliverables for the escrow." />
+                    </label>
+
+                    {userRolesInEscrow.includes("platformAddress") &&
+                      !selectedEscrow?.disputeFlag &&
+                      !selectedEscrow?.resolvedFlag &&
+                      activeTab === "platformAddress" && (
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            dialogStates.editMilestone.setIsOpen(true);
+                          }}
+                          className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
+                          variant="ghost"
+                        >
+                          <Pencil />
+                          Edit
+                        </Button>
+                      )}
+                  </div>
+
                   {selectedEscrow.milestones.map(
                     (milestone, milestoneIndex) => (
                       <div
@@ -633,23 +653,6 @@ const EscrowDetailDialog = ({
                 >
                   <CircleDollarSign />
                   Release Payment
-                </Button>
-              )}
-
-            {userRolesInEscrow.includes("platformAddress") &&
-              !selectedEscrow?.disputeFlag &&
-              !selectedEscrow?.resolvedFlag &&
-              activeTab === "platformAddress" && (
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    dialogStates.editMilestone.setIsOpen(true);
-                  }}
-                  className="mt-6 md:mt-0 w-full md:w-1/12"
-                  variant="outline"
-                >
-                  <Pencil />
-                  Edit
                 </Button>
               )}
           </div>
