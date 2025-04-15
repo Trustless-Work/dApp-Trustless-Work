@@ -4,6 +4,7 @@ export interface DialogEscrowStore {
   isQRDialogOpen: boolean;
   isEditMilestoneDialogOpen: boolean;
   isEditEntitiesDialogOpen: boolean;
+  isEditBasicPropertiesDialogOpen: boolean;
   isResolveDisputeDialogOpen: boolean;
   isSuccessDialogOpen: boolean;
   isSuccessReleaseDialogOpen: boolean;
@@ -15,6 +16,7 @@ export interface DialogEscrowStore {
   setIsQRDialogOpen: (value: boolean) => void;
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
   setIsEditEntitiesDialogOpen: (value: boolean) => void;
+  setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
   setIsResolveDisputeDialogOpen: (value: boolean) => void;
   setIsSuccessDialogOpen: (value: boolean) => void;
   setIsSuccessReleaseDialogOpen: (value: boolean) => void;

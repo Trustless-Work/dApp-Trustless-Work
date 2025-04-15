@@ -15,6 +15,7 @@ export const useEscrowLoadersSlice: StateCreator<
     isFundingEscrow: false,
     isEditingMilestones: false,
     isEditingEntities: false,
+    isEditingBasicProperties: false,
     isResolvingDispute: false,
 
     // Modifiers
@@ -26,6 +27,8 @@ export const useEscrowLoadersSlice: StateCreator<
     setIsEditingMilestones: (value: boolean) =>
       set({ isEditingMilestones: value }),
     setIsEditingEntities: (value: boolean) => set({ isEditingEntities: value }),
+    setIsEditingBasicProperties: (value: boolean) =>
+      set({ isEditingBasicProperties: value }),
     setIsResolvingDispute: (value: boolean) =>
       set({ isResolvingDispute: value }),
   };
