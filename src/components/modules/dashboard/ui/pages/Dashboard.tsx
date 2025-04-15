@@ -10,7 +10,6 @@ import MetricsSection from "../cards/MetricSection";
 import { SkeletonEscrowVolumeTrendChart } from "../utils/SkeletonEscrowVolumeTrendChart";
 import { SkeletonEscrowStatusChart } from "../utils/SkeletonStatusChart";
 import { SkeletonEscrowReleaseTrendChart } from "../utils/SkeletonEscrowReleaseTrendChart";
-import { SkeletonTopEscrowsTable } from "../utils/SkeletonTopEscrowsTable";
 
 export default function Dashboard() {
   const address = useGlobalAuthenticationStore((state) => state.address);
