@@ -17,6 +17,10 @@ interface DialogStates {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
   };
+  editEntities: {
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void;
+  };
   completeMilestone: {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
@@ -55,6 +59,10 @@ export const useEscrowDialogs = (): DialogStates & StatusStates => {
     editMilestone: {
       isOpen: store.isEditMilestoneDialogOpen,
       setIsOpen: store.setIsEditMilestoneDialogOpen,
+    },
+    editEntities: {
+      isOpen: store.isEditEntitiesDialogOpen,
+      setIsOpen: store.setIsEditEntitiesDialogOpen,
     },
     successRelease: {
       isOpen: store.isSuccessReleaseDialogOpen,
