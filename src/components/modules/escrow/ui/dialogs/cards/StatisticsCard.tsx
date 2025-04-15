@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 interface StatisticsCardProps {
   title: string;
@@ -16,6 +17,7 @@ interface StatisticsCardProps {
   onAction?: () => void;
   className?: string;
   iconSize?: number;
+  tooltipContent?: string;
 }
 
 export const StatisticsCard = ({
@@ -28,6 +30,7 @@ export const StatisticsCard = ({
   onAction,
   className,
   iconSize = 30,
+  tooltipContent,
 }: StatisticsCardProps) => {
   return (
     <Card
@@ -38,7 +41,11 @@ export const StatisticsCard = ({
     >
       <CardContent className="p-6 min-h-36">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <div className="flex">
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            {tooltipContent && <TooltipInfo content={tooltipContent} />}
+          </div>
+
           <Icon className={iconColor} size={iconSize} />
         </div>
         <div className="mt-2 flex items-baseline justify-between">
