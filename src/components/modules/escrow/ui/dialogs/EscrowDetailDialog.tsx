@@ -457,13 +457,15 @@ const EscrowDetailDialog = ({
                     (milestone, milestoneIndex) => (
                       <div
                         key={`${milestone.description}-${milestone.status}`}
-                        className="flex items-center space-x-4"
+                        className="flex flex-col items-center space-x-4"
                       >
                         {milestone.approved_flag ? (
-                          <Badge className="uppercase max-w-24">Approved</Badge>
+                          <Badge className="uppercase max-w-24 mb-4 md:mb-0">
+                            Approved
+                          </Badge>
                         ) : (
                           <Badge
-                            className="uppercase max-w-24"
+                            className="uppercase max-w-24 mb-4 md:mb-0"
                             variant="outline"
                           >
                             {milestone.status}
@@ -509,7 +511,7 @@ const EscrowDetailDialog = ({
                                       ? "Show Evidence"
                                       : "Show Description"
                                   }
-                                  className="max-w-20"
+                                  className="max-w-20 mt-4 md:mt-0"
                                   variant="ghost"
                                   onClick={() => {
                                     setEvidenceVisibleMap((prev) => ({
@@ -576,6 +578,11 @@ const EscrowDetailDialog = ({
                               Approve
                             </Button>
                           )}
+
+                        {/* Mobile Milestone Divider */}
+                        <div className="block sm:hidden border-b-2">
+                          ____________________________________
+                        </div>
                       </div>
                     ),
                   )}
@@ -622,12 +629,13 @@ const EscrowDetailDialog = ({
                 <Button
                   onClick={distributeEscrowEarningsSubmit}
                   type="button"
-                  className="bg-green-800 hover:bg-green-700"
+                  className="bg-green-800 hover:bg-green-700 mb-4 md:mb-0 w-full md:w-1/12"
                 >
                   <CircleDollarSign />
                   Release Payment
                 </Button>
               )}
+
             {userRolesInEscrow.includes("platformAddress") &&
               !selectedEscrow?.disputeFlag &&
               !selectedEscrow?.resolvedFlag &&
@@ -637,6 +645,7 @@ const EscrowDetailDialog = ({
                     e.stopPropagation();
                     dialogStates.editMilestone.setIsOpen(true);
                   }}
+                  className="mt-6 md:mt-0 w-full md:w-1/12"
                   variant="outline"
                 >
                   <Pencil />
