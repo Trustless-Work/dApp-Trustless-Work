@@ -43,6 +43,7 @@ import { Separator } from "@/components/ui/separator";
 import { FooterDetails } from "./sections/Footer";
 import { Button } from "@/components/ui/button";
 import EditEntitiesDialog from "./EditEntitiesDialog";
+import EditBasicPropertiesDialog from "./EditBasicPropertiesDialog";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -302,6 +303,15 @@ const EscrowDetailDialog = ({
       <EditEntitiesDialog
         isEditEntitiesDialogOpen={dialogStates.editEntities.isOpen}
         setIsEditEntitiesDialogOpen={dialogStates.editEntities.setIsOpen}
+      />
+
+      <EditBasicPropertiesDialog
+        isEditBasicPropertiesDialogOpen={
+          dialogStates.editBasicProperties.isOpen
+        }
+        setIsEditBasicPropertiesDialogOpen={
+          dialogStates.editBasicProperties.setIsOpen
+        }
       />
 
       <SuccessReleaseDialog
