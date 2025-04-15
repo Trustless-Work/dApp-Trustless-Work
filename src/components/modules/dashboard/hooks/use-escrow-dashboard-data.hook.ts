@@ -2,19 +2,7 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import type { Escrow } from "@/@types/escrow.entity";
 import { fetchAllEscrows } from "../../escrow/services/escrow.service";
-
-type DashboardData = {
-  statusCounts: { name: string; count: number }[];
-  top5ByValue: Escrow[];
-  releaseTrend: { date: string; count: number }[];
-  volumeTrend: { date: string; value: number }[];
-  totalEscrows: number;
-  totalResolved: number;
-  totalReleased: number;
-  totalInDispute: number;
-  resolvedPercentage: number;
-  isPositive: boolean;
-};
+import { DashboardData } from "../@types/dashboard.entity";
 
 export const useEscrowDashboardData = ({
   address,
@@ -67,9 +55,18 @@ const getStatusCounts = (escrows: Escrow[]) => {
 };
 
 const getTop5ByValue = (escrows: Escrow[]) => {
-  return [...escrows]
+  const top5 = [...escrows]
     .sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount))
     .slice(0, 5);
+
+  return top5.sort((a, b) => {
+    const getTimestamp = (e: Escrow) => {
+      const ts = e.updatedAt || e.createdAt;
+      return ts.seconds * 1000 + ts.nanoseconds / 1_000_000;
+    };
+
+    return getTimestamp(b) - getTimestamp(a);
+  });
 };
 
 const getReleaseTrend = (escrows: Escrow[]) => {
@@ -77,15 +74,15 @@ const getReleaseTrend = (escrows: Escrow[]) => {
 
   escrows.forEach((escrow) => {
     if (escrow.releaseFlag && escrow.updatedAt?.seconds) {
-      const date = format(
+      const month = format(
         new Date(escrow.updatedAt.seconds * 1000),
-        "yyyy-MM-dd",
+        "yyyy-MM",
       );
-      map.set(date, (map.get(date) || 0) + 1);
+      map.set(month, (map.get(month) || 0) + 1);
     }
   });
 
-  return Array.from(map.entries()).map(([date, count]) => ({ date, count }));
+  return Array.from(map.entries()).map(([month, count]) => ({ month, count }));
 };
 
 const getVolumeTrend = (escrows: Escrow[]) => {
@@ -100,7 +97,9 @@ const getVolumeTrend = (escrows: Escrow[]) => {
     map.set(date, (map.get(date) || 0) + value);
   });
 
-  return Array.from(map.entries()).map(([date, value]) => ({ date, value }));
+  return Array.from(map.entries())
+    .map(([date, value]) => ({ date, value }))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
 const getResolvedPercentage = (escrows: Escrow[]): number => {
@@ -108,6 +107,7 @@ const getResolvedPercentage = (escrows: Escrow[]): number => {
   const resolvedCount = escrows.filter((e) => e.resolvedFlag).length;
   return Math.round((resolvedCount / escrows.length) * 100);
 };
+
 const getIsPositive = (resolvedPercentage: number): boolean => {
   return resolvedPercentage >= 50;
 };

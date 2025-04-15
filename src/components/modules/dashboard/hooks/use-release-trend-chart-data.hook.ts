@@ -2,13 +2,13 @@ import * as React from "react";
 import { ChartConfig } from "@/components/ui/chart";
 
 type ReleaseTrend = {
-  date: string;
+  month: string;
   count: number;
 }[];
 
 export function useReleaseTrendChartData(data: ReleaseTrend) {
   const chartConfig: ChartConfig = {
-    date: {
+    month: {
       label: "Date",
     },
     count: {
