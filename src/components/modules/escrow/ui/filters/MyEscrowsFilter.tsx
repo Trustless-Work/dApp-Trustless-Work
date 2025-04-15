@@ -124,9 +124,10 @@ const MyEscrowsFilter = () => {
         <div className="flex flex-col gap-4">
           <Link
             href="/dashboard/help#roles"
-            className="text-xs text-muted-foreground font-bold text-end capitalize hover:underline"
+            className="text-xs text-muted-foreground font-bold text-end hover:underline"
           >
-            Actions in "{formatText(activeTab)}"
+            Actions in{" "}
+            <span className="capitalize">"{formatText(activeTab)}"</span>
           </Link>
 
           <div className="flex gap-4 justify-end">
