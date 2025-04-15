@@ -38,12 +38,12 @@ export const useEscrowFilter = () => {
   }, [search]);
 
   const mapNameParams = (paramName: string) => {
-    if (!paramName) return "All Statuses";
+    if (!paramName) return "No Filter";
 
     switch (paramName) {
       // Statuses
       case "all":
-        return "All Statuses";
+        return "No Filter";
       case "working":
         return "Working";
       case "pendingRelease":

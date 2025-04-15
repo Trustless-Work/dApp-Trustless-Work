@@ -30,8 +30,8 @@ const MyEscrowsFilter = () => {
   return (
     <form className="flex flex-col space-y-5">
       <div className="flex flex-col md:flex-row justify-between w-full gap-10">
-        <div className="flex flex-col md:flex-row gap-10">
-          <div className="flex items-center space-x-2">
+        <div className="flex flex-col md:flex-row gap-10 w-full md:w-1/4">
+          <div className="flex items-center space-x-2 w-full">
             <Input
               id="search"
               placeholder="Search..."
@@ -63,7 +63,7 @@ const MyEscrowsFilter = () => {
 
       <Divider type="horizontal" />
 
-      <div className="flex flex-col md:flex-row gap-3 w-1/3">
+      <div className="flex flex-col md:flex-row gap-3 w-full md:w-1/3">
         <div className="flex flex-col w-full">
           <label className="text-xs font-bold mb-2 ml-2" htmlFor="status">
             Status
