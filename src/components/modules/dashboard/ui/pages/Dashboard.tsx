@@ -18,12 +18,14 @@ export default function Dashboard() {
   const data = useEscrowDashboardData({ address });
 
   const { statusCounts, releaseTrend, volumeTrend, top5ByValue } = data || {};
-
   const hasData = data && data.totalEscrows > 0;
+
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
 
   return (
     <>
-      {!hasData && (
+      {!hasData &&
+      (!data?.volumeTrend || !data?.statusCounts || !data?.releaseTrend) ? (
         <div className="flex items-center justify-end w-full gap-2">
           <span className="text-sm flex items-center text-muted-foreground mr-2">
             Don't have any escrow? <ArrowRight className="ml-2" />
@@ -33,6 +35,15 @@ export default function Dashboard() {
             label="Create Escrow"
             url={"/dashboard/escrow/initialize-escrow"}
           />
+        </div>
+      ) : (
+        <div className="flex items-center justify-end w-full gap-2">
+          <p className="text-xl flex items-center text-muted-foreground mr-2">
+            Welcome back,{" "}
+            <strong className="flex gap-2 ml-2">
+              {loggedUser?.firstName}!👋🏼
+            </strong>
+          </p>
         </div>
       )}
 
