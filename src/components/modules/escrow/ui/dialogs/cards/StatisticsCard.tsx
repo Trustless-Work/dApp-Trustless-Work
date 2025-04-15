@@ -43,7 +43,11 @@ export const StatisticsCard = ({
         </div>
         <div className="mt-2 flex items-baseline justify-between">
           <div>
-            <h3 className="text-2xl font-semibold">{value}</h3>
+            <h3
+              className={`text-2xl font-semibold ${!actionLabel && "text-4xl"}`}
+            >
+              {value}
+            </h3>
             {subValue}
           </div>
           {actionLabel && onAction && (
