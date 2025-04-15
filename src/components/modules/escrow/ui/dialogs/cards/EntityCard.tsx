@@ -1,7 +1,11 @@
-import { User } from "@/@types/user.entity";
+"use client";
+
+import type { User } from "@/@types/user.entity";
 import { getUserByWallet } from "@/components/modules/auth/server/authentication.firebase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { SidebarMenuButton } from "@/components/ui/sidebar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useEffect, useState } from "react";
 
@@ -45,67 +49,76 @@ const EntityCard = ({
   }, [entity]);
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="text-xs ml-2 mb-2 flex justify-between">
-        <span className={`${inDispute ? "text-destructive font-bold" : ""}`}>
-          {type}
-        </span>
-        <div className="flex gap-3">
-          {hasPercentage && (
-            <div className="flex">
-              <p className="mr-1 font-bold">Fee:</p>
-              <span className="text-green-700">{percentage}%</span>
-            </div>
-          )}
-          {hasAmount && (
-            <div className="flex">
-              <p className="mr-1 font-bold">{isNet && "Net"} Amount:</p>
-              <span className="text-green-700">{formatDollar(amount)}</span>
-            </div>
-          )}
+    <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-md">
+      <CardContent className="p-3">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            {inDispute && (
+              <Badge variant="destructive" className="h-5 text-[10px]">
+                In Dispute
+              </Badge>
+            )}
+            <span className="text-xs font-medium text-muted-foreground">
+              {type}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs">
+            {hasPercentage && (
+              <div className="flex items-center">
+                <span className="text-muted-foreground mr-1">Fee:</span>
+                <span className="font-medium text-emerald-600">
+                  {percentage}%
+                </span>
+              </div>
+            )}
+            {hasAmount && (
+              <div className="flex items-center">
+                <span className="text-muted-foreground mr-1">
+                  {isNet && "Net "}Amount:
+                </span>
+                <span className="font-medium text-emerald-600">
+                  {formatDollar(amount)}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      <SidebarMenuButton
-        size="lg"
-        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-      >
-        <Avatar className="h-8 w-8 rounded-lg">
-          {type === "Trustless Work" ? (
-            <AvatarImage src="/logo.png" alt="Trustless Work Logo" />
-          ) : user?.profileImage ? (
-            <AvatarImage
-              src={user.profileImage}
-              alt={`${user.firstName} ${user.lastName}`}
-            />
-          ) : (
-            <AvatarFallback className="rounded-lg">
-              {user?.firstName?.[0] || "?"}
-              {user?.lastName?.[0] || "?"}
-            </AvatarFallback>
-          )}
-        </Avatar>
-        <div className="grid flex-1 text-left text-sm leading-tight">
-          {type === "Trustless Work" ? (
-            <>
-              <span className="truncate text-xs font-semibold">
-                Trustless Work
-              </span>
-              <span className="truncate text-xs">Private</span>
-            </>
-          ) : (
-            <>
-              <span className="truncate text-xs font-semibold">
-                {user && (user.firstName || user.lastName)
+
+        <Separator className="my-2" />
+
+        <div className="flex items-center gap-3 py-1">
+          <Avatar className="h-9 w-9 rounded-md border">
+            {type === "Trustless Work" ? (
+              <AvatarImage src="/logo.png" alt="Trustless Work Logo" />
+            ) : user?.profileImage ? (
+              <AvatarImage
+                src={user.profileImage || "/placeholder.svg"}
+                alt={`${user.firstName} ${user.lastName}`}
+              />
+            ) : (
+              <AvatarFallback className="rounded-md bg-background text-foreground">
+                {user?.firstName?.[0] || "?"}
+                {user?.lastName?.[0] || "?"}
+              </AvatarFallback>
+            )}
+          </Avatar>
+
+          <div className="flex flex-col">
+            <span className="text-sm font-medium leading-tight">
+              {type === "Trustless Work"
+                ? "Trustless Work"
+                : user && (user.firstName || user.lastName)
                   ? `${user.firstName} ${user.lastName}`
                   : "Unknown"}
-              </span>
-
-              <span className="truncate text-xs">{formatAddress(entity)}</span>
-            </>
-          )}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {type === "Trustless Work" ? "Private" : formatAddress(entity)}
+            </span>
+          </div>
         </div>
-      </SidebarMenuButton>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
