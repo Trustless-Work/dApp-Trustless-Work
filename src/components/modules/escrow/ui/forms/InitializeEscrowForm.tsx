@@ -327,7 +327,7 @@ const InitializeEscrowForm = () => {
                 <FormLabel className="flex items-center justify-between">
                   <span className="flex items-center">
                     Receiver <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Reciever wallet address." />
+                    <TooltipInfo content="Receiver wallet address." />
                   </span>
                   <Switch
                     checked={showSelect.receiver}
@@ -346,7 +346,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter reciever address"
+                      placeholder="Enter receiver address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);

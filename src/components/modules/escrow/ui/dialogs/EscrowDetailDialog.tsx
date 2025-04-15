@@ -443,7 +443,7 @@ const EscrowDetailDialog = ({
                   type="Release Signer"
                   entity={selectedEscrow.releaseSigner}
                 />
-                <EntityCard type="Reciever" entity={selectedEscrow.receiver} />
+                <EntityCard type="Receiver" entity={selectedEscrow.receiver} />
               </div>
 
               {/* Milestones */}
