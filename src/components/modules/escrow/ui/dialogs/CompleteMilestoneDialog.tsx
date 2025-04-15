@@ -73,7 +73,7 @@ const CompleteMilestoneDialog = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex items-center">
-                          Evidence{" "}
+                          Evidence (optional){" "}
                           <TooltipInfo content="The evidence that you've completed the milestone." />
                         </FormLabel>
                         <FormControl>
