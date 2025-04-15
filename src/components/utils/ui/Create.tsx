@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "../../ui/button";
+import { Plus } from "lucide-react";
 
 interface CreateButtonProps {
   label: string;
@@ -11,7 +12,10 @@ interface CreateButtonProps {
 const CreateButton = ({ label, url, className, id }: CreateButtonProps) => {
   return (
     <Link href={url} id={id || ""}>
-      <Button className={className}>{label}</Button>
+      <Button className={className}>
+        <Plus />
+        {label}
+      </Button>
     </Link>
   );
 };
