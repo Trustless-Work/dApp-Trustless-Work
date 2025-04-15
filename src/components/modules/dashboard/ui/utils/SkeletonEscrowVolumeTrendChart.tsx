@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function EscrowVolumeTrendChartSkeleton() {
+export const SkeletonEscrowVolumeTrendChart = () => {
   return (
     <Card>
       <CardHeader>
@@ -31,4 +31,4 @@ export function EscrowVolumeTrendChartSkeleton() {
       </CardContent>
     </Card>
   );
-}
+};
