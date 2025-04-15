@@ -9,6 +9,7 @@ import {
   Copy,
   Flame,
   Handshake,
+  Pencil,
   QrCode,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -73,16 +74,30 @@ export const EscrowIDActions = ({
         <QrCode />
         Show QR Address
       </Button>
-      <Button
-        onClick={(e) => {
-          e.stopPropagation();
-          dialogStates.second.setIsOpen(true);
-        }}
-        className="w-full"
-      >
-        <CircleDollarSignIcon />
-        Fund Escrow
-      </Button>
+      <div className="flex flex-col sm:flex-row gap-2">
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            dialogStates.second.setIsOpen(true);
+          }}
+          className="w-full"
+        >
+          <CircleDollarSignIcon />
+          Fund Escrow
+        </Button>
+
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            dialogStates.second.setIsOpen(true);
+          }}
+          className="w-full"
+          variant="outline"
+        >
+          <Pencil />
+          Edit Escrow
+        </Button>
+      </div>
 
       {(userRolesInEscrow.includes("approver") ||
         userRolesInEscrow.includes("serviceProvider")) &&

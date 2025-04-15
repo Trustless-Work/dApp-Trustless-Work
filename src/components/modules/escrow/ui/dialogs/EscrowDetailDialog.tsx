@@ -24,6 +24,7 @@ import {
   CircleCheckBig,
   CircleDollarSign,
   Handshake,
+  Pencil,
   Wallet,
 } from "lucide-react";
 import EditMilestonesDialog from "./EditMilestonesDialog";
@@ -40,6 +41,7 @@ import { EscrowIDActions } from "./sections/EscrowIDActions";
 import { Milestones } from "./sections/Milestones";
 import { Separator } from "@/components/ui/separator";
 import { FooterDetails } from "./sections/Footer";
+import { Button } from "@/components/ui/button";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -71,6 +73,7 @@ const EscrowDetailDialog = ({
   const { formatText, formatDollar } = useFormatUtils();
 
   const setAmounts = useEscrowUIBoundedStore((state) => state.setAmounts);
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
   const totalAmount = Number(selectedEscrow?.amount || 0);
   const platformFeePercentage = Number(selectedEscrow?.platformFee || 0);
@@ -167,12 +170,14 @@ const EscrowDetailDialog = ({
               title="Amount"
               icon={CircleDollarSign}
               value={formatDollar(selectedEscrow.amount)}
+              tooltipContent="Total amount of the escrow."
             />
 
             <StatisticsCard
               title="Balance"
               icon={Wallet}
               value={formatDollar(selectedEscrow.balance ?? "null")}
+              tooltipContent="Current balance of the escrow (smart contract)."
             />
 
             {/* Escrow ID and Actions */}
@@ -185,10 +190,31 @@ const EscrowDetailDialog = ({
           {/* Main Content */}
           <Card className={cn("overflow-hidden h-full")}>
             <CardContent className="p-6">
-              <label htmlFor="milestones" className="flex items-center">
-                Entities
-                <TooltipInfo content="Entities that are involved in the escrow." />
-              </label>
+              <div className="flex w-full justify-between">
+                <label htmlFor="milestones" className="flex items-center">
+                  Entities
+                  <TooltipInfo content="Entities that are involved in the escrow." />
+                </label>
+
+                {userRolesInEscrow.includes("platformAddress") &&
+                  !selectedEscrow?.disputeFlag &&
+                  !selectedEscrow?.resolvedFlag &&
+                  activeTab === "platformAddress" && (
+                    <TooltipInfo content="Edit Roles">
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          dialogStates.editMilestone.setIsOpen(true);
+                        }}
+                        className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
+                        variant="ghost"
+                      >
+                        <Pencil />
+                        Edit
+                      </Button>
+                    </TooltipInfo>
+                  )}
+              </div>
 
               <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <EntityCard

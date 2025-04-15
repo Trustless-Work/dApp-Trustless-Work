@@ -60,17 +60,19 @@ export const Milestones = ({
             !selectedEscrow?.disputeFlag &&
             !selectedEscrow?.resolvedFlag &&
             activeTab === "platformAddress" && (
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  dialogStates.editMilestone.setIsOpen(true);
-                }}
-                className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
-                variant="ghost"
-              >
-                <Pencil />
-                Edit
-              </Button>
+              <TooltipInfo content="Edit Milestones">
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dialogStates.editMilestone.setIsOpen(true);
+                  }}
+                  className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
+                  variant="ghost"
+                >
+                  <Pencil />
+                  Edit
+                </Button>
+              </TooltipInfo>
             )}
         </div>
 
