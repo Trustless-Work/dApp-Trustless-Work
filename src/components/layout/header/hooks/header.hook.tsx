@@ -25,7 +25,11 @@ const useHeader = () => {
     const crumbs = pathName.split("/").filter(Boolean);
 
     return crumbs.map((crumb, index) => {
-      const href = "/" + crumbs.slice(0, index + 1).join("/");
+      const isEscrow = crumb.toLowerCase() === "escrow";
+      const href = isEscrow
+        ? "/dashboard/escrow/my-escrows"
+        : "/" + crumbs.slice(0, index + 1).join("/");
+
       const label = crumb
         .replace(/-/g, " ")
         .replace(/\b\w/g, (char) => char.toUpperCase());
