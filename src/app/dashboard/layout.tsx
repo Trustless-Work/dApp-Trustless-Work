@@ -22,7 +22,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <AppSidebar />
       <SidebarInset>
         <Header />
-        <div className="bg-muted/50 min-h-screen">
+        <div className="min-h-screen">
           <div className="flex-1 space-y-4 p-4 pt-6 md:p-8 h-full">
             {label !== "Help" && label !== "Report Issue" && (
               <h2 className="text-3xl font-bold tracking-tight">{label}</h2>
