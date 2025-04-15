@@ -10,7 +10,7 @@ const useHeaderWithoutAuth = () => {
 
   useEffect(() => {
     if (address) {
-      router.push("/dashboard/escrow/my-escrows");
+      router.push("/dashboard");
     }
   }, [address, router]);
 

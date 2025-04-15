@@ -17,7 +17,7 @@ const useHeader = () => {
     if (!address) {
       router.push("/");
     } else if (pathName === "/") {
-      router.push("/dashboard/escrow/my-escrows");
+      router.push("/dashboard");
     }
   }, [address, pathName, router]);
 
