@@ -47,10 +47,10 @@ export const ItemsSidebar = {
       ],
     },
     {
-      label: "Documentation",
+      label: "Resources",
       items: [
         {
-          title: "Documentation",
+          title: "Resources",
           url: "#",
           icon: BookOpen,
           isExpandable: true,
@@ -68,6 +68,11 @@ export const ItemsSidebar = {
             {
               title: "Stellar Expert",
               url: "https://stellar.expert/explorer/testnet",
+              isExternal: true,
+            },
+            {
+              title: "Escrow Viewer",
+              url: "https://viewer.trustlesswork.com/",
               isExternal: true,
             },
           ],
