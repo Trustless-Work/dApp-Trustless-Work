@@ -76,8 +76,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
     setCurrentPage,
   } = useMyEscrows({ type });
 
-  const { formatDateFromFirebase, formatAddress, formatDollar } =
-    useFormatUtils();
+  const { formatDateFromFirebase, formatDollar } = useFormatUtils();
 
   return (
     <>
