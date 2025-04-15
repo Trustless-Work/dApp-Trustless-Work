@@ -5,7 +5,7 @@ import useHeaderWithoutAuth from "./hooks/header-without-auth.hook";
 import ThemeToggle from "./ThemeToggle";
 import Image from "next/image";
 import Link from "next/link";
-import { LogIn, LogOut } from "lucide-react";
+import { Bug, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const HeaderWithoutAuth: React.FC = () => {
@@ -29,7 +29,7 @@ const HeaderWithoutAuth: React.FC = () => {
           <ThemeToggle />
 
           <Button variant="destructive" onClick={handleReportIssue}>
-            <LogIn /> Report Issue
+            <Bug /> Report Issue
           </Button>
 
           <Button variant="outline" onClick={handleConnect}>
