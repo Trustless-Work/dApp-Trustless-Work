@@ -12,12 +12,10 @@ import {
   Pencil,
   QrCode,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Escrow } from "@/@types/escrow.entity";
 import { toast } from "@/hooks/toast.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 interface EscrowIDActionProps {
   selectedEscrow: Escrow;
@@ -39,12 +37,12 @@ export const EscrowIDActions = ({
   const { copyText, copiedKeyId } = useCopyUtils();
 
   return (
-    <div className="flex flex-col justify-center w-full md:w-1/5">
-      <p className="text-center mb-3 text-sm">
-        <span className="uppercase font-bold">
+    <div className="flex flex-col justify-center w-full md:w-1/4 px-2">
+      <p className="text-center mb-4 text-sm">
+        <span className="uppercase font-bold block mb-1">
           {selectedEscrow.trustline?.name || "No Trustline"} | Escrow ID:
         </span>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center gap-2 break-all text-center">
           {formatAddress(selectedEscrow.contractId)}
           <button
             onClick={() =>
@@ -52,117 +50,105 @@ export const EscrowIDActions = ({
             }
             className="p-1.5 hover:bg-muted rounded-md transition-colors"
           >
-            <TooltipInfo content="Copy Escrow ID">
-              {copiedKeyId ? (
-                <Check className={cn("h-4 w-4 text-green-700")} />
-              ) : (
-                <Copy className={cn("h-4 w-4")} />
-              )}
-            </TooltipInfo>
+            {copiedKeyId ? (
+              <Check className="h-4 w-4 text-green-700" />
+            ) : (
+              <Copy className="h-4 w-4" />
+            )}
           </button>
         </div>
       </p>
 
-      <Button
-        onClick={(e) => {
-          e.stopPropagation();
-          dialogStates.qr.setIsOpen(true);
-        }}
-        className="w-full mb-3"
-        variant="outline"
-      >
-        <QrCode />
-        Show QR Address
-      </Button>
-      <div className="flex flex-col sm:flex-row gap-2">
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            dialogStates.second.setIsOpen(true);
-          }}
-          className="w-full"
-        >
-          <CircleDollarSignIcon />
-          Fund Escrow
-        </Button>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
+          {userRolesInEscrow.includes("platformAddress") &&
+            !selectedEscrow?.disputeFlag &&
+            !selectedEscrow?.resolvedFlag &&
+            activeTab === "platformAddress" && (
+              <Button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dialogStates.editBasicProperties.setIsOpen(true);
+                }}
+                className="w-full"
+                variant="outline"
+              >
+                <Pencil className="mr-2" />
+                Edit Escrow
+              </Button>
+            )}
 
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            dialogStates.second.setIsOpen(true);
-          }}
-          className="w-full"
-          variant="outline"
-        >
-          <Pencil />
-          Edit Escrow
-        </Button>
-      </div>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              dialogStates.qr.setIsOpen(true);
+            }}
+            className="w-full"
+            variant="outline"
+          >
+            <QrCode />
+            Show QR Code
+          </Button>
 
-      {(userRolesInEscrow.includes("approver") ||
-        userRolesInEscrow.includes("serviceProvider")) &&
-        (activeTab === "approver" || activeTab === "serviceProvider") &&
-        !selectedEscrow.disputeFlag &&
-        !selectedEscrow.resolvedFlag && (
-          <button
-            type="button"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                if (
+          {(userRolesInEscrow.includes("approver") ||
+            userRolesInEscrow.includes("serviceProvider")) &&
+            (activeTab === "approver" || activeTab === "serviceProvider") &&
+            !selectedEscrow.disputeFlag &&
+            !selectedEscrow.resolvedFlag && (
+              <Button
+                onClick={() => {
+                  if (
+                    Number(selectedEscrow.balance) === 0 ||
+                    !selectedEscrow.balance
+                  ) {
+                    toast({
+                      title: "Cannot start dispute",
+                      description: "The escrow balance is 0",
+                      variant: "destructive",
+                    });
+                  } else {
+                    startDisputeSubmit();
+                  }
+                }}
+                disabled={
                   Number(selectedEscrow.balance) === 0 ||
                   !selectedEscrow.balance
-                ) {
-                  toast({
-                    title: "Cannot start dispute",
-                    description: "The escrow balance is 0",
-                    variant: "destructive",
-                  });
-                } else {
-                  startDisputeSubmit();
                 }
-              }
-            }}
-            onClick={() => {
-              if (
-                Number(selectedEscrow.balance) === 0 ||
-                !selectedEscrow.balance
-              ) {
-                toast({
-                  title: "Cannot start dispute",
-                  description: "The escrow balance is 0",
-                  variant: "destructive",
-                });
-              } else {
-                startDisputeSubmit();
-              }
-            }}
-            className="w-full cursor-pointer"
-          >
-            <Button
-              disabled={
-                Number(selectedEscrow.balance) === 0 || !selectedEscrow.balance
-              }
-              variant="destructive"
-              className="mt-3 pointer-events-none w-full"
-            >
-              <Flame />
-              Start Dispute
-            </Button>
-          </button>
-        )}
+                variant="destructive"
+                className="w-full"
+              >
+                <Flame className="mr-2" />
+                Start Dispute
+              </Button>
+            )}
 
-      {userRolesInEscrow.includes("disputeResolver") &&
-        activeTab === "disputeResolver" &&
-        !selectedEscrow.resolvedFlag &&
-        selectedEscrow.disputeFlag && (
+          {userRolesInEscrow.includes("disputeResolver") &&
+            activeTab === "disputeResolver" &&
+            !selectedEscrow.resolvedFlag &&
+            selectedEscrow.disputeFlag && (
+              <Button
+                onClick={handleOpen}
+                className="bg-green-800 hover:bg-green-700 w-full"
+              >
+                <Handshake className="mr-2" />
+                Resolve Dispute
+              </Button>
+            )}
+        </div>
+
+        <div className="mt-2">
           <Button
-            onClick={handleOpen}
-            className="bg-green-800 hover:bg-green-700 mt-3"
+            onClick={(e) => {
+              e.stopPropagation();
+              dialogStates.second.setIsOpen(true);
+            }}
+            className="w-full"
           >
-            <Handshake />
-            Resolve Dispute
+            <CircleDollarSignIcon className="mr-2" />
+            Fund Escrow
           </Button>
-        )}
+        </div>
+      </div>
     </div>
   );
 };

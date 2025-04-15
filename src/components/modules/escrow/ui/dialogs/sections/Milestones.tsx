@@ -1,9 +1,13 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import {
   CheckCheck,
+  ChevronDown,
+  ChevronUp,
   FileCheck2,
   LetterText,
   Link2,
@@ -18,7 +22,10 @@ import { useEscrowDialogs } from "../hooks/use-escrow-dialogs.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import Link from "next/link";
 import ProgressEscrow from "../utils/ProgressEscrow";
+import { useEffect, useState } from "react";
 
+const MAX_VISIBLE_MILESTONES = 1;
+const ITEM_HEIGHT = 50;
 interface MilestonesProps {
   selectedEscrow: Escrow;
   userRolesInEscrow: string[];
@@ -44,8 +51,26 @@ export const Milestones = ({
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
   const { isValidUrl } = useValidData();
-
   const { changeMilestoneFlagSubmit } = useChangeFlagEscrowDialog();
+
+  const [visibleMoreMilestones, setVisibleMoreMilestones] =
+    useState<boolean>(false);
+
+  const calculatedHeight =
+    visibleMoreMilestones ||
+    selectedEscrow.milestones.length <= MAX_VISIBLE_MILESTONES
+      ? selectedEscrow.milestones.length * ITEM_HEIGHT
+      : MAX_VISIBLE_MILESTONES * ITEM_HEIGHT;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "h") {
+        setVisibleMoreMilestones(true);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedEscrow.milestones.length]);
 
   return (
     <div className="flex justify-center w-full mt-5">
@@ -74,9 +99,29 @@ export const Milestones = ({
                 </Button>
               </TooltipInfo>
             )}
+
+          {selectedEscrow.milestones.length > 1 && (
+            <Button
+              variant="ghost"
+              onClick={() => setVisibleMoreMilestones((prev) => !prev)}
+            >
+              {visibleMoreMilestones ? (
+                <>
+                  <ChevronUp className="mr-1" /> Collapse
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="mr-1" /> Expand
+                </>
+              )}
+            </Button>
+          )}
         </div>
 
-        <div className="flex flex-col gap-4 max-h-[150px] overflow-y-auto px-10">
+        <div
+          className="flex flex-col gap-4 overflow-y-auto px-10 transition-all duration-300"
+          style={{ maxHeight: `${calculatedHeight}px` }}
+        >
           {selectedEscrow.milestones.map((milestone, milestoneIndex) => (
             <div
               key={`${milestone.description}-${milestone.status}`}
@@ -203,7 +248,6 @@ export const Milestones = ({
                   </Button>
                 )}
 
-              {/* Mobile Milestone Divider */}
               <div className="block sm:hidden border-b-2">
                 ____________________________________
               </div>
