@@ -8,8 +8,6 @@ import {
 } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import SelectField from "@/components/utils/ui/SelectSearch";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import useEditBasicPropertiesDialog from "../hooks/edit-basic-properties-dialog.hook";
