@@ -42,6 +42,7 @@ import { Milestones } from "./sections/Milestones";
 import { Separator } from "@/components/ui/separator";
 import { FooterDetails } from "./sections/Footer";
 import { Button } from "@/components/ui/button";
+import EditEntitiesDialog from "./EditEntitiesDialog";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -204,7 +205,7 @@ const EscrowDetailDialog = ({
                       <Button
                         onClick={(e) => {
                           e.stopPropagation();
-                          dialogStates.editMilestone.setIsOpen(true);
+                          dialogStates.editEntities.setIsOpen(true);
                         }}
                         className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
                         variant="ghost"
@@ -296,6 +297,11 @@ const EscrowDetailDialog = ({
       <EditMilestonesDialog
         isEditMilestoneDialogOpen={dialogStates.editMilestone.isOpen}
         setIsEditMilestoneDialogOpen={dialogStates.editMilestone.setIsOpen}
+      />
+
+      <EditEntitiesDialog
+        isEditEntitiesDialogOpen={dialogStates.editEntities.isOpen}
+        setIsEditEntitiesDialogOpen={dialogStates.editEntities.setIsOpen}
       />
 
       <SuccessReleaseDialog
