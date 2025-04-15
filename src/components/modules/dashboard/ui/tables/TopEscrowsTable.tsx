@@ -22,6 +22,7 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import { Escrow } from "@/@types/escrow.entity";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { getStatus } from "../../utils/escrow-status.util";
+import NoData from "@/components/utils/ui/NoData";
 
 export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
@@ -31,6 +32,8 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
+
+  const hasData = escrows && escrows.length > 0;
 
   const { formatDollar, formatDateFromFirebase } = useFormatUtils();
 
@@ -48,51 +51,61 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
           </TableRow>
         </TableHeader>
         <TableBody className="px-5">
-          {escrows.map((escrow) => (
-            <TableRow key={escrow.id}>
-              <TableCell className="font-medium">{escrow.title}</TableCell>
-              <TableCell className="text-center">
-                {formatDollar(escrow.amount)}
-              </TableCell>
-              <TableCell className="text-center">
-                <Badge variant="outline">{getStatus(escrow)}</Badge>
-              </TableCell>
-              <TableCell className="text-center">
-                {formatDateFromFirebase(
-                  escrow.createdAt.seconds,
-                  escrow.createdAt.nanoseconds,
-                )}
-              </TableCell>
-              <TableCell className="text-center">
-                {formatDateFromFirebase(
-                  escrow.updatedAt.seconds,
-                  escrow.updatedAt.nanoseconds,
-                )}
-              </TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsDialogOpen(true);
-                        setSelectedEscrow(escrow);
-                      }}
-                    >
-                      More Details
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+          {hasData ? (
+            escrows.map((escrow) => (
+              <TableRow key={escrow.id}>
+                <TableCell className="font-medium">{escrow.title}</TableCell>
+                <TableCell className="text-center">
+                  {formatDollar(escrow.amount)}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Badge variant="outline">{getStatus(escrow)}</Badge>
+                </TableCell>
+                <TableCell className="text-center">
+                  {formatDateFromFirebase(
+                    escrow.createdAt.seconds,
+                    escrow.createdAt.nanoseconds,
+                  )}
+                </TableCell>
+                <TableCell className="text-center">
+                  {formatDateFromFirebase(
+                    escrow.updatedAt.seconds,
+                    escrow.updatedAt.nanoseconds,
+                  )}
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Open menu</span>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsDialogOpen(true);
+                          setSelectedEscrow(escrow);
+                        }}
+                      >
+                        More Details
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6}>
+                <div className="flex flex-col items-center justify-center h-full text-center p-6">
+                  <NoData />
+                </div>
               </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
 
