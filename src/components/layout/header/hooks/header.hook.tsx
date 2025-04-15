@@ -26,9 +26,7 @@ const useHeader = () => {
 
     return crumbs.map((crumb, index) => {
       const isEscrow = crumb.toLowerCase() === "escrow";
-      const href = isEscrow
-        ? "/dashboard/escrow/my-escrows"
-        : "/" + crumbs.slice(0, index + 1).join("/");
+      const href = isEscrow ? "#" : "/" + crumbs.slice(0, index + 1).join("/");
 
       const label = crumb
         .replace(/-/g, " ")
