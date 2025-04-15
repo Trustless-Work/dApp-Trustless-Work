@@ -30,7 +30,7 @@ export const EditEntitiesForm = ({
     <Form {...form}>
       <form className="grid gap-4 py-4" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-col ms-center gap-4">
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="serviceProvider"
@@ -107,7 +107,8 @@ export const EditEntitiesForm = ({
                 </FormItem>
               )}
             />
-
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="releaseSigner"
@@ -187,7 +188,8 @@ export const EditEntitiesForm = ({
                 </FormItem>
               )}
             />
-
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="platformAddress"

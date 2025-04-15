@@ -33,7 +33,7 @@ const EditEntitiesDialog = ({
 
   return (
     <Dialog open={isEditEntitiesDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>Editing - {selectedEscrow?.title}</DialogTitle>
           <DialogDescription>
