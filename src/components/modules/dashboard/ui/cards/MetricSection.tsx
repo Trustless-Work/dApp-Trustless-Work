@@ -14,7 +14,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import MetricCard from "./MetricCard";
-import { useEscrowDashboardData } from "../../hooks/use-escrow-dashboard-data.hook";
+import { useEscrowDashboardData } from "../../hooks/escrow-dashboard-data.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Button } from "@/components/ui/button";
 

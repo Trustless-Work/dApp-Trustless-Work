@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useReleaseTrendChartData } from "../../hooks/use-release-trend-chart-data.hook";
+import { useReleaseTrendChartData } from "../../hooks/release-trend-chart-data.hook";
 
 type ReleaseTrend = {
   month: string;

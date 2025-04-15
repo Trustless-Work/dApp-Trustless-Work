@@ -20,7 +20,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useVolumeTrendChartData } from "../../hooks/use-volume-trend-chart-data.hook";
+import { useVolumeTrendChartData } from "../../hooks/volume-trend-chart-data.hook";
 import { CalendarOffIcon as BarChartOff } from "lucide-react";
 
 type VolumeTrend = {

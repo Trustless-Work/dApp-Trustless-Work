@@ -1,7 +1,7 @@
 "use client";
 
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { useEscrowDashboardData } from "../../hooks/use-escrow-dashboard-data.hook";
+import { useEscrowDashboardData } from "../../hooks/escrow-dashboard-data.hook";
 import { EscrowStatusChart } from "../charts/EscrowStatusChart";
 import { EscrowReleaseTrendChart } from "../charts/EscrowReleaseTrendChart";
 import { EscrowVolumeTrendChart } from "../charts/EscrowVolumeTrendChart";
