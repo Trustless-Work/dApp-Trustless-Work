@@ -21,7 +21,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useVolumeTrendChartData } from "../../hooks/volume-trend-chart-data.hook";
-import { CalendarOffIcon as BarChartOff } from "lucide-react";
+import NoData from "@/components/utils/ui/NoData";
 
 type VolumeTrend = {
   date: string;
@@ -63,11 +63,7 @@ export function EscrowVolumeTrendChart({ data }: { data: VolumeTrend }) {
             </ResponsiveContainer>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center p-6">
-              <BarChartOff className="h-12 w-12 text-muted-foreground mb-3" />
-              <h3 className="text-lg font-medium">No data available</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                There is no escrow volume data to display at this time.
-              </p>
+              <NoData />
             </div>
           )}
         </ChartContainer>

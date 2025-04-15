@@ -14,6 +14,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useStatusChartData } from "../../hooks/status-chart-data.hook";
+import NoData from "@/components/utils/ui/NoData";
 
 type StatusCounts = {
   name: string;
@@ -22,10 +23,11 @@ type StatusCounts = {
 
 export function EscrowStatusChart({ data }: { data: StatusCounts }) {
   const { total, formattedData, chartConfig } = useStatusChartData(data);
+  const hasData = data && data.length > 0;
 
   return (
     <Card className="h-full">
-      <CardHeader className="items-center pb-0">
+      <CardHeader>
         <CardTitle>Escrow Status</CardTitle>
       </CardHeader>
       <CardContent className="pb-0">
@@ -33,49 +35,55 @@ export function EscrowStatusChart({ data }: { data: StatusCounts }) {
           config={chartConfig}
           className="mx-auto aspect-square h-[250px]"
         >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={formattedData}
-              dataKey="count"
-              nameKey="name"
-              innerRadius={60}
-              strokeWidth={5}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (!viewBox) return null;
-                  const { cx, cy } = viewBox as { cx: number; cy: number };
-                  return (
-                    <text
-                      x={cx}
-                      y={cy}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                    >
-                      <tspan
+          {hasData ? (
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={formattedData}
+                dataKey="count"
+                nameKey="name"
+                innerRadius={60}
+                strokeWidth={5}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (!viewBox) return null;
+                    const { cx, cy } = viewBox as { cx: number; cy: number };
+                    return (
+                      <text
                         x={cx}
                         y={cy}
-                        className="fill-foreground text-2xl font-bold"
+                        textAnchor="middle"
+                        dominantBaseline="middle"
                       >
-                        {total}
-                      </tspan>
-                      <tspan
-                        x={cx}
-                        y={cy + 20}
-                        className="fill-muted-foreground text-sm"
-                      >
-                        Total
-                      </tspan>
-                    </text>
-                  );
-                }}
-              />
-            </Pie>
-          </PieChart>
+                        <tspan
+                          x={cx}
+                          y={cy}
+                          className="fill-foreground text-2xl font-bold"
+                        >
+                          {total}
+                        </tspan>
+                        <tspan
+                          x={cx}
+                          y={cy + 20}
+                          className="fill-muted-foreground text-sm"
+                        >
+                          Total
+                        </tspan>
+                      </text>
+                    );
+                  }}
+                />
+              </Pie>
+            </PieChart>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-center p-6">
+              <NoData />
+            </div>
+          )}
         </ChartContainer>
       </CardContent>
       <CardFooter>
