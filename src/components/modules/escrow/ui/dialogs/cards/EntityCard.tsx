@@ -52,15 +52,15 @@ const EntityCard = ({
     <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-md">
       <CardContent className="p-3">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
+          <div className="flex w-full items-center justify-between gap-2">
+            <span className="text-xs font-medium text-muted-foreground">
+              {type}
+            </span>
             {inDispute && (
               <Badge variant="destructive" className="h-5 text-[10px]">
                 In Dispute
               </Badge>
             )}
-            <span className="text-xs font-medium text-muted-foreground">
-              {type}
-            </span>
           </div>
 
           <div className="flex items-center gap-2 text-xs">
