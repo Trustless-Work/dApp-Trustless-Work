@@ -7,6 +7,7 @@ import Header from "@/components/layout/header/Header";
 import useLayoutDashboard from "@/hooks/layout-dashboard.hook";
 import { redirect } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { Lights } from "@/components/layout/all/ui/utils/Lights";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();
@@ -19,6 +20,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <SidebarProvider>
+      <Lights />
       <AppSidebar />
       <SidebarInset>
         <Header />
