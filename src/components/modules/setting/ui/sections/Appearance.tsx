@@ -6,15 +6,12 @@ import useAppearance from "../../hooks/appearance-section.hook";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-interface AppearanceSectionProps {
+interface AppearanceProps {
   theme: "light" | "dark";
   onThemeChange: (theme: "light" | "dark") => void;
 }
 
-const AppearanceSection = ({
-  theme,
-  onThemeChange,
-}: AppearanceSectionProps) => {
+export const Appearance = ({ theme, onThemeChange }: AppearanceProps) => {
   const { handleSaveTheme } = useAppearance({ theme });
 
   return (
@@ -60,5 +57,3 @@ const AppearanceSection = ({
     </Card>
   );
 };
-
-export default AppearanceSection;

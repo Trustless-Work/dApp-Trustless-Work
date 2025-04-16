@@ -16,11 +16,11 @@ import usePreferences, {
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-interface PreferencesSectionProps {
+interface PreferencesProps {
   onSave: (data: PreferencesForm) => void;
 }
 
-const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
+export const Preferences = ({ onSave }: PreferencesProps) => {
   const { form, onSubmit } = usePreferences({
     onSave,
   });
@@ -65,5 +65,3 @@ const PreferencesSection = ({ onSave }: PreferencesSectionProps) => {
     </Card>
   );
 };
-
-export default PreferencesSection;

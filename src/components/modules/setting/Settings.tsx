@@ -2,10 +2,10 @@ import Header from "@/components/layout/header/Header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import SettingsSidebar from "./Sidebar";
 import useSettings from "./hooks/settings.hook";
-import APIKeysSection from "./ui/sections/APIKeys";
-import ProfileSection from "./ui/sections/Profile";
-import AppearanceSection from "./ui/sections/Appearance";
-import PreferencesSection from "./ui/sections/Preferences";
+import { Profile } from "./ui/sections/Profile";
+import { Appearance } from "./ui/sections/Appearance";
+import { Preferences } from "./ui/sections/Preferences";
+import { APIKeys } from "./ui/sections/APIKeys";
 
 const Settings = () => {
   const { currentTab, setCurrentTab, saveProfile, theme, toggleTheme } =
@@ -24,16 +24,14 @@ const Settings = () => {
 
           <div className="flex-1 flex flex-col h-auto lg:h-3/4">
             <main className="flex-1 p-8">
-              {currentTab === "profile" && (
-                <ProfileSection onSave={saveProfile} />
-              )}
+              {currentTab === "profile" && <Profile onSave={saveProfile} />}
               {currentTab === "appearance" && (
-                <AppearanceSection theme={theme} onThemeChange={toggleTheme} />
+                <Appearance theme={theme} onThemeChange={toggleTheme} />
               )}
               {currentTab === "preferences" && (
-                <PreferencesSection onSave={saveProfile} />
+                <Preferences onSave={saveProfile} />
               )}
-              {currentTab === "api-keys" && <APIKeysSection />}
+              {currentTab === "api-keys" && <APIKeys />}
             </main>
           </div>
         </div>

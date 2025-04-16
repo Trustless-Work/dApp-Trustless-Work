@@ -15,11 +15,11 @@ import useProfile from "../../hooks/profile-section.hook";
 import { ProfileAvatar } from "../utils/ProfileAvatar";
 import { ProfileForm } from "../forms/ProfileForm";
 
-interface ProfileSectionProps {
+interface ProfileProps {
   onSave: (data: UserPayload) => void;
 }
 
-export const ProfileSection = ({ onSave }: ProfileSectionProps) => {
+export const Profile = ({ onSave }: ProfileProps) => {
   const { handleProfileImageUpload, handleProfileImageDelete } = useProfile({
     onSave,
   });

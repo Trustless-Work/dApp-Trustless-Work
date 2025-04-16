@@ -12,7 +12,7 @@ import { Trash2 } from "lucide-react";
 import { useSettingBoundedStore } from "../../store/ui";
 import SkeletonAPIKey from "../utils/SkeletonAPIKey";
 
-const APIKeysSection = () => {
+export const APIKeys = () => {
   const { onSubmit, showApiKey, toggleVisibility, handleRemoveAPiKey } =
     useAPIKeys();
   const { copyText, copiedKeyId } = useCopyUtils();
@@ -83,5 +83,3 @@ const APIKeysSection = () => {
     </Card>
   );
 };
-
-export default APIKeysSection;
