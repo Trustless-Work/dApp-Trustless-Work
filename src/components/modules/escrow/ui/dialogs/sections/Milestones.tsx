@@ -81,41 +81,43 @@ export const Milestones = ({
             <TooltipInfo content="Key stages or deliverables for the escrow." />
           </label>
 
-          {userRolesInEscrow.includes("platformAddress") &&
-            !selectedEscrow?.disputeFlag &&
-            !selectedEscrow?.resolvedFlag &&
-            activeTab === "platformAddress" && (
-              <TooltipInfo content="Edit Milestones">
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    dialogStates.editMilestone.setIsOpen(true);
-                  }}
-                  className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
-                  variant="ghost"
-                >
-                  <Pencil />
-                  Edit
-                </Button>
-              </TooltipInfo>
-            )}
-
-          {selectedEscrow.milestones.length > 1 && (
-            <Button
-              variant="ghost"
-              onClick={() => setVisibleMoreMilestones((prev) => !prev)}
-            >
-              {visibleMoreMilestones ? (
-                <>
-                  <ChevronUp className="mr-1" /> Collapse
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="mr-1" /> Expand
-                </>
+          <div className="flex gap-3 flex-col sm:flex-row">
+            {userRolesInEscrow.includes("platformAddress") &&
+              !selectedEscrow?.disputeFlag &&
+              !selectedEscrow?.resolvedFlag &&
+              activeTab === "platformAddress" && (
+                <TooltipInfo content="Edit Milestones">
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dialogStates.editMilestone.setIsOpen(true);
+                    }}
+                    className="mt-6 md:mt-0 text-xs"
+                    variant="ghost"
+                  >
+                    <Pencil />
+                    Edit
+                  </Button>
+                </TooltipInfo>
               )}
-            </Button>
-          )}
+
+            {selectedEscrow.milestones.length > 1 && (
+              <Button
+                variant="ghost"
+                onClick={() => setVisibleMoreMilestones((prev) => !prev)}
+              >
+                {visibleMoreMilestones ? (
+                  <>
+                    <ChevronUp className="mr-1" /> Collapse
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="mr-1" /> Expand
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
         </div>
 
         <div
