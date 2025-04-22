@@ -41,7 +41,7 @@ export default function Dashboard() {
           <p className="text-xl flex items-center text-muted-foreground mr-2">
             Welcome back,{" "}
             <strong className="flex gap-2 ml-2">
-              {loggedUser?.firstName}!👋🏼
+              {loggedUser?.firstName || "Without Name"}!👋🏼
             </strong>
           </p>
         </div>
