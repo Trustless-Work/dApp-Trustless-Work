@@ -1,10 +1,10 @@
-import { EditMilestonesPayload } from "@/@types/escrow.entity";
+import { EditEscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
 import axios from "axios";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 
-export const editMilestones = async (payload: EditMilestonesPayload) => {
+export const editEscrow = async (payload: EditEscrowPayload) => {
   try {
     const { address } = await kit.getAddress();
 

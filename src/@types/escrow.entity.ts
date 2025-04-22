@@ -93,7 +93,7 @@ export type ResolveDisputePayload = Pick<Escrow, "contractId"> &
     receiverFunds: string;
   };
 
-export type EditMilestonesPayload = {
+export type EditEscrowPayload = {
   contractId: string;
   escrow: EscrowPayload;
   signer: string;
