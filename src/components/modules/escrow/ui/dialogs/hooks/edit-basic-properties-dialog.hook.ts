@@ -12,7 +12,7 @@ import {
 import { EscrowPayload } from "@/@types/escrow.entity";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
-import { editMilestones } from "../../../services/edit-milestones.service";
+import { editEscrow } from "../../../services/edit-escrow.service";
 import { formSchema } from "../../../schema/edit-basic-properties.schema";
 
 interface useEditBasicPropertiesDialogProps {
@@ -64,6 +64,16 @@ const useEditBasicPropertiesDialog = ({
         platformFee: payload.platformFee,
       };
 
+      // Plain the trustline
+      if (
+        updatedEscrow.trustline &&
+        typeof updatedEscrow.trustline === "object"
+      ) {
+        updatedEscrow.trustlineDecimals =
+          updatedEscrow.trustline.trustlineDecimals;
+        updatedEscrow.trustline = updatedEscrow.trustline.trustline;
+      }
+
       delete updatedEscrow.createdAt;
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
@@ -74,7 +84,7 @@ const useEditBasicPropertiesDialog = ({
         contractId: selectedEscrow.contractId || "",
       };
 
-      const response = await editMilestones(newPayload);
+      const response = await editEscrow(newPayload);
 
       if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });
