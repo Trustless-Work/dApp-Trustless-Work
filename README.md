@@ -126,8 +126,8 @@ NEXT_PUBLIC_COUNTDOWN_MINUTES=30
 ### API Key Video
 
 **IMPORTANT TO KNOW:** <br />
--> If you're using the develop enviroment ```https://dev.api.trustlesswork.com```, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
--> If you're using main enviroment ```https://dev.api.trustlesswork.com```, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
+-> If you're using the develop enviroment `https://dev.api.trustlesswork.com`, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
+-> If you're using main enviroment `https://dev.api.trustlesswork.com`, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
 
 https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
 

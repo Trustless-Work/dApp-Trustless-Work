@@ -42,7 +42,7 @@ const useEditBasicPropertiesDialog = ({
       engagementId: selectedEscrow?.engagementId || "",
       description: selectedEscrow?.description || "",
       amount: selectedEscrow?.amount || "",
-      receiverMemo: selectedEscrow?.receiverMemo?.toString() || "0",
+      receiverMemo: selectedEscrow?.receiverMemo?.toString() || "",
       platformFee: selectedEscrow?.platformFee || "",
     },
     mode: "onChange",

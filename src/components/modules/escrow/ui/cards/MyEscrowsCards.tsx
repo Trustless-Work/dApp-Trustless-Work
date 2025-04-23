@@ -1,6 +1,12 @@
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import useMyEscrows from "../../hooks/my-escrows.hook";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +30,8 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import SkeletonCards from "../utils/SkeletonCards";
+import { Badge } from "@/components/ui/badge";
+import { Escrow, Milestone } from "@/@types/escrow.entity";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -78,6 +86,82 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
 
   const { formatDateFromFirebase, formatDollar } = useFormatUtils();
 
+  const getStatusBadge = (escrow: Escrow) => {
+    const completedMilestones = escrow.milestones.filter(
+      (milestone: Milestone) => milestone.status === "completed",
+    ).length;
+
+    const approvedMilestones = escrow.milestones.filter(
+      (milestone: Milestone) => milestone.approved_flag === true,
+    ).length;
+
+    const totalMilestones = escrow.milestones.length;
+
+    const progressPercentageCompleted =
+      totalMilestones > 0 ? (completedMilestones / totalMilestones) * 100 : 0;
+
+    const progressPercentageApproved =
+      totalMilestones > 0 ? (approvedMilestones / totalMilestones) * 100 : 0;
+
+    // Check if both are 100% and releaseFlag is false
+    const pendingRelease =
+      progressPercentageCompleted === 100 &&
+      progressPercentageApproved === 100 &&
+      !escrow.releaseFlag;
+
+    if (escrow.disputeFlag) {
+      return (
+        <Badge variant="destructive" className="gap-1">
+          <CircleAlert className="h-3.5 w-3.5" />
+          <span>In Dispute</span>
+        </Badge>
+      );
+    }
+
+    if (pendingRelease) {
+      return (
+        <Badge
+          variant="outline"
+          className="gap-1 border-yellow-500 text-yellow-600"
+        >
+          <TriangleAlert className="h-3.5 w-3.5" />
+          <span>Pending Release</span>
+        </Badge>
+      );
+    }
+
+    if (escrow.releaseFlag) {
+      return (
+        <Badge
+          variant="outline"
+          className="gap-1 border-green-500 text-green-600"
+        >
+          <CircleCheckBig className="h-3.5 w-3.5" />
+          <span>Released</span>
+        </Badge>
+      );
+    }
+
+    if (escrow.resolvedFlag) {
+      return (
+        <Badge
+          variant="outline"
+          className="gap-1 border-green-500 text-green-600"
+        >
+          <Handshake className="h-3.5 w-3.5" />
+          <span>Resolved</span>
+        </Badge>
+      );
+    }
+
+    return (
+      <Badge variant="secondary" className="gap-1">
+        <Layers className="h-3.5 w-3.5" />
+        <span>Working</span>
+      </Badge>
+    );
+  };
+
   return (
     <>
       {loadingEscrows ? (
@@ -85,155 +169,90 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       ) : currentData.length !== 0 ? (
         <div className="py-3" id="step-3">
           <div className="flex flex-col">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {currentData.map((escrow, index) => {
-                // todo: use these constants in zusntand
-                const completedMilestones = escrow.milestones.filter(
-                  (milestone) => milestone.status === "completed",
-                ).length;
-
-                const approvedMilestones = escrow.milestones.filter(
-                  (milestone) => milestone.approved_flag === true,
-                ).length;
-
-                const totalMilestones = escrow.milestones.length;
-
-                const progressPercentageCompleted =
-                  totalMilestones > 0
-                    ? (completedMilestones / totalMilestones) * 100
-                    : 0;
-
-                const progressPercentageApproved =
-                  totalMilestones > 0
-                    ? (approvedMilestones / totalMilestones) * 100
-                    : 0;
-
-                // Check if both are 100% and releaseFlag is false
-                const pendingRelease =
-                  progressPercentageCompleted === 100 &&
-                  progressPercentageApproved === 100 &&
-                  !escrow.releaseFlag;
-
-                return (
-                  <Card
-                    key={index}
-                    className="overflow-hidden cursor-pointer hover:shadow-lg"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsDialogOpen(true);
-                      setSelectedEscrow(escrow);
-                    }}
-                  >
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium text-muted-foreground truncate">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {currentData.map((escrow, index) => (
+                <Card
+                  key={index}
+                  className="overflow-hidden cursor-pointer hover:shadow-md transition-all border border-border/40 min-h-60 flex flex-col justify-between"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsDialogOpen(true);
+                    setSelectedEscrow(escrow);
+                  }}
+                >
+                  <div>
+                    <CardHeader className="p-4 pb-0 flex-row justify-between items-start space-y-0">
+                      <div className="space-y-1.5">
+                        <CardTitle className="text-base font-medium">
                           {escrow.title || "No title"}
+                        </CardTitle>
+                        <p className="text-xs text-muted-foreground max-w-sm truncate">
+                          {escrow.description || "No description"}
                         </p>
-
-                        <div className="flex items-center gap-1 md:gap-3">
-                          {!escrow.disputeFlag &&
-                            !escrow.releaseFlag &&
-                            !escrow.resolvedFlag &&
-                            !pendingRelease && (
-                              <>
-                                <p className="font-bold text-sm">Working</p>
-                                <Layers size={30} />
-                              </>
-                            )}
-                          {escrow.disputeFlag && (
-                            <>
-                              <p className="font-bold text-sm text-destructive">
-                                In Dispute
-                              </p>
-                              <CircleAlert
-                                size={30}
-                                className="text-destructive"
-                              />
-                            </>
-                          )}
-                          {pendingRelease && (
-                            <>
-                              <p className="font-bold text-sm text-yellow-600">
-                                Pending Release
-                              </p>
-                              <TriangleAlert
-                                size={30}
-                                className="text-yellow-600"
-                              />
-                            </>
-                          )}
-                          {escrow.releaseFlag && (
-                            <>
-                              <p className="font-bold text-sm text-green-800">
-                                Released
-                              </p>
-                              <CircleCheckBig
-                                className="text-green-800"
-                                size={30}
-                              />
-                            </>
-                          )}
-
-                          {escrow.resolvedFlag && (
-                            <>
-                              <p className="font-bold text-sm text-green-800">
-                                Resolved
-                              </p>
-                              <Handshake className="text-green-800" size={30} />
-                            </>
-                          )}
-                        </div>
                       </div>
-                      <div className="mt-2 flex items-baseline">
+                      {getStatusBadge(escrow)}
+                    </CardHeader>
+
+                    <CardContent className="p-4">
+                      <div className="mt-2">
                         <h3 className="text-2xl font-semibold">
-                          {formatDollar(escrow?.balance) || "N/A"} of{" "}
-                          {formatDollar(escrow.amount) || "N/A"}
+                          {formatDollar(escrow?.balance) || "N/A"}
+                          <span className="text-sm text-muted-foreground font-normal ml-1">
+                            of {formatDollar(escrow.amount) || "N/A"}
+                          </span>
                         </h3>
                       </div>
-                      <p className="mt-2 text-sm text-muted-foreground truncate">
-                        {escrow.description || "No description"}
-                      </p>
 
                       <ProgressEscrow escrow={escrow} />
-
-                      <p className="mt-3 text-xs text-muted-foreground text-end italic">
-                        <strong>Created:</strong>{" "}
-                        {formatDateFromFirebase(
-                          escrow.createdAt.seconds,
-                          escrow.createdAt.nanoseconds,
-                        )}
-                      </p>
                     </CardContent>
-                  </Card>
-                );
-              })}
+                  </div>
+
+                  <CardFooter className="p-4 pt-0 justify-end items-end mt-auto">
+                    <p className="text-xs text-muted-foreground italic">
+                      Created:{" "}
+                      {formatDateFromFirebase(
+                        escrow.createdAt.seconds,
+                        escrow.createdAt.nanoseconds,
+                      )}
+                    </p>
+                  </CardFooter>
+                </Card>
+              ))}
             </div>
 
-            <div className="flex justify-end items-center gap-4 mt-10 mb-3 px-3">
+            <div className="flex flex-wrap justify-between items-center gap-4 mt-8 mb-3">
               <div className="flex items-center gap-2">
-                <span>Items per page:</span>
+                <span className="text-sm text-muted-foreground">
+                  Items per page:
+                </span>
                 <Input
                   type="number"
                   value={itemsPerPage}
                   onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                  className="w-16"
+                  className="w-16 h-8 text-sm"
                 />
               </div>
-              <Button
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </Button>
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
-              <Button
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  variant="outline"
+                  size="sm"
+                >
+                  Previous
+                </Button>
+                <span className="text-sm text-muted-foreground">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <Button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  variant="outline"
+                  size="sm"
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         </div>

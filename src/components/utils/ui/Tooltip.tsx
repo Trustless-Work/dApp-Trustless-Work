@@ -8,7 +8,7 @@ import {
 import { Info } from "lucide-react";
 
 interface TooltipInfoProps {
-  content: string;
+  content: string | React.ReactNode;
   children?: React.ReactNode;
 }
 

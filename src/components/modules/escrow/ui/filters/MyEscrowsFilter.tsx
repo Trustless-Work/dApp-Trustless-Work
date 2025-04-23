@@ -18,6 +18,7 @@ import { getRoleActionIcons } from "@/utils/get-role-actions";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import Link from "next/link";
+import { DatePickerWithRange } from "@/components/ui/calendar-range";
 
 const MyEscrowsFilter = () => {
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
@@ -27,6 +28,8 @@ const MyEscrowsFilter = () => {
     search,
     status,
     amountRange,
+    engagement,
+    uniqueEngagements,
     searchParams,
     setSearch,
     updateQuery,
@@ -71,7 +74,7 @@ const MyEscrowsFilter = () => {
       <Divider type="horizontal" />
 
       <div className="flex flex-col justify-between md:flex-row gap-3 w-full">
-        <div className="flex w-1/3 gap-4">
+        <div className="flex w-4/6 gap-4">
           <div className="flex flex-col w-full">
             <label
               className="text-xs text-muted-foreground font-bold mb-2 ml-2"
@@ -118,6 +121,40 @@ const MyEscrowsFilter = () => {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="flex flex-col w-full">
+            <label
+              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+              htmlFor="amount"
+            >
+              Engagements
+            </label>
+            <Select
+              value={engagement}
+              onValueChange={(value) => updateQuery("engagement", value)}
+            >
+              <SelectTrigger>
+                {searchParams.get("engagement") || "Select Engagement"}
+              </SelectTrigger>
+              <SelectContent>
+                {uniqueEngagements.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col w-1/3">
+            <label
+              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+              htmlFor="amount"
+            >
+              Created At
+            </label>
+            <DatePickerWithRange />
           </div>
         </div>
 

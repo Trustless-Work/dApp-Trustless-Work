@@ -257,7 +257,7 @@ export const Milestones = ({
           ))}
         </div>
 
-        <ProgressEscrow escrow={selectedEscrow} />
+        <ProgressEscrow escrow={selectedEscrow} showTimeline={true} />
       </div>
     </div>
   );
