@@ -95,8 +95,11 @@ Make sure to set up the following environment variable in your `.env` file:
 
 ```
 
-# Branch Develop -> v.2 API
-NEXT_PUBLIC_API_URL=https://dev.api.trustlesswork.com
+# Production Branch
+#NEXT_PUBLIC_API_URL=https://api.trustlesswork.com
+
+# Develop Branch -> v.2 API
+#NEXT_PUBLIC_API_URL=https://dev.api.trustlesswork.com
 
 # See API Key Video
 NEXT_PUBLIC_API_KEY=
@@ -122,7 +125,9 @@ NEXT_PUBLIC_COUNTDOWN_MINUTES=30
 
 ### API Key Video
 
-[dApp Trustless Work](https://dapp.trustlesswork.com)
+**IMPORTANT TO KNOW:** <br />
+-> If you're using the develop enviroment ```https://dev.api.trustlesswork.com```, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
+-> If you're using main enviroment ```https://dev.api.trustlesswork.com```, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
 
 https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
 
