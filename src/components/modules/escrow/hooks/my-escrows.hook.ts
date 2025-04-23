@@ -29,6 +29,13 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
   const searchQuery = searchParams.get("q")?.toLowerCase() || "";
   const statusFilter = searchParams.get("status") || "";
   const amountFilter = searchParams.get("amount") || "";
+  const engagementFilter = searchParams.get("engagement") || "";
+  const dateRangeFilter = searchParams.get("dateRange") || "";
+
+  // Date range
+  const [startStr, endStr] = dateRangeFilter.split("_");
+  const startDate = startStr ? new Date(startStr) : null;
+  const endDate = endStr ? new Date(endStr) : null;
 
   const totalPages = Math.ceil(totalEscrows / itemsPerPage);
 
@@ -78,7 +85,7 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         progressPercentageApproved === 100 &&
         !escrow.releaseFlag;
 
-      // Soporte para flags (released, resolved, inDispute) o "all"
+      // Flags
       let matchesStatus = true;
       if (statusFilter && statusFilter !== "all") {
         switch (statusFilter) {
@@ -103,7 +110,11 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         }
       }
 
-      // Soporte para rangos de monto o "all"
+      // Engagement
+      const matchesEngagement =
+        !engagementFilter || escrow.engagementId === engagementFilter;
+
+      // Amount
       let matchesAmount = true;
       const amount = parseFloat(escrow.amount);
       if (!isNaN(amount) && amountFilter && amountFilter !== "all") {
@@ -116,7 +127,20 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         }
       }
 
-      return matchesSearch && matchesStatus && matchesAmount;
+      // Date Range
+      const createdAt = new Date(escrow.createdAt.seconds * 1000);
+
+      const matchesDate =
+        (!startDate || createdAt >= startDate) &&
+        (!endDate || createdAt <= endDate);
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesAmount &&
+        matchesEngagement &&
+        matchesDate
+      );
     });
 
     return filtered.slice(
@@ -128,6 +152,8 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
     searchQuery,
     statusFilter,
     amountFilter,
+    engagementFilter,
+    dateRangeFilter,
     currentPage,
     itemsPerPage,
   ]);
