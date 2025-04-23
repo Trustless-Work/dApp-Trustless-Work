@@ -11,7 +11,7 @@ export const useEscrowFilter = () => {
   const [search, setSearch] = useState(searchParams.get("q") || "");
   const [status] = useState(searchParams.get("status") || "");
   const [amountRange] = useState(searchParams.get("amount") || "");
-  const [engagement] = useState(searchParams.get("engagement") || "")
+  const [engagement] = useState(searchParams.get("engagement") || "");
 
   const updateQuery = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
