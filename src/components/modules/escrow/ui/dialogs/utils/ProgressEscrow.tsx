@@ -116,17 +116,17 @@ const ProgressEscrow = ({
           <div className="relative">
             {/* Progress line */}
             <div className="absolute left-0 right-0 h-0.5 bg-muted/30 top-[9px]"></div>
-            <div
-              className="absolute left-0 h-0.5 bg-primary top-[9px] transition-all duration-300 ease-in-out"
-              style={{ width: `${progressPercentageCompleted}%` }}
-            ></div>
+            <div className="absolute left-0 h-0.5 bg-muted-foreground top-[9px] transition-all duration-300 ease-in-out w-full"></div>
 
             {/* Milestone dots */}
             <div className="flex justify-between relative py-1">
-              {Array.from({ length: totalMilestones }).map((_, i) => {
-                // Calculate position percentage for this milestone
+              {escrow.milestones.map((milestone, i) => {
+                // Para calcular la posición en la línea
                 const position =
                   totalMilestones > 1 ? (i / (totalMilestones - 1)) * 100 : 0;
+
+                const isCompleted = milestone.status === "completed";
+                const isApproved = milestone.approved_flag === true;
 
                 return (
                   <div
@@ -140,23 +140,22 @@ const ProgressEscrow = ({
                     <div
                       className={cn(
                         "w-[18px] h-[18px] rounded-full flex items-center justify-center transition-colors duration-300",
-                        i < completedMilestones
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-background border border-muted/50 text-muted-foreground",
+                        isApproved
+                          ? "bg-[#15803d] text-white"
+                          : isCompleted
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-background border border-muted/50 text-muted-foreground",
                       )}
                     >
-                      {i < approvedMilestones ? (
-                        <div className="w-[6px] h-[6px] rounded-full bg-indigo-200"></div>
-                      ) : (
-                        <span className="text-[9px]">{i + 1}</span>
+                      {isApproved && (
+                        <div className="w-[6px] h-[6px] rounded-full bg-white"></div>
                       )}
                     </div>
 
-                    {/* Status indicator */}
                     <div className="mt-2 text-[10px] font-medium">
-                      {i < completedMilestones && i < approvedMilestones ? (
+                      {isCompleted && isApproved ? (
                         <span className="text-muted-foreground">Approved</span>
-                      ) : i < completedMilestones ? (
+                      ) : isCompleted ? (
                         <span className="text-muted-foreground">Completed</span>
                       ) : (
                         <span className="text-muted-foreground">Pending</span>
