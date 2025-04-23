@@ -1,17 +1,17 @@
+import { useGlobalBoundedStore } from "@/core/store/data";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const useEscrowFilter = () => {
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams.toString());
   const pathname = usePathname();
   const router = useRouter();
+  const escrows = useGlobalBoundedStore((state) => state.escrows);
 
   const [search, setSearch] = useState(searchParams.get("q") || "");
-  const [status, setStatus] = useState(searchParams.get("status") || "");
-  const [amountRange, setAmountRange] = useState(
-    searchParams.get("amount") || "",
-  );
+  const [status] = useState(searchParams.get("status") || "");
+  const [amountRange] = useState(searchParams.get("amount") || "");
+  const [engagement] = useState(searchParams.get("engagement") || "")
 
   const updateQuery = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -24,9 +24,12 @@ export const useEscrowFilter = () => {
   };
 
   const deleteParams = () => {
+    const params = new URLSearchParams(searchParams.toString());
     params.delete("q");
     params.delete("status");
     params.delete("amount");
+    params.delete("engagement");
+    params.delete("dateRange");
     router.replace(`${pathname}?${params.toString()}`);
   };
 
@@ -36,6 +39,19 @@ export const useEscrowFilter = () => {
     }, 500);
     return () => clearTimeout(delayDebounce);
   }, [search]);
+
+  const uniqueEngagements = useMemo(() => {
+    const engagementsSet = new Set<string>();
+    escrows.forEach((escrow) => {
+      if (escrow.engagementId) {
+        engagementsSet.add(escrow.engagementId);
+      }
+    });
+    return Array.from(engagementsSet).map((engagement) => ({
+      value: engagement,
+      label: engagement,
+    }));
+  }, [escrows]);
 
   const mapNameParams = (paramName: string) => {
     if (!paramName) return "No Filter";
@@ -69,14 +85,12 @@ export const useEscrowFilter = () => {
 
   return {
     search,
-    router,
     status,
     amountRange,
-    pathname,
+    engagement,
+    uniqueEngagements,
     searchParams,
-    setStatus,
     setSearch,
-    setAmountRange,
     updateQuery,
     deleteParams,
     mapNameParams,
