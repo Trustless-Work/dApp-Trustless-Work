@@ -155,9 +155,9 @@ const ProgressEscrow = ({
                     {/* Status indicator */}
                     <div className="mt-2 text-[10px] font-medium">
                       {i < completedMilestones && i < approvedMilestones ? (
-                        <span className="text-green-700">Approved</span>
+                        <span className="text-muted-foreground">Approved</span>
                       ) : i < completedMilestones ? (
-                        <span className="text-primary">Completed</span>
+                        <span className="text-muted-foreground">Completed</span>
                       ) : (
                         <span className="text-muted-foreground">Pending</span>
                       )}

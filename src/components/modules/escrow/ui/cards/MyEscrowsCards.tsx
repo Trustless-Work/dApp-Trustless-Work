@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import SkeletonCards from "../utils/SkeletonCards";
 import { Badge } from "@/components/ui/badge";
+import { Escrow, Milestone } from "@/@types/escrow.entity";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -85,13 +86,13 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
 
   const { formatDateFromFirebase, formatDollar } = useFormatUtils();
 
-  const getStatusBadge = (escrow: any) => {
+  const getStatusBadge = (escrow: Escrow) => {
     const completedMilestones = escrow.milestones.filter(
-      (milestone: any) => milestone.status === "completed",
+      (milestone: Milestone) => milestone.status === "completed",
     ).length;
 
     const approvedMilestones = escrow.milestones.filter(
-      (milestone: any) => milestone.approved_flag === true,
+      (milestone: Milestone) => milestone.approved_flag === true,
     ).length;
 
     const totalMilestones = escrow.milestones.length;
