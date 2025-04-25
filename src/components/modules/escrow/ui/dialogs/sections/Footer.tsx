@@ -71,7 +71,7 @@ export const FooterDetails = ({
           <Button
             onClick={distributeEscrowEarningsSubmit}
             type="button"
-            className="bg-green-800 hover:bg-green-700 mb-4 md:mb-0 w-full md:w-1/12"
+            className="bg-green-800 hover:bg-green-700 mb-4 md:mb-0 w-full md:w-auto"
           >
             <CircleDollarSign />
             Release Payment

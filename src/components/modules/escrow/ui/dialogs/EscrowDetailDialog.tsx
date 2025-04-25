@@ -201,6 +201,7 @@ const EscrowDetailDialog = ({
                 {userRolesInEscrow.includes("platformAddress") &&
                   !selectedEscrow?.disputeFlag &&
                   !selectedEscrow?.resolvedFlag &&
+                  !selectedEscrow?.releaseFlag &&
                   activeTab === "platformAddress" && (
                     <TooltipInfo content="Edit Roles">
                       <Button
@@ -210,6 +211,7 @@ const EscrowDetailDialog = ({
                         }}
                         className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
                         variant="ghost"
+                        disabled={selectedEscrow?.balance !== undefined}
                       >
                         <Pencil />
                         Edit

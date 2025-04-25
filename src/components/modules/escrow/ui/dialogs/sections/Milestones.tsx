@@ -85,9 +85,11 @@ export const Milestones = ({
             {userRolesInEscrow.includes("platformAddress") &&
               !selectedEscrow?.disputeFlag &&
               !selectedEscrow?.resolvedFlag &&
+              !selectedEscrow?.releaseFlag &&
               activeTab === "platformAddress" && (
                 <TooltipInfo content="Edit Milestones">
                   <Button
+                    disabled={selectedEscrow?.balance !== undefined}
                     onClick={(e) => {
                       e.stopPropagation();
                       dialogStates.editMilestone.setIsOpen(true);
