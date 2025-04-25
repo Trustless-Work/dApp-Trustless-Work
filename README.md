@@ -66,7 +66,7 @@ Follow the steps below to get started with this project:
 3. Set enviroment variables.
 4. API KEY
 5. Firebase
-7. Run the project!
+6. Run the project!
 
 ## Installation
 
@@ -132,7 +132,6 @@ NEXT_PUBLIC_COUNTDOWN_MINUTES=30
 -> If you're using main enviroment `https://api.trustlesswork.com`, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
 
 https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
-
 
 ## Wallet Requirements
 
