@@ -121,7 +121,6 @@ const ProgressEscrow = ({
             {/* Milestone dots */}
             <div className="flex justify-between relative py-1">
               {escrow.milestones.map((milestone, i) => {
-                // Para calcular la posición en la línea
                 const position =
                   totalMilestones > 1 ? (i / (totalMilestones - 1)) * 100 : 0;
 
@@ -144,7 +143,7 @@ const ProgressEscrow = ({
                           ? "bg-[#15803d] text-white"
                           : isCompleted
                             ? "bg-primary text-primary-foreground"
-                            : "bg-background border border-muted/50 text-muted-foreground",
+                            : "bg-muted-foreground border border-muted/50 text-muted-foreground",
                       )}
                     >
                       {isApproved && (
