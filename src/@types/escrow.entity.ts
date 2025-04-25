@@ -8,6 +8,8 @@ export type Milestone = {
   status?: MilestoneStatus;
   approved_flag?: boolean;
   evidence?: string;
+  approvedAt?: UpdatedAt;
+  completedAt?: UpdatedAt;
 };
 
 export interface Escrow {
