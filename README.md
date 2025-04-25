@@ -66,7 +66,6 @@ Follow the steps below to get started with this project:
 3. Set enviroment variables.
 4. API KEY
 5. Firebase
-6. Firebase collections.
 7. Run the project!
 
 ## Installation
@@ -95,16 +94,18 @@ Make sure to set up the following environment variable in your `.env` file:
 
 ```
 
-# Production Branch
-#NEXT_PUBLIC_API_URL=https://api.trustlesswork.com
+# APP -> Chose your ENV
+#NEXT_PUBLIC_ENV=PROD
+#NEXT_PUBLIC_ENV=DEV
+#NEXT_PUBLIC_ENV=LOCAL
 
-# Develop Branch -> v.2 API
-#NEXT_PUBLIC_API_URL=https://dev.api.trustlesswork.com
-
-# See API Key Video
+# TRUSTLESS WORK -> See API KEY Video
 NEXT_PUBLIC_API_KEY=
+NEXT_PUBLIC_API_URL_PROD=https://api.trustlesswork.com
+NEXT_PUBLIC_API_URL_DEV=https://dev.api.trustlesswork.com
+NEXT_PUBLIC_API_URL_LOCAL=http://localhost:3000
 
-# See Firebase Video
+# FIREBASE -> Request the credentials by Telegram
 NEXT_PUBLIC_FIREBASE_API_KEY=
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=
@@ -112,7 +113,7 @@ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
 NEXT_PUBLIC_FIREBASE_APP_ID=
 
-# MOONPAY -> If you won't use Moonpay, skip these env
+# MOONPAY -> Skip if you wont use Moonpay
 NEXT_PUBLIC_MOONPAY_API_KEY=
 MOONPAY_SECRET_KEY=
 
@@ -127,62 +128,17 @@ NEXT_PUBLIC_COUNTDOWN_MINUTES=30
 
 **IMPORTANT TO KNOW:** <br />
 -> If you're using the develop enviroment `https://dev.api.trustlesswork.com`, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
--> If you're using main enviroment `https://dev.api.trustlesswork.com`, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
+-> If you're using local enviroment `https://local.api.trustlesswork.com`, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
+-> If you're using main enviroment `https://api.trustlesswork.com`, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
 
 https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
 
-### Firebase Video
-
-[Firebase](https://firebase.google.com)
-
-https://github.com/user-attachments/assets/96d35cee-5e57-41cd-afe5-0389f13c7c94
-
-## Firebase Steps
-
-When you already have the Database, please create a collection called `trustlines` and insert the data below:
-
-```
-name
-"USDC"
-(string)
-
-
-trustline
-"GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5"
-(string)
-
-
-trustlineDecimals
-10000000
-(number)
-```
-
-and
-
-```
-name
-"EURC"
-(string)
-
-
-trustline
-"GB3Q6QDZYTHWT7E5PVS3W7FUT5GVAFC5KSZFFLPU25GO7VTC3NM2ZTVO"
-(string)
-
-
-trustlineDecimals
-10000000
-(number)
-```
 
 ## Wallet Requirements
 
 To use this project, you must have one of the following wallets installed:
 
 - **Freighter**
-- **Albedo**
-- **xBull**
-- **LOBSTR**
 
 These wallets are required to interact with the platform.
 
