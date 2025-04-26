@@ -5,13 +5,13 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { Button } from "../../../../ui/button";
-import { Calendar } from "../../../../ui/calender";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "../../../../ui/popover";
 import useDashboard from "../../hooks/dashboard.hook";
+import { Calendar } from "@/components/ui/calender";
 
 interface DateRangePickerProps {
   className?: string;
