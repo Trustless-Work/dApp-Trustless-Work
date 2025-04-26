@@ -67,6 +67,18 @@ Follow the steps below to get started with this project:
 4. Firebase
 5. Run the project!
 
+## Steps
+
+1. Fork the repo.
+2. Clone the repo locally.
+3. Execute ```npm i```.
+4. Setup .env according to the information below.
+   1. The local API Key has already given.
+   2. TW Local URL has already given.
+   3. Request the Firebase credentials by TG.
+5. Run the project.
+6. Finally, if you need to see the local development database, please send your gmail by TG. Then, you'll find it in your Firebase's projects.
+
 ## Installation
 
 1. Install dependencies:
@@ -122,9 +134,9 @@ NEXT_PUBLIC_COUNTDOWN_MINUTES=30
 ### API Key Video
 
 **IMPORTANT TO KNOW:** <br />
--> If you're using the develop enviroment `https://dev.api.trustlesswork.com`, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
--> If you're using local enviroment, you already have it.
--> If you're using main enviroment `https://api.trustlesswork.com`, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
+-> If you're using the DEVELOP enviroment `https://dev.api.trustlesswork.com`, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
+-> If you're using MAIN enviroment `https://api.trustlesswork.com`, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
+-> If you're using LOCAL enviroment, you already have it.
 
 https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
 
