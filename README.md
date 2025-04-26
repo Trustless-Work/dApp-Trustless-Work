@@ -64,9 +64,8 @@ Follow the steps below to get started with this project:
 1. Install dependencies.
 2. Format code.
 3. Set enviroment variables.
-4. API KEY
-5. Firebase
-6. Run the project!
+4. Firebase
+5. Run the project!
 
 ## Installation
 
@@ -94,16 +93,12 @@ Make sure to set up the following environment variable in your `.env` file:
 
 ```
 
-# APP -> Chose your ENV
-#NEXT_PUBLIC_ENV=PROD
-#NEXT_PUBLIC_ENV=DEV
-#NEXT_PUBLIC_ENV=LOCAL
+# APP 
+NEXT_PUBLIC_ENV=LOCAL
 
 # TRUSTLESS WORK -> See API KEY Video
-NEXT_PUBLIC_API_KEY=
-NEXT_PUBLIC_API_URL_PROD=https://api.trustlesswork.com
-NEXT_PUBLIC_API_URL_DEV=https://dev.api.trustlesswork.com
-NEXT_PUBLIC_API_URL_LOCAL=http://localhost:3000
+NEXT_PUBLIC_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXQiOiJHRE42SUpMUzVCUjNXN1FCM1NBRTNNWU5CRzZINFpXRFVHWURNRVVRWEU2RjJRSFhXSFlNNU1MWCIsImlhdCI6MTc0NTcwMzQzM30.M1gr85EXzUl7JRZ82yOORtVTGmGRL_DxN2C2Cl486lY
+NEXT_PUBLIC_API_URL_LOCAL=https://local.api.trustlesswork.com
 
 # FIREBASE -> Request the credentials by Telegram
 NEXT_PUBLIC_FIREBASE_API_KEY=
@@ -128,7 +123,7 @@ NEXT_PUBLIC_COUNTDOWN_MINUTES=30
 
 **IMPORTANT TO KNOW:** <br />
 -> If you're using the develop enviroment `https://dev.api.trustlesswork.com`, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
--> If you're using local enviroment `https://local.api.trustlesswork.com`, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
+-> If you're using local enviroment, you already have it.
 -> If you're using main enviroment `https://api.trustlesswork.com`, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
 
 https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
