@@ -1,7 +1,6 @@
 import { Chart } from "@/components/ui/chart";
 import MetricsSection from "../cards/MetricSection";
 import RecentSales from "../cards/RecentSales";
-import DateRangePicker from "../utils/Datepicker";
 
 const Dashboard = () => {
   // Mock Data
@@ -22,10 +21,6 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex w-full items-center justify-end mb-3">
-        <DateRangePicker />
-      </div>
-
       <div className="space-y-4">
         <MetricsSection />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
