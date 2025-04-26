@@ -14,4 +14,4 @@ if ! npm run lint; then
   exit 1
 fi
 
-git pull origin develop
+# git pull origin develop

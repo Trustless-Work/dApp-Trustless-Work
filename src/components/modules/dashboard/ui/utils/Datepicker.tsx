@@ -11,7 +11,7 @@ import {
   PopoverTrigger,
 } from "../../../../ui/popover";
 import useDashboard from "../../hooks/dashboard.hook";
-import { Calendar } from "@/components/ui/calender";
+import { Calendar } from "@/components/ui/calendar";
 
 interface DateRangePickerProps {
   className?: string;
