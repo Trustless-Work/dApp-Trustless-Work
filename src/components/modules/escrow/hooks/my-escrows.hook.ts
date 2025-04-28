@@ -1,10 +1,8 @@
-import { WalletError } from "@/@types/errors.entity";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { toast } from "@/hooks/toast.hook";
-import { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 
