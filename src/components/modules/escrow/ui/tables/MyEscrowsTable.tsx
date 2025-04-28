@@ -150,11 +150,15 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         onClick={() => toggleRowExpansion(escrow.id)}
                       >
                         <TableCell className="font-medium">
-                          {escrow.title}
+                          {escrow.title || "No title"}
                         </TableCell>
-                        <TableCell>{escrow.description}</TableCell>
-                        <TableCell>{escrow.balance}</TableCell>
-                        <TableCell>{escrow.engagementId}</TableCell>
+                        <TableCell>
+                          {escrow.description || "No description"}
+                        </TableCell>
+                        <TableCell>{escrow.balance || "No balance"}</TableCell>
+                        <TableCell>
+                          {escrow.engagementId || "No engagement"}
+                        </TableCell>
                         <TableCell>
                           {formatAddress(escrow.serviceProvider)}
                         </TableCell>
@@ -176,6 +180,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
                               <DropdownMenuItem
+                                className="cursor-pointer"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setIsDialogOpen(true);
@@ -183,6 +188,18 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                                 }}
                               >
                                 More Details
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(
+                                    `https://viewer.trustlesswork.com/${escrow.contractId}`,
+                                    "_blank",
+                                  );
+                                }}
+                              >
+                                View from TW Escrow Viewer
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>

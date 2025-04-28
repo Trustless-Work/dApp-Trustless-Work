@@ -25,6 +25,7 @@ import SuccessDialog, {
 import {
   CircleAlert,
   CircleCheckBig,
+  ExternalLink,
   Handshake,
   Layers,
   TriangleAlert,
@@ -32,6 +33,8 @@ import {
 import SkeletonCards from "../utils/SkeletonCards";
 import { Badge } from "@/components/ui/badge";
 import { Escrow, Milestone } from "@/@types/escrow.entity";
+import Link from "next/link";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -190,7 +193,21 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                           {escrow.description || "No description"}
                         </p>
                       </div>
-                      {getStatusBadge(escrow)}
+
+                      <div className="flex gap-2">
+                        {getStatusBadge(escrow)}
+
+                        <TooltipInfo content="View from TW Escrow Viewer">
+                          <Link
+                            href={`https://viewer.trustlesswork.com/${escrow.contractId}`}
+                            target="_blank"
+                          >
+                            <Button variant="ghost" size="icon">
+                              <ExternalLink />
+                            </Button>
+                          </Link>
+                        </TooltipInfo>
+                      </div>
                     </CardHeader>
 
                     <CardContent className="p-4">

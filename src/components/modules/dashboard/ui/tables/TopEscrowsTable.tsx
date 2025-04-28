@@ -84,6 +84,7 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuItem
+                        className="cursor-pointer"
                         onClick={(e) => {
                           e.stopPropagation();
                           setIsDialogOpen(true);
@@ -91,6 +92,18 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
                         }}
                       >
                         More Details
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(
+                            `https://viewer.trustlesswork.com/${escrow.contractId}`,
+                            "_blank",
+                          );
+                        }}
+                      >
+                        View from TW Escrow Viewer
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
