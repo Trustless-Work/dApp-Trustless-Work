@@ -1,7 +1,10 @@
+import { WalletError } from "@/@types/errors.entity";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
+import { toast } from "@/hooks/toast.hook";
+import { AxiosError } from "axios";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 
@@ -167,8 +170,14 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
       lastFetchKey.current = fetchKey;
       setIsLoading(true);
       await fetchAllEscrows({ address, type });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("[MyEscrows] Error fetching escrows:", error);
+      toast({
+        title: "Error fetching escrows",
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
       fetchingRef.current = false;
