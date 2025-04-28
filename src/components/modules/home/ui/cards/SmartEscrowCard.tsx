@@ -16,29 +16,29 @@ export const SmartEscrowCard = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true, amount: 0.3 }}
       >
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center mb-6">
-          <div>
-            <div className="text-sm text-foreground/60">Escrow ID</div>
-            <div className="font-mono text-sm">CAZUQX...MML</div>
-          </div>
-          <div className="flex flex-col">
-            <div className="flex gap-2">
-              <Badge className="my-2" variant="outline">
+        <div className="flex flex-col gap-6 sm:gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div>
+              <div className="text-sm text-foreground/60">Escrow ID</div>
+              <div className="font-mono text-sm">CAZUQX...MML</div>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <Badge className="my-1" variant="outline">
                 In Dispute
               </Badge>
-
-              <Badge className="my-2" variant="outline">
+              <Badge className="my-1" variant="outline">
                 Released
               </Badge>
-
-              <Badge className="my-2" variant="outline">
+              <Badge className="my-1" variant="outline">
                 Resolved
               </Badge>
             </div>
-
-            <Separator />
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+
+          <Separator />
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
             <RoleBadge color="green" text="Service Provider" />
             <RoleBadge color="blue" text="Approver" />
             <RoleBadge color="red" text="Dispute Resolver" />
