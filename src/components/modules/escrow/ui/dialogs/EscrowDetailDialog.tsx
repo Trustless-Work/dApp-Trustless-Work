@@ -84,25 +84,31 @@ const EscrowDetailDialog = ({
           <DialogHeader>
             <div className="w-full">
               <div className="flex flex-col gap-2">
-                <Link
-                  href={`https://stellar.expert/explorer/testnet/contract/${selectedEscrow.contractId}`}
-                  target="_blank"
-                  className="hover:underline"
-                >
-                  <DialogTitle className="text-xl">
-                    {selectedEscrow.title} - {selectedEscrow.engagementId}
-                  </DialogTitle>
-                </Link>
+                <div className="w-min">
+                  <Link
+                    href={`https://stellar.expert/explorer/testnet/contract/${selectedEscrow.contractId}`}
+                    target="_blank"
+                    className="hover:underline"
+                  >
+                    <DialogTitle className="text-xl">
+                      {selectedEscrow.title}
+                    </DialogTitle>
+                  </Link>
+                </div>
+
                 <DialogDescription>
                   {selectedEscrow.description}
                 </DialogDescription>
                 <DialogDescription>
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex gap-2 uppercase">
+                    <div className="flex gap-2">
                       <strong>Roles: </strong>
-                      {userRolesInEscrow
-                        .map((role) => formatText(role))
-                        .join(", ")}
+
+                      <span className="uppercase">
+                        {userRolesInEscrow
+                          .map((role) => formatText(role))
+                          .join(", ")}
+                      </span>
                     </div>
 
                     <div className="border-r-2" />
@@ -110,6 +116,14 @@ const EscrowDetailDialog = ({
                     <div className="flex gap-2">
                       <strong className="truncate">Memo:</strong>
                       {selectedEscrow?.receiverMemo || "No memo configured"}
+                    </div>
+
+                    <div className="border-r-2" />
+
+                    <div className="flex gap-2">
+                      <strong className="truncate">Engagement:</strong>
+                      {selectedEscrow?.engagementId ||
+                        "No engagement configured"}
                     </div>
                   </div>
                 </DialogDescription>
