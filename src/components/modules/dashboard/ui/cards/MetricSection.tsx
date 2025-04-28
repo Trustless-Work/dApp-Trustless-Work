@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Layers,
   Handshake,
@@ -62,45 +63,56 @@ const MetricsSection = () => {
         />
       </div>
 
-      {isExpanded && (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-4">
-          <MetricCard
-            title="Working Escrows"
-            value={String(
-              totalEscrows - totalResolved - totalInDispute - totalReleased,
-            ).padStart(2, "0")}
-            subValue="Awaiting for milestone completion"
-            icon={<Hand className="h-7 w-7" />}
-            isLoading={!data}
-          />
-          <MetricCard
-            title="In Dispute Escrows"
-            value={String(totalInDispute).padStart(2, "0")}
-            subValue="Escrows in dispute"
-            icon={<Ban className="h-7 w-7" />}
-            isLoading={!data}
-          />
-          <MetricCard
-            title="Resolution Rate"
-            value={resolvedPercentage + "%"}
-            subValue={
-              <div className="flex items-center gap-1">
-                <p className={`text-sm ${isPositive ? "text-green-500" : ""}`}>
-                  {isPositive ? "Good" : "Needs improvement"}
-                </p>
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            key="expanded-metrics"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 overflow-hidden mt-4"
+          >
+            <MetricCard
+              title="Working Escrows"
+              value={String(
+                totalEscrows - totalResolved - totalInDispute - totalReleased,
+              ).padStart(2, "0")}
+              subValue="Awaiting for milestone completion"
+              icon={<Hand className="h-7 w-7" />}
+              isLoading={!data}
+            />
+            <MetricCard
+              title="In Dispute Escrows"
+              value={String(totalInDispute).padStart(2, "0")}
+              subValue="Escrows in dispute"
+              icon={<Ban className="h-7 w-7" />}
+              isLoading={!data}
+            />
+            <MetricCard
+              title="Resolution Rate"
+              value={resolvedPercentage + "%"}
+              subValue={
+                <div className="flex items-center gap-1">
+                  <p
+                    className={`text-sm ${isPositive ? "text-green-500" : ""}`}
+                  >
+                    {isPositive ? "Good" : "Needs improvement"}
+                  </p>
 
-                {isPositive ? (
-                  <ArrowUpRight className="h-4 w-4 text-green-500" />
-                ) : (
-                  <ArrowDownRight className="h-4 w-4 text-destructive" />
-                )}
-              </div>
-            }
-            icon={<TrendingUpDown className="h-7 w-7" />}
-            isLoading={!data}
-          />
-        </div>
-      )}
+                  {isPositive ? (
+                    <ArrowUpRight className="h-4 w-4 text-green-500" />
+                  ) : (
+                    <ArrowDownRight className="h-4 w-4 text-destructive" />
+                  )}
+                </div>
+              }
+              icon={<TrendingUpDown className="h-7 w-7" />}
+              isLoading={!data}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="flex justify-center">
         <Button
