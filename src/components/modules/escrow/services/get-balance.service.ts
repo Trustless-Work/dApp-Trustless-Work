@@ -1,7 +1,7 @@
 import { WalletError } from "@/@types/errors.entity";
 import http from "@/core/config/axios/http";
 import { handleError } from "@/errors/utils/handle-errors";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 export const getBalance = async (signer: string, addresses: string[]) => {
   try {

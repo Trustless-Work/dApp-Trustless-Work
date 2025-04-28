@@ -3,7 +3,7 @@ import { EscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { handleError } from "@/errors/utils/handle-errors";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 interface EscrowPayloadWithSigner extends EscrowPayload {
   signer?: string;

@@ -1,7 +1,7 @@
 import { DistributeEscrowEarningsEscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { handleError } from "@/errors/utils/handle-errors";
 import { WalletError } from "@/@types/errors.entity";
