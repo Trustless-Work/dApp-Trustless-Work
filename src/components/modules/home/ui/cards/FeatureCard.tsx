@@ -26,8 +26,8 @@ export const FeatureCard = ({
       className="bg-background/80 dark:bg-background/40 backdrop-blur-md rounded-xl p-6 border border-border shadow-md"
     >
       <div className="mb-4">{icon}</div>
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-foreground/80">{description}</p>
+      <h3 className="text-xl font-bold mb-2 text-start">{title}</h3>
+      <p className="text-foreground/80 text-start">{description}</p>
     </motion.div>
   );
 };
