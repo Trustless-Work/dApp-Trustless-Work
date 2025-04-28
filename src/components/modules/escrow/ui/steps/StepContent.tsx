@@ -12,7 +12,7 @@ export const StepContent = React.memo(function StepContent({
   isActive,
 }: StepContentProps) {
   return (
-    <div className="bg-secondary rounded-lg px-6 py-4">
+    <div className="bg-muted rounded-lg px-6 py-4">
       <h3
         className={cn(
           "text-lg font-medium",
