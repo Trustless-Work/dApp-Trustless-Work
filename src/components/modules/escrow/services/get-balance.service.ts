@@ -1,5 +1,7 @@
+import { WalletError } from "@/@types/errors.entity";
 import http from "@/core/config/axios/http";
-import axios from "axios";
+import { handleError } from "@/errors/utils/handle-errors";
+import axios, { AxiosError } from "axios";
 
 export const getBalance = async (signer: string, addresses: string[]) => {
   try {
@@ -9,14 +11,8 @@ export const getBalance = async (signer: string, addresses: string[]) => {
 
     return response;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios Error:", error.response?.data || error.message);
-      throw new Error(
-        error.response?.data?.message || "Error initializing escrow",
-      );
-    } else {
-      console.error("Unexpected Error:", error);
-      throw new Error("Unexpected error occurred");
-    }
+    const mappedError = handleError(error as AxiosError | WalletError);
+    console.error("Error:", mappedError.message);
+    throw new Error(mappedError.message);
   }
 };

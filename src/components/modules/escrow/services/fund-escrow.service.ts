@@ -1,33 +1,29 @@
 import { FundEscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
-import axios from "axios";
+import { AxiosError } from "axios";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
+import { handleError } from "@/errors/utils/handle-errors";
+import { WalletError } from "@/@types/errors.entity";
 
 export const fundEscrow = async (payload: FundEscrowPayload) => {
   try {
     const { address } = await kit.getAddress();
 
-    const response = await http.post("/escrow/fund-escrow", payload);
-    const { unsignedTransaction } = response.data;
+    const {
+      data: { unsignedTransaction },
+    } = await http.post("/escrow/fund-escrow", payload);
 
     const signedTxXdr = await signTransaction({ unsignedTransaction, address });
 
-    const tx = await http.post("/helper/send-transaction", {
+    const { data } = await http.post("/helper/send-transaction", {
       signedXdr: signedTxXdr,
     });
 
-    const { data } = tx;
     return data;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios Error:", error.response?.data || error.message);
-      throw new Error(
-        error.response?.data?.message || "Error in Axios request",
-      );
-    } else {
-      console.error("Unexpected Error:", error);
-      throw new Error("Unexpected error occurred");
-    }
+    const mappedError = handleError(error as AxiosError | WalletError);
+    console.error("Error:", mappedError.message);
+    throw new Error(mappedError.message);
   }
 };
