@@ -73,16 +73,7 @@ const EscrowDetailDialog = ({
   });
 
   const { formatText, formatDollar } = useFormatUtils();
-
-  const setAmounts = useEscrowUIBoundedStore((state) => state.setAmounts);
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
-
-  const totalAmount = Number(selectedEscrow?.amount || 0);
-  const platformFeePercentage = Number(selectedEscrow?.platformFee || 0);
-
-  useEffect(() => {
-    setAmounts(totalAmount, platformFeePercentage);
-  }, [totalAmount, platformFeePercentage, setAmounts]);
 
   if (!isDialogOpen || !selectedEscrow) return null;
 

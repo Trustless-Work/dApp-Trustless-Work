@@ -5,6 +5,7 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
 
 interface EscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -24,11 +25,17 @@ const useEscrowDetailDialog = ({
   const setUserRolesInEscrow = useGlobalBoundedStore(
     (state) => state.setUserRolesInEscrow,
   );
+
+  const setAmounts = useEscrowUIBoundedStore((state) => state.setAmounts);
+
   const fetchingRef = useRef(false);
   const lastFetchKey = useRef("");
   const [evidenceVisibleMap, setEvidenceVisibleMap] = useState<{
     [key: number]: boolean;
   }>({});
+
+  const totalAmount = Number(selectedEscrow?.amount || 0);
+  const platformFeePercentage = Number(selectedEscrow?.platformFee || 0);
 
   const handleClose = useCallback(() => {
     setIsDialogOpen(false);
@@ -87,6 +94,10 @@ const useEscrowDetailDialog = ({
       fetchingRef.current = false;
     };
   }, [selectedEscrow, fetchUserRoleInEscrow, setUserRolesInEscrow, address]);
+
+  useEffect(() => {
+    setAmounts(totalAmount, platformFeePercentage);
+  }, [totalAmount, platformFeePercentage, setAmounts]);
 
   return {
     handleClose,
