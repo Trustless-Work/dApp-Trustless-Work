@@ -71,7 +71,7 @@ Follow the steps below to get started with this project:
 
 1. Fork the repo.
 2. Clone the repo locally.
-3. Execute ```npm i```.
+3. Execute `npm i`.
 4. Setup .env according to the information below.
    1. The local API Key has already given.
    2. TW Local URL has already given.
@@ -105,7 +105,7 @@ Make sure to set up the following environment variable in your `.env` file:
 
 ```
 
-# APP 
+# APP
 NEXT_PUBLIC_ENV=LOCAL
 
 # TRUSTLESS WORK -> See API KEY Video

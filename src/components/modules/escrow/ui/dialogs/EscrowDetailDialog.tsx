@@ -33,7 +33,6 @@ import {
   SuccessResolveDisputeDialog,
 } from "./SuccessDialog";
 import { useEscrowDialogs } from "./hooks/use-escrow-dialogs.hook";
-import { useEffect } from "react";
 import Link from "next/link";
 import CompleteMilestoneDialog from "./CompleteMilestoneDialog";
 import { StatisticsCard } from "./cards/StatisticsCard";
