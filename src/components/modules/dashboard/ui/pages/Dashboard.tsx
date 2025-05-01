@@ -26,7 +26,7 @@ export default function Dashboard() {
   return (
     <>
       {!hasData &&
-        (!data?.volumeTrend || !data?.statusCounts || !data?.releaseTrend) ? (
+      (!data?.volumeTrend || !data?.statusCounts || !data?.releaseTrend) ? (
         <div className="flex items-center justify-end w-full gap-2">
           <span className="text-sm flex items-center text-muted-foreground mr-2">
             Don't have any escrow? <ArrowRight className="ml-2" />

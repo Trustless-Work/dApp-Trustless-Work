@@ -1,23 +1,26 @@
-import { CheckCircle, Clock, AlertTriangle, FileCheck } from "lucide-react"
-import MetricCard from "../cards/MetricCard"
-import { MilestoneStatusChart } from "../charts/MilestoneStatusChart"
-import { MilestoneApprovalTrendChart } from "../charts/MilestoneApprovalTrendChart"
-import { useMilestoneDashboardData } from "../../hooks/milestone-dashboard-data.hook"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import { CheckCircle, Clock, AlertTriangle, FileCheck } from "lucide-react";
+import MetricCard from "../cards/MetricCard";
+import { MilestoneStatusChart } from "../charts/MilestoneStatusChart";
+import { MilestoneApprovalTrendChart } from "../charts/MilestoneApprovalTrendChart";
+import { useMilestoneDashboardData } from "../../hooks/milestone-dashboard-data.hook";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface MilestonesOverviewProps {
-  address: string
-  type?: string
+  address: string;
+  type?: string;
 }
 
-export function MilestonesOverview({ address, type = "approver" }: MilestonesOverviewProps) {
-  const data = useMilestoneDashboardData({ address, type })
-  const hasData = data !== null
+export function MilestonesOverview({
+  address,
+  type = "approver",
+}: MilestonesOverviewProps) {
+  const data = useMilestoneDashboardData({ address, type });
+  const hasData = data !== null;
 
   return (
     <div className="flex flex-col w-full h-full gap-4">
-        <h1 className="text-2xl font-bold">Milestone Overview</h1>
+      <h1 className="text-2xl font-bold">Milestone Overview</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="Total Milestones"
@@ -74,6 +77,7 @@ export function MilestonesOverview({ address, type = "approver" }: MilestonesOve
               </CardContent>
             </Card>
           )}
+          ;
         </div>
 
         <div className="md:col-span-7">
@@ -94,5 +98,5 @@ export function MilestonesOverview({ address, type = "approver" }: MilestonesOve
         </div>
       </div>
     </div>
-  )
+  );
 }
