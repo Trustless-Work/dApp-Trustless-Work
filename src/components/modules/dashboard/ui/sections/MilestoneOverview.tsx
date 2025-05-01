@@ -3,19 +3,22 @@ import MetricCard from "../cards/MetricCard";
 import { MilestoneStatusChart } from "../charts/MilestoneStatusChart";
 import { MilestoneApprovalTrendChart } from "../charts/MilestoneApprovalTrendChart";
 import { useMilestoneDashboardData } from "../../hooks/milestone-dashboard-data.hook";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Escrow } from "@/@types/escrow.entity";
+import { SkeletonMilestoneStatusChart } from "../utils/SkeletonMilestoneOverview";
+import { SkeletonMilestoneApprovalTrendChart } from "../utils/SkeletonMilestoneApprovalChart";
 
 interface MilestonesOverviewProps {
   address: string;
   type?: string;
+  escrows: Escrow[];
 }
 
 export function MilestonesOverview({
   address,
   type = "approver",
+  escrows = [],
 }: MilestonesOverviewProps) {
-  const data = useMilestoneDashboardData({ address, type });
+  const data = useMilestoneDashboardData({ address, type, escrows });
   const hasData = data !== null;
 
   return (
@@ -54,46 +57,18 @@ export function MilestonesOverview({
 
       <div className="grid grid-cols-1 md:grid-cols-10 gap-4">
         <div className="md:col-span-3">
-          {hasData && data.milestoneStatusCounts.length > 0 ? (
+          {hasData ? (
             <MilestoneStatusChart data={data.milestoneStatusCounts} />
           ) : (
-            <Card className="h-full">
-              <CardHeader>
-                <Skeleton className="h-5 w-[150px]" />
-              </CardHeader>
-              <CardContent>
-                <div className="h-[240px] flex items-center justify-center">
-                  <Skeleton className="h-[200px] w-[200px] rounded-full" />
-                </div>
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  {Array.from({ length: 4 }).map((_, index) => (
-                    <div key={index} className="flex items-center">
-                      <Skeleton className="h-3 w-3 mr-2 rounded-full" />
-                      <Skeleton className="h-3 w-[60px]" />
-                      <Skeleton className="h-3 w-[30px] ml-auto" />
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <SkeletonMilestoneStatusChart />
           )}
-          ;
         </div>
 
         <div className="md:col-span-7">
-          {hasData && data.milestoneApprovalTrend.length > 0 ? (
+          {hasData ? (
             <MilestoneApprovalTrendChart data={data.milestoneApprovalTrend} />
           ) : (
-            <Card className="h-full">
-              <CardHeader>
-                <Skeleton className="h-5 w-[200px]" />
-              </CardHeader>
-              <CardContent>
-                <div className="h-[240px]">
-                  <Skeleton className="h-full w-full" />
-                </div>
-              </CardContent>
-            </Card>
+            <SkeletonMilestoneApprovalTrendChart />
           )}
         </div>
       </div>

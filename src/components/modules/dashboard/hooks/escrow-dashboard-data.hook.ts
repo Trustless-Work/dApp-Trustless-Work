@@ -18,6 +18,7 @@ export const useEscrowDashboardData = ({
       const escrows = await fetchAllEscrows({ address, type });
 
       setData({
+        escrows,
         statusCounts: getStatusCounts(escrows),
         top5ByValue: getTop5ByValue(escrows),
         releaseTrend: getReleaseTrend(escrows),

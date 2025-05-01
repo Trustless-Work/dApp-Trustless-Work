@@ -1,24 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchAllEscrows } from "../../escrow/services/escrow.service";
 import {
   MilestoneDashboardData,
   MilestoneWithEscrow,
 } from "../@types/dashboard.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 export const useMilestoneDashboardData = ({
   address,
   type = "approver",
+  escrows = [],
 }: {
   address: string;
   type?: string;
+  escrows?: Escrow[];
 }): MilestoneDashboardData | null => {
   const [data, setData] = useState<MilestoneDashboardData | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const escrows = await fetchAllEscrows({ address, type });
+    const processData = () => {
       const allMilestones = escrows.flatMap((escrow) =>
         escrow.milestones.map((milestone) => ({
           ...milestone,
@@ -44,8 +45,8 @@ export const useMilestoneDashboardData = ({
       });
     };
 
-    if (address) fetchData();
-  }, [address, type]);
+    if (address && escrows.length > 0) processData();
+  }, [address, type, escrows]);
 
   return data;
 };

@@ -1,6 +1,7 @@
 import { Escrow, Milestone } from "@/@types/escrow.entity";
 
 export type DashboardData = {
+  escrows: Escrow[];
   statusCounts: { name: string; count: number }[];
   top5ByValue: Escrow[];
   releaseTrend: { month: string; count: number }[];

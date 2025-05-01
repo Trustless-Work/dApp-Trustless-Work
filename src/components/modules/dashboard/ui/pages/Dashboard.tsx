@@ -83,7 +83,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <MilestonesOverview address={address} />
+        <MilestonesOverview address={address} escrows={data?.escrows || []} />
       </div>
     </>
   );
