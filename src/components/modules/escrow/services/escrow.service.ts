@@ -12,6 +12,7 @@ export const fetchAllEscrows = async ({
 }: {
   address: string;
   type: string;
+  isActive?: boolean;
 }): Promise<Escrow[]> => {
   const escrowsByUser = await getAllEscrowsByUser({ address, type });
   const contractIds = escrowsByUser.data.map(

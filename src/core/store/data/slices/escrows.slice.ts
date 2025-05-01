@@ -25,7 +25,7 @@ export const useGlobalEscrowsSlice: StateCreator<
   [["zustand/devtools", never]],
   [],
   EscrowGlobalStore
-> = (set) => {
+> = (set, get) => {
   return {
     // State
     escrows: [],
@@ -49,10 +49,18 @@ export const useGlobalEscrowsSlice: StateCreator<
         ESCROW_ACTIONS.SET_SELECTED_ESCROW,
       ),
 
-    fetchAllEscrows: async ({ address, type = "approver" }) => {
+    fetchAllEscrows: async ({
+      address,
+      type = "approver",
+      isActive = true,
+    }: {
+      address: string;
+      type: string;
+      isActive?: boolean;
+    }) => {
       set({ loadingEscrows: true }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
       try {
-        const escrows = await fetchAllEscrows({ address, type });
+        const escrows = await fetchAllEscrows({ address, type, isActive });
         set(
           { escrows, loadingEscrows: false },
           false,
@@ -97,6 +105,14 @@ export const useGlobalEscrowsSlice: StateCreator<
         );
         throw error;
       }
+    },
+
+    softDeleteEscrow: async (escrowId: string) => {
+      await get().updateEscrow({ escrowId, payload: { isActive: false } });
+    },
+
+    restoreEscrow: async (escrowId: string) => {
+      await get().updateEscrow({ escrowId, payload: { isActive: true } });
     },
 
     setUserRolesInEscrow: (role) =>

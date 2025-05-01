@@ -15,7 +15,7 @@ export interface EscrowGlobalStore {
   fetchAllEscrows: (params: { address: string; type: string }) => void;
   updateEscrow: (params: {
     escrowId: string;
-    payload: EscrowPayload;
+    payload: Partial<EscrowPayload>;
   }) => Promise<Escrow | undefined>;
   setUserRolesInEscrow: (roles: string[]) => void;
   setRecentEscrow: (escrow: Escrow | undefined) => void;
