@@ -18,7 +18,7 @@ export default function Dashboard() {
   const address = useGlobalAuthenticationStore((state) => state.address);
   const data = useEscrowDashboardData({ address });
 
-  const { statusCounts, releaseTrend, volumeTrend, top5ByValue } = data || {};
+  const { statusCounts, releaseTrend, volumeTrend, top5ByValue, escrows } = data || {};
   const hasData = data && data.totalEscrows > 0;
 
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
@@ -83,7 +83,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <MilestonesOverview address={address} escrows={data?.escrows || []} />
+        <MilestonesOverview address={address} escrows={escrows || []} />
       </div>
     </>
   );
