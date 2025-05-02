@@ -1,9 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Define Node/NPM path
-NODE_PATH="/c/Program Files/nodejs"
-export PATH="$NODE_PATH:$PATH"
+export PATH="/c/Program Files/nodejs:$PATH"
 
 if ! npx prettier --write .; then
   echo "Error: Code formatting failed. Please fix the issues before committing."
