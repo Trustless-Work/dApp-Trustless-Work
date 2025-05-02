@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { NotificationService } from "@/services/notificationService";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 
