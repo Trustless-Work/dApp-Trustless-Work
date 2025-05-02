@@ -18,6 +18,8 @@ export interface EscrowGlobalStore {
     payload: Partial<EscrowPayload>;
   }) => Promise<Escrow | undefined>;
   setUserRolesInEscrow: (roles: string[]) => void;
+  softDeleteEscrow: (escrowId: string) => Promise<void>;
+  restoreEscrow: (escrowId: string) => Promise<void>;
   setRecentEscrow: (escrow: Escrow | undefined) => void;
   setSelectedEscrow: (escrow: Escrow | undefined) => void;
 }
