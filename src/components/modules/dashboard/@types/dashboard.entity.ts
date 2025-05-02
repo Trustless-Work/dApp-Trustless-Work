@@ -11,4 +11,17 @@ export type DashboardData = {
   totalInDispute: number;
   resolvedPercentage: number;
   isPositive: boolean;
+  platformFees: number;
+  depositsVsReleases: {
+    deposits: number;
+    releases: number;
+    difference: number;
+  };
+  pendingFunds: number;
+  feesByTimePeriod: {
+    today: number;
+    last7Days: number;
+    last30Days: number;
+    allTime: number;
+  };
 };
