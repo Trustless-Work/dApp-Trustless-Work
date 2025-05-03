@@ -20,6 +20,7 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";
 import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
 import {
+  ArchiveRestore,
   Ban,
   CircleCheckBig,
   CircleDollarSign,
@@ -50,6 +51,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Trash } from "lucide-react";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -288,6 +290,7 @@ const EscrowDetailDialog = ({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
+                        className="ml-10"
                         variant="destructive"
                         onClick={async () => {
                           await softDeleteEscrow(selectedEscrow.id);
@@ -295,7 +298,7 @@ const EscrowDetailDialog = ({
                           handleClose();
                         }}
                       >
-                        Delete
+                        <Trash />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -309,6 +312,7 @@ const EscrowDetailDialog = ({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
+                        className="ml-10"
                         variant="default"
                         onClick={async () => {
                           await restoreEscrow(selectedEscrow.id);
@@ -316,7 +320,8 @@ const EscrowDetailDialog = ({
                           handleClose();
                         }}
                       >
-                        Restore
+                        <ArchiveRestore />
+                        {/* Restore */}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>

@@ -13,6 +13,7 @@ import { useEscrowFilter } from "./hooks/escrow-filter.hook";
 import {
   amountOptionsFilters,
   statusOptionsFilters,
+  activeOptionsFilters,
 } from "./constants/filters-options.constant";
 import { getRoleActionIcons } from "@/utils/get-role-actions";
 import { useEscrowUIBoundedStore } from "../../store/ui";
@@ -29,6 +30,7 @@ const MyEscrowsFilter = () => {
     status,
     amountRange,
     engagement,
+    active,
     uniqueEngagements,
     searchParams,
     setSearch,
@@ -55,7 +57,6 @@ const MyEscrowsFilter = () => {
             className="flex items-center space-x-2"
             onClick={(e) => {
               e.preventDefault();
-
               deleteParams();
             }}
           >
@@ -74,8 +75,9 @@ const MyEscrowsFilter = () => {
       <Divider type="horizontal" />
 
       <div className="flex flex-col justify-between md:flex-row gap-3 w-full">
-        <div className="flex w-4/6 gap-4">
-          <div className="flex flex-col w-full">
+        <div className="flex w-full flex-wrap gap-4">
+          {/* Status */}
+          <div className="flex flex-col w-full md:w-1/5">
             <label
               className="text-xs text-muted-foreground font-bold mb-2 ml-2"
               htmlFor="status"
@@ -99,7 +101,8 @@ const MyEscrowsFilter = () => {
             </Select>
           </div>
 
-          <div className="flex flex-col w-full">
+          {/* Amount */}
+          <div className="flex flex-col w-full md:w-1/5">
             <label
               className="text-xs text-muted-foreground font-bold mb-2 ml-2"
               htmlFor="amount"
@@ -123,10 +126,11 @@ const MyEscrowsFilter = () => {
             </Select>
           </div>
 
-          <div className="flex flex-col w-full">
+          {/* Engagement */}
+          <div className="flex flex-col w-full md:w-1/5">
             <label
               className="text-xs text-muted-foreground font-bold mb-2 ml-2"
-              htmlFor="amount"
+              htmlFor="engagement"
             >
               Engagements
             </label>
@@ -147,10 +151,33 @@ const MyEscrowsFilter = () => {
             </Select>
           </div>
 
-          <div className="flex flex-col w-1/3">
+          <div className="flex flex-col w-full md:w-1/5">
             <label
               className="text-xs text-muted-foreground font-bold mb-2 ml-2"
-              htmlFor="amount"
+              htmlFor="active"
+            >
+              Visibility
+            </label>
+            <Select
+              value={active}
+              onValueChange={(value) => updateQuery("active", value)}
+            >
+              <SelectTrigger>{mapNameParams(active)}</SelectTrigger>
+              <SelectContent>
+                {activeOptionsFilters.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Created At */}
+          <div className="flex flex-col w-full md:w-1/5">
+            <label
+              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+              htmlFor="dateRange"
             >
               Created At
             </label>
@@ -158,6 +185,7 @@ const MyEscrowsFilter = () => {
           </div>
         </div>
 
+        {/* Actions */}
         <div className="flex flex-col gap-4">
           <Link
             href="/dashboard/help#roles"

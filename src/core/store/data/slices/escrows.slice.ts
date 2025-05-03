@@ -52,7 +52,7 @@ export const useGlobalEscrowsSlice: StateCreator<
     fetchAllEscrows: async ({
       address,
       type = "approver",
-      isActive = true,
+      isActive,
     }: {
       address: string;
       type: string;
@@ -84,7 +84,9 @@ export const useGlobalEscrowsSlice: StateCreator<
           set(
             (state) => ({
               escrows: state.escrows.map((escrow) =>
-                escrow.id === escrowId ? updatedEscrow : escrow,
+                escrow.id === escrowId
+                  ? { ...escrow, ...updatedEscrow }
+                  : escrow,
               ),
             }),
             false,
@@ -109,10 +111,24 @@ export const useGlobalEscrowsSlice: StateCreator<
 
     softDeleteEscrow: async (escrowId: string) => {
       await get().updateEscrow({ escrowId, payload: { isActive: false } });
+      set(
+        (state) => ({
+          escrows: state.escrows.filter((e) => e.id !== escrowId),
+        }),
+        false,
+        "escrows/softDeleteFiltered",
+      );
     },
 
     restoreEscrow: async (escrowId: string) => {
       await get().updateEscrow({ escrowId, payload: { isActive: true } });
+      set(
+        (state) => ({
+          escrows: state.escrows.filter((e) => e.id !== escrowId),
+        }),
+        false,
+        "escrows/restoreFiltered",
+      );
     },
 
     setUserRolesInEscrow: (role) =>

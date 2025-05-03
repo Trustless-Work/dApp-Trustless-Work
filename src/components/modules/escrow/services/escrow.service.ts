@@ -16,7 +16,6 @@ export const fetchAllEscrows = async ({
   isActive?: boolean;
 }): Promise<Escrow[]> => {
   const escrowsByUser = await getAllEscrowsByUser({ address, type });
-  console.log("Escrows by user:", escrowsByUser);
   const filtered =
     typeof isActive === "boolean"
       ? escrowsByUser.data.filter((e: Escrow) => e.isActive === isActive)

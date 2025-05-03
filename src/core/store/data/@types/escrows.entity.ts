@@ -12,7 +12,11 @@ export interface EscrowGlobalStore {
   recentEscrow: Escrow | undefined;
 
   setEscrows: (escrows: Escrow[]) => void;
-  fetchAllEscrows: (params: { address: string; type: string }) => void;
+  fetchAllEscrows: (params: {
+    address: string;
+    type: string;
+    isActive: boolean;
+  }) => void;
   updateEscrow: (params: {
     escrowId: string;
     payload: Partial<EscrowPayload>;

@@ -14,3 +14,8 @@ export const statusOptionsFilters = [
   { label: "Resolved", value: "resolved" },
   { label: "In Dispute", value: "inDispute" },
 ];
+
+export const activeOptionsFilters = [
+  { label: "Active", value: "active" },
+  { label: "Trash", value: "trashed" },
+];
