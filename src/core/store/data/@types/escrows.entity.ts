@@ -15,7 +15,7 @@ export interface EscrowGlobalStore {
   fetchAllEscrows: (params: {
     address: string;
     type: string;
-    isActive: boolean;
+    isActive?: boolean;
   }) => void;
   updateEscrow: (params: {
     escrowId: string;

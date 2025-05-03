@@ -111,24 +111,53 @@ export const useGlobalEscrowsSlice: StateCreator<
 
     softDeleteEscrow: async (escrowId: string) => {
       await get().updateEscrow({ escrowId, payload: { isActive: false } });
-      set(
-        (state) => ({
-          escrows: state.escrows.filter((e) => e.id !== escrowId),
-        }),
-        false,
-        "escrows/softDeleteFiltered",
-      );
+      try {
+        set(
+          (state) => ({
+            escrows: state.escrows.filter((e) => e.id !== escrowId),
+          }),
+          false,
+          "escrows/softDeleteFiltered",
+        );
+        set(
+          { loadingEscrows: false },
+          false,
+          ESCROW_ACTIONS.SET_LOADING_ESCROWS,
+        );
+      } catch (error) {
+        set(
+          { loadingEscrows: false },
+          false,
+          ESCROW_ACTIONS.SET_LOADING_ESCROWS,
+        );
+        throw error;
+      }
     },
 
     restoreEscrow: async (escrowId: string) => {
-      await get().updateEscrow({ escrowId, payload: { isActive: true } });
-      set(
-        (state) => ({
-          escrows: state.escrows.filter((e) => e.id !== escrowId),
-        }),
-        false,
-        "escrows/restoreFiltered",
-      );
+      set({ loadingEscrows: true }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
+      try {
+        await get().updateEscrow({ escrowId, payload: { isActive: true } });
+        set(
+          (state) => ({
+            escrows: state.escrows.filter((e) => e.id !== escrowId),
+          }),
+          false,
+          "escrows/restoreFiltered",
+        );
+        set(
+          { loadingEscrows: false },
+          false,
+          ESCROW_ACTIONS.SET_LOADING_ESCROWS,
+        );
+      } catch (error) {
+        set(
+          { loadingEscrows: false },
+          false,
+          ESCROW_ACTIONS.SET_LOADING_ESCROWS,
+        );
+        throw error;
+      }
     },
 
     setUserRolesInEscrow: (role) =>
