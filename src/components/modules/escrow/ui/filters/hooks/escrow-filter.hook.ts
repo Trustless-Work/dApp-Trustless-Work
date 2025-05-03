@@ -12,6 +12,7 @@ export const useEscrowFilter = () => {
   const [status] = useState(searchParams.get("status") || "");
   const [amountRange] = useState(searchParams.get("amount") || "");
   const [engagement] = useState(searchParams.get("engagement") || "");
+  const active = searchParams.get("active") || "active";
 
   const updateQuery = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -30,6 +31,7 @@ export const useEscrowFilter = () => {
     params.delete("amount");
     params.delete("engagement");
     params.delete("dateRange");
+    params.delete("active");
     router.replace(`${pathname}?${params.toString()}`);
   };
 
@@ -80,6 +82,12 @@ export const useEscrowFilter = () => {
         return "$500 - $1000";
       case "1000+":
         return "Over $1000";
+
+      // Active
+      case "active":
+        return "Active";
+      case "trashed":
+        return "Trash";
     }
   };
 
@@ -88,6 +96,7 @@ export const useEscrowFilter = () => {
     status,
     amountRange,
     engagement,
+    active,
     uniqueEngagements,
     searchParams,
     setSearch,

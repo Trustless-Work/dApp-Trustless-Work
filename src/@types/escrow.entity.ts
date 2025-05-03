@@ -40,6 +40,7 @@ export interface Escrow {
   receiver?: string;
   receiverMemo?: number;
   disputeStartedBy?: string;
+  isActive?: boolean;
 }
 
 export type RolesInEscrow =

@@ -20,6 +20,7 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";
 import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
 import {
+  ArchiveRestore,
   Ban,
   CircleCheckBig,
   CircleDollarSign,
@@ -43,6 +44,14 @@ import { FooterDetails } from "./sections/Footer";
 import { Button } from "@/components/ui/button";
 import EditEntitiesDialog from "./EditEntitiesDialog";
 import EditBasicPropertiesDialog from "./EditBasicPropertiesDialog";
+import { useToast } from "@/hooks/toast.hook";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Trash } from "lucide-react";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -57,6 +66,9 @@ const EscrowDetailDialog = ({
 }: EscrowDetailDialogProps) => {
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const dialogStates = useEscrowDialogs();
+
+  const { softDeleteEscrow, restoreEscrow } = useGlobalBoundedStore();
+  const { toast } = useToast();
 
   const {
     handleClose,
@@ -273,6 +285,51 @@ const EscrowDetailDialog = ({
                   areAllMilestonesCompletedAndFlag
                 }
               />
+              {selectedEscrow?.isActive !== false ? (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className="ml-10"
+                        variant="destructive"
+                        onClick={async () => {
+                          await softDeleteEscrow(selectedEscrow.id);
+                          toast({ title: "Escrow moved to Trash." });
+                          handleClose();
+                        }}
+                      >
+                        <Trash />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      This is a soft delete. Escrow can be restored from the
+                      Trash.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className="ml-10"
+                        variant="default"
+                        onClick={async () => {
+                          await restoreEscrow(selectedEscrow.id);
+                          toast({ title: "Escrow restored." });
+                          handleClose();
+                        }}
+                      >
+                        <ArchiveRestore />
+                        {/* Restore */}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      This escrow is in Trash. Click to restore it.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
             </CardFooter>
           </Card>
         </DialogContent>

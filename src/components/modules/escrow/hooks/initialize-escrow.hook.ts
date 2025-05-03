@@ -125,6 +125,7 @@ export const useInitializeEscrow = () => {
           issuer: address,
           trustlineDecimals: trustlineObject?.trustlineDecimals,
           receiverMemo: Number(payload.receiverMemo),
+          isActive: true,
         },
         address,
       );

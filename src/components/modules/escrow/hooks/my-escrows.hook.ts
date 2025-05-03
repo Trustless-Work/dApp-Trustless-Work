@@ -32,8 +32,11 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
   const amountFilter = searchParams.get("amount") || "";
   const engagementFilter = searchParams.get("engagement") || "";
   const dateRangeFilter = searchParams.get("dateRange") || "";
+  const activeParam = searchParams.get("active"); // ← 👈
 
-  // Date range
+  const isActive =
+    activeParam === "trashed" ? false : activeParam === "active" ? true : true;
+
   const [startStr, endStr] = dateRangeFilter.split("_");
   const startDate = startStr ? new Date(startStr) : null;
   const endDate = endStr ? new Date(endStr) : null;
@@ -63,7 +66,6 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         escrow.title?.toLowerCase().includes(searchQuery) ||
         escrow.description?.toLowerCase().includes(searchQuery);
 
-      // todo: use these constants in zusntand
       const completedMilestones = escrow.milestones.filter(
         (milestone) => milestone.status === "completed",
       ).length;
@@ -80,13 +82,11 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
       const progressPercentageApproved =
         totalMilestones > 0 ? (approvedMilestones / totalMilestones) * 100 : 0;
 
-      // Check if both are 100% and releaseFlag is false
       const pendingRelease =
         progressPercentageCompleted === 100 &&
         progressPercentageApproved === 100 &&
         !escrow.releaseFlag;
 
-      // Flags
       let matchesStatus = true;
       if (statusFilter && statusFilter !== "all") {
         switch (statusFilter) {
@@ -111,11 +111,9 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         }
       }
 
-      // Engagement
       const matchesEngagement =
         !engagementFilter || escrow.engagementId === engagementFilter;
 
-      // Amount
       let matchesAmount = true;
       const amount = parseFloat(escrow.amount);
       if (!isNaN(amount) && amountFilter && amountFilter !== "all") {
@@ -128,9 +126,7 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         }
       }
 
-      // Date Range
       const createdAt = new Date(escrow.createdAt.seconds * 1000);
-
       const matchesDate =
         (!startDate || createdAt >= startDate) &&
         (!endDate || createdAt <= endDate);
@@ -161,13 +157,13 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
 
   const memoizedFetchEscrows = useCallback(async () => {
     if (!address || fetchingRef.current) return;
-    const fetchKey = `${address}-${type}`;
+    const fetchKey = `${address}-${type}-${isActive}`;
     if (fetchKey === lastFetchKey.current) return;
     try {
       fetchingRef.current = true;
       lastFetchKey.current = fetchKey;
       setIsLoading(true);
-      await fetchAllEscrows({ address, type });
+      await fetchAllEscrows({ address, type, isActive });
     } catch (error: unknown) {
       console.error("[MyEscrows] Error fetching escrows:", error);
       toast({
@@ -180,20 +176,17 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
       setIsLoading(false);
       fetchingRef.current = false;
     }
-  }, [address, type, fetchAllEscrows]);
+  }, [address, type, isActive, fetchAllEscrows]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
-
     const debouncedFetch = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         memoizedFetchEscrows();
       }, 100);
     };
-
     debouncedFetch();
-
     return () => {
       clearTimeout(timeoutId);
       fetchingRef.current = false;

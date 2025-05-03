@@ -9,14 +9,19 @@ import { getBalance } from "./get-balance.service";
 export const fetchAllEscrows = async ({
   address,
   type = "approver",
+  isActive = true,
 }: {
   address: string;
   type: string;
+  isActive?: boolean;
 }): Promise<Escrow[]> => {
   const escrowsByUser = await getAllEscrowsByUser({ address, type });
-  const contractIds = escrowsByUser.data.map(
-    (escrow: Escrow) => escrow.contractId,
-  );
+  const filtered =
+    typeof isActive === "boolean"
+      ? escrowsByUser.data.filter((e: Escrow) => e.isActive === isActive)
+      : escrowsByUser.data;
+
+  const contractIds = filtered.map((escrow: Escrow) => escrow.contractId);
 
   if (!Array.isArray(contractIds)) {
     throw new Error("contractIds is not a valid array.");
@@ -26,11 +31,10 @@ export const fetchAllEscrows = async ({
   const balances = response.data as BalanceItem[];
 
   return Promise.all(
-    escrowsByUser.data.map(async (escrow: Escrow) => {
+    filtered.map(async (escrow: Escrow) => {
       const matchedBalance = balances.find(
         (item) => item.address === escrow.contractId,
       );
-
       const plainBalance = matchedBalance ? matchedBalance.balance : 0;
       const currentBalance = escrow.balance ? Number(escrow.balance) : 0;
 
