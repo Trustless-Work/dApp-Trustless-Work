@@ -26,6 +26,7 @@ import {
   CircleDollarSign,
   Handshake,
   Pencil,
+  Trash2,
   Wallet,
 } from "lucide-react";
 import EditMilestonesDialog from "./EditMilestonesDialog";
@@ -51,7 +52,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Trash } from "lucide-react";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -298,7 +298,7 @@ const EscrowDetailDialog = ({
                           handleClose();
                         }}
                       >
-                        <Trash />
+                        <Trash2 />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
