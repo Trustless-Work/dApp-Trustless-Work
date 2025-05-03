@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { addDays, format } from "date-fns";
+import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -51,7 +51,9 @@ export function DatePickerWithRange({
           <Button
             id="date"
             variant={"outline"}
-            className={cn("w-[300px] justify-start text-left font-normal")}
+            className={cn(
+              "w-full md:w-[300px] justify-start text-left font-normal bg-transparent",
+            )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {date?.from ? (

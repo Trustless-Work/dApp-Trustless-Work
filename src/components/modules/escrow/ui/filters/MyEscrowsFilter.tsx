@@ -64,140 +64,134 @@ const MyEscrowsFilter = () => {
           </Button>
         </div>
 
-        <CreateButton
-          className="mr-auto w-full md:w-auto"
-          label="Create Escrow"
-          url={"/dashboard/escrow/initialize-escrow"}
-          id="step-2"
-        />
-      </div>
-
-      <Divider type="horizontal" />
-
-      <div className="flex flex-col justify-between md:flex-row gap-3 w-full">
-        <div className="flex w-full flex-wrap gap-4">
-          {/* Status */}
-          <div className="flex flex-col w-full md:w-1/5">
-            <label
-              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
-              htmlFor="status"
-            >
-              Status
-            </label>
-            <Select
-              value={status}
-              onValueChange={(value) => updateQuery("status", value)}
-            >
-              <SelectTrigger>
-                {mapNameParams(searchParams.get("status") || "")}
-              </SelectTrigger>
-              <SelectContent>
-                {statusOptionsFilters.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Amount */}
-          <div className="flex flex-col w-full md:w-1/5">
-            <label
-              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
-              htmlFor="amount"
-            >
-              Amount Range
-            </label>
-            <Select
-              value={amountRange}
-              onValueChange={(value) => updateQuery("amount", value)}
-            >
-              <SelectTrigger>
-                {mapNameParams(searchParams.get("amount") || "")}
-              </SelectTrigger>
-              <SelectContent>
-                {amountOptionsFilters.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Engagement */}
-          <div className="flex flex-col w-full md:w-1/5">
-            <label
-              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
-              htmlFor="engagement"
-            >
-              Engagements
-            </label>
-            <Select
-              value={engagement}
-              onValueChange={(value) => updateQuery("engagement", value)}
-            >
-              <SelectTrigger>
-                {searchParams.get("engagement") || "Select Engagement"}
-              </SelectTrigger>
-              <SelectContent>
-                {uniqueEngagements.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex flex-col w-full md:w-1/5">
-            <label
-              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
-              htmlFor="active"
-            >
-              Visibility
-            </label>
-            <Select
-              value={active}
-              onValueChange={(value) => updateQuery("active", value)}
-            >
-              <SelectTrigger>{mapNameParams(active)}</SelectTrigger>
-              <SelectContent>
-                {activeOptionsFilters.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Created At */}
-          <div className="flex flex-col w-full md:w-1/5">
-            <label
-              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
-              htmlFor="dateRange"
-            >
-              Created At
-            </label>
-            <DatePickerWithRange />
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-4">
+          {/* Actions */}
           <Link
             href="/dashboard/help#roles"
             className="text-xs text-muted-foreground font-bold text-end hover:underline"
           >
-            Actions in{" "}
-            <span className="capitalize">"{formatText(activeTab)}"</span>
+            {getRoleActionIcons(activeTab)}
           </Link>
 
-          <div className="flex gap-4 justify-end">
-            {getRoleActionIcons(activeTab)}
-          </div>
+          <CreateButton
+            className="mr-auto w-full md:w-auto"
+            label="Create Escrow"
+            url={"/dashboard/escrow/initialize-escrow"}
+            id="step-2"
+          />
+        </div>
+      </div>
+
+      <Divider type="horizontal" />
+
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 w-full md:w-4/5">
+        {/* Status */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="status"
+          >
+            Status
+          </label>
+          <Select
+            value={status}
+            onValueChange={(value) => updateQuery("status", value)}
+          >
+            <SelectTrigger>
+              {mapNameParams(searchParams.get("status") || "")}
+            </SelectTrigger>
+            <SelectContent>
+              {statusOptionsFilters.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Amount */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="amount"
+          >
+            Amount Range
+          </label>
+          <Select
+            value={amountRange}
+            onValueChange={(value) => updateQuery("amount", value)}
+          >
+            <SelectTrigger>
+              {mapNameParams(searchParams.get("amount") || "")}
+            </SelectTrigger>
+            <SelectContent>
+              {amountOptionsFilters.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Engagement */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="engagement"
+          >
+            Engagements
+          </label>
+          <Select
+            value={engagement}
+            onValueChange={(value) => updateQuery("engagement", value)}
+          >
+            <SelectTrigger>
+              {searchParams.get("engagement") || "Select Engagement"}
+            </SelectTrigger>
+            <SelectContent>
+              {uniqueEngagements.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Visibility */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="active"
+          >
+            Visibility
+          </label>
+          <Select
+            value={active}
+            onValueChange={(value) => updateQuery("active", value)}
+          >
+            <SelectTrigger>{mapNameParams(active)}</SelectTrigger>
+            <SelectContent>
+              {activeOptionsFilters.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Created At */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="dateRange"
+          >
+            Created At
+          </label>
+          <DatePickerWithRange />
         </div>
       </div>
     </form>
