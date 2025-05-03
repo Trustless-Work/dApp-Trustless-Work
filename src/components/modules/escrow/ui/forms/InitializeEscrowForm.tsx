@@ -481,8 +481,8 @@ const InitializeEscrowForm = () => {
             <TooltipInfo content="Key stages or deliverables for the escrow." />
           </FormLabel>
           {milestones.map((milestone, index) => (
-            <>
-              <div key={index} className="flex items-center space-x-4">
+            <div key={index}>
+              <div className="flex items-center space-x-4">
                 <Input
                   placeholder="Milestone Description"
                   value={milestone.description}
@@ -516,7 +516,7 @@ const InitializeEscrowForm = () => {
                   </Button>
                 </div>
               )}
-            </>
+            </div>
           ))}
         </div>
 
