@@ -21,11 +21,12 @@ export function getStatusVariant(status: string): BadgeProps["variant"] {
 export function getStatusColor(status: string): string {
   switch (status.toLowerCase()) {
     case "released":
+    case "approved":
       return "hsl(var(--chart-1))";
     case "disputed":
+    case "completed":
       return "hsl(var(--chart-2))";
     case "resolved":
-      return "hsl(var(--chart-3))";
     case "pending":
     default:
       return "hsl(var(--chart-4))";

@@ -28,28 +28,28 @@ export function MilestonesOverview({
         <MetricCard
           title="Total Milestones"
           value={hasData ? data.totalMilestones : 0}
-          icon={<FileCheck className="h-4 w-4 text-blue-500" />}
+          icon={<FileCheck />}
           subValue="Total milestones across all escrows"
           isLoading={!hasData}
         />
         <MetricCard
           title="Pending Approval"
           value={hasData ? data.pendingApproval : 0}
-          icon={<Clock className="h-4 w-4 text-yellow-500" />}
+          icon={<Clock />}
           subValue="Completed milestones awaiting approval"
           isLoading={!hasData}
         />
         <MetricCard
           title="Approved Not Released"
           value={hasData ? data.approvedNotReleased : 0}
-          icon={<CheckCircle className="h-4 w-4 text-green-500" />}
+          icon={<CheckCircle />}
           subValue="Approved milestones in unreleased escrows"
           isLoading={!hasData}
         />
         <MetricCard
           title="Disputed Milestones"
           value={hasData ? data.disputed : 0}
-          icon={<AlertTriangle className="h-4 w-4 text-red-500" />}
+          icon={<AlertTriangle />}
           subValue="Milestones in disputed escrows"
           isLoading={!hasData}
         />

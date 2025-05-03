@@ -1,11 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useStatusChartData } from "../../hooks/status-chart-data.hook";
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie, Label } from "recharts";
 import { MilestoneDashboardData } from "../../@types/dashboard.entity";
 import NoData from "@/components/utils/ui/NoData";
 
@@ -22,55 +28,78 @@ export function MilestoneStatusChart({ data }: MilestoneStatusChartProps) {
       <CardHeader>
         <CardTitle>Milestone Status</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="h-[240px]">
-          <ChartContainer config={chartConfig}>
-            {hasData ? (
-              <PieChart>
-                <Pie
-                  data={formattedData}
-                  dataKey="count"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  innerRadius={40}
-                  paddingAngle={2}
-                  label={({ name, percent }) =>
-                    `${name}: ${(percent * 100).toFixed(0)}%`
-                  }
-                  labelLine={false}
-                >
-                  {formattedData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Pie>
-                <ChartTooltip content={<ChartTooltipContent />} />
-              </PieChart>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full">
-                <NoData />
-              </div>
-            )}
-          </ChartContainer>
-        </div>
-        {hasData && (
-          <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
-            {formattedData.map((item) => (
-              <div key={item.name} className="flex items-center">
-                <div
-                  className="mr-2 h-3 w-3 rounded-full"
-                  style={{ backgroundColor: item.fill }}
+      <CardContent className="pb-0">
+        <ChartContainer
+          config={chartConfig}
+          className="mx-auto aspect-square h-[250px]"
+        >
+          {hasData ? (
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={formattedData}
+                dataKey="count"
+                nameKey="name"
+                innerRadius={60}
+                strokeWidth={5}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (!viewBox) return null;
+                    const { cx, cy } = viewBox as { cx: number; cy: number };
+                    return (
+                      <text
+                        x={cx}
+                        y={cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={cx}
+                          y={cy}
+                          className="fill-foreground text-2xl font-bold"
+                        >
+                          {total}
+                        </tspan>
+                        <tspan
+                          x={cx}
+                          y={cy + 20}
+                          className="fill-muted-foreground text-sm"
+                        >
+                          Total
+                        </tspan>
+                      </text>
+                    );
+                  }}
                 />
-                <span className="text-muted-foreground">{item.name}</span>
-                <span className="ml-auto font-medium">
-                  {((item.count / total) * 100).toFixed(0)}%
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+              </Pie>
+            </PieChart>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-center p-6">
+              <NoData />
+            </div>
+          )}
+        </ChartContainer>
       </CardContent>
+      <CardFooter>
+        <div className="flex justify-center gap-4 w-full">
+          {formattedData.map((entry, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <div
+                className="w-4 h-4 rounded-full"
+                style={{ backgroundColor: entry.fill }}
+              ></div>
+              <span className="text-sm font-medium">{entry.name}</span>
+              <span className="text-sm text-muted-foreground">
+                {entry.count}
+              </span>
+            </div>
+          ))}
+        </div>
+      </CardFooter>
     </Card>
   );
 }
