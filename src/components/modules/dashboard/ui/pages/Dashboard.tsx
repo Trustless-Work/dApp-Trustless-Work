@@ -13,6 +13,7 @@ import { SkeletonEscrowReleaseTrendChart } from "../utils/SkeletonEscrowReleaseT
 import { ArrowRight } from "lucide-react";
 import CreateButton from "@/components/utils/ui/Create";
 import { MilestonesOverview } from "../sections/MilestoneOverview";
+import { DisputeAnalytics } from "../sections/DisputeAnalytics";
 
 export default function Dashboard() {
   const address = useGlobalAuthenticationStore((state) => state.address);
@@ -85,6 +86,8 @@ export default function Dashboard() {
         </div>
 
         <MilestonesOverview address={address} escrows={escrows || []} />
+
+        <DisputeAnalytics address={address} escrows={escrows || []} />
       </div>
     </>
   );
