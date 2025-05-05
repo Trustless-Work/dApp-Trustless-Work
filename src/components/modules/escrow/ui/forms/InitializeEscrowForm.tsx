@@ -121,7 +121,7 @@ const InitializeEscrowForm = () => {
                       control={form.control}
                       name="approver"
                       label=""
-                      tooltipContent="A"
+                      tooltipContent=""
                       options={userOptions}
                     />
                   ) : (
@@ -139,6 +139,7 @@ const InitializeEscrowForm = () => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="serviceProvider"
@@ -148,7 +149,7 @@ const InitializeEscrowForm = () => {
                   <span className="flex items-center">
                     Service Provider
                     <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Address of the service provider for this escrow." />
+                    <TooltipInfo content="The person providing the service." />
                   </span>
                   <Switch
                     checked={showSelect.serviceProvider}
@@ -158,6 +159,7 @@ const InitializeEscrowForm = () => {
                     title="Show Users List?"
                   />
                 </FormLabel>
+
                 <FormControl>
                   {showSelect.serviceProvider ? (
                     <SelectField
@@ -194,7 +196,7 @@ const InitializeEscrowForm = () => {
                   <span className="flex items-center">
                     Release Signer
                     <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Entity authorized to release funds from escrow." />
+                    <TooltipInfo content="Who approves releasing the funds." />
                   </span>
                   <Switch
                     checked={showSelect.releaseSigner}
@@ -204,6 +206,7 @@ const InitializeEscrowForm = () => {
                     title="Show Users List?"
                   />
                 </FormLabel>
+
                 <FormControl>
                   {showSelect.releaseSigner ? (
                     <SelectField
@@ -238,7 +241,7 @@ const InitializeEscrowForm = () => {
                   <span className="flex items-center">
                     Dispute Resolver
                     <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Entity responsible for resolving disputes." />
+                    <TooltipInfo content="Who resolves disputes if any." />
                   </span>
                   <Switch
                     checked={showSelect.disputeResolver}
@@ -248,6 +251,7 @@ const InitializeEscrowForm = () => {
                     title="Show Users List?"
                   />
                 </FormLabel>
+
                 <FormControl>
                   {showSelect.disputeResolver ? (
                     <SelectField
@@ -282,9 +286,9 @@ const InitializeEscrowForm = () => {
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
                   <span className="flex items-center">
-                    Platform Address{" "}
+                    Platform Address
                     <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Public key of the platform managing the escrow." />
+                    <TooltipInfo content="Address of the platform to receive fees." />
                   </span>
                   <Switch
                     checked={showSelect.platformAddress}
@@ -294,6 +298,7 @@ const InitializeEscrowForm = () => {
                     title="Show Users List?"
                   />
                 </FormLabel>
+
                 <FormControl>
                   {showSelect.platformAddress ? (
                     <SelectField
@@ -318,7 +323,6 @@ const InitializeEscrowForm = () => {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="receiver"
@@ -326,8 +330,8 @@ const InitializeEscrowForm = () => {
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
                   <span className="flex items-center">
-                    Receiver <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Receiver wallet address." />
+                    Receiver<span className="text-destructive ml-1">*</span>
+                    <TooltipInfo content="Final recipient of funds." />
                   </span>
                   <Switch
                     checked={showSelect.receiver}
@@ -335,6 +339,7 @@ const InitializeEscrowForm = () => {
                     title="Show Users List?"
                   />
                 </FormLabel>
+
                 <FormControl>
                   {showSelect.receiver ? (
                     <SelectField
