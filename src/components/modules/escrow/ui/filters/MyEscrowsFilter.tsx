@@ -17,14 +17,12 @@ import {
 } from "./constants/filters-options.constant";
 import { getRoleActionIcons } from "@/utils/get-role-actions";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import { useFormatUtils } from "@/utils/hook/format.hook";
 import Link from "next/link";
 import { DatePickerWithRange } from "@/components/ui/calendar-range";
 
 const MyEscrowsFilter = () => {
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
-  const { formatText } = useFormatUtils();
   const {
     search,
     status,
