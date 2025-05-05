@@ -47,7 +47,7 @@ const Header = () => {
 
             <div className="flex gap-5 ml-auto items-center">
               <ThemeToggle />
-              <NotificationBell /> {/* 👈 Aquí va el icono de notificaciones */}
+              <NotificationBell />
               <Button variant="outline" onClick={handleDisconnect}>
                 <LogOut /> Disconnect
               </Button>

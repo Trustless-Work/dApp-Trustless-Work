@@ -42,20 +42,11 @@ export const useWallet = () => {
       console.error("Error disconnecting wallet:", error);
     }
   };
-  const getWalletAddress = async (): Promise<string | null> => {
-    try {
-      const { address } = await kit.getAddress();
-      return address;
-    } catch {
-      return null;
-    }
-  };
 
   return {
     connectWallet,
     disconnectWallet,
     handleConnect,
     handleDisconnect,
-    getWalletAddress,
   };
 };

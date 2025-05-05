@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import MoonpayClientProvider from "@/providers/MoonpayClientProvider";
 import ReactQueryClientProvider from "@/providers/ReactQueryClientProvider";
 import { Analytics } from "@vercel/analytics/react";
+import { GlobalProvider } from "@/providers/GlobalProvider";
 
 const Exo2 = localFont({
   src: "./fonts/Exo2.ttf",
@@ -27,19 +28,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(Exo2.variable, "antialiased")}>
         <Analytics />
-        <ReactQueryClientProvider>
-          {" "}
-          <MoonpayClientProvider>
-            <div className="relative flex min-h-screen w-full">
-              <div className="flex-1 flex flex-col w-full">
-                <div className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
-                  {children}
-                </div>
+        <GlobalProvider>
+          <div className="relative flex min-h-screen w-full">
+            <div className="flex-1 flex flex-col w-full">
+              <div className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
+                {children}
               </div>
             </div>
-          </MoonpayClientProvider>
-          <Toaster />
-        </ReactQueryClientProvider>
+          </div>
+        </GlobalProvider>
+        <Toaster />
       </body>
     </html>
   );
