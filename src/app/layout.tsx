@@ -3,8 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
-import MoonpayClientProvider from "@/providers/MoonpayClientProvider";
-import ReactQueryClientProvider from "@/providers/ReactQueryClientProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { GlobalProvider } from "@/providers/GlobalProvider";
 
