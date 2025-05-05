@@ -15,15 +15,28 @@ import {
 } from "@/components/ui/chart";
 import { useStatusChartData } from "../../hooks/status-chart-data.hook";
 import NoData from "@/components/utils/ui/NoData";
+import { SkeletonEscrowStatusChart } from "../utils/SkeletonStatusChart";
 
 type StatusCounts = {
   name: string;
   count: number;
 }[];
 
-export function EscrowStatusChart({ data }: { data: StatusCounts }) {
+interface EscrowStatusChartProps {
+  data: StatusCounts;
+  isLoading?: boolean;
+}
+
+export function EscrowStatusChart({
+  data,
+  isLoading = false,
+}: EscrowStatusChartProps) {
   const { total, formattedData, chartConfig } = useStatusChartData(data);
   const hasData = data && data.length > 0;
+
+  if (isLoading) {
+    return <SkeletonEscrowStatusChart />;
+  }
 
   return (
     <Card className="h-full">
