@@ -15,7 +15,6 @@ import { useFormatUtils } from "@/utils/hook/format.hook";
 import { Escrow } from "@/@types/escrow.entity";
 import EntityCard from "./cards/EntityCard";
 import { useGlobalBoundedStore } from "@/core/store/data";
-import { Separator } from "@/components/ui/separator";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import TransferAnimation from "./TransferAnimation";
 import { motion } from "framer-motion";
