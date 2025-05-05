@@ -13,9 +13,12 @@ import {
 import { PieChart, Pie, Label } from "recharts";
 import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/ui/NoData";
+import { SkeletonDisputeEngagementChart } from "../utils/SkeletonDisputeEngagementChart";
+import { useDisputesEngagement } from "@/components/modules/dashboard/hooks/disputes-engagement.hook";
 
 interface DisputesEngagementChartProps {
   escrows: Escrow[];
+  isLoading?: boolean;
 }
 
 interface EngagementData {
@@ -81,47 +84,14 @@ const generateColorPalette = (n: number): string[] => {
 
 export function DisputesEngagementChart({
   escrows,
+  isLoading = false,
 }: DisputesEngagementChartProps) {
-  // Generate engagement data from escrows
-  const engagementData = escrows
-    .filter((escrow) => escrow.disputeFlag)
-    .reduce(
-      (acc, escrow) => {
-        const engagementId = escrow.engagementId;
-        if (!acc[engagementId]) {
-          acc[engagementId] = 0;
-        }
-        acc[engagementId]++;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
+  if (isLoading) {
+    return <SkeletonDisputeEngagementChart />;
+  }
 
-  // Generate color palette based on number of engagements
-  const colorPalette = generateColorPalette(Object.keys(engagementData).length);
-
-  // Format data with dynamic colors from the generated palette
-  const formattedData: EngagementData[] = Object.entries(engagementData).map(
-    ([name, count], index) => ({
-      name,
-      count,
-      fill: colorPalette[index],
-    }),
-  );
-
-  const total = formattedData.reduce((sum, entry) => sum + entry.count, 0);
-  const hasData = formattedData.length > 0;
-
-  const chartConfig = Object.entries(engagementData).reduce(
-    (acc, [engagementId], index) => {
-      acc[engagementId] = {
-        label: `${engagementId}  `,
-        color: colorPalette[index],
-      };
-      return acc;
-    },
-    {} as Record<string, { label: string; color: string }>,
-  );
+  const { formattedData, total, hasData, chartConfig } =
+    useDisputesEngagement(escrows);
 
   return (
     <Card className="h-full">
