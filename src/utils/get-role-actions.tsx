@@ -12,7 +12,7 @@ export const getRoleActionIcons = (role: RolesInEscrow): React.ReactNode[] => {
   return roleData.actions.map((action) => (
     <div
       key={action}
-      className="inline-flex items-center justify-center rounded-full shadow-sm text-muted-foreground"
+      className="inline-flex items-center justify-center rounded-full shadow-sm text-muted-foreground px-2"
     >
       <TooltipInfo content={action}>{actionIcons[action]}</TooltipInfo>
     </div>
