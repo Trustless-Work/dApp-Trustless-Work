@@ -227,7 +227,10 @@ const EscrowDetailDialog = ({
                         }}
                         className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
                         variant="ghost"
-                        disabled={selectedEscrow?.balance !== undefined}
+                        disabled={
+                          Number(selectedEscrow.balance) !== 0 ||
+                          !selectedEscrow.balance
+                        }
                       >
                         <Pencil />
                         Edit

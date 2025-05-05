@@ -67,7 +67,10 @@ export const EscrowIDActions = ({
             !selectedEscrow?.releaseFlag &&
             activeTab === "platformAddress" && (
               <Button
-                disabled={selectedEscrow?.balance !== undefined}
+                disabled={
+                  Number(selectedEscrow.balance) !== 0 ||
+                  !selectedEscrow.balance
+                }
                 onClick={(e) => {
                   e.stopPropagation();
                   dialogStates.editBasicProperties.setIsOpen(true);
