@@ -20,74 +20,63 @@ export function DisputeAnalytics({
   escrows = [],
 }: DisputeAnalyticsProps) {
   const data = useEscrowDashboardData({ address, type });
-  const hasData = data !== null;
-  const displayData = hasData
-    ? data
-    : {
-        escrows: [],
-        statusCounts: [],
-        totalEscrows: 0,
-        totalResolved: 0,
-        totalInDispute: 0,
-        avgResolutionTime: 0,
-      };
+  const isLoading = !data;
+  const displayData = data || {
+    escrows: [],
+    statusCounts: [],
+    totalEscrows: 0,
+    totalInDispute: 0,
+    avgResolutionTime: 0,
+  };
   const displayEscrows = escrows.length > 0 ? escrows : displayData.escrows;
 
-  if (!hasData) {
+  if (isLoading) {
     return <SkeletonDisputeAnalytics />;
   }
 
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <h1 className="text-2xl font-bold">Dispute Analytics</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <MetricCard
           title="Total Disputes"
           value={displayData.totalInDispute.toString()}
           icon={<Ban />}
           subValue="All time dispute count"
-          isLoading={!hasData}
+          isLoading={isLoading}
         />
         <MetricCard
           title="Dispute Rate"
           value={`${(displayData.totalEscrows > 0 ? (displayData.totalInDispute / displayData.totalEscrows) * 100 : 0).toFixed(1)}%`}
           icon={<BarChart />}
           subValue="Percentage of escrows in dispute"
-          isLoading={!hasData}
+          isLoading={isLoading}
         />
         <MetricCard
           title="Avg Resolution Time"
           value={
-            hasData
+            displayData.avgResolutionTime > 0
               ? `${displayData.avgResolutionTime} ${displayData.avgResolutionTime === 1 ? "day" : "days"}`
               : "N/A"
           }
           icon={<Clock />}
           subValue="Average time to resolve disputes"
-          isLoading={!hasData}
-        />
-        <MetricCard
-          title="Resolved Disputes"
-          value={displayData.totalResolved.toString()}
-          icon={<Handshake />}
-          subValue="Successfully resolved disputes"
-          isLoading={!hasData}
+          isLoading={isLoading}
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {hasData ? (
-          <DisputesEngagementChart escrows={displayEscrows} />
-        ) : (
-          <SkeletonDisputeEngagementChart />
-        )}
-        {hasData ? (
-          <LongestPendingDisputesList escrows={displayEscrows} />
-        ) : (
+        <DisputesEngagementChart
+          escrows={displayEscrows}
+          isLoading={isLoading}
+        />
+        {isLoading ? (
           <div className="space-y-4 mb-4">
             <h2 className="text-lg font-semibold">Longest Pending Disputes</h2>
             <SkeletonPendingDisputes />
           </div>
+        ) : (
+          <LongestPendingDisputesList escrows={displayEscrows} />
         )}
       </div>
     </div>
