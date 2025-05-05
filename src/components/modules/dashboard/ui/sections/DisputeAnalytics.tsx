@@ -32,6 +32,10 @@ export function DisputeAnalytics({
       };
   const displayEscrows = escrows.length > 0 ? escrows : displayData.escrows;
 
+  if (!hasData) {
+    return <SkeletonDisputeAnalytics />;
+  }
+
   return (
     <div className="flex flex-col w-full h-full gap-4">
       <h1 className="text-2xl font-bold">Dispute Analytics</h1>
