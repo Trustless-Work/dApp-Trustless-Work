@@ -1,11 +1,10 @@
-import { Handshake, Clock, BarChart, Ban } from "lucide-react";
+import { Clock, BarChart, Ban } from "lucide-react";
 import MetricCard from "../cards/MetricCard";
 import { useEscrowDashboardData } from "../../hooks/escrow-dashboard-data.hook";
 import { Escrow } from "@/@types/escrow.entity";
 import { SkeletonDisputeAnalytics } from "../utils/SkeletonDisputeAnalytics";
 import { DisputesEngagementChart } from "../charts/DisputesEngagementChart";
 import { LongestPendingDisputesList } from "../lists/LongestPendingDisputesList";
-import { SkeletonDisputeEngagementChart } from "../utils/SkeletonDisputeEngagementChart";
 import { SkeletonPendingDisputes } from "../utils/SkeletonPendingDisputes";
 
 interface DisputeAnalyticsProps {

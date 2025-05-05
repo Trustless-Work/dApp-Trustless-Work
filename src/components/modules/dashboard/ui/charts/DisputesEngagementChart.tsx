@@ -21,67 +21,6 @@ interface DisputesEngagementChartProps {
   isLoading?: boolean;
 }
 
-interface EngagementData {
-  name: string;
-  count: number;
-  fill: string;
-}
-
-// Base blue colors for the palette
-const BASE_BLUES = [
-  "#1E88E5", // Blue 600
-  "#42A5F5", // Blue 400
-  "#64B5F6", // Blue 300
-  "#90CAF9", // Blue 200
-  "#BBDEFB", // Blue 100
-  "#1565C0", // Blue 800
-  "#0D47A1", // Blue 900
-  "#2196F3", // Blue 500
-  "#1976D2", // Blue 700
-  "#82B1FF", // Blue A100
-];
-
-// Function to generate a color palette with n colors
-const generateColorPalette = (n: number): string[] => {
-  if (n <= BASE_BLUES.length) {
-    return BASE_BLUES.slice(0, n);
-  }
-
-  const palette: string[] = [...BASE_BLUES];
-  const baseColors = BASE_BLUES.length;
-
-  // Generate additional colors by adjusting the base colors
-  for (let i = baseColors; i < n; i++) {
-    const baseColor = BASE_BLUES[i % baseColors];
-    const adjustment = Math.floor(i / baseColors) * 0.2; // Adjust brightness for each cycle
-
-    // Convert hex to RGB
-    const r = parseInt(baseColor.slice(1, 3), 16);
-    const g = parseInt(baseColor.slice(3, 5), 16);
-    const b = parseInt(baseColor.slice(5, 7), 16);
-
-    // Adjust brightness
-    const adjustedR = Math.max(
-      0,
-      Math.min(255, Math.round(r * (1 - adjustment))),
-    );
-    const adjustedG = Math.max(
-      0,
-      Math.min(255, Math.round(g * (1 - adjustment))),
-    );
-    const adjustedB = Math.max(
-      0,
-      Math.min(255, Math.round(b * (1 - adjustment))),
-    );
-
-    // Convert back to hex
-    const adjustedColor = `#${adjustedR.toString(16).padStart(2, "0")}${adjustedG.toString(16).padStart(2, "0")}${adjustedB.toString(16).padStart(2, "0")}`;
-    palette.push(adjustedColor);
-  }
-
-  return palette;
-};
-
 export function DisputesEngagementChart({
   escrows,
   isLoading = false,
