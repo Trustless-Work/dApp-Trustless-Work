@@ -14,5 +14,4 @@ export interface Notification {
   };
   read: boolean;
   createdAt: number;
-  url?: string;
 }
