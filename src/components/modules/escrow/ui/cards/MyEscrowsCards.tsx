@@ -194,13 +194,14 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                         </p>
                       </div>
 
-                      <div className="flex gap-2">
+                      <div>
                         {getStatusBadge(escrow)}
 
                         <TooltipInfo content="View from TW Escrow Viewer">
                           <Link
                             href={`https://viewer.trustlesswork.com/${escrow.contractId}`}
                             target="_blank"
+                            className="ml-2"
                           >
                             <Button variant="ghost" size="icon">
                               <ExternalLink />
