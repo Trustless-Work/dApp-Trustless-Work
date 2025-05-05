@@ -29,6 +29,7 @@ export const useEscrowDashboardData = ({
         totalInDispute: escrows.filter((e) => e.disputeFlag).length,
         resolvedPercentage: getResolvedPercentage(escrows),
         isPositive: getIsPositive(getResolvedPercentage(escrows)),
+        avgResolutionTime: getAvgResolutionTime(escrows),
       });
     };
 
@@ -111,4 +112,20 @@ const getResolvedPercentage = (escrows: Escrow[]): number => {
 
 const getIsPositive = (resolvedPercentage: number): boolean => {
   return resolvedPercentage >= 50;
+};
+
+const getAvgResolutionTime = (escrows: Escrow[]): number => {
+  const resolvedEscrows = escrows.filter((e) => e.resolvedFlag);
+  return resolvedEscrows.length
+    ? Math.round(
+      resolvedEscrows
+        .map((e) => {
+          const start = e.createdAt.seconds * 1000;
+          const end = (e.updatedAt ?? e.createdAt).seconds * 1000;
+          return (end - start) / (1000 * 60 * 60 * 24);
+        })
+        .reduce((sum, days) => sum + days, 0) /
+      resolvedEscrows.length
+    )
+    : 0;
 };

@@ -24,12 +24,13 @@ export function DisputeAnalytics({
   const displayData = hasData
     ? data
     : {
-        escrows: [],
-        statusCounts: [],
-        totalEscrows: 0,
-        totalResolved: 0,
-        totalInDispute: 0,
-      };
+      escrows: [],
+      statusCounts: [],
+      totalEscrows: 0,
+      totalResolved: 0,
+      totalInDispute: 0,
+      avgResolutionTime: 0,
+    };
   const displayEscrows = escrows.length > 0 ? escrows : displayData.escrows;
 
   if (!hasData) {
@@ -56,7 +57,11 @@ export function DisputeAnalytics({
         />
         <MetricCard
           title="Avg Resolution Time"
-          value="7 days"
+          value={
+            hasData
+              ? `${displayData.avgResolutionTime} ${displayData.avgResolutionTime === 1 ? 'day' : 'days'}`
+              : 'N/A'
+          }
           icon={<Clock />}
           subValue="Average time to resolve disputes"
           isLoading={!hasData}

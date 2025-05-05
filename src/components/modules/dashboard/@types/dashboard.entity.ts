@@ -12,6 +12,7 @@ export type DashboardData = {
   totalInDispute: number;
   resolvedPercentage: number;
   isPositive: boolean;
+  avgResolutionTime: number;
 };
 
 export type MilestoneWithEscrow = Milestone & {
