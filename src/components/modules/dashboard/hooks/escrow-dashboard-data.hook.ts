@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import type { Escrow } from "@/@types/escrow.entity";
 import { fetchAllEscrows } from "../../escrow/services/escrow.service";
 import { DashboardData } from "../@types/dashboard.entity";
@@ -30,6 +30,10 @@ export const useEscrowDashboardData = ({
         resolvedPercentage: getResolvedPercentage(escrows),
         isPositive: getIsPositive(getResolvedPercentage(escrows)),
         avgResolutionTime: getAvgResolutionTime(escrows),
+        platformFees: getPlatformFees(escrows),
+        depositsVsReleases: getDepositsVsReleases(escrows),
+        pendingFunds: getPendingFunds(escrows),
+        feesByTimePeriod: getFeesByTimePeriod(escrows),
       });
     };
 
@@ -127,4 +131,64 @@ const getAvgResolutionTime = (escrows: Escrow[]): number => {
           .reduce((sum, days) => sum + days, 0) / resolvedEscrows.length,
       )
     : 0;
+};
+
+const getPlatformFees = (escrows: Escrow[]) => {
+  return escrows.reduce((total, escrow) => {
+    const fee = parseFloat(escrow.platformFee || "0");
+    return total + fee;
+  }, 0);
+};
+
+const getDepositsVsReleases = (escrows: Escrow[]) => {
+  const deposits = escrows.reduce((total, escrow) => {
+    return total + parseFloat(escrow.amount);
+  }, 0);
+
+  const releases = escrows
+    .filter((e) => e.releaseFlag)
+    .reduce((total, escrow) => {
+      return total + parseFloat(escrow.amount);
+    }, 0);
+
+  return {
+    deposits,
+    releases,
+    difference: deposits - releases,
+  };
+};
+
+const getPendingFunds = (escrows: Escrow[]) => {
+  return escrows
+    .filter((e) => !e.releaseFlag && !e.disputeFlag)
+    .reduce((total, escrow) => {
+      return total + parseFloat(escrow.amount);
+    }, 0);
+};
+
+const getFeesByTimePeriod = (escrows: Escrow[]) => {
+  const today = new Date();
+  const periods = {
+    today: 0,
+    last7Days: 0,
+    last30Days: 0,
+    allTime: 0,
+  };
+
+  escrows.forEach((escrow) => {
+    const fee = parseFloat(escrow.platformFee || "0");
+    const createdAt = new Date(escrow.createdAt.seconds * 1000);
+    periods.allTime += fee;
+    if (format(createdAt, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")) {
+      periods.today += fee;
+    }
+    if (createdAt >= subDays(today, 7)) {
+      periods.last7Days += fee;
+    }
+    if (createdAt >= subDays(today, 30)) {
+      periods.last30Days += fee;
+    }
+  });
+
+  return periods;
 };

@@ -13,25 +13,35 @@ import {
   Ban,
   ChevronDown,
   ChevronUp,
+  DollarSign,
+  TrendingUp,
+  Lock,
+  AlertCircle,
 } from "lucide-react";
-import MetricCard from "./MetricCard";
+import { MetricCard } from "./MetricCard";
 import { useEscrowDashboardData } from "../../hooks/escrow-dashboard-data.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/utils";
 
 const MetricsSection = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const data = useEscrowDashboardData({ address });
 
-  const {
-    totalEscrows = 0,
-    totalResolved = 0,
-    totalReleased = 0,
-    totalInDispute = 0,
-    resolvedPercentage = 0,
-    isPositive = false,
-  } = data || {};
+  if (!data) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <MetricCard isLoading title="Loading..." value="0" />
+        <MetricCard isLoading title="Loading..." value="0" />
+        <MetricCard isLoading title="Loading..." value="0" />
+        <MetricCard isLoading title="Loading..." value="0" />
+      </div>
+    );
+  }
+
+  const { platformFees, depositsVsReleases, pendingFunds, totalInDispute } =
+    data;
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -39,27 +49,30 @@ const MetricsSection = () => {
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard
-          title="Total Escrows"
-          value={String(totalEscrows).padStart(2, "0")}
-          subValue="All time escrow count"
-          icon={<Layers className="h-7 w-7" />}
-          isLoading={!data}
+          title="Total Platform Fees"
+          value={formatCurrency(platformFees)}
+          description="All-time platform fees collected"
+          icon={<DollarSign className="h-4 w-4 text-muted-foreground" />}
         />
         <MetricCard
-          title="Resolved Escrows"
-          value={String(totalResolved).padStart(2, "0")}
-          subValue="Disputes successfully resolved"
-          icon={<Handshake className="h-7 w-7" />}
-          isLoading={!data}
+          title="Net Volume"
+          value={formatCurrency(depositsVsReleases.difference)}
+          description={`${formatCurrency(depositsVsReleases.deposits)} deposits - ${formatCurrency(depositsVsReleases.releases)} releases`}
+          icon={<TrendingUp className="h-4 w-4 text-muted-foreground" />}
         />
         <MetricCard
-          title="Released Escrows"
-          value={String(totalReleased).padStart(2, "0")}
-          subValue="Successfully released"
-          icon={<CircleCheckBig className="h-7 w-7" />}
-          isLoading={!data}
+          title="Pending Funds"
+          value={formatCurrency(pendingFunds)}
+          description="Funds currently locked in escrow"
+          icon={<Lock className="h-4 w-4 text-muted-foreground" />}
+        />
+        <MetricCard
+          title="Escrows in Dispute"
+          value={totalInDispute}
+          description="Active disputes requiring resolution"
+          icon={<AlertCircle className="h-4 w-4 text-muted-foreground" />}
         />
       </div>
 
@@ -74,9 +87,33 @@ const MetricsSection = () => {
             className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 overflow-hidden mt-4"
           >
             <MetricCard
+              title="Total Escrows"
+              value={String(data.totalEscrows).padStart(2, "0")}
+              subValue="All time escrow count"
+              icon={<Layers className="h-7 w-7" />}
+              isLoading={!data}
+            />
+            <MetricCard
+              title="Resolved Escrows"
+              value={String(data.totalResolved).padStart(2, "0")}
+              subValue="Disputes successfully resolved"
+              icon={<Handshake className="h-7 w-7" />}
+              isLoading={!data}
+            />
+            <MetricCard
+              title="Released Escrows"
+              value={String(data.totalReleased).padStart(2, "0")}
+              subValue="Successfully released"
+              icon={<CircleCheckBig className="h-7 w-7" />}
+              isLoading={!data}
+            />
+            <MetricCard
               title="Working Escrows"
               value={String(
-                totalEscrows - totalResolved - totalInDispute - totalReleased,
+                data.totalEscrows -
+                  data.totalResolved -
+                  data.totalInDispute -
+                  data.totalReleased,
               ).padStart(2, "0")}
               subValue="Awaiting for milestone completion"
               icon={<Hand className="h-7 w-7" />}
@@ -84,23 +121,23 @@ const MetricsSection = () => {
             />
             <MetricCard
               title="In Dispute Escrows"
-              value={String(totalInDispute).padStart(2, "0")}
+              value={String(data.totalInDispute).padStart(2, "0")}
               subValue="Escrows in dispute"
               icon={<Ban className="h-7 w-7" />}
               isLoading={!data}
             />
             <MetricCard
               title="Resolution Rate"
-              value={resolvedPercentage + "%"}
+              value={data.resolvedPercentage + "%"}
               subValue={
                 <div className="flex items-center gap-1">
                   <p
-                    className={`text-sm ${isPositive ? "text-green-500" : ""}`}
+                    className={`text-sm ${data.isPositive ? "text-green-500" : ""}`}
                   >
-                    {isPositive ? "Good" : "Needs improvement"}
+                    {data.isPositive ? "Good" : "Needs improvement"}
                   </p>
 
-                  {isPositive ? (
+                  {data.isPositive ? (
                     <ArrowUpRight className="h-4 w-4 text-green-500" />
                   ) : (
                     <ArrowDownRight className="h-4 w-4 text-destructive" />

@@ -34,5 +34,17 @@ export type MilestoneDashboardData = {
     completed: MilestoneWithEscrow[];
     approved: MilestoneWithEscrow[];
     disputed: MilestoneWithEscrow[];
+  platformFees: number;
+  depositsVsReleases: {
+    deposits: number;
+    releases: number;
+    difference: number;
+  };
+  pendingFunds: number;
+  feesByTimePeriod: {
+    today: number;
+    last7Days: number;
+    last30Days: number;
+    allTime: number;
   };
 };
