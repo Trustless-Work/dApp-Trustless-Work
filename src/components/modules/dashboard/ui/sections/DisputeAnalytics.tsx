@@ -13,11 +13,11 @@ interface DisputeAnalyticsProps {
   escrows: Escrow[];
 }
 
-export function DisputeAnalytics({
+export const DisputeAnalytics = ({
   address,
   type = "approver",
   escrows = [],
-}: DisputeAnalyticsProps) {
+}: DisputeAnalyticsProps) => {
   const data = useEscrowDashboardData({ address, type });
   const isLoading = !data;
   const displayData = data || {
@@ -80,4 +80,4 @@ export function DisputeAnalytics({
       </div>
     </div>
   );
-}
+};

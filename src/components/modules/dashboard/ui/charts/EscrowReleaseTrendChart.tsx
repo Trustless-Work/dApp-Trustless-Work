@@ -28,10 +28,10 @@ interface EscrowReleaseTrendChartProps {
   isLoading?: boolean;
 }
 
-export function EscrowReleaseTrendChart({
+export const EscrowReleaseTrendChart = ({
   data,
   isLoading = false,
-}: EscrowReleaseTrendChartProps) {
+}: EscrowReleaseTrendChartProps) => {
   const { chartConfig, formatted } = useReleaseTrendChartData(data);
   const hasData = data && data.length > 0;
 
@@ -72,4 +72,4 @@ export function EscrowReleaseTrendChart({
       </CardContent>
     </Card>
   );
-}
+};

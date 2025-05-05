@@ -7,9 +7,9 @@ interface LongestPendingDisputesListProps {
   escrows: Escrow[];
 }
 
-export function LongestPendingDisputesList({
+export const LongestPendingDisputesList = ({
   escrows,
-}: LongestPendingDisputesListProps) {
+}: LongestPendingDisputesListProps) => {
   const { pendingDisputes, getTimeInfo } = useLongestPendingDisputes(escrows);
 
   return (
@@ -45,4 +45,4 @@ export function LongestPendingDisputesList({
       </CardContent>
     </Card>
   );
-}
+};

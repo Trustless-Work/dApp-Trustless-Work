@@ -27,10 +27,10 @@ interface EscrowStatusChartProps {
   isLoading?: boolean;
 }
 
-export function EscrowStatusChart({
+export const EscrowStatusChart = ({
   data,
   isLoading = false,
-}: EscrowStatusChartProps) {
+}: EscrowStatusChartProps) => {
   const { total, formattedData, chartConfig } = useStatusChartData(data);
   const hasData = data && data.length > 0;
 
@@ -117,4 +117,4 @@ export function EscrowStatusChart({
       </CardFooter>
     </Card>
   );
-}
+};

@@ -34,10 +34,10 @@ interface EscrowVolumeTrendChartProps {
   isLoading?: boolean;
 }
 
-export function EscrowVolumeTrendChart({
+export const EscrowVolumeTrendChart = ({
   data,
   isLoading = false,
-}: EscrowVolumeTrendChartProps) {
+}: EscrowVolumeTrendChartProps) => {
   const { chartConfig, formatted, currencyFormatter } =
     useVolumeTrendChartData(data);
   const hasData = data && data.length > 0;
@@ -83,4 +83,4 @@ export function EscrowVolumeTrendChart({
       </CardContent>
     </Card>
   );
-}
+};

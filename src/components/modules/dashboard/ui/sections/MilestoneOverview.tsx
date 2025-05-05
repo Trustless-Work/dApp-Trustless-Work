@@ -13,11 +13,11 @@ interface MilestonesOverviewProps {
   escrows: Escrow[];
 }
 
-export function MilestonesOverview({
+export const MilestonesOverview = ({
   address,
   type = "approver",
   escrows = [],
-}: MilestonesOverviewProps) {
+}: MilestonesOverviewProps) => {
   const data = useMilestoneDashboardData({ address, type, escrows });
   const hasData = data !== null;
 
@@ -74,4 +74,4 @@ export function MilestonesOverview({
       </div>
     </div>
   );
-}
+};

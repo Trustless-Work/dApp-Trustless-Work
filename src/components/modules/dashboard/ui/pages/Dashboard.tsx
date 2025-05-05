@@ -12,7 +12,7 @@ import CreateButton from "@/components/utils/ui/Create";
 import { MilestonesOverview } from "../sections/MilestoneOverview";
 import { DisputeAnalytics } from "../sections/DisputeAnalytics";
 
-export default function Dashboard() {
+export const Dashboard = () => {
   const address = useGlobalAuthenticationStore((state) => state.address);
   const data = useEscrowDashboardData({ address });
 
@@ -86,4 +86,4 @@ export default function Dashboard() {
       </div>
     </>
   );
-}
+};

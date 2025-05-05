@@ -21,16 +21,16 @@ interface DisputesEngagementChartProps {
   isLoading?: boolean;
 }
 
-export function DisputesEngagementChart({
+export const DisputesEngagementChart = ({
   escrows,
   isLoading = false,
-}: DisputesEngagementChartProps) {
+}: DisputesEngagementChartProps) => {
+  const { formattedData, total, hasData, chartConfig } =
+    useDisputesEngagement(escrows);
+
   if (isLoading) {
     return <SkeletonDisputeEngagementChart />;
   }
-
-  const { formattedData, total, hasData, chartConfig } =
-    useDisputesEngagement(escrows);
 
   return (
     <Card className="h-full">
@@ -111,4 +111,4 @@ export function DisputesEngagementChart({
       </CardFooter>
     </Card>
   );
-}
+};

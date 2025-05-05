@@ -9,7 +9,7 @@ type TopEscrowsListProps = {
   escrows: Escrow[];
 };
 
-export function TopEscrowsList({ escrows }: TopEscrowsListProps) {
+export const TopEscrowsList = ({ escrows }: TopEscrowsListProps) => {
   return (
     <Card>
       <CardHeader>
@@ -24,4 +24,4 @@ export function TopEscrowsList({ escrows }: TopEscrowsListProps) {
       </CardContent>
     </Card>
   );
-}
+};
