@@ -8,10 +8,10 @@ interface NotificationListProps {
   onClearAll: () => void;
 }
 
-export function NotificationList({
+export const NotificationList = ({
   notifications,
   onClearAll,
-}: NotificationListProps) {
+}: NotificationListProps) => {
   return (
     <div className="grid gap-1">
       <div className="px-4 py-3 flex items-center justify-between border-b">
@@ -44,4 +44,4 @@ export function NotificationList({
       </ScrollArea>
     </div>
   );
-}
+};

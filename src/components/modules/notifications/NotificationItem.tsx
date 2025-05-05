@@ -1,24 +1,12 @@
 import { Notification } from "@/@types/notification.entity";
 import { cn } from "@/lib/utils";
-import { useMarkNotificationAsRead } from "@/hooks/notification.hook";
-import { useRouter } from "next/navigation";
-
+import { useNotifications } from "./hooks/notification.hook";
 interface NotificationItemProps {
   notification: Notification;
 }
 
-export function NotificationItem({ notification }: NotificationItemProps) {
-  const { markAsRead } = useMarkNotificationAsRead();
-  const router = useRouter();
-
-  const handleClick = () => {
-    if (!notification.read) {
-      markAsRead(notification.id);
-    }
-    if (notification.url) {
-      router.push(notification.url);
-    }
-  };
+export const NotificationItem = ({ notification }: NotificationItemProps) => {
+  const { handleClick } = useNotifications({ notification });
 
   return (
     <div
@@ -41,4 +29,4 @@ export function NotificationItem({ notification }: NotificationItemProps) {
       </div>
     </div>
   );
-}
+};
