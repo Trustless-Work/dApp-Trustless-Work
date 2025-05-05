@@ -110,13 +110,45 @@ export const ImprovedSuccessResolveDisputeDialog = ({
 
   return (
     <Dialog open={isSuccessResolveDisputeDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[550px] p-0 gap-0 overflow-auto md:overflow-hidden h-auto max-h-[90vh] md:max-h-none">
-        {/* Layout container */}
+      <DialogContent className="sm:max-w-[650px] p-0 gap-0 overflow-auto md:overflow-hidden h-auto max-h-[90vh] md:max-h-none">
         <div className="flex flex-col md:flex-row">
-          {/* Animation Column - takes full width on mobile, half on desktop */}
-          <div className="w-full md:w-1/2 bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 p-4">
-            {/* Aumentado el tamaño mínimo para asegurar que el check se vea completo */}
-            <div className="min-h-[220px] sm:min-h-[240px] md:min-h-[280px] flex items-center justify-center py-4">
+          <div className="w-full p-6">
+            <DialogHeader className="mb-8">
+              <DialogTitle>{title}</DialogTitle>
+              <DialogDescription className="mb-2">
+                {description}{" "}
+                <Link
+                  href={`https://stellar.expert/explorer/testnet/contract/${escrow?.contractId}`}
+                  className="text-primary"
+                  target="_blank"
+                >
+                  Stellar Explorer
+                </Link>
+                <span className="mx-2">or</span>
+                <Link
+                  href={`https://viewer.trustlesswork.com/${escrow?.contractId}`}
+                  className="text-primary"
+                  target="_blank"
+                >
+                  Escrow Viewer
+                </Link>
+              </DialogDescription>
+
+              <div className="flex justify-start gap-10">
+                <p className="text-sm">
+                  <span className="font-bold">Total Amount: </span>
+                  {formatDollar(escrow?.amount)}
+                </p>
+                {recentEscrow && (
+                  <p className="text-sm">
+                    <span className="font-bold">Total Balance:</span>{" "}
+                    {formatDollar(escrow?.balance)}
+                  </p>
+                )}
+              </div>
+            </DialogHeader>
+
+            <div className="w-full grid grid-cols-2 gap-4 mt-3">
               <TransferAnimation
                 title="Dispute Resolved"
                 fromLabel="Contract"
@@ -129,98 +161,63 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 toCurrency="USD"
                 additionalInfo={
                   escrow?.contractId
-                    ? `ID: ${escrow.contractId.slice(0, 6)}...`
+                    ? `Contract ID: ${escrow.contractId.slice(0, 8)}...${escrow.contractId.slice(-6)}`
                     : "Unknown"
                 }
               />
-            </div>
-          </div>
-          {/* Content Column - takes full width on mobile, half on desktop */}
-          <div className="w-full md:w-1/2 p-4 h-full">
-            <div className="flex flex-col h-full">
-              {/* Header section */}
-              <DialogHeader className="mb-2">
-                <DialogTitle>{title}</DialogTitle>
-                <DialogDescription className="text-xs">
-                  {description}{" "}
-                  <Link
-                    href={`https://stellar.expert/explorer/testnet/contract/${escrow?.contractId}`}
-                    className="text-primary"
-                    target="_blank"
-                  >
-                    Stellar Explorer
-                  </Link>
-                </DialogDescription>
-              </DialogHeader>
-              {/* Summary section */}
-              <div className="flex justify-between mt-2">
-                <p className="text-xs">
-                  <span className="font-bold">Total Amount: </span>
-                  {formatDollar(escrow?.amount)}
-                </p>
-                {recentEscrow && (
-                  <p className="text-xs">
-                    <span className="font-bold">Balance:</span>{" "}
-                    {formatDollar(escrow?.balance)}
-                  </p>
-                )}
-              </div>
-              <Separator className="my-2" />
-              {/* Content area - remove overflow-y-auto y max-height en móvil */}
-              <div className="pr-1 md:overflow-y-auto md:flex-grow md:max-h-[320px]">
-                <motion.div
-                  className="flex flex-col gap-2"
-                  variants={containerAnimation}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <motion.div variants={itemAnimation}>
-                    <EntityCard
-                      type="Receiver"
-                      entity={escrow?.receiver}
-                      hasPercentage={false}
-                      hasAmount={true}
-                      isNet={true}
-                      amount={receiverNet.toString()}
-                    />
-                  </motion.div>
-                  <motion.div variants={itemAnimation}>
-                    <EntityCard
-                      type="Approver"
-                      entity={escrow?.approver}
-                      hasPercentage={false}
-                      hasAmount={true}
-                      isNet={true}
-                      amount={approverNet.toString()}
-                    />
-                  </motion.div>
-                  <motion.div variants={itemAnimation}>
-                    <EntityCard
-                      type="Trustless Work"
-                      entity={"0x"}
-                      hasPercentage={true}
-                      percentage={trustlessPercentage.toString()}
-                      hasAmount={true}
-                      amount={trustlessWorkAmount.toString()}
-                    />
-                  </motion.div>
-                  <motion.div variants={itemAnimation}>
-                    <EntityCard
-                      type="Platform"
-                      entity={escrow?.platformAddress}
-                      hasPercentage={true}
-                      percentage={platformPercentage.toString()}
-                      hasAmount={true}
-                      amount={totalPlatformAmount.toString()}
-                    />
-                  </motion.div>
+
+              <motion.div
+                className="flex flex-col gap-3 mt-3"
+                variants={containerAnimation}
+                initial="hidden"
+                animate="visible"
+              >
+                <motion.div variants={itemAnimation}>
+                  <EntityCard
+                    type="Receiver"
+                    entity={escrow?.receiver}
+                    hasPercentage={false}
+                    hasAmount={true}
+                    isNet={true}
+                    amount={receiverNet.toString()}
+                  />
                 </motion.div>
-              </div>
-              {/* Footer with action button */}
-              <DialogFooter className="mt-3 pt-2 border-t">
-                <Button onClick={handleClose}>Close</Button>
-              </DialogFooter>
+                <motion.div variants={itemAnimation}>
+                  <EntityCard
+                    type="Approver"
+                    entity={escrow?.approver}
+                    hasPercentage={false}
+                    hasAmount={true}
+                    isNet={true}
+                    amount={approverNet.toString()}
+                  />
+                </motion.div>
+                <motion.div variants={itemAnimation}>
+                  <EntityCard
+                    type="Trustless Work"
+                    entity={"0x"}
+                    hasPercentage={true}
+                    percentage={trustlessPercentage.toString()}
+                    hasAmount={true}
+                    amount={trustlessWorkAmount.toString()}
+                  />
+                </motion.div>
+                <motion.div variants={itemAnimation}>
+                  <EntityCard
+                    type="Platform"
+                    entity={escrow?.platformAddress}
+                    hasPercentage={true}
+                    percentage={platformPercentage.toString()}
+                    hasAmount={true}
+                    amount={totalPlatformAmount.toString()}
+                  />
+                </motion.div>
+              </motion.div>
             </div>
+
+            <DialogFooter className="mt-4">
+              <Button onClick={handleClose}>Close</Button>
+            </DialogFooter>
           </div>
         </div>
       </DialogContent>

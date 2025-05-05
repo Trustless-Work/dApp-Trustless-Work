@@ -29,7 +29,7 @@ const TransferAnimation = ({
 }: TransferAnimationProps) => {
   return (
     <Card
-      className={`w-full max-w-md mx-auto p-6 min-h-[300px] flex flex-col justify-center ${className}`}
+      className={`w-full max-w-md mx-auto p-6 min-h-[300px] flex flex-col justify-center hover:shadow-md ${className}`}
     >
       <CardContent className="space-y-4 flex flex-col items-center justify-center">
         <motion.div
