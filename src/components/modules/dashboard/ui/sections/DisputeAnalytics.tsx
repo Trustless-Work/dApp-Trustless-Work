@@ -1,5 +1,5 @@
 import { Clock, BarChart, Ban } from "lucide-react";
-import MetricCard from "../cards/MetricCard";
+import { MetricCard } from "../cards/MetricCard";
 import { useEscrowDashboardData } from "../../hooks/escrow-dashboard-data.hook";
 import { Escrow } from "@/@types/escrow.entity";
 import { SkeletonDisputeAnalytics } from "../utils/SkeletonDisputeAnalytics";

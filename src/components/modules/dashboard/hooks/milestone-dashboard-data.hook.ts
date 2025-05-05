@@ -107,5 +107,9 @@ const getMilestonesByStatus = (milestones: MilestoneWithEscrow[]) => {
       .slice(0, 5),
     approved: milestones.filter((m) => m.approved_flag).slice(0, 5),
     disputed: milestones.filter((m) => m.disputeFlag).slice(0, 5),
+    platformFees: 0,
+    depositsVsReleases: { deposits: 0, releases: 0, difference: 0 },
+    pendingFunds: 0,
+    feesByTimePeriod: { today: 0, last7Days: 0, last30Days: 0, allTime: 0 },
   };
 };

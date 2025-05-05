@@ -1,9 +1,6 @@
 "use client";
 
 import Loader from "@/components/utils/ui/Loader";
-import { initializeEscrowCode } from "../../code/initialize.code";
-import InitializeEscrowForm from "../forms/InitializeEscrowForm";
-import FlipCard from "@/components/utils/code/FlipCard";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
 const InitializeEscrow = () => {
@@ -22,10 +19,6 @@ const InitializeEscrow = () => {
             Fill in the details below to set up a secure and reliable escrow
             agreement.
           </h2>
-          <FlipCard
-            children={<InitializeEscrowForm />}
-            codeExample={initializeEscrowCode}
-          />
         </div>
       )}
     </>

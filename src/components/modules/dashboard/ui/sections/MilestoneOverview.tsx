@@ -1,5 +1,5 @@
 import { CheckCircle, Clock, AlertTriangle, FileCheck } from "lucide-react";
-import MetricCard from "../cards/MetricCard";
+import { MetricCard } from "../cards/MetricCard";
 import { MilestoneStatusChart } from "../charts/MilestoneStatusChart";
 import { MilestoneApprovalTrendChart } from "../charts/MilestoneApprovalTrendChart";
 import { useMilestoneDashboardData } from "../../hooks/milestone-dashboard-data.hook";
