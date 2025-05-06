@@ -33,7 +33,7 @@ export function usePublicProfile(
         }
 
         setUser(response.data as User);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error loading public profile:", err);
         setError("Failed to load user.");
       } finally {
