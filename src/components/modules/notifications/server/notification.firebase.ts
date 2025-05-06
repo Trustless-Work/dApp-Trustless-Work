@@ -28,7 +28,13 @@ export const NotificationService = {
       } as Notification;
     });
 
-    return notifications.sort((a, b) => b.createdAt - a.createdAt);
+    return notifications.sort((a, b) => {
+      const aTime =
+        a.createdAt.seconds * 1000 + a.createdAt.nanoseconds / 1000000;
+      const bTime =
+        b.createdAt.seconds * 1000 + b.createdAt.nanoseconds / 1000000;
+      return bTime - aTime;
+    });
   },
 
   async markAsRead(notificationId: string): Promise<void> {
@@ -89,7 +95,15 @@ export const NotificationService = {
         } as Notification;
       });
 
-      callback(notifications.sort((a, b) => b.createdAt - a.createdAt));
+      callback(
+        notifications.sort((a, b) => {
+          const aTime =
+            a.createdAt.seconds * 1000 + a.createdAt.nanoseconds / 1000000;
+          const bTime =
+            b.createdAt.seconds * 1000 + b.createdAt.nanoseconds / 1000000;
+          return bTime - aTime;
+        }),
+      );
     });
   },
 };
