@@ -106,7 +106,7 @@ const EntityCard = ({
 
           <div className="flex flex-col">
             {entity && (
-              <Link href={`/public-profile/${entity}`}>
+              <Link href={`/dashboard/public-profile/${entity}`}>
                 <span className="text-sm font-medium leading-tight hover:underline">
                   {type === "Trustless Work"
                     ? "Trustless Work"
@@ -117,7 +117,7 @@ const EntityCard = ({
               </Link>
             )}
             {entity && (
-              <Link href={`/public-profile/${entity}`}>
+              <Link href={`/dashboard/public-profile/${entity}`}>
                 <span className="text-xs text-muted-foreground hover:underline">
                   {type === "Trustless Work"
                     ? "Private"

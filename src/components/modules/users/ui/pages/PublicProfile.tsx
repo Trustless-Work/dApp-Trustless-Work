@@ -37,15 +37,6 @@ export default function PublicProfile() {
         <Loader isLoading={isLoading} />
       ) : (
         <div className="container mx-auto py-8 max-w-4xl">
-          <Button
-            variant="ghost"
-            onClick={() => router.push("/dashboard")}
-            className="mb-6 hover:bg-muted transition-colors"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
-
           {!user || error ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-10">

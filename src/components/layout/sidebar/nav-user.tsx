@@ -158,7 +158,7 @@ export const NavUser = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href={`/public-profile/${address}`}>
+              <Link href={`/dashboard/public-profile/${address}`}>
                 <DropdownMenuItem>
                   <User />
                   Public Profile
