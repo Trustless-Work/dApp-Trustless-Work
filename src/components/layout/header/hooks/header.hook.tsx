@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const useHeader = () => {
-  const { address } = useGlobalAuthenticationStore();
+  const { address, loggedUser } = useGlobalAuthenticationStore();
   const pathName = usePathname();
   const router = useRouter();
 
@@ -26,11 +26,18 @@ const useHeader = () => {
 
     return crumbs.map((crumb, index) => {
       const isEscrow = crumb.toLowerCase() === "escrow";
+      const isPublicProfile = crumbs.includes("public-profile");
       const href = isEscrow ? "#" : "/" + crumbs.slice(0, index + 1).join("/");
 
-      const label = crumb
+      let label = crumb
         .replace(/-/g, " ")
         .replace(/\b\w/g, (char) => char.toUpperCase());
+
+      if (isPublicProfile && index === crumbs.length - 1 && loggedUser) {
+        label =
+          `${loggedUser.firstName || ""} ${loggedUser.lastName || ""}`.trim() ||
+          "Unknown User";
+      }
 
       return (
         <BreadcrumbItem key={href}>
