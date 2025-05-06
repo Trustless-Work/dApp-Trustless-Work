@@ -4,12 +4,17 @@ const useLayoutDashboard = () => {
   const pathName = usePathname();
   const crumbs = pathName.split("/").filter(Boolean);
 
-  const label =
-    crumbs.length > 0
-      ? crumbs[crumbs.length - 1]
-          .replace(/-/g, " ")
-          .replace(/\b\w/g, (char) => char.toUpperCase())
-      : "Home";
+  let label = "Home";
+
+  if (crumbs.length > 0) {
+    if (crumbs.includes("public-profile")) {
+      label = "";
+    } else {
+      label = crumbs[crumbs.length - 1]
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+  }
 
   return { label };
 };

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface EntityCardProps {
   entity?: string;
@@ -33,7 +34,6 @@ const EntityCard = ({
   const { formatAddress, formatDollar } = useFormatUtils();
   const [user, setUser] = useState<User | undefined>(undefined);
 
-  // todo: save this in zustand, in order to avoid fetching the same user multiple times
   useEffect(() => {
     const fetchUser = async () => {
       if (entity) {
@@ -105,16 +105,26 @@ const EntityCard = ({
           </Avatar>
 
           <div className="flex flex-col">
-            <span className="text-sm font-medium leading-tight">
-              {type === "Trustless Work"
-                ? "Trustless Work"
-                : user && (user.firstName || user.lastName)
-                  ? `${user.firstName} ${user.lastName}`
-                  : "Unknown"}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {type === "Trustless Work" ? "Private" : formatAddress(entity)}
-            </span>
+            {entity && (
+              <Link href={`/dashboard/public-profile/${entity}`}>
+                <span className="text-sm font-medium leading-tight hover:underline">
+                  {type === "Trustless Work"
+                    ? "Trustless Work"
+                    : user && (user.firstName || user.lastName)
+                      ? `${user.firstName} ${user.lastName}`
+                      : "Unknown"}
+                </span>
+              </Link>
+            )}
+            {entity && (
+              <Link href={`/dashboard/public-profile/${entity}`}>
+                <span className="text-xs text-muted-foreground hover:underline">
+                  {type === "Trustless Work"
+                    ? "Private"
+                    : formatAddress(entity)}
+                </span>
+              </Link>
+            )}
           </div>
         </div>
       </CardContent>
