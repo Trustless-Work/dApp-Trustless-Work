@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
 import { User } from "@/@types/user.entity";
-import { db } from "@/core/config/firebase/firebase";
-import { format, isValid, parseISO } from "date-fns";
+import { getUser } from "@/components/modules/auth/server/authentication.firebase";
 
 interface UsePublicProfileResult {
   user: User | null;
@@ -12,7 +10,6 @@ interface UsePublicProfileResult {
   error: string | null;
   fullName: string;
   initials: string;
-  memberSince: string;
 }
 
 export function usePublicProfile(
@@ -28,17 +25,14 @@ export function usePublicProfile(
       setError(null);
 
       try {
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("address", "==", walletAddress));
-        const snapshot = await getDocs(q);
+        const response = await getUser({ address: walletAddress });
 
-        if (snapshot.empty) {
+        if (!response.success) {
           setUser(null);
           return;
         }
 
-        const data = snapshot.docs[0].data() as User;
-        setUser(data);
+        setUser(response.data as User);
       } catch (err: any) {
         console.error("Error loading public profile:", err);
         setError("Failed to load user.");
@@ -52,31 +46,6 @@ export function usePublicProfile(
     }
   }, [walletAddress]);
 
-  const formatDate = (input: any): string => {
-    if (!input) return "N/A";
-
-    try {
-      if (typeof input === "string") {
-        const date = parseISO(input);
-        if (isValid(date)) {
-          return format(date, "MM/dd/yyyy");
-        }
-      }
-
-      if (typeof input === "object" && typeof input.toDate === "function") {
-        const date = input.toDate();
-        if (isValid(date)) {
-          return format(date, "MM/dd/yyyy");
-        }
-      }
-
-      return "N/A";
-    } catch (e) {
-      console.error("Date parsing error:", e);
-      return "N/A";
-    }
-  };
-
   const fullName =
     user?.firstName || user?.lastName
       ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
@@ -86,7 +55,5 @@ export function usePublicProfile(
     `${user?.firstName?.charAt(0) || ""}${user?.lastName?.charAt(0) || ""}` ||
     "?";
 
-  const memberSince = user?.createdAt ? formatDate(user.createdAt) : "N/A";
-
-  return { user, loading, error, fullName, initials, memberSince };
+  return { user, loading, error, fullName, initials };
 }

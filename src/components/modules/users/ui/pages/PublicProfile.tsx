@@ -2,7 +2,6 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -18,6 +17,7 @@ import { usePublicProfile } from "../../hooks/public-profile.hook";
 import type React from "react";
 import Loader from "@/components/utils/ui/Loader";
 import { InfoItem } from "../cards/InfoItemCards";
+import { useFormatUtils } from "@/utils/hook/format.hook";
 
 export default function PublicProfile() {
   const router = useRouter();
@@ -28,8 +28,8 @@ export default function PublicProfile() {
     error,
     fullName,
     initials,
-    memberSince,
   } = usePublicProfile(walletAddress);
+  const { formatDateFromFirebase } = useFormatUtils();
 
   return (
     <>
@@ -70,10 +70,16 @@ export default function PublicProfile() {
                     </h1>
 
                     <div className="flex flex-col gap-2 mt-1">
-                      {memberSince && (
+                      {user?.createdAt && (
                         <div className="flex items-center gap-2 text-muted-foreground">
                           <Calendar className="h-4 w-4" />
-                          <span>Member since {memberSince}</span>
+                          <span>
+                            Member since{" "}
+                            {formatDateFromFirebase(
+                              user?.createdAt?.seconds ?? 0,
+                              user?.createdAt?.nanoseconds ?? 0,
+                            )}
+                          </span>
                         </div>
                       )}
                       {user.country && (
