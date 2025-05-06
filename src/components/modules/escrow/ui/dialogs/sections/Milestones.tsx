@@ -89,10 +89,7 @@ export const Milestones = ({
               activeTab === "platformAddress" && (
                 <TooltipInfo content="Edit Milestones">
                   <Button
-                    disabled={
-                      Number(selectedEscrow.balance) !== 0 ||
-                      !selectedEscrow.balance
-                    }
+                    disabled={Number(selectedEscrow.balance) === 0}
                     onClick={(e) => {
                       e.stopPropagation();
                       dialogStates.editMilestone.setIsOpen(true);

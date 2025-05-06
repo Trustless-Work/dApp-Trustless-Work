@@ -82,12 +82,12 @@ const EscrowDetailDialog = ({
     setSelectedEscrow,
     selectedEscrow,
   });
+  console.log(selectedEscrow?.balance);
 
   const { formatText, formatDollar } = useFormatUtils();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
   if (!isDialogOpen || !selectedEscrow) return null;
-
   return (
     <>
       <Dialog open={isDialogOpen} onOpenChange={handleClose}>
@@ -227,10 +227,7 @@ const EscrowDetailDialog = ({
                         }}
                         className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
                         variant="ghost"
-                        disabled={
-                          Number(selectedEscrow.balance) !== 0 ||
-                          !selectedEscrow.balance
-                        }
+                        disabled={Number(selectedEscrow.balance) === 0}
                       >
                         <Pencil />
                         Edit
