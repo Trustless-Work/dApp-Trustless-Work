@@ -7,6 +7,7 @@ import {
   IdCard,
   LogOut,
   Settings,
+  User,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -154,6 +155,15 @@ export const NavUser = () => {
                 <CreditCard />
                 Wallet - {name}
               </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <Link href={`/public-profile/${address}`}>
+                <DropdownMenuItem>
+                  <User />
+                  Public Profile
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
