@@ -33,7 +33,7 @@ export const NotificationBell = () => {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0" align="end">
+      <PopoverContent className="w-96 h-[500px] px-2" align="end">
         <NotificationList
           notifications={notifications}
           onClearAll={clearAllNotifications}

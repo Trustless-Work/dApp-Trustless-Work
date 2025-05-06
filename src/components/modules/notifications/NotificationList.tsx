@@ -26,7 +26,7 @@ export const NotificationList = ({
           Clear all
         </Button>
       </div>
-      <ScrollArea className="h-72">
+      <ScrollArea className="h-[400px]">
         {notifications.length === 0 ? (
           <div className="p-4 text-center text-sm text-muted-foreground">
             No notifications
