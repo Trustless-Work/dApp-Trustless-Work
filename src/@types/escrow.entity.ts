@@ -7,6 +7,9 @@ export type Milestone = {
   description: string;
   status?: MilestoneStatus;
   approved_flag?: boolean;
+  evidence?: string;
+  approvedAt?: UpdatedAt;
+  completedAt?: UpdatedAt;
 };
 
 export interface Escrow {
@@ -33,10 +36,11 @@ export interface Escrow {
   releaseFlag?: boolean;
   resolvedFlag?: boolean;
   approverFunds?: string;
-  serviceProviderFunds?: string;
+  receiverFunds?: string;
   receiver?: string;
   receiverMemo?: number;
   disputeStartedBy?: string;
+  isActive?: boolean;
 }
 
 export type RolesInEscrow =
@@ -45,7 +49,8 @@ export type RolesInEscrow =
   | "disputeResolver"
   | "serviceProvider"
   | "releaseSigner"
-  | "platformAddress";
+  | "platformAddress"
+  | "receiver";
 
 // Payloads
 export type FundEscrowPayload = Pick<Escrow, "amount" | "contractId"> & {
@@ -62,10 +67,14 @@ export type EscrowPayload = Omit<
   "user" | "createdAt" | "updatedAt" | "id" | "trustline"
 >;
 
-export type ChangeMilestoneStatusPayload = {
+export type ChangeMilestoneStatusPayload = Omit<
+  Milestone,
+  "description" | "status" | "approved_flag"
+> & {
   contractId?: string;
   milestoneIndex: string;
   newStatus: MilestoneStatus;
+  newEvidence?: string;
   serviceProvider?: string;
 };
 
@@ -84,10 +93,10 @@ export type StartDisputePayload = Pick<Escrow, "contractId"> & {
 export type ResolveDisputePayload = Pick<Escrow, "contractId"> &
   Partial<Pick<Escrow, "disputeResolver">> & {
     approverFunds: string;
-    serviceProviderFunds: string;
+    receiverFunds: string;
   };
 
-export type EditMilestonesPayload = {
+export type EditEscrowPayload = {
   contractId: string;
   escrow: EscrowPayload;
   signer: string;

@@ -27,7 +27,7 @@ import useMyEscrows from "../../hooks/my-escrows.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/ui/NoData";
-import { useEscrowBoundedStore } from "../../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import {
   useGlobalAuthenticationStore,
@@ -39,6 +39,7 @@ import SuccessDialog, {
   SuccessResolveDisputeDialog,
 } from "../dialogs/SuccessDialog";
 import SkeletonTable from "../utils/SkeletonTable";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 interface MyEscrowsTableProps {
   type:
@@ -47,34 +48,35 @@ interface MyEscrowsTableProps {
     | "disputeResolver"
     | "serviceProvider"
     | "releaseSigner"
-    | "platformAddress";
+    | "platformAddress"
+    | "receiver";
 }
 
 const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
-  const isDialogOpen = useEscrowBoundedStore((state) => state.isDialogOpen);
-  const setIsDialogOpen = useEscrowBoundedStore(
+  const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
+  const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
   const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
-  const isSuccessDialogOpen = useEscrowBoundedStore(
+  const isSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.isSuccessDialogOpen,
   );
-  const setIsSuccessDialogOpen = useEscrowBoundedStore(
+  const setIsSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
   );
-  const isSuccessReleaseDialogOpen = useEscrowBoundedStore(
+  const isSuccessReleaseDialogOpen = useEscrowUIBoundedStore(
     (state) => state.isSuccessReleaseDialogOpen,
   );
-  const setIsSuccessReleaseDialogOpen = useEscrowBoundedStore(
+  const setIsSuccessReleaseDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessReleaseDialogOpen,
   );
-  const isSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+  const isSuccessResolveDisputeDialogOpen = useEscrowUIBoundedStore(
     (state) => state.isSuccessResolveDisputeDialogOpen,
   );
-  const setIsSuccessResolveDisputeDialogOpen = useEscrowBoundedStore(
+  const setIsSuccessResolveDisputeDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
@@ -148,11 +150,15 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         onClick={() => toggleRowExpansion(escrow.id)}
                       >
                         <TableCell className="font-medium">
-                          {escrow.title}
+                          {escrow.title || "No title"}
                         </TableCell>
-                        <TableCell>{escrow.description}</TableCell>
-                        <TableCell>{escrow.balance}</TableCell>
-                        <TableCell>{escrow.engagementId}</TableCell>
+                        <TableCell>
+                          {escrow.description || "No description"}
+                        </TableCell>
+                        <TableCell>{escrow.balance || "No balance"}</TableCell>
+                        <TableCell>
+                          {escrow.engagementId || "No engagement"}
+                        </TableCell>
                         <TableCell>
                           {formatAddress(escrow.serviceProvider)}
                         </TableCell>
@@ -174,6 +180,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Actions</DropdownMenuLabel>
                               <DropdownMenuItem
+                                className="cursor-pointer"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setIsDialogOpen(true);
@@ -181,6 +188,18 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                                 }}
                               >
                                 More Details
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(
+                                    `https://viewer.trustlesswork.com/${escrow.contractId}`,
+                                    "_blank",
+                                  );
+                                }}
+                              >
+                                View from TW Escrow Viewer
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -197,36 +216,44 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           </p>
                         </TableCell>
                         {escrow.disputeFlag && (
-                          <TableCell title="Escrow in Dispute">
-                            <CircleAlert
-                              className="text-destructive"
-                              size={22}
-                            />
-                          </TableCell>
+                          <TooltipInfo content="Escrow in Dispute">
+                            <TableCell>
+                              <CircleAlert
+                                className="text-destructive"
+                                size={22}
+                              />
+                            </TableCell>
+                          </TooltipInfo>
                         )}
 
                         {pendingRelease && (
-                          <TableCell title="Escrow pending release">
-                            <TriangleAlert
-                              size={22}
-                              className="text-yellow-600"
-                            />
-                          </TableCell>
+                          <TooltipInfo content="Escrow pending release">
+                            <TableCell>
+                              <TriangleAlert
+                                size={22}
+                                className="text-yellow-600"
+                              />
+                            </TableCell>
+                          </TooltipInfo>
                         )}
 
                         {escrow.releaseFlag && (
-                          <TableCell title="Escrow released">
-                            <CircleCheckBig
-                              className="text-green-800"
-                              size={22}
-                            />
-                          </TableCell>
+                          <TooltipInfo content="Escrow released">
+                            <TableCell>
+                              <CircleCheckBig
+                                className="text-green-800"
+                                size={22}
+                              />
+                            </TableCell>
+                          </TooltipInfo>
                         )}
 
                         {escrow.resolvedFlag && (
-                          <TableCell title="Escrow released">
-                            <Handshake className="text-green-800" size={22} />
-                          </TableCell>
+                          <TooltipInfo content="Escrow resolved">
+                            <TableCell>
+                              <Handshake className="text-green-800" size={22} />
+                            </TableCell>
+                          </TooltipInfo>
                         )}
                       </TableRow>
                       {escrow.milestones &&

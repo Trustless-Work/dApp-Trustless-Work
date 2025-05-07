@@ -1,4 +1,4 @@
-import { useEscrowBoundedStore } from "../../../store/ui";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
 
 interface DialogStates {
   second: {
@@ -14,6 +14,18 @@ interface DialogStates {
     setIsOpen: (value: boolean) => void;
   };
   editMilestone: {
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void;
+  };
+  editEntities: {
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void;
+  };
+  editBasicProperties: {
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void;
+  };
+  completeMilestone: {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
   };
@@ -33,7 +45,7 @@ interface StatusStates {
 }
 
 export const useEscrowDialogs = (): DialogStates & StatusStates => {
-  const store = useEscrowBoundedStore();
+  const store = useEscrowUIBoundedStore();
 
   return {
     second: {
@@ -52,6 +64,14 @@ export const useEscrowDialogs = (): DialogStates & StatusStates => {
       isOpen: store.isEditMilestoneDialogOpen,
       setIsOpen: store.setIsEditMilestoneDialogOpen,
     },
+    editEntities: {
+      isOpen: store.isEditEntitiesDialogOpen,
+      setIsOpen: store.setIsEditEntitiesDialogOpen,
+    },
+    editBasicProperties: {
+      isOpen: store.isEditBasicPropertiesDialogOpen,
+      setIsOpen: store.setIsEditBasicPropertiesDialogOpen,
+    },
     successRelease: {
       isOpen: store.isSuccessReleaseDialogOpen,
       setIsOpen: store.setIsSuccessReleaseDialogOpen,
@@ -59,6 +79,10 @@ export const useEscrowDialogs = (): DialogStates & StatusStates => {
     successResolveDispute: {
       isOpen: store.isSuccessResolveDisputeDialogOpen,
       setIsOpen: store.setIsSuccessResolveDisputeDialogOpen,
+    },
+    completeMilestone: {
+      isOpen: store.isCompleteMilestoneDialogOpen,
+      setIsOpen: store.setIsCompleteMilestoneDialogOpen,
     },
     isChangingStatus: store.isChangingStatus,
     isStartingDispute: store.isStartingDispute,

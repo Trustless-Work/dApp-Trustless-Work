@@ -7,6 +7,7 @@ import {
   IdCard,
   LogOut,
   Settings,
+  User,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -32,6 +33,7 @@ import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();
@@ -118,16 +120,17 @@ export const NavUser = () => {
                     <button
                       onClick={() => copyText(user.adress, user.adress)}
                       className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                      title="Copy address"
                     >
-                      <Copy
-                        className={cn(
-                          "h-4 w-4",
-                          copiedKeyId
-                            ? "text-green-700"
-                            : "text-muted-foreground",
-                        )}
-                      />
+                      <TooltipInfo content="Copy address">
+                        <Copy
+                          className={cn(
+                            "h-4 w-4",
+                            copiedKeyId
+                              ? "text-green-700"
+                              : "text-muted-foreground",
+                          )}
+                        />
+                      </TooltipInfo>
                     </button>
                   </div>
                 </div>
@@ -152,6 +155,15 @@ export const NavUser = () => {
                 <CreditCard />
                 Wallet - {name}
               </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <Link href={`/dashboard/public-profile/${address}`}>
+                <DropdownMenuItem>
+                  <User />
+                  Public Profile
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>

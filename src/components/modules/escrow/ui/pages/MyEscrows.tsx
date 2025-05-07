@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEscrowBoundedStore } from "@/components/modules/escrow/store/ui";
+import { useEscrowUIBoundedStore } from "@/components/modules/escrow/store/ui";
 import MyEscrowsTable from "@/components/modules/escrow/ui/tables/MyEscrowsTable";
 import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards";
 import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFilter";
@@ -20,17 +20,18 @@ import { useState } from "react";
 import { CircleHelp } from "lucide-react";
 import { MoonpayWidget } from "@/components/modules/payment/widgets/moonpay.widget";
 import { useGlobalBoundedStore } from "@/core/store/data";
+import TooltipInfo from "@/components/utils/ui/Tooltip";
 
 const MyEscrows = () => {
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
-  const setActiveTab = useEscrowBoundedStore((state) => state.setActiveTab);
-  const setActiveMode = useEscrowBoundedStore((state) => state.setActiveMode);
+  const setActiveTab = useEscrowUIBoundedStore((state) => state.setActiveTab);
+  const setActiveMode = useEscrowUIBoundedStore((state) => state.setActiveMode);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const activeMode = useEscrowBoundedStore((state) => state.activeMode);
+  const activeMode = useEscrowUIBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 
   const [run, setRun] = useState(false);
-  const isMoonpayWidgetOpen = useEscrowBoundedStore(
+  const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
     (state) => state.isMoonpayWidgetOpen,
   );
 
@@ -84,7 +85,7 @@ const MyEscrows = () => {
             <Tabs defaultValue="issuer" className="w-full">
               <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-16 md:gap-3">
                 <TabsList
-                  className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-4"
+                  className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-7 gap-4"
                   id="step-1"
                 >
                   <TabsTrigger
@@ -123,9 +124,15 @@ const MyEscrows = () => {
                   >
                     Platform Address
                   </TabsTrigger>
+                  <TabsTrigger
+                    onClick={() => setActiveTab("receiver")}
+                    value="receiver"
+                  >
+                    Receiver
+                  </TabsTrigger>
                 </TabsList>
 
-                <div className="flex items-center gap-2 mt-10 sm:mt-10 xl:mt-10 2xl:mt-0">
+                <div className="flex items-center gap-2 mt-20 sm:mt-10 xl:mt-10 2xl:mt-0">
                   <Select
                     value={activeMode}
                     onValueChange={(value) =>
@@ -142,14 +149,15 @@ const MyEscrows = () => {
                   </Select>
                 </div>
 
-                <button
-                  title="Help"
-                  className="btn-dark"
-                  type="button"
-                  onClick={() => setRun(true)}
-                >
-                  <CircleHelp size={29} />
-                </button>
+                <TooltipInfo content="Help">
+                  <button
+                    className="btn-dark"
+                    type="button"
+                    onClick={() => setRun(true)}
+                  >
+                    <CircleHelp size={29} />
+                  </button>
+                </TooltipInfo>
               </div>
 
               <TabsContent value="issuer" className="flex flex-col gap-3">
@@ -251,6 +259,21 @@ const MyEscrows = () => {
                   </Card>
                 ) : (
                   <MyEscrowsCards type="platformAddress" />
+                )}
+              </TabsContent>
+
+              <TabsContent value="receiver" className="flex flex-col gap-3">
+                <Card className={cn("overflow-hidden")}>
+                  <CardContent className="p-6">
+                    <MyEscrowsFilter />
+                  </CardContent>
+                </Card>
+                {activeMode === "table" ? (
+                  <Card className={cn("overflow-hidden")}>
+                    <MyEscrowsTable type="receiver" />
+                  </Card>
+                ) : (
+                  <MyEscrowsCards type="receiver" />
                 )}
               </TabsContent>
             </Tabs>

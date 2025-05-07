@@ -85,6 +85,7 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
             </div>
             <div className="flex gap-3 flex-col md:flex-row">
               <EntityCard type="Release Signer" entity={escrow.releaseSigner} />
+              <EntityCard type="Receiver" entity={escrow.receiver} />
             </div>
           </div>
         </div>

@@ -1,37 +1,69 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Card, CardContent } from "../../../../ui/card";
 
 interface MetricCardProps {
   title: string;
   value: string | number;
+  description?: string;
+  subValue?: string | React.ReactNode;
   icon?: React.ReactNode;
-  subValue?: string;
+  isLoading?: boolean;
   className?: string;
 }
 
-const MetricCard = ({
+export function MetricCard({
   title,
   value,
-  icon,
+  description,
   subValue,
+  icon,
+  isLoading = false,
   className,
-}: MetricCardProps) => {
+}: MetricCardProps) {
+  if (isLoading) {
+    return (
+      <Card className={cn("w-full", className)}>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">
+            <Skeleton className="h-4 w-[100px]" />
+          </CardTitle>
+          <Skeleton className="h-4 w-4" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">
+            <Skeleton className="h-8 w-[100px]" />
+          </div>
+          {description && (
+            <p className="text-xs text-muted-foreground">
+              <Skeleton className="h-4 w-[200px]" />
+            </p>
+          )}
+          {subValue && (
+            <p className="text-xs text-muted-foreground">
+              <Skeleton className="h-4 w-[200px]" />
+            </p>
+          )}
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <Card className={cn("overflow-hidden", className)}>
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          {icon && <div className="text-muted-foreground">{icon}</div>}
-        </div>
-        <div className="mt-2 flex items-baseline">
-          <h3 className="text-2xl font-semibold">{value}</h3>
-        </div>
+    <Card className={cn("w-full", className)}>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        {icon}
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        {description && (
+          <p className="text-xs text-muted-foreground">{description}</p>
+        )}
         {subValue && (
-          <p className="mt-2 text-sm text-muted-foreground">{subValue}</p>
+          <p className="text-xs text-muted-foreground">{subValue}</p>
         )}
       </CardContent>
     </Card>
   );
-};
-
-export default MetricCard;
+}

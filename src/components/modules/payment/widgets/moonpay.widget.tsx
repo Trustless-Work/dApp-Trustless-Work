@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useEscrowBoundedStore } from "../../escrow/store/ui";
+import { useEscrowUIBoundedStore } from "../../escrow/store/ui";
 
 const MoonPayBuyWidget = dynamic(
   () => import("@moonpay/moonpay-react").then((mod) => mod.MoonPayBuyWidget),
@@ -12,10 +12,10 @@ interface MoonpayWidgetProps {
 }
 
 export const MoonpayWidget = ({ visible, wallet }: MoonpayWidgetProps) => {
-  const setIsMoonpayWidgetOpen = useEscrowBoundedStore(
+  const setIsMoonpayWidgetOpen = useEscrowUIBoundedStore(
     (state) => state.setIsMoonpayWidgetOpen,
   );
-  const amountMoonpay = useEscrowBoundedStore((state) => state.amountMoonpay);
+  const amountMoonpay = useEscrowUIBoundedStore((state) => state.amountMoonpay);
 
   return (
     <MoonPayBuyWidget

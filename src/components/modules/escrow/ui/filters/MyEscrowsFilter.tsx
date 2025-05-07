@@ -13,13 +13,23 @@ import { useEscrowFilter } from "./hooks/escrow-filter.hook";
 import {
   amountOptionsFilters,
   statusOptionsFilters,
+  activeOptionsFilters,
 } from "./constants/filters-options.constant";
+import { getRoleActionIcons } from "@/utils/get-role-actions";
+import { useEscrowUIBoundedStore } from "../../store/ui";
+import Link from "next/link";
+import { DatePickerWithRange } from "@/components/ui/calendar-range";
 
 const MyEscrowsFilter = () => {
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+
   const {
     search,
     status,
     amountRange,
+    engagement,
+    active,
+    uniqueEngagements,
     searchParams,
     setSearch,
     updateQuery,
@@ -30,8 +40,8 @@ const MyEscrowsFilter = () => {
   return (
     <form className="flex flex-col space-y-5">
       <div className="flex flex-col md:flex-row justify-between w-full gap-10">
-        <div className="flex flex-col md:flex-row gap-10">
-          <div className="flex items-center space-x-2">
+        <div className="flex flex-col md:flex-row gap-10 w-full md:w-1/4">
+          <div className="flex items-center space-x-2 w-full">
             <Input
               id="search"
               placeholder="Search..."
@@ -45,7 +55,6 @@ const MyEscrowsFilter = () => {
             className="flex items-center space-x-2"
             onClick={(e) => {
               e.preventDefault();
-
               deleteParams();
             }}
           >
@@ -53,19 +62,33 @@ const MyEscrowsFilter = () => {
           </Button>
         </div>
 
-        <CreateButton
-          className="mr-auto w-full md:w-auto"
-          label="Create Escrow"
-          url={"/dashboard/escrow/initialize-escrow"}
-          id="step-2"
-        />
+        <div className="flex items-center gap-4">
+          {/* Actions */}
+          <Link
+            href="/dashboard/help#roles"
+            className="text-xs text-muted-foreground font-bold text-end hover:underline"
+          >
+            {getRoleActionIcons(activeTab)}
+          </Link>
+
+          <CreateButton
+            className="mr-auto w-full md:w-auto"
+            label="Create Escrow"
+            url={"/dashboard/escrow/initialize-escrow"}
+            id="step-2"
+          />
+        </div>
       </div>
 
       <Divider type="horizontal" />
 
-      <div className="flex flex-col md:flex-row gap-3 w-1/3">
-        <div className="flex flex-col w-full">
-          <label className="text-xs font-bold mb-2 ml-2" htmlFor="status">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 w-full md:w-4/5">
+        {/* Status */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="status"
+          >
             Status
           </label>
           <Select
@@ -85,8 +108,12 @@ const MyEscrowsFilter = () => {
           </Select>
         </div>
 
-        <div className="flex flex-col w-full">
-          <label className="text-xs font-bold mb-2 ml-2" htmlFor="amount">
+        {/* Amount */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="amount"
+          >
             Amount Range
           </label>
           <Select
@@ -104,6 +131,65 @@ const MyEscrowsFilter = () => {
               ))}
             </SelectContent>
           </Select>
+        </div>
+
+        {/* Engagement */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="engagement"
+          >
+            Engagements
+          </label>
+          <Select
+            value={engagement}
+            onValueChange={(value) => updateQuery("engagement", value)}
+          >
+            <SelectTrigger>
+              {searchParams.get("engagement") || "Select Engagement"}
+            </SelectTrigger>
+            <SelectContent>
+              {uniqueEngagements.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Visibility */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="active"
+          >
+            Visibility
+          </label>
+          <Select
+            value={active}
+            onValueChange={(value) => updateQuery("active", value)}
+          >
+            <SelectTrigger>{mapNameParams(active)}</SelectTrigger>
+            <SelectContent>
+              {activeOptionsFilters.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Created At */}
+        <div className="flex flex-col">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="dateRange"
+          >
+            Created At
+          </label>
+          <DatePickerWithRange />
         </div>
       </div>
     </form>

@@ -7,6 +7,7 @@ import Header from "@/components/layout/header/Header";
 import useLayoutDashboard from "@/hooks/layout-dashboard.hook";
 import { redirect } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { Lights } from "@/components/layout/all/ui/utils/Lights";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();
@@ -19,10 +20,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <SidebarProvider>
+      <Lights />
       <AppSidebar />
       <SidebarInset>
         <Header />
-        <div className="bg-muted/50 min-h-screen">
+        <div className="min-h-screen">
           <div className="flex-1 space-y-4 p-4 pt-6 md:p-8 h-full">
             {label !== "Help" && label !== "Report Issue" && (
               <h2 className="text-3xl font-bold tracking-tight">{label}</h2>

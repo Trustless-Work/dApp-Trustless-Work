@@ -6,7 +6,7 @@ POC of a decentralized application (dApp) to enhance trust in agency-client rela
 
 ---
 
-![image](https://github.com/user-attachments/assets/d0002030-97a6-4217-84c9-09ae850d985a)
+![image](https://github.com/user-attachments/assets/d0cdab67-637c-4277-8297-55ebc19a6455)
 
 ---
 
@@ -64,10 +64,20 @@ Follow the steps below to get started with this project:
 1. Install dependencies.
 2. Format code.
 3. Set enviroment variables.
-4. API KEY
-5. Firebase
-6. Firebase collections.
-7. Run the project!
+4. Firebase
+5. Run the project!
+
+## Steps
+
+1. Fork the repo.
+2. Clone the repo locally.
+3. Execute `npm i`.
+4. Setup .env according to the information below.
+   1. The local API Key has already given.
+   2. TW Local URL has already given.
+   3. Request the Firebase credentials by TG.
+5. Run the project.
+6. Finally, if you need to see the local development database, please send your gmail by TG. Then, you'll find it in your Firebase's projects.
 
 ## Installation
 
@@ -95,13 +105,14 @@ Make sure to set up the following environment variable in your `.env` file:
 
 ```
 
-# Branch Develop -> v.2 API
-NEXT_PUBLIC_API_URL=https://dev.api.trustlesswork.com
+# APP
+NEXT_PUBLIC_ENV=LOCAL
 
-# See API Key Video
-NEXT_PUBLIC_API_KEY=
+# TRUSTLESS WORK -> See API KEY Video
+NEXT_PUBLIC_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXQiOiJHRE42SUpMUzVCUjNXN1FCM1NBRTNNWU5CRzZINFpXRFVHWURNRVVRWEU2RjJRSFhXSFlNNU1MWCIsImlhdCI6MTc0NTcwMzQzM30.M1gr85EXzUl7JRZ82yOORtVTGmGRL_DxN2C2Cl486lY
+NEXT_PUBLIC_API_URL_LOCAL=https://local.api.trustlesswork.com
 
-# See Firebase Video
+# FIREBASE -> Request the credentials by Telegram
 NEXT_PUBLIC_FIREBASE_API_KEY=
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=
@@ -109,7 +120,7 @@ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
 NEXT_PUBLIC_FIREBASE_APP_ID=
 
-# MOONPAY -> If you won't use Moonpay, skip these env
+# MOONPAY -> Skip if you wont use Moonpay
 NEXT_PUBLIC_MOONPAY_API_KEY=
 MOONPAY_SECRET_KEY=
 
@@ -122,62 +133,18 @@ NEXT_PUBLIC_COUNTDOWN_MINUTES=30
 
 ### API Key Video
 
-[dApp Trustless Work](https://dapp.trustlesswork.com)
+**IMPORTANT TO KNOW:** <br />
+-> If you're using the DEVELOP enviroment `https://dev.api.trustlesswork.com`, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
+-> If you're using MAIN enviroment `https://api.trustlesswork.com`, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
+-> If you're using LOCAL enviroment, you already have it.
 
 https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
-
-### Firebase Video
-
-[Firebase](https://firebase.google.com)
-
-https://github.com/user-attachments/assets/96d35cee-5e57-41cd-afe5-0389f13c7c94
-
-## Firebase Steps
-
-When you already have the Database, please create a collection called `trustlines` and insert the data below:
-
-```
-name
-"USDC"
-(string)
-
-
-trustline
-"GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5"
-(string)
-
-
-trustlineDecimals
-10000000
-(number)
-```
-
-and
-
-```
-name
-"EURC"
-(string)
-
-
-trustline
-"GB3Q6QDZYTHWT7E5PVS3W7FUT5GVAFC5KSZFFLPU25GO7VTC3NM2ZTVO"
-(string)
-
-
-trustlineDecimals
-10000000
-(number)
-```
 
 ## Wallet Requirements
 
 To use this project, you must have one of the following wallets installed:
 
 - **Freighter**
-- **Albedo**
-- **xBull**
-- **LOBSTR**
 
 These wallets are required to interact with the platform.
 

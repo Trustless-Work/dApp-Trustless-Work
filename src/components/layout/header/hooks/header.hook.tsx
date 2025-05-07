@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const useHeader = () => {
-  const { address } = useGlobalAuthenticationStore();
+  const { address, loggedUser } = useGlobalAuthenticationStore();
   const pathName = usePathname();
   const router = useRouter();
 
@@ -17,7 +17,7 @@ const useHeader = () => {
     if (!address) {
       router.push("/");
     } else if (pathName === "/") {
-      router.push("/dashboard/escrow/my-escrows");
+      router.push("/dashboard");
     }
   }, [address, pathName, router]);
 
@@ -25,10 +25,19 @@ const useHeader = () => {
     const crumbs = pathName.split("/").filter(Boolean);
 
     return crumbs.map((crumb, index) => {
-      const href = "/" + crumbs.slice(0, index + 1).join("/");
-      const label = crumb
+      const isEscrow = crumb.toLowerCase() === "escrow";
+      const isPublicProfile = crumbs.includes("public-profile");
+      const href = isEscrow ? "#" : "/" + crumbs.slice(0, index + 1).join("/");
+
+      let label = crumb
         .replace(/-/g, " ")
         .replace(/\b\w/g, (char) => char.toUpperCase());
+
+      if (isPublicProfile && index === crumbs.length - 1 && loggedUser) {
+        label =
+          `${loggedUser.firstName || ""} ${loggedUser.lastName || ""}`.trim() ||
+          "Unknown User";
+      }
 
       return (
         <BreadcrumbItem key={href}>

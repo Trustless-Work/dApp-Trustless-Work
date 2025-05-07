@@ -1,39 +1,89 @@
-import { Chart } from "@/components/ui/chart";
-import MetricsSection from "../cards/MetricSection";
-import RecentSales from "../cards/RecentSales";
+"use client";
 
-const Dashboard = () => {
-  // Mock Data
-  const chartData = [
-    { name: "Jan", value: 4500 },
-    { name: "Feb", value: 4000 },
-    { name: "Mar", value: 6000 },
-    { name: "Apr", value: 2000 },
-    { name: "May", value: 3000 },
-    { name: "Jun", value: 4000 },
-    { name: "Jul", value: 3500 },
-    { name: "Aug", value: 4200 },
-    { name: "Sep", value: 4000 },
-    { name: "Oct", value: 3200 },
-    { name: "Nov", value: 3000 },
-    { name: "Dec", value: 2800 },
-  ];
+import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { useEscrowDashboardData } from "../../hooks/escrow-dashboard-data.hook";
+import { EscrowStatusChart } from "../charts/EscrowStatusChart";
+import { EscrowReleaseTrendChart } from "../charts/EscrowReleaseTrendChart";
+import { EscrowVolumeTrendChart } from "../charts/EscrowVolumeTrendChart";
+import { TopEscrowsList } from "../lists/TopEscrowsList";
+import MetricsSection from "../cards/MetricSection";
+import { ArrowRight } from "lucide-react";
+import CreateButton from "@/components/utils/ui/Create";
+import { MilestonesOverview } from "../sections/MilestoneOverview";
+import { DisputeAnalytics } from "../sections/DisputeAnalytics";
+
+export const Dashboard = () => {
+  const address = useGlobalAuthenticationStore((state) => state.address);
+  const data = useEscrowDashboardData({ address });
+
+  const { statusCounts, releaseTrend, volumeTrend, top5ByValue, escrows } =
+    data || {};
+  const hasData = data && data.totalEscrows > 0;
+  const isLoading = !data;
+
+  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
 
   return (
-    <div className="flex flex-col">
-      <div className="space-y-4">
+    <>
+      {!hasData &&
+      (!data?.volumeTrend || !data?.statusCounts || !data?.releaseTrend) ? (
+        <div className="flex items-center justify-end w-full gap-2">
+          <span className="text-sm flex items-center text-muted-foreground mr-2">
+            Don't have any escrow? <ArrowRight className="ml-2" />
+          </span>
+          <CreateButton
+            className="mr-auto w-full md:w-auto"
+            label="Create Escrow"
+            url={"/dashboard/escrow/initialize-escrow"}
+          />
+        </div>
+      ) : (
+        <div className="flex items-center justify-end w-full gap-2">
+          <p className="text-xl flex items-center text-muted-foreground mr-2">
+            Welcome back,{" "}
+            <strong className="flex gap-2 ml-2">
+              {loggedUser?.firstName || "Without Name"}!👋🏼
+            </strong>
+          </p>
+        </div>
+      )}
+
+      <div className="flex flex-col w-full h-full gap-4">
         <MetricsSection />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <div className="col-span-4">
-            <Chart title="Overview" data={chartData} />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+          <div className="md:col-span-2">
+            <EscrowVolumeTrendChart
+              data={volumeTrend || []}
+              isLoading={isLoading}
+            />
           </div>
-          <div className="col-span-4 lg:col-span-3">
-            <RecentSales />
+
+          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-10 gap-4">
+            <div className="md:col-span-3">
+              <EscrowStatusChart
+                data={statusCounts || []}
+                isLoading={isLoading}
+              />
+            </div>
+
+            <div className="md:col-span-7">
+              <EscrowReleaseTrendChart
+                data={releaseTrend || []}
+                isLoading={isLoading}
+              />
+            </div>
+          </div>
+
+          <div className="md:col-span-2">
+            <TopEscrowsList escrows={top5ByValue || []} />
           </div>
         </div>
+
+        <MilestonesOverview address={address} escrows={escrows || []} />
+
+        <DisputeAnalytics address={address} escrows={escrows || []} />
       </div>
-    </div>
+    </>
   );
 };
-
-export default Dashboard;

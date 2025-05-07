@@ -11,9 +11,9 @@ import {
 } from "@/core/store/data";
 import { formSchema } from "../../../schema/edit-milestone.schema";
 import { EscrowPayload, Milestone } from "@/@types/escrow.entity";
-import { useEscrowBoundedStore } from "../../../store/ui";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { toast } from "@/hooks/toast.hook";
-import { editMilestones } from "../../../services/edit-milestones.service";
+import { editEscrow } from "../../../services/edit-escrow.service";
 
 interface useEditMilestonesDialogProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
@@ -24,14 +24,14 @@ const useEditMilestonesDialog = ({
 }: useEditMilestonesDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const setIsEditingMilestones = useEscrowBoundedStore(
+  const setIsEditingMilestones = useEscrowUIBoundedStore(
     (state) => state.setIsEditingMilestones,
   );
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
-  const activeTab = useEscrowBoundedStore((state) => state.activeTab);
-  const setIsDialogOpen = useEscrowBoundedStore(
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+  const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
 
@@ -74,6 +74,16 @@ const useEditMilestonesDialog = ({
         milestones: payload.milestones,
       };
 
+      // Plain the trustline
+      if (
+        updatedEscrow.trustline &&
+        typeof updatedEscrow.trustline === "object"
+      ) {
+        updatedEscrow.trustlineDecimals =
+          updatedEscrow.trustline.trustlineDecimals;
+        updatedEscrow.trustline = updatedEscrow.trustline.trustline;
+      }
+
       delete updatedEscrow.createdAt;
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
@@ -84,7 +94,7 @@ const useEditMilestonesDialog = ({
         contractId: selectedEscrow.contractId || "",
       };
 
-      const response = await editMilestones(newPayload);
+      const response = await editEscrow(newPayload);
 
       if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });

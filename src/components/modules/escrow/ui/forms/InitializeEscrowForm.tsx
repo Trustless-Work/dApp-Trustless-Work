@@ -215,7 +215,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      placeholder="Enter release signer address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -259,7 +259,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      placeholder="Enter dispute resolver address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -305,7 +305,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter service provider address"
+                      placeholder="Enter platform address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -327,7 +327,7 @@ const InitializeEscrowForm = () => {
                 <FormLabel className="flex items-center justify-between">
                   <span className="flex items-center">
                     Receiver <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Reciever wallet address." />
+                    <TooltipInfo content="Receiver wallet address." />
                   </span>
                   <Switch
                     checked={showSelect.receiver}
@@ -346,7 +346,7 @@ const InitializeEscrowForm = () => {
                     />
                   ) : (
                     <Input
-                      placeholder="Enter reciever address"
+                      placeholder="Enter receiver address"
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
@@ -431,7 +431,7 @@ const InitializeEscrowForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center">
-                  Receiver Memo
+                  Receiver Memo (opcional)
                   <TooltipInfo content="Total receiver Memo to be held in escrow." />
                 </FormLabel>
                 <FormControl>
@@ -481,8 +481,8 @@ const InitializeEscrowForm = () => {
             <TooltipInfo content="Key stages or deliverables for the escrow." />
           </FormLabel>
           {milestones.map((milestone, index) => (
-            <>
-              <div key={index} className="flex items-center space-x-4">
+            <div key={index}>
+              <div className="flex items-center space-x-4">
                 <Input
                   placeholder="Milestone Description"
                   value={milestone.description}
@@ -504,7 +504,7 @@ const InitializeEscrowForm = () => {
               </div>
 
               {index === milestones.length - 1 && (
-                <div className="flex justify-end">
+                <div className="flex justify-end mt-4">
                   <Button
                     disabled={isAnyMilestoneEmpty}
                     className="w-full md:w-1/4"
@@ -516,7 +516,7 @@ const InitializeEscrowForm = () => {
                   </Button>
                 </div>
               )}
-            </>
+            </div>
           ))}
         </div>
 

@@ -1,8 +1,10 @@
 import { DistributeEscrowEarningsEscrowPayload } from "@/@types/escrow.entity";
 import http from "@/core/config/axios/http";
 import { kit } from "@/components/modules/auth/wallet/constants/wallet-kit.constant";
-import axios from "axios";
+import { AxiosError } from "axios";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
+import { handleError } from "@/errors/utils/handle-errors";
+import { WalletError } from "@/@types/errors.entity";
 
 export const distributeEscrowEarnings = async (
   payload: DistributeEscrowEarningsEscrowPayload,
@@ -25,12 +27,8 @@ export const distributeEscrowEarnings = async (
     const { data } = tx;
     return data;
   } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error("Axios Error:", error.response?.data.message);
-      throw new Error(error.response?.data?.message);
-    } else {
-      console.error("Unexpected Error:", error);
-      throw new Error("Unexpected error occurred");
-    }
+    const mappedError = handleError(error as AxiosError | WalletError);
+    console.error("Error:", mappedError.message);
+    throw new Error(mappedError.message);
   }
 };

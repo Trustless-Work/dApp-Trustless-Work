@@ -30,16 +30,15 @@ const getAllEscrowsByUser = async ({
   const collectionRef = collection(db, "escrows");
 
   try {
-    const escrowCollectionSnapshot = await getDocs(
-      query(collectionRef, where(type, "==", address)),
-    );
+    const q = query(collectionRef, where(type, "==", address));
+    const snapshot = await getDocs(q);
 
-    const escrowList = escrowCollectionSnapshot.docs.map((doc) => ({
+    const escrowList = snapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
 
-    return { success: false, data: escrowList };
+    return { success: true, data: escrowList };
   } catch (error: any) {
     const errorMessage =
       error.response && error.response.data
