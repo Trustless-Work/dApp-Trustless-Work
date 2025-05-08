@@ -1,10 +1,8 @@
-import type {
-  Escrow,
-  EscrowPayload,
-  BalanceItem,
-} from "@/@types/escrow.entity";
+import type { Escrow, BalanceItem } from "@/@types/escrows/escrow.entity";
 import { getAllEscrowsByUser, updateEscrow } from "../server/escrow.firebase";
-import { getBalance } from "./get-balance.service";
+import { EscrowPayload } from "@/@types/escrows/escrow-payload.entity";
+import { trustlessWorkService } from "./trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 
 export const fetchAllEscrows = async ({
   address,
@@ -29,7 +27,14 @@ export const fetchAllEscrows = async ({
     throw new Error("contractIds is not a valid array.");
   }
 
-  const response = await getBalance(address, contractIds);
+  const response = (await trustlessWorkService({
+    payload: { signer: address || "", addresses: contractIds },
+    endpoint: "/helper/get-multiple-escrow-balance",
+    method: "get",
+    requiresSignature: false,
+    returnEscrowDataIsRequired: false,
+  })) as EscrowRequestResponse;
+
   const balances = response.data as BalanceItem[];
 
   return Promise.all(
