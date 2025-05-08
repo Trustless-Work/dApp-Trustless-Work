@@ -12,12 +12,12 @@ import {
 import useSuccessResolveDisputeDialog from "./hooks/success-resolve-dispute-dialog.hook";
 import Link from "next/link";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import { Escrow } from "@/@types/escrow.entity";
 import EntityCard from "./cards/EntityCard";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import TransferAnimation from "./TransferAnimation";
 import { motion } from "framer-motion";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface SuccessResolveDisputeProps {
   title: string;

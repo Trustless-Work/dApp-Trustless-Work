@@ -11,20 +11,27 @@ export const useEscrowInitializeFormSlice: StateCreator<
   InitializeFormEscrowStore
 > = (set) => {
   const initialState: EscrowFormData = {
-    approver: "",
+    roles: {
+      approver: "",
+      serviceProvider: "",
+      platformAddress: "",
+      releaseSigner: "",
+      disputeResolver: "",
+    },
     engagementId: "",
-    serviceProvider: "",
-    platformAddress: "",
     platformFee: "",
     amount: "",
-    releaseSigner: "",
-    disputeResolver: "",
     milestones: [{ description: "" }],
   };
 
   return {
     // Stores
     ...initialState,
+    approver: initialState.roles.approver,
+    serviceProvider: initialState.roles.serviceProvider,
+    platformAddress: initialState.roles.platformAddress,
+    releaseSigner: initialState.roles.releaseSigner,
+    disputeResolver: initialState.roles.disputeResolver,
     formData: initialState,
 
     // Modifiers

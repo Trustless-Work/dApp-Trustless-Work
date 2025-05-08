@@ -30,7 +30,7 @@ export type StartDisputePayload = {
 };
 
 export type ResolveDisputePayload = {
-  contractId: string;
+  contractId?: string;
   disputeResolver?: string;
   approverFunds: string;
   receiverFunds: string;

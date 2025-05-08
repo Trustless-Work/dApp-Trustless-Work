@@ -1,6 +1,8 @@
 import { CreatedAt, UpdatedAt } from "../dates.entity";
 import { Trustline } from "../trustline.entity";
 
+export type MilestoneStatus = "completed" | "approved" | "pending";
+
 export type Milestone = {
   description: string;
   status?: string;

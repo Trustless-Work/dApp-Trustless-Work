@@ -1,10 +1,11 @@
 import type { StateCreator } from "zustand";
 import type { EscrowGlobalStore } from "../@types/escrows.entity";
-import type { Escrow } from "@/@types/escrow.entity";
+
 import {
   fetchAllEscrows,
   updateExistingEscrow,
 } from "@/components/modules/escrow/services/escrow.service";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 const ESCROW_ACTIONS = {
   SET_ESCROWS: "escrows/set",

@@ -13,11 +13,11 @@ import Image from "next/image";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { cn } from "@/lib/utils";
-import { Escrow } from "@/@types/escrow.entity";
 import { Check, Copy } from "lucide-react";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import ImprovedSuccessReleaseDialog from "./ImprovedSuccessReleaseDialog";
 import ImprovedSuccessResolveDisputeDialog from "./ImprovedSuccessResolveDisputeDialog";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface SuccessDialogProps {
   title: string;

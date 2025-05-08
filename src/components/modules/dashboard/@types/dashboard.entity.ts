@@ -1,4 +1,4 @@
-import { Escrow, Milestone } from "@/@types/escrow.entity";
+import { Escrow, Milestone } from "@/@types/escrows/escrow.entity";
 
 export type DashboardData = {
   escrows: Escrow[];
