@@ -81,7 +81,6 @@ const EscrowDetailDialog = ({
     setSelectedEscrow,
     selectedEscrow,
   });
-  console.log(selectedEscrow?.balance);
 
   const { formatText, formatDollar } = useFormatUtils();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);

@@ -32,8 +32,6 @@ const InitializeEscrowForm = () => {
     handleFieldChange,
   } = useInitializeEscrow();
 
-  console.log(trustlineOptions);
-
   return (
     <Form {...form}>
       <form

@@ -51,6 +51,7 @@ export const useInitializeEscrow = () => {
   const getAllTrustlines = useGlobalBoundedStore(
     (state) => state.getAllTrustlines,
   );
+  const address = useGlobalAuthenticationStore((state) => state.address);
   const trustlines = useGlobalBoundedStore((state) => state.trustlines);
   const formSchema = GetFormSchema();
 
@@ -122,6 +123,8 @@ export const useInitializeEscrow = () => {
       const finalPayload: InitializeEscrowPayload = {
         ...payload,
         receiverMemo: Number(payload.receiverMemo) ?? 0,
+        signer: address,
+        issuer: address,
       };
 
       const result = (await trustlessWorkService({
