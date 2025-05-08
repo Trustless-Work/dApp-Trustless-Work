@@ -30,7 +30,7 @@ const getAllEscrowsByUser = async ({
   const collectionRef = collection(db, "escrows");
 
   try {
-    const q = query(collectionRef, where(type, "==", address));
+    const q = query(collectionRef, where(`roles.${type}`, "==", address));
     const snapshot = await getDocs(q);
 
     const escrowList = snapshot.docs.map((doc) => ({

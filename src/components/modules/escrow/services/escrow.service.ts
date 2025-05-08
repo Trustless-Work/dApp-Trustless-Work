@@ -14,7 +14,6 @@ export const fetchAllEscrows = async ({
   isActive?: boolean;
 }): Promise<Escrow[]> => {
   const escrowsByUser = await getAllEscrowsByUser({ address, type });
-
   // todo: pass this logic to the getAllEscrowsByUser function
   const filtered =
     typeof isActive === "boolean"
@@ -32,10 +31,10 @@ export const fetchAllEscrows = async ({
     endpoint: "/helper/get-multiple-escrow-balance",
     method: "get",
     requiresSignature: false,
-    returnEscrowDataIsRequired: false,
+    returnEscrowDataIsRequired: true,
   })) as EscrowRequestResponse;
 
-  const balances = response.data as BalanceItem[];
+  const balances = response as unknown as BalanceItem[];
 
   return Promise.all(
     filtered.map(async (escrow: Escrow) => {

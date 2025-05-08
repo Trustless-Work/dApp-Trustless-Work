@@ -18,7 +18,6 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
   );
   const escrows = useGlobalBoundedStore((state) => state.escrows);
   const totalEscrows = useGlobalBoundedStore((state) => state.totalEscrows);
-
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(15);
