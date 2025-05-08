@@ -5,7 +5,7 @@ export type EscrowPayload = Escrow;
 
 export type InitializeEscrowPayload = Omit<
   EscrowPayload,
-  "signer" | "contractId"
+  "signer" | "contractId" | "id" | "user" | "createdAt" | "updatedAt"
 > & {};
 
 export type ChangeMilestoneStatusPayload = {

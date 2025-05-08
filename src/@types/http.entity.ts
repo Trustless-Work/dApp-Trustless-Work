@@ -1,2 +1,2 @@
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE"
-export type Status = "SUCCESS" | "FAILED"
+export type HttpMethod = "get" | "post" | "put" | "delete";
+export type Status = "SUCCESS" | "FAILED";
