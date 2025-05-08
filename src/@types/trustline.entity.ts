@@ -1,5 +1,5 @@
 export interface Trustline {
-  name: string;
-  trustline: string;
-  trustlineDecimals: number;
+  name?: string;
+  address: string;
+  decimals: number;
 }

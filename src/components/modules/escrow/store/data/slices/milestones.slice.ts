@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { MilestonesEscrowStore } from "../@types/milestones.entity";
-import { Milestone } from "@/@types/escrow.entity";
+import { Milestone } from "@/@types/escrows/escrow.entity";
 
 export const useEscrowMilestoneSlice: StateCreator<
   MilestonesEscrowStore,

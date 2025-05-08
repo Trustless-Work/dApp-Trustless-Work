@@ -4,7 +4,7 @@ import useDistributeEarningsEscrowDialog from "../hooks/distribute-earnings-escr
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CircleDollarSign } from "lucide-react";
-import { Escrow } from "@/@types/escrow.entity";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface FooterDetailsProps {
   selectedEscrow: Escrow;
@@ -44,29 +44,31 @@ export const FooterDetails = ({
           selectedEscrow.createdAt.nanoseconds,
         )}
       </p>
-      {!selectedEscrow.releaseFlag && !selectedEscrow.resolvedFlag && (
-        <Card className="flex gap-10 items-center p-5">
-          <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 pr-3">
-            Release Amount Distribution
-          </CardTitle>
+      {!selectedEscrow.flags?.releaseFlag &&
+        !selectedEscrow.flags?.resolvedFlag && (
+          <Card className="flex gap-10 items-center p-5">
+            <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 pr-3">
+              Release Amount Distribution
+            </CardTitle>
 
-          <div className="flex gap-10 sm:flex-row flex-col">
-            <p className="text-sm">
-              <strong>Receiver:</strong> ${receiverAmount.toFixed(2)}
-            </p>
-            <p className="text-sm">
-              <strong>Platform Fee:</strong> ${platformFeeAmount.toFixed(2)}
-            </p>
-            <p className="text-sm">
-              <strong>Trustless Work:</strong> ${trustlessWorkAmount.toFixed(2)}
-            </p>
-          </div>
-        </Card>
-      )}
+            <div className="flex gap-10 sm:flex-row flex-col">
+              <p className="text-sm">
+                <strong>Receiver:</strong> ${receiverAmount.toFixed(2)}
+              </p>
+              <p className="text-sm">
+                <strong>Platform Fee:</strong> ${platformFeeAmount.toFixed(2)}
+              </p>
+              <p className="text-sm">
+                <strong>Trustless Work:</strong> $
+                {trustlessWorkAmount.toFixed(2)}
+              </p>
+            </div>
+          </Card>
+        )}
       {areAllMilestonesCompleted &&
         areAllMilestonesCompletedAndFlag &&
         userRolesInEscrow.includes("releaseSigner") &&
-        !selectedEscrow.releaseFlag &&
+        !selectedEscrow.flags?.releaseFlag &&
         activeTab === "releaseSigner" && (
           <Button
             onClick={distributeEscrowEarningsSubmit}

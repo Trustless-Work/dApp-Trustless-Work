@@ -19,10 +19,10 @@ import { MoreHorizontal } from "lucide-react";
 import EscrowDetailDialog from "@/components/modules/escrow/ui/dialogs/EscrowDetailDialog";
 import { useEscrowUIBoundedStore } from "@/components/modules/escrow/store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
-import { Escrow } from "@/@types/escrow.entity";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { getStatus } from "../../utils/escrow-status.util";
 import NoData from "@/components/utils/ui/NoData";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);

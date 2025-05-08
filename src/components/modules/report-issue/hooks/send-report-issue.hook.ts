@@ -6,8 +6,8 @@ import { z } from "zod";
 import { formSchema } from "../schema/report-issue.schema";
 import { addReportIssue } from "../server/report-issue.firebase";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { toast } from "@/hooks/toast.hook";
 import { IssueType } from "@/@types/issue.entity";
+import { toast } from "sonner";
 
 export const useSendReportIssue = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -34,28 +34,14 @@ export const useSendReportIssue = () => {
 
       if (res.success) {
         form.reset();
-        toast({
-          title: "Success",
-          description: res.message,
-        });
+        toast.success(res.message);
       } else {
-        toast({
-          title: "Error",
-          description: res.message,
-          variant: "destructive",
-        });
+        toast.error(res.message);
       }
-    } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data
-          ? error.response.data.message
-          : "An error occurred";
-
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
     }
   };
 

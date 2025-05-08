@@ -7,8 +7,10 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { startDispute } from "../../../services/start-dispute.service";
-import { toast } from "@/hooks/toast.hook";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { StartDisputePayload } from "@/@types/escrows/escrow-payload.entity";
+import { toast } from "sonner";
 
 const useStartDisputeEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -34,12 +36,17 @@ const useStartDisputeEscrowDialog = () => {
     if (!selectedEscrow) return;
 
     try {
-      const response = await startDispute({
+      const finalPayload: StartDisputePayload = {
         contractId: selectedEscrow?.contractId,
         signer: address,
-      });
+      };
 
-      setIsStartingDispute(false);
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/change-dispute-flag",
+        method: "post",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
 
       if (response.status === "SUCCESS") {
         setIsDialogOpen(false);
@@ -53,19 +60,14 @@ const useStartDisputeEscrowDialog = () => {
         });
         fetchAllEscrows({ address, type: activeTab || "client" });
 
-        toast({
-          title: "Success",
-          description: `You have started a dispute in ${selectedEscrow.title}.`,
-        });
+        toast.success(`You have started a dispute in ${selectedEscrow.title}.`);
       }
-    } catch (error: any) {
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
       setIsStartingDispute(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
     }
   };
 

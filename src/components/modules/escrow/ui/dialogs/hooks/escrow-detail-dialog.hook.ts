@@ -1,4 +1,3 @@
-import type { Escrow } from "@/@types/escrow.entity";
 import { getUserRoleInEscrow } from "../../../server/escrow.firebase";
 import {
   useGlobalAuthenticationStore,
@@ -6,6 +5,7 @@ import {
 } from "@/core/store/data";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface EscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;
@@ -49,7 +49,7 @@ const useEscrowDetailDialog = ({
 
   const areAllMilestonesCompletedAndFlag =
     selectedEscrow?.milestones?.every(
-      (milestone) => milestone.approved_flag === true,
+      (milestone) => milestone.approvedFlag === true,
     ) ?? false;
 
   const fetchUserRoleInEscrow = useCallback(async () => {

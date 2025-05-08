@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import { GlobalProvider } from "@/providers/GlobalProvider";
+import { Toaster } from "sonner";
 
 const Exo2 = localFont({
   src: "./fonts/Exo2.ttf",
@@ -27,6 +27,7 @@ export default function RootLayout({
       <body className={cn(Exo2.variable, "antialiased")}>
         <Analytics />
         <GlobalProvider>
+          <Toaster />
           <div className="relative flex min-h-screen w-full">
             <div className="flex-1 flex flex-col w-full">
               <div className="flex-1 w-full p-4  min-h-[calc(100vh-2rem-2rem)]">
@@ -35,7 +36,6 @@ export default function RootLayout({
             </div>
           </div>
         </GlobalProvider>
-        <Toaster />
       </body>
     </html>
   );

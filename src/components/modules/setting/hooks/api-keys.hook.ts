@@ -4,7 +4,7 @@ import { useState } from "react";
 import { requestApiKey } from "../services/request-api-key.service";
 import { getUser } from "../../auth/server/authentication.firebase";
 import { removeApiKey } from "../server/api-key-firebase";
-import { toast } from "@/hooks/toast.hook";
+import { toast } from "sonner";
 import { useSettingBoundedStore } from "../store/ui";
 
 const useAPIKeys = () => {
@@ -21,11 +21,7 @@ const useAPIKeys = () => {
     setIsRequestingAPIKey(true);
 
     if (loggedUser?.useCase === "" || !loggedUser?.useCase) {
-      toast({
-        title: "Error",
-        description: "You need to complete your use case first",
-        variant: "destructive",
-      });
+      toast.error("You need to complete your use case first");
 
       setIsRequestingAPIKey(false);
     } else {
@@ -34,16 +30,9 @@ const useAPIKeys = () => {
       await updateUser(address, data);
 
       if (response) {
-        toast({
-          title: "Success",
-          description: "Your API key has been generated",
-        });
+        toast.success("Your API key has been generated");
       } else {
-        toast({
-          title: "Error",
-          description: "Error while requesting",
-          variant: "destructive",
-        });
+        toast.error("Error while requesting");
       }
 
       setIsRequestingAPIKey(false);
@@ -54,19 +43,12 @@ const useAPIKeys = () => {
     const { success } = await removeApiKey(address, apiKey);
 
     if (success) {
-      toast({
-        title: "Success",
-        description: "API key removed",
-      });
+      toast.success("API key removed");
 
       const { data } = await getUser({ address });
       updateUser(address, data);
     } else {
-      toast({
-        title: "Error",
-        description: "Error while removing",
-        variant: "destructive",
-      });
+      toast.error("Error while removing");
     }
   };
 

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { toast } from "@/hooks/toast.hook";
 import { UserPayload } from "@/@types/user.entity";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { PreferencesForm } from "./preferences-section.hook";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
+import { toast } from "sonner";
 
 const useSettings = () => {
   const [currentTab, setCurrentTab] = useState("profile");
@@ -23,17 +23,10 @@ const useSettings = () => {
 
       await updateUser(address, updatedData);
 
-      toast({
-        title: "Success",
-        description: "Profile and preferences saved successfully!",
-      });
+      toast.success("Profile and preferences saved successfully!");
     } catch (error) {
       console.error("Error saving preferences:", error);
-      toast({
-        title: "Error",
-        description: "Failed to save preferences. Please try again.",
-        variant: "destructive",
-      });
+      toast.error("Failed to save preferences. Please try again.");
     }
   };
 

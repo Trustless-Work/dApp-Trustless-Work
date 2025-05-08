@@ -12,12 +12,12 @@ import {
 import useSuccessResolveDisputeDialog from "./hooks/success-resolve-dispute-dialog.hook";
 import Link from "next/link";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import { Escrow } from "@/@types/escrow.entity";
 import EntityCard from "./cards/EntityCard";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import TransferAnimation from "./TransferAnimation";
 import { motion } from "framer-motion";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface SuccessResolveDisputeProps {
   title: string;
@@ -174,7 +174,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Receiver"
-                    entity={escrow?.receiver}
+                    entity={escrow?.roles?.receiver}
                     hasPercentage={false}
                     hasAmount={true}
                     isNet={true}
@@ -184,7 +184,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Approver"
-                    entity={escrow?.approver}
+                    entity={escrow?.roles?.approver}
                     hasPercentage={false}
                     hasAmount={true}
                     isNet={true}
@@ -204,7 +204,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Platform"
-                    entity={escrow?.platformAddress}
+                    entity={escrow?.roles?.platformAddress}
                     hasPercentage={true}
                     percentage={platformPercentage.toString()}
                     hasAmount={true}

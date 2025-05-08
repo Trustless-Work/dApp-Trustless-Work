@@ -1,4 +1,4 @@
-import type { Escrow } from "@/@types/escrow.entity";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 import { cn } from "@/lib/utils";
 
 interface ProgressEscrowProps {
@@ -64,7 +64,7 @@ const ProgressEscrow = ({
     (milestone) => milestone.status === "completed",
   ).length;
   const approvedMilestones = escrow.milestones.filter(
-    (milestone) => milestone.approved_flag === true,
+    (milestone) => milestone.approvedFlag === true,
   ).length;
   const totalMilestones = escrow.milestones.length;
 
@@ -73,7 +73,8 @@ const ProgressEscrow = ({
   const progressPercentageApproved =
     totalMilestones > 0 ? (approvedMilestones / totalMilestones) * 100 : 0;
 
-  const shouldHideProgress = escrow.releaseFlag || escrow.resolvedFlag;
+  const shouldHideProgress =
+    escrow.flags?.releaseFlag || escrow.flags?.resolvedFlag;
 
   if (shouldHideProgress || totalMilestones === 0) {
     return null;
@@ -125,7 +126,7 @@ const ProgressEscrow = ({
                   totalMilestones > 1 ? (i / (totalMilestones - 1)) * 100 : 0;
 
                 const isCompleted = milestone.status === "completed";
-                const isApproved = milestone.approved_flag === true;
+                const isApproved = milestone.approvedFlag === true;
 
                 return (
                   <div

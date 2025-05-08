@@ -32,9 +32,9 @@ import {
 } from "lucide-react";
 import SkeletonCards from "../utils/SkeletonCards";
 import { Badge } from "@/components/ui/badge";
-import { Escrow, Milestone } from "@/@types/escrow.entity";
 import Link from "next/link";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
+import { Escrow, Milestone } from "@/@types/escrows/escrow.entity";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -95,7 +95,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
     ).length;
 
     const approvedMilestones = escrow.milestones.filter(
-      (milestone: Milestone) => milestone.approved_flag === true,
+      (milestone: Milestone) => milestone.approvedFlag === true,
     ).length;
 
     const totalMilestones = escrow.milestones.length;
@@ -110,9 +110,9 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
     const pendingRelease =
       progressPercentageCompleted === 100 &&
       progressPercentageApproved === 100 &&
-      !escrow.releaseFlag;
+      !escrow.flags?.releaseFlag;
 
-    if (escrow.disputeFlag) {
+    if (escrow.flags?.disputeFlag) {
       return (
         <Badge variant="destructive" className="gap-1">
           <CircleAlert className="h-3.5 w-3.5" />
@@ -133,7 +133,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       );
     }
 
-    if (escrow.releaseFlag) {
+    if (escrow.flags?.releaseFlag) {
       return (
         <Badge
           variant="outline"
@@ -145,7 +145,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       );
     }
 
-    if (escrow.resolvedFlag) {
+    if (escrow.flags?.resolvedFlag) {
       return (
         <Badge
           variant="outline"

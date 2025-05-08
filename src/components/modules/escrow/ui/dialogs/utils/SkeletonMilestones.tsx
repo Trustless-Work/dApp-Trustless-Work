@@ -1,3 +1,4 @@
+import { Milestone } from "@/@types/escrows/escrow.entity";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalBoundedStore } from "@/core/store/data";
 
@@ -11,7 +12,7 @@ const SkeletonMilestones = () => {
         <Skeleton className="w-24 h-4 rounded-md" />
         <Skeleton className="ml-2 w-6 h-6 rounded-full" />
       </div>
-      {milestones.map((_, index) => (
+      {milestones.map((_: Milestone, index: number) => (
         <div key={index} className="flex items-center space-x-4">
           <Skeleton className="w-24 h-6 rounded-md" />
           <Skeleton className="flex-1 h-10 rounded-md" />
