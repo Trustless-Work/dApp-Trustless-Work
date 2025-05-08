@@ -131,7 +131,9 @@ const getUserRoleInEscrow = async ({
 
     const escrowData = escrowSnapshot.docs[0].data();
 
-    const userRoles = roles.filter((role) => escrowData[role] === address);
+    const userRoles = roles.filter(
+      (role) => escrowData.roles[role] === address,
+    );
 
     if (userRoles.length > 0) {
       return {

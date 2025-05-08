@@ -124,7 +124,10 @@ export const useInitializeEscrow = () => {
         ...payload,
         receiverMemo: Number(payload.receiverMemo) ?? 0,
         signer: address,
-        issuer: address,
+        roles: {
+          ...payload.roles,
+          issuer: address,
+        },
       };
 
       const result = (await trustlessWorkService({

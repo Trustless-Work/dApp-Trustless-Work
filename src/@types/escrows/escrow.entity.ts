@@ -19,6 +19,7 @@ export type Roles = {
   releaseSigner: string;
   disputeResolver: string;
   receiver: string;
+  issuer: string;
 };
 
 export type Flags = {
