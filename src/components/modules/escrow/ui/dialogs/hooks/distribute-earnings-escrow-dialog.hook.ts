@@ -42,8 +42,8 @@ const useDistributeEarningsEscrowDialog = () => {
       const finalPayload: DistributeEscrowEarningsEscrowPayload = {
         contractId: selectedEscrow?.contractId,
         signer: address,
-        serviceProvider: selectedEscrow?.serviceProvider,
-        releaseSigner: selectedEscrow?.releaseSigner,
+        serviceProvider: selectedEscrow?.roles?.serviceProvider,
+        releaseSigner: selectedEscrow?.roles?.releaseSigner,
       };
 
       const response = (await trustlessWorkService({

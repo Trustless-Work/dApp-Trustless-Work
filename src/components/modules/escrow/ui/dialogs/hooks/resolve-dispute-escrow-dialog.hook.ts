@@ -67,7 +67,7 @@ const useResolveDisputeEscrowDialog = ({
     try {
       const finalPayload: ResolveDisputePayload = {
         contractId: selectedEscrow?.contractId,
-        disputeResolver: selectedEscrow?.disputeResolver,
+        disputeResolver: selectedEscrow?.roles?.disputeResolver,
         approverFunds: payload.approverFunds,
         receiverFunds: payload.receiverFunds,
       };

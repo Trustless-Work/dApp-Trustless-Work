@@ -136,7 +136,7 @@ export const ImprovedSuccessReleaseDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Receiver"
-                    entity={escrow?.receiver}
+                    entity={escrow?.roles?.receiver}
                     hasPercentage={true}
                     percentage={receiverPercentage.toString()}
                     hasAmount={true}
@@ -156,7 +156,7 @@ export const ImprovedSuccessReleaseDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Platform"
-                    entity={escrow?.platformAddress}
+                    entity={escrow?.roles?.platformAddress}
                     hasPercentage={true}
                     percentage={platformFee.toString()}
                     hasAmount={true}

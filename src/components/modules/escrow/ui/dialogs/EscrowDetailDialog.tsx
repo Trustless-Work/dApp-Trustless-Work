@@ -142,7 +142,7 @@ const EscrowDetailDialog = ({
           </DialogHeader>
 
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
-            {selectedEscrow.disputeFlag && (
+            {selectedEscrow.flags?.disputeFlag && (
               <StatisticsCard
                 title="Status"
                 icon={Ban}
@@ -159,7 +159,7 @@ const EscrowDetailDialog = ({
               />
             )}
 
-            {selectedEscrow.releaseFlag && (
+            {selectedEscrow.flags?.releaseFlag && (
               <StatisticsCard
                 title="Status"
                 icon={CircleCheckBig}
@@ -170,7 +170,7 @@ const EscrowDetailDialog = ({
               />
             )}
 
-            {selectedEscrow.resolvedFlag && (
+            {selectedEscrow.flags?.resolvedFlag && (
               <StatisticsCard
                 title="Status"
                 icon={Handshake}
@@ -214,9 +214,9 @@ const EscrowDetailDialog = ({
                 </label>
 
                 {userRolesInEscrow.includes("platformAddress") &&
-                  !selectedEscrow?.disputeFlag &&
-                  !selectedEscrow?.resolvedFlag &&
-                  !selectedEscrow?.releaseFlag &&
+                  !selectedEscrow?.flags?.disputeFlag &&
+                  !selectedEscrow?.flags?.resolvedFlag &&
+                  !selectedEscrow?.flags?.releaseFlag &&
                   activeTab === "platformAddress" && (
                     <TooltipInfo content="Edit Roles">
                       <Button
@@ -238,30 +238,33 @@ const EscrowDetailDialog = ({
               <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <EntityCard
                   type="Approver"
-                  entity={selectedEscrow.approver}
-                  inDispute={selectedEscrow.disputeFlag}
+                  entity={selectedEscrow.roles?.approver}
+                  inDispute={selectedEscrow.flags?.disputeFlag}
                 />
                 <EntityCard
                   type="Service Provider"
-                  entity={selectedEscrow.serviceProvider}
-                  inDispute={selectedEscrow.disputeFlag}
+                  entity={selectedEscrow.roles?.serviceProvider}
+                  inDispute={selectedEscrow.flags?.disputeFlag}
                 />
                 <EntityCard
                   type="Dispute Resolver"
-                  entity={selectedEscrow.disputeResolver}
+                  entity={selectedEscrow.roles?.disputeResolver}
                 />
                 <EntityCard
                   type="Platform"
-                  entity={selectedEscrow.platformAddress}
+                  entity={selectedEscrow.roles?.platformAddress}
                   hasPercentage
                   percentage={selectedEscrow.platformFee}
                 />
 
                 <EntityCard
                   type="Release Signer"
-                  entity={selectedEscrow.releaseSigner}
+                  entity={selectedEscrow.roles?.releaseSigner}
                 />
-                <EntityCard type="Receiver" entity={selectedEscrow.receiver} />
+                <EntityCard
+                  type="Receiver"
+                  entity={selectedEscrow.roles?.receiver}
+                />
               </div>
 
               {/* Milestones */}

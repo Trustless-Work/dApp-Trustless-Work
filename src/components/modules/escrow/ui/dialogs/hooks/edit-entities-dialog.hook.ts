@@ -64,12 +64,12 @@ const useEditEntitiesDialog = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      approver: selectedEscrow?.approver || "",
-      serviceProvider: selectedEscrow?.serviceProvider || "",
-      platformAddress: selectedEscrow?.platformAddress || "",
-      receiver: selectedEscrow?.receiver || "",
-      releaseSigner: selectedEscrow?.releaseSigner || "",
-      disputeResolver: selectedEscrow?.disputeResolver || "",
+      approver: selectedEscrow?.roles?.approver || "",
+      serviceProvider: selectedEscrow?.roles?.serviceProvider || "",
+      platformAddress: selectedEscrow?.roles?.platformAddress || "",
+      receiver: selectedEscrow?.roles?.receiver || "",
+      releaseSigner: selectedEscrow?.roles?.releaseSigner || "",
+      disputeResolver: selectedEscrow?.roles?.disputeResolver || "",
     },
     mode: "onChange",
   });

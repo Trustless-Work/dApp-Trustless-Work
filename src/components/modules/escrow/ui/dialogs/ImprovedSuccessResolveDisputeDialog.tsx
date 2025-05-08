@@ -174,7 +174,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Receiver"
-                    entity={escrow?.receiver}
+                    entity={escrow?.roles?.receiver}
                     hasPercentage={false}
                     hasAmount={true}
                     isNet={true}
@@ -184,7 +184,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Approver"
-                    entity={escrow?.approver}
+                    entity={escrow?.roles?.approver}
                     hasPercentage={false}
                     hasAmount={true}
                     isNet={true}
@@ -204,7 +204,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Platform"
-                    entity={escrow?.platformAddress}
+                    entity={escrow?.roles?.platformAddress}
                     hasPercentage={true}
                     percentage={platformPercentage.toString()}
                     hasAmount={true}

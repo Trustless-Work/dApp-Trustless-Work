@@ -38,7 +38,7 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
                   <TableCell>{milestone.description}</TableCell>
                   {/* <TableCell>amount</TableCell> */}
                   {/* <TableCell>
-                    {milestone.approved_flag ? (
+                    {milestone.approvedFlag ? (
                       <Badge variant="destructive" className="uppercase">
                         Yes
                       </Badge>

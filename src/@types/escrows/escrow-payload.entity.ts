@@ -10,8 +10,8 @@ export type InitializeEscrowPayload = Omit<
 
 export type ChangeMilestoneStatusPayload = {
   contractId?: string;
-  milestoneIndex: string;
-  newStatus: string;
+  milestoneIndex?: string;
+  newStatus?: string;
   evidence?: string;
   serviceProvider?: string;
 };
@@ -25,8 +25,8 @@ export type ChangeMilestoneFlagPayload = Omit<
 };
 
 export type StartDisputePayload = {
-  contractId: string;
-  signer: string;
+  contractId?: string;
+  signer?: string;
 };
 
 export type ResolveDisputePayload = {
@@ -38,30 +38,30 @@ export type ResolveDisputePayload = {
 
 export type FundEscrowPayload = {
   amount: string;
-  contractId: string;
-  signer: string;
+  contractId?: string;
+  signer?: string;
 };
 
 export type GetEscrowPayload = {
-  contractId: string;
-  signer: string;
+  contractId?: string;
+  signer?: string;
 };
 
 export type DistributeEscrowEarningsEscrowPayload = {
-  contractId: string;
+  contractId?: string;
   serviceProvider?: string;
   releaseSigner?: string;
-  signer: string;
+  signer?: string;
 };
 
 export type UpdateEscrowPayload = {
-  contractId: string;
+  contractId?: string;
   escrow: EscrowPayload;
-  signer: string;
+  signer?: string;
 };
 
 export type GetBalanceParams = {
-  signer: string;
+  signer?: string;
   addresses: string[];
 };
 
