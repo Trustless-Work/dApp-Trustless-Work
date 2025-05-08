@@ -1,10 +1,11 @@
+import { Milestone } from "@/@types/escrows/escrow.entity";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { toast } from "@/hooks/toast.hook";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { toast } from "sonner";
 
 interface useMyEscrowsProps {
   type: string;
@@ -67,11 +68,11 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         escrow.description?.toLowerCase().includes(searchQuery);
 
       const completedMilestones = escrow.milestones.filter(
-        (milestone) => milestone.status === "completed",
+        (milestone: Milestone) => milestone.status === "completed",
       ).length;
 
       const approvedMilestones = escrow.milestones.filter(
-        (milestone) => milestone.approved_flag === true,
+        (milestone: Milestone) => milestone.approvedFlag === true,
       ).length;
 
       const totalMilestones = escrow.milestones.length;
@@ -166,12 +167,9 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
       await fetchAllEscrows({ address, type, isActive });
     } catch (error: unknown) {
       console.error("[MyEscrows] Error fetching escrows:", error);
-      toast({
-        title: "Error fetching escrows",
-        description:
-          error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error ? error.message : "An unknown error occurred",
+      );
     } finally {
       setIsLoading(false);
       fetchingRef.current = false;

@@ -90,17 +90,20 @@ const InitializeEscrowForm = () => {
           <SelectField
             required
             control={form.control}
-            name="trustline"
+            name="trustline.address"
             label="Trustline"
             tooltipContent="Trustline to be used for the escrow."
-            options={trustlineOptions}
+            options={trustlineOptions.map((tl) => ({
+              value: tl.value,
+              label: tl.label || "",
+            }))}
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="approver"
+            name="roles.approver"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -141,7 +144,7 @@ const InitializeEscrowForm = () => {
           />
           <FormField
             control={form.control}
-            name="serviceProvider"
+            name="roles.serviceProvider"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -187,7 +190,7 @@ const InitializeEscrowForm = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="releaseSigner"
+            name="roles.releaseSigner"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -231,7 +234,7 @@ const InitializeEscrowForm = () => {
 
           <FormField
             control={form.control}
-            name="disputeResolver"
+            name="roles.disputeResolver"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -277,7 +280,7 @@ const InitializeEscrowForm = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="platformAddress"
+            name="roles.platformAddress"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -321,7 +324,7 @@ const InitializeEscrowForm = () => {
 
           <FormField
             control={form.control}
-            name="receiver"
+            name="roles.receiver"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">

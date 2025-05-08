@@ -9,11 +9,15 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { EscrowPayload } from "@/@types/escrow.entity";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { toast } from "@/hooks/toast.hook";
-import { editEscrow } from "../../../services/edit-escrow.service";
 import { formSchema } from "../../../schema/edit-basic-properties.schema";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import {
+  EscrowPayload,
+  UpdateEscrowPayload,
+} from "@/@types/escrows/escrow-payload.entity";
+import { toast } from "sonner";
 
 interface useEditBasicPropertiesDialogProps {
   setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
@@ -78,34 +82,34 @@ const useEditBasicPropertiesDialog = ({
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
 
-      const newPayload = {
+      const finalPayload: UpdateEscrowPayload = {
         escrow: updatedEscrow as EscrowPayload,
         signer: address,
         contractId: selectedEscrow.contractId || "",
       };
 
-      const response = await editEscrow(newPayload);
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/update-escrow-by-contract-id",
+        method: "put",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
 
       if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });
         setIsEditBasicPropertiesDialogOpen(false);
         setIsDialogOpen(false);
 
-        toast({
-          title: "Success",
-          description: `You have edited the basic properties of ${selectedEscrow.title}.`,
-        });
+        toast.success(
+          `You have edited the basic properties of ${selectedEscrow.title}.`,
+        );
       }
-
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
       setIsEditingBasicProperties(false);
-    } catch (error: any) {
-      setIsEditingBasicProperties(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
     }
   };
 

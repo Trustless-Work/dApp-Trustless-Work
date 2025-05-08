@@ -7,9 +7,11 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { Escrow, Milestone } from "@/@types/escrow.entity";
-import { changeMilestoneFlag } from "../../../services/change-mileston-flag.service";
-import { toast } from "@/hooks/toast.hook";
+import { Escrow, Milestone } from "@/@types/escrows/escrow.entity";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { ChangeMilestoneFlagPayload } from "@/@types/escrows/escrow-payload.entity";
+import { toast } from "sonner";
 
 const useChangeFlagEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -35,32 +37,35 @@ const useChangeFlagEscrowDialog = () => {
     setIsChangingStatus(true);
 
     try {
-      const response = await changeMilestoneFlag({
+      const finalPayload: ChangeMilestoneFlagPayload = {
         contractId: selectedEscrow?.contractId,
         milestoneIndex: index.toString(),
         newFlag: true,
         approver: address,
-      });
+      };
+
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/change-milestone-approved-flag",
+        method: "post",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
 
       if (response.status === "SUCCESS") {
-        setIsChangingStatus(false);
         setIsDialogOpen(false);
         setSelectedEscrow(undefined);
         fetchAllEscrows({ address, type: activeTab || "approver" });
 
-        toast({
-          title: "Success",
-          description: `The Milestone ${milestone.description} has been approved.`,
-        });
+        toast.success(
+          `The Milestone ${milestone.description} has been approved.`,
+        );
       }
-    } catch (error: any) {
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
       setIsChangingStatus(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
     }
   };
 

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import { GlobalProvider } from "@/providers/GlobalProvider";
@@ -35,7 +34,6 @@ export default function RootLayout({
             </div>
           </div>
         </GlobalProvider>
-        <Toaster />
       </body>
     </html>
   );

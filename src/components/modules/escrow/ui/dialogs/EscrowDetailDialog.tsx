@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
-import type { Escrow } from "@/@types/escrow.entity";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";
@@ -45,13 +44,14 @@ import { FooterDetails } from "./sections/Footer";
 import { Button } from "@/components/ui/button";
 import EditEntitiesDialog from "./EditEntitiesDialog";
 import EditBasicPropertiesDialog from "./EditBasicPropertiesDialog";
-import { useToast } from "@/hooks/toast.hook";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Escrow } from "@/@types/escrows/escrow.entity";
+import { toast } from "sonner";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -68,7 +68,6 @@ const EscrowDetailDialog = ({
   const dialogStates = useEscrowDialogs();
 
   const { softDeleteEscrow, restoreEscrow } = useGlobalBoundedStore();
-  const { toast } = useToast();
 
   const {
     handleClose,
@@ -294,7 +293,7 @@ const EscrowDetailDialog = ({
                         variant="destructive"
                         onClick={async () => {
                           await softDeleteEscrow(selectedEscrow.id);
-                          toast({ title: "Escrow moved to Trash." });
+                          toast.success("Escrow moved to Trash.");
                           handleClose();
                         }}
                       >
@@ -316,7 +315,7 @@ const EscrowDetailDialog = ({
                         variant="default"
                         onClick={async () => {
                           await restoreEscrow(selectedEscrow.id);
-                          toast({ title: "Escrow restored." });
+                          toast.success("Escrow restored.");
                           handleClose();
                         }}
                       >

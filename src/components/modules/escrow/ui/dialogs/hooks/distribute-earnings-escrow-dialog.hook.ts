@@ -7,8 +7,10 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { distributeEscrowEarnings } from "../../../services/distribute-escrow-earnings.service";
-import { toast } from "@/hooks/toast.hook";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { DistributeEscrowEarningsEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { toast } from "sonner";
 
 const useDistributeEarningsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -37,36 +39,39 @@ const useDistributeEarningsEscrowDialog = () => {
     if (!selectedEscrow) return;
 
     try {
-      const response = await distributeEscrowEarnings({
+      const finalPayload: DistributeEscrowEarningsEscrowPayload = {
         contractId: selectedEscrow?.contractId,
         signer: address,
         serviceProvider: selectedEscrow?.serviceProvider,
         releaseSigner: selectedEscrow?.releaseSigner,
-      });
+      };
+
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/distribute-escrow-earnings",
+        method: "post",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
 
       if (response.status === "SUCCESS") {
         setIsSuccessReleaseDialogOpen(true);
         fetchAllEscrows({ address, type: activeTab || "approver" });
         setIsDialogOpen(false);
-        setIsChangingStatus(false);
 
         if (selectedEscrow) {
           setRecentEscrow(selectedEscrow);
         }
 
-        toast({
-          title: "Success",
-          description: `You have released the payment in ${selectedEscrow.title}.`,
-        });
+        toast.success(
+          `You have released the payment in ${selectedEscrow.title}.`,
+        );
       }
-    } catch (error: any) {
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
       setIsChangingStatus(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
     }
   };
 

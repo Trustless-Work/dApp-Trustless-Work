@@ -10,9 +10,9 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { toast } from "@/hooks/toast.hook";
 import { db } from "@/core/config/firebase/firebase";
 import { formSchema, WalletType } from "../schema/contact-schema";
+import { toast } from "sonner";
 
 export const useContact = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,21 +47,14 @@ export const useContact = () => {
       }
 
       form.reset();
-      toast({
-        title: "Success",
-        description: "Contact saved successfully",
-      });
+      toast.success("Contact saved successfully");
     } catch (error: any) {
       const errorMessage =
         error.response && error.response.data
           ? error.response.data.message
           : "An error occurred";
 
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
+      toast.error(errorMessage);
     }
   };
 
