@@ -16,6 +16,7 @@ import { useEscrowUIBoundedStore } from "../store/ui";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { GetFormSchema } from "../schema/initialize-escrow.schema";
 import { Trustline } from "@/@types/trustline.entity";
+import { useContactStore } from "@/core/store/data/slices/contacts.slice";
 
 export const useInitializeEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -43,10 +44,9 @@ export const useInitializeEscrow = () => {
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
-  const getAllUsers = useGlobalAuthenticationStore(
-    (state) => state.getAllUsers,
-  );
-  const users = useGlobalAuthenticationStore((state) => state.users);
+  const fetchContacts = useContactStore((state) => state.fetchContacts);
+  const contacts = useContactStore((state) => state.contacts);
+
   const getAllTrustlines = useGlobalBoundedStore(
     (state) => state.getAllTrustlines,
   );
@@ -54,9 +54,11 @@ export const useInitializeEscrow = () => {
   const formSchema = GetFormSchema();
 
   useEffect(() => {
-    getAllUsers();
-    getAllTrustlines();
-  }, [getAllUsers, getAllTrustlines]);
+    if (address) {
+      fetchContacts(address);
+      getAllTrustlines();
+    }
+  }, [fetchContacts, getAllTrustlines, address]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -168,13 +170,13 @@ export const useInitializeEscrow = () => {
   };
 
   const userOptions = useMemo(() => {
-    const options = users.map((user) => ({
-      value: user.address,
-      label: `${user.firstName} ${user.lastName}`,
+    const options = contacts.map((contact) => ({
+      value: contact.address,
+      label: `${contact.firstName} ${contact.lastName}`,
     }));
 
-    return [{ value: "", label: "Select an User" }, ...options];
-  }, [users]);
+    return [{ value: "", label: "Select a Contact" }, ...options];
+  }, [contacts]);
 
   const trustlineOptions = useMemo(() => {
     const options = trustlines.map((trustline: Trustline) => ({
