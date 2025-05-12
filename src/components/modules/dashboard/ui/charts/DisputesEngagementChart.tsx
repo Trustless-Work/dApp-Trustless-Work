@@ -11,10 +11,10 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { PieChart, Pie, Label } from "recharts";
-import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/ui/NoData";
 import { SkeletonDisputeEngagementChart } from "../utils/SkeletonDisputeEngagementChart";
 import { useDisputesEngagement } from "@/components/modules/dashboard/hooks/disputes-engagement.hook";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface DisputesEngagementChartProps {
   escrows: Escrow[];

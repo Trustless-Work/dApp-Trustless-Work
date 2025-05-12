@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { toast } from "@/hooks/toast.hook";
-import { initializeEscrow } from "@/components/modules/escrow/services/initialize-escrow.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";
@@ -16,6 +14,10 @@ import { useEscrowUIBoundedStore } from "../store/ui";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { GetFormSchema } from "../schema/initialize-escrow.schema";
 import { Trustline } from "@/@types/trustline.entity";
+import { InitializeEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
+import { trustlessWorkService } from "../services/trustless-work.service";
+import { InitializeEscrowResponse } from "@/@types/escrows/escrow-response.entity";
+import { toast } from "sonner";
 
 export const useInitializeEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -27,7 +29,6 @@ export const useInitializeEscrow = () => {
     receiver: false,
   });
 
-  const { address } = useGlobalAuthenticationStore();
   const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
   const formData = useEscrowUIBoundedStore((state) => state.formData);
   const setFormData = useEscrowUIBoundedStore((state) => state.setFormData);
@@ -50,6 +51,7 @@ export const useInitializeEscrow = () => {
   const getAllTrustlines = useGlobalBoundedStore(
     (state) => state.getAllTrustlines,
   );
+  const address = useGlobalAuthenticationStore((state) => state.address);
   const trustlines = useGlobalBoundedStore((state) => state.trustlines);
   const formSchema = GetFormSchema();
 
@@ -61,19 +63,24 @@ export const useInitializeEscrow = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      trustline: "",
-      approver: "",
       engagementId: "",
       title: "",
       description: "",
-      serviceProvider: "",
-      platformAddress: "",
-      receiver: "",
       platformFee: "",
       amount: "",
       receiverMemo: "",
-      releaseSigner: "",
-      disputeResolver: "",
+      trustline: {
+        address: "",
+        decimals: 10000000,
+      },
+      roles: {
+        approver: "",
+        serviceProvider: "",
+        platformAddress: "",
+        receiver: "",
+        releaseSigner: "",
+        disputeResolver: "",
+      },
       milestones: [{ description: "" }],
     },
     mode: "onChange",
@@ -112,27 +119,26 @@ export const useInitializeEscrow = () => {
     setIsLoading(true);
     setIsSuccessDialogOpen(false);
 
-    const trustlineObject = trustlines.find(
-      (tl) => tl.trustline === payload.trustline,
-    );
-
     try {
-      const platformFeeDecimal = Number(payload.platformFee);
-      const data = await initializeEscrow(
-        {
-          ...payload,
-          platformFee: platformFeeDecimal.toString(),
+      const finalPayload: InitializeEscrowPayload = {
+        ...payload,
+        receiverMemo: Number(payload.receiverMemo) ?? 0,
+        signer: address,
+        roles: {
+          ...payload.roles,
           issuer: address,
-          trustlineDecimals: trustlineObject?.trustlineDecimals,
-          receiverMemo: Number(payload.receiverMemo),
-          isActive: true,
         },
-        address,
-      );
+      };
 
-      if (data.status === "SUCCESS" || data.status === 201) {
+      const result = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/deployer/invoke-deployer-contract",
+        method: "post",
+      })) as InitializeEscrowResponse;
+
+      if (result.status === "SUCCESS") {
         setIsSuccessDialogOpen(true);
-        setRecentEscrow({ ...data.escrow, contractId: data.contract_id });
+        setRecentEscrow({ ...result.escrow, contractId: result.contractId });
         resetSteps();
         setCurrentStep(1);
         form.reset();
@@ -144,21 +150,14 @@ export const useInitializeEscrow = () => {
         setCurrentStep(1);
         setIsLoading(false);
         setIsSuccessDialogOpen(false);
-        toast({
-          title: "Error",
-          description: data.message || "An error occurred",
-          variant: "destructive",
-        });
+        toast.error(result.message || "An error occurred");
       }
-    } catch (error: any) {
+    } catch (err) {
       setIsLoading(false);
       setIsSuccessDialogOpen(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
     }
   };
 
@@ -178,7 +177,7 @@ export const useInitializeEscrow = () => {
 
   const trustlineOptions = useMemo(() => {
     const options = trustlines.map((trustline: Trustline) => ({
-      value: trustline.trustline,
+      value: trustline.address,
       label: trustline.name,
     }));
 

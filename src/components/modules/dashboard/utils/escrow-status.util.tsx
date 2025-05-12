@@ -1,11 +1,13 @@
-import type { Escrow } from "@/@types/escrow.entity";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 import { BadgeProps } from "@/components/ui/badge";
+
 export function getStatus(escrow: Escrow): string {
-  if (escrow.releaseFlag) return "Released";
-  if (escrow.disputeFlag) return "Disputed";
-  if (escrow.resolvedFlag) return "Resolved";
+  if (escrow.flags?.releaseFlag) return "Released";
+  if (escrow.flags?.disputeFlag) return "Disputed";
+  if (escrow.flags?.resolvedFlag) return "Resolved";
   return "Pending";
 }
+
 export function getStatusVariant(status: string): BadgeProps["variant"] {
   switch (status) {
     case "Released":
@@ -18,6 +20,7 @@ export function getStatusVariant(status: string): BadgeProps["variant"] {
       return "outline";
   }
 }
+
 export function getStatusColor(status: string): string {
   switch (status.toLowerCase()) {
     case "released":

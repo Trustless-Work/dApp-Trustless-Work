@@ -1,4 +1,4 @@
-import { Escrow } from "@/@types/escrow.entity";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 export const useLongestPendingDisputes = (escrows: Escrow[]) => {
   const getTimeInfo = (timestamp?: { seconds: number }) => {
@@ -11,7 +11,7 @@ export const useLongestPendingDisputes = (escrows: Escrow[]) => {
   };
 
   const pendingDisputes = escrows
-    .filter((e) => e.disputeFlag && !e.resolvedFlag)
+    .filter((e) => e.flags?.disputeFlag && !e.flags?.resolvedFlag)
     .sort((a, b) => {
       const aTime = a.updatedAt?.seconds || 0;
       const bTime = b.updatedAt?.seconds || 0;

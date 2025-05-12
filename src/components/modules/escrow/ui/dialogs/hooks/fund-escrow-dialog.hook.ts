@@ -6,14 +6,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "../../../schema/fund-escrow.schema";
-import { fundEscrow } from "@/components/modules/escrow/services/fund-escrow.service";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { toast } from "@/hooks/toast.hook";
 import { useEffect } from "react";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { FundEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
+import { toast } from "sonner";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen?: (value: boolean) => void;
@@ -68,43 +70,37 @@ const useFundEscrowDialog = ({
     }
   }, [paymentMethod, amount, setError, clearErrors]);
 
-  const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+  const onSubmit = async (payload: FundEscrowPayload) => {
     setIsFundingEscrow(true);
 
     try {
-      const response = await fundEscrow({
+      const finalPayload: FundEscrowPayload = {
         signer: address,
         amount: payload.amount,
         contractId: selectedEscrow!.contractId,
-      });
+      };
 
-      if (response.status === "SUCCESS" || response.status === 201) {
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/fund-escrow",
+        method: "post",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
+
+      if (response.status === "SUCCESS") {
         form.reset();
         setIsSecondDialogOpen?.(false);
-        setIsFundingEscrow(false);
         setIsDialogOpen(false);
         fetchAllEscrows({ address, type: activeTab || "approver" });
 
-        toast({
-          title: "Success",
-          description: "Escrow funded successfully",
-        });
-      } else {
-        setIsFundingEscrow(false);
-        toast({
-          title: "Error",
-          description: response.message || "An error occurred",
-          variant: "destructive",
-        });
+        toast.success("Escrow funded successfully");
       }
-    } catch (error: any) {
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
       setIsFundingEscrow(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
     }
   };
 

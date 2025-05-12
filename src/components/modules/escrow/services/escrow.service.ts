@@ -1,10 +1,8 @@
-import type {
-  Escrow,
-  EscrowPayload,
-  BalanceItem,
-} from "@/@types/escrow.entity";
+import type { Escrow, BalanceItem } from "@/@types/escrows/escrow.entity";
 import { getAllEscrowsByUser, updateEscrow } from "../server/escrow.firebase";
-import { getBalance } from "./get-balance.service";
+import { EscrowPayload } from "@/@types/escrows/escrow-payload.entity";
+import { trustlessWorkService } from "./trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 
 export const fetchAllEscrows = async ({
   address,
@@ -16,7 +14,6 @@ export const fetchAllEscrows = async ({
   isActive?: boolean;
 }): Promise<Escrow[]> => {
   const escrowsByUser = await getAllEscrowsByUser({ address, type });
-
   // todo: pass this logic to the getAllEscrowsByUser function
   const filtered =
     typeof isActive === "boolean"
@@ -29,8 +26,15 @@ export const fetchAllEscrows = async ({
     throw new Error("contractIds is not a valid array.");
   }
 
-  const response = await getBalance(address, contractIds);
-  const balances = response.data as BalanceItem[];
+  const response = (await trustlessWorkService({
+    payload: { signer: address || "", addresses: contractIds },
+    endpoint: "/helper/get-multiple-escrow-balance",
+    method: "get",
+    requiresSignature: false,
+    returnEscrowDataIsRequired: true,
+  })) as EscrowRequestResponse;
+
+  const balances = response as unknown as BalanceItem[];
 
   return Promise.all(
     filtered.map(async (escrow: Escrow) => {

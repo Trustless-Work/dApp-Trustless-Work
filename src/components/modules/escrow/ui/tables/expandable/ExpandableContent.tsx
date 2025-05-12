@@ -1,4 +1,3 @@
-import { Escrow } from "@/@types/escrow.entity";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -11,6 +10,7 @@ import {
 import Divider from "@/components/utils/ui/Divider";
 import EntityCard from "../../dialogs/cards/EntityCard";
 import ProgressEscrow from "../../dialogs/utils/ProgressEscrow";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface ExpandableContentProps {
   escrow: Escrow;
@@ -38,7 +38,7 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
                   <TableCell>{milestone.description}</TableCell>
                   {/* <TableCell>amount</TableCell> */}
                   {/* <TableCell>
-                    {milestone.approved_flag ? (
+                    {milestone.approvedFlag ? (
                       <Badge variant="destructive" className="uppercase">
                         Yes
                       </Badge>
@@ -65,27 +65,30 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
         <div className="flex mt-8  p-5 border rounded border-primary w-full h-full gap-5">
           <div className="flex flex-col w-full gap-5">
             <div className="flex gap-3 flex-col md:flex-row">
-              <EntityCard type="Approver" entity={escrow.approver} />
+              <EntityCard type="Approver" entity={escrow.roles.approver} />
               <EntityCard
                 type="Service Provider"
-                entity={escrow.serviceProvider}
+                entity={escrow.roles.serviceProvider}
               />
             </div>
             <div className="flex gap-3 flex-col md:flex-row">
               <EntityCard
                 type="Dispute Resolver"
-                entity={escrow.disputeResolver}
+                entity={escrow.roles.disputeResolver}
               />
               <EntityCard
                 type="Platform"
-                entity={escrow.platformAddress}
+                entity={escrow.roles.platformAddress}
                 hasPercentage
                 percentage={escrow.platformFee}
               />
             </div>
             <div className="flex gap-3 flex-col md:flex-row">
-              <EntityCard type="Release Signer" entity={escrow.releaseSigner} />
-              <EntityCard type="Receiver" entity={escrow.receiver} />
+              <EntityCard
+                type="Release Signer"
+                entity={escrow.roles.releaseSigner}
+              />
+              <EntityCard type="Receiver" entity={escrow.roles.receiver} />
             </div>
           </div>
         </div>

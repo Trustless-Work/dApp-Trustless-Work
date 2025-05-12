@@ -69,7 +69,7 @@ const CompleteMilestoneDialog = ({
                 <div className="flex flex-col ms-center gap-4">
                   <FormField
                     control={form.control}
-                    name="evidence"
+                    name="newEvidence"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex items-center">

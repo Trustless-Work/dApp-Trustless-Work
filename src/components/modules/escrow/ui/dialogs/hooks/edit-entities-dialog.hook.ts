@@ -9,12 +9,16 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { EscrowPayload } from "@/@types/escrow.entity";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { toast } from "@/hooks/toast.hook";
-import { editEscrow } from "../../../services/edit-escrow.service";
 import { useMemo, useState } from "react";
 import { GetFormSchema } from "../../../schema/edit-entities.schema";
+import {
+  EscrowPayload,
+  UpdateEscrowPayload,
+} from "@/@types/escrows/escrow-payload.entity";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { toast } from "sonner";
 
 interface useEditEntitiesDialogProps {
   setIsEditEntitiesDialogOpen: (value: boolean) => void;
@@ -60,12 +64,12 @@ const useEditEntitiesDialog = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      approver: selectedEscrow?.approver || "",
-      serviceProvider: selectedEscrow?.serviceProvider || "",
-      platformAddress: selectedEscrow?.platformAddress || "",
-      receiver: selectedEscrow?.receiver || "",
-      releaseSigner: selectedEscrow?.releaseSigner || "",
-      disputeResolver: selectedEscrow?.disputeResolver || "",
+      approver: selectedEscrow?.roles?.approver || "",
+      serviceProvider: selectedEscrow?.roles?.serviceProvider || "",
+      platformAddress: selectedEscrow?.roles?.platformAddress || "",
+      receiver: selectedEscrow?.roles?.receiver || "",
+      releaseSigner: selectedEscrow?.roles?.releaseSigner || "",
+      disputeResolver: selectedEscrow?.roles?.disputeResolver || "",
     },
     mode: "onChange",
   });
@@ -104,34 +108,34 @@ const useEditEntitiesDialog = ({
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
 
-      const newPayload = {
+      const finalPayload: UpdateEscrowPayload = {
         escrow: updatedEscrow as EscrowPayload,
         signer: address,
         contractId: selectedEscrow.contractId || "",
       };
 
-      const response = await editEscrow(newPayload);
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/update-escrow-by-contract-id",
+        method: "put",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
 
       if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });
         setIsEditEntitiesDialogOpen(false);
         setIsDialogOpen(false);
 
-        toast({
-          title: "Success",
-          description: `You have edited the entities of ${selectedEscrow.title}.`,
-        });
+        toast.success(
+          `You have edited the entities of ${selectedEscrow.title}.`,
+        );
       }
-
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
       setIsEditingEntities(false);
-    } catch (error: any) {
-      setIsEditingEntities(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
     }
   };
 

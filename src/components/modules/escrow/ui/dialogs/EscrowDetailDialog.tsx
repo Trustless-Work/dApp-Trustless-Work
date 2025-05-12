@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
-import type { Escrow } from "@/@types/escrow.entity";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";
@@ -45,13 +44,14 @@ import { FooterDetails } from "./sections/Footer";
 import { Button } from "@/components/ui/button";
 import EditEntitiesDialog from "./EditEntitiesDialog";
 import EditBasicPropertiesDialog from "./EditBasicPropertiesDialog";
-import { useToast } from "@/hooks/toast.hook";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Escrow } from "@/@types/escrows/escrow.entity";
+import { toast } from "sonner";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -68,7 +68,6 @@ const EscrowDetailDialog = ({
   const dialogStates = useEscrowDialogs();
 
   const { softDeleteEscrow, restoreEscrow } = useGlobalBoundedStore();
-  const { toast } = useToast();
 
   const {
     handleClose,
@@ -82,7 +81,6 @@ const EscrowDetailDialog = ({
     setSelectedEscrow,
     selectedEscrow,
   });
-  console.log(selectedEscrow?.balance);
 
   const { formatText, formatDollar } = useFormatUtils();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
@@ -143,7 +141,7 @@ const EscrowDetailDialog = ({
           </DialogHeader>
 
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
-            {selectedEscrow.disputeFlag && (
+            {selectedEscrow.flags?.disputeFlag && (
               <StatisticsCard
                 title="Status"
                 icon={Ban}
@@ -160,7 +158,7 @@ const EscrowDetailDialog = ({
               />
             )}
 
-            {selectedEscrow.releaseFlag && (
+            {selectedEscrow.flags?.releaseFlag && (
               <StatisticsCard
                 title="Status"
                 icon={CircleCheckBig}
@@ -171,7 +169,7 @@ const EscrowDetailDialog = ({
               />
             )}
 
-            {selectedEscrow.resolvedFlag && (
+            {selectedEscrow.flags?.resolvedFlag && (
               <StatisticsCard
                 title="Status"
                 icon={Handshake}
@@ -215,9 +213,9 @@ const EscrowDetailDialog = ({
                 </label>
 
                 {userRolesInEscrow.includes("platformAddress") &&
-                  !selectedEscrow?.disputeFlag &&
-                  !selectedEscrow?.resolvedFlag &&
-                  !selectedEscrow?.releaseFlag &&
+                  !selectedEscrow?.flags?.disputeFlag &&
+                  !selectedEscrow?.flags?.resolvedFlag &&
+                  !selectedEscrow?.flags?.releaseFlag &&
                   activeTab === "platformAddress" && (
                     <TooltipInfo content="Edit Roles">
                       <Button
@@ -239,30 +237,33 @@ const EscrowDetailDialog = ({
               <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <EntityCard
                   type="Approver"
-                  entity={selectedEscrow.approver}
-                  inDispute={selectedEscrow.disputeFlag}
+                  entity={selectedEscrow.roles?.approver}
+                  inDispute={selectedEscrow.flags?.disputeFlag}
                 />
                 <EntityCard
                   type="Service Provider"
-                  entity={selectedEscrow.serviceProvider}
-                  inDispute={selectedEscrow.disputeFlag}
+                  entity={selectedEscrow.roles?.serviceProvider}
+                  inDispute={selectedEscrow.flags?.disputeFlag}
                 />
                 <EntityCard
                   type="Dispute Resolver"
-                  entity={selectedEscrow.disputeResolver}
+                  entity={selectedEscrow.roles?.disputeResolver}
                 />
                 <EntityCard
                   type="Platform"
-                  entity={selectedEscrow.platformAddress}
+                  entity={selectedEscrow.roles?.platformAddress}
                   hasPercentage
                   percentage={selectedEscrow.platformFee}
                 />
 
                 <EntityCard
                   type="Release Signer"
-                  entity={selectedEscrow.releaseSigner}
+                  entity={selectedEscrow.roles?.releaseSigner}
                 />
-                <EntityCard type="Receiver" entity={selectedEscrow.receiver} />
+                <EntityCard
+                  type="Receiver"
+                  entity={selectedEscrow.roles?.receiver}
+                />
               </div>
 
               {/* Milestones */}
@@ -294,7 +295,7 @@ const EscrowDetailDialog = ({
                         variant="destructive"
                         onClick={async () => {
                           await softDeleteEscrow(selectedEscrow.id);
-                          toast({ title: "Escrow moved to Trash." });
+                          toast.success("Escrow moved to Trash.");
                           handleClose();
                         }}
                       >
@@ -316,7 +317,7 @@ const EscrowDetailDialog = ({
                         variant="default"
                         onClick={async () => {
                           await restoreEscrow(selectedEscrow.id);
-                          toast({ title: "Escrow restored." });
+                          toast.success("Escrow restored.");
                           handleClose();
                         }}
                       >

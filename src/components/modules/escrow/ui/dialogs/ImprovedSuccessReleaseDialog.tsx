@@ -12,11 +12,11 @@ import {
 import useSuccessReleaseDialogHook from "./hooks/success-release-dialog.hook";
 import Link from "next/link";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import { Escrow } from "@/@types/escrow.entity";
 import EntityCard from "./cards/EntityCard";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import TransferAnimation from "./TransferAnimation";
 import { motion } from "framer-motion";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface SuccessReleaseDialogProps {
   title: string;
@@ -136,7 +136,7 @@ export const ImprovedSuccessReleaseDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Receiver"
-                    entity={escrow?.receiver}
+                    entity={escrow?.roles?.receiver}
                     hasPercentage={true}
                     percentage={receiverPercentage.toString()}
                     hasAmount={true}
@@ -156,7 +156,7 @@ export const ImprovedSuccessReleaseDialog = ({
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Platform"
-                    entity={escrow?.platformAddress}
+                    entity={escrow?.roles?.platformAddress}
                     hasPercentage={true}
                     percentage={platformFee.toString()}
                     hasAmount={true}

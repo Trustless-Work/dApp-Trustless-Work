@@ -3,9 +3,9 @@ import { MetricCard } from "../cards/MetricCard";
 import { MilestoneStatusChart } from "../charts/MilestoneStatusChart";
 import { MilestoneApprovalTrendChart } from "../charts/MilestoneApprovalTrendChart";
 import { useMilestoneDashboardData } from "../../hooks/milestone-dashboard-data.hook";
-import { Escrow } from "@/@types/escrow.entity";
 import { SkeletonMilestoneStatusChart } from "../utils/SkeletonMilestoneOverview";
 import { SkeletonMilestoneApprovalTrendChart } from "../utils/SkeletonMilestoneApprovalChart";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface MilestonesOverviewProps {
   address: string;

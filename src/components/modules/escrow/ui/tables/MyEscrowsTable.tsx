@@ -25,7 +25,6 @@ import {
 import { Input } from "@/components/ui/input";
 import useMyEscrows from "../../hooks/my-escrows.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import { Escrow } from "@/@types/escrow.entity";
 import NoData from "@/components/utils/ui/NoData";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
@@ -40,6 +39,7 @@ import SuccessDialog, {
 } from "../dialogs/SuccessDialog";
 import SkeletonTable from "../utils/SkeletonTable";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface MyEscrowsTableProps {
   type:
@@ -123,7 +123,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                   ).length;
 
                   const approvedMilestones = escrow.milestones.filter(
-                    (milestone) => milestone.approved_flag === true,
+                    (milestone) => milestone.approvedFlag === true,
                   ).length;
 
                   const totalMilestones = escrow.milestones.length;
@@ -141,7 +141,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                   const pendingRelease =
                     progressPercentageCompleted === 100 &&
                     progressPercentageApproved === 100 &&
-                    !escrow.releaseFlag;
+                    !escrow.flags?.releaseFlag;
 
                   return (
                     <React.Fragment key={escrow.id}>
@@ -160,9 +160,11 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           {escrow.engagementId || "No engagement"}
                         </TableCell>
                         <TableCell>
-                          {formatAddress(escrow.serviceProvider)}
+                          {formatAddress(escrow.roles?.serviceProvider)}
                         </TableCell>
-                        <TableCell>{formatAddress(escrow.approver)}</TableCell>
+                        <TableCell>
+                          {formatAddress(escrow.roles?.approver)}
+                        </TableCell>
                         <TableCell>
                           {formatDateFromFirebase(
                             escrow.createdAt.seconds,
@@ -215,7 +217,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                             {expandedRows.includes(escrow.id) ? "-" : "+"}
                           </p>
                         </TableCell>
-                        {escrow.disputeFlag && (
+                        {escrow.flags?.disputeFlag && (
                           <TooltipInfo content="Escrow in Dispute">
                             <TableCell>
                               <CircleAlert
@@ -237,7 +239,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           </TooltipInfo>
                         )}
 
-                        {escrow.releaseFlag && (
+                        {escrow.flags?.releaseFlag && (
                           <TooltipInfo content="Escrow released">
                             <TableCell>
                               <CircleCheckBig
@@ -248,7 +250,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           </TooltipInfo>
                         )}
 
-                        {escrow.resolvedFlag && (
+                        {escrow.flags?.resolvedFlag && (
                           <TooltipInfo content="Escrow resolved">
                             <TableCell>
                               <Handshake className="text-green-800" size={22} />
