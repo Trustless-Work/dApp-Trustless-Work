@@ -1,74 +1,134 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
+import { toast } from "@/hooks/toast.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useEffect, useMemo, useState } from "react";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { contactSchema, ContactFormData } from "../schema/contact-schema";
+import { Contact, RoleType } from "@/@types/contact.entity";
 import {
-  arrayUnion,
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { toast } from "@/hooks/toast.hook";
-import { db } from "@/core/config/firebase/firebase";
-import { formSchema, WalletType } from "../schema/contact-schema";
+  getContacts,
+  createContact,
+  deleteContact,
+} from "../server/contact.firebase";
+import { Timestamp } from "firebase/firestore";
 
 export const useContact = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { address } = useGlobalAuthenticationStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const form = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
       lastName: "",
       email: "",
       address: "",
+      role: RoleType.BUYER,
     },
     mode: "onChange",
   });
 
-  const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+  const fetchContacts = async () => {
+    if (!address) return;
     try {
-      const userId = "USER_ID";
-      const userRef = doc(db, "users", userId);
-
-      const userSnap = await getDoc(userRef);
-
-      if (userSnap.exists()) {
-        await updateDoc(userRef, {
-          contacts: arrayUnion(payload),
-          updatedAt: serverTimestamp(),
-        });
-      } else {
-        await setDoc(userRef, {
-          contacts: [payload],
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        });
-      }
-
-      form.reset();
+      setIsLoading(true);
+      const fetchedContacts = await getContacts(address);
+      setContacts(fetchedContacts);
+    } catch (error: unknown) {
+      console.error("[Contact] Error fetching contacts:", error);
       toast({
-        title: "Success",
-        description: "Contact saved successfully",
-      });
-    } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data
-          ? error.response.data.message
-          : "An error occurred";
-
-      toast({
-        title: "Error",
-        description: errorMessage,
+        title: "Error fetching contacts",
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const typeOptions = Object.values(WalletType).map((value) => ({
-    value,
-    label: value,
-  }));
+  const onSubmit = async (data: ContactFormData) => {
+    if (!address) return;
+    try {
+      setIsSubmitting(true);
+      const now = Timestamp.now();
+      const contact: Contact = {
+        id: crypto.randomUUID(),
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        address: data.address,
+        role: data.role,
+        createdAt: now,
+        updatedAt: now,
+      };
+      await createContact(address, contact);
+      toast({
+        title: "Success",
+        description: "Contact created successfully",
+      });
+      form.reset();
+      fetchContacts();
+    } catch (error: unknown) {
+      console.error("[Contact] Error creating contact:", error);
+      toast({
+        title: "Error creating contact",
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-  return { form, onSubmit, typeOptions };
+  const handleDeleteContact = async (contactId: string) => {
+    if (!address) return;
+    try {
+      setIsDeleting(true);
+      await deleteContact(address, contactId);
+      toast({
+        title: "Success",
+        description: "Contact deleted successfully",
+      });
+      fetchContacts();
+    } catch (error: unknown) {
+      console.error("[Contact] Error deleting contact:", error);
+      toast({
+        title: "Error deleting contact",
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchContacts();
+  }, [address]);
+
+  const roleOptions = useMemo(() => {
+    return Object.values(RoleType).map((role) => ({
+      value: role,
+      label: role.charAt(0) + role.slice(1).toLowerCase().replace("_", " "),
+    }));
+  }, []);
+
+  return {
+    form,
+    contacts,
+    isLoading,
+    isSubmitting,
+    isDeleting,
+    onSubmit,
+    handleDeleteContact,
+    roleOptions,
+  };
 };

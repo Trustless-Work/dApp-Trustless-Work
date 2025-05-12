@@ -1,47 +1,47 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-"use server";
+import { db } from "@/core/config/firebase/firebase";
 import {
   collection,
-  doc,
-  setDoc,
+  addDoc,
   getDocs,
   updateDoc,
   deleteDoc,
+  doc,
+  serverTimestamp,
 } from "firebase/firestore";
-import { db } from "@/core/config/firebase/firebase";
 import { Contact } from "@/@types/contact.entity";
 
-export const getUserContacts = async (userId: string): Promise<Contact[]> => {
-  const snapshot = await getDocs(collection(db, `users/${userId}/contacts`));
-  return snapshot.docs.map((doc) => {
-    const data = doc.data();
-    return {
-      id: doc.id,
-      firstName: data.firstName ?? "",
-      lastName: data.lastName ?? "",
-      email: data.email ?? "",
-      address: data.address ?? "",
-      role: data.role ?? "",
-    };
+const contactsCollection = (userId: string) =>
+  collection(db, `users/${userId}/contacts`);
+
+export const createContact = async (userId: string, contact: Contact) => {
+  await addDoc(contactsCollection(userId), {
+    ...contact,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
 };
 
-export const addUserContact = async (userId: string, contact: any) => {
-  const ref = doc(collection(db, `users/${userId}/contacts`));
-  await setDoc(ref, contact);
+export const getContacts = async (userId: string): Promise<Contact[]> => {
+  const snapshot = await getDocs(contactsCollection(userId));
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Contact[];
 };
 
-export const updateUserContact = async (
+export const updateContact = async (
   userId: string,
   contactId: string,
-  data: any,
+  data: Partial<Contact>,
 ) => {
-  const ref = doc(db, `users/${userId}/contacts/${contactId}`);
-  await updateDoc(ref, data);
+  const docRef = doc(db, `users/${userId}/contacts/${contactId}`);
+  await updateDoc(docRef, {
+    ...data,
+    updatedAt: serverTimestamp(),
+  });
 };
 
-export const deleteUserContact = async (userId: string, contactId: string) => {
-  const ref = doc(db, `users/${userId}/contacts/${contactId}`);
-  await deleteDoc(ref);
+export const deleteContact = async (userId: string, contactId: string) => {
+  const docRef = doc(db, `users/${userId}/contacts/${contactId}`);
+  await deleteDoc(docRef);
 };
