@@ -14,7 +14,7 @@ export type ChangeMilestoneStatusPayload = {
   contractId?: string;
   milestoneIndex?: string;
   newStatus?: string;
-  evidence?: string;
+  newEvidence?: string;
   serviceProvider?: string;
 };
 

@@ -47,7 +47,7 @@ const useChangeMilestoneStatusDialogHook = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      evidence: "",
+      newEvidence: "",
     },
     mode: "onChange",
   });
@@ -61,7 +61,7 @@ const useChangeMilestoneStatusDialogHook = ({
         milestoneIndex: milestoneIndex?.toString() || "0",
         newStatus: "completed",
         serviceProvider: address,
-        evidence: payload.evidence || "",
+        newEvidence: payload.newEvidence || "",
       };
 
       const response = (await trustlessWorkService({
