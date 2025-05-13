@@ -18,7 +18,6 @@ import {
   UpdateEscrowPayload,
 } from "@/@types/escrows/escrow-payload.entity";
 import { toast } from "sonner";
-import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface useEditBasicPropertiesDialogProps {
   setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
@@ -74,8 +73,7 @@ const useEditBasicPropertiesDialog = ({
         updatedEscrow.trustline &&
         typeof updatedEscrow.trustline === "object"
       ) {
-        updatedEscrow.trustline.decimals = updatedEscrow.trustline.decimals;
-        updatedEscrow.trustline.address = updatedEscrow.trustline.address;
+        // Keep trustline object as is - no need for self assignment
       }
 
       delete updatedEscrow.createdAt;
