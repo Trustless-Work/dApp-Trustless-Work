@@ -22,9 +22,12 @@ const InitializeEscrow = () => {
                 Fill in the details of the Escrow
               </h1>
 
-              <Button variant="outline" onClick={fillTemplateForm}>
-                Use Template
-              </Button>
+              {process.env.NEXT_PUBLIC_ENV == "DEV" ||
+              process.env.NEXT_PUBLIC_ENV == "LOCAL" ? (
+                <Button variant="outline" onClick={fillTemplateForm}>
+                  Use Template
+                </Button>
+              ) : null}
             </div>
             <h2>
               Fill in the details below to set up a secure and reliable escrow
