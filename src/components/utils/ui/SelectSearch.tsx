@@ -58,6 +58,17 @@ const SelectField: React.FC<SelectFieldProps> = ({
     setOpen(false);
   };
 
+  // Move useEffect to component level
+  useEffect(() => {
+    const fieldValue = control._formValues[name];
+    if (fieldValue) {
+      const matchingOption = options.find((opt) => opt.value === fieldValue);
+      if (matchingOption) {
+        setSelected(matchingOption);
+      }
+    }
+  }, [control._formValues, name, options]);
+
   return (
     <FormField
       control={control}
@@ -66,18 +77,6 @@ const SelectField: React.FC<SelectFieldProps> = ({
         // Find the option that matches the current field value
         const currentOption =
           options.find((opt) => opt.value === field.value) || options[0];
-
-        // Update selected when field value changes
-        useEffect(() => {
-          if (field.value) {
-            const matchingOption = options.find(
-              (opt) => opt.value === field.value,
-            );
-            if (matchingOption) {
-              setSelected(matchingOption);
-            }
-          }
-        }, [field.value, options]);
 
         return (
           <FormItem className={className}>
