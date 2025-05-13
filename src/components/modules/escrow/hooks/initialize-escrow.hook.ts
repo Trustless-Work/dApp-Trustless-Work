@@ -85,6 +85,53 @@ export const useInitializeEscrow = () => {
     },
     mode: "onChange",
   });
+  
+  const fillTemplateForm = () => {
+    // Find the USDC trustline
+    const usdcTrustline = trustlines.find(tl => tl.name?.toLowerCase().includes('usdc')) || trustlines[0];
+    
+    if (!usdcTrustline) {
+      toast.error("No trustline available");
+      return;
+    }
+
+    const templateData: z.infer<typeof formSchema> = {
+      engagementId: "ENG-001",
+      title: "Design Landing Page",
+      description: "Landing for the new product of the company.",
+      platformFee: "5",
+      amount: "5",
+      receiverMemo: "123",
+      trustline: {
+        address: usdcTrustline.address,
+        decimals: usdcTrustline.decimals || 10000000,
+      },
+      roles: {
+        approver: address || "",
+        serviceProvider: address || "",
+        platformAddress: address || "",
+        receiver: address || "",
+        releaseSigner: address || "",
+        disputeResolver: address || "",
+      },
+      milestones: [
+        { description: "Design the wireframe" },
+        { description: "Implementation in React" },
+        { description: "Final delivery and review" },
+      ],
+    };
+  
+    // Set form values
+    Object.entries(templateData).forEach(([key, value]) => {
+      form.setValue(key as any, value);
+    });
+
+    // Explicitly set the trustline field
+    form.setValue("trustline.address", usdcTrustline.address);
+    form.setValue("trustline.decimals", usdcTrustline.decimals || 10000000);
+  
+    setFormData(templateData);
+  };
 
   // Load stored form data when component mounts
   useEffect(() => {
@@ -200,5 +247,6 @@ export const useInitializeEscrow = () => {
     showSelect,
     toggleField,
     isAnyMilestoneEmpty,
+    fillTemplateForm
   };
 };

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FormControl,
   FormField,
@@ -47,7 +47,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
 }) => {
   const { handleFieldChange } = useInitializeEscrow();
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(options[0]);
+  const [, setSelected] = useState(options[0]);
 
   const handleSelect = (option: {
     value: string | undefined;
@@ -63,6 +63,19 @@ const SelectField: React.FC<SelectFieldProps> = ({
       control={control}
       name={name}
       render={({ field }) => {
+        // Find the option that matches the current field value
+        const currentOption = options.find(opt => opt.value === field.value) || options[0];
+        
+        // Update selected when field value changes
+        useEffect(() => {
+          if (field.value) {
+            const matchingOption = options.find(opt => opt.value === field.value);
+            if (matchingOption) {
+              setSelected(matchingOption);
+            }
+          }
+        }, [field.value, options]);
+
         return (
           <FormItem className={className}>
             {label && (
@@ -72,44 +85,42 @@ const SelectField: React.FC<SelectFieldProps> = ({
                 {tooltipContent && <TooltipInfo content={tooltipContent} />}
               </FormLabel>
             )}
-            <FormControl>
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <FormControl>
                   <Button
                     variant="outline"
                     role="combobox"
-                    className="w-full justify-between font-normal"
                     aria-expanded={open}
-                    onClick={() => setOpen(!open)}
+                    className="w-full justify-between"
                   >
-                    {selected ? selected.label : "Select"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                    {currentOption.label}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-52 p-0">
-                  <Command>
-                    <CommandInput placeholder="Search..." />
-                    <CommandList>
-                      <CommandEmpty>No options found.</CommandEmpty>
-                      <CommandGroup>
-                        {options.map((option) => (
-                          <CommandItem
-                            key={option.value}
-                            onSelect={() => {
-                              setSelected(option);
-                              field.onChange(option.value);
-                              handleSelect(option);
-                            }}
-                          >
-                            {option.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </FormControl>
+                </FormControl>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0" align="start">
+                <Command>
+                  <CommandInput placeholder="Search..." />
+                  <CommandList>
+                    <CommandEmpty>No results found.</CommandEmpty>
+                    <CommandGroup>
+                      {options.map((option) => (
+                        <CommandItem
+                          key={option.value}
+                          onSelect={() => {
+                            handleSelect(option);
+                            field.onChange(option.value);
+                          }}
+                        >
+                          {option.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
             <FormMessage />
           </FormItem>
         );

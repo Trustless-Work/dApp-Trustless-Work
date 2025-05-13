@@ -15,7 +15,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { DollarSign, Trash2 } from "lucide-react";
+import { DollarSign, Plus, Trash2 } from "lucide-react";
 
 const InitializeEscrowForm = () => {
   const {
