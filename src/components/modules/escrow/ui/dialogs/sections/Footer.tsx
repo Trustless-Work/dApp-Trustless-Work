@@ -1,9 +1,9 @@
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import useDistributeEarningsEscrowDialog from "../hooks/distribute-earnings-escrow-dialog.hook";
+import useReleaseFundsEscrowDialog from "../hooks/release-funds-dialog.hook";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CircleDollarSign } from "lucide-react";
+import { CircleDollarSign, Loader2 } from "lucide-react";
 import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface FooterDetailsProps {
@@ -23,6 +23,8 @@ export const FooterDetails = ({
   const receiverAmount = useEscrowUIBoundedStore(
     (state) => state.receiverAmount,
   );
+  const isReleasingFunds = useEscrowUIBoundedStore((state) => state.isReleasingFunds)
+
   const platformFeeAmount = useEscrowUIBoundedStore(
     (state) => state.platformFeeAmount,
   );
@@ -30,8 +32,8 @@ export const FooterDetails = ({
     (state) => state.trustlessWorkAmount,
   );
 
-  const { distributeEscrowEarningsSubmit } =
-    useDistributeEarningsEscrowDialog();
+  const { releaseFundsSubmit } =
+  useReleaseFundsEscrowDialog();
 
   const { formatDateFromFirebase } = useFormatUtils();
 
@@ -71,12 +73,22 @@ export const FooterDetails = ({
         !selectedEscrow.flags?.releaseFlag &&
         activeTab === "releaseSigner" && (
           <Button
-            onClick={distributeEscrowEarningsSubmit}
+            onClick={releaseFundsSubmit}
             type="button"
             className="bg-green-800 hover:bg-green-700 mb-4 md:mb-0 w-full md:w-auto"
+            disabled={isReleasingFunds}
           >
-            <CircleDollarSign />
-            Release Payment
+            {isReleasingFunds ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Releasing...
+              </>
+            ) : (
+              <>
+                <CircleDollarSign />
+                Release Payment
+              </>
+            )}
           </Button>
         )}
     </>

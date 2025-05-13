@@ -8,14 +8,14 @@ import {
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { trustlessWorkService } from "../../../services/trustless-work.service";
-import { DistributeEscrowEarningsEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
+import { ReleaseFundsEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
 import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
 
-const useDistributeEarningsEscrowDialog = () => {
+const useReleaseFundsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
-  const setIsChangingStatus = useEscrowUIBoundedStore(
-    (state) => state.setIsChangingStatus,
+  const setIsReleasingFunds = useEscrowUIBoundedStore(
+    (state) => state.setIsReleasingFunds,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsDialogOpen = useEscrowUIBoundedStore(
@@ -32,14 +32,14 @@ const useDistributeEarningsEscrowDialog = () => {
   );
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
-  const distributeEscrowEarningsSubmit = async () => {
-    setIsChangingStatus(true);
+  const releaseFundsSubmit = async () => {
+    setIsReleasingFunds(true);
     setIsSuccessReleaseDialogOpen(false);
 
     if (!selectedEscrow) return;
 
     try {
-      const finalPayload: DistributeEscrowEarningsEscrowPayload = {
+      const finalPayload: ReleaseFundsEscrowPayload = {
         contractId: selectedEscrow?.contractId,
         signer: address,
         serviceProvider: selectedEscrow?.roles?.serviceProvider,
@@ -48,7 +48,7 @@ const useDistributeEarningsEscrowDialog = () => {
 
       const response = (await trustlessWorkService({
         payload: finalPayload,
-        endpoint: "/escrow/distribute-escrow-earnings",
+        endpoint: "/escrow/release-funds",
         method: "post",
         returnEscrowDataIsRequired: false,
       })) as EscrowRequestResponse;
@@ -71,11 +71,11 @@ const useDistributeEarningsEscrowDialog = () => {
         err instanceof Error ? err.message : "An unknown error occurred",
       );
     } finally {
-      setIsChangingStatus(false);
+      setIsReleasingFunds(false);
     }
   };
 
-  return { distributeEscrowEarningsSubmit };
+  return { releaseFundsSubmit };
 };
 
-export default useDistributeEarningsEscrowDialog;
+export default useReleaseFundsEscrowDialog;
