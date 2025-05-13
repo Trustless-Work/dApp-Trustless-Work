@@ -9,6 +9,7 @@ import {
   Copy,
   Flame,
   Handshake,
+  Loader2,
   Pencil,
   QrCode,
 } from "lucide-react";
@@ -32,6 +33,9 @@ export const EscrowIDActions = ({
     setIsResolveDisputeDialogOpen: dialogStates.resolveDispute.setIsOpen,
   });
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+  const isStartingDispute = useEscrowUIBoundedStore(
+    (state) => state.isStartingDispute,
+  );
   const { startDisputeSubmit } = useStartDisputeEscrowDialog();
   const { formatAddress } = useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
@@ -110,13 +114,23 @@ export const EscrowIDActions = ({
                 }}
                 disabled={
                   Number(selectedEscrow.balance) === 0 ||
-                  !selectedEscrow.balance
+                  !selectedEscrow.balance ||
+                  isStartingDispute
                 }
                 variant="destructive"
                 className="w-1/2"
               >
-                <Flame className="mr-2" />
-                Start Dispute
+                {isStartingDispute ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Starting Dispute...
+                  </>
+                ) : (
+                  <>
+                    <Flame className="mr-2" />
+                    Start Dispute
+                  </>
+                )}
               </Button>
             )}
 
