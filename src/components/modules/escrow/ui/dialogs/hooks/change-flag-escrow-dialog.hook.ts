@@ -15,8 +15,8 @@ import { toast } from "sonner";
 
 const useChangeFlagEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
-  const setIsChangingStatus = useEscrowUIBoundedStore(
-    (state) => state.setIsChangingStatus,
+  const setIsChangingFlag = useEscrowUIBoundedStore(
+    (state) => state.setIsChangingFlag,
   );
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -34,7 +34,7 @@ const useChangeFlagEscrowDialog = () => {
     milestone: Milestone,
     index: number,
   ) => {
-    setIsChangingStatus(true);
+    setIsChangingFlag(true);
 
     try {
       const finalPayload: ChangeMilestoneFlagPayload = {
@@ -65,7 +65,7 @@ const useChangeFlagEscrowDialog = () => {
         err instanceof Error ? err.message : "An unknown error occurred",
       );
     } finally {
-      setIsChangingStatus(false);
+      setIsChangingFlag(false);
     }
   };
 

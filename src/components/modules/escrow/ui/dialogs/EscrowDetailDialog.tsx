@@ -93,7 +93,7 @@ const EscrowDetailDialog = ({
           <DialogHeader>
             <div className="w-full">
               <div className="flex flex-col gap-2">
-                <div className="w-min">
+                <div className="w-full">
                   <Link
                     href={`https://stellar.expert/explorer/testnet/contract/${selectedEscrow.contractId}`}
                     target="_blank"

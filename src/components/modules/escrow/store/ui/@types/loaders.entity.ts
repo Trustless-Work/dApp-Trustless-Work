@@ -1,5 +1,6 @@
 export interface LoadersEscrowStore {
   isChangingStatus: boolean;
+  isChangingFlag: boolean;
   isReleasingFunds: boolean;
   isStartingDispute: boolean;
   isFundingEscrow: boolean;
@@ -8,6 +9,7 @@ export interface LoadersEscrowStore {
   isEditingBasicProperties: boolean;
   isResolvingDispute: boolean;
   setIsChangingStatus: (value: boolean) => void;
+  setIsChangingFlag: (value: boolean) => void;
   setIsReleasingFunds: (value: boolean) => void;
   setIsStartingDispute: (value: boolean) => void;
   setIsFundingEscrow: (value: boolean) => void;

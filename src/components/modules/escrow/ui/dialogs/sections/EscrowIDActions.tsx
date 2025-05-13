@@ -85,7 +85,7 @@ export const EscrowIDActions = ({
               e.stopPropagation();
               dialogStates.qr.setIsOpen(true);
             }}
-            className="w-full"
+            className="w-1/2"
             variant="outline"
           >
             <QrCode />
@@ -113,7 +113,7 @@ export const EscrowIDActions = ({
                   !selectedEscrow.balance
                 }
                 variant="destructive"
-                className="w-full"
+                className="w-1/2"
               >
                 <Flame className="mr-2" />
                 Start Dispute
@@ -126,7 +126,7 @@ export const EscrowIDActions = ({
             selectedEscrow?.flags?.disputeFlag && (
               <Button
                 onClick={handleOpen}
-                className="bg-green-800 hover:bg-green-700 w-full"
+                className="bg-green-800 hover:bg-green-700 w-1/2"
               >
                 <Handshake className="mr-2" />
                 Resolve Dispute

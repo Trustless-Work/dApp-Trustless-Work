@@ -11,6 +11,7 @@ import {
   FileCheck2,
   LetterText,
   Link2,
+  Loader2,
   PackageCheck,
   Pencil,
 } from "lucide-react";
@@ -43,6 +44,9 @@ export const Milestones = ({
 }: MilestonesProps) => {
   const setCompletingMilestone = useEscrowBoundedStore(
     (state) => state.setCompletingMilestone,
+  );
+  const isChangingFlag = useEscrowUIBoundedStore(
+    (state) => state.isChangingFlag,
   );
   const setMilestoneIndex = useEscrowBoundedStore(
     (state) => state.setMilestoneIndex,
@@ -239,6 +243,7 @@ export const Milestones = ({
                 !milestone.approvedFlag && (
                   <Button
                     className="max-w-32"
+                    disabled={isChangingFlag}
                     onClick={() =>
                       changeMilestoneFlagSubmit(
                         selectedEscrow,
@@ -247,8 +252,17 @@ export const Milestones = ({
                       )
                     }
                   >
-                    <CheckCheck />
-                    Approve
+                    {isChangingFlag ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Approving...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCheck />
+                        Approve
+                      </>
+                    )}
                   </Button>
                 )}
 
