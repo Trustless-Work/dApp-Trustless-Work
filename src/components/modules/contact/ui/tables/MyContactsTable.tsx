@@ -19,12 +19,13 @@ import { MoreHorizontal } from "lucide-react";
 import NoData from "@/components/utils/ui/NoData";
 import { useContact } from "@/components/modules/contact/hooks/contact.hook";
 import { Contact } from "@/@types/contact.entity";
+import SkeletonTable from "@/components/modules/escrow/ui/utils/SkeletonTable";
 
 const MyContactsTable = () => {
   const { contacts, isLoading, handleDeleteContact } = useContact();
 
   if (isLoading) {
-    return <p>Loading Contacts...</p>;
+    return <SkeletonTable />;
   }
 
   if (!contacts.length) {

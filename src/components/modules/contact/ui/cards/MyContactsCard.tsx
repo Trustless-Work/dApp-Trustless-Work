@@ -17,12 +17,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import NoData from "@/components/utils/ui/NoData";
-
+import SkeletonCards from "@/components/modules/escrow/ui/utils/SkeletonCards";
 const MyContactsCards = () => {
   const { contacts, isLoading, handleDeleteContact } = useContact();
 
   if (isLoading) {
-    return <p>Loading Contacts...</p>;
+    return <SkeletonCards />;
   }
 
   if (!contacts.length) {
