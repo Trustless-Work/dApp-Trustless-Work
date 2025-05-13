@@ -203,7 +203,11 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                             target="_blank"
                             className="sm:ml-2"
                           >
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                            >
                               <ExternalLink className="h-4 w-4" />
                             </Button>
                           </Link>
