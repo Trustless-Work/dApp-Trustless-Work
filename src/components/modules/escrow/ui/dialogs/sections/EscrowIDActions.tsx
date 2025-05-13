@@ -89,7 +89,7 @@ export const EscrowIDActions = ({
               e.stopPropagation();
               dialogStates.qr.setIsOpen(true);
             }}
-            className="w-1/2"
+            className="w-full"
             variant="outline"
           >
             <QrCode />
