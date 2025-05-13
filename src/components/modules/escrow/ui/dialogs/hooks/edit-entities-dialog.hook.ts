@@ -99,8 +99,7 @@ const useEditEntitiesDialog = ({
         updatedEscrow.trustline &&
         typeof updatedEscrow.trustline === "object"
       ) {
-        updatedEscrow.trustline.decimals =
-          updatedEscrow.trustline.decimals;
+        updatedEscrow.trustline.decimals = updatedEscrow.trustline.decimals;
         updatedEscrow.trustline.address = updatedEscrow.trustline.address;
       }
 
