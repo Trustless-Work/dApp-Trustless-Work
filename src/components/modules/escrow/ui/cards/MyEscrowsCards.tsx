@@ -172,11 +172,11 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       ) : currentData.length !== 0 ? (
         <div className="py-3" id="step-3">
           <div className="flex flex-col">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {currentData.map((escrow, index) => (
                 <Card
                   key={index}
-                  className="overflow-hidden cursor-pointer hover:shadow-md transition-all border border-border/40 min-h-60 flex flex-col justify-between"
+                  className="overflow-hidden cursor-pointer hover:shadow-md transition-all border border-border/40 min-h-[280px] flex flex-col justify-between"
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsDialogOpen(true);
@@ -184,27 +184,27 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                   }}
                 >
                   <div>
-                    <CardHeader className="p-4 pb-0 flex-row justify-between items-start space-y-0">
-                      <div className="space-y-1.5">
-                        <CardTitle className="text-base font-medium">
+                    <CardHeader className="p-4 pb-0 flex-col sm:flex-row justify-between items-start space-y-2 sm:space-y-0">
+                      <div className="space-y-1.5 w-full sm:w-2/3">
+                        <CardTitle className="text-base font-medium line-clamp-2">
                           {escrow.title || "No title"}
                         </CardTitle>
-                        <p className="text-xs text-muted-foreground max-w-sm truncate">
+                        <p className="text-xs text-muted-foreground line-clamp-2">
                           {escrow.description || "No description"}
                         </p>
                       </div>
 
-                      <div>
+                      <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 w-full sm:w-auto">
                         {getStatusBadge(escrow)}
 
                         <TooltipInfo content="View from TW Escrow Viewer">
                           <Link
                             href={`https://viewer.trustlesswork.com/${escrow.contractId}`}
                             target="_blank"
-                            className="ml-2"
+                            className="sm:ml-2"
                           >
-                            <Button variant="ghost" size="icon">
-                              <ExternalLink />
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <ExternalLink className="h-4 w-4" />
                             </Button>
                           </Link>
                         </TooltipInfo>
@@ -213,7 +213,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
 
                     <CardContent className="p-4">
                       <div className="mt-2">
-                        <h3 className="text-2xl font-semibold">
+                        <h3 className="text-xl sm:text-2xl font-semibold">
                           {formatDollar(escrow?.balance) || "N/A"}
                           <span className="text-sm text-muted-foreground font-normal ml-1">
                             of {formatDollar(escrow.amount) || "N/A"}
@@ -238,28 +238,29 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
               ))}
             </div>
 
-            <div className="flex flex-wrap justify-between items-center gap-4 mt-8 mb-3">
+            <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mt-8 mb-3">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-muted-foreground whitespace-nowrap">
                   Items per page:
                 </span>
                 <Input
                   type="number"
                   value={itemsPerPage}
                   onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                  className="w-16 h-8 text-sm"
+                  className="w-20 h-8 text-sm"
                 />
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-between sm:justify-end">
                 <Button
                   onClick={() => setCurrentPage(currentPage - 1)}
                   disabled={currentPage === 1}
                   variant="outline"
                   size="sm"
+                  className="w-full sm:w-auto"
                 >
                   Previous
                 </Button>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-muted-foreground whitespace-nowrap">
                   Page {currentPage} of {totalPages}
                 </span>
                 <Button
@@ -267,6 +268,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                   disabled={currentPage === totalPages}
                   variant="outline"
                   size="sm"
+                  className="w-full sm:w-auto"
                 >
                   Next
                 </Button>
