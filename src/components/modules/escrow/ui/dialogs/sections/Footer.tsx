@@ -49,12 +49,12 @@ export const FooterDetails = ({
       </p>
       {!selectedEscrow.flags?.releaseFlag &&
         !selectedEscrow.flags?.resolvedFlag && (
-          <Card className="flex gap-10 items-center p-5">
-            <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 pr-3">
+          <Card className="flex items-center p-5">
+            <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 px-3">
               Release Amount Distribution
             </CardTitle>
 
-            <div className="flex gap-10 sm:flex-row flex-col">
+            <div className="pl-3 flex gap-10 sm:flex-row flex-col">
               <p className="text-sm">
                 <strong>Receiver:</strong> ${receiverAmount.toFixed(2)}
               </p>
@@ -87,7 +87,7 @@ export const FooterDetails = ({
             ) : (
               <>
                 <CircleDollarSign />
-                Release Payment
+                Release Funds
               </>
             )}
           </Button>

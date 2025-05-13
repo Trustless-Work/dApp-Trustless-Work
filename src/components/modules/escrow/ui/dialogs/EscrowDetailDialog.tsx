@@ -291,7 +291,6 @@ const EscrowDetailDialog = ({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                        className="ml-10"
                         variant="destructive"
                         onClick={async () => {
                           await softDeleteEscrow(selectedEscrow.id);
@@ -313,7 +312,6 @@ const EscrowDetailDialog = ({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                        className="ml-10"
                         variant="default"
                         onClick={async () => {
                           await restoreEscrow(selectedEscrow.id);
