@@ -85,11 +85,13 @@ export const useInitializeEscrow = () => {
     },
     mode: "onChange",
   });
-  
+
   const fillTemplateForm = () => {
     // Find the USDC trustline
-    const usdcTrustline = trustlines.find(tl => tl.name?.toLowerCase().includes('usdc')) || trustlines[0];
-    
+    const usdcTrustline =
+      trustlines.find((tl) => tl.name?.toLowerCase().includes("usdc")) ||
+      trustlines[0];
+
     if (!usdcTrustline) {
       toast.error("No trustline available");
       return;
@@ -120,7 +122,7 @@ export const useInitializeEscrow = () => {
         { description: "Final delivery and review" },
       ],
     };
-  
+
     // Set form values
     Object.entries(templateData).forEach(([key, value]) => {
       form.setValue(key as any, value);
@@ -129,7 +131,7 @@ export const useInitializeEscrow = () => {
     // Explicitly set the trustline field
     form.setValue("trustline.address", usdcTrustline.address);
     form.setValue("trustline.decimals", usdcTrustline.decimals || 10000000);
-  
+
     setFormData(templateData);
   };
 
@@ -247,6 +249,6 @@ export const useInitializeEscrow = () => {
     showSelect,
     toggleField,
     isAnyMilestoneEmpty,
-    fillTemplateForm
+    fillTemplateForm,
   };
 };

@@ -64,12 +64,15 @@ const SelectField: React.FC<SelectFieldProps> = ({
       name={name}
       render={({ field }) => {
         // Find the option that matches the current field value
-        const currentOption = options.find(opt => opt.value === field.value) || options[0];
-        
+        const currentOption =
+          options.find((opt) => opt.value === field.value) || options[0];
+
         // Update selected when field value changes
         useEffect(() => {
           if (field.value) {
-            const matchingOption = options.find(opt => opt.value === field.value);
+            const matchingOption = options.find(
+              (opt) => opt.value === field.value,
+            );
             if (matchingOption) {
               setSelected(matchingOption);
             }

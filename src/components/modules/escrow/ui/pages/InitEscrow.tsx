@@ -18,13 +18,13 @@ const InitializeEscrow = () => {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-3">
             <div className="flex justify-between">
-            <h1 className="text-4xl font-bold">
-              Fill in the details of the Escrow
-            </h1>
+              <h1 className="text-4xl font-bold">
+                Fill in the details of the Escrow
+              </h1>
 
-            <Button variant="outline" onClick={fillTemplateForm}>
-              Use Template
-            </Button>
+              <Button variant="outline" onClick={fillTemplateForm}>
+                Use Template
+              </Button>
             </div>
             <h2>
               Fill in the details below to set up a secure and reliable escrow

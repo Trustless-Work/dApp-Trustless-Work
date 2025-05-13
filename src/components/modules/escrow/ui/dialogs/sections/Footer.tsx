@@ -23,7 +23,9 @@ export const FooterDetails = ({
   const receiverAmount = useEscrowUIBoundedStore(
     (state) => state.receiverAmount,
   );
-  const isReleasingFunds = useEscrowUIBoundedStore((state) => state.isReleasingFunds)
+  const isReleasingFunds = useEscrowUIBoundedStore(
+    (state) => state.isReleasingFunds,
+  );
 
   const platformFeeAmount = useEscrowUIBoundedStore(
     (state) => state.platformFeeAmount,
@@ -32,8 +34,7 @@ export const FooterDetails = ({
     (state) => state.trustlessWorkAmount,
   );
 
-  const { releaseFundsSubmit } =
-  useReleaseFundsEscrowDialog();
+  const { releaseFundsSubmit } = useReleaseFundsEscrowDialog();
 
   const { formatDateFromFirebase } = useFormatUtils();
 
