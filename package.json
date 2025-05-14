@@ -52,7 +52,7 @@
     "react-day-picker": "8.10.1",
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
-    "react-joyride": "^2.9.3",
+    "react-joyride": "^3.0.0-7",
     "react-loader-spinner": "^6.1.6",
     "react-qr-code": "^2.0.15",
     "recharts": "^2.15.2",
