@@ -35,14 +35,14 @@ export function MetricCard({
             <Skeleton className="h-8 w-[100px]" />
           </div>
           {description && (
-            <p className="text-xs text-muted-foreground">
+            <div className="text-xs text-muted-foreground">
               <Skeleton className="h-4 w-[200px]" />
-            </p>
+            </div>
           )}
           {subValue && (
-            <p className="text-xs text-muted-foreground">
+            <div className="text-xs text-muted-foreground">
               <Skeleton className="h-4 w-[200px]" />
-            </p>
+            </div>
           )}
         </CardContent>
       </Card>
