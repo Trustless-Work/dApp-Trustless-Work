@@ -15,6 +15,22 @@ import {
 } from "firebase/firestore";
 import { convertFirestoreTimestamps } from "@/utils/hook/format.hook";
 
+interface EscrowRoles {
+  approver?: string;
+  serviceProvider?: string;
+  platformAddress?: string;
+  releaseSigner?: string;
+  issuer?: string;
+  disputeResolver?: string;
+  [key: string]: string | undefined;
+}
+
+interface EscrowData {
+  roles: EscrowRoles;
+  contractId?: string;
+  [key: string]: unknown;
+}
+
 interface getAllEscrowsByUserProps {
   address: string;
   type: string;
@@ -139,7 +155,7 @@ const getUserRoleInEscrow = async ({
 
     const escrowData = convertFirestoreTimestamps(
       escrowSnapshot.docs[0].data(),
-    );
+    ) as EscrowData;
 
     const userRoles = roles.filter(
       (role) => escrowData.roles[role] === address,

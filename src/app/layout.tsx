@@ -7,7 +7,6 @@ import { GlobalProvider } from "@/providers/GlobalProvider";
 import { Toaster } from "sonner";
 import { Inter } from "next/font/google";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { LanguageProvider } from "@/providers/LanguageProvider";
 
 const Exo2 = localFont({
   src: "./fonts/Exo2.ttf",

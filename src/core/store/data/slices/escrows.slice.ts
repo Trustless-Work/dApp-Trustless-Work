@@ -47,7 +47,11 @@ export const useGlobalEscrowsSlice: StateCreator<
 
     setSelectedEscrow: (escrow: Escrow | undefined) =>
       set(
-        { selectedEscrow: escrow ? convertFirestoreTimestamps(escrow) : null },
+        {
+          selectedEscrow: escrow
+            ? (convertFirestoreTimestamps(escrow) as Escrow)
+            : null,
+        },
         false,
         ESCROW_ACTIONS.SET_SELECTED_ESCROW,
       ),
@@ -169,7 +173,9 @@ export const useGlobalEscrowsSlice: StateCreator<
     setRecentEscrow: (escrow: Escrow | undefined) =>
       set(
         {
-          recentEscrow: escrow ? convertFirestoreTimestamps(escrow) : undefined,
+          recentEscrow: escrow
+            ? (convertFirestoreTimestamps(escrow) as Escrow)
+            : undefined,
         },
         false,
         ESCROW_ACTIONS.SET_RECENT_ESCROW,

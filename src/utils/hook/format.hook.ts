@@ -66,7 +66,13 @@ interface FirestoreTimestamp {
   nanoseconds: number;
 }
 
-export const convertFirestoreTimestamps = (data: any): any => {
+type FirestoreData = {
+  [key: string]: FirestoreTimestamp | FirestoreData | FirestoreData[] | unknown;
+};
+
+export const convertFirestoreTimestamps = (
+  data: FirestoreData | FirestoreData[] | unknown,
+): FirestoreData | FirestoreData[] | unknown => {
   if (!data) return data;
 
   // If it's an array, map over each item
@@ -75,21 +81,22 @@ export const convertFirestoreTimestamps = (data: any): any => {
   }
 
   // If it's an object, process each property
-  if (typeof data === "object") {
-    const result: Record<string, any> = {};
+  if (typeof data === "object" && data !== null) {
+    const result: FirestoreData = {};
     for (const key in data) {
-      if (data[key] && typeof data[key] === "object") {
+      const value = (data as FirestoreData)[key];
+      if (value && typeof value === "object") {
         // Check if it's a Firestore timestamp
-        if ("seconds" in data[key] && "nanoseconds" in data[key]) {
+        if ("seconds" in value && "nanoseconds" in value) {
           result[key] = {
-            seconds: data[key].seconds,
-            nanoseconds: data[key].nanoseconds,
+            seconds: (value as FirestoreTimestamp).seconds,
+            nanoseconds: (value as FirestoreTimestamp).nanoseconds,
           } as FirestoreTimestamp;
         } else {
-          result[key] = convertFirestoreTimestamps(data[key]);
+          result[key] = convertFirestoreTimestamps(value as FirestoreData);
         }
       } else {
-        result[key] = data[key];
+        result[key] = value;
       }
     }
     return result;
