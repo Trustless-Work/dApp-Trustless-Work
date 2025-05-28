@@ -16,10 +16,10 @@ export const ItemsSidebar = {
   ],
   navGroups: [
     {
-      label: "Platform",
+      label: "sidebar.platform",
       items: [
         {
-          title: "Dashboard",
+          title: "sidebar.dashboard",
           url: "/dashboard",
           icon: LayoutDashboard,
           isActive: true,
@@ -35,10 +35,10 @@ export const ItemsSidebar = {
       ],
     },
     {
-      label: "Financials",
+      label: "sidebar.financials",
       items: [
         {
-          title: "Escrows",
+          title: "sidebar.escrows",
           url: "/dashboard/escrow/my-escrows",
           icon: Layers,
           isActive: false,
@@ -47,31 +47,31 @@ export const ItemsSidebar = {
       ],
     },
     {
-      label: "Resources",
+      label: "sidebar.resources",
       items: [
         {
-          title: "Resources",
+          title: "sidebar.resources",
           url: "#",
           icon: BookOpen,
           isExpandable: true,
           items: [
             {
-              title: "API Documentation",
+              title: "sidebar.apiDocs",
               url: "https://docs.trustlesswork.com/trustless-work",
               isExternal: true,
             },
             {
-              title: "Website",
+              title: "sidebar.website",
               url: "https://www.trustlesswork.com/",
               isExternal: true,
             },
             {
-              title: "Stellar Expert",
+              title: "sidebar.stellarExpert",
               url: "https://stellar.expert/explorer/testnet",
               isExternal: true,
             },
             {
-              title: "Escrow Viewer",
+              title: "sidebar.escrowViewer",
               url: "https://viewer.trustlesswork.com/",
               isExternal: true,
             },
@@ -80,17 +80,17 @@ export const ItemsSidebar = {
       ],
     },
     {
-      label: "Support",
+      label: "sidebar.support",
       items: [
         {
-          title: "Report an API Issue",
+          title: "sidebar.reportIssue",
           url: "/dashboard/report-issue",
           icon: Bug,
           isActive: true,
           isExpandable: false,
         },
         {
-          title: "Help",
+          title: "sidebar.help",
           url: "/dashboard/help",
           icon: CircleHelp,
           isActive: true,

@@ -108,34 +108,30 @@ const EscrowDetailDialog = ({
                 <DialogDescription>
                   {selectedEscrow.description}
                 </DialogDescription>
-                <DialogDescription>
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <div className="flex gap-2">
-                      <strong>Roles: </strong>
-
-                      <span className="uppercase">
-                        {userRolesInEscrow
-                          .map((role) => formatText(role))
-                          .join(", ")}
-                      </span>
-                    </div>
-
-                    <div className="border-r-2" />
-
-                    <div className="flex gap-2">
-                      <strong className="truncate">Memo:</strong>
-                      {selectedEscrow?.receiverMemo || "No memo configured"}
-                    </div>
-
-                    <div className="border-r-2" />
-
-                    <div className="flex gap-2">
-                      <strong className="truncate">Engagement:</strong>
-                      {selectedEscrow?.engagementId ||
-                        "No engagement configured"}
-                    </div>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex gap-2">
+                    <strong>Roles: </strong>
+                    <span className="uppercase">
+                      {userRolesInEscrow
+                        .map((role) => formatText(role))
+                        .join(", ")}
+                    </span>
                   </div>
-                </DialogDescription>
+
+                  <div className="border-r-2" />
+
+                  <div className="flex gap-2">
+                    <strong className="truncate">Memo:</strong>
+                    {selectedEscrow?.receiverMemo || "No memo configured"}
+                  </div>
+
+                  <div className="border-r-2" />
+
+                  <div className="flex gap-2">
+                    <strong className="truncate">Engagement:</strong>
+                    {selectedEscrow?.engagementId || "No engagement configured"}
+                  </div>
+                </div>
               </div>
             </div>
           </DialogHeader>

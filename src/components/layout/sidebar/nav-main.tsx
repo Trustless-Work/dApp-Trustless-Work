@@ -15,6 +15,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const NavMain = ({
   groups,
@@ -36,62 +37,66 @@ const NavMain = ({
     }[];
   }[];
 }) => {
+  const { t } = useLanguage();
+
   return (
     <>
       {groups.map((group) => (
         <SidebarGroup key={group.label}>
-          <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+          <SidebarGroupLabel>{t(group.label)}</SidebarGroupLabel>
           <SidebarMenu>
-            {group.items.map((item) =>
-              item.isExpandable ? (
-                <Collapsible
-                  key={item.title}
-                  asChild
-                  defaultOpen={item.isActive}
-                  className="group/collapsible"
-                >
-                  <SidebarMenuItem>
+            {group.items.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                {item.isExpandable ? (
+                  <Collapsible>
                     <CollapsibleTrigger asChild>
-                      <SidebarMenuButton tooltip={item.title}>
+                      <SidebarMenuButton>
                         {item.icon && <item.icon />}
-                        <span>{item.title}</span>
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        <span>{t(item.title)}</span>
+                        <ChevronRight className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                       <SidebarMenuSub>
                         {item.items?.map((subItem) => (
                           <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={item.isActive}
+                            >
                               <Link
                                 href={subItem.url}
-                                target={subItem.isExternal ? "_blank" : "_self"}
+                                target={
+                                  subItem.isExternal ? "_blank" : undefined
+                                }
                                 rel={
                                   subItem.isExternal
                                     ? "noopener noreferrer"
                                     : undefined
                                 }
                               >
-                                <span>{subItem.title}</span>
+                                {t(subItem.title)}
                               </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
                       </SidebarMenuSub>
                     </CollapsibleContent>
-                  </SidebarMenuItem>
-                </Collapsible>
-              ) : (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
-                    <Link href={item.url}>
+                  </Collapsible>
+                ) : (
+                  <SidebarMenuButton asChild>
+                    <Link
+                      href={item.url}
+                      target={item.isExternal ? "_blank" : undefined}
+                      rel={item.isExternal ? "noopener noreferrer" : undefined}
+                    >
                       {item.icon && <item.icon />}
-                      <span>{item.title}</span>
+                      <span>{t(item.title)}</span>
                     </Link>
                   </SidebarMenuButton>
-                </SidebarMenuItem>
-              ),
-            )}
+                )}
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
       ))}

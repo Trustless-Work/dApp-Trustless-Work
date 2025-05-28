@@ -1,6 +1,6 @@
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 
 export const useEscrowFilter = () => {
   const searchParams = useSearchParams();
@@ -14,17 +14,20 @@ export const useEscrowFilter = () => {
   const [engagement] = useState(searchParams.get("engagement") || "");
   const active = searchParams.get("active") || "active";
 
-  const updateQuery = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (value) {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
-    router.replace(`${pathname}?${params.toString()}`);
-  };
+  const updateQuery = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+      router.replace(`${pathname}?${params.toString()}`);
+    },
+    [searchParams, pathname, router],
+  );
 
-  const deleteParams = () => {
+  const deleteParams = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("q");
     params.delete("status");
@@ -33,14 +36,14 @@ export const useEscrowFilter = () => {
     params.delete("dateRange");
     params.delete("active");
     router.replace(`${pathname}?${params.toString()}`);
-  };
+  }, [searchParams, pathname, router]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       updateQuery("q", search);
     }, 500);
     return () => clearTimeout(delayDebounce);
-  }, [search]);
+  }, [search, updateQuery]);
 
   const uniqueEngagements = useMemo(() => {
     const engagementsSet = new Set<string>();
