@@ -60,3 +60,40 @@ export const useFormatUtils = () => {
     formatNumber,
   };
 };
+
+interface FirestoreTimestamp {
+  seconds: number;
+  nanoseconds: number;
+}
+
+export const convertFirestoreTimestamps = (data: any): any => {
+  if (!data) return data;
+
+  // If it's an array, map over each item
+  if (Array.isArray(data)) {
+    return data.map((item) => convertFirestoreTimestamps(item));
+  }
+
+  // If it's an object, process each property
+  if (typeof data === "object") {
+    const result: Record<string, any> = {};
+    for (const key in data) {
+      if (data[key] && typeof data[key] === "object") {
+        // Check if it's a Firestore timestamp
+        if ("seconds" in data[key] && "nanoseconds" in data[key]) {
+          result[key] = {
+            seconds: data[key].seconds,
+            nanoseconds: data[key].nanoseconds,
+          } as FirestoreTimestamp;
+        } else {
+          result[key] = convertFirestoreTimestamps(data[key]);
+        }
+      } else {
+        result[key] = data[key];
+      }
+    }
+    return result;
+  }
+
+  return data;
+};
