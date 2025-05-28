@@ -6,6 +6,7 @@ import {
   updateExistingEscrow,
 } from "@/components/modules/escrow/services/escrow.service";
 import { Escrow } from "@/@types/escrows/escrow.entity";
+import { convertFirestoreTimestamps } from "@/utils/hook/format.hook";
 
 const ESCROW_ACTIONS = {
   SET_ESCROWS: "escrows/set",
@@ -17,6 +18,7 @@ const ESCROW_ACTIONS = {
   SET_ESCROW_TO_DELETE: "escrows/setToDelete",
   SET_LOADING_ESCROWS: "escrows/setLoading",
   SET_USER_ROLE: "escrows/setUserRole",
+  SET_RECENT_ESCROW: "escrows/setRecent",
 } as const;
 
 export const ESCROW_SLICE_NAME = "escrowSlice" as const;
@@ -45,7 +47,7 @@ export const useGlobalEscrowsSlice: StateCreator<
 
     setSelectedEscrow: (escrow: Escrow | undefined) =>
       set(
-        { selectedEscrow: escrow },
+        { selectedEscrow: escrow ? convertFirestoreTimestamps(escrow) : null },
         false,
         ESCROW_ACTIONS.SET_SELECTED_ESCROW,
       ),
@@ -164,8 +166,13 @@ export const useGlobalEscrowsSlice: StateCreator<
     setUserRolesInEscrow: (role) =>
       set({ userRolesInEscrow: role }, false, ESCROW_ACTIONS.SET_USER_ROLE),
 
-    setRecentEscrow: (escrow: Escrow | undefined) => {
-      set({ recentEscrow: escrow });
-    },
+    setRecentEscrow: (escrow: Escrow | undefined) =>
+      set(
+        {
+          recentEscrow: escrow ? convertFirestoreTimestamps(escrow) : undefined,
+        },
+        false,
+        ESCROW_ACTIONS.SET_RECENT_ESCROW,
+      ),
   };
 };

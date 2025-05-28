@@ -13,6 +13,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { convertFirestoreTimestamps } from "@/utils/hook/format.hook";
 
 interface getAllEscrowsByUserProps {
   address: string;
@@ -33,10 +34,13 @@ const getAllEscrowsByUser = async ({
     const q = query(collectionRef, where(`roles.${type}`, "==", address));
     const snapshot = await getDocs(q);
 
-    const escrowList = snapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
+    const escrowList = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return convertFirestoreTimestamps({
+        ...data,
+        id: doc.id,
+      });
+    });
 
     return { success: true, data: escrowList };
   } catch (error: any) {
@@ -78,11 +82,15 @@ const updateEscrow = async ({
     }
 
     const updatedEscrow = updatedDoc.data();
+    const convertedEscrow = convertFirestoreTimestamps({
+      escrowId,
+      ...updatedEscrow,
+    });
 
     return {
       success: true,
       message: `Escrow with ID ${escrowId} updated successfully.`,
-      data: { escrowId, ...updatedEscrow },
+      data: convertedEscrow,
     };
   } catch (error: any) {
     const errorMessage =
@@ -129,7 +137,9 @@ const getUserRoleInEscrow = async ({
       };
     }
 
-    const escrowData = escrowSnapshot.docs[0].data();
+    const escrowData = convertFirestoreTimestamps(
+      escrowSnapshot.docs[0].data(),
+    );
 
     const userRoles = roles.filter(
       (role) => escrowData.roles[role] === address,
