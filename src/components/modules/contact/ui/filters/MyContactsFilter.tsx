@@ -1,76 +1,72 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { Search, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { DatePickerWithRange } from "@/components/ui/calendar-range";
+import CreateButton from "@/components/utils/ui/Create";
+import Divider from "@/components/utils/ui/Divider";
 
-interface MyContactsFilterProps {
-  onFilter: (query: string) => void;
-  onClear: () => void;
-}
-
-const MyContactsFilter = ({ onFilter, onClear }: MyContactsFilterProps) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [role, setRole] = useState("");
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    onFilter(value);
-  };
-
-  const handleClear = () => {
-    setSearchTerm("");
-    setRole("");
-    onClear();
-  };
-
+const MyContactsFilter = () => {
   return (
-    <form className="flex flex-col space-y-5">
-      <div className="flex flex-row justify-between w-full gap-10">
-        <div className="flex items-center space-x-2 w-full">
-          <Input
-            id="search"
-            placeholder="Search Contacts..."
-            value={searchTerm}
-            onChange={handleInputChange}
-          />
-          <Search className="h-5 w-5" />
-        </div>
-
-        <Button
-          variant="destructive"
-          className="flex items-center space-x-2"
-          onClick={(e) => {
-            e.preventDefault();
-            handleClear();
-          }}
-        >
-          <Trash2 className="h-5 w-5" />
-        </Button>
+    <form className="flex flex-col space-y-4 w-full">
+      {/* Header Row */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <h2 className="text-lg font-semibold">Filter Contacts</h2>
+        <CreateButton
+          className="shrink-0"
+          label="Create Contact"
+          url="/dashboard/contact/initialize-contact"
+          id="step-2"
+        />
       </div>
 
-      <div className="flex gap-4">
-        <Select
-          value={role}
-          onValueChange={(value) => {
-            setRole(value);
-            onFilter(value);
-          }}
-        >
-          <SelectTrigger>{role || "Select Role"}</SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">All Roles</SelectItem>
-            <SelectItem value="BUYER">Buyer</SelectItem>
-            <SelectItem value="SELLER">Seller</SelectItem>
-            <SelectItem value="AGENT">Agent</SelectItem>
-          </SelectContent>
-        </Select>
+      <Divider type="horizontal" />
+
+      {/* Filters Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Name */}
+        <div className="flex flex-col">
+          <label className="text-xs text-muted-foreground font-bold mb-2 ml-2">
+            Name
+          </label>
+          <Input placeholder="Search by name" />
+        </div>
+
+        {/* Email */}
+        <div className="flex flex-col">
+          <label className="text-xs text-muted-foreground font-bold mb-2 ml-2">
+            Email
+          </label>
+          <Input placeholder="Search by email" />
+        </div>
+
+        {/* Wallet Type */}
+        <div className="flex flex-col">
+          <label className="text-xs text-muted-foreground font-bold mb-2 ml-2">
+            Wallet Type
+          </label>
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Select wallet type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Albedo">Albedo</SelectItem>
+              <SelectItem value="LOBSTR">LOBSTR</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Date Range */}
+        <div className="flex flex-col">
+          <label className="text-xs text-muted-foreground font-bold mb-2 ml-2">
+            Created At
+          </label>
+          <DatePickerWithRange className="w-full" />
+        </div>
       </div>
     </form>
   );
