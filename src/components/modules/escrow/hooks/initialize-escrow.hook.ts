@@ -18,6 +18,7 @@ import { InitializeEscrowPayload } from "@/@types/escrows/escrow-payload.entity"
 import { trustlessWorkService } from "../services/trustless-work.service";
 import { InitializeEscrowResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
+import { useContactStore } from "@/core/store/data/slices/contacts.slice";
 
 export const useInitializeEscrow = () => {
   const [showSelect, setShowSelect] = useState({

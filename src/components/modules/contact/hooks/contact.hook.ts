@@ -6,7 +6,7 @@ import {
   deleteContact,
 } from "@/components/modules/contact/server/contact.firebase";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { toast } from "@/hooks/toast.hook";
+import { toast } from "sonner";
 
 interface UseContactHook {
   contacts: Contact[];
@@ -38,11 +38,9 @@ export const useContact = (type?: string): UseContactHook => {
       setContacts(filteredContacts);
     } catch (error) {
       console.error("[Contact] Error fetching contacts:", error);
-      toast({
-        title: "Error fetching contacts",
+      toast.error("Error fetching contacts", {
         description:
           error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -54,18 +52,13 @@ export const useContact = (type?: string): UseContactHook => {
     try {
       setIsSubmitting(true);
       await createContact(address, contact);
-      toast({
-        title: "Success",
-        description: "Contact created successfully",
-      });
+      toast.success("Contact created successfully");
       fetchContacts();
     } catch (error) {
       console.error("[Contact] Error creating contact:", error);
-      toast({
-        title: "Error creating contact",
+      toast.error("Error creating contact", {
         description:
           error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -77,18 +70,13 @@ export const useContact = (type?: string): UseContactHook => {
     try {
       setIsDeleting(true);
       await deleteContact(address, id);
-      toast({
-        title: "Success",
-        description: "Contact deleted successfully",
-      });
+      toast.success("Contact deleted successfully");
       fetchContacts();
     } catch (error) {
       console.error("[Contact] Error deleting contact:", error);
-      toast({
-        title: "Error deleting contact",
+      toast.error("Error deleting contact", {
         description:
           error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
       });
     } finally {
       setIsDeleting(false);
