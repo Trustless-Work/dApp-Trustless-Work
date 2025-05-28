@@ -9,6 +9,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { ItemsSidebar } from "@/components/layout/sidebar/constants/sidebar-items.constant";
 import NavMain from "./nav-main";
@@ -23,6 +24,7 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
         <NavMain groups={ItemsSidebar.navGroups} />
       </SidebarContent>
       <SidebarFooter>
+        <SidebarSeparator />
         <NavUser />
       </SidebarFooter>
       <SidebarRail />

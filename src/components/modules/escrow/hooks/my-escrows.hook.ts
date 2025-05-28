@@ -37,14 +37,14 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
   const isActive =
     activeParam === "trashed" ? false : activeParam === "active" ? true : true;
 
-  const [startStr, endStr] = dateRangeFilter.split("_");
-  const startDate = startStr ? new Date(startStr) : null;
-  const endDate = endStr ? new Date(endStr) : null;
-
   const totalPages = Math.ceil(totalEscrows / itemsPerPage);
 
   const currentData = useMemo(() => {
     if (!escrows) return [];
+
+    const [startStr, endStr] = dateRangeFilter.split("_");
+    const startDate = startStr ? new Date(startStr) : null;
+    const endDate = endStr ? new Date(endStr) : null;
 
     const sorted = [...escrows].sort((a, b) => {
       const aTimestamp = a.updatedAt || a.createdAt;
@@ -152,9 +152,9 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
     statusFilter,
     amountFilter,
     engagementFilter,
-    dateRangeFilter,
     currentPage,
     itemsPerPage,
+    dateRangeFilter,
   ]);
 
   const memoizedFetchEscrows = useCallback(async () => {

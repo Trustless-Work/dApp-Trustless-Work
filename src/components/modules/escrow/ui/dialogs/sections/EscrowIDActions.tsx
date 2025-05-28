@@ -42,7 +42,7 @@ export const EscrowIDActions = ({
 
   return (
     <div className="flex flex-col justify-center w-full md:w-1/4 px-2">
-      <p className="text-center mb-4 text-sm">
+      <div className="text-center mb-4 text-sm">
         <span className="uppercase font-bold block mb-1">
           {selectedEscrow.trustline?.name || "No Trustline"} | Escrow ID:
         </span>
@@ -61,7 +61,7 @@ export const EscrowIDActions = ({
             )}
           </button>
         </div>
-      </p>
+      </div>
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-col sm:flex-row gap-2">

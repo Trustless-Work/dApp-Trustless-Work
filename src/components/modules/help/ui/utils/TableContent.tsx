@@ -3,18 +3,21 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Section } from "../../@types/setion.entity";
 import { HelpCircle, Users, VideoIcon } from "lucide-react";
 
 export const TableOfContents = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
-  const sections: Section[] = [
-    { id: "faqs", title: "FAQs", icon: <HelpCircle /> },
-    { id: "videos", title: "Video Tutorials", icon: <VideoIcon /> },
-    { id: "roles", title: "Roles in the Escrows", icon: <Users /> },
-  ];
+  const sections = useMemo<Section[]>(
+    () => [
+      { id: "faqs", title: "FAQs", icon: <HelpCircle /> },
+      { id: "videos", title: "Video Tutorials", icon: <VideoIcon /> },
+      { id: "roles", title: "Roles in the Escrows", icon: <Users /> },
+    ],
+    [],
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -39,7 +42,7 @@ export const TableOfContents = () => {
         if (element) observer.unobserve(element);
       });
     };
-  }, []);
+  }, [sections]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);

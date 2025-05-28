@@ -1,0 +1,16 @@
+{
+  "sidebar": {
+    "platform": "Plataforma",
+    "dashboard": "Panel de Control",
+    "financials": "Finanzas",
+    "escrows": "Escrows",
+    "resources": "Recursos",
+    "apiDocs": "Documentación API",
+    "website": "Sitio Web",
+    "stellarExpert": "Stellar Expert",
+    "escrowViewer": "Visor de Escrows",
+    "support": "Soporte",
+    "reportIssue": "Reportar un Problema API",
+    "help": "Ayuda"
+  }
+}

@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Bug, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LanguageToggle from "./LanguageToggle";
 
 const HeaderWithoutAuth: React.FC = () => {
   const { handleConnect, handleDisconnect } = useWallet();
@@ -19,6 +20,7 @@ const HeaderWithoutAuth: React.FC = () => {
       </Link>
       {address ? (
         <div className="flex gap-5 ml-auto">
+          <LanguageToggle />
           <ThemeToggle />
           <Button variant="outline" onClick={handleDisconnect}>
             <LogOut /> Disconnect
@@ -26,12 +28,11 @@ const HeaderWithoutAuth: React.FC = () => {
         </div>
       ) : (
         <div className="flex gap-5 ml-auto">
+          <LanguageToggle />
           <ThemeToggle />
-
           <Button variant="destructive" onClick={handleReportIssue}>
             <Bug /> Report Issue
           </Button>
-
           <Button variant="outline" onClick={handleConnect}>
             <LogIn /> Connect
           </Button>
