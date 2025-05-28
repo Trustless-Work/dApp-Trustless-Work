@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const formSchema = z.object({
-  evidence: z
+  newEvidence: z
     .string()
     .optional()
     .refine((val) => !val || val.length >= 1, {

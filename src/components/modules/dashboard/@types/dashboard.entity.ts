@@ -1,4 +1,4 @@
-import { Escrow, Milestone } from "@/@types/escrow.entity";
+import { Escrow, Milestone } from "@/@types/escrows/escrow.entity";
 
 export type DashboardData = {
   escrows: Escrow[];
@@ -12,6 +12,20 @@ export type DashboardData = {
   totalInDispute: number;
   resolvedPercentage: number;
   isPositive: boolean;
+  avgResolutionTime: number;
+  platformFees: number;
+  depositsVsReleases: {
+    deposits: number;
+    releases: number;
+    difference: number;
+  };
+  pendingFunds: number;
+  feesByTimePeriod: {
+    today: number;
+    last7Days: number;
+    last30Days: number;
+    allTime: number;
+  };
 };
 
 export type MilestoneWithEscrow = Milestone & {
@@ -33,5 +47,18 @@ export type MilestoneDashboardData = {
     completed: MilestoneWithEscrow[];
     approved: MilestoneWithEscrow[];
     disputed: MilestoneWithEscrow[];
+    platformFees: number;
+    depositsVsReleases: {
+      deposits: number;
+      releases: number;
+      difference: number;
+    };
+    pendingFunds: number;
+    feesByTimePeriod: {
+      today: number;
+      last7Days: number;
+      last30Days: number;
+      allTime: number;
+    };
   };
 };

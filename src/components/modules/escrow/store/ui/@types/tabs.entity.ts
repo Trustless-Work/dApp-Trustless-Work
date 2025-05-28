@@ -1,4 +1,4 @@
-import { RolesInEscrow } from "@/@types/escrow.entity";
+import { RolesInEscrow } from "@/@types/escrows/escrow.entity";
 
 export interface TabsEscrowStore {
   activeTab: RolesInEscrow;

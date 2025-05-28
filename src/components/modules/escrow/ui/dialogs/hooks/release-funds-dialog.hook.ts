@@ -7,13 +7,15 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { distributeEscrowEarnings } from "../../../services/distribute-escrow-earnings.service";
-import { toast } from "@/hooks/toast.hook";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { ReleaseFundsEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { toast } from "sonner";
 
-const useDistributeEarningsEscrowDialog = () => {
+const useReleaseFundsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
-  const setIsChangingStatus = useEscrowUIBoundedStore(
-    (state) => state.setIsChangingStatus,
+  const setIsReleasingFunds = useEscrowUIBoundedStore(
+    (state) => state.setIsReleasingFunds,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsDialogOpen = useEscrowUIBoundedStore(
@@ -30,47 +32,50 @@ const useDistributeEarningsEscrowDialog = () => {
   );
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
-  const distributeEscrowEarningsSubmit = async () => {
-    setIsChangingStatus(true);
+  const releaseFundsSubmit = async () => {
+    setIsReleasingFunds(true);
     setIsSuccessReleaseDialogOpen(false);
 
     if (!selectedEscrow) return;
 
     try {
-      const response = await distributeEscrowEarnings({
+      const finalPayload: ReleaseFundsEscrowPayload = {
         contractId: selectedEscrow?.contractId,
         signer: address,
-        serviceProvider: selectedEscrow?.serviceProvider,
-        releaseSigner: selectedEscrow?.releaseSigner,
-      });
+        serviceProvider: selectedEscrow?.roles?.serviceProvider,
+        releaseSigner: selectedEscrow?.roles?.releaseSigner,
+      };
+
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/release-funds",
+        method: "post",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
 
       if (response.status === "SUCCESS") {
         setIsSuccessReleaseDialogOpen(true);
         fetchAllEscrows({ address, type: activeTab || "approver" });
         setIsDialogOpen(false);
-        setIsChangingStatus(false);
 
         if (selectedEscrow) {
           setRecentEscrow(selectedEscrow);
         }
 
-        toast({
-          title: "Success",
-          description: `You have released the payment in ${selectedEscrow.title}.`,
-        });
+        toast.success(
+          `You have released the payment in ${selectedEscrow.title}.`,
+        );
       }
-    } catch (error: any) {
-      setIsChangingStatus(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
+      setIsReleasingFunds(false);
     }
   };
 
-  return { distributeEscrowEarningsSubmit };
+  return { releaseFundsSubmit };
 };
 
-export default useDistributeEarningsEscrowDialog;
+export default useReleaseFundsEscrowDialog;

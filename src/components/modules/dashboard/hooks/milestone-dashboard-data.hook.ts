@@ -5,7 +5,7 @@ import {
   MilestoneDashboardData,
   MilestoneWithEscrow,
 } from "../@types/dashboard.entity";
-import { Escrow } from "@/@types/escrow.entity";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 export const useMilestoneDashboardData = ({
   address,
@@ -25,18 +25,18 @@ export const useMilestoneDashboardData = ({
           ...milestone,
           escrowId: escrow.id,
           escrowTitle: escrow.title,
-          disputeFlag: escrow.disputeFlag,
-          releaseFlag: escrow.releaseFlag,
+          disputeFlag: escrow.flags?.disputeFlag,
+          releaseFlag: escrow.flags?.releaseFlag,
         })),
       );
 
       setData({
         totalMilestones: allMilestones.length,
         pendingApproval: allMilestones.filter(
-          (m) => m.status === "completed" && !m.approved_flag,
+          (m) => m.status === "completed" && !m.approvedFlag,
         ).length,
         approvedNotReleased: allMilestones.filter(
-          (m) => m.approved_flag && !m.releaseFlag,
+          (m) => m.approvedFlag && !m.releaseFlag,
         ).length,
         disputed: allMilestones.filter((m) => m.disputeFlag).length,
         milestoneStatusCounts: getMilestoneStatusCounts(allMilestones),
@@ -59,9 +59,9 @@ const getMilestoneStatusCounts = (
   milestones.forEach((milestone) => {
     let status = "Pending";
 
-    if (milestone.status === "completed" && !milestone.approved_flag) {
+    if (milestone.status === "completed" && !milestone.approvedFlag) {
       status = "Completed";
-    } else if (milestone.approved_flag) {
+    } else if (milestone.approvedFlag) {
       status = "Approved";
     }
 
@@ -82,7 +82,7 @@ const getMilestoneApprovalTrend = (
   milestones: MilestoneWithEscrow[],
 ): MilestoneDashboardData["milestoneApprovalTrend"] => {
   const approvedMilestones = milestones.filter(
-    (m) => m.approved_flag && m.approvedAt,
+    (m) => m.approvedFlag && m.approvedAt,
   );
   const monthMap = new Map<string, number>();
 
@@ -103,9 +103,13 @@ const getMilestonesByStatus = (milestones: MilestoneWithEscrow[]) => {
   return {
     pending: milestones.filter((m) => m.status === "pending").slice(0, 5),
     completed: milestones
-      .filter((m) => m.status === "completed" && !m.approved_flag)
+      .filter((m) => m.status === "completed" && !m.approvedFlag)
       .slice(0, 5),
-    approved: milestones.filter((m) => m.approved_flag).slice(0, 5),
+    approved: milestones.filter((m) => m.approvedFlag).slice(0, 5),
     disputed: milestones.filter((m) => m.disputeFlag).slice(0, 5),
+    platformFees: 0,
+    depositsVsReleases: { deposits: 0, releases: 0, difference: 0 },
+    pendingFunds: 0,
+    feesByTimePeriod: { today: 0, last7Days: 0, last30Days: 0, allTime: 0 },
   };
 };

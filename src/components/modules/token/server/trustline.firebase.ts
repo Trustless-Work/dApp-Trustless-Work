@@ -23,7 +23,7 @@ const getAllTrustlines = async (): Promise<{
     const trustlines = querySnapshot.docs
       .map((doc) => {
         const trustlineData = doc.data();
-        if (!trustlineData.name || !trustlineData.trustline) {
+        if (!trustlineData.name || !trustlineData.address) {
           return null;
         }
 

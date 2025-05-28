@@ -10,10 +10,15 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { formSchema } from "../../../schema/edit-milestone.schema";
-import { EscrowPayload, Milestone } from "@/@types/escrow.entity";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { toast } from "@/hooks/toast.hook";
-import { editEscrow } from "../../../services/edit-escrow.service";
+import { Milestone } from "@/@types/escrows/escrow.entity";
+import {
+  EscrowPayload,
+  UpdateEscrowPayload,
+} from "@/@types/escrows/escrow-payload.entity";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { toast } from "sonner";
 
 interface useEditMilestonesDialogProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
@@ -79,43 +84,41 @@ const useEditMilestonesDialog = ({
         updatedEscrow.trustline &&
         typeof updatedEscrow.trustline === "object"
       ) {
-        updatedEscrow.trustlineDecimals =
-          updatedEscrow.trustline.trustlineDecimals;
-        updatedEscrow.trustline = updatedEscrow.trustline.trustline;
+        // Keep trustline object as is - no need for self assignment
       }
 
       delete updatedEscrow.createdAt;
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
 
-      const newPayload = {
+      const finalPayload: UpdateEscrowPayload = {
         escrow: updatedEscrow as EscrowPayload,
         signer: address,
         contractId: selectedEscrow.contractId || "",
       };
 
-      const response = await editEscrow(newPayload);
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/update-escrow-by-contract-id",
+        method: "put",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
 
       if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });
         setIsEditMilestoneDialogOpen(false);
         setIsDialogOpen(false);
 
-        toast({
-          title: "Success",
-          description: `You have edited the milestones of ${selectedEscrow.title}.`,
-        });
+        toast.success(
+          `You have edited the milestones of ${selectedEscrow.title}.`,
+        );
       }
-
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
       setIsEditingMilestones(false);
-    } catch (error: any) {
-      setIsEditingMilestones(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
     }
   };
 

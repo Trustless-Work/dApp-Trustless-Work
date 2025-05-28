@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { Escrow, EscrowPayload } from "@/@types/escrow.entity";
+import { EscrowPayload } from "@/@types/escrows/escrow-payload.entity";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 export interface EscrowGlobalStore {
   escrows: Escrow[];

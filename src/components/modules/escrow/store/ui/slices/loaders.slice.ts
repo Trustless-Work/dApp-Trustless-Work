@@ -10,7 +10,8 @@ export const useEscrowLoadersSlice: StateCreator<
   return {
     // Stores
     isChangingStatus: false,
-    isDistributingEarnings: false,
+    isChangingFlag: false,
+    isReleasingFunds: false,
     isStartingDispute: false,
     isFundingEscrow: false,
     isEditingMilestones: false,
@@ -20,8 +21,8 @@ export const useEscrowLoadersSlice: StateCreator<
 
     // Modifiers
     setIsChangingStatus: (value: boolean) => set({ isChangingStatus: value }),
-    setIsDistributingEarnings: (value: boolean) =>
-      set({ isDistributingEarnings: value }),
+    setIsChangingFlag: (value: boolean) => set({ isChangingFlag: value }),
+    setIsReleasingFunds: (value: boolean) => set({ isReleasingFunds: value }),
     setIsStartingDispute: (value: boolean) => set({ isStartingDispute: value }),
     setIsFundingEscrow: (value: boolean) => set({ isFundingEscrow: value }),
     setIsEditingMilestones: (value: boolean) =>

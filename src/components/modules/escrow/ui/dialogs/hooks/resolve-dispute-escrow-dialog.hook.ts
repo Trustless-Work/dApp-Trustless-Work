@@ -9,12 +9,13 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { resolveDispute } from "../../../services/resolve-dispute.service";
-import { ResolveDisputePayload } from "@/@types/escrow.entity";
 import { MouseEvent } from "react";
 import { getFormSchema } from "../../../schema/resolve-dispute-escrow.schema";
-import { toast } from "@/hooks/toast.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
+import { ResolveDisputePayload } from "@/@types/escrows/escrow-payload.entity";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { toast } from "sonner";
 
 interface useResolveDisputeEscrowDialogProps {
   setIsResolveDisputeDialogOpen: (value: boolean) => void;
@@ -64,19 +65,25 @@ const useResolveDisputeEscrowDialog = ({
     if (!selectedEscrow) return;
 
     try {
-      const response = await resolveDispute({
+      const finalPayload: ResolveDisputePayload = {
         contractId: selectedEscrow?.contractId,
-        disputeResolver: selectedEscrow?.disputeResolver,
+        disputeResolver: selectedEscrow?.roles?.disputeResolver,
         approverFunds: payload.approverFunds,
         receiverFunds: payload.receiverFunds,
-      });
+      };
+
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/resolving-disputes",
+        method: "post",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
 
       if (response.status === "SUCCESS") {
         form.reset();
         setReceiverResolve(payload.receiverFunds);
         setApproverResolve(payload.approverFunds);
         setIsResolveDisputeDialogOpen(false);
-        setIsResolvingDispute(false);
         setIsDialogOpen(false);
         fetchAllEscrows({ address, type: activeTab || "client" });
         setIsSuccessResolveDisputeDialogOpen(true);
@@ -85,26 +92,14 @@ const useResolveDisputeEscrowDialog = ({
           setRecentEscrow(selectedEscrow);
         }
 
-        toast({
-          title: "Success",
-          description: response.message,
-        });
-      } else {
-        setIsResolvingDispute(false);
-        toast({
-          title: "Error",
-          description: response.message || "An error occurred",
-          variant: "destructive",
-        });
+        toast.success("Dispute resolved successfully");
       }
-    } catch (error: any) {
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
       setIsResolvingDispute(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
     }
   };
 
@@ -114,11 +109,7 @@ const useResolveDisputeEscrowDialog = ({
     if (Number(selectedEscrow?.balance) !== 0) {
       setIsResolveDisputeDialogOpen(true);
     } else {
-      toast({
-        title: "Error",
-        description: "The balance cannot be 0",
-        variant: "destructive",
-      });
+      toast.error("The balance cannot be 0");
     }
   };
 

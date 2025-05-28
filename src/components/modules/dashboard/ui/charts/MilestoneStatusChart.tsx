@@ -19,7 +19,7 @@ interface MilestoneStatusChartProps {
   data: MilestoneDashboardData["milestoneStatusCounts"];
 }
 
-export function MilestoneStatusChart({ data }: MilestoneStatusChartProps) {
+export const MilestoneStatusChart = ({ data }: MilestoneStatusChartProps) => {
   const { formattedData, chartConfig, total } = useStatusChartData(data);
   const hasData = data && data.length > 0;
 
@@ -102,4 +102,4 @@ export function MilestoneStatusChart({ data }: MilestoneStatusChartProps) {
       </CardFooter>
     </Card>
   );
-}
+};

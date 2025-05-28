@@ -22,16 +22,29 @@ import {
 } from "@/components/ui/chart";
 import { useVolumeTrendChartData } from "../../hooks/volume-trend-chart-data.hook";
 import NoData from "@/components/utils/ui/NoData";
+import { SkeletonEscrowVolumeTrendChart } from "../utils/SkeletonEscrowVolumeTrendChart";
 
 type VolumeTrend = {
   date: string;
   value: number;
 }[];
 
-export function EscrowVolumeTrendChart({ data }: { data: VolumeTrend }) {
+interface EscrowVolumeTrendChartProps {
+  data: VolumeTrend;
+  isLoading?: boolean;
+}
+
+export const EscrowVolumeTrendChart = ({
+  data,
+  isLoading = false,
+}: EscrowVolumeTrendChartProps) => {
   const { chartConfig, formatted, currencyFormatter } =
     useVolumeTrendChartData(data);
   const hasData = data && data.length > 0;
+
+  if (isLoading) {
+    return <SkeletonEscrowVolumeTrendChart />;
+  }
 
   return (
     <Card>
@@ -70,4 +83,4 @@ export function EscrowVolumeTrendChart({ data }: { data: VolumeTrend }) {
       </CardContent>
     </Card>
   );
-}
+};

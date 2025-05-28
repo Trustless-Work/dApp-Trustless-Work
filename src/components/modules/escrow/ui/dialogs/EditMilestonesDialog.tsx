@@ -73,7 +73,7 @@ const EditMilestonesDialog = ({
                       className="flex flex-col gap-4"
                     >
                       <div className="flex items-center space-x-4">
-                        {milestone.approved_flag ? (
+                        {milestone.approvedFlag ? (
                           <Badge className="uppercase max-w-24">Approved</Badge>
                         ) : (
                           <Badge
@@ -85,7 +85,7 @@ const EditMilestonesDialog = ({
                         )}
 
                         <Input
-                          disabled={"approved_flag" in milestone}
+                          disabled={"approvedFlag" in milestone}
                           placeholder="Milestone Description"
                           value={milestone.description}
                           onChange={(e) => {
@@ -102,7 +102,7 @@ const EditMilestonesDialog = ({
                           disabled={
                             index === 0 ||
                             milestone.status === "completed" ||
-                            milestone.approved_flag
+                            milestone.approvedFlag
                           }
                         >
                           <Trash2 className="h-5 w-5" />

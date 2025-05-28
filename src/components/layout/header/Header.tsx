@@ -10,6 +10,7 @@ import Link from "next/link";
 import { ArrowBigLeft, LogIn, LogOut } from "lucide-react";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 import { Button } from "@/components/ui/button";
+import { NotificationBell } from "@/components/modules/notifications/NotificationBell"; // 👈 Asegúrate que la ruta sea correcta
 
 const Header = () => {
   const { handleConnect, handleDisconnect } = useWallet();
@@ -44,9 +45,9 @@ const Header = () => {
               </Link>
             )}
 
-            <div className="flex gap-5 ml-auto">
+            <div className="flex gap-5 ml-auto items-center">
               <ThemeToggle />
-
+              <NotificationBell />
               <Button variant="outline" onClick={handleDisconnect}>
                 <LogOut /> Disconnect
               </Button>

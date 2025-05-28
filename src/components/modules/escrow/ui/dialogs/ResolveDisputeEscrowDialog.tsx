@@ -23,9 +23,9 @@ import SkeletonResolveDispute from "./utils/SkeletonResolveDispute";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { DollarSign } from "lucide-react";
-import type { Escrow } from "../../../../../@types/escrow.entity";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { Card } from "@/components/ui/card";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface ResolveDisputeEscrowDialogProps {
   isResolveDisputeDialogOpen: boolean;
@@ -134,28 +134,28 @@ const ResolveDisputeEscrowDialog = ({
           </DialogDescription>
 
           <Card className="grid grid-cols-1 gap-4 !mt-4 p-4">
-            <p className="text-sm text-gray-400 p-0">
+            <p className="text-sm text-muted-foreground p-0">
               <span className="font-extrabold">Total Balance:</span>{" "}
               {formatDollar(escrow.balance)}
             </p>
 
             <div className="grid grid-cols-2 gap-4">
-              <p className="text-sm text-gray-400 p-0">
+              <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Approver Net:</span>{" "}
                 {formatDollar(approverNet?.toString())}
               </p>
 
-              <p className="text-sm text-gray-400 p-0">
+              <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Receiver Net:</span>{" "}
                 {formatDollar(receiverNet?.toString())}
               </p>
 
-              <p className="text-sm text-gray-400 p-0">
+              <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Platform Net:</span>{" "}
                 {formatDollar(totalPlatformAmount?.toString())}
               </p>
 
-              <p className="text-sm text-gray-400 p-0">
+              <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Trustless Work Net:</span>{" "}
                 {formatDollar(totalTrustlessWorkAmount?.toString())}
               </p>

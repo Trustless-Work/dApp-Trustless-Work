@@ -1,17 +1,15 @@
-import { Escrow, Milestone } from "@/@types/escrow.entity";
+import { Escrow, Milestone } from "@/@types/escrows/escrow.entity";
 
-export type EscrowFormData = Pick<
-  Escrow,
-  | "approver"
-  | "engagementId"
-  | "serviceProvider"
-  | "platformAddress"
-  | "platformFee"
-  | "amount"
-  | "releaseSigner"
-  | "disputeResolver"
-  | "milestones"
->;
+export type EscrowFormData = {
+  roles: Pick<
+    Escrow["roles"],
+    | "approver"
+    | "serviceProvider"
+    | "platformAddress"
+    | "releaseSigner"
+    | "disputeResolver"
+  >;
+} & Pick<Escrow, "engagementId" | "platformFee" | "amount" | "milestones">;
 
 export interface InitializeFormEscrowStore {
   approver: string;

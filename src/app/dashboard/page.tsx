@@ -1,6 +1,6 @@
-import Dashboard from "@/components/modules/dashboard/ui/pages/Dashboard";
+import { Dashboard } from "@/components/modules/dashboard/ui/pages/Dashboard";
 
-const DashboardPage: React.FC = () => {
+const DashboardPage = () => {
   return <Dashboard />;
 };
 

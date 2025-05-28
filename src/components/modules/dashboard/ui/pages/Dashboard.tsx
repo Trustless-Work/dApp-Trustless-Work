@@ -7,20 +7,19 @@ import { EscrowReleaseTrendChart } from "../charts/EscrowReleaseTrendChart";
 import { EscrowVolumeTrendChart } from "../charts/EscrowVolumeTrendChart";
 import { TopEscrowsList } from "../lists/TopEscrowsList";
 import MetricsSection from "../cards/MetricSection";
-import { SkeletonEscrowVolumeTrendChart } from "../utils/SkeletonEscrowVolumeTrendChart";
-import { SkeletonEscrowStatusChart } from "../utils/SkeletonStatusChart";
-import { SkeletonEscrowReleaseTrendChart } from "../utils/SkeletonEscrowReleaseTrendChart";
 import { ArrowRight } from "lucide-react";
 import CreateButton from "@/components/utils/ui/Create";
 import { MilestonesOverview } from "../sections/MilestoneOverview";
+import { DisputeAnalytics } from "../sections/DisputeAnalytics";
 
-export default function Dashboard() {
+export const Dashboard = () => {
   const address = useGlobalAuthenticationStore((state) => state.address);
   const data = useEscrowDashboardData({ address });
 
   const { statusCounts, releaseTrend, volumeTrend, top5ByValue, escrows } =
     data || {};
   const hasData = data && data.totalEscrows > 0;
+  const isLoading = !data;
 
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
 
@@ -54,28 +53,25 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
           <div className="md:col-span-2">
-            {data?.volumeTrend ? (
-              <EscrowVolumeTrendChart data={volumeTrend || []} />
-            ) : (
-              <SkeletonEscrowVolumeTrendChart />
-            )}
+            <EscrowVolumeTrendChart
+              data={volumeTrend || []}
+              isLoading={isLoading}
+            />
           </div>
 
           <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-10 gap-4">
             <div className="md:col-span-3">
-              {data?.statusCounts ? (
-                <EscrowStatusChart data={statusCounts || []} />
-              ) : (
-                <SkeletonEscrowStatusChart />
-              )}
+              <EscrowStatusChart
+                data={statusCounts || []}
+                isLoading={isLoading}
+              />
             </div>
 
             <div className="md:col-span-7">
-              {data?.releaseTrend ? (
-                <EscrowReleaseTrendChart data={releaseTrend || []} />
-              ) : (
-                <SkeletonEscrowReleaseTrendChart />
-              )}
+              <EscrowReleaseTrendChart
+                data={releaseTrend || []}
+                isLoading={isLoading}
+              />
             </div>
           </div>
 
@@ -85,7 +81,9 @@ export default function Dashboard() {
         </div>
 
         <MilestonesOverview address={address} escrows={escrows || []} />
+
+        <DisputeAnalytics address={address} escrows={escrows || []} />
       </div>
     </>
   );
-}
+};

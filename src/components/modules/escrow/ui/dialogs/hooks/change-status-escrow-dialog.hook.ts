@@ -10,11 +10,12 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { toast } from "@/hooks/toast.hook";
 import { formSchema } from "../../../schema/complete-milestone.schema";
 import { useEscrowBoundedStore } from "../../../store/data";
-import { changeMilestoneStatus } from "../../../services/change-milestone-status.service";
-import { ChangeMilestoneStatusPayload } from "@/@types/escrow.entity";
+import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { ChangeMilestoneStatusPayload } from "@/@types/escrows/escrow-payload.entity";
+import { toast } from "sonner";
 
 interface changeMilestoneStatusDialogHook {
   setIsCompleteMilestoneDialogOpen: (value: boolean) => void;
@@ -46,23 +47,29 @@ const useChangeMilestoneStatusDialogHook = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      evidence: "",
+      newEvidence: "",
     },
     mode: "onChange",
   });
 
-  const onSubmit = async ({
-    evidence,
-  }: Pick<ChangeMilestoneStatusPayload, "evidence">) => {
+  const onSubmit = async (payload: ChangeMilestoneStatusPayload) => {
     setIsChangingStatus(true);
+
     try {
-      const response = await changeMilestoneStatus({
+      const finalPayload: ChangeMilestoneStatusPayload = {
         contractId: selectedEscrow?.contractId,
         milestoneIndex: milestoneIndex?.toString() || "0",
         newStatus: "completed",
         serviceProvider: address,
-        newEvidence: evidence,
-      });
+        newEvidence: payload.newEvidence || "",
+      };
+
+      const response = (await trustlessWorkService({
+        payload: finalPayload,
+        endpoint: "/escrow/change-milestone-status",
+        method: "post",
+        returnEscrowDataIsRequired: false,
+      })) as EscrowRequestResponse;
 
       if (response.status === "SUCCESS") {
         setIsChangingStatus(false);
@@ -71,19 +78,16 @@ const useChangeMilestoneStatusDialogHook = ({
         setSelectedEscrow(undefined);
         fetchAllEscrows({ address, type: activeTab || "serviceProvider" });
 
-        toast({
-          title: "Success",
-          description: `The Milestone ${completingMilestone?.description} has been completed.`,
-        });
+        toast.success(
+          `The Milestone ${completingMilestone?.description} has been completed.`,
+        );
       }
-    } catch (error: any) {
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
+    } finally {
       setIsChangingStatus(false);
-
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
     }
   };
 

@@ -1,10 +1,10 @@
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import useDistributeEarningsEscrowDialog from "../hooks/distribute-earnings-escrow-dialog.hook";
+import useReleaseFundsEscrowDialog from "../hooks/release-funds-dialog.hook";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CircleDollarSign } from "lucide-react";
-import { Escrow } from "@/@types/escrow.entity";
+import { CircleDollarSign, Loader2 } from "lucide-react";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface FooterDetailsProps {
   selectedEscrow: Escrow;
@@ -23,6 +23,10 @@ export const FooterDetails = ({
   const receiverAmount = useEscrowUIBoundedStore(
     (state) => state.receiverAmount,
   );
+  const isReleasingFunds = useEscrowUIBoundedStore(
+    (state) => state.isReleasingFunds,
+  );
+
   const platformFeeAmount = useEscrowUIBoundedStore(
     (state) => state.platformFeeAmount,
   );
@@ -30,8 +34,7 @@ export const FooterDetails = ({
     (state) => state.trustlessWorkAmount,
   );
 
-  const { distributeEscrowEarningsSubmit } =
-    useDistributeEarningsEscrowDialog();
+  const { releaseFundsSubmit } = useReleaseFundsEscrowDialog();
 
   const { formatDateFromFirebase } = useFormatUtils();
 
@@ -44,37 +47,49 @@ export const FooterDetails = ({
           selectedEscrow.createdAt.nanoseconds,
         )}
       </p>
-      {!selectedEscrow.releaseFlag && !selectedEscrow.resolvedFlag && (
-        <Card className="flex gap-10 items-center p-5">
-          <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 pr-3">
-            Release Amount Distribution
-          </CardTitle>
+      {!selectedEscrow.flags?.releaseFlag &&
+        !selectedEscrow.flags?.resolvedFlag && (
+          <Card className="flex items-center p-5">
+            <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 px-3">
+              Release Amount Distribution
+            </CardTitle>
 
-          <div className="flex gap-10 sm:flex-row flex-col">
-            <p className="text-sm">
-              <strong>Receiver:</strong> ${receiverAmount.toFixed(2)}
-            </p>
-            <p className="text-sm">
-              <strong>Platform Fee:</strong> ${platformFeeAmount.toFixed(2)}
-            </p>
-            <p className="text-sm">
-              <strong>Trustless Work:</strong> ${trustlessWorkAmount.toFixed(2)}
-            </p>
-          </div>
-        </Card>
-      )}
+            <div className="pl-3 flex gap-10 sm:flex-row flex-col">
+              <p className="text-sm">
+                <strong>Receiver:</strong> ${receiverAmount.toFixed(2)}
+              </p>
+              <p className="text-sm">
+                <strong>Platform Fee:</strong> ${platformFeeAmount.toFixed(2)}
+              </p>
+              <p className="text-sm">
+                <strong>Trustless Work:</strong> $
+                {trustlessWorkAmount.toFixed(2)}
+              </p>
+            </div>
+          </Card>
+        )}
       {areAllMilestonesCompleted &&
         areAllMilestonesCompletedAndFlag &&
         userRolesInEscrow.includes("releaseSigner") &&
-        !selectedEscrow.releaseFlag &&
+        !selectedEscrow.flags?.releaseFlag &&
         activeTab === "releaseSigner" && (
           <Button
-            onClick={distributeEscrowEarningsSubmit}
+            onClick={releaseFundsSubmit}
             type="button"
             className="bg-green-800 hover:bg-green-700 mb-4 md:mb-0 w-full md:w-auto"
+            disabled={isReleasingFunds}
           >
-            <CircleDollarSign />
-            Release Payment
+            {isReleasingFunds ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Releasing...
+              </>
+            ) : (
+              <>
+                <CircleDollarSign />
+                Release Funds
+              </>
+            )}
           </Button>
         )}
     </>

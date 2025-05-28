@@ -1,15 +1,15 @@
 "use client";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import type { Escrow } from "@/@types/escrow.entity";
 import { TopEscrowsTable } from "../tables/TopEscrowsTable";
 import { SkeletonTopEscrowsTable } from "../utils/SkeletonTopEscrowsTable";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 type TopEscrowsListProps = {
   escrows: Escrow[];
 };
 
-export function TopEscrowsList({ escrows }: TopEscrowsListProps) {
+export const TopEscrowsList = ({ escrows }: TopEscrowsListProps) => {
   return (
     <Card>
       <CardHeader>
@@ -24,4 +24,4 @@ export function TopEscrowsList({ escrows }: TopEscrowsListProps) {
       </CardContent>
     </Card>
   );
-}
+};

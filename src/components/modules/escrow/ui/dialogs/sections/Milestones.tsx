@@ -11,18 +11,19 @@ import {
   FileCheck2,
   LetterText,
   Link2,
+  Loader2,
   PackageCheck,
   Pencil,
 } from "lucide-react";
 import { useEscrowBoundedStore } from "../../../store/data";
 import useChangeFlagEscrowDialog from "../hooks/change-flag-escrow-dialog.hook";
 import { useValidData } from "@/utils/hook/valid-data.hook";
-import { Escrow } from "@/@types/escrow.entity";
 import { useEscrowDialogs } from "../hooks/use-escrow-dialogs.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import Link from "next/link";
 import ProgressEscrow from "../utils/ProgressEscrow";
 import { useEffect, useState } from "react";
+import { Escrow } from "@/@types/escrows/escrow.entity";
 
 const MAX_VISIBLE_MILESTONES = 1;
 const ITEM_HEIGHT = 50;
@@ -43,6 +44,9 @@ export const Milestones = ({
 }: MilestonesProps) => {
   const setCompletingMilestone = useEscrowBoundedStore(
     (state) => state.setCompletingMilestone,
+  );
+  const isChangingFlag = useEscrowUIBoundedStore(
+    (state) => state.isChangingFlag,
   );
   const setMilestoneIndex = useEscrowBoundedStore(
     (state) => state.setMilestoneIndex,
@@ -83,13 +87,13 @@ export const Milestones = ({
 
           <div className="flex gap-3 flex-col sm:flex-row">
             {userRolesInEscrow.includes("platformAddress") &&
-              !selectedEscrow?.disputeFlag &&
-              !selectedEscrow?.resolvedFlag &&
-              !selectedEscrow?.releaseFlag &&
+              !selectedEscrow?.flags?.disputeFlag &&
+              !selectedEscrow?.flags?.resolvedFlag &&
+              !selectedEscrow?.flags?.releaseFlag &&
               activeTab === "platformAddress" && (
                 <TooltipInfo content="Edit Milestones">
                   <Button
-                    disabled={selectedEscrow?.balance !== undefined}
+                    disabled={Number(selectedEscrow.balance) === 0}
                     onClick={(e) => {
                       e.stopPropagation();
                       dialogStates.editMilestone.setIsOpen(true);
@@ -131,7 +135,7 @@ export const Milestones = ({
               key={`${milestone.description}-${milestone.status}`}
               className="flex flex-col sm:flex-row items-center space-x-4"
             >
-              {milestone.approved_flag ? (
+              {milestone.approvedFlag ? (
                 <Badge className="uppercase max-w-24 mb-4 md:mb-0">
                   Approved
                 </Badge>
@@ -156,7 +160,7 @@ export const Milestones = ({
               {userRolesInEscrow.includes("serviceProvider") &&
                 activeTab === "serviceProvider" &&
                 milestone.status !== "completed" &&
-                !milestone.approved_flag && (
+                !milestone.approvedFlag && (
                   <Button
                     className="max-w-32"
                     onClick={(e) => {
@@ -236,9 +240,10 @@ export const Milestones = ({
               {userRolesInEscrow.includes("approver") &&
                 activeTab === "approver" &&
                 milestone.status === "completed" &&
-                !milestone.approved_flag && (
+                !milestone.approvedFlag && (
                   <Button
                     className="max-w-32"
+                    disabled={isChangingFlag}
                     onClick={() =>
                       changeMilestoneFlagSubmit(
                         selectedEscrow,
@@ -247,8 +252,17 @@ export const Milestones = ({
                       )
                     }
                   >
-                    <CheckCheck />
-                    Approve
+                    {isChangingFlag ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Approving...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCheck />
+                        Approve
+                      </>
+                    )}
                   </Button>
                 )}
 

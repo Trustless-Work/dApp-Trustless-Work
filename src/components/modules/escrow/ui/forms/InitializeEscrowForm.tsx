@@ -21,15 +21,15 @@ const InitializeEscrowForm = () => {
   const {
     form,
     milestones,
+    userOptions,
+    trustlineOptions,
+    showSelect,
+    isAnyMilestoneEmpty,
+    toggleField,
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
     handleFieldChange,
-    userOptions,
-    trustlineOptions,
-    showSelect,
-    toggleField,
-    isAnyMilestoneEmpty,
   } = useInitializeEscrow();
 
   return (
@@ -90,17 +90,20 @@ const InitializeEscrowForm = () => {
           <SelectField
             required
             control={form.control}
-            name="trustline"
+            name="trustline.address"
             label="Trustline"
             tooltipContent="Trustline to be used for the escrow."
-            options={trustlineOptions}
+            options={trustlineOptions.map((tl) => ({
+              value: tl.value,
+              label: tl.label || "",
+            }))}
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="approver"
+            name="roles.approver"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -119,7 +122,7 @@ const InitializeEscrowForm = () => {
                   {showSelect.approver ? (
                     <SelectField
                       control={form.control}
-                      name="approver"
+                      name="roles.approver"
                       label=""
                       tooltipContent=""
                       options={userOptions}
@@ -130,7 +133,7 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("approver", e.target.value);
+                        handleFieldChange("roles.approver", e.target.value);
                       }}
                     />
                   )}
@@ -142,7 +145,7 @@ const InitializeEscrowForm = () => {
 
           <FormField
             control={form.control}
-            name="serviceProvider"
+            name="roles.serviceProvider"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -154,7 +157,7 @@ const InitializeEscrowForm = () => {
                   <Switch
                     checked={showSelect.serviceProvider}
                     onCheckedChange={(value) =>
-                      toggleField("serviceProvider", value)
+                      toggleField("roles.serviceProvider", value)
                     }
                     title="Show Users List?"
                   />
@@ -164,7 +167,7 @@ const InitializeEscrowForm = () => {
                   {showSelect.serviceProvider ? (
                     <SelectField
                       control={form.control}
-                      name="serviceProvider"
+                      name="roles.serviceProvider"
                       label=""
                       tooltipContent=""
                       options={userOptions}
@@ -175,7 +178,10 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("serviceProvider", e.target.value);
+                        handleFieldChange(
+                          "roles.serviceProvider",
+                          e.target.value,
+                        );
                       }}
                     />
                   )}
@@ -189,7 +195,7 @@ const InitializeEscrowForm = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="releaseSigner"
+            name="roles.releaseSigner"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -201,7 +207,7 @@ const InitializeEscrowForm = () => {
                   <Switch
                     checked={showSelect.releaseSigner}
                     onCheckedChange={(value) =>
-                      toggleField("releaseSigner", value)
+                      toggleField("roles.releaseSigner", value)
                     }
                     title="Show Users List?"
                   />
@@ -211,7 +217,7 @@ const InitializeEscrowForm = () => {
                   {showSelect.releaseSigner ? (
                     <SelectField
                       control={form.control}
-                      name="releaseSigner"
+                      name="roles.releaseSigner"
                       label=""
                       tooltipContent=""
                       options={userOptions}
@@ -222,7 +228,10 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("releaseSigner", e.target.value);
+                        handleFieldChange(
+                          "roles.releaseSigner",
+                          e.target.value,
+                        );
                       }}
                     />
                   )}
@@ -234,7 +243,7 @@ const InitializeEscrowForm = () => {
 
           <FormField
             control={form.control}
-            name="disputeResolver"
+            name="roles.disputeResolver"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -246,7 +255,7 @@ const InitializeEscrowForm = () => {
                   <Switch
                     checked={showSelect.disputeResolver}
                     onCheckedChange={(value) =>
-                      toggleField("disputeResolver", value)
+                      toggleField("roles.disputeResolver", value)
                     }
                     title="Show Users List?"
                   />
@@ -256,7 +265,7 @@ const InitializeEscrowForm = () => {
                   {showSelect.disputeResolver ? (
                     <SelectField
                       control={form.control}
-                      name="disputeResolver"
+                      name="roles.disputeResolver"
                       label=""
                       tooltipContent=""
                       options={userOptions}
@@ -267,7 +276,10 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("disputeResolver", e.target.value);
+                        handleFieldChange(
+                          "roles.disputeResolver",
+                          e.target.value,
+                        );
                       }}
                     />
                   )}
@@ -281,7 +293,7 @@ const InitializeEscrowForm = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="platformAddress"
+            name="roles.platformAddress"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -293,7 +305,7 @@ const InitializeEscrowForm = () => {
                   <Switch
                     checked={showSelect.platformAddress}
                     onCheckedChange={(value) =>
-                      toggleField("platformAddress", value)
+                      toggleField("roles.platformAddress", value)
                     }
                     title="Show Users List?"
                   />
@@ -303,7 +315,7 @@ const InitializeEscrowForm = () => {
                   {showSelect.platformAddress ? (
                     <SelectField
                       control={form.control}
-                      name="platformAddress"
+                      name="roles.platformAddress"
                       label=""
                       tooltipContent=""
                       options={userOptions}
@@ -314,7 +326,10 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("platformAddress", e.target.value);
+                        handleFieldChange(
+                          "roles.platformAddress",
+                          e.target.value,
+                        );
                       }}
                     />
                   )}
@@ -325,7 +340,7 @@ const InitializeEscrowForm = () => {
           />
           <FormField
             control={form.control}
-            name="receiver"
+            name="roles.receiver"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center justify-between">
@@ -335,7 +350,9 @@ const InitializeEscrowForm = () => {
                   </span>
                   <Switch
                     checked={showSelect.receiver}
-                    onCheckedChange={(value) => toggleField("receiver", value)}
+                    onCheckedChange={(value) =>
+                      toggleField("roles.receiver", value)
+                    }
                     title="Show Users List?"
                   />
                 </FormLabel>
@@ -344,7 +361,7 @@ const InitializeEscrowForm = () => {
                   {showSelect.receiver ? (
                     <SelectField
                       control={form.control}
-                      name="receiver"
+                      name="roles.receiver"
                       label=""
                       tooltipContent=""
                       options={userOptions}
@@ -355,7 +372,7 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("receiver", e.target.value);
+                        handleFieldChange("roles.receiver", e.target.value);
                       }}
                     />
                   )}

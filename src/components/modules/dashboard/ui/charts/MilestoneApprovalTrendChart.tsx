@@ -20,9 +20,9 @@ interface MilestoneApprovalTrendChartProps {
   data: MilestoneDashboardData["milestoneApprovalTrend"];
 }
 
-export function MilestoneApprovalTrendChart({
+export const MilestoneApprovalTrendChart = ({
   data,
-}: MilestoneApprovalTrendChartProps) {
+}: MilestoneApprovalTrendChartProps) => {
   const { chartConfig, formatted } = useReleaseTrendChartData(data);
   const hasData = data && data.length > 0;
 
@@ -66,4 +66,4 @@ export function MilestoneApprovalTrendChart({
       </CardContent>
     </Card>
   );
-}
+};
