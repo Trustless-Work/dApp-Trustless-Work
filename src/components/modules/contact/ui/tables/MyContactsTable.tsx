@@ -18,11 +18,82 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import NoData from "@/components/utils/ui/NoData";
 import { useContact } from "@/components/modules/contact/hooks/contact.hook";
-import { Contact } from "@/@types/contact.entity";
+import { Contact, RoleType } from "@/@types/contact.entity";
 import SkeletonTable from "@/components/modules/escrow/ui/utils/SkeletonTable";
 
-const MyContactsTable = () => {
-  const { contacts, isLoading, handleDeleteContact } = useContact();
+interface MyContactsTableProps {
+  type: string;
+}
+
+const MyContactsTable = ({ type }: MyContactsTableProps) => {
+  const { isLoading, handleDeleteContact } = useContact(type);
+  // Mock Data for Testing Purposes
+  const contacts: Contact[] = [
+    {
+      id: "1",
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      address: "123 Main St",
+      role: RoleType.ISSUER,
+      createdAt: {
+        seconds: 1672531200,
+        nanoseconds: 0,
+      },
+      updatedAt: {
+        seconds: 1672531200,
+        nanoseconds: 0,
+      },
+    },
+    {
+      id: "2",
+      firstName: "Jane",
+      lastName: "Smith",
+      email: "jane.smith@example.com",
+      address: "456 Park Ave",
+      role: RoleType.APPROVER,
+      createdAt: {
+        seconds: 1672531200,
+        nanoseconds: 0,
+      },
+      updatedAt: {
+        seconds: 1672531200,
+        nanoseconds: 0,
+      },
+    },
+    {
+      id: "3",
+      firstName: "Michael",
+      lastName: "Johnson",
+      email: "michael.johnson@example.com",
+      address: "789 Broadway",
+      role: RoleType.SERVICE_PROVIDER,
+      createdAt: {
+        seconds: 1672531200,
+        nanoseconds: 0,
+      },
+      updatedAt: {
+        seconds: 1672531200,
+        nanoseconds: 0,
+      },
+    },
+    {
+      id: "4",
+      firstName: "Emily",
+      lastName: "Davis",
+      email: "emily.davis@example.com",
+      address: "321 Elm St",
+      role: RoleType.DISPUTE_RESOLVER,
+      createdAt: {
+        seconds: 1672531200,
+        nanoseconds: 0,
+      },
+      updatedAt: {
+        seconds: 1672531200,
+        nanoseconds: 0,
+      },
+    },
+  ];
 
   if (isLoading) {
     return <SkeletonTable />;

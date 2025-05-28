@@ -1,45 +1,42 @@
-"use client";
-
-import { toast } from "@/hooks/toast.hook";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect, useMemo, useState } from "react";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { contactSchema, ContactFormData } from "../schema/contact-schema";
+import { useState, useEffect, useMemo } from "react";
 import { Contact, RoleType } from "@/@types/contact.entity";
 import {
   getContacts,
   createContact,
   deleteContact,
-} from "../server/contact.firebase";
-import { Timestamp } from "firebase/firestore";
+} from "@/components/modules/contact/server/contact.firebase";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { toast } from "@/hooks/toast.hook";
 
-export const useContact = () => {
+interface UseContactHook {
+  contacts: Contact[];
+  isLoading: boolean;
+  isSubmitting: boolean;
+  isDeleting: boolean;
+  handleCreateContact: (contact: Contact) => Promise<void>;
+  handleDeleteContact: (id: string) => Promise<void>;
+  roleOptions: { value: string; label: string }[];
+}
+
+export const useContact = (type?: string): UseContactHook => {
   const { address } = useGlobalAuthenticationStore();
-  const [isLoading, setIsLoading] = useState(false);
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-
-  const form = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      address: "",
-      role: RoleType.BUYER,
-    },
-    mode: "onChange",
-  });
 
   const fetchContacts = async () => {
     if (!address) return;
     try {
       setIsLoading(true);
       const fetchedContacts = await getContacts(address);
-      setContacts(fetchedContacts);
-    } catch (error: unknown) {
+      const filteredContacts = type
+        ? fetchedContacts.filter(
+            (contact) => contact.role.toLowerCase() === type.toLowerCase(),
+          )
+        : fetchedContacts;
+      setContacts(filteredContacts);
+    } catch (error) {
       console.error("[Contact] Error fetching contacts:", error);
       toast({
         title: "Error fetching contacts",
@@ -52,29 +49,17 @@ export const useContact = () => {
     }
   };
 
-  const onSubmit = async (data: ContactFormData) => {
+  const handleCreateContact = async (contact: Contact) => {
     if (!address) return;
     try {
       setIsSubmitting(true);
-      const now = Timestamp.now();
-      const contact: Contact = {
-        id: crypto.randomUUID(),
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        address: data.address,
-        role: data.role,
-        createdAt: now,
-        updatedAt: now,
-      };
       await createContact(address, contact);
       toast({
         title: "Success",
         description: "Contact created successfully",
       });
-      form.reset();
       fetchContacts();
-    } catch (error: unknown) {
+    } catch (error) {
       console.error("[Contact] Error creating contact:", error);
       toast({
         title: "Error creating contact",
@@ -87,17 +72,17 @@ export const useContact = () => {
     }
   };
 
-  const handleDeleteContact = async (contactId: string) => {
+  const handleDeleteContact = async (id: string) => {
     if (!address) return;
     try {
       setIsDeleting(true);
-      await deleteContact(address, contactId);
+      await deleteContact(address, id);
       toast({
         title: "Success",
         description: "Contact deleted successfully",
       });
       fetchContacts();
-    } catch (error: unknown) {
+    } catch (error) {
       console.error("[Contact] Error deleting contact:", error);
       toast({
         title: "Error deleting contact",
@@ -112,7 +97,7 @@ export const useContact = () => {
 
   useEffect(() => {
     fetchContacts();
-  }, [address]);
+  }, [address, type]);
 
   const roleOptions = useMemo(() => {
     return Object.values(RoleType).map((role) => ({
@@ -122,12 +107,11 @@ export const useContact = () => {
   }, []);
 
   return {
-    form,
     contacts,
     isLoading,
     isSubmitting,
     isDeleting,
-    onSubmit,
+    handleCreateContact,
     handleDeleteContact,
     roleOptions,
   };

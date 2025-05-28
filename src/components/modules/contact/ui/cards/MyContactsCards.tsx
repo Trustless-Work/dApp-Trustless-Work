@@ -18,8 +18,13 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import NoData from "@/components/utils/ui/NoData";
 import SkeletonCards from "@/components/modules/escrow/ui/utils/SkeletonCards";
-const MyContactsCards = () => {
-  const { contacts, isLoading, handleDeleteContact } = useContact();
+
+interface MyContactsCardsProps {
+  type: string;
+}
+
+const MyContactsCards = ({ type }: MyContactsCardsProps) => {
+  const { contacts, isLoading, handleDeleteContact } = useContact(type);
 
   if (isLoading) {
     return <SkeletonCards />;

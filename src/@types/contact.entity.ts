@@ -1,9 +1,13 @@
 import { CreatedAt, UpdatedAt } from "./dates.entity";
 
 export enum RoleType {
-  BUYER = "BUYER",
-  SELLER = "SELLER",
-  ESCROW_AGENT = "ESCROW_AGENT",
+  ISSUER = "ISSUER",
+  APPROVER = "APPROVER",
+  SERVICE_PROVIDER = "SERVICE_PROVIDER",
+  DISPUTE_RESOLVER = "DISPUTE_RESOLVER",
+  RELEASE_SIGNER = "RELEASE_SIGNER",
+  PLATFORM_ADDRESS = "PLATFORM_ADDRESS",
+  RECEIVER = "RECEIVER",
 }
 
 export interface Contact {
