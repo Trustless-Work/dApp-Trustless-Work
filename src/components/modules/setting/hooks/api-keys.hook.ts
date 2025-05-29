@@ -21,7 +21,7 @@ const useAPIKeys = () => {
     setIsRequestingAPIKey(true);
 
     if (loggedUser?.useCase === "" || !loggedUser?.useCase) {
-      toast.error("You need to complete your use case first");
+      toast.error("Please complete your profile to get an API Key");
 
       setIsRequestingAPIKey(false);
     } else {
