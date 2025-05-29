@@ -9,16 +9,19 @@ import { useRouter } from "next/navigation";
 import { useContactsQuery } from "./tanstack/useContactsQuery";
 import { useCreateContactMutation } from "./tanstack/useCreateContactMutation";
 import { useDeleteContactMutation } from "./tanstack/useDeleteContactMutation";
+import { useUpdateContactMutation } from "./tanstack/useUpdateContactMutation";
 
 interface UseContactHook {
   contacts: Contact[];
   isLoading: boolean;
   isSubmitting: boolean;
   isDeleting: boolean;
+  isUpdating: boolean;
   activeMode: "table" | "cards";
   setActiveMode: (mode: "table" | "cards") => void;
   handleCreateContact: (data: ContactFormData) => Promise<void>;
   handleDeleteContact: (id: string) => Promise<void>;
+  handleUpdateContact: (id: string, data: ContactFormData) => Promise<boolean>;
   run: boolean;
   setRun: (run: boolean) => void;
   steps: {
@@ -42,6 +45,7 @@ export const useContact = (): UseContactHook => {
   // Mutations
   const createMutation = useCreateContactMutation();
   const deleteMutation = useDeleteContactMutation();
+  const updateMutation = useUpdateContactMutation();
 
   const steps = [
     {
@@ -85,15 +89,37 @@ export const useContact = (): UseContactHook => {
     }
   };
 
+  const handleUpdateContact = async (
+    id: string,
+    data: ContactFormData,
+  ): Promise<boolean> => {
+    if (!address) return false;
+    try {
+      await updateMutation.mutateAsync({ id, data });
+      toast.success("Contact updated successfully");
+      router.refresh();
+      return true;
+    } catch (error) {
+      console.error("[Contact] Error updating contact:", error);
+      toast.error("Error updating contact", {
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      });
+      return false;
+    }
+  };
+
   return {
     contacts,
     isLoading,
     isSubmitting: createMutation.isPending,
     isDeleting: deleteMutation.isPending,
+    isUpdating: updateMutation.isPending,
     activeMode,
     setActiveMode,
     handleCreateContact,
     handleDeleteContact,
+    handleUpdateContact,
     run,
     setRun,
     steps,

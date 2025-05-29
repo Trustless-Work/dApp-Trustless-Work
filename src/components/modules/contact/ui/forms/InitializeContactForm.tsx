@@ -1,18 +1,18 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { WalletType } from "@/@types/contact.entity";
 import { useForm } from "react-hook-form";
-import { formSchema, ContactFormData } from "../../schema/contact-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ContactFormData, formSchema } from "../../schema/contact-schema";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -20,16 +20,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { WalletType } from "@/@types/contact.entity";
 
 interface InitializeContactFormProps {
-  onSubmit: (data: ContactFormData) => Promise<void>;
+  onSubmit: (data: ContactFormData) => void;
+  defaultValues?: ContactFormData;
 }
 
-const InitializeContactForm = ({ onSubmit }: InitializeContactFormProps) => {
+const InitializeContactForm = ({
+  onSubmit,
+  defaultValues,
+}: InitializeContactFormProps) => {
   const form = useForm<ContactFormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: defaultValues || {
       name: "",
       email: "",
       address: "",
@@ -110,7 +114,7 @@ const InitializeContactForm = ({ onSubmit }: InitializeContactFormProps) => {
 
         <div className="flex justify-start">
           <Button type="submit" className="w-full md:w-1/4">
-            Create Contact
+            {defaultValues ? "Update Contact" : "Create Contact"}
           </Button>
         </div>
       </form>
