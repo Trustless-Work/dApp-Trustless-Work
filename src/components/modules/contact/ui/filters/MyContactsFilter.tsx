@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DatePickerWithRange } from "@/components/ui/calendar-range";
 import CreateButton from "@/components/utils/ui/Create";
 import Divider from "@/components/utils/ui/Divider";
 import { WalletType } from "@/@types/contact.entity";
@@ -73,7 +72,7 @@ const MyContactsFilter = () => {
 
       <Divider type="horizontal" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Name */}
         <div className="flex flex-col">
           <label className="text-xs text-muted-foreground font-bold mb-2 ml-2">
@@ -124,14 +123,6 @@ const MyContactsFilter = () => {
               </SelectItem>
             </SelectContent>
           </Select>
-        </div>
-
-        {/* Created At */}
-        <div className="flex flex-col">
-          <label className="text-xs text-muted-foreground font-bold mb-2 ml-2">
-            Created At
-          </label>
-          <DatePickerWithRange className="w-full" />
         </div>
       </div>
     </form>

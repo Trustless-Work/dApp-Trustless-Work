@@ -113,7 +113,7 @@ const InitializeContactForm = ({
         />
 
         <div className="flex justify-start">
-          <Button type="submit" className="w-full md:w-1/4">
+          <Button type="submit" className="w-full md:w-auto min-w-[120px]">
             {defaultValues ? "Update Contact" : "Create Contact"}
           </Button>
         </div>
