@@ -41,7 +41,7 @@ export const useContact = (): UseContactHook => {
 
   // Queries
   const { data: contacts = [], isLoading } = useContactsQuery();
-
+  console.log(contacts);
   // Mutations
   const createMutation = useCreateContactMutation();
   const deleteMutation = useDeleteContactMutation();
