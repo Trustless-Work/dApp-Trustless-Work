@@ -1,22 +1,16 @@
 import { CreatedAt, UpdatedAt } from "./dates.entity";
 
-export enum RoleType {
-  ISSUER = "ISSUER",
-  APPROVER = "APPROVER",
-  SERVICE_PROVIDER = "SERVICE_PROVIDER",
-  DISPUTE_RESOLVER = "DISPUTE_RESOLVER",
-  RELEASE_SIGNER = "RELEASE_SIGNER",
-  PLATFORM_ADDRESS = "PLATFORM_ADDRESS",
-  RECEIVER = "RECEIVER",
+export enum WalletType {
+  ALBEDO = "Albedo",
+  LOBSTR = "LOBSTR",
 }
 
 export interface Contact {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   address: string;
-  role: RoleType;
+  walletType: WalletType;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
 }

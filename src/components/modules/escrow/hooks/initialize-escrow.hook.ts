@@ -47,7 +47,6 @@ export const useInitializeEscrow = () => {
   );
   const fetchContacts = useContactStore((state) => state.fetchContacts);
   const contacts = useContactStore((state) => state.contacts);
-
   const getAllTrustlines = useGlobalBoundedStore(
     (state) => state.getAllTrustlines,
   );
@@ -220,7 +219,7 @@ export const useInitializeEscrow = () => {
   const userOptions = useMemo(() => {
     const options = contacts.map((contact) => ({
       value: contact.address,
-      label: `${contact.firstName} ${contact.lastName}`,
+      label: contact.name,
     }));
 
     return [{ value: "", label: "Select a Contact" }, ...options];

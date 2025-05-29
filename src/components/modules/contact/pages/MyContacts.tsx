@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
 import {
   Select,
   SelectContent,
@@ -11,47 +10,41 @@ import {
 import MyContactsTable from "@/components/modules/contact/ui/tables/MyContactsTable";
 import MyContactsCards from "@/components/modules/contact/ui/cards/MyContactsCards";
 import MyContactsFilter from "@/components/modules/contact/ui/filters/MyContactsFilter";
-import { useState } from "react";
+import { useContact } from "@/components/modules/contact/hooks/contact.hook";
 import { useContactUIBoundedStore } from "@/components/modules/contact/store/ui";
-import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import Loader from "@/components/utils/ui/Loader";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { CircleHelp } from "lucide-react";
 import Joyride from "react-joyride";
+import { useMemo } from "react";
 
 const MyContacts = () => {
-  const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
-  const setActiveTab = useContactUIBoundedStore((state) => state.setActiveTab);
-  const setActiveMode = useContactUIBoundedStore(
-    (state) => state.setActiveMode,
-  );
-  const activeMode = useContactUIBoundedStore((state) => state.activeMode);
-  const activeTab = useContactUIBoundedStore((state) => state.activeTab);
-  const theme = useGlobalUIBoundedStore((state) => state.theme);
-  const [run, setRun] = useState(false);
+  const {
+    contacts,
+    isLoading,
+    activeMode,
+    setActiveMode,
+    run,
+    setRun,
+    steps,
+    theme,
+  } = useContact();
+  const { filters } = useContactUIBoundedStore();
 
-  const allTabs = [
-    "issuer",
-    "approver",
-    "service-provider",
-    "dispute-resolver",
-    "release-signer",
-    "platform-address",
-    "receiver",
-  ];
+  const filteredContacts = useMemo(() => {
+    return contacts.filter((contact) => {
+      const matchesName =
+        filters.name === "" ||
+        contact.name.toLowerCase().includes(filters.name.toLowerCase());
+      const matchesEmail =
+        filters.email === "" ||
+        contact.email.toLowerCase().includes(filters.email.toLowerCase());
+      const matchesWalletType =
+        !filters.walletType || contact.walletType === filters.walletType;
 
-  const steps = [
-    {
-      target: "#step-1",
-      content: "Select the type of contact you want to view",
-      disableBeacon: true,
-    },
-    {
-      target: "#step-2",
-      content: "Create a new contact",
-      disableBeacon: true,
-    },
-  ];
+      return matchesName && matchesEmail && matchesWalletType;
+    });
+  }, [contacts, filters]);
 
   return (
     <>
@@ -95,52 +88,35 @@ const MyContacts = () => {
           />
 
           <div className="flex gap-3 w-full h-full justify-between">
-            <Tabs defaultValue={activeTab} className="w-full">
-              <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-16 md:gap-3">
-                <TabsList
-                  className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-7 gap-4"
-                  id="step-1"
+            <div className="w-full">
+              <div className="flex w-full justify-end items-center gap-2 mb-4">
+                <Select
+                  value={activeMode}
+                  onValueChange={(value) =>
+                    setActiveMode(value as "table" | "cards")
+                  }
                 >
-                  {allTabs.map((tab) => (
-                    <TabsTrigger
-                      key={tab}
-                      onClick={() => setActiveTab(tab)}
-                      value={tab}
-                    >
-                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+                  <SelectTrigger className="w-32">
+                    <SelectValue placeholder="Select view" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="table">Table</SelectItem>
+                    <SelectItem value="cards">Cards</SelectItem>
+                  </SelectContent>
+                </Select>
 
-                <div className="flex items-center gap-2 mt-20 sm:mt-10 xl:mt-10 2xl:mt-0">
-                  <Select
-                    value={activeMode}
-                    onValueChange={(value) =>
-                      setActiveMode(value as "table" | "cards")
-                    }
+                <TooltipInfo content="Help">
+                  <button
+                    className="btn-dark"
+                    type="button"
+                    onClick={() => setRun(true)}
                   >
-                    <SelectTrigger className="w-32">
-                      <SelectValue placeholder="Select view" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="table">Table</SelectItem>
-                      <SelectItem value="cards">Cards</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <TooltipInfo content="Help">
-                    <button
-                      className="btn-dark"
-                      type="button"
-                      onClick={() => setRun(true)}
-                    >
-                      <CircleHelp size={29} />
-                    </button>
-                  </TooltipInfo>
-                </div>
+                    <CircleHelp size={29} />
+                  </button>
+                </TooltipInfo>
               </div>
 
-              <TabsContent value={activeTab} className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3">
                 <Card className={cn("overflow-hidden")}>
                   <CardContent className="p-6">
                     <MyContactsFilter />
@@ -149,18 +125,18 @@ const MyContacts = () => {
                 {activeMode === "table" ? (
                   <Card className={cn("overflow-hidden")}>
                     <CardContent className="p-6">
-                      <MyContactsTable type={activeTab} />
+                      <MyContactsTable contacts={filteredContacts} />
                     </CardContent>
                   </Card>
                 ) : (
                   <Card className={cn("overflow-hidden")}>
                     <CardContent className="p-6">
-                      <MyContactsCards type={activeTab} />
+                      <MyContactsCards contacts={filteredContacts} />
                     </CardContent>
                   </Card>
                 )}
-              </TabsContent>
-            </Tabs>
+              </div>
+            </div>
           </div>
         </>
       )}
