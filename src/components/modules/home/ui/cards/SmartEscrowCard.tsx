@@ -96,38 +96,30 @@ export const SmartEscrowCard = () => {
 
           <Milestone
             title={t("home.smartEscrow.card.milestones.initialDesign")}
-            status={t("home.smartEscrow.card.milestones.completed")}
+            status={t("reusable.completed")}
             statusColor="blue"
-            description={t(
-              "home.smartEscrow.card.milestones.initialDesignDesc",
-            )}
+            description={t("home.smartEscrow.card.milestones.initialDesignDesc")}
           />
 
           <Milestone
             title={t("home.smartEscrow.card.milestones.frontendDevelopment")}
-            status={t("home.smartEscrow.card.milestones.inProgress")}
+            status={t("reusable.inProgress")}
             statusColor="yellow"
-            description={t(
-              "home.smartEscrow.card.milestones.frontendDevelopmentDesc",
-            )}
+            description={t("home.smartEscrow.card.milestones.frontendDevelopmentDesc")}
           />
 
           <Milestone
             title={t("home.smartEscrow.card.milestones.backendIntegration")}
-            status={t("home.smartEscrow.card.milestones.pending")}
+            status={t("reusable.pending")}
             statusColor="gray"
-            description={t(
-              "home.smartEscrow.card.milestones.backendIntegrationDesc",
-            )}
+            description={t("home.smartEscrow.card.milestones.backendIntegrationDesc")}
           />
 
           <Milestone
-            title={t("home.smartEscrow.card.milestones.backendIntegration")}
-            status={t("home.smartEscrow.card.milestones.approved")}
+            title={t("home.smartEscrow.card.milestones.finalTesting")}
+            status={t("reusable.approved")}
             statusColor="green"
-            description={t(
-              "home.smartEscrow.card.milestones.backendIntegrationDesc",
-            )}
+            description={t("home.smartEscrow.card.milestones.finalTestingDesc")}
           />
         </div>
       </motion.div>

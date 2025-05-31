@@ -119,13 +119,15 @@
           "initialDesign": "Initial Design",
           "frontendDevelopment": "Frontend Development",
           "backendIntegration": "Backend Integration",
+          "finalTesting": "Final Testing",
           "completed": "Completed",
           "inProgress": "In Progress",
           "pending": "Pending",
           "approved": "Approved",
           "initialDesignDesc": "Delivery of wireframes and mockups",
           "frontendDevelopmentDesc": "Implementation of user interface",
-          "backendIntegrationDesc": "API integration and testing"
+          "backendIntegrationDesc": "API integration and testing",
+          "finalTestingDesc": "Final review and deployment testing"
         }
       }
     },
@@ -147,5 +149,13 @@
   "language": {
     "english": "English",
     "spanish": "Spanish"
+  },
+  "reusable": {
+    "approved": "Approved",
+    "pending": "Pending",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "connect": "Connect",
+    "disconnect": "Disconnect"
   }
 }
