@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import { Bounded } from "@/components/layout/Bounded";
 import { ServiceCard } from "../cards/ServiceCard";
+import { useTranslation } from "react-i18next";
 
 export const HowItWorksSection = () => {
+  const { t } = useTranslation("common");
   return (
     <Bounded center={true} className="py-20 relative">
       <motion.div
@@ -27,29 +29,28 @@ export const HowItWorksSection = () => {
         className="relative z-10"
       >
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
-          How Trustless Work Changes the Game
+          {t("home.howItWorks.title")}
         </h2>
         <p className="text-xl max-w-3xl mx-auto mb-12">
-          We provide a new way to manage trust with blockchain-powered smart
-          escrows.
+          {t("home.howItWorks.subtitle")}
         </p>
 
         <div className="grid md:grid-cols-3 gap-8">
           <ServiceCard
-            title="Escrow-as-a-Service"
-            description="Seamlessly integrate escrow workflows into any platform with our API-first approach."
+            title={t("home.howItWorks.services.escrowService.title")}
+            description={t("home.howItWorks.services.escrowService.description")}
             delay={0.1}
           />
 
           <ServiceCard
-            title="Developer-Friendly Tools"
-            description="API-first design, open-source templates, and testnet resources for easy integration."
+            title={t("home.howItWorks.services.developerTools.title")}
+            description={t("home.howItWorks.services.developerTools.description")}
             delay={0.3}
           />
 
           <ServiceCard
-            title="Diverse Applications"
-            description="Supporting industries from marketplaces to crowdfunding, real estate, and trade finance."
+            title={t("home.howItWorks.services.applications.title")}
+            description={t("home.howItWorks.services.applications.description")}
             delay={0.5}
           />
         </div>

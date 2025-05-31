@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 export const ComparisonCard = () => {
+  const { t } = useTranslation("common");
   return (
     <div className="relative">
       <div className="absolute -top-20 -left-20 w-60 h-60 bg-primary/20 dark:bg-primary/10 rounded-full blur-[80px] z-0"></div>
@@ -15,34 +17,34 @@ export const ComparisonCard = () => {
         viewport={{ once: true, amount: 0.3 }}
       >
         <h3 className="text-2xl font-bold mb-4">
-          Traditional Systems vs Trustless Work
+          {t("home.whyEscrows.comparisonCard.title")}
         </h3>
 
         <div className="space-y-6">
           <ComparisonItem
             isNegative={true}
-            title="Costly Intermediaries"
-            description="Banks, lawyers, or brokers adding fees and delays."
+            title={t("home.whyEscrows.comparisonCard.costlyIntermediaries.title")}
+            description={t("home.whyEscrows.comparisonCard.costlyIntermediaries.description")}
           />
 
           <ComparisonItem
             isNegative={true}
-            title="Complex Processes"
-            description="Lengthy, manual procedures that slow down business."
+            title={t("home.whyEscrows.comparisonCard.complexProcesses.title")}
+            description={t("home.whyEscrows.comparisonCard.complexProcesses.description")}
           />
 
           <ComparisonItem
             isNegative={true}
-            title="Limited Transparency"
-            description="Little visibility into where funds are and why delays occur."
+            title={t("home.whyEscrows.comparisonCard.limitedTransparency.title")}
+            description={t("home.whyEscrows.comparisonCard.limitedTransparency.description")}
           />
 
           <div className="h-px bg-border my-4"></div>
 
           <ComparisonItem
             isNegative={false}
-            title="Our Solution"
-            description="Blockchain-powered smart escrows that are configurable, scalable, and transparent."
+            title={t("home.whyEscrows.comparisonCard.ourSolution.title")}
+            description={t("home.whyEscrows.comparisonCard.ourSolution.description")}
           />
         </div>
       </motion.div>

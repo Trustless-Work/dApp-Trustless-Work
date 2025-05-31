@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import { Bounded } from "@/components/layout/Bounded";
 import { ComparisonCard } from "../cards/ComparisonCard";
+import { useTranslation } from "react-i18next";
 
 export const WhyEscrowsSection = () => {
+  const { t } = useTranslation("common");
   return (
     <Bounded className="py-20 relative">
       <div className="absolute inset-0 bg-muted/50 dark:bg-muted/20 backdrop-blur-sm z-0"></div>
@@ -17,22 +19,16 @@ export const WhyEscrowsSection = () => {
           viewport={{ once: true, amount: 0.3 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Why Escrows Matter
+            {t("home.whyEscrows.title")}
           </h2>
           <p className="text-lg mb-6">
-            At its core, an escrow is a neutral and secure way to hold funds
-            while something else happens—whether it's transferring a house,
-            delivering a product, or completing a project.
+            {t("home.whyEscrows.description1")}
           </p>
           <p className="text-lg mb-6">
-            In traditional payment systems, trust is built through costly
-            intermediaries, complex processes, and limited transparency. These
-            barriers slow innovation, increase costs, and limit accessibility.
+            {t("home.whyEscrows.description2")}
           </p>
           <p className="text-lg font-medium">
-            Trustless Work eliminates these inefficiencies, fostering trust
-            through blockchain-powered automation, API-driven simplicity, and
-            global accessibility.
+            {t("home.whyEscrows.description3")}
           </p>
         </motion.div>
 

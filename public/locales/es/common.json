@@ -12,5 +12,140 @@
     "support": "Soporte",
     "reportIssue": "Reportar un Problema API",
     "help": "Ayuda"
+  },
+  "home": {
+    "hero": {
+      "welcome": "Bienvenido a",
+      "title": "Trustless Work",
+      "subtitle": "Plataforma de <strong>depósito en garantía como servicio</strong> diseñada para asegurar transacciones con transparencia, eficiencia y escalabilidad.",
+      "description": "Ya seas un desarrollador buscando integrar depósitos en garantía basados en blockchain, una plataforma que busca construir confianza con los usuarios, o un innovador buscando nuevas soluciones financieras, estás en el lugar correcto.",
+      "exploreButton": "Explorar Nuestras Soluciones",
+      "learnMoreButton": "Saber Más",
+      "currentWords": {
+        "configurable": "Configurable",
+        "scalable": "Escalable",
+        "transparent": "Transparente"
+      }
+    },
+    "mission": {
+      "title": "Nuestra Misión",
+      "description": "Resolver la confianza en los pagos globales proporcionando infraestructura y herramientas de depósito en garantía configurables, escalables y transparentes para la nueva economía.",
+      "features": {
+        "configurable": {
+          "title": "Configurable",
+          "description": "Adapta los flujos de trabajo de depósito en garantía a tus necesidades únicas, desde hitos hasta acuerdos multipartita."
+        },
+        "scalable": {
+          "title": "Escalable",
+          "description": "Soporta altos volúmenes de transacciones y diversas industrias, permitiendo un crecimiento sin problemas."
+        },
+        "transparent": {
+          "title": "Transparente",
+          "description": "Aprovecha la tecnología blockchain para garantizar la visibilidad y equidad en cada transacción."
+        }
+      }
+    },
+    "whyEscrows": {
+      "title": "Por qué son Importantes los Depósitos en Garantía",
+      "description1": "En esencia, un depósito en garantía es una forma neutral y segura de mantener fondos mientras ocurre algo más—ya sea la transferencia de una casa, la entrega de un producto o la finalización de un proyecto.",
+      "description2": "En los sistemas de pago tradicionales, la confianza se construye a través de intermediarios costosos, procesos complejos y transparencia limitada. Estas barreras ralentizan la innovación, aumentan los costos y limitan la accesibilidad.",
+      "description3": "Trustless Work elimina estas ineficiencias, fomentando la confianza a través de la automatización basada en blockchain, la simplicidad impulsada por API y la accesibilidad global.",
+      "comparisonCard": {
+    "title": "Sistemas Tradicionales vs Trustless Work",
+    "costlyIntermediaries": {
+      "title": "Intermediarios Costosos",
+      "description": "Bancos, abogados o corredores que agregan comisiones y demoras."
+    },
+    "complexProcesses": {
+      "title": "Procesos Complejos",
+      "description": "Procedimientos manuales y extensos que ralentizan el negocio."
+    },
+    "limitedTransparency": {
+      "title": "Transparencia Limitada",
+      "description": "Poca visibilidad sobre dónde están los fondos y por qué ocurren demoras."
+    },
+    "ourSolution": {
+      "title": "Nuestra Solución",
+      "description": "Depósitos en garantía inteligentes basados en blockchain que son configurables, escalables y transparentes."
+    }
+  }
+    },
+    "howItWorks": {
+      "title": "Cómo Trustless Work Cambia el Juego",
+      "subtitle": "Proporcionamos una nueva forma de gestionar la confianza con depósitos en garantía inteligentes basados en blockchain.",
+      "services": {
+        "escrowService": {
+          "title": "Depósito en Garantía como Servicio",
+          "description": "Integra sin problemas flujos de trabajo de depósito en garantía en cualquier plataforma con nuestro enfoque API-first."
+        },
+        "developerTools": {
+          "title": "Herramientas para Desarrolladores",
+          "description": "Diseño API-first, plantillas de código abierto y recursos de testnet para una fácil integración."
+        },
+        "applications": {
+          "title": "Aplicaciones Diversas",
+          "description": "Soporte para industrias desde marketplaces hasta crowdfunding, bienes raíces y financiamiento comercial."
+        }
+      }
+    },
+    "smartEscrow": {
+      "title": "¿Cómo se ve un Depósito en Garantía Inteligente?",
+      "description1": "Nuestros depósitos en garantía inteligentes están diseñados para ser flexibles, seguros y transparentes. Cada depósito tiene propiedades únicas que definen cómo funciona y quién puede interactuar con él.",
+      "description2": "Desde el ID del depósito hasta los hitos y banderas, cada aspecto está cuidadosamente diseñado para asegurar la confianza y eficiencia en tus transacciones.",
+      "description3": "Los depósitos en garantía inteligentes pueden configurarse para varios casos de uso, desde pagos simples hasta proyectos complejos de múltiples etapas con múltiples partes interesadas.",
+      "card": {
+        "status": {
+          "inDispute": "En disputa",
+          "released": "Liberado",
+          "resolved": "Resuelto"
+        },
+        "roles": {
+          "serviceProvider": "Proveedor de Servicio",
+          "approver": "Aprobador",
+          "disputeResolver": "Resolutor de Disputas",
+          "releaseSigner": "Firmante de Liberación",
+          "receiver": "Receptor",
+          "platformAddress": "Dirección de la Plataforma"
+        },
+        "properties": {
+          "escrowId": "ID de Depósito",
+          "balance": "Balance:",
+          "trustline": "Trustline:",
+          "platformFee": "Comisión de la Plataforma:",
+          "engagementId": "ID de Proyecto:"
+        },
+        "milestones": {
+          "title": "Hitos:",
+          "initialDesign": "Diseño Inicial",
+          "frontendDevelopment": "Desarrollo Frontend",
+          "backendIntegration": "Integración Backend",
+          "completed": "Completado",
+          "inProgress": "En Progreso",
+          "pending": "Pendiente",
+          "approved": "Aprobado",
+          "initialDesignDesc": "Entrega de wireframes y mockups",
+          "frontendDevelopmentDesc": "Implementación de la interfaz de usuario",
+          "backendIntegrationDesc": "Integración y pruebas de API"
+        }
+      }
+    },
+    "cta": {
+      "title": "¿Listo para comenzar?",
+      "subtitle": "Únete a nosotros en la construcción del futuro de la confianza en los pagos globales.",
+      "button": "Explorar Nuestras Soluciones"
+    }
+  },
+  "header": {
+    "disconnect": "Desconectar",
+    "reportIssue": "Reportar Problema",
+    "connect": "Conectar",
+    "language": "Cambiar Idioma"
+  },
+  "connectArrow": {
+    "testDapp": "¡Prueba la dApp conectando tu wallet!"
+  },
+  "language": {
+    "english": "Inglés",
+    "spanish": "Español"
   }
 }

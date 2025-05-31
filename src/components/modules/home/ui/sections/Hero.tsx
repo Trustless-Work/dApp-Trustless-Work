@@ -7,6 +7,7 @@ import { Bounded } from "@/components/layout/Bounded";
 import Link from "next/link";
 import { ScrollIndicator } from "../utils/ScrollIndicator";
 import { useHero } from "../../hooks/hero.hook";
+import { Trans, useTranslation } from "react-i18next";
 
 interface HeroSectionProps {
   y1: MotionValue<number>;
@@ -15,11 +16,12 @@ interface HeroSectionProps {
 
 export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
   const { currentWord, words } = useHero();
+  const { t } = useTranslation("common");
 
   return (
     <Bounded
       center={true}
-      className="min-h-[90vh] flex flex-col justify-center relative"
+      className="min-h-[95vh] flex flex-col justify-center relative"
     >
       <motion.div style={{ y: y1, opacity }} className="z-10 relative">
         <motion.div
@@ -34,9 +36,13 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-black/80 dark:text-white/80">Welcome to</span>{" "}
+            <span className="text-black/80 dark:text-white/80">
+              {t("home.hero.welcome")}
+            </span>{" "}
             <br />
-            <span className="font-black">Trustless Work</span>
+            <span className="font-black">
+              {t("home.hero.title")}
+            </span>
           </motion.h1>
         </motion.div>
 
@@ -47,11 +53,13 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
           className="max-w-2xl"
         >
           <p className="text-xl md:text-2xl mb-4">
-            <span className="font-bold text-primary/70 dark:text-primary/80">
-              Escrow-as-a-service
-            </span>{" "}
-            platform designed to secure transactions with transparency,
-            efficiency, and scalability.
+            <Trans
+              i18nKey="home.hero.subtitle"
+              ns="common"
+              components={{
+                strong: <span className="font-bold text-primary/70 dark:text-primary/80" />
+              }}
+            />
           </p>
 
           <div className="h-16 overflow-hidden my-6 relative">
@@ -71,10 +79,7 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
 
           <p className="mb-8 text-foreground/80 dark:text-foreground/90">
             <strong>
-              Whether you are a developer looking to integrate
-              blockchain-powered escrows, a platform aiming to build user trust,
-              or an innovator seeking new financial solutions, you're in the
-              right place.
+              {t("home.hero.description")}
             </strong>
           </p>
 
@@ -86,7 +91,7 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
           >
             <Link href="https://docs.trustlesswork.com/trustless-work">
               <Button size="lg" className="group">
-                Explore Our Solutions
+                {t("home.hero.exploreButton")}
                 <motion.span
                   className="inline-block ml-2"
                   initial={{ x: 0 }}
@@ -100,7 +105,7 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
 
             <Link href="https://www.trustlesswork.com">
               <Button size="lg" variant="outline" className="group">
-                Learn More
+                {t("home.hero.learnMoreButton")}
               </Button>
             </Link>
           </motion.div>
