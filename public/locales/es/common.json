@@ -51,24 +51,24 @@
       "description2": "En los sistemas de pago tradicionales, la confianza se construye a través de intermediarios costosos, procesos complejos y transparencia limitada. Estas barreras ralentizan la innovación, aumentan los costos y limitan la accesibilidad.",
       "description3": "Trustless Work elimina estas ineficiencias, fomentando la confianza a través de la automatización basada en blockchain, la simplicidad impulsada por API y la accesibilidad global.",
       "comparisonCard": {
-    "title": "Sistemas Tradicionales vs Trustless Work",
-    "costlyIntermediaries": {
-      "title": "Intermediarios Costosos",
-      "description": "Bancos, abogados o corredores que agregan comisiones y demoras."
-    },
-    "complexProcesses": {
-      "title": "Procesos Complejos",
-      "description": "Procedimientos manuales y extensos que ralentizan el negocio."
-    },
-    "limitedTransparency": {
-      "title": "Transparencia Limitada",
-      "description": "Poca visibilidad sobre dónde están los fondos y por qué ocurren demoras."
-    },
-    "ourSolution": {
-      "title": "Nuestra Solución",
-      "description": "Depósitos en garantía inteligentes basados en blockchain que son configurables, escalables y transparentes."
-    }
-  }
+        "title": "Sistemas Tradicionales vs Trustless Work",
+        "costlyIntermediaries": {
+          "title": "Intermediarios Costosos",
+          "description": "Bancos, abogados o corredores que agregan comisiones y demoras."
+        },
+        "complexProcesses": {
+          "title": "Procesos Complejos",
+          "description": "Procedimientos manuales y extensos que ralentizan el negocio."
+        },
+        "limitedTransparency": {
+          "title": "Transparencia Limitada",
+          "description": "Poca visibilidad sobre dónde están los fondos y por qué ocurren demoras."
+        },
+        "ourSolution": {
+          "title": "Nuestra Solución",
+          "description": "Depósitos en garantía inteligentes basados en blockchain que son configurables, escalables y transparentes."
+        }
+      }
     },
     "howItWorks": {
       "title": "Cómo Trustless Work Cambia el Juego",

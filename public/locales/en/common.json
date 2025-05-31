@@ -51,24 +51,24 @@
       "description2": "In traditional payment systems, trust is built through costly intermediaries, complex processes, and limited transparency. These barriers slow innovation, increase costs, and limit accessibility.",
       "description3": "Trustless Work eliminates these inefficiencies, fostering trust through blockchain-powered automation, API-driven simplicity, and global accessibility.",
       "comparisonCard": {
-    "title": "Traditional Systems vs Trustless Work",
-    "costlyIntermediaries": {
-      "title": "Costly Intermediaries",
-      "description": "Banks, lawyers, or brokers adding fees and delays."
-    },
-    "complexProcesses": {
-      "title": "Complex Processes",
-      "description": "Lengthy, manual procedures that slow down business."
-    },
-    "limitedTransparency": {
-      "title": "Limited Transparency",
-      "description": "Little visibility into where funds are and why delays occur."
-    },
-    "ourSolution": {
-      "title": "Our Solution",
-      "description": "Blockchain-powered smart escrows that are configurable, scalable, and transparent."
-    }
-  }
+        "title": "Traditional Systems vs Trustless Work",
+        "costlyIntermediaries": {
+          "title": "Costly Intermediaries",
+          "description": "Banks, lawyers, or brokers adding fees and delays."
+        },
+        "complexProcesses": {
+          "title": "Complex Processes",
+          "description": "Lengthy, manual procedures that slow down business."
+        },
+        "limitedTransparency": {
+          "title": "Limited Transparency",
+          "description": "Little visibility into where funds are and why delays occur."
+        },
+        "ourSolution": {
+          "title": "Our Solution",
+          "description": "Blockchain-powered smart escrows that are configurable, scalable, and transparent."
+        }
+      }
     },
     "howItWorks": {
       "title": "How Trustless Work Changes the Game",

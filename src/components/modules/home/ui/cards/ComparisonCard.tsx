@@ -23,20 +23,30 @@ export const ComparisonCard = () => {
         <div className="space-y-6">
           <ComparisonItem
             isNegative={true}
-            title={t("home.whyEscrows.comparisonCard.costlyIntermediaries.title")}
-            description={t("home.whyEscrows.comparisonCard.costlyIntermediaries.description")}
+            title={t(
+              "home.whyEscrows.comparisonCard.costlyIntermediaries.title",
+            )}
+            description={t(
+              "home.whyEscrows.comparisonCard.costlyIntermediaries.description",
+            )}
           />
 
           <ComparisonItem
             isNegative={true}
             title={t("home.whyEscrows.comparisonCard.complexProcesses.title")}
-            description={t("home.whyEscrows.comparisonCard.complexProcesses.description")}
+            description={t(
+              "home.whyEscrows.comparisonCard.complexProcesses.description",
+            )}
           />
 
           <ComparisonItem
             isNegative={true}
-            title={t("home.whyEscrows.comparisonCard.limitedTransparency.title")}
-            description={t("home.whyEscrows.comparisonCard.limitedTransparency.description")}
+            title={t(
+              "home.whyEscrows.comparisonCard.limitedTransparency.title",
+            )}
+            description={t(
+              "home.whyEscrows.comparisonCard.limitedTransparency.description",
+            )}
           />
 
           <div className="h-px bg-border my-4"></div>
@@ -44,7 +54,9 @@ export const ComparisonCard = () => {
           <ComparisonItem
             isNegative={false}
             title={t("home.whyEscrows.comparisonCard.ourSolution.title")}
-            description={t("home.whyEscrows.comparisonCard.ourSolution.description")}
+            description={t(
+              "home.whyEscrows.comparisonCard.ourSolution.description",
+            )}
           />
         </div>
       </motion.div>

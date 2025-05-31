@@ -38,13 +38,17 @@ export const HowItWorksSection = () => {
         <div className="grid md:grid-cols-3 gap-8">
           <ServiceCard
             title={t("home.howItWorks.services.escrowService.title")}
-            description={t("home.howItWorks.services.escrowService.description")}
+            description={t(
+              "home.howItWorks.services.escrowService.description",
+            )}
             delay={0.1}
           />
 
           <ServiceCard
             title={t("home.howItWorks.services.developerTools.title")}
-            description={t("home.howItWorks.services.developerTools.description")}
+            description={t(
+              "home.howItWorks.services.developerTools.description",
+            )}
             delay={0.3}
           />
 

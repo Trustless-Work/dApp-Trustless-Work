@@ -21,7 +21,9 @@ export const SmartEscrowCard = () => {
         <div className="flex flex-col gap-6 sm:gap-4 mb-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
             <div>
-              <div className="text-sm text-foreground/60">{t("home.smartEscrow.card.properties.escrowId")}</div>
+              <div className="text-sm text-foreground/60">
+                {t("home.smartEscrow.card.properties.escrowId")}
+              </div>
               <div className="font-mono text-sm">CAZUQX...MML</div>
             </div>
 
@@ -41,55 +43,91 @@ export const SmartEscrowCard = () => {
           <Separator />
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
-            <RoleBadge color="green" text={t("home.smartEscrow.card.roles.serviceProvider")} />
-            <RoleBadge color="blue" text={t("home.smartEscrow.card.roles.approver")} />
-            <RoleBadge color="red" text={t("home.smartEscrow.card.roles.disputeResolver")} />
-            <RoleBadge color="yellow" text={t("home.smartEscrow.card.roles.releaseSigner")} />
-            <RoleBadge color="pink" text={t("home.smartEscrow.card.roles.receiver")} />
-            <RoleBadge color="purple" text={t("home.smartEscrow.card.roles.platformAddress")} />
+            <RoleBadge
+              color="green"
+              text={t("home.smartEscrow.card.roles.serviceProvider")}
+            />
+            <RoleBadge
+              color="blue"
+              text={t("home.smartEscrow.card.roles.approver")}
+            />
+            <RoleBadge
+              color="red"
+              text={t("home.smartEscrow.card.roles.disputeResolver")}
+            />
+            <RoleBadge
+              color="yellow"
+              text={t("home.smartEscrow.card.roles.releaseSigner")}
+            />
+            <RoleBadge
+              color="pink"
+              text={t("home.smartEscrow.card.roles.receiver")}
+            />
+            <RoleBadge
+              color="purple"
+              text={t("home.smartEscrow.card.roles.platformAddress")}
+            />
           </div>
         </div>
 
         <div className="space-y-4 mb-6">
-          <EscrowProperty label={t("home.smartEscrow.card.properties.balance")}
-            value="1,000 USDC" />
-          <EscrowProperty label={t("home.smartEscrow.card.properties.trustline")}
-            value="USDC" />
-          <EscrowProperty label={t("home.smartEscrow.card.properties.platformFee")}
-            value="2%" />
-          <EscrowProperty label={t("home.smartEscrow.card.properties.engagementId")}
-            value="PRJ-2023-089" />
+          <EscrowProperty
+            label={t("home.smartEscrow.card.properties.balance")}
+            value="1,000 USDC"
+          />
+          <EscrowProperty
+            label={t("home.smartEscrow.card.properties.trustline")}
+            value="USDC"
+          />
+          <EscrowProperty
+            label={t("home.smartEscrow.card.properties.platformFee")}
+            value="2%"
+          />
+          <EscrowProperty
+            label={t("home.smartEscrow.card.properties.engagementId")}
+            value="PRJ-2023-089"
+          />
         </div>
 
         <div className="space-y-3">
-          <div className="text-sm font-medium mb-2">{t("home.smartEscrow.card.milestones.title")}</div>
+          <div className="text-sm font-medium mb-2">
+            {t("home.smartEscrow.card.milestones.title")}
+          </div>
 
           <Milestone
             title={t("home.smartEscrow.card.milestones.initialDesign")}
             status={t("home.smartEscrow.card.milestones.completed")}
             statusColor="blue"
-            description={t("home.smartEscrow.card.milestones.initialDesignDesc")}
+            description={t(
+              "home.smartEscrow.card.milestones.initialDesignDesc",
+            )}
           />
 
           <Milestone
             title={t("home.smartEscrow.card.milestones.frontendDevelopment")}
             status={t("home.smartEscrow.card.milestones.inProgress")}
             statusColor="yellow"
-            description={t("home.smartEscrow.card.milestones.frontendDevelopmentDesc")}
+            description={t(
+              "home.smartEscrow.card.milestones.frontendDevelopmentDesc",
+            )}
           />
 
           <Milestone
             title={t("home.smartEscrow.card.milestones.backendIntegration")}
             status={t("home.smartEscrow.card.milestones.pending")}
             statusColor="gray"
-            description={t("home.smartEscrow.card.milestones.backendIntegrationDesc")}
+            description={t(
+              "home.smartEscrow.card.milestones.backendIntegrationDesc",
+            )}
           />
 
           <Milestone
             title={t("home.smartEscrow.card.milestones.backendIntegration")}
             status={t("home.smartEscrow.card.milestones.approved")}
             statusColor="green"
-            description={t("home.smartEscrow.card.milestones.backendIntegrationDesc")}
+            description={t(
+              "home.smartEscrow.card.milestones.backendIntegrationDesc",
+            )}
           />
         </div>
       </motion.div>

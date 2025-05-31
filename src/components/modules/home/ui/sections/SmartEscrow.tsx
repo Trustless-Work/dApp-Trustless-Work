@@ -24,12 +24,8 @@ export const SmartEscrowSection = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             {t("home.smartEscrow.title")}
           </h2>
-          <p className="text-lg mb-6">
-            {t("home.smartEscrow.description1")}
-          </p>
-          <p className="text-lg mb-6">
-            {t("home.smartEscrow.description2")}
-          </p>
+          <p className="text-lg mb-6">{t("home.smartEscrow.description1")}</p>
+          <p className="text-lg mb-6">{t("home.smartEscrow.description2")}</p>
           <p className="text-lg font-medium">
             {t("home.smartEscrow.description3")}
           </p>

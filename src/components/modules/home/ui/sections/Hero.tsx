@@ -40,9 +40,7 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
               {t("home.hero.welcome")}
             </span>{" "}
             <br />
-            <span className="font-black">
-              {t("home.hero.title")}
-            </span>
+            <span className="font-black">{t("home.hero.title")}</span>
           </motion.h1>
         </motion.div>
 
@@ -57,7 +55,9 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
               i18nKey="home.hero.subtitle"
               ns="common"
               components={{
-                strong: <span className="font-bold text-primary/70 dark:text-primary/80" />
+                strong: (
+                  <span className="font-bold text-primary/70 dark:text-primary/80" />
+                ),
               }}
             />
           </p>
@@ -78,9 +78,7 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
           </div>
 
           <p className="mb-8 text-foreground/80 dark:text-foreground/90">
-            <strong>
-              {t("home.hero.description")}
-            </strong>
+            <strong>{t("home.hero.description")}</strong>
           </p>
 
           <motion.div
