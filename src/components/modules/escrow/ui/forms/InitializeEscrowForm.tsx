@@ -46,7 +46,7 @@ const InitializeEscrowForm = () => {
               <FormItem>
                 <FormLabel className="flex items-center">
                   Title<span className="text-destructive ml-1">*</span>
-                  <TooltipInfo content="Significant title for escrow." />
+                  <TooltipInfo content="Name of the escrow." />
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -70,7 +70,7 @@ const InitializeEscrowForm = () => {
               <FormItem>
                 <FormLabel className="flex items-center">
                   Engagement<span className="text-destructive ml-1">*</span>
-                  <TooltipInfo content="Unique identifier for this escrow engagement." />
+                  <TooltipInfo content="Unique identifier for the escrow." />
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -92,7 +92,7 @@ const InitializeEscrowForm = () => {
             control={form.control}
             name="trustline.address"
             label="Trustline"
-            tooltipContent="Trustline to be used for the escrow."
+            tooltipContent="Information on the trustline that will manage the movement of funds in escrow."
             options={trustlineOptions.map((tl) => ({
               value: tl.value,
               label: tl.label || "",
@@ -109,7 +109,7 @@ const InitializeEscrowForm = () => {
                 <FormLabel className="flex items-center justify-between">
                   <span className="flex items-center">
                     Approver<span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Address of the approver for this escrow." />
+                    <TooltipInfo content="Address of the entity requiring the service." />
                   </span>
                   <Switch
                     checked={showSelect.approver}
@@ -202,7 +202,7 @@ const InitializeEscrowForm = () => {
                   <span className="flex items-center">
                     Release Signer
                     <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Who approves releasing the funds." />
+                    <TooltipInfo content="Address of the user in charge of releasing the escrow funds to the service provider." />
                   </span>
                   <Switch
                     checked={showSelect.releaseSigner}
@@ -250,7 +250,7 @@ const InitializeEscrowForm = () => {
                   <span className="flex items-center">
                     Dispute Resolver
                     <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Who resolves disputes if any." />
+                    <TooltipInfo content="Address in charge of resolving disputes within the escrow." />
                   </span>
                   <Switch
                     checked={showSelect.disputeResolver}
@@ -300,7 +300,7 @@ const InitializeEscrowForm = () => {
                   <span className="flex items-center">
                     Platform Address
                     <span className="text-destructive ml-1">*</span>
-                    <TooltipInfo content="Address of the platform to receive fees." />
+                    <TooltipInfo content="Address of the entity that owns the escrow." />
                   </span>
                   <Switch
                     checked={showSelect.platformAddress}
@@ -391,7 +391,7 @@ const InitializeEscrowForm = () => {
               <FormItem>
                 <FormLabel className="flex items-center">
                   Platform Fee<span className="text-destructive ml-1">*</span>
-                  <TooltipInfo content="Fee charged by the platform for this escrow." />
+                  <TooltipInfo content="Commission that the platform will receive when the escrow is completed." />
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -422,7 +422,7 @@ const InitializeEscrowForm = () => {
               <FormItem>
                 <FormLabel className="flex items-center">
                   Amount<span className="text-destructive ml-1">*</span>
-                  <TooltipInfo content="Total amount to be held in escrow." />
+                  <TooltipInfo content="Amount to be transferred upon completion of escrow milestones." />
                 </FormLabel>
                 <FormControl>
                   <div className="relative">
@@ -454,7 +454,7 @@ const InitializeEscrowForm = () => {
               <FormItem>
                 <FormLabel className="flex items-center">
                   Receiver Memo (opcional)
-                  <TooltipInfo content="Total receiver Memo to be held in escrow." />
+                  <TooltipInfo content="Enter the code or memo needed to send funds to the right person." />
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -480,7 +480,7 @@ const InitializeEscrowForm = () => {
             <FormItem>
               <FormLabel className="flex items-center">
                 Description<span className="text-destructive ml-1">*</span>
-                <TooltipInfo content="Description that clearly explains the purpose of the escrow." />
+                <TooltipInfo content="Text describing the function of the escrow." />
               </FormLabel>
               <FormControl>
                 <Textarea
@@ -500,7 +500,7 @@ const InitializeEscrowForm = () => {
         <div className="space-y-4">
           <FormLabel className="flex items-center">
             Milestones<span className="text-destructive ml-1">*</span>
-            <TooltipInfo content="Key stages or deliverables for the escrow." />
+            <TooltipInfo content="Objectives to be completed to define the escrow as completed." />
           </FormLabel>
           {milestones.map((milestone, index) => (
             <div key={index}>

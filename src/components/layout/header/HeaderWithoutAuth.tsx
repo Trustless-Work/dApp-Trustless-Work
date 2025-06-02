@@ -8,10 +8,12 @@ import Link from "next/link";
 import { Bug, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LanguageToggle from "./LanguageToggle";
+import { useTranslation } from "react-i18next";
 
 const HeaderWithoutAuth: React.FC = () => {
   const { handleConnect, handleDisconnect } = useWallet();
   const { address, handleReportIssue } = useHeaderWithoutAuth();
+  const { t } = useTranslation("common");
 
   return (
     <div className="flex w-full justify-between items-center gap-2 px-4">
@@ -23,7 +25,7 @@ const HeaderWithoutAuth: React.FC = () => {
           <LanguageToggle />
           <ThemeToggle />
           <Button variant="outline" onClick={handleDisconnect}>
-            <LogOut /> Disconnect
+            <LogOut /> {t("header.disconnect")}
           </Button>
         </div>
       ) : (
@@ -31,10 +33,10 @@ const HeaderWithoutAuth: React.FC = () => {
           <LanguageToggle />
           <ThemeToggle />
           <Button variant="destructive" onClick={handleReportIssue}>
-            <Bug /> Report Issue
+            <Bug /> {t("header.reportIssue")}
           </Button>
           <Button variant="outline" onClick={handleConnect}>
-            <LogIn /> Connect
+            <LogIn /> {t("header.connect")}
           </Button>
         </div>
       )}
