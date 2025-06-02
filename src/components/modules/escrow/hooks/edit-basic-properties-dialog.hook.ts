@@ -9,40 +9,27 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { useMemo, useState } from "react";
-import { GetFormSchema } from "../../../schema/edit-entities.schema";
+import { useEscrowUIBoundedStore } from "../store/ui";
+import { formSchema } from "../schema/edit-basic-properties.schema";
+import { trustlessWorkService } from "../services/trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import {
   EscrowPayload,
   UpdateEscrowPayload,
 } from "@/@types/escrows/escrow-payload.entity";
-import { trustlessWorkService } from "../../../services/trustless-work.service";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
-import { useUsersQuery } from "@/components/modules/contact/hooks/tanstack/useUsersQuery";
 
-interface useEditEntitiesDialogProps {
-  setIsEditEntitiesDialogOpen: (value: boolean) => void;
+interface useEditBasicPropertiesDialogProps {
+  setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
 }
 
-const useEditEntitiesDialog = ({
-  setIsEditEntitiesDialogOpen,
-}: useEditEntitiesDialogProps) => {
-  const formSchema = GetFormSchema();
-
-  const [showSelect, setShowSelect] = useState({
-    approver: false,
-    serviceProvider: false,
-    platformAddress: false,
-    releaseSigner: false,
-    disputeResolver: false,
-    receiver: false,
-  });
-
+const useEditBasicPropertiesDialog = ({
+  setIsEditBasicPropertiesDialogOpen,
+}: useEditBasicPropertiesDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const setIsEditingEntities = useEscrowUIBoundedStore(
-    (state) => state.setIsEditingEntities,
+  const setIsEditingBasicProperties = useEscrowUIBoundedStore(
+    (state) => state.setIsEditingBasicProperties,
   );
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
@@ -51,48 +38,34 @@ const useEditEntitiesDialog = ({
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
-  const { data: users = [] } = useUsersQuery();
-
-  const userOptions = useMemo(() => {
-    const options = users.map((user) => ({
-      value: user.address,
-      label: `${user.firstName} ${user.lastName}`,
-    }));
-
-    return [{ value: "", label: "Select an User" }, ...options];
-  }, [users]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      approver: selectedEscrow?.roles?.approver || "",
-      serviceProvider: selectedEscrow?.roles?.serviceProvider || "",
-      platformAddress: selectedEscrow?.roles?.platformAddress || "",
-      receiver: selectedEscrow?.roles?.receiver || "",
-      releaseSigner: selectedEscrow?.roles?.releaseSigner || "",
-      disputeResolver: selectedEscrow?.roles?.disputeResolver || "",
+      title: selectedEscrow?.title || "",
+      engagementId: selectedEscrow?.engagementId || "",
+      description: selectedEscrow?.description || "",
+      amount: selectedEscrow?.amount || "",
+      receiverMemo: selectedEscrow?.receiverMemo?.toString() || "",
+      platformFee: selectedEscrow?.platformFee || "",
     },
     mode: "onChange",
   });
 
-  const toggleField = (field: string, value: boolean) => {
-    setShowSelect((prev) => ({ ...prev, [field]: value }));
-  };
-
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     if (!selectedEscrow) return;
 
-    setIsEditingEntities(true);
+    setIsEditingBasicProperties(true);
 
     try {
       const updatedEscrow = {
         ...JSON.parse(JSON.stringify(selectedEscrow)),
-        approver: payload.approver,
-        serviceProvider: payload.serviceProvider,
-        platformAddress: payload.platformAddress,
-        receiver: payload.receiver,
-        releaseSigner: payload.releaseSigner,
-        disputeResolver: payload.disputeResolver,
+        title: payload.title,
+        engagementId: payload.engagementId,
+        description: payload.description,
+        amount: payload.amount,
+        receiverMemo: payload.receiverMemo,
+        platformFee: payload.platformFee,
       };
 
       // Plain the trustline
@@ -122,11 +95,11 @@ const useEditEntitiesDialog = ({
 
       if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });
-        setIsEditEntitiesDialogOpen(false);
+        setIsEditBasicPropertiesDialogOpen(false);
         setIsDialogOpen(false);
 
         toast.success(
-          `You have edited the entities of ${selectedEscrow.title}.`,
+          `You have edited the basic properties of ${selectedEscrow.title}.`,
         );
       }
     } catch (err) {
@@ -134,22 +107,19 @@ const useEditEntitiesDialog = ({
         err instanceof Error ? err.message : "An unknown error occurred",
       );
     } finally {
-      setIsEditingEntities(false);
+      setIsEditingBasicProperties(false);
     }
   };
 
   const handleClose = () => {
-    setIsEditEntitiesDialogOpen(false);
+    setIsEditBasicPropertiesDialogOpen(false);
   };
 
   return {
     form,
-    userOptions,
-    showSelect,
-    toggleField,
     onSubmit,
     handleClose,
   };
 };
 
-export default useEditEntitiesDialog;
+export default useEditBasicPropertiesDialog;

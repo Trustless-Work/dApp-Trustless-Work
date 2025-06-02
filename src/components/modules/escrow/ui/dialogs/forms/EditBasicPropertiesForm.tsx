@@ -10,7 +10,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import useEditBasicPropertiesDialog from "../hooks/edit-basic-properties-dialog.hook";
+import useEditBasicPropertiesDialog from "../../../hooks/edit-basic-properties-dialog.hook";
 import { DollarSign } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 

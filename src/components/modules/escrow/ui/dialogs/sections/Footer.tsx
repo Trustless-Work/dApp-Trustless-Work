@@ -1,6 +1,6 @@
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import useReleaseFundsEscrowDialog from "../hooks/release-funds-dialog.hook";
+import useReleaseFundsEscrowDialog from "../../../hooks/release-funds-dialog.hook";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CircleDollarSign, Loader2 } from "lucide-react";

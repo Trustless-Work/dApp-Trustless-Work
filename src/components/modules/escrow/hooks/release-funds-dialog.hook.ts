@@ -6,8 +6,8 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { useEscrowUIBoundedStore } from "../store/ui";
+import { trustlessWorkService } from "../services/trustless-work.service";
 import { ReleaseFundsEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
 import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";

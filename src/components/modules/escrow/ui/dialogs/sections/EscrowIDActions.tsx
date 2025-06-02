@@ -1,7 +1,7 @@
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import useStartDisputeEscrowDialog from "../hooks/start-dispute-escrow-dialog.hook";
-import useResolveDisputeEscrowDialog from "../hooks/resolve-dispute-escrow-dialog.hook";
+import useStartDisputeEscrowDialog from "../../../hooks/start-dispute-escrow-dialog.hook";
+import useResolveDisputeEscrowDialog from "../../../hooks/resolve-dispute-escrow-dialog.hook";
 import { useEscrowDialogs } from "../hooks/use-escrow-dialogs.hook";
 import {
   Check,

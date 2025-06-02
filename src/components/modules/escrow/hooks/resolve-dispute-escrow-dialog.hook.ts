@@ -10,10 +10,10 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { MouseEvent } from "react";
-import { getFormSchema } from "../../../schema/resolve-dispute-escrow.schema";
-import { useEscrowUIBoundedStore } from "../../../store/ui";
+import { getFormSchema } from "../schema/resolve-dispute-escrow.schema";
+import { useEscrowUIBoundedStore } from "../store/ui";
 import { ResolveDisputePayload } from "@/@types/escrows/escrow-payload.entity";
-import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { trustlessWorkService } from "../services/trustless-work.service";
 import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
 

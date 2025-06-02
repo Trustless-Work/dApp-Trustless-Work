@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import useEditEntitiesDialog from "./hooks/edit-entities-dialog.hook";
+import useEditEntitiesDialog from "../../hooks/edit-entities-dialog.hook";
 import { EditEntitiesForm } from "./forms/EditEntitiesForm";
 import { SkeletonEditEntities } from "./utils/SkeletonEditEntities";
 

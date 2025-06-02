@@ -9,27 +9,28 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { formSchema } from "../../../schema/edit-basic-properties.schema";
-import { trustlessWorkService } from "../../../services/trustless-work.service";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import { formSchema } from "../schema/edit-milestone.schema";
+import { useEscrowUIBoundedStore } from "../store/ui";
+import { Milestone } from "@/@types/escrows/escrow.entity";
 import {
   EscrowPayload,
   UpdateEscrowPayload,
 } from "@/@types/escrows/escrow-payload.entity";
+import { trustlessWorkService } from "../services/trustless-work.service";
+import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
 
-interface useEditBasicPropertiesDialogProps {
-  setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
+interface useEditMilestonesDialogProps {
+  setIsEditMilestoneDialogOpen: (value: boolean) => void;
 }
 
-const useEditBasicPropertiesDialog = ({
-  setIsEditBasicPropertiesDialogOpen,
-}: useEditBasicPropertiesDialogProps) => {
+const useEditMilestonesDialog = ({
+  setIsEditMilestoneDialogOpen,
+}: useEditMilestonesDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const setIsEditingBasicProperties = useEscrowUIBoundedStore(
-    (state) => state.setIsEditingBasicProperties,
+  const setIsEditingMilestones = useEscrowUIBoundedStore(
+    (state) => state.setIsEditingMilestones,
   );
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
@@ -42,30 +43,40 @@ const useEditBasicPropertiesDialog = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: selectedEscrow?.title || "",
-      engagementId: selectedEscrow?.engagementId || "",
-      description: selectedEscrow?.description || "",
-      amount: selectedEscrow?.amount || "",
-      receiverMemo: selectedEscrow?.receiverMemo?.toString() || "",
-      platformFee: selectedEscrow?.platformFee || "",
+      milestones: selectedEscrow?.milestones || [{ description: "" }],
     },
     mode: "onChange",
   });
 
+  const milestones: Milestone[] = form.watch("milestones");
+  const isAnyMilestoneEmpty = milestones.some(
+    (milestone) => milestone.description === "",
+  );
+
+  const handleAddMilestone = () => {
+    const currentMilestones = form.getValues("milestones");
+    const updatedMilestones = [
+      ...currentMilestones,
+      { description: "", status: "pending" },
+    ];
+    form.setValue("milestones", updatedMilestones);
+  };
+
+  const handleRemoveMilestone = (index: number) => {
+    const currentMilestones = form.getValues("milestones");
+    const updatedMilestones = currentMilestones.filter((_, i) => i !== index);
+    form.setValue("milestones", updatedMilestones);
+  };
+
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     if (!selectedEscrow) return;
 
-    setIsEditingBasicProperties(true);
+    setIsEditingMilestones(true);
 
     try {
       const updatedEscrow = {
         ...JSON.parse(JSON.stringify(selectedEscrow)),
-        title: payload.title,
-        engagementId: payload.engagementId,
-        description: payload.description,
-        amount: payload.amount,
-        receiverMemo: payload.receiverMemo,
-        platformFee: payload.platformFee,
+        milestones: payload.milestones,
       };
 
       // Plain the trustline
@@ -95,11 +106,11 @@ const useEditBasicPropertiesDialog = ({
 
       if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });
-        setIsEditBasicPropertiesDialogOpen(false);
+        setIsEditMilestoneDialogOpen(false);
         setIsDialogOpen(false);
 
         toast.success(
-          `You have edited the basic properties of ${selectedEscrow.title}.`,
+          `You have edited the milestones of ${selectedEscrow.title}.`,
         );
       }
     } catch (err) {
@@ -107,19 +118,23 @@ const useEditBasicPropertiesDialog = ({
         err instanceof Error ? err.message : "An unknown error occurred",
       );
     } finally {
-      setIsEditingBasicProperties(false);
+      setIsEditingMilestones(false);
     }
   };
 
   const handleClose = () => {
-    setIsEditBasicPropertiesDialogOpen(false);
+    setIsEditMilestoneDialogOpen(false);
   };
 
   return {
-    form,
     onSubmit,
+    form,
     handleClose,
+    milestones,
+    handleAddMilestone,
+    handleRemoveMilestone,
+    isAnyMilestoneEmpty,
   };
 };
 
-export default useEditBasicPropertiesDialog;
+export default useEditMilestonesDialog;

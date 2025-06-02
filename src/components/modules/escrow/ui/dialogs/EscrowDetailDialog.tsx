@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
+import useEscrowDetailDialog from "../../hooks/escrow-detail-dialog.hook";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useFormatUtils } from "@/utils/hook/format.hook";

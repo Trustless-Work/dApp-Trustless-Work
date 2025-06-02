@@ -16,7 +16,7 @@ import {
   Pencil,
 } from "lucide-react";
 import { useEscrowBoundedStore } from "../../../store/data";
-import useChangeFlagEscrowDialog from "../hooks/change-flag-escrow-dialog.hook";
+import useChangeFlagEscrowDialog from "../../../hooks/change-flag-escrow-dialog.hook";
 import { useValidData } from "@/utils/hook/valid-data.hook";
 import { useEscrowDialogs } from "../hooks/use-escrow-dialogs.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";

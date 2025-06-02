@@ -5,14 +5,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { formSchema } from "../../../schema/fund-escrow.schema";
+import { formSchema } from "../schema/fund-escrow.schema";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../../../store/ui";
+import { useEscrowUIBoundedStore } from "../store/ui";
 import { useEffect } from "react";
-import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { trustlessWorkService } from "../services/trustless-work.service";
 import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { FundEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
 import { toast } from "sonner";

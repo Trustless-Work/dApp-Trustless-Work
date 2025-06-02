@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import useEditEntitiesDialog from "../hooks/edit-entities-dialog.hook";
+import useEditEntitiesDialog from "../../../hooks/edit-entities-dialog.hook";
 
 interface EditEntitiesFormProps {
   setIsEditEntitiesDialogOpen: (value: boolean) => void;

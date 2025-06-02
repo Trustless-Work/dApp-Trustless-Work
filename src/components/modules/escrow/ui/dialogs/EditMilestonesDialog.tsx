@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGlobalBoundedStore } from "@/core/store/data";
-import useEditMilestonesDialog from "./hooks/edit-milestones-dialog.hook";
+import useEditMilestonesDialog from "../../hooks/edit-milestones-dialog.hook";
 import { Form, FormLabel } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";

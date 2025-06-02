@@ -9,10 +9,10 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { formSchema } from "../../../schema/complete-milestone.schema";
-import { useEscrowBoundedStore } from "../../../store/data";
-import { trustlessWorkService } from "../../../services/trustless-work.service";
+import { useEscrowUIBoundedStore } from "../store/ui";
+import { formSchema } from "../schema/complete-milestone.schema";
+import { useEscrowBoundedStore } from "../store/data";
+import { trustlessWorkService } from "../services/trustless-work.service";
 import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { ChangeMilestoneStatusPayload } from "@/@types/escrows/escrow-payload.entity";
 import { toast } from "sonner";

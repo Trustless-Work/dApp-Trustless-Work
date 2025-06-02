@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import useResolveDisputeEscrowDialogHook from "./hooks/resolve-dispute-escrow-dialog.hook";
+import useResolveDisputeEscrowDialogHook from "../../hooks/resolve-dispute-escrow-dialog.hook";
 import SkeletonResolveDispute from "./utils/SkeletonResolveDispute";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
