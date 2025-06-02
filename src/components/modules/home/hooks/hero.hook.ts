@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const useHero = () => {
+  const { t } = useTranslation("common");
   const [currentWord, setCurrentWord] = useState(0);
-  const words = ["Configurable.", "Scalable.", "Transparent."];
+  const words = [
+    t("home.hero.currentWords.configurable"),
+    t("home.hero.currentWords.scalable"),
+    t("home.hero.currentWords.transparent"),
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {

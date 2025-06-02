@@ -10,14 +10,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const languages = [
-  { code: "en", name: "English" },
-  { code: "es", name: "Español" },
+  { code: "en", nameKey: "language.english" },
+  { code: "es", nameKey: "language.spanish" },
 ];
 
 const LanguageToggle = () => {
   const { currentLanguage, changeLanguage } = useLanguage();
+  const { t } = useTranslation("common");
 
   return (
     <DropdownMenu>
@@ -28,7 +30,7 @@ const LanguageToggle = () => {
           className="h-9 w-9 rounded-full border-0"
         >
           <Globe className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">Change Language</span>
+          <span className="sr-only">{t("header.language")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -41,7 +43,7 @@ const LanguageToggle = () => {
               currentLanguage === language.code && "bg-accent",
             )}
           >
-            {language.name}
+            {t(language.nameKey)}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

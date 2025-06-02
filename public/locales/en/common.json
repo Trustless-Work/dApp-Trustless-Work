@@ -12,5 +12,150 @@
     "support": "Support",
     "reportIssue": "Report an API Issue",
     "help": "Help"
+  },
+  "home": {
+    "hero": {
+      "welcome": "Welcome to",
+      "title": "Trustless Work",
+      "subtitle": "<strong>Escrow-as-a-service</strong> platform designed to secure transactions with transparency, efficiency, and scalability.",
+      "description": "Whether you are a developer looking to integrate blockchain-powered escrows, a platform aiming to build user trust, or an innovator seeking new financial solutions, you're in the right place.",
+      "exploreButton": "Explore Our Solutions",
+      "learnMoreButton": "Learn More",
+      "currentWords": {
+        "configurable": "Configurable",
+        "scalable": "Scalable",
+        "transparent": "Transparent"
+      }
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "To solve trust in global payments by providing configurable, scalable, and transparent escrow infrastructure and tools for the new economy.",
+      "features": {
+        "configurable": {
+          "title": "Configurable",
+          "description": "Tailor escrow workflows to your unique needs, from milestones to multi-party agreements."
+        },
+        "scalable": {
+          "title": "Scalable",
+          "description": "Support high transaction volumes and diverse industries, enabling seamless growth."
+        },
+        "transparent": {
+          "title": "Transparent",
+          "description": "Leverage blockchain technology to ensure visibility and fairness in every transaction."
+        }
+      }
+    },
+    "whyEscrows": {
+      "title": "Why Escrows Matter",
+      "description1": "At its core, an escrow is a neutral and secure way to hold funds while something else happens—whether it's transferring a house, delivering a product, or completing a project.",
+      "description2": "In traditional payment systems, trust is built through costly intermediaries, complex processes, and limited transparency. These barriers slow innovation, increase costs, and limit accessibility.",
+      "description3": "Trustless Work eliminates these inefficiencies, fostering trust through blockchain-powered automation, API-driven simplicity, and global accessibility.",
+      "comparisonCard": {
+        "title": "Traditional Systems vs Trustless Work",
+        "costlyIntermediaries": {
+          "title": "Costly Intermediaries",
+          "description": "Banks, lawyers, or brokers adding fees and delays."
+        },
+        "complexProcesses": {
+          "title": "Complex Processes",
+          "description": "Lengthy, manual procedures that slow down business."
+        },
+        "limitedTransparency": {
+          "title": "Limited Transparency",
+          "description": "Little visibility into where funds are and why delays occur."
+        },
+        "ourSolution": {
+          "title": "Our Solution",
+          "description": "Blockchain-powered smart escrows that are configurable, scalable, and transparent."
+        }
+      }
+    },
+    "howItWorks": {
+      "title": "How Trustless Work Changes the Game",
+      "subtitle": "We provide a new way to manage trust with blockchain-powered smart escrows.",
+      "services": {
+        "escrowService": {
+          "title": "Escrow-as-a-Service",
+          "description": "Seamlessly integrate escrow workflows into any platform with our API-first approach."
+        },
+        "developerTools": {
+          "title": "Developer-Friendly Tools",
+          "description": "API-first design, open-source templates, and testnet resources for easy integration."
+        },
+        "applications": {
+          "title": "Diverse Applications",
+          "description": "Supporting industries from marketplaces to crowdfunding, real estate, and trade finance."
+        }
+      }
+    },
+    "smartEscrow": {
+      "title": "What does a Smart Escrow look like?",
+      "description1": "Our smart escrows are designed to be flexible, secure, and transparent. Each escrow has unique properties that define how it works and who can interact with it.",
+      "description2": "From the escrow ID to milestones and flags, every aspect is carefully designed to ensure trust and efficiency in your transactions.",
+      "description3": "Smart escrows can be configured for various use cases, from simple payments to complex multi-stage projects with multiple stakeholders.",
+      "card": {
+        "status": {
+          "inDispute": "In Dispute",
+          "released": "Released",
+          "resolved": "Resolved"
+        },
+        "roles": {
+          "serviceProvider": "Service Provider",
+          "approver": "Approver",
+          "disputeResolver": "Dispute Resolver",
+          "releaseSigner": "Release Signer",
+          "receiver": "Receiver",
+          "platformAddress": "Platform Address"
+        },
+        "properties": {
+          "escrowId": "Escrow ID",
+          "balance": "Balance:",
+          "trustline": "Trustline:",
+          "platformFee": "Platform Fee:",
+          "engagementId": "Engagement ID:"
+        },
+        "milestones": {
+          "title": "Milestones:",
+          "initialDesign": "Initial Design",
+          "frontendDevelopment": "Frontend Development",
+          "backendIntegration": "Backend Integration",
+          "finalTesting": "Final Testing",
+          "completed": "Completed",
+          "inProgress": "In Progress",
+          "pending": "Pending",
+          "approved": "Approved",
+          "initialDesignDesc": "Delivery of wireframes and mockups",
+          "frontendDevelopmentDesc": "Implementation of user interface",
+          "backendIntegrationDesc": "API integration and testing",
+          "finalTestingDesc": "Final review and deployment testing"
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to get started?",
+      "subtitle": "Join us in building the future of trust in global payments.",
+      "button": "Explore Our Solutions"
+    }
+  },
+  "header": {
+    "disconnect": "Disconnect",
+    "reportIssue": "Report Issue",
+    "connect": "Connect",
+    "language": "Change Language"
+  },
+  "connectArrow": {
+    "testDapp": "Test the dApp by connecting your wallet!"
+  },
+  "language": {
+    "english": "English",
+    "spanish": "Spanish"
+  },
+  "reusable": {
+    "approved": "Approved",
+    "pending": "Pending",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "connect": "Connect",
+    "disconnect": "Disconnect"
   }
 }

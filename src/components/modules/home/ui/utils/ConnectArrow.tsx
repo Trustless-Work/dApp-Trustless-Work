@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion";
 import { useConnectArrow } from "../../hooks/connect-arrow.hook";
+import { useTranslation } from "react-i18next";
 
 export const ConnectArrow = () => {
   const { visible } = useConnectArrow();
+  const { t } = useTranslation("common");
 
   return (
     <motion.div
@@ -23,7 +25,7 @@ export const ConnectArrow = () => {
           transition={{ delay: 1.2, duration: 0.5 }}
         >
           <div className="bg-black/80 text-blue-400 p-2 rounded-lg shadow-md border border-blue-900 max-w-[200px] text-sm font-medium">
-            <p>Test the dApp by connecting your wallet!</p>
+            <p>{t("connectArrow.testDapp")}</p>
           </div>
         </motion.div>
       </div>
