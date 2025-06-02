@@ -2,7 +2,6 @@ import { StateCreator } from "zustand";
 import { AuthenticationGlobalStore } from "../@types/authentication.entity";
 import {
   addUser,
-  getAllUsers,
   getUser,
   updateUser,
 } from "@/components/modules/auth/server/authentication.firebase";
@@ -13,7 +12,6 @@ const AUTHENTICATION_ACTIONS = {
   DISCONNECT_WALLET: "authentication/disconnect",
   UPDATE_USER: "authentication/updateUser",
   REMOVE_API_KEY: "authentication/removeApiKey",
-  SET_USERS: "authentication/setUsers",
 } as const;
 
 export const useGlobalAuthenticationSlice: StateCreator<
@@ -27,7 +25,6 @@ export const useGlobalAuthenticationSlice: StateCreator<
     address: "",
     name: "",
     loggedUser: null,
-    users: [],
 
     // Modifiers
     connectWalletStore: async (address: string, name: string) => {
@@ -69,16 +66,6 @@ export const useGlobalAuthenticationSlice: StateCreator<
 
       if (success) {
         set({ loggedUser: data }, false, AUTHENTICATION_ACTIONS.UPDATE_USER);
-      }
-    },
-
-    getAllUsers: async () => {
-      const { success, message, data } = await getAllUsers();
-
-      if (success) {
-        set({ users: data }, false, AUTHENTICATION_ACTIONS.SET_USERS);
-      } else {
-        console.error(message);
       }
     },
   };

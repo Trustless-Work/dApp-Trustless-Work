@@ -167,19 +167,10 @@ const getAllUsers = async (): Promise<{
       };
     }
 
-    const users = querySnapshot.docs
-      .map((doc) => {
-        const userData = doc.data();
-        if (!userData.firstName || userData.firstName.trim() === "") {
-          return null;
-        }
-
-        return {
-          id: doc.id,
-          ...userData,
-        };
-      })
-      .filter((user) => user !== null);
+    const users = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
     return {
       success: true,

@@ -4,6 +4,7 @@ import {
   CircleHelp,
   Layers,
   LayoutDashboard,
+  LucideContactRound,
 } from "lucide-react";
 
 export const ItemsSidebar = {
@@ -25,13 +26,13 @@ export const ItemsSidebar = {
           isActive: true,
           isExpandable: false,
         },
-        // {
-        //   title: "Contacts",
-        //   url: "/dashboard/contact",
-        //   icon: LuContactRound,
-        //   isActive: true,
-        //   isExpandable: false,
-        // },
+        {
+          title: "sidebar.contacts",
+          url: "/dashboard/contact",
+          icon: LucideContactRound,
+          isActive: true,
+          isExpandable: false,
+        },
       ],
     },
     {
