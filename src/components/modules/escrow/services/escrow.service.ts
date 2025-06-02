@@ -1,6 +1,5 @@
-import type { Escrow, BalanceItem } from "@/@types/escrows/escrow.entity";
+import { BalanceItem, Escrow } from "@/@types/escrow.entity";
 import { getAllEscrowsByUser, updateEscrow } from "../server/escrow.firebase";
-import { EscrowPayload } from "@/@types/escrows/escrow-payload.entity";
 import { useGetMultipleEscrowBalances } from "@trustless-work/escrow/hooks";
 import { GetEscrowBalancesResponse } from "@trustless-work/escrow/types";
 
@@ -61,7 +60,7 @@ export const updateExistingEscrow = async ({
   payload,
 }: {
   escrowId: string;
-  payload: Partial<EscrowPayload>;
+  payload: Partial<Escrow>;
 }): Promise<Escrow | undefined> => {
   const response = await updateEscrow({
     escrowId,

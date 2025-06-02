@@ -14,7 +14,6 @@ import {
   Escrow,
   Milestone,
   UpdateEscrowPayload,
-  UpdateEscrowResponse,
 } from "@trustless-work/escrow/types";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import {

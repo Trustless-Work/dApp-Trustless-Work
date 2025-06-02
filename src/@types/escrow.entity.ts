@@ -1,0 +1,40 @@
+import { Flags, Milestone, Roles, Trustline } from "@trustless-work/escrow";
+import { CreatedAt, UpdatedAt } from "./dates.entity";
+
+export type RolesInEscrow =
+  | "issuer"
+  | "approver"
+  | "disputeResolver"
+  | "serviceProvider"
+  | "releaseSigner"
+  | "platformAddress"
+  | "receiver";
+
+export interface BalanceItem {
+  address: string;
+  balance: number;
+}
+
+export interface Escrow {
+  id: string;
+  signer?: string;
+  contractId?: string;
+  engagementId: string;
+  title: string;
+  roles: Roles;
+  description: string;
+  amount: string;
+  platformFee: string;
+  balance?: string;
+  milestones: Milestone[];
+  flags?: Flags;
+  trustline: Trustline;
+  receiverMemo?: number;
+  disputeStartedBy?: string;
+  isActive?: boolean;
+  approverFunds?: string;
+  receiverFunds?: string;
+  user: string;
+  createdAt: CreatedAt;
+  updatedAt: UpdatedAt;
+}

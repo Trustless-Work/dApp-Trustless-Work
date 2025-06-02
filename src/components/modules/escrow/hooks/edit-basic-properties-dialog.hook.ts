@@ -13,11 +13,7 @@ import {
   useUpdateEscrow,
   useSendTransaction,
 } from "@trustless-work/escrow/hooks";
-import {
-  Escrow,
-  UpdateEscrowPayload,
-  UpdateEscrowResponse,
-} from "@trustless-work/escrow/types";
+import { Escrow, UpdateEscrowPayload } from "@trustless-work/escrow/types";
 import { toast } from "sonner";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 
