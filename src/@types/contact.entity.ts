@@ -3,6 +3,7 @@ import { CreatedAt, UpdatedAt } from "./dates.entity";
 export enum WalletType {
   ALBEDO = "Albedo",
   LOBSTR = "LOBSTR",
+  FREIGHTER = "Freighter",
 }
 
 export interface Contact {
