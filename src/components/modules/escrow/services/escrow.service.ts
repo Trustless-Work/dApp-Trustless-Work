@@ -1,7 +1,20 @@
-import { BalanceItem, Escrow } from "@/@types/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 import { getAllEscrowsByUser, updateEscrow } from "../server/escrow.firebase";
 import { useGetMultipleEscrowBalances } from "@trustless-work/escrow/hooks";
-import { GetEscrowBalancesResponse } from "@trustless-work/escrow/types";
+
+// Custom hook to handle balance fetching
+export const useEscrowBalances = () => {
+  const { getMultipleBalances } = useGetMultipleEscrowBalances();
+
+  const fetchBalances = async (signer: string, addresses: string[]) => {
+    return getMultipleBalances({
+      signer,
+      addresses,
+    });
+  };
+
+  return { fetchBalances };
+};
 
 export const fetchAllEscrows = async ({
   address,
@@ -12,8 +25,6 @@ export const fetchAllEscrows = async ({
   type: string;
   isActive?: boolean;
 }): Promise<Escrow[]> => {
-  const { getMultipleBalances } = useGetMultipleEscrowBalances();
-
   const escrowsByUser = await getAllEscrowsByUser({ address, type });
   // todo: pass this logic to the getAllEscrowsByUser function
   const filtered =
@@ -21,38 +32,7 @@ export const fetchAllEscrows = async ({
       ? escrowsByUser.data.filter((e: Escrow) => e.isActive === isActive)
       : escrowsByUser.data;
 
-  const contractIds = filtered.map((escrow: Escrow) => escrow.contractId);
-
-  if (!Array.isArray(contractIds)) {
-    throw new Error("contractIds is not a valid array.");
-  }
-
-  const response = (await getMultipleBalances({
-    signer: address || "",
-    addresses: contractIds,
-  })) as GetEscrowBalancesResponse[];
-
-  const balances = response as unknown as BalanceItem[];
-
-  return Promise.all(
-    filtered.map(async (escrow: Escrow) => {
-      const matchedBalance = balances.find(
-        (item) => item.address === escrow.contractId,
-      );
-      const plainBalance = matchedBalance ? matchedBalance.balance : 0;
-      const currentBalance = escrow.balance ? Number(escrow.balance) : 0;
-
-      if (currentBalance !== plainBalance) {
-        await updateEscrow({
-          escrowId: escrow.id,
-          payload: { balance: String(plainBalance) },
-        });
-        escrow.balance = String(plainBalance);
-      }
-
-      return escrow;
-    }),
-  );
+  return filtered;
 };
 
 export const updateExistingEscrow = async ({
