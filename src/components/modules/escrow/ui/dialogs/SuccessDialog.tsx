@@ -52,6 +52,14 @@ const SuccessDialog = ({
             >
               Stellar Explorer
             </Link>
+            <span className="mx-2">or</span>
+                <Link
+                  href={`https://viewer.trustlesswork.com/${recentEscrow?.contractId}`}
+                  className="text-primary"
+                  target="_blank"
+                >
+                  Escrow Viewer
+                </Link>
           </DialogDescription>
 
           <div className="flex items-center justify-center">
