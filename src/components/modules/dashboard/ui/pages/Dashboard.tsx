@@ -55,8 +55,12 @@ export const Dashboard = () => {
         <Tabs defaultValue="general" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="milestone-overview">Milestone Overview</TabsTrigger>
-            <TabsTrigger value="dispute-analytics">Dispute Analytics</TabsTrigger>
+            <TabsTrigger value="milestone-overview">
+              Milestone Overview
+            </TabsTrigger>
+            <TabsTrigger value="dispute-analytics">
+              Dispute Analytics
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="space-y-4">
