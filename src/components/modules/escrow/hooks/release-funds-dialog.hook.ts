@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import {
@@ -7,10 +5,13 @@ import {
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../store/ui";
-import { trustlessWorkService } from "../services/trustless-work.service";
-import { ReleaseFundsEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
+import { ReleaseFundsPayload } from "@trustless-work/escrow/types";
+import {
+  useReleaseFunds,
+  useSendTransaction,
+} from "@trustless-work/escrow/hooks";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
 
 const useReleaseFundsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -32,6 +33,9 @@ const useReleaseFundsEscrowDialog = () => {
   );
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
+  const { releaseFunds } = useReleaseFunds();
+  const { sendTransaction } = useSendTransaction();
+
   const releaseFundsSubmit = async () => {
     setIsReleasingFunds(true);
     setIsSuccessReleaseDialogOpen(false);
@@ -39,19 +43,33 @@ const useReleaseFundsEscrowDialog = () => {
     if (!selectedEscrow) return;
 
     try {
-      const finalPayload: ReleaseFundsEscrowPayload = {
+      const finalPayload: ReleaseFundsPayload = {
         contractId: selectedEscrow?.contractId,
         signer: address,
-        serviceProvider: selectedEscrow?.roles?.serviceProvider,
         releaseSigner: selectedEscrow?.roles?.releaseSigner,
       };
 
-      const response = (await trustlessWorkService({
+      const { unsignedTransaction } = await releaseFunds({
         payload: finalPayload,
-        endpoint: "/escrow/release-funds",
-        method: "post",
-        returnEscrowDataIsRequired: false,
-      })) as EscrowRequestResponse;
+        type: "single-release",
+      });
+
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from releaseFunds response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = await sendTransaction(signedTxXdr);
 
       if (response.status === "SUCCESS") {
         setIsSuccessReleaseDialogOpen(true);

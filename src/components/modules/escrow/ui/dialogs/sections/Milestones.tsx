@@ -16,7 +16,6 @@ import {
   Pencil,
 } from "lucide-react";
 import { useEscrowBoundedStore } from "../../../store/data";
-import useChangeFlagEscrowDialog from "../../../hooks/change-flag-escrow-dialog.hook";
 import { useValidData } from "@/utils/hook/valid-data.hook";
 import { useEscrowDialogs } from "../hooks/use-escrow-dialogs.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
@@ -24,6 +23,7 @@ import Link from "next/link";
 import ProgressEscrow from "../utils/ProgressEscrow";
 import { useEffect, useState } from "react";
 import { Escrow } from "@/@types/escrows/escrow.entity";
+import useApproveMilestoneDialog from "../../../hooks/approve-milestone-dialog.hook";
 
 const MAX_VISIBLE_MILESTONES = 1;
 const ITEM_HEIGHT = 50;
@@ -55,7 +55,7 @@ export const Milestones = ({
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
   const { isValidUrl } = useValidData();
-  const { changeMilestoneFlagSubmit } = useChangeFlagEscrowDialog();
+  const { approveMilestoneSubmit } = useApproveMilestoneDialog();
 
   const [visibleMoreMilestones, setVisibleMoreMilestones] =
     useState<boolean>(false);
@@ -245,7 +245,7 @@ export const Milestones = ({
                     className="max-w-32"
                     disabled={isChangingFlag}
                     onClick={() =>
-                      changeMilestoneFlagSubmit(
+                      approveMilestoneSubmit(
                         selectedEscrow,
                         milestone,
                         milestoneIndex,

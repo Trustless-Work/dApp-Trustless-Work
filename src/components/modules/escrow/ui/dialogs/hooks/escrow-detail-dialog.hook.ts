@@ -1,10 +1,10 @@
-import { getUserRoleInEscrow } from "../server/escrow.firebase";
+import { getUserRoleInEscrow } from "../../../server/escrow.firebase";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useEscrowUIBoundedStore } from "../store/ui";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { Escrow } from "@/@types/escrows/escrow.entity";
 
 interface EscrowDetailDialogProps {

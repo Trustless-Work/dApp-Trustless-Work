@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,14 +9,18 @@ import {
 } from "@/core/store/data";
 import { formSchema } from "../schema/edit-milestone.schema";
 import { useEscrowUIBoundedStore } from "../store/ui";
-import { Milestone } from "@/@types/escrows/escrow.entity";
-import {
-  EscrowPayload,
-  UpdateEscrowPayload,
-} from "@/@types/escrows/escrow-payload.entity";
-import { trustlessWorkService } from "../services/trustless-work.service";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
+import {
+  Escrow,
+  Milestone,
+  UpdateEscrowPayload,
+  UpdateEscrowResponse,
+} from "@trustless-work/escrow/types";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
+import {
+  useUpdateEscrow,
+  useSendTransaction,
+} from "@trustless-work/escrow/hooks";
 
 interface useEditMilestonesDialogProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
@@ -40,6 +42,9 @@ const useEditMilestonesDialog = ({
     (state) => state.setIsDialogOpen,
   );
 
+  const { updateEscrow } = useUpdateEscrow();
+  const { sendTransaction } = useSendTransaction();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,7 +53,8 @@ const useEditMilestonesDialog = ({
     mode: "onChange",
   });
 
-  const milestones: Milestone[] = form.watch("milestones");
+  const milestones: Omit<Milestone, "status" | "evidence">[] =
+    form.watch("milestones");
   const isAnyMilestoneEmpty = milestones.some(
     (milestone) => milestone.description === "",
   );
@@ -92,17 +98,32 @@ const useEditMilestonesDialog = ({
       delete updatedEscrow.id;
 
       const finalPayload: UpdateEscrowPayload = {
-        escrow: updatedEscrow as EscrowPayload,
+        escrow: updatedEscrow as Escrow,
         signer: address,
         contractId: selectedEscrow.contractId || "",
       };
 
-      const response = (await trustlessWorkService({
+      const { unsignedTransaction } = await updateEscrow({
         payload: finalPayload,
-        endpoint: "/escrow/update-escrow-by-contract-id",
-        method: "put",
-        returnEscrowDataIsRequired: false,
-      })) as EscrowRequestResponse;
+        type: "single-release",
+      });
+
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from updateEscrow response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = await sendTransaction(signedTxXdr);
 
       if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });

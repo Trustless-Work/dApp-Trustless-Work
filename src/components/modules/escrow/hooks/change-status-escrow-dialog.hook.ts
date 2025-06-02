@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,10 +10,13 @@ import {
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { formSchema } from "../schema/complete-milestone.schema";
 import { useEscrowBoundedStore } from "../store/data";
-import { trustlessWorkService } from "../services/trustless-work.service";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
-import { ChangeMilestoneStatusPayload } from "@/@types/escrows/escrow-payload.entity";
 import { toast } from "sonner";
+import {
+  useChangeMilestoneStatus,
+  useSendTransaction,
+} from "@trustless-work/escrow/hooks";
+import { ChangeMilestoneStatusPayload } from "@trustless-work/escrow/types";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
 
 interface changeMilestoneStatusDialogHook {
   setIsCompleteMilestoneDialogOpen: (value: boolean) => void;
@@ -44,6 +45,9 @@ const useChangeMilestoneStatusDialogHook = ({
   );
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
+  const { changeMilestoneStatus } = useChangeMilestoneStatus();
+  const { sendTransaction } = useSendTransaction();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,19 +61,34 @@ const useChangeMilestoneStatusDialogHook = ({
 
     try {
       const finalPayload: ChangeMilestoneStatusPayload = {
-        contractId: selectedEscrow?.contractId,
+        contractId: selectedEscrow?.contractId || "",
         milestoneIndex: milestoneIndex?.toString() || "0",
         newStatus: "completed",
         serviceProvider: address,
         newEvidence: payload.newEvidence || "",
       };
 
-      const response = (await trustlessWorkService({
+      const { unsignedTransaction } = await changeMilestoneStatus({
         payload: finalPayload,
-        endpoint: "/escrow/change-milestone-status",
-        method: "post",
-        returnEscrowDataIsRequired: false,
-      })) as EscrowRequestResponse;
+        type: "single-release",
+      });
+
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from changeMilestoneStatus response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = await sendTransaction(signedTxXdr);
 
       if (response.status === "SUCCESS") {
         setIsChangingStatus(false);

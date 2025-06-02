@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,14 +10,14 @@ import {
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { useMemo, useState } from "react";
 import { GetFormSchema } from "../schema/edit-entities.schema";
-import {
-  EscrowPayload,
-  UpdateEscrowPayload,
-} from "@/@types/escrows/escrow-payload.entity";
-import { trustlessWorkService } from "../services/trustless-work.service";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
 import { useUsersQuery } from "@/components/modules/contact/hooks/tanstack/useUsersQuery";
+import { Escrow, UpdateEscrowPayload } from "@trustless-work/escrow/types";
+import {
+  useSendTransaction,
+  useUpdateEscrow,
+} from "@trustless-work/escrow/hooks";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
 
 interface useEditEntitiesDialogProps {
   setIsEditEntitiesDialogOpen: (value: boolean) => void;
@@ -52,6 +50,9 @@ const useEditEntitiesDialog = ({
     (state) => state.setIsDialogOpen,
   );
   const { data: users = [] } = useUsersQuery();
+
+  const { updateEscrow } = useUpdateEscrow();
+  const { sendTransaction } = useSendTransaction();
 
   const userOptions = useMemo(() => {
     const options = users.map((user) => ({
@@ -108,17 +109,32 @@ const useEditEntitiesDialog = ({
       delete updatedEscrow.id;
 
       const finalPayload: UpdateEscrowPayload = {
-        escrow: updatedEscrow as EscrowPayload,
+        escrow: updatedEscrow as Escrow,
         signer: address,
         contractId: selectedEscrow.contractId || "",
       };
 
-      const response = (await trustlessWorkService({
+      const { unsignedTransaction } = await updateEscrow({
         payload: finalPayload,
-        endpoint: "/escrow/update-escrow-by-contract-id",
-        method: "put",
-        returnEscrowDataIsRequired: false,
-      })) as EscrowRequestResponse;
+        type: "single-release",
+      });
+
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from updateEscrow response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = await sendTransaction(signedTxXdr);
 
       if (response.status === "SUCCESS") {
         fetchAllEscrows({ address, type: activeTab || "approver" });

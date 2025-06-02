@@ -13,12 +13,29 @@ import {
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { GetFormSchema } from "../schema/initialize-escrow.schema";
-import { Trustline } from "@/@types/trustline.entity";
-import { InitializeEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
-import { trustlessWorkService } from "../services/trustless-work.service";
-import { InitializeEscrowResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
 import { useContactStore } from "@/core/store/data/slices/contacts.slice";
+import {
+  InitializeEscrowPayload,
+  InitializeEscrowResponse,
+  Roles,
+} from "@trustless-work/escrow/types";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
+import {
+  useInitializeEscrow as useInitializeEscrowHook,
+  useSendTransaction,
+} from "@trustless-work/escrow/hooks";
+
+interface Trustline {
+  id: string;
+  name: string;
+  address: string;
+  decimals?: number;
+}
+
+type ExtendedRoles = Roles & {
+  issuer: string;
+};
 
 export const useInitializeEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -53,6 +70,9 @@ export const useInitializeEscrow = () => {
   const address = useGlobalAuthenticationStore((state) => state.address);
   const trustlines = useGlobalBoundedStore((state) => state.trustlines);
   const formSchema = GetFormSchema();
+
+  const { deployEscrow } = useInitializeEscrowHook();
+  const { sendTransaction } = useSendTransaction();
 
   useEffect(() => {
     if (address) {
@@ -177,18 +197,44 @@ export const useInitializeEscrow = () => {
         roles: {
           ...payload.roles,
           issuer: address,
-        },
+        } as ExtendedRoles,
+        milestones: payload.milestones.map((milestone) => ({
+          ...milestone,
+          status: "pending",
+          evidence: "",
+        })),
       };
 
-      const result = (await trustlessWorkService({
+      const { unsignedTransaction } = await deployEscrow({
         payload: finalPayload,
-        endpoint: "/deployer/invoke-deployer-contract",
-        method: "post",
-      })) as InitializeEscrowResponse;
+        type: "single-release",
+      });
 
-      if (result.status === "SUCCESS") {
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from deployEscrow response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = (await sendTransaction(
+        signedTxXdr,
+      )) as InitializeEscrowResponse;
+
+      if (response.status === "SUCCESS") {
         setIsSuccessDialogOpen(true);
-        setRecentEscrow({ ...result.escrow, contractId: result.contractId });
+        setRecentEscrow({
+          ...response.escrow,
+          contractId: response.contractId,
+        });
         resetSteps();
         setCurrentStep(1);
         form.reset();
@@ -200,7 +246,7 @@ export const useInitializeEscrow = () => {
         setCurrentStep(1);
         setIsLoading(false);
         setIsSuccessDialogOpen(false);
-        toast.error(result.message || "An error occurred");
+        toast.error(response.message || "An error occurred");
       }
     } catch (err) {
       setIsLoading(false);
