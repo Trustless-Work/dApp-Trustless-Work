@@ -11,6 +11,7 @@ import { ArrowRight } from "lucide-react";
 import CreateButton from "@/components/utils/ui/Create";
 import { MilestonesOverview } from "../sections/MilestoneOverview";
 import { DisputeAnalytics } from "../sections/DisputeAnalytics";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
 
 export const Dashboard = () => {
   const address = useGlobalAuthenticationStore((state) => state.address);
@@ -51,38 +52,52 @@ export const Dashboard = () => {
       <div className="flex flex-col w-full h-full gap-4">
         <MetricsSection />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-          <div className="md:col-span-2">
-            <EscrowVolumeTrendChart
-              data={volumeTrend || []}
-              isLoading={isLoading}
-            />
-          </div>
+        <Tabs defaultValue="general" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="general">General</TabsTrigger>
+            <TabsTrigger value="milestone-overview">Milestone Overview</TabsTrigger>
+            <TabsTrigger value="dispute-analytics">Dispute Analytics</TabsTrigger>
+          </TabsList>
 
-          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-10 gap-4">
-            <div className="md:col-span-3">
-              <EscrowStatusChart
-                data={statusCounts || []}
-                isLoading={isLoading}
-              />
+          <TabsContent value="general" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+              <div className="md:col-span-2">
+                <EscrowVolumeTrendChart
+                  data={volumeTrend || []}
+                  isLoading={isLoading}
+                />
+              </div>
+
+              <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-10 gap-4">
+                <div className="md:col-span-3">
+                  <EscrowStatusChart
+                    data={statusCounts || []}
+                    isLoading={isLoading}
+                  />
+                </div>
+
+                <div className="md:col-span-7">
+                  <EscrowReleaseTrendChart
+                    data={releaseTrend || []}
+                    isLoading={isLoading}
+                  />
+                </div>
+              </div>
+
+              <div className="md:col-span-2">
+                <TopEscrowsList escrows={top5ByValue || []} />
+              </div>
             </div>
+          </TabsContent>
 
-            <div className="md:col-span-7">
-              <EscrowReleaseTrendChart
-                data={releaseTrend || []}
-                isLoading={isLoading}
-              />
-            </div>
-          </div>
+          <TabsContent value="milestone-overview" className="space-y-4">
+            <MilestonesOverview address={address} escrows={escrows || []} />
+          </TabsContent>
 
-          <div className="md:col-span-2">
-            <TopEscrowsList escrows={top5ByValue || []} />
-          </div>
-        </div>
-
-        <MilestonesOverview address={address} escrows={escrows || []} />
-
-        <DisputeAnalytics address={address} escrows={escrows || []} />
+          <TabsContent value="dispute-analytics" className="space-y-4">
+            <DisputeAnalytics address={address} escrows={escrows || []} />
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );
