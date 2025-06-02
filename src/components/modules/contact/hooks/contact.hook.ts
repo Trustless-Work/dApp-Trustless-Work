@@ -1,67 +1,128 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import {
-  arrayUnion,
-  doc,
-  getDoc,
-  serverTimestamp,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "@/core/config/firebase/firebase";
-import { formSchema, WalletType } from "../schema/contact-schema";
+import { useState } from "react";
+import { Contact } from "@/@types/contact.entity";
+import { ContactFormData } from "@/components/modules/contact/schema/contact-schema";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
+import { useContactUIBoundedStore } from "@/components/modules/contact/store/ui";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useContactsQuery } from "./tanstack/useContactsQuery";
+import { useCreateContactMutation } from "./tanstack/useCreateContactMutation";
+import { useDeleteContactMutation } from "./tanstack/useDeleteContactMutation";
+import { useUpdateContactMutation } from "./tanstack/useUpdateContactMutation";
 
-export const useContact = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      lastName: "",
-      email: "",
-      address: "",
+interface UseContactHook {
+  contacts: Contact[];
+  isLoading: boolean;
+  isSubmitting: boolean;
+  isDeleting: boolean;
+  isUpdating: boolean;
+  activeMode: "table" | "cards";
+  setActiveMode: (mode: "table" | "cards") => void;
+  handleCreateContact: (data: ContactFormData) => Promise<void>;
+  handleDeleteContact: (id: string) => Promise<void>;
+  handleUpdateContact: (id: string, data: ContactFormData) => Promise<boolean>;
+  run: boolean;
+  setRun: (run: boolean) => void;
+  steps: {
+    target: string;
+    content: string;
+    disableBeacon: boolean;
+  }[];
+  theme: string;
+}
+
+export const useContact = (): UseContactHook => {
+  const { address } = useGlobalAuthenticationStore();
+  const [run, setRun] = useState(false);
+  const { activeMode, setActiveMode } = useContactUIBoundedStore();
+  const { theme } = useGlobalUIBoundedStore();
+  const router = useRouter();
+
+  // Queries
+  const { data: contacts = [], isLoading } = useContactsQuery();
+  console.log(contacts);
+  // Mutations
+  const createMutation = useCreateContactMutation();
+  const deleteMutation = useDeleteContactMutation();
+  const updateMutation = useUpdateContactMutation();
+
+  const steps = [
+    {
+      target: "#step-1",
+      content: "View your contacts in table or card format",
+      disableBeacon: true,
     },
-    mode: "onChange",
-  });
+    {
+      target: "#step-2",
+      content: "Create a new contact",
+      disableBeacon: true,
+    },
+  ];
 
-  const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+  const handleCreateContact = async (data: ContactFormData) => {
+    if (!address) return;
     try {
-      const userId = "USER_ID";
-      const userRef = doc(db, "users", userId);
-
-      const userSnap = await getDoc(userRef);
-
-      if (userSnap.exists()) {
-        await updateDoc(userRef, {
-          contacts: arrayUnion(payload),
-          updatedAt: serverTimestamp(),
-        });
-      } else {
-        await setDoc(userRef, {
-          contacts: [payload],
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        });
-      }
-
-      form.reset();
-      toast.success("Contact saved successfully");
-    } catch (error: any) {
-      const errorMessage =
-        error.response && error.response.data
-          ? error.response.data.message
-          : "An error occurred";
-
-      toast.error(errorMessage);
+      await createMutation.mutateAsync(data);
+      toast.success("Contact created successfully");
+      router.push("/dashboard/contact");
+    } catch (error) {
+      console.error("[Contact] Error creating contact:", error);
+      toast.error("Error creating contact", {
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      });
     }
   };
 
-  const typeOptions = Object.values(WalletType).map((value) => ({
-    value,
-    label: value,
-  }));
+  const handleDeleteContact = async (id: string) => {
+    if (!address) return;
+    try {
+      await deleteMutation.mutateAsync(id);
+      toast.success("Contact deleted successfully");
+    } catch (error) {
+      console.error("[Contact] Error deleting contact:", error);
+      toast.error("Error deleting contact", {
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      });
+    }
+  };
 
-  return { form, onSubmit, typeOptions };
+  const handleUpdateContact = async (
+    id: string,
+    data: ContactFormData,
+  ): Promise<boolean> => {
+    if (!address) return false;
+    try {
+      await updateMutation.mutateAsync({ id, data });
+      toast.success("Contact updated successfully");
+      router.refresh();
+      return true;
+    } catch (error) {
+      console.error("[Contact] Error updating contact:", error);
+      toast.error("Error updating contact", {
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      });
+      return false;
+    }
+  };
+
+  return {
+    contacts,
+    isLoading,
+    isSubmitting: createMutation.isPending,
+    isDeleting: deleteMutation.isPending,
+    isUpdating: updateMutation.isPending,
+    activeMode,
+    setActiveMode,
+    handleCreateContact,
+    handleDeleteContact,
+    handleUpdateContact,
+    run,
+    setRun,
+    steps,
+    theme,
+  };
 };
