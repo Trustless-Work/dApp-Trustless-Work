@@ -36,15 +36,12 @@ const MyContactsTable = ({ contacts }: MyContactsTableProps) => {
   const {
     handleDeleteContact,
     handleUpdateContact,
-    isDeleting,
-    isUpdating,
     isLoading,
     currentPage,
     setCurrentPage,
     itemsPerPage,
     setItemsPerPage,
     totalPages,
-    itemsPerPageOptions,
   } = useContact();
   const { formatAddress } = useFormatUtils();
   const [editingContact, setEditingContact] = useState<Contact | null>(null);

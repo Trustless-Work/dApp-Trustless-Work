@@ -32,7 +32,6 @@ const MyContactsCards = ({ contacts }: MyContactsCardsProps) => {
     itemsPerPage,
     setItemsPerPage,
     totalPages,
-    itemsPerPageOptions,
   } = useContact();
   const { formatAddress } = useFormatUtils();
   const [editingContact, setEditingContact] = useState<Contact | null>(null);

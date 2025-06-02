@@ -11,11 +11,9 @@ import MyContactsTable from "@/components/modules/contact/ui/tables/MyContactsTa
 import MyContactsCards from "@/components/modules/contact/ui/cards/MyContactsCards";
 import MyContactsFilter from "@/components/modules/contact/ui/filters/MyContactsFilter";
 import { useContact } from "@/components/modules/contact/hooks/contact.hook";
-import Loader from "@/components/utils/ui/Loader";
 
 const MyContacts = () => {
-  const { filteredContacts, isLoading, activeMode, setActiveMode } =
-    useContact();
+  const { filteredContacts, activeMode, setActiveMode } = useContact();
 
   return (
     <>
