@@ -58,10 +58,10 @@ export function MetricCard({
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
         {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
+          <div className="text-xs text-muted-foreground">{description}</div>
         )}
         {subValue && (
-          <p className="text-xs text-muted-foreground">{subValue}</p>
+          <div className="text-xs text-muted-foreground">{subValue}</div>
         )}
       </CardContent>
     </Card>
