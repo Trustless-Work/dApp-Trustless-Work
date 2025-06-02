@@ -19,6 +19,7 @@ import {
 import { trustlessWorkService } from "../../../services/trustless-work.service";
 import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
+import { useUsersQuery } from "@/components/modules/contact/hooks/tanstack/useUsersQuery";
 
 interface useEditEntitiesDialogProps {
   setIsEditEntitiesDialogOpen: (value: boolean) => void;
@@ -50,7 +51,7 @@ const useEditEntitiesDialog = ({
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
-  const users = useGlobalAuthenticationStore((state) => state.users);
+  const { data: users = [] } = useUsersQuery();
 
   const userOptions = useMemo(() => {
     const options = users.map((user) => ({

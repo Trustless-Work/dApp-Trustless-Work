@@ -157,7 +157,7 @@ const InitializeEscrowForm = () => {
                   <Switch
                     checked={showSelect.serviceProvider}
                     onCheckedChange={(value) =>
-                      toggleField("roles.serviceProvider", value)
+                      toggleField("serviceProvider", value)
                     }
                     title="Show Users List?"
                   />
@@ -207,7 +207,7 @@ const InitializeEscrowForm = () => {
                   <Switch
                     checked={showSelect.releaseSigner}
                     onCheckedChange={(value) =>
-                      toggleField("roles.releaseSigner", value)
+                      toggleField("releaseSigner", value)
                     }
                     title="Show Users List?"
                   />
@@ -255,7 +255,7 @@ const InitializeEscrowForm = () => {
                   <Switch
                     checked={showSelect.disputeResolver}
                     onCheckedChange={(value) =>
-                      toggleField("roles.disputeResolver", value)
+                      toggleField("disputeResolver", value)
                     }
                     title="Show Users List?"
                   />
@@ -305,7 +305,7 @@ const InitializeEscrowForm = () => {
                   <Switch
                     checked={showSelect.platformAddress}
                     onCheckedChange={(value) =>
-                      toggleField("roles.platformAddress", value)
+                      toggleField("platformAddress", value)
                     }
                     title="Show Users List?"
                   />
@@ -350,9 +350,7 @@ const InitializeEscrowForm = () => {
                   </span>
                   <Switch
                     checked={showSelect.receiver}
-                    onCheckedChange={(value) =>
-                      toggleField("roles.receiver", value)
-                    }
+                    onCheckedChange={(value) => toggleField("receiver", value)}
                     title="Show Users List?"
                   />
                 </FormLabel>

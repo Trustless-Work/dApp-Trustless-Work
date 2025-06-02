@@ -39,6 +39,7 @@ const InitializeContactForm = ({
       address: "",
       walletType: WalletType.ALBEDO,
     },
+    mode: "onChange",
   });
 
   return (
@@ -99,12 +100,15 @@ const InitializeContactForm = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={WalletType.ALBEDO}>
-                    {WalletType.ALBEDO}
-                  </SelectItem>
-                  <SelectItem value={WalletType.LOBSTR}>
-                    {WalletType.LOBSTR}
-                  </SelectItem>
+                  {Object.values(WalletType).map((type) => (
+                    <SelectItem
+                      className="cursor-pointer"
+                      key={type}
+                      value={type}
+                    >
+                      {type}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />

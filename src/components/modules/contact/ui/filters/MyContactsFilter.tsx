@@ -8,40 +8,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import CreateButton from "@/components/utils/ui/Create";
 import Divider from "@/components/utils/ui/Divider";
 import { WalletType } from "@/@types/contact.entity";
 import { useContactUIBoundedStore } from "@/components/modules/contact/store/ui";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
-import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { Plus, Search, Trash2 } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import InitializeContactForm from "../forms/InitializeContactForm";
+import { useContact } from "../../hooks/contact.hook";
 
 const MyContactsFilter = () => {
+  const { handleClearFilters, handleSubmit, isSheetOpen, setIsSheetOpen } =
+    useContact();
   const { filters, setFilters } = useContactUIBoundedStore();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  // Update URL params
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (filters.name) params.set("name", filters.name);
-    if (filters.email) params.set("email", filters.email);
-    if (filters.walletType) params.set("walletType", filters.walletType);
-
-    const queryString = params.toString();
-    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
-    router.push(newUrl);
-  }, [filters, pathname, router]);
-
-  const handleClearFilters = () => {
-    setFilters({
-      name: "",
-      email: "",
-      walletType: null,
-    });
-    router.push(pathname);
-  };
 
   return (
     <form
@@ -50,8 +35,16 @@ const MyContactsFilter = () => {
     >
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
-        <h2 className="text-lg font-semibold">Filter Contacts</h2>
-        <div className="flex gap-2">
+        <div className="flex flex-row items-center gap-2 w-full sm:w-auto">
+          <div className="relative flex-1 sm:w-[300px]">
+            <Input
+              placeholder="Search by name..."
+              value={filters.name}
+              onChange={(e) => setFilters({ name: e.target.value })}
+              className="w-full"
+            />
+            <Search className="h-4 w-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+          </div>
           <Button
             variant="destructive"
             size="icon"
@@ -61,47 +54,51 @@ const MyContactsFilter = () => {
           >
             <Trash2 className="h-4 w-4" />
           </Button>
-          <CreateButton
-            className="shrink-0"
-            label="Create Contact"
-            url="/dashboard/contact/initialize-contact"
-            id="step-2"
-          />
+        </div>
+
+        <div className="flex gap-2">
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+            <SheetTrigger asChild>
+              <Button className="flex items-center gap-2">
+                <Plus size={20} />
+                Create Contact
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+              <SheetHeader>
+                <SheetTitle>Create a New Contact</SheetTitle>
+              </SheetHeader>
+              <div className="mt-6">
+                <InitializeContactForm onSubmit={handleSubmit} />
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
 
       <Divider type="horizontal" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Name */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="flex flex-col">
-          <label className="text-xs text-muted-foreground font-bold mb-2 ml-2">
-            Name
-          </label>
-          <Input
-            placeholder="Filter by name"
-            value={filters.name}
-            onChange={(e) => setFilters({ name: e.target.value })}
-            className="w-full"
-          />
-        </div>
-
-        {/* Email */}
-        <div className="flex flex-col">
-          <label className="text-xs text-muted-foreground font-bold mb-2 ml-2">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="status"
+          >
             Email
           </label>
           <Input
-            placeholder="Filter by email"
+            placeholder="Search by email..."
             value={filters.email}
             onChange={(e) => setFilters({ email: e.target.value })}
             className="w-full"
           />
         </div>
 
-        {/* Wallet Type */}
         <div className="flex flex-col">
-          <label className="text-xs text-muted-foreground font-bold mb-2 ml-2">
+          <label
+            className="text-xs text-muted-foreground font-bold mb-2 ml-2"
+            htmlFor="status"
+          >
             Wallet Type
           </label>
           <Select
@@ -115,12 +112,11 @@ const MyContactsFilter = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
-              <SelectItem value={WalletType.ALBEDO}>
-                {WalletType.ALBEDO}
-              </SelectItem>
-              <SelectItem value={WalletType.LOBSTR}>
-                {WalletType.LOBSTR}
-              </SelectItem>
+              {Object.values(WalletType).map((type) => (
+                <SelectItem className="cursor-pointer" key={type} value={type}>
+                  {type}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
