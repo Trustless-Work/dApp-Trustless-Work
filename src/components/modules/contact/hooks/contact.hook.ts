@@ -1,64 +1,87 @@
-import { useState } from "react";
-import { Contact } from "@/@types/contact.entity";
+import { useEffect, useMemo, useState } from "react";
 import { ContactFormData } from "@/components/modules/contact/schema/contact-schema";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useContactUIBoundedStore } from "@/components/modules/contact/store/ui";
-import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useContactsQuery } from "./tanstack/useContactsQuery";
 import { useCreateContactMutation } from "./tanstack/useCreateContactMutation";
 import { useDeleteContactMutation } from "./tanstack/useDeleteContactMutation";
 import { useUpdateContactMutation } from "./tanstack/useUpdateContactMutation";
+import { useUsersQuery } from "./tanstack/useUsersQuery";
 
-interface UseContactHook {
-  contacts: Contact[];
-  isLoading: boolean;
-  isSubmitting: boolean;
-  isDeleting: boolean;
-  isUpdating: boolean;
-  activeMode: "table" | "cards";
-  setActiveMode: (mode: "table" | "cards") => void;
-  handleCreateContact: (data: ContactFormData) => Promise<void>;
-  handleDeleteContact: (id: string) => Promise<void>;
-  handleUpdateContact: (id: string, data: ContactFormData) => Promise<boolean>;
-  run: boolean;
-  setRun: (run: boolean) => void;
-  steps: {
-    target: string;
-    content: string;
-    disableBeacon: boolean;
-  }[];
-  theme: string;
-}
+export const useContact = () => {
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(15);
 
-export const useContact = (): UseContactHook => {
   const { address } = useGlobalAuthenticationStore();
-  const [run, setRun] = useState(false);
   const { activeMode, setActiveMode } = useContactUIBoundedStore();
-  const { theme } = useGlobalUIBoundedStore();
+  const { filters, setFilters } = useContactUIBoundedStore();
   const router = useRouter();
+  const pathname = usePathname();
 
   // Queries
-  const { data: contacts = [], isLoading } = useContactsQuery();
-  console.log(contacts);
+  const { data: contacts = [], isLoading: isLoadingContacts } =
+    useContactsQuery();
+  const { data: users = [], isLoading: isLoadingUsers } = useUsersQuery();
+
   // Mutations
   const createMutation = useCreateContactMutation();
   const deleteMutation = useDeleteContactMutation();
   const updateMutation = useUpdateContactMutation();
 
-  const steps = [
-    {
-      target: "#step-1",
-      content: "View your contacts in table or card format",
-      disableBeacon: true,
-    },
-    {
-      target: "#step-2",
-      content: "Create a new contact",
-      disableBeacon: true,
-    },
-  ];
+  // Update URL params
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (filters.name) params.set("name", filters.name);
+    if (filters.email) params.set("email", filters.email);
+    if (filters.walletType) params.set("walletType", filters.walletType);
+    params.set("page", currentPage.toString());
+    params.set("perPage", itemsPerPage.toString());
+
+    const queryString = params.toString();
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+    router.push(newUrl);
+  }, [filters, pathname, router, currentPage, itemsPerPage]);
+
+  const filteredContacts = useMemo(() => {
+    return contacts.filter((contact) => {
+      const matchesName =
+        filters.name === "" ||
+        contact.name.toLowerCase().includes(filters.name.toLowerCase());
+      const matchesEmail =
+        filters.email === "" ||
+        contact.email.toLowerCase().includes(filters.email.toLowerCase());
+      const matchesWalletType =
+        !filters.walletType || contact.walletType === filters.walletType;
+
+      return matchesName && matchesEmail && matchesWalletType;
+    });
+  }, [contacts, filters]);
+
+  const totalPages = Math.ceil(filteredContacts.length / itemsPerPage);
+
+  const paginatedContacts = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredContacts.slice(startIndex, endIndex);
+  }, [filteredContacts, currentPage, itemsPerPage]);
+
+  const handleClearFilters = () => {
+    setFilters({
+      name: "",
+      email: "",
+      walletType: null,
+    });
+    setCurrentPage(1);
+    router.push(pathname);
+  };
+
+  const handleSubmit = async (data: ContactFormData) => {
+    await handleCreateContact(data);
+    setIsSheetOpen(false);
+  };
 
   const handleCreateContact = async (data: ContactFormData) => {
     if (!address) return;
@@ -109,9 +132,18 @@ export const useContact = (): UseContactHook => {
     }
   };
 
+  const itemsPerPageOptions = [
+    { value: 5, label: "5" },
+    { value: 10, label: "10" },
+    { value: 15, label: "15" },
+    { value: 25, label: "25" },
+    { value: 50, label: "50" },
+  ];
+
   return {
-    contacts,
-    isLoading,
+    contacts: paginatedContacts,
+    users,
+    isLoading: isLoadingContacts || isLoadingUsers,
     isSubmitting: createMutation.isPending,
     isDeleting: deleteMutation.isPending,
     isUpdating: updateMutation.isPending,
@@ -120,9 +152,16 @@ export const useContact = (): UseContactHook => {
     handleCreateContact,
     handleDeleteContact,
     handleUpdateContact,
-    run,
-    setRun,
-    steps,
-    theme,
+    isSheetOpen,
+    setIsSheetOpen,
+    handleClearFilters,
+    handleSubmit,
+    filteredContacts,
+    currentPage,
+    setCurrentPage,
+    itemsPerPage,
+    setItemsPerPage,
+    totalPages,
+    itemsPerPageOptions,
   };
 };
