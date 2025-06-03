@@ -44,12 +44,12 @@ const getAllEscrowsByUser = async ({
   message?: string;
   data?: any;
 }> => {
+  console.log(address);
   const collectionRef = collection(db, "escrows");
 
   try {
     const q = query(collectionRef, where(`roles.${type}`, "==", address));
     const snapshot = await getDocs(q);
-
     const escrowList = snapshot.docs.map((doc) => {
       const data = doc.data();
       return convertFirestoreTimestamps({

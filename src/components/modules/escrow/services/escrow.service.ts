@@ -1,20 +1,7 @@
-import { Escrow } from "@/@types/escrow.entity";
+import { BalanceItem, Escrow } from "@/@types/escrow.entity";
 import { getAllEscrowsByUser, updateEscrow } from "../server/escrow.firebase";
-import { useGetMultipleEscrowBalances } from "@trustless-work/escrow/hooks";
-
-// Custom hook to handle balance fetching
-export const useEscrowBalances = () => {
-  const { getMultipleBalances } = useGetMultipleEscrowBalances();
-
-  const fetchBalances = async (signer: string, addresses: string[]) => {
-    return getMultipleBalances({
-      signer,
-      addresses,
-    });
-  };
-
-  return { fetchBalances };
-};
+import http from "@/core/config/axios/http";
+import { GetEscrowBalancesResponse } from "@trustless-work/escrow";
 
 export const fetchAllEscrows = async ({
   address,
@@ -32,7 +19,37 @@ export const fetchAllEscrows = async ({
       ? escrowsByUser.data.filter((e: Escrow) => e.isActive === isActive)
       : escrowsByUser.data;
 
-  return filtered;
+  const contractIds = filtered.map((escrow: Escrow) => escrow.contractId);
+
+  if (!Array.isArray(contractIds)) {
+    throw new Error("contractIds is not a valid array.");
+  }
+
+  const response = (await http.get("/helper/get-multiple-escrow-balance", {
+    params: { addresses: contractIds, signer: address || "" },
+  })) as GetEscrowBalancesResponse;
+
+  const balances = response as unknown as BalanceItem[];
+
+  return Promise.all(
+    filtered.map(async (escrow: Escrow) => {
+      const matchedBalance = balances.find(
+        (item) => item.address === escrow.contractId,
+      );
+      const plainBalance = matchedBalance ? matchedBalance.balance : 0;
+      const currentBalance = escrow.balance ? Number(escrow.balance) : 0;
+
+      if (currentBalance !== plainBalance) {
+        await updateEscrow({
+          escrowId: escrow.id,
+          payload: { balance: String(plainBalance) },
+        });
+        escrow.balance = String(plainBalance);
+      }
+
+      return escrow;
+    }),
+  );
 };
 
 export const updateExistingEscrow = async ({
