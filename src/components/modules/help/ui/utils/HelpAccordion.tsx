@@ -4,17 +4,20 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { helpItems } from "@/components/modules/help/constants/help-items.constant";
+import { helpItemKeys } from "@/components/modules/help/constants/help-items.constant";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const HelpAccordion = () => {
+  const { t } = useLanguage();
+
   return (
     <Accordion type="single" collapsible className="w-full">
-      {helpItems.map((item, index) => (
+      {helpItemKeys.map((item, index) => (
         <AccordionItem key={index} value={`item-${index + 1}`}>
           <AccordionTrigger className="text-left">
-            {item.question}
+            {t(item.questionKey)}
           </AccordionTrigger>
-          <AccordionContent>{item.answer}</AccordionContent>
+          <AccordionContent>{t(item.answerKey)}</AccordionContent>
         </AccordionItem>
       ))}
     </Accordion>

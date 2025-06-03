@@ -1,74 +1,57 @@
 import { RoleAction } from "@/@types/role-actions";
-import {
-  AlertTriangle,
-  Briefcase,
-  CheckCircle,
-  CheckSquare,
-  DollarSign,
-  Edit,
-  Scale,
-  Settings,
-  Unlock,
-  Wallet,
-} from "lucide-react";
+import { AlertTriangle, Briefcase, CheckCircle, CheckSquare, DollarSign, Edit, Scale, Settings, Unlock, Wallet } from 'lucide-react';
+
 export const roleActions: RoleAction[] = [
   {
     role: "issuer",
-    label: "Issuer",
-    actions: ["Fund Escrow"],
+    actions: ["fundEscrow"],
     icon: <Wallet className="h-6 w-6 text-primary" />,
     color: "",
   },
   {
     role: "approver",
-    label: "Approver",
-    actions: ["Fund Escrow", "Approve Milestone", "Start Dispute"],
+    actions: ["fundEscrow", "approveMilestone", "startDispute"],
     icon: <CheckCircle className="h-6 w-6 text-primary" />,
     color: "0",
   },
   {
     role: "serviceProvider",
-    label: "Service Provider",
-    actions: ["Fund Escrow", "Complete Milestone", "Start Dispute"],
+    actions: ["fundEscrow", "completeMilestone", "startDispute"],
     icon: <Briefcase className="h-6 w-6 text-primary" />,
     color: "0",
   },
   {
     role: "disputeResolver",
-    label: "Dispute Resolver",
-    actions: ["Fund Escrow", "Resolve Dispute"],
+    actions: ["fundEscrow", "resolveDispute"],
     icon: <Scale className="h-6 w-6 text-primary" />,
     color: "00",
   },
   {
     role: "releaseSigner",
-    label: "Release Signer",
-    actions: ["Fund Escrow", "Release payment"],
+    actions: ["fundEscrow", "releasePayment"],
     icon: <Unlock className="h-6 w-6 text-primary" />,
     color: "",
   },
   {
     role: "platformAddress",
-    label: "Platform Address",
-    actions: ["Fund Escrow", "Edit Escrow"],
+    actions: ["fundEscrow", "editEscrow"],
     icon: <Settings className="h-6 w-6 text-primary" />,
     color: "0",
   },
   {
     role: "receiver",
-    label: "Receiver",
-    actions: ["Fund Escrow"],
+    actions: ["fundEscrow"],
     icon: <DollarSign className="h-6 w-6 text-primary" />,
     color: "",
   },
 ];
 
 export const actionIcons: Record<string, React.ReactNode> = {
-  "Fund Escrow": <DollarSign className="h-6 w-6 text-primary/60" />,
-  "Approve Milestone": <CheckCircle className="h-6 w-6 text-primary/60" />,
-  "Complete Milestone": <CheckSquare className="h-6 w-6 text-primary/60" />,
-  "Start Dispute": <AlertTriangle className="h-6 w-6 text-primary/60" />,
-  "Resolve Dispute": <Scale className="h-6 w-6 text-primary/60" />,
-  "Release payment": <Unlock className="h-6 w-6 text-primary/60" />,
-  "Edit Escrow": <Edit className="h-6 w-6 text-primary/60" />,
+  "fundEscrow": <DollarSign className="h-6 w-6 text-primary/60" />,
+  "approveMilestone": <CheckCircle className="h-6 w-6 text-primary/60" />,
+  "completeMilestone": <CheckSquare className="h-6 w-6 text-primary/60" />,
+  "startDispute": <AlertTriangle className="h-6 w-6 text-primary/60" />,
+  "resolveDispute": <Scale className="h-6 w-6 text-primary/60" />,
+  "releasePayment": <Unlock className="h-6 w-6 text-primary/60" />,
+  "editEscrow": <Edit className="h-6 w-6 text-primary/60" />,
 };

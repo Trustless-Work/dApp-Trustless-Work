@@ -8,8 +8,11 @@ import {
   actionIcons,
   roleActions,
 } from "@/constants/role-actions/role-actions.constant";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export const RolesSection = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-4">
       {roleActions.map((item) => (
@@ -20,12 +23,14 @@ export const RolesSection = () => {
             >
               {item.icon}
             </div>
-            <h2 className="text-lg font-semibold">{item.label}</h2>
+            <h2 className="text-lg font-semibold">
+              {t(`help.roleLabels.${item.role}`)}
+            </h2>
           </div>
 
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground">
-              Actions:
+              {t('help.roles.actionsLabel')}
             </h3>
             <ul className="space-y-2">
               {item.actions.map((action) => (
@@ -38,11 +43,11 @@ export const RolesSection = () => {
                         </div>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{action}</p>
+                        <p>{t(`help.actions.${action}`)}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
-                  <span>{action}</span>
+                  <span>{t(`help.actions.${action}`)}</span>
                 </li>
               ))}
             </ul>
