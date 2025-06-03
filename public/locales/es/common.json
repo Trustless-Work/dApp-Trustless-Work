@@ -190,6 +190,16 @@
     "restoreSuccess": "Depósito restaurado.",
     "restoreTooltip": "Este depósito está en la Papelera. Haz clic para restaurarlo.",
     "releasedDescription": "Ahora que tu depósito ha sido liberado, podrás verlo directamente en",
-    "resolvedDescription": "Ahora que tu disputa ha sido resuelta, podrás verla directamente en"
+    "resolvedDescription": "Ahora que tu disputa ha sido resuelta, podrás verla directamente en",
+    "milestonesLabel": "Hitos",
+    "milestonesTooltip": "Etapas clave o entregables del depósito en garantía.",
+    "editMilestonesTooltip": "Editar Hitos",
+    "expand": "Expandir",
+    "collapse": "Colapsar",
+    "completeMilestone": "Completar",
+    "showEvidence": "Mostrar Evidencia",
+    "showDescription": "Mostrar Descripción",
+    "approveMilestone": "Aprobar",
+    "approving": "Aprobando..."
   }
 }
