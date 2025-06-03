@@ -52,6 +52,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Escrow } from "@/@types/escrows/escrow.entity";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -64,6 +65,7 @@ const EscrowDetailDialog = ({
   setIsDialogOpen,
   setSelectedEscrow,
 }: EscrowDetailDialogProps) => {
+  const { t } = useTranslation();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const dialogStates = useEscrowDialogs();
 
@@ -110,7 +112,7 @@ const EscrowDetailDialog = ({
                 </DialogDescription>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex gap-2">
-                    <strong>Roles: </strong>
+                    <strong>{t("escrowDetailDialog.rolesLabel")} </strong>
                     <span className="uppercase">
                       {userRolesInEscrow
                         .map((role) => formatText(role))
@@ -121,15 +123,21 @@ const EscrowDetailDialog = ({
                   <div className="border-r-2" />
 
                   <div className="flex gap-2">
-                    <strong className="truncate">Memo:</strong>
-                    {selectedEscrow?.receiverMemo || "No memo configured"}
+                    <strong className="truncate">
+                      {t("escrowDetailDialog.memoLabel")}
+                    </strong>
+                    {selectedEscrow?.receiverMemo ||
+                      t("escrowDetailDialog.noMemo")}
                   </div>
 
                   <div className="border-r-2" />
 
                   <div className="flex gap-2">
-                    <strong className="truncate">Engagement:</strong>
-                    {selectedEscrow?.engagementId || "No engagement configured"}
+                    <strong className="truncate">
+                      {t("escrowDetailDialog.engagementLabel")}
+                    </strong>
+                    {selectedEscrow?.engagementId ||
+                      t("escrowDetailDialog.noEngagement")}
                   </div>
                 </div>
               </div>
@@ -139,16 +147,18 @@ const EscrowDetailDialog = ({
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
             {selectedEscrow.flags?.disputeFlag && (
               <StatisticsCard
-                title="Status"
+                title={t("escrowDetailDialog.status")}
                 icon={Ban}
                 iconColor="text-destructive"
-                value="In Dispute"
+                value={t("reusable.inDispute")}
                 subValue={
                   <p className="text-sm text-muted-foreground mt-2">
-                    <span className="font-bold">By: </span>
+                    <span className="font-bold">
+                      {t("escrowDetailDialog.by")}{" "}
+                    </span>
                     {selectedEscrow.disputeStartedBy === "serviceProvider"
-                      ? "Service Provider"
-                      : "Approver"}
+                      ? t("reusable.serviceProvider")
+                      : t("reusable.approver")}
                   </p>
                 }
               />
@@ -156,22 +166,22 @@ const EscrowDetailDialog = ({
 
             {selectedEscrow.flags?.releaseFlag && (
               <StatisticsCard
-                title="Status"
+                title={t("escrowDetailDialog.status")}
                 icon={CircleCheckBig}
                 iconColor="text-green-800"
-                value="Released"
-                actionLabel="See Details"
+                value={t("reusable.released")}
+                actionLabel={t("escrowDetailDialog.seeDetails")}
                 onAction={() => dialogStates.successRelease.setIsOpen(true)}
               />
             )}
 
             {selectedEscrow.flags?.resolvedFlag && (
               <StatisticsCard
-                title="Status"
+                title={t("escrowDetailDialog.status")}
                 icon={Handshake}
                 iconColor="text-green-800"
-                value="Resolved"
-                actionLabel="See Details"
+                value={t("reusable.resolved")}
+                actionLabel={t("escrowDetailDialog.seeDetails")}
                 onAction={() =>
                   dialogStates.successResolveDispute.setIsOpen(true)
                 }
@@ -179,17 +189,17 @@ const EscrowDetailDialog = ({
             )}
 
             <StatisticsCard
-              title="Amount"
+              title={t("escrowDetailDialog.amount")}
               icon={CircleDollarSign}
               value={formatDollar(selectedEscrow.amount)}
-              tooltipContent="Total amount of the escrow."
+              tooltipContent={t("escrowDetailDialog.amountTooltip")}
             />
 
             <StatisticsCard
-              title="Balance"
+              title={t("escrowDetailDialog.balance")}
               icon={Wallet}
               value={formatDollar(selectedEscrow.balance ?? "null")}
-              tooltipContent="Current balance of the escrow (smart contract)."
+              tooltipContent={t("escrowDetailDialog.balanceTooltip")}
             />
 
             {/* Escrow ID and Actions */}
@@ -204,8 +214,10 @@ const EscrowDetailDialog = ({
             <CardContent className="p-6">
               <div className="flex w-full justify-between">
                 <label htmlFor="milestones" className="flex items-center">
-                  Entities
-                  <TooltipInfo content="Entities that are involved in the escrow." />
+                  {t("escrowDetailDialog.entitiesLabel")}
+                  <TooltipInfo
+                    content={t("escrowDetailDialog.entitiesTooltip")}
+                  />
                 </label>
 
                 {userRolesInEscrow.includes("platformAddress") &&
@@ -213,7 +225,9 @@ const EscrowDetailDialog = ({
                   !selectedEscrow?.flags?.resolvedFlag &&
                   !selectedEscrow?.flags?.releaseFlag &&
                   activeTab === "platformAddress" && (
-                    <TooltipInfo content="Edit Roles">
+                    <TooltipInfo
+                      content={t("escrowDetailDialog.editRolesTooltip")}
+                    >
                       <Button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -224,7 +238,7 @@ const EscrowDetailDialog = ({
                         disabled={Number(selectedEscrow.balance) === 0}
                       >
                         <Pencil />
-                        Edit
+                        {t("escrowDetailDialog.editButton")}
                       </Button>
                     </TooltipInfo>
                   )}
@@ -232,32 +246,32 @@ const EscrowDetailDialog = ({
 
               <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <EntityCard
-                  type="Approver"
+                  type={t("reusable.approver")}
                   entity={selectedEscrow.roles?.approver}
                   inDispute={selectedEscrow.flags?.disputeFlag}
                 />
                 <EntityCard
-                  type="Service Provider"
+                  type={t("reusable.serviceProvider")}
                   entity={selectedEscrow.roles?.serviceProvider}
                   inDispute={selectedEscrow.flags?.disputeFlag}
                 />
                 <EntityCard
-                  type="Dispute Resolver"
+                  type={t("reusable.disputeResolver")}
                   entity={selectedEscrow.roles?.disputeResolver}
                 />
                 <EntityCard
-                  type="Platform"
+                  type={t("reusable.platformAddress")}
                   entity={selectedEscrow.roles?.platformAddress}
                   hasPercentage
                   percentage={selectedEscrow.platformFee}
                 />
 
                 <EntityCard
-                  type="Release Signer"
+                  type={t("reusable.releaseSigner")}
                   entity={selectedEscrow.roles?.releaseSigner}
                 />
                 <EntityCard
-                  type="Receiver"
+                  type={t("reusable.receiver")}
                   entity={selectedEscrow.roles?.receiver}
                 />
               </div>
@@ -290,7 +304,7 @@ const EscrowDetailDialog = ({
                         variant="destructive"
                         onClick={async () => {
                           await softDeleteEscrow(selectedEscrow.id);
-                          toast.success("Escrow moved to Trash.");
+                          toast.success(t("escrowDetailDialog.trashSuccess"));
                           handleClose();
                         }}
                       >
@@ -298,8 +312,7 @@ const EscrowDetailDialog = ({
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      This is a soft delete. Escrow can be restored from the
-                      Trash.
+                      {t("escrowDetailDialog.softDeleteTooltip")}
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -311,16 +324,15 @@ const EscrowDetailDialog = ({
                         variant="default"
                         onClick={async () => {
                           await restoreEscrow(selectedEscrow.id);
-                          toast.success("Escrow restored.");
+                          toast.success(t("escrowDetailDialog.restoreSuccess"));
                           handleClose();
                         }}
                       >
                         <ArchiveRestore />
-                        {/* Restore */}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      This escrow is in Trash. Click to restore it.
+                      {t("escrowDetailDialog.restoreTooltip")}
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -376,7 +388,7 @@ const EscrowDetailDialog = ({
         isSuccessReleaseDialogOpen={dialogStates.successRelease.isOpen}
         setIsSuccessReleaseDialogOpen={dialogStates.successRelease.setIsOpen}
         title=""
-        description="Now that your escrow is released, you will be able to view it directly in"
+        description={t("escrowDetailDialog.releasedDescription")}
       />
 
       <SuccessResolveDisputeDialog
@@ -387,7 +399,7 @@ const EscrowDetailDialog = ({
           dialogStates.successResolveDispute.setIsOpen
         }
         title=""
-        description="Now that your escrow is resolved, you will be able to view it directly in"
+        description={t("escrowDetailDialog.resolvedDescription")}
       />
     </>
   );
