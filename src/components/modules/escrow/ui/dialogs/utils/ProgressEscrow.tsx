@@ -1,5 +1,6 @@
 import { Escrow } from "@/@types/escrows/escrow.entity";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface ProgressEscrowProps {
   escrow: Escrow;
@@ -60,6 +61,7 @@ const ProgressEscrow = ({
   escrow,
   showTimeline = false,
 }: ProgressEscrowProps) => {
+  const { t } = useTranslation();
   const completedMilestones = escrow.milestones.filter(
     (milestone) => milestone.status === "completed",
   ).length;
@@ -90,7 +92,7 @@ const ProgressEscrow = ({
             color="#006be4"
           />
           <div className="text-xs">
-            <div className="font-medium">Completed</div>
+            <div className="font-medium">{t("reusable.completed")}</div>
             <div className="text-muted-foreground">
               {completedMilestones}/{totalMilestones}
             </div>
@@ -99,7 +101,7 @@ const ProgressEscrow = ({
 
         <div className="flex items-center gap-3">
           <div className="text-xs text-right">
-            <div className="font-medium">Approved</div>
+            <div className="font-medium">{t("reusable.approved")}</div>
             <div className="text-muted-foreground">
               {approvedMilestones}/{totalMilestones}
             </div>
@@ -154,11 +156,17 @@ const ProgressEscrow = ({
 
                     <div className="mt-2 text-[10px] font-medium">
                       {isCompleted && isApproved ? (
-                        <span className="text-muted-foreground">Approved</span>
+                        <span className="text-muted-foreground">
+                          {t("reusable.approved")}
+                        </span>
                       ) : isCompleted ? (
-                        <span className="text-muted-foreground">Completed</span>
+                        <span className="text-muted-foreground">
+                          {t("reusable.completed")}
+                        </span>
                       ) : (
-                        <span className="text-muted-foreground">Pending</span>
+                        <span className="text-muted-foreground">
+                          {t("reusable.pending")}
+                        </span>
                       )}
                     </div>
                   </div>
