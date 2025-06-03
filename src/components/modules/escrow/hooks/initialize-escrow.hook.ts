@@ -198,11 +198,7 @@ export const useInitializeEscrow = () => {
           ...payload.roles,
           issuer: address,
         } as ExtendedRoles,
-        milestones: payload.milestones.map((milestone) => ({
-          ...milestone,
-          status: "pending",
-          evidence: "",
-        })),
+        milestones: payload.milestones,
       };
 
       const { unsignedTransaction } = await deployEscrow({
