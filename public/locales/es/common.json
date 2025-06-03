@@ -151,12 +151,43 @@
     "english": "Inglés",
     "spanish": "Español"
   },
-  "reusable": {
+  "escrowDetailDialog": {
+    "rolesLabel": "Roles",
+    "memoLabel": "Memo",
+    "noMemo": "Sin memo configurado",
+    "engagementLabel": "Compromiso",
+    "noEngagement": "Sin compromiso configurado",
+    "status": "Estado",
+    "seeDetails": "Ver detalles",
+    "by": "Por:",
+    "amount": "Monto",
+    "amountTooltip": "Monto total del depósito en garantía.",
+    "balance": "Saldo",
+    "balanceTooltip": "Saldo actual del depósito (contrato inteligente).",
+    "entitiesLabel": "Entidades",
+    "entitiesTooltip": "Entidades involucradas en el depósito en garantía.",
+    "editButton": "Editar",
+    "editRolesTooltip": "Editar roles",
+    "trashSuccess": "Depósito movido a la Papelera.",
+    "softDeleteTooltip": "Esto es una eliminación suave. El depósito puede ser restaurado desde la Papelera.",
+    "restoreSuccess": "Depósito restaurado.",
+    "restoreTooltip": "Este depósito está en la Papelera. Haz clic para restaurarlo.",
+    "releasedDescription": "Ahora que tu depósito ha sido liberado, podrás verlo directamente en",
+    "resolvedDescription": "Ahora que tu disputa ha sido resuelta, podrás verla directamente en"
+  },
     "approved": "Aprobado",
     "pending": "Pendiente",
     "completed": "Completado",
     "inProgress": "En Progreso",
     "connect": "Conectar",
-    "disconnect": "Desconectar"
+    "disconnect": "Desconectar",
+    "inDispute": "En disputa",
+    "released": "Liberado",
+    "resolved": "Resuelto",
+    "approver": "Aprobador",
+    "serviceProvider": "Proveedor de servicios",
+    "disputeResolver": "Resolutor de disputas",
+    "releaseSigner": "Firmante de liberación",
+    "receiver": "Receptor",
+    "platformAddress": "Plataforma"
   }
-}
