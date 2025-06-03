@@ -3,6 +3,7 @@ import HelpAccordion from "@/components/modules/help/ui/utils/HelpAccordion";
 import { Card, CardContent } from "@/components/ui/card";
 import Loader from "@/components/utils/ui/Loader";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
+import { useLanguage } from "@/hooks/useLanguage";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { VideoSection } from "../sections/VideoSection";
@@ -10,6 +11,7 @@ import { RolesSection } from "../sections/RolesSection";
 import { TableOfContents } from "../utils/TableContent";
 
 const Help = () => {
+  const { t } = useLanguage();
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
 
   return (
@@ -25,16 +27,16 @@ const Help = () => {
           <div className="flex-1 flex flex-col gap-6">
             <Card className={cn("overflow-hidden")} id="faqs">
               <CardContent className="p-6">
-                <h1 className="text-4xl font-bold">FAQs</h1>
+                <h1 className="text-4xl font-bold">{t('help.faqs.title')}</h1>
                 <h2 className="my-2">
-                  Find answers to common questions about our escrow service.{" "}
+                  {t('help.faqs.subtitle')}{" "}
                   <Link
                     href="https://docs.trustlesswork.com/trustless-work"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-muted-foreground text-sm underline"
                   >
-                    Ask more questions to our IA:
+                    {t('help.faqs.askMoreQuestions')}
                   </Link>
                 </h2>
 
@@ -44,17 +46,16 @@ const Help = () => {
 
             <Card className={cn("overflow-hidden")} id="videos">
               <CardContent className="p-6">
-                <h1 className="text-4xl font-bold">Video Tutorials</h1>
+                <h1 className="text-4xl font-bold">{t('help.videoSectionTitle.title')}</h1>
                 <h2 className="my-2">
-                  Watch our video tutorials to learn how to use our escrow
-                  service effectively through videos.{" "}
+                  {t('help.videos.subtitle')}{" "}
                   <Link
                     href="https://www.youtube.com/@TrustlessWork"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-muted-foreground text-sm underline"
                   >
-                    More info here:
+                    {t('reusable.moreInfoHere')}
                   </Link>
                 </h2>
 
@@ -64,17 +65,16 @@ const Help = () => {
 
             <Card className={cn("overflow-hidden")} id="roles">
               <CardContent className="p-6">
-                <h1 className="text-4xl font-bold">Roles in the Escrows</h1>
+                <h1 className="text-4xl font-bold">{t('help.roles.title')}</h1>
                 <h2 className="my-2">
-                  Learn what each role in the escrow does and how they interact
-                  with each other.{" "}
+                  {t('help.roles.subtitle')}{" "}
                   <Link
                     href="https://docs.trustlesswork.com/trustless-work/technology-overview/smart-escrow-design/roles-in-trustless-work"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-muted-foreground text-sm underline"
                   >
-                    More info here:
+                    {t('reusable.moreInfoHere')}
                   </Link>
                 </h2>
 

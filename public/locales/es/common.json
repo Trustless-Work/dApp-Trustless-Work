@@ -138,6 +138,110 @@
       "button": "Explorar Nuestras Soluciones"
     }
   },
+  "help": {
+    "videos": {
+      "items": {
+        "intro": {
+          "title": "Tutorial de la DApp Trustless Work: INTRODUCCIÓN 🚀",
+          "description": "Descripción general de Trustless Work y cómo comenzar."
+        },
+        "understandingEscrows": {
+          "title": "Entendiendo los Depósitos en Garantía",
+          "description": "Cómo el depósito en garantía protege tanto a compradores como vendedores."
+        },
+        "loginWallet": {
+          "title": "Inicio de Sesión por Wallet y Configuración de Perfil",
+          "description": "Conecta tu wallet y configura tu perfil."
+        },
+        "creatingEscrow": {
+          "title": "Creando un Depósito en Garantía🚀",
+          "description": "Guía paso a paso para crear un depósito en garantía."
+        },
+        "fundingEscrow": {
+          "title": "Proceso de Financiamiento del Depósito",
+          "description": "Cómo financiar un depósito en garantía de forma segura."
+        },
+        "milestoneCompletion": {
+          "title": "Proceso de Finalización de Hitos",
+          "description": "Rastrea y completa los hitos del proyecto."
+        },
+        "approvingMilestones": {
+          "title": "Aprobando Hitos",
+          "description": "Aprueba hitos para pagos parciales."
+        },
+        "paymentRelease": {
+          "title": "Proceso de Liberación de Pagos",
+          "description": "Libera fondos después de la aprobación de hitos."
+        },
+        "disputeResolution": {
+          "title": "Proceso de Resolución de Disputas",
+          "description": "Cómo se resuelven las disputas de manera justa."
+        }
+      }
+    },
+    "faqs": {
+      "title": "Preguntas Frecuentes",
+      "subtitle": "Encuentra respuestas a preguntas comunes sobre nuestro servicio de depósito en garantía.",
+      "askMoreQuestions": "Haz más preguntas a nuestra IA:"
+    },
+    "videoSectionTitle": {
+      "title": "Tutoriales en Video",
+      "subtitle": "Mira nuestros tutoriales en video para aprender cómo usar nuestro servicio de depósito en garantía de manera efectiva."
+    },
+    "roles": {
+      "title": "Roles en los Depósitos en Garantía",
+      "subtitle": "Aprende qué hace cada rol en el depósito en garantía y cómo interactúan entre sí.",
+      "actionsLabel": "Acciones:"
+    },
+    "tableOfContents": {
+      "title": "Contenido de Ayuda",
+      "sections": {
+        "faqs": "Preguntas Frecuentes",
+        "videos": "Tutoriales en Video",
+        "roles": "Roles en los Depósitos en Garantía"
+      }
+    },
+    "questions": {
+      "getStarted": {
+        "question": "¿Cómo empiezo?",
+        "answer": "Para comenzar, necesitarás crear una cuenta y verificar tu identidad. Una vez hecho esto, puedes inicializar un depósito en garantía, financiarlo y comenzar a usar nuestros servicios. Para instrucciones más detalladas, consulta nuestra guía de usuario o contacta a nuestro equipo de soporte."
+      },
+      "whatIsEscrow": {
+        "question": "¿Qué es un depósito en garantía?",
+        "answer": "Un depósito en garantía es un acuerdo financiero donde un tercero mantiene y regula el pago de los fondos requeridos para dos partes involucradas en una transacción determinada. Ayuda a hacer las transacciones más seguras manteniendo el pago en una cuenta de depósito segura que solo se libera cuando se cumplen todos los términos de un acuerdo."
+      },
+      "initializeEscrow": {
+        "question": "¿Cómo inicializo un depósito en garantía?",
+        "answer": "Para inicializar un depósito en garantía, navega a la página 'Inicializar Depósito' desde el menú principal. Necesitarás proporcionar detalles como las partes involucradas, los términos del acuerdo y la cantidad a mantener en depósito. Sigue las instrucciones en pantalla para completar el proceso."
+      },
+      "fundEscrow": {
+        "question": "¿Cómo financio un depósito en garantía?",
+        "answer": "Para financiar un depósito en garantía, ve a la página 'Financiar Depósito'. Necesitarás ingresar el ID del Contrato y el ID del Proyecto para el depósito que quieres financiar. Luego, sigue las indicaciones para completar el proceso de financiamiento. Asegúrate de tener fondos suficientes en tu cuenta antes de iniciar la transferencia."
+      },
+      "completeEscrow": {
+        "question": "¿Cómo completo un depósito en garantía?",
+        "answer": "Completar un depósito en garantía implica verificar que todas las condiciones del acuerdo se hayan cumplido. Navega a la página 'Completar Depósito', ingresa la información requerida y confirma la finalización. Esto activará la liberación de fondos a la parte apropiada según el acuerdo de depósito."
+      }
+    },
+    "roleLabels": {
+      "issuer": "Emisor",
+      "approver": "Aprobador",
+      "serviceProvider": "Proveedor de Servicio",
+      "disputeResolver": "Resolutor de Disputas",
+      "releaseSigner": "Firmante de Liberación",
+      "platformAddress": "Dirección de la Plataforma",
+      "receiver": "Receptor"
+    },
+    "actions": {
+      "fundEscrow": "Financiar Depósito",
+      "approveMilestone": "Aprobar Hito",
+      "startDispute": "Iniciar Disputa",
+      "completeMilestone": "Completar Hito",
+      "resolveDispute": "Resolver Disputa",
+      "releasePayment": "Liberar pago",
+      "editEscrow": "Editar Depósito"
+    }
+  },
   "header": {
     "disconnect": "Desconectar",
     "reportIssue": "Reportar Problema",
@@ -157,6 +261,9 @@
     "completed": "Completado",
     "inProgress": "En Progreso",
     "connect": "Conectar",
-    "disconnect": "Desconectar"
+    "disconnect": "Desconectar",
+    "learnMore": "Saber más",
+    "moreInfoHere": "Más información aquí:",
+    "faqs": "Preguntas Frecuentes"
   }
 }
