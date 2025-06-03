@@ -22,8 +22,9 @@ import { useEscrowUIBoundedStore } from "../../../store/ui";
 import Link from "next/link";
 import ProgressEscrow from "../utils/ProgressEscrow";
 import { useEffect, useState } from "react";
-import { Escrow } from "@/@types/escrows/escrow.entity";
 import useApproveMilestoneDialog from "../../../hooks/approve-milestone-dialog.hook";
+import { useTranslation } from "react-i18next";
+import { Escrow } from "@trustless-work/escrow";
 
 const MAX_VISIBLE_MILESTONES = 1;
 const ITEM_HEIGHT = 50;
@@ -42,6 +43,7 @@ export const Milestones = ({
   setEvidenceVisibleMap,
   evidenceVisibleMap,
 }: MilestonesProps) => {
+  const { t } = useTranslation();
   const setCompletingMilestone = useEscrowBoundedStore(
     (state) => state.setCompletingMilestone,
   );
@@ -81,17 +83,19 @@ export const Milestones = ({
       <div className="flex flex-col gap-4 py-4 w-full md:w-4/5">
         <div className="flex w-full justify-between">
           <label htmlFor="milestones" className="flex items-center">
-            Milestones
-            <TooltipInfo content="Key stages or deliverables for the escrow." />
+            {t("escrowDetailDialog.milestonesLabel")}
+            <TooltipInfo content={t("escrowDetailDialog.milestonesTooltip")} />
           </label>
 
           <div className="flex gap-3 flex-col sm:flex-row">
             {userRolesInEscrow.includes("platformAddress") &&
-              !selectedEscrow?.flags?.disputeFlag &&
-              !selectedEscrow?.flags?.resolvedFlag &&
-              !selectedEscrow?.flags?.releaseFlag &&
+              !selectedEscrow?.flags?.disputed &&
+              !selectedEscrow?.flags?.resolved &&
+              !selectedEscrow?.flags?.released &&
               activeTab === "platformAddress" && (
-                <TooltipInfo content="Edit Milestones">
+                <TooltipInfo
+                  content={t("escrowDetailDialog.editMilestonesTooltip")}
+                >
                   <Button
                     disabled={Number(selectedEscrow.balance) === 0}
                     onClick={(e) => {
@@ -102,7 +106,7 @@ export const Milestones = ({
                     variant="ghost"
                   >
                     <Pencil />
-                    Edit
+                    {t("escrowDetailDialog.editButton")}
                   </Button>
                 </TooltipInfo>
               )}
@@ -114,11 +118,13 @@ export const Milestones = ({
               >
                 {visibleMoreMilestones ? (
                   <>
-                    <ChevronUp className="mr-1" /> Collapse
+                    <ChevronUp className="mr-1" />{" "}
+                    {t("escrowDetailDialog.collapse")}
                   </>
                 ) : (
                   <>
-                    <ChevronDown className="mr-1" /> Expand
+                    <ChevronDown className="mr-1" />{" "}
+                    {t("escrowDetailDialog.expand")}
                   </>
                 )}
               </Button>
@@ -135,16 +141,18 @@ export const Milestones = ({
               key={`${milestone.description}-${milestone.status}`}
               className="flex flex-col sm:flex-row items-center space-x-4"
             >
-              {milestone.approvedFlag ? (
+              {milestone.flags?.approved ? (
                 <Badge className="uppercase max-w-24 mb-4 md:mb-0">
-                  Approved
+                  {t("reusable.approved")}
                 </Badge>
               ) : (
                 <Badge
                   className="uppercase max-w-24 mb-4 md:mb-0"
                   variant="outline"
                 >
-                  {milestone.status}
+                  {t(
+                    `reusable.${milestone.status?.toLowerCase() ?? "pending"}`,
+                  )}
                 </Badge>
               )}
 
@@ -160,7 +168,7 @@ export const Milestones = ({
               {userRolesInEscrow.includes("serviceProvider") &&
                 activeTab === "serviceProvider" &&
                 milestone.status !== "completed" &&
-                !milestone.approvedFlag && (
+                !milestone.flags?.approved && (
                   <Button
                     className="max-w-32"
                     onClick={(e) => {
@@ -171,7 +179,7 @@ export const Milestones = ({
                     }}
                   >
                     <PackageCheck />
-                    Complete
+                    {t("escrowDetailDialog.completeMilestone")}
                   </Button>
                 )}
 
@@ -184,8 +192,8 @@ export const Milestones = ({
                       <TooltipInfo
                         content={
                           !evidenceVisibleMap[milestoneIndex]
-                            ? "Show Evidence"
-                            : "Show Description"
+                            ? t("escrowDetailDialog.showEvidence")
+                            : t("escrowDetailDialog.showDescription")
                         }
                       >
                         <Button
@@ -219,8 +227,8 @@ export const Milestones = ({
                             <TooltipInfo
                               content={
                                 !evidenceVisibleMap[milestoneIndex]
-                                  ? "Show Evidence"
-                                  : "Show Description"
+                                  ? t("escrowDetailDialog.showEvidence")
+                                  : t("escrowDetailDialog.showDescription")
                               }
                             >
                               <Button className="max-w-20" variant="ghost">
@@ -240,7 +248,7 @@ export const Milestones = ({
               {userRolesInEscrow.includes("approver") &&
                 activeTab === "approver" &&
                 milestone.status === "completed" &&
-                !milestone.approvedFlag && (
+                !milestone.flags?.approved && (
                   <Button
                     className="max-w-32"
                     disabled={isChangingFlag}
@@ -255,12 +263,12 @@ export const Milestones = ({
                     {isChangingFlag ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Approving...
+                        {t("escrowDetailDialog.approving")}
                       </>
                     ) : (
                       <>
                         <CheckCheck />
-                        Approve
+                        {t("escrowDetailDialog.approveMilestone")}
                       </>
                     )}
                   </Button>

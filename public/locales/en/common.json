@@ -138,6 +138,110 @@
       "button": "Explore Our Solutions"
     }
   },
+  "help": {
+    "videos": {
+      "items": {
+        "intro": {
+          "title": "Trustless Work DApp Tutorial: INTRO 🚀",
+          "description": "Overview of Trustless Work and how to get started."
+        },
+        "understandingEscrows": {
+          "title": "Understanding Escrows",
+          "description": "How escrow protects both buyers and sellers."
+        },
+        "loginWallet": {
+          "title": "Login by Wallet and Profile setup",
+          "description": "Connect your wallet and set up your profile."
+        },
+        "creatingEscrow": {
+          "title": "Creating an Escrow🚀",
+          "description": "Step-by-step guide to creating an escrow."
+        },
+        "fundingEscrow": {
+          "title": "Funding the Escrow Process",
+          "description": "How to fund an escrow securely."
+        },
+        "milestoneCompletion": {
+          "title": "Milestone Completion Process",
+          "description": "Track and complete project milestones."
+        },
+        "approvingMilestones": {
+          "title": "Approving Milestones",
+          "description": "Approve milestones for partial payments."
+        },
+        "paymentRelease": {
+          "title": "Payment Release Process",
+          "description": "Release funds after milestone approval."
+        },
+        "disputeResolution": {
+          "title": "Dispute Resolution Process",
+          "description": "How disputes are resolved fairly."
+        }
+      }
+    },
+    "faqs": {
+      "title": "FAQs",
+      "subtitle": "Find answers to common questions about our escrow service.",
+      "askMoreQuestions": "Ask more questions to our IA:"
+    },
+    "videoSectionTitle": {
+      "title": "Video Tutorials",
+      "subtitle": "Watch our video tutorials to learn how to use our escrow service effectively through videos."
+    },
+    "roles": {
+      "title": "Roles in the Escrows",
+      "subtitle": "Learn what each role in the escrow does and how they interact with each other.",
+      "actionsLabel": "Actions:"
+    },
+    "tableOfContents": {
+      "title": "Help Content",
+      "sections": {
+        "faqs": "FAQs",
+        "videos": "Video Tutorials", 
+        "roles": "Roles in the Escrows"
+      }
+    },
+    "questions": {
+      "getStarted": {
+        "question": "How do I get started?",
+        "answer": "To get started, you'll need to create an account and verify your identity. Once that's done, you can initialize an escrow, fund it, and start using our services. For more detailed instructions, please refer to our user guide or contact our support team."
+      },
+      "whatIsEscrow": {
+        "question": "What is an escrow?",
+        "answer": "An escrow is a financial arrangement where a third party holds and regulates payment of the funds required for two parties involved in a given transaction. It helps make transactions more secure by keeping the payment in a secure escrow account which is only released when all of the terms of an agreement are met."
+      },
+      "initializeEscrow": {
+        "question": "How do I initialize an escrow?",
+        "answer": "To initialize an escrow, navigate to the 'Initialize Escrow' page from the main menu. You'll need to provide details such as the parties involved, the terms of the agreement, and the amount to be held in escrow. Follow the on-screen instructions to complete the process."
+      },
+      "fundEscrow": {
+        "question": "How do I fund an escrow?",
+        "answer": "To fund an escrow, go to the 'Fund Escrow' page. You'll need to enter the Contract ID and Engagement ID for the escrow you want to fund. Then, follow the prompts to complete the funding process. Make sure you have sufficient funds in your account before initiating the transfer."
+      },
+      "completeEscrow": {
+        "question": "How do I complete an escrow?",
+        "answer": "Completing an escrow involves verifying that all conditions of the agreement have been met. Navigate to the 'Complete Escrow' page, enter the required information, and confirm the completion. This will trigger the release of funds to the appropriate party as per the escrow agreement."
+      }
+    },
+    "roleLabels": {
+      "issuer": "Issuer",
+      "approver": "Approver", 
+      "serviceProvider": "Service Provider",
+      "disputeResolver": "Dispute Resolver",
+      "releaseSigner": "Release Signer",
+      "platformAddress": "Platform Address",
+      "receiver": "Receiver"
+    },
+    "actions": {
+      "fundEscrow": "Fund Escrow",
+      "approveMilestone": "Approve Milestone",
+      "startDispute": "Start Dispute",
+      "completeMilestone": "Complete Milestone",
+      "resolveDispute": "Resolve Dispute",
+      "releasePayment": "Release payment",
+      "editEscrow": "Edit Escrow"
+    }
+  },
   "header": {
     "disconnect": "Disconnect",
     "reportIssue": "Report Issue",
@@ -157,6 +261,56 @@
     "completed": "Completed",
     "inProgress": "In Progress",
     "connect": "Connect",
-    "disconnect": "Disconnect"
+    "disconnect": "Disconnect",
+    "inDispute": "In Dispute",
+    "released": "Released",
+    "resolved": "Resolved",
+    "approver": "Approver",
+    "serviceProvider": "Service Provider",
+    "disputeResolver": "Dispute Resolver",
+    "releaseSigner": "Release Signer",
+    "receiver": "Receptor",
+    "platformAddress": "Platform"
+  },
+  "escrowDetailDialog": {
+    "rolesLabel": "Roles",
+    "memoLabel": "Memo",
+    "noMemo": "No memo configured",
+    "engagementLabel": "Engagement",
+    "noEngagement": "No engagement configured",
+    "status": "Status",
+    "seeDetails": "See Details",
+    "by": "By:",
+    "amount": "Amount",
+    "amountTooltip": "Total amount of the escrow.",
+    "balance": "Balance",
+    "balanceTooltip": "Current balance of the escrow (smart contract).",
+    "entitiesLabel": "Entities",
+    "entitiesTooltip": "Entities that are involved in the escrow.",
+    "editButton": "Edit",
+    "editRolesTooltip": "Edit Roles",
+    "trashSuccess": "Escrow moved to Trash.",
+    "softDeleteTooltip": "This is a soft delete. Escrow can be restored from the Trash.",
+    "restoreSuccess": "Escrow restored.",
+    "restoreTooltip": "This escrow is in Trash. Click to restore it.",
+    "releasedDescription": "Now that your escrow is released, you will be able to view it directly in",
+    "resolvedDescription": "Now that your escrow is resolved, you will be able to view it directly in",
+    "milestonesLabel": "Milestones",
+    "milestonesTooltip": "Key stages or deliverables for the escrow.",
+    "editMilestonesTooltip": "Edit Milestones",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "completeMilestone": "Complete",
+    "showEvidence": "Show Evidence",
+    "showDescription": "Show Description",
+    "approveMilestone": "Approve",
+    "approving": "Approving...",
+    "created": "Created",
+    "releaseAmountDistribution": "Release Amount Distribution",
+    "receiver": "Receiver",
+    "platformFee": "Platform Fee",
+    "trustlessWork": "Trustless Work",
+    "releasing": "Releasing...",
+    "releaseFunds": "Release Funds"
   }
 }

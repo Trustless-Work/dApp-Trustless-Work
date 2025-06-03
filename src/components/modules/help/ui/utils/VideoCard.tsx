@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Play } from "lucide-react";
+import { Play } from 'lucide-react';
 import { useState } from "react";
 
 export const VideoCard = ({ video }: { video: Video }) => {
