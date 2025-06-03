@@ -5,6 +5,7 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CircleDollarSign, Loader2 } from "lucide-react";
 import { Escrow } from "@/@types/escrows/escrow.entity";
+import { useTranslation } from "react-i18next";
 
 interface FooterDetailsProps {
   selectedEscrow: Escrow;
@@ -19,6 +20,7 @@ export const FooterDetails = ({
   areAllMilestonesCompleted,
   areAllMilestonesCompletedAndFlag,
 }: FooterDetailsProps) => {
+  const { t } = useTranslation();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const receiverAmount = useEscrowUIBoundedStore(
     (state) => state.receiverAmount,
@@ -41,7 +43,9 @@ export const FooterDetails = ({
   return (
     <>
       <p className="italic text-sm sm:mb-0 mb-3">
-        <span className="font-bold mr-1">Created:</span>
+        <span className="font-bold mr-1">
+          {t("escrowDetailDialog.created")}:
+        </span>
         {formatDateFromFirebase(
           selectedEscrow.createdAt.seconds,
           selectedEscrow.createdAt.nanoseconds,
@@ -51,18 +55,20 @@ export const FooterDetails = ({
         !selectedEscrow.flags?.resolvedFlag && (
           <Card className="flex items-center p-5">
             <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 px-3">
-              Release Amount Distribution
+              {t("escrowDetailDialog.releaseAmountDistribution")}
             </CardTitle>
 
             <div className="pl-3 flex gap-10 sm:flex-row flex-col">
               <p className="text-sm">
-                <strong>Receiver:</strong> ${receiverAmount.toFixed(2)}
+                <strong>{t("escrowDetailDialog.receiver")}:</strong> $
+                {receiverAmount.toFixed(2)}
               </p>
               <p className="text-sm">
-                <strong>Platform Fee:</strong> ${platformFeeAmount.toFixed(2)}
+                <strong>{t("escrowDetailDialog.platformFee")}:</strong> $
+                {platformFeeAmount.toFixed(2)}
               </p>
               <p className="text-sm">
-                <strong>Trustless Work:</strong> $
+                <strong>{t("escrowDetailDialog.trustlessWork")}:</strong> $
                 {trustlessWorkAmount.toFixed(2)}
               </p>
             </div>
@@ -82,12 +88,12 @@ export const FooterDetails = ({
             {isReleasingFunds ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Releasing...
+                {t("escrowDetailDialog.releasing")}
               </>
             ) : (
               <>
                 <CircleDollarSign />
-                Release Funds
+                {t("escrowDetailDialog.releaseFunds")}
               </>
             )}
           </Button>

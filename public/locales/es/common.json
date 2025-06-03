@@ -200,6 +200,13 @@
     "showEvidence": "Mostrar Evidencia",
     "showDescription": "Mostrar Descripción",
     "approveMilestone": "Aprobar",
-    "approving": "Aprobando..."
+    "approving": "Aprobando...",
+    "created": "Creado",
+    "releaseAmountDistribution": "Distribución del Monto de Liberación",
+    "receiver": "Receptor",
+    "platformFee": "Comisión de la Plataforma",
+    "trustlessWork": "Trustless Work",
+    "releasing": "Liberando...",
+    "releaseFunds": "Liberar Fondos"
   }
 }

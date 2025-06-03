@@ -200,6 +200,13 @@
     "showEvidence": "Show Evidence",
     "showDescription": "Show Description",
     "approveMilestone": "Approve",
-    "approving": "Approving..."
+    "approving": "Approving...",
+    "created": "Created",
+    "releaseAmountDistribution": "Release Amount Distribution",
+    "receiver": "Receiver",
+    "platformFee": "Platform Fee",
+    "trustlessWork": "Trustless Work",
+    "releasing": "Releasing...",
+    "releaseFunds": "Release Funds"
   }
 }
