@@ -29,6 +29,7 @@ const InitializeEscrowForm = () => {
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
+    fillTemplateForm,
   } = useInitializeEscrow();
 
   return (
@@ -37,6 +38,19 @@ const InitializeEscrowForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-6"
       >
+        {(process.env.NEXT_PUBLIC_ENV === "DEV" ||
+          process.env.NEXT_PUBLIC_ENV === "LOCAL") && (
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={fillTemplateForm}
+              className="mb-4"
+            >
+              Use Template
+            </Button>
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <FormField
             control={form.control}

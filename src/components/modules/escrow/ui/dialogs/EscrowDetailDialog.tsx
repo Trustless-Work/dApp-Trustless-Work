@@ -53,6 +53,9 @@ import {
 import { Escrow } from "@/@types/escrow.entity";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { DeleteEscrowDialog } from "./DeleteEscrowDialog";
+import { RestoreEscrowDialog } from "./RestoreEscrowDialog";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -68,6 +71,8 @@ const EscrowDetailDialog = ({
   const { t } = useTranslation();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const dialogStates = useEscrowDialogs();
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isRestoreConfirmOpen, setIsRestoreConfirmOpen] = useState(false);
 
   const { softDeleteEscrow, restoreEscrow } = useGlobalBoundedStore();
 
@@ -302,11 +307,7 @@ const EscrowDetailDialog = ({
                     <TooltipTrigger asChild>
                       <Button
                         variant="destructive"
-                        onClick={async () => {
-                          await softDeleteEscrow(selectedEscrow.id);
-                          toast.success(t("escrowDetailDialog.trashSuccess"));
-                          handleClose();
-                        }}
+                        onClick={() => setIsDeleteConfirmOpen(true)}
                       >
                         <Trash2 />
                       </Button>
@@ -322,11 +323,7 @@ const EscrowDetailDialog = ({
                     <TooltipTrigger asChild>
                       <Button
                         variant="default"
-                        onClick={async () => {
-                          await restoreEscrow(selectedEscrow.id);
-                          toast.success(t("escrowDetailDialog.restoreSuccess"));
-                          handleClose();
-                        }}
+                        onClick={() => setIsRestoreConfirmOpen(true)}
                       >
                         <ArchiveRestore />
                       </Button>
@@ -341,6 +338,27 @@ const EscrowDetailDialog = ({
           </Card>
         </DialogContent>
       </Dialog>
+
+      {/* Confirmation Dialogs */}
+      <DeleteEscrowDialog
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => setIsDeleteConfirmOpen(false)}
+        onConfirm={async () => {
+          await softDeleteEscrow(selectedEscrow.id);
+          handleClose();
+        }}
+        escrowTitle={selectedEscrow.title}
+      />
+
+      <RestoreEscrowDialog
+        isOpen={isRestoreConfirmOpen}
+        onClose={() => setIsRestoreConfirmOpen(false)}
+        onConfirm={async () => {
+          await restoreEscrow(selectedEscrow.id);
+          handleClose();
+        }}
+        escrowTitle={selectedEscrow.title}
+      />
 
       {/* External Dialogs */}
       <FundEscrowDialog

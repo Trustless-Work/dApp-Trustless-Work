@@ -34,7 +34,8 @@ import SkeletonCards from "../utils/SkeletonCards";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import { Escrow, Milestone } from "@/@types/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
+import { Milestone } from "@trustless-work/escrow";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -95,7 +96,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
     ).length;
 
     const approvedMilestones = escrow.milestones.filter(
-      (milestone: Milestone) => milestone.approvedFlag === true,
+      (milestone: Milestone) => milestone.flags?.approved === true,
     ).length;
 
     const totalMilestones = escrow.milestones.length;

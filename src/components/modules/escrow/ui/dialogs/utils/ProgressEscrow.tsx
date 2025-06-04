@@ -66,7 +66,7 @@ const ProgressEscrow = ({
     (milestone) => milestone.status === "completed",
   ).length;
   const approvedMilestones = escrow.milestones.filter(
-    (milestone) => milestone.approvedFlag === true,
+    (milestone) => milestone.approved === true, // !milestone.flags?.approved
   ).length;
   const totalMilestones = escrow.milestones.length;
 
@@ -127,7 +127,7 @@ const ProgressEscrow = ({
                   totalMilestones > 1 ? (i / (totalMilestones - 1)) * 100 : 0;
 
                 const isCompleted = milestone.status === "completed";
-                const isApproved = milestone.approvedFlag === true;
+                const isApproved = milestone.flags?.approved === true;
 
                 return (
                   <div

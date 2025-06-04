@@ -63,7 +63,9 @@ const CompleteMilestoneDialog = ({
           ) : (
             <FormProvider {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit((data) =>
+                  onSubmit(data.newEvidence),
+                )}
                 className="grid gap-4 py-4"
               >
                 <div className="flex flex-col ms-center gap-4">

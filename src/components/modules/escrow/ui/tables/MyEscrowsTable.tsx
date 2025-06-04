@@ -123,7 +123,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                   ).length;
 
                   const approvedMilestones = escrow.milestones.filter(
-                    (milestone) => milestone.approvedFlag === true,
+                    (milestone) => milestone.flags?.approved === true,
                   ).length;
 
                   const totalMilestones = escrow.milestones.length;

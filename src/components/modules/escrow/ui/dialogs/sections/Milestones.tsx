@@ -141,7 +141,7 @@ export const Milestones = ({
               key={`${milestone.description}-${milestone.status}`}
               className="flex flex-col sm:flex-row items-center space-x-4"
             >
-              {milestone.flags?.approved ? (
+              {milestone.approved ? (
                 <Badge className="uppercase max-w-24 mb-4 md:mb-0">
                   {t("reusable.approved")}
                 </Badge>
@@ -248,7 +248,7 @@ export const Milestones = ({
               {userRolesInEscrow.includes("approver") &&
                 activeTab === "approver" &&
                 milestone.status === "completed" &&
-                !milestone.flags?.approved && (
+                !milestone.approved && ( // !milestone.flags?.approved
                   <Button
                     className="max-w-32"
                     disabled={isChangingFlag}
