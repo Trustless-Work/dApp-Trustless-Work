@@ -49,7 +49,7 @@ const useEscrowDetailDialog = ({
 
   const areAllMilestonesCompletedAndFlag =
     selectedEscrow?.milestones?.every(
-      (milestone) => milestone.approvedFlag === true,
+      (milestone) => milestone?.approved === true, // !milestone.flags?.approved
     ) ?? false;
 
   const fetchUserRoleInEscrow = useCallback(async () => {
