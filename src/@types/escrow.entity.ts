@@ -30,7 +30,7 @@ export interface Escrow {
   balance?: string;
   milestones: Milestone[];
   flags?: Flags;
-  trustline: Trustline;
+  trustline: Trustline & { name: string };
   receiverMemo?: number;
   disputeStartedBy?: string;
   isActive?: boolean;
