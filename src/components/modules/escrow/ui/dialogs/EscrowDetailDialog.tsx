@@ -51,7 +51,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Escrow } from "@/@types/escrow.entity";
-import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { DeleteEscrowDialog } from "./DeleteEscrowDialog";
