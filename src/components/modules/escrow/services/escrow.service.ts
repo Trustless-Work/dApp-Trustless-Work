@@ -1,7 +1,6 @@
 import { BalanceItem, Escrow } from "@/@types/escrow.entity";
 import { getAllEscrowsByUser, updateEscrow } from "../server/escrow.firebase";
 import http from "@/core/config/axios/http";
-import { GetEscrowBalancesResponse } from "@trustless-work/escrow";
 
 export const fetchAllEscrows = async ({
   address,
@@ -13,6 +12,7 @@ export const fetchAllEscrows = async ({
   isActive?: boolean;
 }): Promise<Escrow[]> => {
   const escrowsByUser = await getAllEscrowsByUser({ address, type });
+
   // todo: pass this logic to the getAllEscrowsByUser function
   const filtered =
     typeof isActive === "boolean"
@@ -25,11 +25,11 @@ export const fetchAllEscrows = async ({
     throw new Error("contractIds is not a valid array.");
   }
 
-  const response = (await http.get("/helper/get-multiple-escrow-balance", {
+  const { data } = await http.get("/helper/get-multiple-escrow-balance", {
     params: { addresses: contractIds, signer: address || "" },
-  })) as GetEscrowBalancesResponse;
+  });
 
-  const balances = response as unknown as BalanceItem[];
+  const balances = data as unknown as BalanceItem[];
 
   return Promise.all(
     filtered.map(async (escrow: Escrow) => {
