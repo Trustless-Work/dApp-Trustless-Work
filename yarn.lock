@@ -2508,10 +2508,10 @@
     varuint-bitcoin "2.0.0"
     wif "^5.0.0"
 
-"@trustless-work/escrow@^0.2.8":
-  version "0.2.8"
-  resolved "https://registry.npmjs.org/@trustless-work/escrow/-/escrow-0.2.8.tgz"
-  integrity sha512-ga8Xk7ajWFrzxk56mr796f7mmV9QgXEaCMS+oekWeIgGoOOGwx0pHVm5iI0S8Qmn44zR62HC1FpBQueoSKI25A==
+"@trustless-work/escrow@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/@trustless-work/escrow/-/escrow-0.3.0.tgz"
+  integrity sha512-7RBC8B7sfyBhtqLrrpO6+R69lbkIRXv687jV8hRmyAc33VjncUJZgaxDKry0Ma/N36OmlZ8GT0Ux+wHNwsT8jA==
   dependencies:
     "@tanstack/react-query" "^5.76.1"
     axios "^1.9.0"
