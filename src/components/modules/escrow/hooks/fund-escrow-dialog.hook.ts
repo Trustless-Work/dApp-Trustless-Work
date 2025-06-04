@@ -1,21 +1,22 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { formSchema } from "../../../schema/fund-escrow.schema";
+import { formSchema } from "../schema/fund-escrow.schema";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../../../store/ui";
+import { useEscrowUIBoundedStore } from "../store/ui";
 import { useEffect } from "react";
-import { trustlessWorkService } from "../../../services/trustless-work.service";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
-import { FundEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
 import { toast } from "sonner";
+import { FundEscrowPayload } from "@trustless-work/escrow/types";
+import {
+  useFundEscrow,
+  useSendTransaction,
+} from "@trustless-work/escrow/hooks";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen?: (value: boolean) => void;
@@ -39,6 +40,9 @@ const useFundEscrowDialog = ({
   const setAmountMoonpay = useEscrowUIBoundedStore(
     (state) => state.setAmountMoonpay,
   );
+
+  const { fundEscrow } = useFundEscrow();
+  const { sendTransaction } = useSendTransaction();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -70,22 +74,37 @@ const useFundEscrowDialog = ({
     }
   }, [paymentMethod, amount, setError, clearErrors]);
 
-  const onSubmit = async (payload: FundEscrowPayload) => {
+  const onSubmit = async ({ amount }: { amount: string }) => {
     setIsFundingEscrow(true);
 
     try {
       const finalPayload: FundEscrowPayload = {
         signer: address,
-        amount: payload.amount,
-        contractId: selectedEscrow!.contractId,
+        amount: amount,
+        contractId: selectedEscrow!.contractId || "",
       };
 
-      const response = (await trustlessWorkService({
+      const { unsignedTransaction } = await fundEscrow({
         payload: finalPayload,
-        endpoint: "/escrow/fund-escrow",
-        method: "post",
-        returnEscrowDataIsRequired: false,
-      })) as EscrowRequestResponse;
+        type: "single-release",
+      });
+
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from fundEscrow response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = await sendTransaction(signedTxXdr);
 
       if (response.status === "SUCCESS") {
         form.reset();

@@ -29,7 +29,7 @@ const InitializeEscrowForm = () => {
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
-    handleFieldChange,
+    fillTemplateForm,
   } = useInitializeEscrow();
 
   return (
@@ -38,6 +38,19 @@ const InitializeEscrowForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-6"
       >
+        {(process.env.NEXT_PUBLIC_ENV === "DEV" ||
+          process.env.NEXT_PUBLIC_ENV === "LOCAL") && (
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={fillTemplateForm}
+              className="mb-4"
+            >
+              Use Template
+            </Button>
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <FormField
             control={form.control}
@@ -54,7 +67,6 @@ const InitializeEscrowForm = () => {
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
-                      handleFieldChange("title", e.target.value);
                     }}
                   />
                 </FormControl>
@@ -78,7 +90,6 @@ const InitializeEscrowForm = () => {
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
-                      handleFieldChange("engagementId", e.target.value);
                     }}
                   />
                 </FormControl>
@@ -133,7 +144,6 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("roles.approver", e.target.value);
                       }}
                     />
                   )}
@@ -178,10 +188,6 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange(
-                          "roles.serviceProvider",
-                          e.target.value,
-                        );
                       }}
                     />
                   )}
@@ -228,10 +234,6 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange(
-                          "roles.releaseSigner",
-                          e.target.value,
-                        );
                       }}
                     />
                   )}
@@ -276,10 +278,6 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange(
-                          "roles.disputeResolver",
-                          e.target.value,
-                        );
                       }}
                     />
                   )}
@@ -326,10 +324,6 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange(
-                          "roles.platformAddress",
-                          e.target.value,
-                        );
                       }}
                     />
                   )}
@@ -370,7 +364,6 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("roles.receiver", e.target.value);
                       }}
                     />
                   )}
@@ -404,7 +397,6 @@ const InitializeEscrowForm = () => {
                       }
 
                       field.onChange(rawValue);
-                      handleFieldChange("platformFee", rawValue);
                     }}
                   />
                 </FormControl>
@@ -435,7 +427,6 @@ const InitializeEscrowForm = () => {
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        handleFieldChange("amount", e.target.value);
                       }}
                     />
                   </div>
@@ -461,7 +452,6 @@ const InitializeEscrowForm = () => {
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
-                      handleFieldChange("receiverMemo", e.target.value);
                     }}
                   />
                 </FormControl>
@@ -486,7 +476,6 @@ const InitializeEscrowForm = () => {
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
-                    handleFieldChange("description", e.target.value);
                   }}
                 />
               </FormControl>
@@ -510,7 +499,6 @@ const InitializeEscrowForm = () => {
                     const updatedMilestones = [...milestones];
                     updatedMilestones[index].description = e.target.value;
                     form.setValue("milestones", updatedMilestones);
-                    handleFieldChange("milestones", updatedMilestones);
                   }}
                 />
 

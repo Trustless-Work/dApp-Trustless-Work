@@ -197,7 +197,7 @@
       "title": "Help Content",
       "sections": {
         "faqs": "FAQs",
-        "videos": "Video Tutorials", 
+        "videos": "Video Tutorials",
         "roles": "Roles in the Escrows"
       }
     },
@@ -225,7 +225,7 @@
     },
     "roleLabels": {
       "issuer": "Issuer",
-      "approver": "Approver", 
+      "approver": "Approver",
       "serviceProvider": "Service Provider",
       "disputeResolver": "Dispute Resolver",
       "releaseSigner": "Release Signer",
@@ -312,5 +312,18 @@
     "trustlessWork": "Trustless Work",
     "releasing": "Releasing...",
     "releaseFunds": "Release Funds"
+  },
+  "confirmDialog": {
+    "deleteTitle": "Delete Escrow",
+    "deleteDescription": "Are you sure you want to delete {{title}}? This action can be undone later.",
+    "restoreTitle": "Restore Escrow",
+    "restoreDescription": "Are you sure you want to restore {{title}}? This will make the escrow active again.",
+    "trashSuccess": "Escrow moved to trash successfully",
+    "restoreSuccess": "Escrow restored successfully"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "restore": "Restore",
+    "delete": "Delete"
   }
 }

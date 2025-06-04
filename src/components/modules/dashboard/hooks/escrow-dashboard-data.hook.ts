@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { format, subDays } from "date-fns";
-import { Escrow } from "@/@types/escrows/escrow.entity";
 import { fetchAllEscrows } from "../../escrow/services/escrow.service";
 import { DashboardData } from "../@types/dashboard.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 export const useEscrowDashboardData = ({
   address,
@@ -24,9 +24,9 @@ export const useEscrowDashboardData = ({
         releaseTrend: getReleaseTrend(escrows),
         volumeTrend: getVolumeTrend(escrows),
         totalEscrows: escrows.length,
-        totalResolved: escrows.filter((e) => e.flags?.resolvedFlag).length,
-        totalReleased: escrows.filter((e) => e.flags?.releaseFlag).length,
-        totalInDispute: escrows.filter((e) => e.flags?.disputeFlag).length,
+        totalResolved: escrows.filter((e) => e.flags?.resolved).length,
+        totalReleased: escrows.filter((e) => e.flags?.released).length,
+        totalInDispute: escrows.filter((e) => e.flags?.disputed).length,
         resolvedPercentage: getResolvedPercentage(escrows),
         isPositive: getIsPositive(getResolvedPercentage(escrows)),
         avgResolutionTime: getAvgResolutionTime(escrows),
@@ -46,11 +46,11 @@ export const useEscrowDashboardData = ({
 const getStatusCounts = (escrows: Escrow[]) => {
   const map = new Map<string, number>();
   escrows.forEach((escrow) => {
-    const status = escrow.flags?.releaseFlag
+    const status = escrow.flags?.released
       ? "Released"
-      : escrow.flags?.disputeFlag
+      : escrow.flags?.disputed
         ? "Disputed"
-        : escrow.flags?.resolvedFlag
+        : escrow.flags?.resolved
           ? "Resolved"
           : "Pending";
 
@@ -79,7 +79,7 @@ const getReleaseTrend = (escrows: Escrow[]) => {
   const map = new Map<string, number>();
 
   escrows.forEach((escrow) => {
-    if (escrow.flags?.releaseFlag && escrow.updatedAt?.seconds) {
+    if (escrow.flags?.released && escrow.updatedAt?.seconds) {
       const month = format(
         new Date(escrow.updatedAt.seconds * 1000),
         "yyyy-MM",
@@ -110,7 +110,7 @@ const getVolumeTrend = (escrows: Escrow[]) => {
 
 const getResolvedPercentage = (escrows: Escrow[]): number => {
   if (escrows.length === 0) return 0;
-  const resolvedCount = escrows.filter((e) => e.flags?.resolvedFlag).length;
+  const resolvedCount = escrows.filter((e) => e.flags?.resolved).length;
   return Math.round((resolvedCount / escrows.length) * 100);
 };
 
@@ -119,7 +119,7 @@ const getIsPositive = (resolvedPercentage: number): boolean => {
 };
 
 const getAvgResolutionTime = (escrows: Escrow[]): number => {
-  const resolvedEscrows = escrows.filter((e) => e.flags?.resolvedFlag);
+  const resolvedEscrows = escrows.filter((e) => e.flags?.resolved);
   return resolvedEscrows.length
     ? Math.round(
         resolvedEscrows
@@ -146,7 +146,7 @@ const getDepositsVsReleases = (escrows: Escrow[]) => {
   }, 0);
 
   const releases = escrows
-    .filter((e) => e.flags?.releaseFlag)
+    .filter((e) => e.flags?.released)
     .reduce((total, escrow) => {
       return total + parseFloat(escrow.amount);
     }, 0);
@@ -160,7 +160,7 @@ const getDepositsVsReleases = (escrows: Escrow[]) => {
 
 const getPendingFunds = (escrows: Escrow[]) => {
   return escrows
-    .filter((e) => !e.flags?.releaseFlag && !e.flags?.disputeFlag)
+    .filter((e) => !e.flags?.released && !e.flags?.disputed)
     .reduce((total, escrow) => {
       return total + parseFloat(escrow.amount);
     }, 0);

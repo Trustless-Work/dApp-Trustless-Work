@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import useFundEscrowDialogHook from "./hooks/fund-escrow-dialog.hook";
+import useFundEscrowDialogHook from "../../hooks/fund-escrow-dialog.hook";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import SkeletonFundEscrow from "./utils/SkeletonFundEscrow";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";

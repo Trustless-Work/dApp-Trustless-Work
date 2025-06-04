@@ -14,7 +14,7 @@ import { PieChart, Pie, Label } from "recharts";
 import NoData from "@/components/utils/ui/NoData";
 import { SkeletonDisputeEngagementChart } from "../utils/SkeletonDisputeEngagementChart";
 import { useDisputesEngagement } from "@/components/modules/dashboard/hooks/disputes-engagement.hook";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface DisputesEngagementChartProps {
   escrows: Escrow[];

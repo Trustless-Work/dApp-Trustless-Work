@@ -1,7 +1,7 @@
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import useStartDisputeEscrowDialog from "../hooks/start-dispute-escrow-dialog.hook";
-import useResolveDisputeEscrowDialog from "../hooks/resolve-dispute-escrow-dialog.hook";
+import useStartDisputeEscrowDialog from "../../../hooks/start-dispute-escrow-dialog.hook";
+import useResolveDisputeEscrowDialog from "../../../hooks/resolve-dispute-escrow-dialog.hook";
 import { useEscrowDialogs } from "../hooks/use-escrow-dialogs.hook";
 import {
   Check,
@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { toast } from "sonner";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface EscrowIDActionProps {
   selectedEscrow: Escrow;
@@ -66,9 +66,9 @@ export const EscrowIDActions = ({
       <div className="flex flex-col gap-2">
         <div className="flex flex-col sm:flex-row gap-2">
           {userRolesInEscrow.includes("platformAddress") &&
-            !selectedEscrow?.flags?.disputeFlag &&
-            !selectedEscrow?.flags?.resolvedFlag &&
-            !selectedEscrow?.flags?.releaseFlag &&
+            !selectedEscrow?.flags?.disputed &&
+            !selectedEscrow?.flags?.resolved &&
+            !selectedEscrow?.flags?.released &&
             activeTab === "platformAddress" && (
               <Button
                 disabled={Number(selectedEscrow.balance) === 0}
@@ -99,8 +99,8 @@ export const EscrowIDActions = ({
           {(userRolesInEscrow.includes("approver") ||
             userRolesInEscrow.includes("serviceProvider")) &&
             (activeTab === "approver" || activeTab === "serviceProvider") &&
-            !selectedEscrow?.flags?.disputeFlag &&
-            !selectedEscrow?.flags?.resolvedFlag && (
+            !selectedEscrow?.flags?.disputed &&
+            !selectedEscrow?.flags?.resolved && (
               <Button
                 onClick={() => {
                   if (
@@ -136,8 +136,8 @@ export const EscrowIDActions = ({
 
           {userRolesInEscrow.includes("disputeResolver") &&
             activeTab === "disputeResolver" &&
-            !selectedEscrow?.flags?.resolvedFlag &&
-            selectedEscrow?.flags?.disputeFlag && (
+            !selectedEscrow?.flags?.resolved &&
+            selectedEscrow?.flags?.disputed && (
               <Button
                 onClick={handleOpen}
                 className="bg-green-800 hover:bg-green-700 w-1/2"

@@ -13,12 +13,23 @@ import {
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { GetFormSchema } from "../schema/initialize-escrow.schema";
-import { Trustline } from "@/@types/trustline.entity";
-import { InitializeEscrowPayload } from "@/@types/escrows/escrow-payload.entity";
-import { trustlessWorkService } from "../services/trustless-work.service";
-import { InitializeEscrowResponse } from "@/@types/escrows/escrow-response.entity";
 import { toast } from "sonner";
 import { useContactStore } from "@/core/store/data/slices/contacts.slice";
+import {
+  InitializeEscrowPayload,
+  InitializeEscrowResponse,
+  Roles,
+} from "@trustless-work/escrow/types";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
+import {
+  useInitializeEscrow as useInitializeEscrowHook,
+  useSendTransaction,
+} from "@trustless-work/escrow/hooks";
+import { Escrow } from "@/@types/escrow.entity";
+
+type ExtendedRoles = Roles & {
+  issuer: string;
+};
 
 export const useInitializeEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -31,9 +42,6 @@ export const useInitializeEscrow = () => {
   });
 
   const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
-  const formData = useEscrowUIBoundedStore((state) => state.formData);
-  const setFormData = useEscrowUIBoundedStore((state) => state.setFormData);
-  const resetForm = useEscrowUIBoundedStore((state) => state.resetForm);
   const setCurrentStep = useEscrowUIBoundedStore(
     (state) => state.setCurrentStep,
   );
@@ -53,6 +61,9 @@ export const useInitializeEscrow = () => {
   const address = useGlobalAuthenticationStore((state) => state.address);
   const trustlines = useGlobalBoundedStore((state) => state.trustlines);
   const formSchema = GetFormSchema();
+
+  const { deployEscrow } = useInitializeEscrowHook();
+  const { sendTransaction } = useSendTransaction();
 
   useEffect(() => {
     if (address) {
@@ -132,18 +143,7 @@ export const useInitializeEscrow = () => {
     // Explicitly set the trustline field
     form.setValue("trustline.address", usdcTrustline.address);
     form.setValue("trustline.decimals", usdcTrustline.decimals || 10000000);
-
-    setFormData(templateData);
   };
-
-  // Load stored form data when component mounts
-  useEffect(() => {
-    if (formData) {
-      Object.keys(formData).forEach((key) => {
-        form.setValue(key as any, formData[key as keyof typeof formData]);
-      });
-    }
-  }, [formData, form]);
 
   const milestones = form.watch("milestones");
   const isAnyMilestoneEmpty = milestones.some(
@@ -154,18 +154,15 @@ export const useInitializeEscrow = () => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = [...currentMilestones, { description: "" }];
     form.setValue("milestones", updatedMilestones);
-    setFormData({ milestones: updatedMilestones });
   };
 
   const handleRemoveMilestone = (index: number) => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = currentMilestones.filter((_, i) => i !== index);
     form.setValue("milestones", updatedMilestones);
-    setFormData({ milestones: updatedMilestones });
   };
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    setFormData(payload);
     setIsLoading(true);
     setIsSuccessDialogOpen(false);
 
@@ -177,22 +174,43 @@ export const useInitializeEscrow = () => {
         roles: {
           ...payload.roles,
           issuer: address,
-        },
+        } as ExtendedRoles,
+        milestones: payload.milestones,
       };
 
-      const result = (await trustlessWorkService({
+      const { unsignedTransaction } = await deployEscrow({
         payload: finalPayload,
-        endpoint: "/deployer/invoke-deployer-contract",
-        method: "post",
-      })) as InitializeEscrowResponse;
+        type: "single-release",
+      });
 
-      if (result.status === "SUCCESS") {
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from deployEscrow response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = (await sendTransaction(
+        signedTxXdr,
+      )) as InitializeEscrowResponse & { escrow: Escrow };
+
+      if (response.status === "SUCCESS") {
         setIsSuccessDialogOpen(true);
-        setRecentEscrow({ ...result.escrow, contractId: result.contractId });
+        setRecentEscrow({
+          ...response.escrow,
+          contractId: response.contractId,
+        });
         resetSteps();
         setCurrentStep(1);
         form.reset();
-        resetForm();
         router.push("/dashboard/escrow/my-escrows");
         setIsLoading(false);
       } else {
@@ -200,7 +218,7 @@ export const useInitializeEscrow = () => {
         setCurrentStep(1);
         setIsLoading(false);
         setIsSuccessDialogOpen(false);
-        toast.error(result.message || "An error occurred");
+        toast.error(response.message || "An error occurred");
       }
     } catch (err) {
       setIsLoading(false);
@@ -209,11 +227,6 @@ export const useInitializeEscrow = () => {
         err instanceof Error ? err.message : "An unknown error occurred",
       );
     }
-  };
-
-  // Update store whenever form fields change
-  const handleFieldChange = (name: string, value: any) => {
-    setFormData({ [name]: value });
   };
 
   const userOptions = useMemo(() => {
@@ -226,7 +239,7 @@ export const useInitializeEscrow = () => {
   }, [contacts]);
 
   const trustlineOptions = useMemo(() => {
-    const options = trustlines.map((trustline: Trustline) => ({
+    const options = trustlines.map((trustline) => ({
       value: trustline.address,
       label: trustline.name,
     }));
@@ -244,7 +257,6 @@ export const useInitializeEscrow = () => {
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
-    handleFieldChange,
     userOptions,
     trustlineOptions,
     showSelect,

@@ -34,7 +34,8 @@ import SkeletonCards from "../utils/SkeletonCards";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import { Escrow, Milestone } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
+import { Milestone } from "@trustless-work/escrow";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -95,7 +96,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
     ).length;
 
     const approvedMilestones = escrow.milestones.filter(
-      (milestone: Milestone) => milestone.approvedFlag === true,
+      (milestone: Milestone) => milestone.flags?.approved === true,
     ).length;
 
     const totalMilestones = escrow.milestones.length;
@@ -110,9 +111,9 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
     const pendingRelease =
       progressPercentageCompleted === 100 &&
       progressPercentageApproved === 100 &&
-      !escrow.flags?.releaseFlag;
+      !escrow.flags?.released;
 
-    if (escrow.flags?.disputeFlag) {
+    if (escrow.flags?.disputed) {
       return (
         <Badge variant="destructive" className="gap-1">
           <CircleAlert className="h-3.5 w-3.5" />
@@ -133,7 +134,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       );
     }
 
-    if (escrow.flags?.releaseFlag) {
+    if (escrow.flags?.released) {
       return (
         <Badge
           variant="outline"
@@ -145,7 +146,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       );
     }
 
-    if (escrow.flags?.resolvedFlag) {
+    if (escrow.flags?.resolved) {
       return (
         <Badge
           variant="outline"

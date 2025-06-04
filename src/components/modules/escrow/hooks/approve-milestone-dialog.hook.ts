@@ -1,19 +1,23 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { Escrow, Milestone } from "@/@types/escrows/escrow.entity";
-import { trustlessWorkService } from "../../../services/trustless-work.service";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
-import { ChangeMilestoneFlagPayload } from "@/@types/escrows/escrow-payload.entity";
+import { useEscrowUIBoundedStore } from "../store/ui";
 import { toast } from "sonner";
+import {
+  useApproveMilestone,
+  useSendTransaction,
+} from "@trustless-work/escrow/hooks";
+import {
+  ApproveMilestonePayload,
+  Milestone,
+} from "@trustless-work/escrow/types";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
+import { Escrow } from "@/@types/escrow.entity";
 
-const useChangeFlagEscrowDialog = () => {
+const useApproveMilestoneDialog = () => {
   const { address } = useGlobalAuthenticationStore();
   const setIsChangingFlag = useEscrowUIBoundedStore(
     (state) => state.setIsChangingFlag,
@@ -29,7 +33,10 @@ const useChangeFlagEscrowDialog = () => {
   );
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
-  const changeMilestoneFlagSubmit = async (
+  const { approveMilestone } = useApproveMilestone();
+  const { sendTransaction } = useSendTransaction();
+
+  const approveMilestoneSubmit = async (
     selectedEscrow: Escrow,
     milestone: Milestone,
     index: number,
@@ -37,19 +44,34 @@ const useChangeFlagEscrowDialog = () => {
     setIsChangingFlag(true);
 
     try {
-      const finalPayload: ChangeMilestoneFlagPayload = {
-        contractId: selectedEscrow?.contractId,
+      const finalPayload: ApproveMilestonePayload = {
+        contractId: selectedEscrow?.contractId || "",
         milestoneIndex: index.toString(),
         newFlag: true,
         approver: address,
       };
 
-      const response = (await trustlessWorkService({
+      const { unsignedTransaction } = await approveMilestone({
         payload: finalPayload,
-        endpoint: "/escrow/change-milestone-approved-flag",
-        method: "post",
-        returnEscrowDataIsRequired: false,
-      })) as EscrowRequestResponse;
+        type: "single-release",
+      });
+
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from approveMilestone response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = await sendTransaction(signedTxXdr);
 
       if (response.status === "SUCCESS") {
         setIsDialogOpen(false);
@@ -69,7 +91,7 @@ const useChangeFlagEscrowDialog = () => {
     }
   };
 
-  return { changeMilestoneFlagSubmit };
+  return { approveMilestoneSubmit };
 };
 
-export default useChangeFlagEscrowDialog;
+export default useApproveMilestoneDialog;

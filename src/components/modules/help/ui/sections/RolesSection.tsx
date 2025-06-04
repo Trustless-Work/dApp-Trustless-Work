@@ -30,7 +30,7 @@ export const RolesSection = () => {
 
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground">
-              {t('help.roles.actionsLabel')}
+              {t("help.roles.actionsLabel")}
             </h3>
             <ul className="space-y-2">
               {item.actions.map((action) => (

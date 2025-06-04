@@ -17,7 +17,7 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import TransferAnimation from "./TransferAnimation";
 import { motion } from "framer-motion";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface SuccessResolveDisputeProps {
   title: string;

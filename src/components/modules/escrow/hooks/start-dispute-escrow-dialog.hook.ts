@@ -1,16 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
-import { trustlessWorkService } from "../../../services/trustless-work.service";
-import { StartDisputePayload } from "@/@types/escrows/escrow-payload.entity";
+import { useEscrowUIBoundedStore } from "../store/ui";
 import { toast } from "sonner";
+import { StartDisputePayload } from "@trustless-work/escrow/types";
+import {
+  useStartDispute,
+  useSendTransaction,
+} from "@trustless-work/escrow/hooks";
+import { signTransaction } from "@/lib/stellar-wallet-kit";
 
 const useStartDisputeEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -30,6 +31,9 @@ const useStartDisputeEscrowDialog = () => {
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
+  const { startDispute } = useStartDispute();
+  const { sendTransaction } = useSendTransaction();
+
   const startDisputeSubmit = async () => {
     setIsStartingDispute(true);
 
@@ -37,16 +41,31 @@ const useStartDisputeEscrowDialog = () => {
 
     try {
       const finalPayload: StartDisputePayload = {
-        contractId: selectedEscrow?.contractId,
+        contractId: selectedEscrow?.contractId || "",
         signer: address,
       };
 
-      const response = (await trustlessWorkService({
+      const { unsignedTransaction } = await startDispute({
         payload: finalPayload,
-        endpoint: "/escrow/change-dispute-flag",
-        method: "post",
-        returnEscrowDataIsRequired: false,
-      })) as EscrowRequestResponse;
+        type: "single-release",
+      });
+
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from startDispute response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = await sendTransaction(signedTxXdr);
 
       if (response.status === "SUCCESS") {
         setIsDialogOpen(false);
@@ -56,6 +75,10 @@ const useStartDisputeEscrowDialog = () => {
           payload: {
             ...selectedEscrow,
             disputeStartedBy: activeTab,
+            flags: {
+              ...selectedEscrow.flags,
+              disputed: true,
+            },
           },
         });
         fetchAllEscrows({ address, type: activeTab || "client" });

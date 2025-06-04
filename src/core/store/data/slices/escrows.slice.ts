@@ -1,27 +1,20 @@
-import type { StateCreator } from "zustand";
-import type { EscrowGlobalStore } from "../@types/escrows.entity";
-
+import { StateCreator } from "zustand";
+import { EscrowGlobalStore } from "../@types/escrows.entity";
 import {
   fetchAllEscrows,
   updateExistingEscrow,
 } from "@/components/modules/escrow/services/escrow.service";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 import { convertFirestoreTimestamps } from "@/utils/hook/format.hook";
 
 const ESCROW_ACTIONS = {
-  SET_ESCROWS: "escrows/set",
-  SET_SELECTED_ESCROW: "escrows/setSelected",
-  FETCH_ALL_ESCROWS: "escrows/fetchAll",
-  ADD_ESCROW: "escrows/add",
-  UPDATE_ESCROW: "escrows/update",
-  DELETE_PRODUCT: "escrows/delete",
-  SET_ESCROW_TO_DELETE: "escrows/setToDelete",
-  SET_LOADING_ESCROWS: "escrows/setLoading",
-  SET_USER_ROLE: "escrows/setUserRole",
-  SET_RECENT_ESCROW: "escrows/setRecent",
+  SET_ESCROWS: "escrows/setEscrows",
+  SET_LOADING_ESCROWS: "escrows/setLoadingEscrows",
+  SET_SELECTED_ESCROW: "escrows/setSelectedEscrow",
+  SET_USER_ROLES_IN_ESCROW: "escrows/setUserRolesInEscrow",
+  SET_RECENT_ESCROW: "escrows/setRecentEscrow",
+  UPDATE_ESCROW: "escrows/updateEscrow",
 } as const;
-
-export const ESCROW_SLICE_NAME = "escrowSlice" as const;
 
 export const useGlobalEscrowsSlice: StateCreator<
   EscrowGlobalStore,
@@ -30,41 +23,20 @@ export const useGlobalEscrowsSlice: StateCreator<
   EscrowGlobalStore
 > = (set, get) => {
   return {
-    // State
+    // Stores
     escrows: [],
     totalEscrows: 0,
     loadingEscrows: false,
-    escrowsToDelete: [],
     selectedEscrow: null,
+    escrowsToDelete: [],
     userRolesInEscrow: [],
     recentEscrow: undefined,
-    approverFunds: "",
-    serviceProviderFunds: "",
 
     // Actions
-    setEscrows: (escrows: Escrow[]) =>
+    setEscrows: (escrows) =>
       set({ escrows }, false, ESCROW_ACTIONS.SET_ESCROWS),
 
-    setSelectedEscrow: (escrow: Escrow | undefined) =>
-      set(
-        {
-          selectedEscrow: escrow
-            ? (convertFirestoreTimestamps(escrow) as Escrow)
-            : null,
-        },
-        false,
-        ESCROW_ACTIONS.SET_SELECTED_ESCROW,
-      ),
-
-    fetchAllEscrows: async ({
-      address,
-      type = "approver",
-      isActive,
-    }: {
-      address: string;
-      type: string;
-      isActive?: boolean;
-    }) => {
+    fetchAllEscrows: async ({ address, type, isActive }) => {
       set({ loadingEscrows: true }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
       try {
         const escrows = await fetchAllEscrows({ address, type, isActive });
@@ -82,6 +54,35 @@ export const useGlobalEscrowsSlice: StateCreator<
         throw error;
       }
     },
+
+    setSelectedEscrow: (escrow) =>
+      set(
+        {
+          selectedEscrow: escrow
+            ? (convertFirestoreTimestamps(escrow) as Escrow)
+            : null,
+        },
+        false,
+        ESCROW_ACTIONS.SET_SELECTED_ESCROW,
+      ),
+
+    setUserRolesInEscrow: (roles) =>
+      set(
+        { userRolesInEscrow: roles },
+        false,
+        ESCROW_ACTIONS.SET_USER_ROLES_IN_ESCROW,
+      ),
+
+    setRecentEscrow: (escrow) =>
+      set(
+        {
+          recentEscrow: escrow
+            ? (convertFirestoreTimestamps(escrow) as Escrow)
+            : undefined,
+        },
+        false,
+        ESCROW_ACTIONS.SET_RECENT_ESCROW,
+      ),
 
     updateEscrow: async ({ escrowId, payload }) => {
       set({ loadingEscrows: true }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
@@ -166,19 +167,5 @@ export const useGlobalEscrowsSlice: StateCreator<
         throw error;
       }
     },
-
-    setUserRolesInEscrow: (role) =>
-      set({ userRolesInEscrow: role }, false, ESCROW_ACTIONS.SET_USER_ROLE),
-
-    setRecentEscrow: (escrow: Escrow | undefined) =>
-      set(
-        {
-          recentEscrow: escrow
-            ? (convertFirestoreTimestamps(escrow) as Escrow)
-            : undefined,
-        },
-        false,
-        ESCROW_ACTIONS.SET_RECENT_ESCROW,
-      ),
   };
 };

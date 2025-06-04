@@ -1,32 +1,5 @@
-import { CreatedAt, UpdatedAt } from "../dates.entity";
-import { Trustline } from "../trustline.entity";
-
-export type MilestoneStatus = "completed" | "approved" | "pending";
-
-export type Milestone = {
-  description: string;
-  status?: string;
-  evidence?: string;
-  approvedFlag?: boolean;
-  approvedAt?: UpdatedAt;
-  completedAt?: UpdatedAt;
-};
-
-export type Roles = {
-  approver: string;
-  serviceProvider: string;
-  platformAddress: string;
-  releaseSigner: string;
-  disputeResolver: string;
-  receiver: string;
-  issuer: string;
-};
-
-export type Flags = {
-  disputeFlag?: boolean;
-  releaseFlag?: boolean;
-  resolvedFlag?: boolean;
-};
+import { Flags, Milestone, Roles, Trustline } from "@trustless-work/escrow";
+import { CreatedAt, UpdatedAt } from "./dates.entity";
 
 export type RolesInEscrow =
   | "issuer"
@@ -36,6 +9,8 @@ export type RolesInEscrow =
   | "releaseSigner"
   | "platformAddress"
   | "receiver";
+
+export type MilestoneStatus = "completed" | "approved" | "pending";
 
 export interface BalanceItem {
   address: string;
@@ -55,7 +30,7 @@ export interface Escrow {
   balance?: string;
   milestones: Milestone[];
   flags?: Flags;
-  trustline: Trustline;
+  trustline: Trustline & { name: string };
   receiverMemo?: number;
   disputeStartedBy?: string;
   isActive?: boolean;

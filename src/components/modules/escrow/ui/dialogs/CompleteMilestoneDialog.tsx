@@ -18,7 +18,7 @@ import {
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { PackageCheck } from "lucide-react";
-import useCompleteMilestoneDialogHook from "./hooks/change-status-escrow-dialog.hook";
+import useCompleteMilestoneDialogHook from "../../hooks/change-status-escrow-dialog.hook";
 import { useEscrowBoundedStore } from "../../store/data";
 import SkeletonCompleteMilestone from "./utils/SkeletonCompleteMilestone";
 import { Textarea } from "@/components/ui/textarea";
@@ -63,7 +63,9 @@ const CompleteMilestoneDialog = ({
           ) : (
             <FormProvider {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit((data) =>
+                  onSubmit(data.newEvidence),
+                )}
                 className="grid gap-4 py-4"
               >
                 <div className="flex flex-col ms-center gap-4">

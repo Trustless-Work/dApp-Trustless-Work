@@ -17,7 +17,7 @@ import { Check, Copy } from "lucide-react";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import ImprovedSuccessReleaseDialog from "./ImprovedSuccessReleaseDialog";
 import ImprovedSuccessResolveDisputeDialog from "./ImprovedSuccessResolveDisputeDialog";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface SuccessDialogProps {
   title: string;

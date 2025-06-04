@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import useEditBasicPropertiesDialog from "./hooks/edit-basic-properties-dialog.hook";
+import useEditBasicPropertiesDialog from "../../hooks/edit-basic-properties-dialog.hook";
 import { EditBasicPropertiesForm } from "./forms/EditBasicPropertiesForm";
 import { SkeletonEditBasicProperties } from "./utils/SkeletonEditBasicProperties";
 

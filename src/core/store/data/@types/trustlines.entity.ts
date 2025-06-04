@@ -1,7 +1,7 @@
-import { Trustline } from "@/@types/trustline.entity";
+import { Trustline } from "@trustless-work/escrow";
 
 export interface TrustlineGlobalStore {
-  trustlines: Trustline[];
+  trustlines: (Trustline & { name: string })[];
 
   getAllTrustlines: () => void;
 }

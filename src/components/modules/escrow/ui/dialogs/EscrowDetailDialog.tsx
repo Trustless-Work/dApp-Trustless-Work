@@ -50,9 +50,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Escrow } from "@/@types/escrows/escrow.entity";
-import { toast } from "sonner";
+import { Escrow } from "@/@types/escrow.entity";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { DeleteEscrowDialog } from "./DeleteEscrowDialog";
+import { RestoreEscrowDialog } from "./RestoreEscrowDialog";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -68,6 +70,8 @@ const EscrowDetailDialog = ({
   const { t } = useTranslation();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const dialogStates = useEscrowDialogs();
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isRestoreConfirmOpen, setIsRestoreConfirmOpen] = useState(false);
 
   const { softDeleteEscrow, restoreEscrow } = useGlobalBoundedStore();
 
@@ -145,7 +149,7 @@ const EscrowDetailDialog = ({
           </DialogHeader>
 
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
-            {selectedEscrow.flags?.disputeFlag && (
+            {selectedEscrow.flags?.disputed && (
               <StatisticsCard
                 title={t("escrowDetailDialog.status")}
                 icon={Ban}
@@ -164,7 +168,7 @@ const EscrowDetailDialog = ({
               />
             )}
 
-            {selectedEscrow.flags?.releaseFlag && (
+            {selectedEscrow.flags?.released && (
               <StatisticsCard
                 title={t("escrowDetailDialog.status")}
                 icon={CircleCheckBig}
@@ -175,7 +179,7 @@ const EscrowDetailDialog = ({
               />
             )}
 
-            {selectedEscrow.flags?.resolvedFlag && (
+            {selectedEscrow.flags?.resolved && (
               <StatisticsCard
                 title={t("escrowDetailDialog.status")}
                 icon={Handshake}
@@ -221,9 +225,9 @@ const EscrowDetailDialog = ({
                 </label>
 
                 {userRolesInEscrow.includes("platformAddress") &&
-                  !selectedEscrow?.flags?.disputeFlag &&
-                  !selectedEscrow?.flags?.resolvedFlag &&
-                  !selectedEscrow?.flags?.releaseFlag &&
+                  !selectedEscrow?.flags?.disputed &&
+                  !selectedEscrow?.flags?.resolved &&
+                  !selectedEscrow?.flags?.released &&
                   activeTab === "platformAddress" && (
                     <TooltipInfo
                       content={t("escrowDetailDialog.editRolesTooltip")}
@@ -248,12 +252,12 @@ const EscrowDetailDialog = ({
                 <EntityCard
                   type={t("reusable.approver")}
                   entity={selectedEscrow.roles?.approver}
-                  inDispute={selectedEscrow.flags?.disputeFlag}
+                  inDispute={selectedEscrow.flags?.disputed}
                 />
                 <EntityCard
                   type={t("reusable.serviceProvider")}
                   entity={selectedEscrow.roles?.serviceProvider}
-                  inDispute={selectedEscrow.flags?.disputeFlag}
+                  inDispute={selectedEscrow.flags?.disputed}
                 />
                 <EntityCard
                   type={t("reusable.disputeResolver")}
@@ -302,11 +306,7 @@ const EscrowDetailDialog = ({
                     <TooltipTrigger asChild>
                       <Button
                         variant="destructive"
-                        onClick={async () => {
-                          await softDeleteEscrow(selectedEscrow.id);
-                          toast.success(t("escrowDetailDialog.trashSuccess"));
-                          handleClose();
-                        }}
+                        onClick={() => setIsDeleteConfirmOpen(true)}
                       >
                         <Trash2 />
                       </Button>
@@ -322,11 +322,7 @@ const EscrowDetailDialog = ({
                     <TooltipTrigger asChild>
                       <Button
                         variant="default"
-                        onClick={async () => {
-                          await restoreEscrow(selectedEscrow.id);
-                          toast.success(t("escrowDetailDialog.restoreSuccess"));
-                          handleClose();
-                        }}
+                        onClick={() => setIsRestoreConfirmOpen(true)}
                       >
                         <ArchiveRestore />
                       </Button>
@@ -341,6 +337,27 @@ const EscrowDetailDialog = ({
           </Card>
         </DialogContent>
       </Dialog>
+
+      {/* Confirmation Dialogs */}
+      <DeleteEscrowDialog
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => setIsDeleteConfirmOpen(false)}
+        onConfirm={async () => {
+          await softDeleteEscrow(selectedEscrow.id);
+          handleClose();
+        }}
+        escrowTitle={selectedEscrow.title}
+      />
+
+      <RestoreEscrowDialog
+        isOpen={isRestoreConfirmOpen}
+        onClose={() => setIsRestoreConfirmOpen(false)}
+        onConfirm={async () => {
+          await restoreEscrow(selectedEscrow.id);
+          handleClose();
+        }}
+        escrowTitle={selectedEscrow.title}
+      />
 
       {/* External Dialogs */}
       <FundEscrowDialog

@@ -1,4 +1,4 @@
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
@@ -66,7 +66,7 @@ const ProgressEscrow = ({
     (milestone) => milestone.status === "completed",
   ).length;
   const approvedMilestones = escrow.milestones.filter(
-    (milestone) => milestone.approvedFlag === true,
+    (milestone) => milestone.approved === true, // !milestone.flags?.approved
   ).length;
   const totalMilestones = escrow.milestones.length;
 
@@ -75,8 +75,7 @@ const ProgressEscrow = ({
   const progressPercentageApproved =
     totalMilestones > 0 ? (approvedMilestones / totalMilestones) * 100 : 0;
 
-  const shouldHideProgress =
-    escrow.flags?.releaseFlag || escrow.flags?.resolvedFlag;
+  const shouldHideProgress = escrow.flags?.released || escrow.flags?.resolved;
 
   if (shouldHideProgress || totalMilestones === 0) {
     return null;
@@ -128,7 +127,7 @@ const ProgressEscrow = ({
                   totalMilestones > 1 ? (i / (totalMilestones - 1)) * 100 : 0;
 
                 const isCompleted = milestone.status === "completed";
-                const isApproved = milestone.approvedFlag === true;
+                const isApproved = milestone.flags?.approved === true;
 
                 return (
                   <div

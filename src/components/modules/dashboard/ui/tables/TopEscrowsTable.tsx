@@ -22,7 +22,7 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { getStatus } from "../../utils/escrow-status.util";
 import NoData from "@/components/utils/ui/NoData";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);

@@ -1,8 +1,6 @@
-import type { Escrow, BalanceItem } from "@/@types/escrows/escrow.entity";
+import { BalanceItem, Escrow } from "@/@types/escrow.entity";
 import { getAllEscrowsByUser, updateEscrow } from "../server/escrow.firebase";
-import { EscrowPayload } from "@/@types/escrows/escrow-payload.entity";
-import { trustlessWorkService } from "./trustless-work.service";
-import { EscrowRequestResponse } from "@/@types/escrows/escrow-response.entity";
+import http from "@/core/config/axios/http";
 
 export const fetchAllEscrows = async ({
   address,
@@ -14,6 +12,7 @@ export const fetchAllEscrows = async ({
   isActive?: boolean;
 }): Promise<Escrow[]> => {
   const escrowsByUser = await getAllEscrowsByUser({ address, type });
+
   // todo: pass this logic to the getAllEscrowsByUser function
   const filtered =
     typeof isActive === "boolean"
@@ -26,15 +25,11 @@ export const fetchAllEscrows = async ({
     throw new Error("contractIds is not a valid array.");
   }
 
-  const response = (await trustlessWorkService({
-    payload: { signer: address || "", addresses: contractIds },
-    endpoint: "/helper/get-multiple-escrow-balance",
-    method: "get",
-    requiresSignature: false,
-    returnEscrowDataIsRequired: true,
-  })) as EscrowRequestResponse;
+  const { data } = await http.get("/helper/get-multiple-escrow-balance", {
+    params: { addresses: contractIds, signer: address || "" },
+  });
 
-  const balances = response as unknown as BalanceItem[];
+  const balances = data as unknown as BalanceItem[];
 
   return Promise.all(
     filtered.map(async (escrow: Escrow) => {
@@ -62,7 +57,7 @@ export const updateExistingEscrow = async ({
   payload,
 }: {
   escrowId: string;
-  payload: Partial<EscrowPayload>;
+  payload: Partial<Escrow>;
 }): Promise<Escrow | undefined> => {
   const response = await updateEscrow({
     escrowId,

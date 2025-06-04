@@ -10,23 +10,23 @@ import { useLanguage } from "@/hooks/useLanguage";
 
 export const TableOfContents = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
-const { t } = useLanguage();
+  const { t } = useLanguage();
   const sections = useMemo<Section[]>(
     () => [
-      { 
-        id: "faqs", 
-        title: t('help.tableOfContents.sections.faqs'), 
-        icon: <HelpCircle /> 
+      {
+        id: "faqs",
+        title: t("help.tableOfContents.sections.faqs"),
+        icon: <HelpCircle />,
       },
-      { 
-        id: "videos", 
-        title: t('help.tableOfContents.sections.videos'), 
-        icon: <VideoIcon /> 
+      {
+        id: "videos",
+        title: t("help.tableOfContents.sections.videos"),
+        icon: <VideoIcon />,
       },
-      { 
-        id: "roles", 
-        title: t('help.tableOfContents.sections.roles'), 
-        icon: <Users /> 
+      {
+        id: "roles",
+        title: t("help.tableOfContents.sections.roles"),
+        icon: <Users />,
       },
     ],
     [t],
@@ -65,7 +65,9 @@ const { t } = useLanguage();
 
   return (
     <Card className="p-4 sticky top-24 max-h-[calc(100vh-120px)] overflow-auto">
-      <h3 className="font-medium mb-4 text-lg">{t("help.tableOfContents.title")}</h3>
+      <h3 className="font-medium mb-4 text-lg">
+        {t("help.tableOfContents.title")}
+      </h3>
       <div className="space-y-2">
         {sections.map((section) => (
           <Button

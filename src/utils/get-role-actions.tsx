@@ -1,4 +1,4 @@
-import { RolesInEscrow } from "@/@types/escrows/escrow.entity";
+import { RolesInEscrow } from "@/@types/escrow.entity";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import {
   actionIcons,

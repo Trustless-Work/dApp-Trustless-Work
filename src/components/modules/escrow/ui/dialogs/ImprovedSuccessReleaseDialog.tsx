@@ -16,7 +16,7 @@ import EntityCard from "./cards/EntityCard";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import TransferAnimation from "./TransferAnimation";
 import { motion } from "framer-motion";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface SuccessReleaseDialogProps {
   title: string;

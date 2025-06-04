@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { TopEscrowsTable } from "../tables/TopEscrowsTable";
 import { SkeletonTopEscrowsTable } from "../utils/SkeletonTopEscrowsTable";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 type TopEscrowsListProps = {
   escrows: Escrow[];
