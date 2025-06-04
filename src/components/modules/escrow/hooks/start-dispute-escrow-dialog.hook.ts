@@ -41,7 +41,7 @@ const useStartDisputeEscrowDialog = () => {
 
     try {
       const finalPayload: StartDisputePayload = {
-        contractId: selectedEscrow?.contractId,
+        contractId: selectedEscrow?.contractId || "",
         signer: address,
       };
 

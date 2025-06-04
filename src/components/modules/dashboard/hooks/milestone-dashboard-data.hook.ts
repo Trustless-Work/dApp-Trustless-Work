@@ -25,20 +25,20 @@ export const useMilestoneDashboardData = ({
           ...milestone,
           escrowId: escrow.id,
           escrowTitle: escrow.title,
-          disputeFlag: escrow.flags?.disputed,
-          releaseFlag: escrow.flags?.released,
+          disputed: escrow.flags?.disputed,
+          released: escrow.flags?.released,
         })),
       );
 
       setData({
         totalMilestones: allMilestones.length,
         pendingApproval: allMilestones.filter(
-          (m) => m.status === "completed" && !m.approvedFlag,
+          (m) => m.status === "completed" && !m.flags?.approved,
         ).length,
         approvedNotReleased: allMilestones.filter(
-          (m) => m.approvedFlag && !m.releaseFlag,
+          (m) => m.flags?.approved && !m.released,
         ).length,
-        disputed: allMilestones.filter((m) => m.disputeFlag).length,
+        disputed: allMilestones.filter((m) => m.flags?.disputed).length,
         milestoneStatusCounts: getMilestoneStatusCounts(allMilestones),
         milestoneApprovalTrend: getMilestoneApprovalTrend(allMilestones),
         milestonesByStatus: getMilestonesByStatus(allMilestones),
@@ -59,13 +59,13 @@ const getMilestoneStatusCounts = (
   milestones.forEach((milestone) => {
     let status = "Pending";
 
-    if (milestone.status === "completed" && !milestone.approvedFlag) {
+    if (milestone.status === "completed" && !milestone.flags?.approved) {
       status = "Completed";
-    } else if (milestone.approvedFlag) {
+    } else if (milestone.flags?.approved) {
       status = "Approved";
     }
 
-    if (milestone.disputeFlag) {
+    if (milestone.flags?.disputed) {
       status = "Disputed";
     }
 
@@ -81,32 +81,20 @@ const getMilestoneStatusCounts = (
 const getMilestoneApprovalTrend = (
   milestones: MilestoneWithEscrow[],
 ): MilestoneDashboardData["milestoneApprovalTrend"] => {
-  const approvedMilestones = milestones.filter(
-    (m) => m.approvedFlag && m.approvedAt,
-  );
-  const monthMap = new Map<string, number>();
+  const approvedMilestones = milestones.filter((m) => m.flags?.approved);
 
-  approvedMilestones.forEach((milestone) => {
-    if (milestone.approvedAt?.seconds) {
-      const date = new Date(milestone.approvedAt.seconds * 1000);
-      const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-      monthMap.set(month, (monthMap.get(month) || 0) + 1);
-    }
-  });
-
-  return Array.from(monthMap.entries())
-    .map(([month, count]) => ({ month, count }))
-    .sort((a, b) => a.month.localeCompare(b.month));
+  // Since we don't have approval timestamps, we'll return a simple count
+  return [{ month: "current", count: approvedMilestones.length }];
 };
 
 const getMilestonesByStatus = (milestones: MilestoneWithEscrow[]) => {
   return {
     pending: milestones.filter((m) => m.status === "pending").slice(0, 5),
     completed: milestones
-      .filter((m) => m.status === "completed" && !m.approvedFlag)
+      .filter((m) => m.status === "completed" && !m.flags?.approved)
       .slice(0, 5),
-    approved: milestones.filter((m) => m.approvedFlag).slice(0, 5),
-    disputed: milestones.filter((m) => m.disputeFlag).slice(0, 5),
+    approved: milestones.filter((m) => m.flags?.approved).slice(0, 5),
+    disputed: milestones.filter((m) => m.flags?.disputed).slice(0, 5),
     platformFees: 0,
     depositsVsReleases: { deposits: 0, releases: 0, difference: 0 },
     pendingFunds: 0,

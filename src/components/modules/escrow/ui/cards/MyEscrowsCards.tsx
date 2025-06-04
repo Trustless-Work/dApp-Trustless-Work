@@ -34,7 +34,7 @@ import SkeletonCards from "../utils/SkeletonCards";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import { Escrow, Milestone } from "@/@types/escrows/escrow.entity";
+import { Escrow, Milestone } from "@/@types/escrow.entity";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {

@@ -25,6 +25,7 @@ import {
   useInitializeEscrow as useInitializeEscrowHook,
   useSendTransaction,
 } from "@trustless-work/escrow/hooks";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface Trustline {
   id: string;
@@ -48,9 +49,6 @@ export const useInitializeEscrow = () => {
   });
 
   const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
-  const formData = useEscrowUIBoundedStore((state) => state.formData);
-  const setFormData = useEscrowUIBoundedStore((state) => state.setFormData);
-  const resetForm = useEscrowUIBoundedStore((state) => state.resetForm);
   const setCurrentStep = useEscrowUIBoundedStore(
     (state) => state.setCurrentStep,
   );
@@ -152,18 +150,7 @@ export const useInitializeEscrow = () => {
     // Explicitly set the trustline field
     form.setValue("trustline.address", usdcTrustline.address);
     form.setValue("trustline.decimals", usdcTrustline.decimals || 10000000);
-
-    setFormData(templateData);
   };
-
-  // Load stored form data when component mounts
-  useEffect(() => {
-    if (formData) {
-      Object.keys(formData).forEach((key) => {
-        form.setValue(key as any, formData[key as keyof typeof formData]);
-      });
-    }
-  }, [formData, form]);
 
   const milestones = form.watch("milestones");
   const isAnyMilestoneEmpty = milestones.some(
@@ -174,18 +161,15 @@ export const useInitializeEscrow = () => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = [...currentMilestones, { description: "" }];
     form.setValue("milestones", updatedMilestones);
-    setFormData({ milestones: updatedMilestones });
   };
 
   const handleRemoveMilestone = (index: number) => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = currentMilestones.filter((_, i) => i !== index);
     form.setValue("milestones", updatedMilestones);
-    setFormData({ milestones: updatedMilestones });
   };
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
-    setFormData(payload);
     setIsLoading(true);
     setIsSuccessDialogOpen(false);
 
@@ -223,7 +207,7 @@ export const useInitializeEscrow = () => {
 
       const response = (await sendTransaction(
         signedTxXdr,
-      )) as InitializeEscrowResponse;
+      )) as InitializeEscrowResponse & { escrow: Escrow };
 
       if (response.status === "SUCCESS") {
         setIsSuccessDialogOpen(true);
@@ -234,7 +218,6 @@ export const useInitializeEscrow = () => {
         resetSteps();
         setCurrentStep(1);
         form.reset();
-        resetForm();
         router.push("/dashboard/escrow/my-escrows");
         setIsLoading(false);
       } else {
@@ -251,11 +234,6 @@ export const useInitializeEscrow = () => {
         err instanceof Error ? err.message : "An unknown error occurred",
       );
     }
-  };
-
-  // Update store whenever form fields change
-  const handleFieldChange = (name: string, value: any) => {
-    setFormData({ [name]: value });
   };
 
   const userOptions = useMemo(() => {
@@ -286,7 +264,6 @@ export const useInitializeEscrow = () => {
     onSubmit,
     handleAddMilestone,
     handleRemoveMilestone,
-    handleFieldChange,
     userOptions,
     trustlineOptions,
     showSelect,

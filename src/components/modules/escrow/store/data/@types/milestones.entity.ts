@@ -1,4 +1,4 @@
-import { Milestone } from "@/@types/escrows/escrow.entity";
+import { Milestone } from "@trustless-work/escrow/types";
 
 export interface MilestonesEscrowStore {
   completingMilestone: Milestone | null;

@@ -10,6 +10,8 @@ export type RolesInEscrow =
   | "platformAddress"
   | "receiver";
 
+export type MilestoneStatus = "completed" | "approved" | "pending";
+
 export interface BalanceItem {
   address: string;
   balance: number;

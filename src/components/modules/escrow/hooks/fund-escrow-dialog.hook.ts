@@ -81,7 +81,7 @@ const useFundEscrowDialog = ({
       const finalPayload: FundEscrowPayload = {
         signer: address,
         amount: payload.amount,
-        contractId: selectedEscrow!.contractId,
+        contractId: selectedEscrow!.contractId || "",
       };
 
       const { unsignedTransaction } = await fundEscrow({

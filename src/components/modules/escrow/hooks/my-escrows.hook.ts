@@ -1,4 +1,4 @@
-import { Milestone } from "@/@types/escrows/escrow.entity";
+import { Milestone } from "@trustless-work/escrow/types";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
@@ -71,7 +71,7 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
       ).length;
 
       const approvedMilestones = escrow.milestones.filter(
-        (milestone: Milestone) => milestone.approvedFlag === true,
+        (milestone: Milestone) => milestone.flags?.approved === true,
       ).length;
 
       const totalMilestones = escrow.milestones.length;

@@ -1,4 +1,3 @@
-import { EscrowPayload } from "@/@types/escrows/escrow-payload.entity";
 import { Escrow } from "@/@types/escrow.entity";
 
 export interface EscrowGlobalStore {
@@ -18,7 +17,7 @@ export interface EscrowGlobalStore {
   }) => void;
   updateEscrow: (params: {
     escrowId: string;
-    payload: Partial<EscrowPayload>;
+    payload: Partial<Escrow>;
   }) => Promise<Escrow | undefined>;
   setUserRolesInEscrow: (roles: string[]) => void;
   softDeleteEscrow: (escrowId: string) => Promise<void>;

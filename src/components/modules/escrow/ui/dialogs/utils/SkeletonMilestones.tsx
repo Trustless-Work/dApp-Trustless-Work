@@ -1,4 +1,4 @@
-import { Milestone } from "@/@types/escrows/escrow.entity";
+import { Milestone } from "@trustless-work/escrow/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalBoundedStore } from "@/core/store/data";
 

@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { TabsEscrowStore } from "../@types/tabs.entity";
-import { RolesInEscrow } from "@/@types/escrows/escrow.entity";
+import { RolesInEscrow } from "@/@types/escrow.entity";
 
 export const useEscrowTabSlice: StateCreator<
   TabsEscrowStore,

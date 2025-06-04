@@ -1,4 +1,4 @@
-import { RolesInEscrow } from "./escrows/escrow.entity";
+import { RolesInEscrow } from "@/@types/escrow.entity";
 
 export interface RoleAction {
   role: RolesInEscrow;

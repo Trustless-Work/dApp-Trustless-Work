@@ -1,4 +1,5 @@
-import { Escrow, Milestone } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
+import { Milestone } from "@trustless-work/escrow";
 
 export type DashboardData = {
   escrows: Escrow[];
@@ -31,8 +32,8 @@ export type DashboardData = {
 export type MilestoneWithEscrow = Milestone & {
   escrowId: string;
   escrowTitle: string;
-  disputeFlag?: boolean;
-  releaseFlag?: boolean;
+  disputed?: boolean;
+  released?: boolean;
 };
 
 export type MilestoneDashboardData = {
