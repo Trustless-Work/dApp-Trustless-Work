@@ -312,5 +312,18 @@
     "trustlessWork": "Trustless Work",
     "releasing": "Liberando...",
     "releaseFunds": "Liberar Fondos"
+  },
+  "confirmDialog": {
+    "deleteTitle": "Eliminar Escrow",
+    "deleteDescription": "¿Estás seguro de que quieres eliminar {{title}}? Esta acción se puede deshacer más tarde.",
+    "restoreTitle": "Restaurar Escrow",
+    "restoreDescription": "¿Estás seguro de que quieres restaurar {{title}}? Esto hará que el escrow esté activo nuevamente.",
+    "trashSuccess": "Escrow movido a la papelera exitosamente",
+    "restoreSuccess": "Escrow restaurado exitosamente"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "restore": "Restaurar",
+    "delete": "Eliminar"
   }
 }
