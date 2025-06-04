@@ -1,5 +1,16 @@
 import { RoleAction } from "@/@types/role-actions";
-import { AlertTriangle, Briefcase, CheckCircle, CheckSquare, DollarSign, Edit, Scale, Settings, Unlock, Wallet } from 'lucide-react';
+import {
+  AlertTriangle,
+  Briefcase,
+  CheckCircle,
+  CheckSquare,
+  DollarSign,
+  Edit,
+  Scale,
+  Settings,
+  Unlock,
+  Wallet,
+} from "lucide-react";
 
 export const roleActions: RoleAction[] = [
   {
@@ -47,11 +58,11 @@ export const roleActions: RoleAction[] = [
 ];
 
 export const actionIcons: Record<string, React.ReactNode> = {
-  "fundEscrow": <DollarSign className="h-6 w-6 text-primary/60" />,
-  "approveMilestone": <CheckCircle className="h-6 w-6 text-primary/60" />,
-  "completeMilestone": <CheckSquare className="h-6 w-6 text-primary/60" />,
-  "startDispute": <AlertTriangle className="h-6 w-6 text-primary/60" />,
-  "resolveDispute": <Scale className="h-6 w-6 text-primary/60" />,
-  "releasePayment": <Unlock className="h-6 w-6 text-primary/60" />,
-  "editEscrow": <Edit className="h-6 w-6 text-primary/60" />,
+  fundEscrow: <DollarSign className="h-6 w-6 text-primary/60" />,
+  approveMilestone: <CheckCircle className="h-6 w-6 text-primary/60" />,
+  completeMilestone: <CheckSquare className="h-6 w-6 text-primary/60" />,
+  startDispute: <AlertTriangle className="h-6 w-6 text-primary/60" />,
+  resolveDispute: <Scale className="h-6 w-6 text-primary/60" />,
+  releasePayment: <Unlock className="h-6 w-6 text-primary/60" />,
+  editEscrow: <Edit className="h-6 w-6 text-primary/60" />,
 };

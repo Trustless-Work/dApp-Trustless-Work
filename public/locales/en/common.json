@@ -197,7 +197,7 @@
       "title": "Help Content",
       "sections": {
         "faqs": "FAQs",
-        "videos": "Video Tutorials", 
+        "videos": "Video Tutorials",
         "roles": "Roles in the Escrows"
       }
     },
@@ -225,7 +225,7 @@
     },
     "roleLabels": {
       "issuer": "Issuer",
-      "approver": "Approver", 
+      "approver": "Approver",
       "serviceProvider": "Service Provider",
       "disputeResolver": "Dispute Resolver",
       "releaseSigner": "Release Signer",
