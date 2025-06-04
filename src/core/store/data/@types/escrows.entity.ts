@@ -1,5 +1,5 @@
 import { EscrowPayload } from "@/@types/escrows/escrow-payload.entity";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 export interface EscrowGlobalStore {
   escrows: Escrow[];

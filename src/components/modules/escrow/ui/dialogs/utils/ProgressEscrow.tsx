@@ -1,4 +1,4 @@
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
@@ -75,8 +75,7 @@ const ProgressEscrow = ({
   const progressPercentageApproved =
     totalMilestones > 0 ? (approvedMilestones / totalMilestones) * 100 : 0;
 
-  const shouldHideProgress =
-    escrow.flags?.releaseFlag || escrow.flags?.resolvedFlag;
+  const shouldHideProgress = escrow.flags?.released || escrow.flags?.resolved;
 
   if (shouldHideProgress || totalMilestones === 0) {
     return null;

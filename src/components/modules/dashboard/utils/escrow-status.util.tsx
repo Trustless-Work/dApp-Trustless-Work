@@ -1,10 +1,10 @@
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 import { BadgeProps } from "@/components/ui/badge";
 
 export function getStatus(escrow: Escrow): string {
-  if (escrow.flags?.releaseFlag) return "Released";
-  if (escrow.flags?.disputeFlag) return "Disputed";
-  if (escrow.flags?.resolvedFlag) return "Resolved";
+  if (escrow.flags?.released) return "Released";
+  if (escrow.flags?.disputed) return "Disputed";
+  if (escrow.flags?.resolved) return "Resolved";
   return "Pending";
 }
 

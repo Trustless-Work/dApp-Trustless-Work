@@ -85,28 +85,28 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
       const pendingRelease =
         progressPercentageCompleted === 100 &&
         progressPercentageApproved === 100 &&
-        !escrow.flags?.releaseFlag;
+        !escrow.flags?.released;
 
       let matchesStatus = true;
       if (statusFilter && statusFilter !== "all") {
         switch (statusFilter) {
           case "working":
             matchesStatus =
-              !escrow.flags?.releaseFlag &&
-              !escrow.flags?.resolvedFlag &&
+              !escrow.flags?.released &&
+              !escrow.flags?.resolved &&
               !pendingRelease;
             break;
           case "pendingRelease":
             matchesStatus = pendingRelease;
             break;
           case "released":
-            matchesStatus = escrow.flags?.releaseFlag === true;
+            matchesStatus = escrow.flags?.released === true;
             break;
           case "resolved":
-            matchesStatus = escrow.flags?.resolvedFlag === true;
+            matchesStatus = escrow.flags?.resolved === true;
             break;
           case "inDispute":
-            matchesStatus = escrow.flags?.disputeFlag === true;
+            matchesStatus = escrow.flags?.disputed === true;
             break;
           default:
             matchesStatus = true;

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import NoData from "@/components/utils/ui/NoData";
 import { useLongestPendingDisputes } from "@/components/modules/dashboard/hooks/longest-pending-disputes.hook";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface LongestPendingDisputesListProps {
   escrows: Escrow[];

@@ -50,7 +50,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
@@ -145,7 +145,7 @@ const EscrowDetailDialog = ({
           </DialogHeader>
 
           <div className="flex flex-col md:flex-row w-full gap-5 items-center justify-center">
-            {selectedEscrow.flags?.disputeFlag && (
+            {selectedEscrow.flags?.disputed && (
               <StatisticsCard
                 title={t("escrowDetailDialog.status")}
                 icon={Ban}
@@ -164,7 +164,7 @@ const EscrowDetailDialog = ({
               />
             )}
 
-            {selectedEscrow.flags?.releaseFlag && (
+            {selectedEscrow.flags?.released && (
               <StatisticsCard
                 title={t("escrowDetailDialog.status")}
                 icon={CircleCheckBig}
@@ -175,7 +175,7 @@ const EscrowDetailDialog = ({
               />
             )}
 
-            {selectedEscrow.flags?.resolvedFlag && (
+            {selectedEscrow.flags?.resolved && (
               <StatisticsCard
                 title={t("escrowDetailDialog.status")}
                 icon={Handshake}
@@ -221,9 +221,9 @@ const EscrowDetailDialog = ({
                 </label>
 
                 {userRolesInEscrow.includes("platformAddress") &&
-                  !selectedEscrow?.flags?.disputeFlag &&
-                  !selectedEscrow?.flags?.resolvedFlag &&
-                  !selectedEscrow?.flags?.releaseFlag &&
+                  !selectedEscrow?.flags?.disputed &&
+                  !selectedEscrow?.flags?.resolved &&
+                  !selectedEscrow?.flags?.released &&
                   activeTab === "platformAddress" && (
                     <TooltipInfo
                       content={t("escrowDetailDialog.editRolesTooltip")}
@@ -248,12 +248,12 @@ const EscrowDetailDialog = ({
                 <EntityCard
                   type={t("reusable.approver")}
                   entity={selectedEscrow.roles?.approver}
-                  inDispute={selectedEscrow.flags?.disputeFlag}
+                  inDispute={selectedEscrow.flags?.disputed}
                 />
                 <EntityCard
                   type={t("reusable.serviceProvider")}
                   entity={selectedEscrow.roles?.serviceProvider}
-                  inDispute={selectedEscrow.flags?.disputeFlag}
+                  inDispute={selectedEscrow.flags?.disputed}
                 />
                 <EntityCard
                   type={t("reusable.disputeResolver")}

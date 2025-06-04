@@ -25,7 +25,7 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import { DollarSign } from "lucide-react";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { Card } from "@/components/ui/card";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface ResolveDisputeEscrowDialogProps {
   isResolveDisputeDialogOpen: boolean;

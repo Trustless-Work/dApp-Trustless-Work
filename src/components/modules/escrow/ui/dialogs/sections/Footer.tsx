@@ -4,7 +4,7 @@ import useReleaseFundsEscrowDialog from "../../../hooks/release-funds-dialog.hoo
 import { Card, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CircleDollarSign, Loader2 } from "lucide-react";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 import { useTranslation } from "react-i18next";
 
 interface FooterDetailsProps {
@@ -51,33 +51,32 @@ export const FooterDetails = ({
           selectedEscrow.createdAt.nanoseconds,
         )}
       </p>
-      {!selectedEscrow.flags?.releaseFlag &&
-        !selectedEscrow.flags?.resolvedFlag && (
-          <Card className="flex items-center p-5">
-            <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 px-3">
-              {t("escrowDetailDialog.releaseAmountDistribution")}
-            </CardTitle>
+      {!selectedEscrow.flags?.released && !selectedEscrow.flags?.resolved && (
+        <Card className="flex items-center p-5">
+          <CardTitle className="text-sm font-bold border-r-2 border-r-gray-300 px-3">
+            {t("escrowDetailDialog.releaseAmountDistribution")}
+          </CardTitle>
 
-            <div className="pl-3 flex gap-10 sm:flex-row flex-col">
-              <p className="text-sm">
-                <strong>{t("escrowDetailDialog.receiver")}:</strong> $
-                {receiverAmount.toFixed(2)}
-              </p>
-              <p className="text-sm">
-                <strong>{t("escrowDetailDialog.platformFee")}:</strong> $
-                {platformFeeAmount.toFixed(2)}
-              </p>
-              <p className="text-sm">
-                <strong>{t("escrowDetailDialog.trustlessWork")}:</strong> $
-                {trustlessWorkAmount.toFixed(2)}
-              </p>
-            </div>
-          </Card>
-        )}
+          <div className="pl-3 flex gap-10 sm:flex-row flex-col">
+            <p className="text-sm">
+              <strong>{t("escrowDetailDialog.receiver")}:</strong> $
+              {receiverAmount.toFixed(2)}
+            </p>
+            <p className="text-sm">
+              <strong>{t("escrowDetailDialog.platformFee")}:</strong> $
+              {platformFeeAmount.toFixed(2)}
+            </p>
+            <p className="text-sm">
+              <strong>{t("escrowDetailDialog.trustlessWork")}:</strong> $
+              {trustlessWorkAmount.toFixed(2)}
+            </p>
+          </div>
+        </Card>
+      )}
       {areAllMilestonesCompleted &&
         areAllMilestonesCompletedAndFlag &&
         userRolesInEscrow.includes("releaseSigner") &&
-        !selectedEscrow.flags?.releaseFlag &&
+        !selectedEscrow.flags?.released &&
         activeTab === "releaseSigner" && (
           <Button
             onClick={releaseFundsSubmit}

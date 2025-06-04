@@ -5,7 +5,7 @@ import {
 } from "@/core/store/data";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface EscrowDetailDialogProps {
   setIsDialogOpen: (value: boolean) => void;

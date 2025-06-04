@@ -110,9 +110,9 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
     const pendingRelease =
       progressPercentageCompleted === 100 &&
       progressPercentageApproved === 100 &&
-      !escrow.flags?.releaseFlag;
+      !escrow.flags?.released;
 
-    if (escrow.flags?.disputeFlag) {
+    if (escrow.flags?.disputed) {
       return (
         <Badge variant="destructive" className="gap-1">
           <CircleAlert className="h-3.5 w-3.5" />
@@ -133,7 +133,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       );
     }
 
-    if (escrow.flags?.releaseFlag) {
+    if (escrow.flags?.released) {
       return (
         <Badge
           variant="outline"
@@ -145,7 +145,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       );
     }
 
-    if (escrow.flags?.resolvedFlag) {
+    if (escrow.flags?.resolved) {
       return (
         <Badge
           variant="outline"

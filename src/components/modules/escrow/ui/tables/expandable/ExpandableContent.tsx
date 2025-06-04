@@ -10,7 +10,7 @@ import {
 import Divider from "@/components/utils/ui/Divider";
 import EntityCard from "../../dialogs/cards/EntityCard";
 import ProgressEscrow from "../../dialogs/utils/ProgressEscrow";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface ExpandableContentProps {
   escrow: Escrow;

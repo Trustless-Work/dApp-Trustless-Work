@@ -5,7 +5,7 @@ import {
   MilestoneDashboardData,
   MilestoneWithEscrow,
 } from "../@types/dashboard.entity";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 export const useMilestoneDashboardData = ({
   address,
@@ -25,8 +25,8 @@ export const useMilestoneDashboardData = ({
           ...milestone,
           escrowId: escrow.id,
           escrowTitle: escrow.title,
-          disputeFlag: escrow.flags?.disputeFlag,
-          releaseFlag: escrow.flags?.releaseFlag,
+          disputeFlag: escrow.flags?.disputed,
+          releaseFlag: escrow.flags?.released,
         })),
       );
 

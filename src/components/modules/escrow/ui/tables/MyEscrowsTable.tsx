@@ -39,7 +39,7 @@ import SuccessDialog, {
 } from "../dialogs/SuccessDialog";
 import SkeletonTable from "../utils/SkeletonTable";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface MyEscrowsTableProps {
   type:
@@ -141,7 +141,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                   const pendingRelease =
                     progressPercentageCompleted === 100 &&
                     progressPercentageApproved === 100 &&
-                    !escrow.flags?.releaseFlag;
+                    !escrow.flags?.released;
 
                   return (
                     <React.Fragment key={escrow.id}>
@@ -217,7 +217,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                             {expandedRows.includes(escrow.id) ? "-" : "+"}
                           </p>
                         </TableCell>
-                        {escrow.flags?.disputeFlag && (
+                        {escrow.flags?.disputed && (
                           <TooltipInfo content="Escrow in Dispute">
                             <TableCell>
                               <CircleAlert
@@ -239,7 +239,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           </TooltipInfo>
                         )}
 
-                        {escrow.flags?.releaseFlag && (
+                        {escrow.flags?.released && (
                           <TooltipInfo content="Escrow released">
                             <TableCell>
                               <CircleCheckBig
@@ -250,7 +250,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           </TooltipInfo>
                         )}
 
-                        {escrow.flags?.resolvedFlag && (
+                        {escrow.flags?.resolved && (
                           <TooltipInfo content="Escrow resolved">
                             <TableCell>
                               <Handshake className="text-green-800" size={22} />

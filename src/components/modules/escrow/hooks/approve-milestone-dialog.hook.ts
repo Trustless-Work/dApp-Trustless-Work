@@ -12,10 +12,10 @@ import {
 } from "@trustless-work/escrow/hooks";
 import {
   ApproveMilestonePayload,
-  Escrow,
   Milestone,
 } from "@trustless-work/escrow/types";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
+import { Escrow } from "@/@types/escrow.entity";
 
 const useApproveMilestoneDialog = () => {
   const { address } = useGlobalAuthenticationStore();

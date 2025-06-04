@@ -1,4 +1,4 @@
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface EngagementData {
   name: string;
@@ -24,7 +24,7 @@ export const useDisputesEngagement = (escrows: Escrow[]) => {
   };
 
   const engagementData = escrows
-    .filter((escrow) => escrow.flags?.disputeFlag)
+    .filter((escrow) => escrow.flags?.disputed)
     .reduce(
       (acc, escrow) => {
         const engagementId = escrow.engagementId;

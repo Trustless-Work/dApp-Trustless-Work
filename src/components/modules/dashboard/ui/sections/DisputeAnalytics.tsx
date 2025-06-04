@@ -5,7 +5,7 @@ import { SkeletonDisputeAnalytics } from "../utils/SkeletonDisputeAnalytics";
 import { DisputesEngagementChart } from "../charts/DisputesEngagementChart";
 import { LongestPendingDisputesList } from "../lists/LongestPendingDisputesList";
 import { SkeletonPendingDisputes } from "../utils/SkeletonPendingDisputes";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface DisputeAnalyticsProps {
   address: string;

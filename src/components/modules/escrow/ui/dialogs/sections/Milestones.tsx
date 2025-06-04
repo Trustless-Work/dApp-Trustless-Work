@@ -24,7 +24,7 @@ import ProgressEscrow from "../utils/ProgressEscrow";
 import { useEffect, useState } from "react";
 import useApproveMilestoneDialog from "../../../hooks/approve-milestone-dialog.hook";
 import { useTranslation } from "react-i18next";
-import { Escrow } from "@trustless-work/escrow";
+import { Escrow } from "@/@types/escrow.entity";
 
 const MAX_VISIBLE_MILESTONES = 1;
 const ITEM_HEIGHT = 50;

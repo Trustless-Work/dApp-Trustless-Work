@@ -5,7 +5,7 @@ import { MilestoneApprovalTrendChart } from "../charts/MilestoneApprovalTrendCha
 import { useMilestoneDashboardData } from "../../hooks/milestone-dashboard-data.hook";
 import { SkeletonMilestoneStatusChart } from "../utils/SkeletonMilestoneOverview";
 import { SkeletonMilestoneApprovalTrendChart } from "../utils/SkeletonMilestoneApprovalChart";
-import { Escrow } from "@/@types/escrows/escrow.entity";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface MilestonesOverviewProps {
   address: string;
