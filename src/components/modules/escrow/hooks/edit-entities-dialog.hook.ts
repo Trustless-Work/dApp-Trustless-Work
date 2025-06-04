@@ -88,21 +88,15 @@ const useEditEntitiesDialog = ({
     try {
       const updatedEscrow = {
         ...JSON.parse(JSON.stringify(selectedEscrow)),
-        approver: payload.approver,
-        serviceProvider: payload.serviceProvider,
-        platformAddress: payload.platformAddress,
-        receiver: payload.receiver,
-        releaseSigner: payload.releaseSigner,
-        disputeResolver: payload.disputeResolver,
+        roles: {
+          approver: payload.approver,
+          serviceProvider: payload.serviceProvider,
+          platformAddress: payload.platformAddress,
+          receiver: payload.receiver,
+          releaseSigner: payload.releaseSigner,
+          disputeResolver: payload.disputeResolver,
+        },
       };
-
-      // Plain the trustline
-      if (
-        updatedEscrow.trustline &&
-        typeof updatedEscrow.trustline === "object"
-      ) {
-        // Keep trustline object as is - no need for self assignment
-      }
 
       delete updatedEscrow.createdAt;
       delete updatedEscrow.updatedAt;
