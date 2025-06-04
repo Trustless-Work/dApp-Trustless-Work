@@ -27,13 +27,6 @@ import {
 } from "@trustless-work/escrow/hooks";
 import { Escrow } from "@/@types/escrow.entity";
 
-interface Trustline {
-  id: string;
-  name: string;
-  address: string;
-  decimals?: number;
-}
-
 type ExtendedRoles = Roles & {
   issuer: string;
 };
@@ -246,7 +239,7 @@ export const useInitializeEscrow = () => {
   }, [contacts]);
 
   const trustlineOptions = useMemo(() => {
-    const options = trustlines.map((trustline: Trustline) => ({
+    const options = trustlines.map((trustline) => ({
       value: trustline.address,
       label: trustline.name,
     }));

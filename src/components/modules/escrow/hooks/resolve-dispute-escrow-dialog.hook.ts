@@ -63,7 +63,13 @@ const useResolveDisputeEscrowDialog = ({
     mode: "onChange",
   });
 
-  const onSubmit = async (payload: ResolveDisputePayload) => {
+  const onSubmit = async ({
+    approverFunds,
+    receiverFunds,
+  }: {
+    approverFunds: string;
+    receiverFunds: string;
+  }) => {
     setIsResolvingDispute(true);
 
     if (!selectedEscrow) return;
@@ -72,8 +78,8 @@ const useResolveDisputeEscrowDialog = ({
       const finalPayload: ResolveDisputePayload = {
         contractId: selectedEscrow?.contractId || "",
         disputeResolver: selectedEscrow?.roles?.disputeResolver,
-        approverFunds: payload.approverFunds,
-        receiverFunds: payload.receiverFunds,
+        approverFunds: approverFunds,
+        receiverFunds: receiverFunds,
       };
 
       const { unsignedTransaction } = await resolveDispute({
@@ -100,8 +106,8 @@ const useResolveDisputeEscrowDialog = ({
 
       if (response.status === "SUCCESS") {
         form.reset();
-        setReceiverResolve(payload.receiverFunds);
-        setApproverResolve(payload.approverFunds);
+        setReceiverResolve(receiverFunds);
+        setApproverResolve(approverFunds);
         setIsResolveDisputeDialogOpen(false);
         setIsDialogOpen(false);
         fetchAllEscrows({ address, type: activeTab || "client" });

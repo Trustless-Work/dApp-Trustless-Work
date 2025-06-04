@@ -75,6 +75,10 @@ const useStartDisputeEscrowDialog = () => {
           payload: {
             ...selectedEscrow,
             disputeStartedBy: activeTab,
+            flags: {
+              ...selectedEscrow.flags,
+              disputed: true,
+            },
           },
         });
         fetchAllEscrows({ address, type: activeTab || "client" });

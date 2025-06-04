@@ -10,11 +10,7 @@ import {
 import { formSchema } from "../schema/edit-milestone.schema";
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { toast } from "sonner";
-import {
-  Escrow,
-  Milestone,
-  UpdateEscrowPayload,
-} from "@trustless-work/escrow/types";
+import { Escrow, UpdateEscrowPayload } from "@trustless-work/escrow/types";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import {
   useUpdateEscrow,
@@ -52,8 +48,9 @@ const useEditMilestonesDialog = ({
     mode: "onChange",
   });
 
-  const milestones: Omit<Milestone, "status" | "evidence">[] =
+  const milestones: z.infer<typeof formSchema>["milestones"] =
     form.watch("milestones");
+
   const isAnyMilestoneEmpty = milestones.some(
     (milestone) => milestone.description === "",
   );

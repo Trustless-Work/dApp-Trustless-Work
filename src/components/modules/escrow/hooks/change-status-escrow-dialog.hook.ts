@@ -56,7 +56,7 @@ const useChangeMilestoneStatusDialogHook = ({
     mode: "onChange",
   });
 
-  const onSubmit = async (payload: ChangeMilestoneStatusPayload) => {
+  const onSubmit = async (newEvidence: string | undefined) => {
     setIsChangingStatus(true);
 
     try {
@@ -65,7 +65,7 @@ const useChangeMilestoneStatusDialogHook = ({
         milestoneIndex: milestoneIndex?.toString() || "0",
         newStatus: "completed",
         serviceProvider: address,
-        newEvidence: payload.newEvidence || "",
+        newEvidence: newEvidence || "",
       };
 
       const { unsignedTransaction } = await changeMilestoneStatus({

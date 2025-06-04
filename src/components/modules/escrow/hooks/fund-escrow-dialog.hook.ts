@@ -74,13 +74,13 @@ const useFundEscrowDialog = ({
     }
   }, [paymentMethod, amount, setError, clearErrors]);
 
-  const onSubmit = async (payload: FundEscrowPayload) => {
+  const onSubmit = async ({ amount }: { amount: string }) => {
     setIsFundingEscrow(true);
 
     try {
       const finalPayload: FundEscrowPayload = {
         signer: address,
-        amount: payload.amount,
+        amount: amount,
         contractId: selectedEscrow!.contractId || "",
       };
 
