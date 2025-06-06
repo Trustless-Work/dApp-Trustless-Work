@@ -9,11 +9,11 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/locales/:path*',
+        source: "/locales/:path*",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600', // Cache for 1 hour
+            key: "Cache-Control",
+            value: "public, max-age=3600", // Cache for 1 hour
           },
         ],
       },
