@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
 
-  // Maintainance mode activated
+  // Maintenance mode activated
   if (
     maintenanceMode &&
     request.nextUrl.pathname !== "/maintenance" &&
@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/maintenance", request.url));
   }
 
-  // Maintainance mode deactivated
+  // Maintenance mode deactivated
   if (!maintenanceMode && request.nextUrl.pathname === "/maintenance") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }

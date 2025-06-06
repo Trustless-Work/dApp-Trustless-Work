@@ -38,6 +38,7 @@
     "@tanstack/react-query-devtools": "^5.75.0",
     "@trustless-work/escrow": "^0.3.2",
     "@vercel/analytics": "^1.5.0",
+    "accept-language": "^3.0.20",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
