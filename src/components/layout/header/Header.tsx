@@ -13,13 +13,18 @@ import { Button } from "@/components/ui/button";
 import { NotificationBell } from "@/components/modules/notifications/NotificationBell"; // 👈 Asegúrate que la ruta sea correcta
 import LanguageToggle from "./LanguageToggle";
 
-const Header = () => {
+const Header = ({ className }: { className?: string }) => {
   const { handleConnect, handleDisconnect } = useWallet();
   const isMobile = useIsMobile();
   const { pathName, getBreadCrumbs, address } = useHeader();
 
   return (
-    <header className="flex flex-1 h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mb-4">
+    <header
+      className={cn(
+        "flex flex-1 h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mb-4",
+        className,
+      )}
+    >
       <div className="flex w-full justify-between items-center gap-2 px-4">
         {pathName !== "/" && address ? (
           <>
