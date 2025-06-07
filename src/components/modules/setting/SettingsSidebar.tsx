@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { User, Palette, Settings, Key, ArrowBigLeft } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import {
   Sidebar,
@@ -24,27 +25,27 @@ interface SettingsSidebarProps {
 const settingsNavItems = [
   {
     id: "profile",
-    title: "Profile",
+    title: "settings.sidebar.profile",
     icon: User,
   },
   {
     id: "appearance",
-    title: "Appearance",
+    title: "settings.sidebar.appearance",
     icon: Palette,
   },
   {
     id: "preferences",
-    title: "Preferences",
+    title: "settings.sidebar.preferences",
     icon: Settings,
   },
   {
     id: "api-keys",
-    title: "API Keys",
+    title: "settings.sidebar.apiKeys",
     icon: Key,
   },
   {
     id: "go-back",
-    title: "Back",
+    title: "settings.sidebar.goBack",
     icon: ArrowBigLeft,
   },
 ];
@@ -58,6 +59,7 @@ const SettingsSidebar = ({
   const theme = useGlobalUIBoundedStore((state) => state.theme);
   const isMobile = useIsMobile();
   const { toggleSidebar } = useSidebar();
+  const { t } = useTranslation();
 
   const handleTabClick = (tabId: string) => {
     if (tabId === "go-back") {
@@ -83,35 +85,35 @@ const SettingsSidebar = ({
       <SidebarContent
         className={`${theme === "dark" ? "bg-zinc-950" : "bg-gray-50"}`}
       >
-          <SidebarGroup>
-            <SidebarGroupContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
             <SidebarMenu className="gap-2">
-                {settingsNavItems.map((item) => (
-                  <SidebarMenuItem key={item.id}>
-                    <SidebarMenuButton
-                      onClick={() => handleTabClick(item.id)}
-                      isActive={currentTab === item.id}
+              {settingsNavItems.map((item) => (
+                <SidebarMenuItem key={item.id}>
+                  <SidebarMenuButton
+                    onClick={() => handleTabClick(item.id)}
+                    isActive={currentTab === item.id}
                     className={`w-full justify-start p-3 rounded-lg transition-colors ${
-                        currentTab === item.id
-                          ? theme === "dark"
-                            ? "!bg-gray-700 !text-white hover:!bg-gray-700"
+                      currentTab === item.id
+                        ? theme === "dark"
+                          ? "!bg-gray-700 !text-white hover:!bg-gray-700"
                           : "!bg-gray-200 !text-black hover:!bg-gray-200"
-                          : theme === "dark"
+                        : theme === "dark"
                           ? "!text-gray-300 hover:!bg-gray-800 hover:!text-white"
                           : "!text-gray-700 hover:!bg-gray-100 hover:!text-black"
-                      }`}
-                      aria-current={currentTab === item.id ? "page" : undefined}
-                    >
+                    }`}
+                    aria-current={currentTab === item.id ? "page" : undefined}
+                  >
                     <item.icon className="h-5 w-5 flex-shrink-0" />
-                    <span className="text-sm">{item.title}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-      </Sidebar>
+                    <span className="text-sm">{t(item.title)}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   );
 };
 

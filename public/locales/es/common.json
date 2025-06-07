@@ -325,5 +325,15 @@
     "cancel": "Cancelar",
     "restore": "Restaurar",
     "delete": "Eliminar"
+  },
+  "settings": {
+    "title": "Configuración",
+    "sidebar": {
+      "profile": "Perfil",
+      "appearance": "Apariencia",
+      "preferences": "Preferencias",
+      "apiKeys": "API Keys",
+      "goBack": "Atrás"
+    }
   }
 }

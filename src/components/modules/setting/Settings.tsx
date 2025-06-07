@@ -7,11 +7,13 @@ import { Preferences } from "./ui/sections/Preferences";
 import { APIKeys } from "./ui/sections/APIKeys";
 import SettingsSidebar from "./SettingsSidebar";
 import useIsMobile from "@/hooks/mobile.hook";
+import { useTranslation } from "react-i18next";
 
 const Settings = () => {
   const { currentTab, setCurrentTab, saveProfile, theme, toggleTheme } =
     useSettings();
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
 
   return (
     <SidebarProvider>
@@ -31,7 +33,9 @@ const Settings = () => {
           {/* Mobile Sidebar Toggle */}
           {isMobile && (
             <div className="flex items-center gap-2 p-4 lg:hidden">
-              <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
+              <h1 className="text-3xl font-bold tracking-tight">
+                {t("settings.title")}
+              </h1>
             </div>
           )}
 
