@@ -53,36 +53,38 @@ const SettingsSidebar = ({
   };
 
   return (
-    <aside
-      className={`h-auto rounded-xl p-4 ${className} ${
-        theme === "dark" ? "bg-zinc-950 text-white" : "bg-gray-100 text-black"
+    <Sidebar
+      collapsible="icon"
+      className={`border-r ${className} ${
+        theme === "dark"
+          ? "bg-zinc-950 border-zinc-800"
+          : "bg-gray-50 border-gray-200"
       }`}
-      role="navigation"
-      aria-label="Settings navigation"
     >
-      <Sidebar collapsible="none" className="w-full border-none bg-transparent">
-        <SidebarContent className="bg-transparent">
+      <SidebarContent
+        className={`${theme === "dark" ? "bg-zinc-950" : "bg-gray-50"}`}
+      >
           <SidebarGroup>
             <SidebarGroupContent>
-              <SidebarMenu className="gap-2 lg:gap-4">
+            <SidebarMenu className="gap-2">
                 {settingsNavItems.map((item) => (
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton
                       onClick={() => handleTabClick(item.id)}
                       isActive={currentTab === item.id}
-                      className={`w-full justify-start p-2 rounded transition-colors ${
+                    className={`w-full justify-start p-3 rounded-lg transition-colors ${
                         currentTab === item.id
                           ? theme === "dark"
                             ? "!bg-gray-700 !text-white hover:!bg-gray-700"
-                            : "!bg-gray-300 !text-black hover:!bg-gray-300"
+                          : "!bg-gray-200 !text-black hover:!bg-gray-200"
                           : theme === "dark"
-                            ? "!text-white hover:!bg-gray-800"
-                            : "!text-black hover:!bg-gray-200"
+                          ? "!text-gray-300 hover:!bg-gray-800 hover:!text-white"
+                          : "!text-gray-700 hover:!bg-gray-100 hover:!text-black"
                       }`}
                       aria-current={currentTab === item.id ? "page" : undefined}
                     >
-                      <item.icon className="h-4 w-4 flex-shrink-0" />
-                      <span className="text-sm font-medium">{item.title}</span>
+                    <item.icon className="h-5 w-5 flex-shrink-0" />
+                    <span className="text-sm">{item.title}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -91,7 +93,6 @@ const SettingsSidebar = ({
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>
-    </aside>
   );
 };
 
