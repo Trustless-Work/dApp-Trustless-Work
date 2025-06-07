@@ -58,7 +58,7 @@ const SettingsNavigationMenu = ({
 
   return (
     <aside
-      className={`h-full rounded-xl p-4 ${className} ${
+      className={`h-auto lg:h-full rounded-xl p-4 ${className} ${
         theme === "dark" ? "bg-zinc-950 text-white" : "bg-gray-100 text-black"
       }`}
       role="navigation"
