@@ -1,6 +1,7 @@
 "use client";
 
-import { User, Palette, Settings, Key } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { User, Palette, Settings, Key, ArrowBigLeft } from "lucide-react";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import {
   Sidebar,
@@ -39,6 +40,11 @@ const settingsNavItems = [
     title: "API Keys",
     icon: Key,
   },
+  {
+    id: "go-back",
+    title: "Back",
+    icon: ArrowBigLeft,
+  },
 ];
 
 const SettingsSidebar = ({
@@ -46,9 +52,14 @@ const SettingsSidebar = ({
   onTabChange,
   className,
 }: SettingsSidebarProps) => {
+  const router = useRouter();
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 
   const handleTabClick = (tabId: string) => {
+    if (tabId === "go-back") {
+      router.push("/dashboard");
+    }
+
     onTabChange(tabId);
   };
 
