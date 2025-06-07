@@ -1,6 +1,6 @@
 import Header from "@/components/layout/header/Header";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import SettingsSidebar from "./Sidebar";
+import SettingsNavigationMenu from "./SettingsNavigationMenu";
 import useSettings from "./hooks/settings.hook";
 import { Profile } from "./ui/sections/Profile";
 import { Appearance } from "./ui/sections/Appearance";
@@ -16,7 +16,7 @@ const Settings = () => {
       <div className="flex flex-col h-screen w-full">
         <Header />
         <div className="flex flex-col lg:flex-row h-screen">
-          <SettingsSidebar
+          <SettingsNavigationMenu
             currentTab={currentTab}
             onTabChange={setCurrentTab}
             className="lg:w-1/6 w-full h-1/4 lg:h-full"
