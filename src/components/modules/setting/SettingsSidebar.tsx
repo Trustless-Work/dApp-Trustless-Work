@@ -64,6 +64,7 @@ const SettingsSidebar = ({
   const handleTabClick = (tabId: string) => {
     if (tabId === "go-back") {
       router.push("/dashboard");
+      return;
     }
 
     if (isMobile) {
@@ -71,6 +72,19 @@ const SettingsSidebar = ({
     }
 
     onTabChange(tabId);
+  };
+
+  // Extract the complex inline logic into a helper at the top of the file
+  const getSidebarButtonStyles = (isActive: boolean, theme: string) => {
+    const baseStyles = "w-full justify-start p-3 rounded-lg transition-colors";
+    if (isActive) {
+      return theme === "dark"
+        ? `${baseStyles} !bg-gray-700 !text-white hover:!bg-gray-700`
+        : `${baseStyles} !bg-gray-200 !text-black hover:!bg-gray-200`;
+    }
+    return theme === "dark"
+      ? `${baseStyles} !text-gray-300 hover:!bg-gray-800 hover:!text-white`
+      : `${baseStyles} !text-gray-700 hover:!bg-gray-100 hover:!text-black`;
   };
 
   return (
@@ -93,15 +107,10 @@ const SettingsSidebar = ({
                   <SidebarMenuButton
                     onClick={() => handleTabClick(item.id)}
                     isActive={currentTab === item.id}
-                    className={`w-full justify-start p-3 rounded-lg transition-colors ${
-                      currentTab === item.id
-                        ? theme === "dark"
-                          ? "!bg-gray-700 !text-white hover:!bg-gray-700"
-                          : "!bg-gray-200 !text-black hover:!bg-gray-200"
-                        : theme === "dark"
-                          ? "!text-gray-300 hover:!bg-gray-800 hover:!text-white"
-                          : "!text-gray-700 hover:!bg-gray-100 hover:!text-black"
-                    }`}
+                    className={getSidebarButtonStyles(
+                      currentTab === item.id,
+                      theme,
+                    )}
                     aria-current={currentTab === item.id ? "page" : undefined}
                   >
                     <item.icon className="h-5 w-5 flex-shrink-0" />
