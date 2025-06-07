@@ -11,7 +11,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import useIsMobile from "@/hooks/mobile.hook";
 
 interface SettingsSidebarProps {
   currentTab: string;
@@ -54,10 +56,16 @@ const SettingsSidebar = ({
 }: SettingsSidebarProps) => {
   const router = useRouter();
   const theme = useGlobalUIBoundedStore((state) => state.theme);
+  const isMobile = useIsMobile();
+  const { toggleSidebar } = useSidebar();
 
   const handleTabClick = (tabId: string) => {
     if (tabId === "go-back") {
       router.push("/dashboard");
+    }
+
+    if (isMobile) {
+      toggleSidebar();
     }
 
     onTabChange(tabId);
