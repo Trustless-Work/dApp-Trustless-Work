@@ -7,7 +7,7 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
-} from "@/components/ui/new-navigation-menu";
+} from "@/components/ui/navigation-menu";
 
 interface SettingsNavigationMenuProps {
   currentTab: string;
