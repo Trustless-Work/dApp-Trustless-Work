@@ -262,15 +262,18 @@
     "inProgress": "En Progreso",
     "connect": "Conectar",
     "disconnect": "Desconectar",
-    "inDispute": "En disputa",
+    "inDispute": "En Disputa",
     "released": "Liberado",
     "resolved": "Resuelto",
     "approver": "Aprobador",
-    "serviceProvider": "Proveedor de servicios",
-    "disputeResolver": "Resolutor de disputas",
-    "releaseSigner": "Firmante de liberación",
+    "serviceProvider": "Proveedor de Servicio",
+    "disputeResolver": "Resolutor de Disputas",
+    "releaseSigner": "Firmante de Liberación",
     "receiver": "Receptor",
-    "platformAddress": "Plataforma"
+    "platformAddress": "Plataforma",
+    "tooltips": {
+      "help": "Ayuda"
+    }
   },
   "escrowDetailDialog": {
     "rolesLabel": "Roles",
@@ -334,6 +337,22 @@
       "preferences": "Preferencias",
       "apiKeys": "API Keys",
       "goBack": "Atrás"
+    }
+  },
+  "myEscrows": {
+    "tabs": {
+      "issuer": "Escrows Iniciados",
+      "approver": "Aprobador",
+      "serviceProvider": "Proveedor de Servicio",
+      "disputeResolver": "Resolutor de Disputas",
+      "releaseSigner": "Firmante de Liberación",
+      "platformAddress": "Dirección de Plataforma",
+      "receiver": "Receptor"
+    },
+    "view": {
+      "placeholder": "Seleccionar vista",
+      "table": "Tabla",
+      "cards": "Tarjetas"
     }
   }
 }

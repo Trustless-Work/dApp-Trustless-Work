@@ -270,7 +270,26 @@
     "disputeResolver": "Dispute Resolver",
     "releaseSigner": "Release Signer",
     "receiver": "Receptor",
-    "platformAddress": "Platform"
+    "platformAddress": "Platform",
+    "tooltips": {
+      "help": "Help"
+    }
+  },
+  "myEscrows": {
+    "tabs": {
+      "issuer": "Initiated Escrows",
+      "approver": "Approver",
+      "serviceProvider": "Service Provider",
+      "disputeResolver": "Dispute Resolver",
+      "releaseSigner": "Release Signer",
+      "platformAddress": "Platform Address",
+      "receiver": "Receiver"
+    },
+    "view": {
+      "placeholder": "Select view",
+      "table": "Table",
+      "cards": "Cards"
+    }
   },
   "escrowDetailDialog": {
     "rolesLabel": "Roles",
