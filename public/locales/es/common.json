@@ -238,7 +238,7 @@
       "startDispute": "Iniciar Disputa",
       "completeMilestone": "Completar Hito",
       "resolveDispute": "Resolver Disputa",
-      "releasePayment": "Liberar pago",
+      "releasePayment": "Liberar Pago",
       "editEscrow": "Editar Depósito"
     }
   },
@@ -327,7 +327,8 @@
   "common": {
     "cancel": "Cancelar",
     "restore": "Restaurar",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "pickDate": "Seleccionar fecha"
   },
   "settings": {
     "title": "Configuración",
@@ -353,6 +354,30 @@
       "placeholder": "Seleccionar vista",
       "table": "Tabla",
       "cards": "Tarjetas"
+    },
+    "filter": {
+      "search": {
+        "placeholder": "Buscar..."
+      },
+      "status": {
+        "label": "Estado"
+      },
+      "amount": {
+        "label": "Rango de Monto"
+      },
+      "engagement": {
+        "label": "Proyectos",
+        "select": "Seleccionar Proyecto"
+      },
+      "visibility": {
+        "label": "Visibilidad"
+      },
+      "date": {
+        "label": "Fecha de Creación"
+      },
+      "actions": {
+        "create": "Crear Depósito"
+      }
     }
   },
     "onboarding": {

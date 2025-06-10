@@ -289,6 +289,30 @@
       "placeholder": "Select view",
       "table": "Table",
       "cards": "Cards"
+    },
+    "filter": {
+      "search": {
+        "placeholder": "Search..."
+      },
+      "status": {
+        "label": "Status"
+      },
+      "amount": {
+        "label": "Amount Range"
+      },
+      "engagement": {
+        "label": "Engagements",
+        "select": "Select Engagement"
+      },
+      "visibility": {
+        "label": "Visibility"
+      },
+      "date": {
+        "label": "Created At"
+      },
+      "actions": {
+        "create": "Create Escrow"
+      }
     }
   },
   "escrowDetailDialog": {
@@ -343,7 +367,8 @@
   "common": {
     "cancel": "Cancel",
     "restore": "Restore",
-    "delete": "Delete"
+    "delete": "Delete",
+    "pickDate": "Pick Date"
   },
   "settings": {
     "title": "Settings",
