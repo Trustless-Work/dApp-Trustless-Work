@@ -313,6 +313,54 @@
       "actions": {
         "create": "Create Escrow"
       }
+    },
+    "table": {
+      "headers": {
+        "title": "Title",
+        "description": "Description",
+        "balance": "Balance",
+        "engagement": "Engagement",
+        "serviceProvider": "Service Provider",
+        "approver": "Approver",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "tooltips": {
+        "disputed": "Escrow in Dispute",
+        "pending": "Escrow pending release",
+        "released": "Escrow released",
+        "resolved": "Escrow resolved"
+      },
+      "dropdown": {
+        "label": "Actions",
+        "moreDetails": "More Details",
+        "viewViewer": "View from TW Escrow Viewer",
+        "openMenu": "Open menu"
+      },
+      "pagination": {
+        "itemsPerPage": "Items per page:",
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {{currentPage}} of {{totalPages}}"
+      },
+      "success": {
+        "initialized": {
+          "title": "Escrow initialized successfully",
+          "description": "Now that your escrow is initialized, you will be able to view it directly in"
+        },
+        "released": {
+          "title": "Escrow released",
+          "description": "Now that your escrow is released, you will be able to view it directly in"
+        },
+        "resolved": {
+          "title": "Escrow's dispute resolved",
+          "description": "Now that your escrow's dispute is resolved, you will be able to view it directly in"
+        }
+      },
+      "noTitle": "No title",
+      "noDescription": "No description",
+      "noBalance": "No balance",
+      "noEngagement": "No engagement"
     }
   },
   "escrowDetailDialog": {
@@ -368,7 +416,8 @@
     "cancel": "Cancel",
     "restore": "Restore",
     "delete": "Delete",
-    "pickDate": "Pick Date"
+    "pickDate": "Pick Date",
+    "noData": "No Data Available"
   },
   "settings": {
     "title": "Settings",

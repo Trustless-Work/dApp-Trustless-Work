@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   Table,
   TableBody,
@@ -53,6 +54,7 @@ interface MyEscrowsTableProps {
 }
 
 const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
+  const { t } = useTranslation();
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -105,14 +107,20 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Balance</TableHead>
-                  <TableHead>Engagement</TableHead>
-                  <TableHead>Service Provider</TableHead>
-                  <TableHead>Approver</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead>{t("myEscrows.table.headers.title")}</TableHead>
+                  <TableHead>
+                    {t("myEscrows.table.headers.description")}
+                  </TableHead>
+                  <TableHead>{t("myEscrows.table.headers.balance")}</TableHead>
+                  <TableHead>
+                    {t("myEscrows.table.headers.engagement")}
+                  </TableHead>
+                  <TableHead>
+                    {t("myEscrows.table.headers.serviceProvider")}
+                  </TableHead>
+                  <TableHead>{t("myEscrows.table.headers.approver")}</TableHead>
+                  <TableHead>{t("myEscrows.table.headers.created")}</TableHead>
+                  <TableHead>{t("myEscrows.table.headers.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -150,14 +158,18 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         onClick={() => toggleRowExpansion(escrow.id)}
                       >
                         <TableCell className="font-medium">
-                          {escrow.title || "No title"}
+                          {escrow.title || t("myEscrows.table.noTitle")}
                         </TableCell>
                         <TableCell>
-                          {escrow.description || "No description"}
+                          {escrow.description ||
+                            t("myEscrows.table.noDescription")}
                         </TableCell>
-                        <TableCell>{escrow.balance || "No balance"}</TableCell>
                         <TableCell>
-                          {escrow.engagementId || "No engagement"}
+                          {escrow.balance || t("myEscrows.table.noBalance")}
+                        </TableCell>
+                        <TableCell>
+                          {escrow.engagementId ||
+                            t("myEscrows.table.noEngagement")}
                         </TableCell>
                         <TableCell>
                           {formatAddress(escrow.roles?.serviceProvider)}
@@ -175,12 +187,16 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
+                                <span className="sr-only">
+                                  {t("myEscrows.table.dropdown.openMenu")}
+                                </span>
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuLabel>
+                                {t("myEscrows.table.dropdown.label")}
+                              </DropdownMenuLabel>
                               <DropdownMenuItem
                                 className="cursor-pointer"
                                 onClick={(e) => {
@@ -189,7 +205,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                                   setSelectedEscrow(escrow);
                                 }}
                               >
-                                More Details
+                                {t("myEscrows.table.dropdown.moreDetails")}
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 className="cursor-pointer"
@@ -201,7 +217,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                                   );
                                 }}
                               >
-                                View from TW Escrow Viewer
+                                {t("myEscrows.table.dropdown.viewViewer")}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -218,7 +234,9 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                           </p>
                         </TableCell>
                         {escrow.flags?.disputed && (
-                          <TooltipInfo content="Escrow in Dispute">
+                          <TooltipInfo
+                            content={t("myEscrows.table.tooltips.disputed")}
+                          >
                             <TableCell>
                               <CircleAlert
                                 className="text-destructive"
@@ -229,7 +247,9 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         )}
 
                         {pendingRelease && (
-                          <TooltipInfo content="Escrow pending release">
+                          <TooltipInfo
+                            content={t("myEscrows.table.tooltips.pending")}
+                          >
                             <TableCell>
                               <TriangleAlert
                                 size={22}
@@ -240,7 +260,9 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         )}
 
                         {escrow.flags?.released && (
-                          <TooltipInfo content="Escrow released">
+                          <TooltipInfo
+                            content={t("myEscrows.table.tooltips.released")}
+                          >
                             <TableCell>
                               <CircleCheckBig
                                 className="text-green-800"
@@ -251,7 +273,9 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         )}
 
                         {escrow.flags?.resolved && (
-                          <TooltipInfo content="Escrow resolved">
+                          <TooltipInfo
+                            content={t("myEscrows.table.tooltips.resolved")}
+                          >
                             <TableCell>
                               <Handshake className="text-green-800" size={22} />
                             </TableCell>
@@ -273,7 +297,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
 
           <div className="flex justify-end items-center gap-4 mt-10 mb-3 px-3">
             <div className="flex items-center gap-2">
-              <span>Items per page:</span>
+              <span>{t("myEscrows.table.pagination.itemsPerPage")}</span>
               <Input
                 type="number"
                 value={itemsPerPage}
@@ -285,16 +309,19 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
               onClick={() => setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1}
             >
-              Previous
+              {t("myEscrows.table.pagination.previous")}
             </Button>
             <span>
-              Page {currentPage} of {totalPages}
+              {t("myEscrows.table.pagination.pageOf", {
+                currentPage,
+                totalPages,
+              })}
             </span>
             <Button
               onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage === totalPages}
             >
-              Next
+              {t("myEscrows.table.pagination.next")}
             </Button>
           </div>
         </>
@@ -311,16 +338,18 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
       <SuccessDialog
         isSuccessDialogOpen={isSuccessDialogOpen}
         setIsSuccessDialogOpen={setIsSuccessDialogOpen}
-        title={`${loggedUser?.saveEscrow ? "Escrow initialized successfully" : "Escrow initialized successfully, but according to your settings, it was not saved"}`}
-        description="Now that your escrow is initialized, you will be able to view it directly in"
+        title={t("myEscrows.success.initialized.title", {
+          saved: loggedUser?.saveEscrow,
+        })}
+        description={t("myEscrows.success.initialized.description")}
         recentEscrow={recentEscrow}
       />
       {/* Success Release Dialog */}
       <SuccessReleaseDialog
         isSuccessReleaseDialogOpen={isSuccessReleaseDialogOpen}
         setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
-        title={"Escrow released"}
-        description="Now that your escrow is released, you will be able to view it directly in"
+        title={t("myEscrows.success.released.title")}
+        description={t("myEscrows.success.released.description")}
         recentEscrow={recentEscrow}
       />
 
@@ -330,8 +359,8 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
         setIsSuccessResolveDisputeDialogOpen={
           setIsSuccessResolveDisputeDialogOpen
         }
-        title={"Escrow's dispute resolved"}
-        description="Now that your escrow's dispute is resolved, you will be able to view it directly in"
+        title={t("myEscrows.success.resolved.title")}
+        description={t("myEscrows.success.resolved.description")}
         recentEscrow={recentEscrow}
       />
     </div>

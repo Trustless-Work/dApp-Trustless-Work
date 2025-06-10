@@ -328,7 +328,8 @@
     "cancel": "Cancelar",
     "restore": "Restaurar",
     "delete": "Eliminar",
-    "pickDate": "Seleccionar fecha"
+    "pickDate": "Seleccionar fecha",
+    "noData": "No hay datos disponibles"
   },
   "settings": {
     "title": "Configuración",
@@ -378,35 +379,82 @@
       "actions": {
         "create": "Crear Depósito"
       }
+    },
+    "table": {
+      "headers": {
+        "title": "Título",
+        "description": "Descripción",
+        "balance": "Balance",
+        "engagement": "Proyecto",
+        "serviceProvider": "Proveedor de Servicio",
+        "approver": "Aprobador",
+        "created": "Creado",
+        "actions": "Acciones"
+      },
+      "tooltips": {
+        "disputed": "Depósito en disputa",
+        "pending": "Depósito pendiente de liberación",
+        "released": "Depósito liberado",
+        "resolved": "Depósito resuelto"
+      },
+      "dropdown": {
+        "label": "Acciones",
+        "moreDetails": "Ver más detalles",
+        "viewViewer": "Ver en Visor de Trustless Work",
+        "openMenu": "Abrir menú"
+      },
+      "pagination": {
+        "itemsPerPage": "Elementos por página:",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "pageOf": "Página {{currentPage}} de {{totalPages}}"
+      },
+      "success": {
+        "initialized": {
+          "title": "Depósito inicializado con éxito",
+          "description": "Ahora que tu depósito ha sido inicializado, podrás verlo directamente en"
+        },
+        "released": {
+          "title": "Depósito liberado",
+          "description": "Ahora que tu depósito ha sido liberado, podrás verlo directamente en"
+        },
+        "resolved": {
+          "title": "Disputa del depósito resuelta",
+          "description": "Ahora que la disputa se ha resuelto, podrás verla directamente en"
+        }
+      },
+      "noTitle": "Sin título",
+      "noDescription": "Sin descripción",
+      "noBalance": "Sin balance",
+      "noEngagement": "Sin proyecto"
     }
   },
-    "onboarding": {
-      "buttons": {
-        "back": "Atrás",
-        "next": "Siguiente",
-        "skip": "Saltar",
-        "close": "Cerrar",
-        "last": "Finalizar"
+  "onboarding": {
+    "buttons": {
+      "back": "Atrás",
+      "next": "Siguiente",
+      "skip": "Saltar",
+      "close": "Cerrar",
+      "last": "Finalizar"
+    },
+    "steps": {
+      "welcome": {
+        "title": "¡Bienvenido a Trustless Work!",
+        "logoAlt": "Logo de Trustless Work",
+        "content": "Aquí puedes entender cómo usar nuestra API."
       },
-      "steps": {
-        "welcome": {
-          "title": "¡Bienvenido a Trustless Work!",
-          "logoAlt": "Logo de Trustless Work",
-          "content": "Aquí puedes entender cómo usar nuestra API."
-        },
-        "1": {
-          "title": "Roles en Trustless Work",
-          "content": "Aquí encontrarás todos los roles en cada depósito en garantía."
-        },
-        "2": {
-          "title": "Inicializar un Depósito",
-          "content": "Comienza configurando un nuevo acuerdo, incluyendo términos, montos y partes."
-        },
-        "3": {
-          "title": "Tus Depósitos",
-          "content": "Aquí puedes ver todos los depósitos en los que participas y tomar acciones como Financiar o Liberar."
-        }
+      "1": {
+        "title": "Roles en Trustless Work",
+        "content": "Aquí encontrarás todos los roles en cada depósito en garantía."
+      },
+      "2": {
+        "title": "Inicializar un Depósito",
+        "content": "Comienza configurando un nuevo acuerdo, incluyendo términos, montos y partes."
+      },
+      "3": {
+        "title": "Tus Depósitos",
+        "content": "Aquí puedes ver todos los depósitos en los que participas y tomar acciones como Financiar o Liberar."
       }
     }
-  
+  }
 }
