@@ -354,5 +354,34 @@
       "table": "Tabla",
       "cards": "Tarjetas"
     }
-  }
+  },
+    "onboarding": {
+      "buttons": {
+        "back": "Atrás",
+        "next": "Siguiente",
+        "skip": "Saltar",
+        "close": "Cerrar",
+        "last": "Finalizar"
+      },
+      "steps": {
+        "welcome": {
+          "title": "¡Bienvenido a Trustless Work!",
+          "logoAlt": "Logo de Trustless Work",
+          "content": "Aquí puedes entender cómo usar nuestra API."
+        },
+        "1": {
+          "title": "Roles en Trustless Work",
+          "content": "Aquí encontrarás todos los roles en cada depósito en garantía."
+        },
+        "2": {
+          "title": "Inicializar un Depósito",
+          "content": "Comienza configurando un nuevo acuerdo, incluyendo términos, montos y partes."
+        },
+        "3": {
+          "title": "Tus Depósitos",
+          "content": "Aquí puedes ver todos los depósitos en los que participas y tomar acciones como Financiar o Liberar."
+        }
+      }
+    }
+  
 }
