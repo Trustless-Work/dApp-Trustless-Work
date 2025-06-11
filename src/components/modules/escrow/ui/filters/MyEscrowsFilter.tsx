@@ -11,9 +11,9 @@ import Divider from "@/components/utils/ui/Divider";
 import { Search, Trash2 } from "lucide-react";
 import { useEscrowFilter } from "./hooks/escrow-filter.hook";
 import {
-  amountOptionsFilters,
-  statusOptionsFilters,
-  activeOptionsFilters,
+  getAmountOptionsFilters,
+  getStatusOptionsFilters,
+  getActiveOptionsFilters,
 } from "./constants/filters-options.constant";
 import { getRoleActionIcons } from "@/utils/get-role-actions";
 import { useEscrowUIBoundedStore } from "../../store/ui";
@@ -38,6 +38,10 @@ const MyEscrowsFilter = () => {
     deleteParams,
     mapNameParams,
   } = useEscrowFilter();
+
+  const amountOptions = getAmountOptionsFilters(t);
+  const statusOptions = getStatusOptionsFilters(t);
+  const activeOptions = getActiveOptionsFilters(t);
 
   return (
     <form className="flex flex-col space-y-4 w-full">
@@ -102,7 +106,7 @@ const MyEscrowsFilter = () => {
               {mapNameParams(searchParams.get("status") || "")}
             </SelectTrigger>
             <SelectContent>
-              {statusOptionsFilters.map((opt) => (
+              {statusOptions.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
                 </SelectItem>
@@ -127,7 +131,7 @@ const MyEscrowsFilter = () => {
               {mapNameParams(searchParams.get("amount") || "")}
             </SelectTrigger>
             <SelectContent>
-              {amountOptionsFilters.map((opt) => (
+              {amountOptions.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
                 </SelectItem>
@@ -178,7 +182,7 @@ const MyEscrowsFilter = () => {
               {mapNameParams(active)}
             </SelectTrigger>
             <SelectContent>
-              {activeOptionsFilters.map((opt) => (
+              {activeOptions.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
                 </SelectItem>

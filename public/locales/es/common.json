@@ -360,12 +360,6 @@
       "search": {
         "placeholder": "Buscar..."
       },
-      "status": {
-        "label": "Estado"
-      },
-      "amount": {
-        "label": "Rango de Monto"
-      },
       "engagement": {
         "label": "Proyectos",
         "select": "Seleccionar Proyecto"
@@ -378,6 +372,27 @@
       },
       "actions": {
         "create": "Crear Depósito"
+      },
+      "amount": {
+        "label": "Rango de Monto",
+        "all": "Todos los montos",
+        "0-100": "Menos de $100",
+        "100-500": "$100 - $500",
+        "500-1000": "$500 - $1000",
+        "1000+": "Más de $1000"
+      },
+      "status": {
+        "label": "Estado",
+        "all": "Todos los estados",
+        "working": "Trabajando",
+        "pendingRelease": "Pendiente de Liberación",
+        "released": "Liberado",
+        "resolved": "Resuelto",
+        "inDispute": "En Disputa"
+      },
+      "active": {
+        "active": "Activo",
+        "trashed": "Papelera"
       }
     },
     "table": {

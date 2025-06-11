@@ -6,6 +6,7 @@ import { CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { enUS, es } from "date-fns/locale";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ import { Calendar } from "./calendar";
 export function DatePickerWithRange({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -78,6 +79,7 @@ export function DatePickerWithRange({
             initialFocus
             mode="range"
             defaultMonth={date?.from}
+            locale={i18n.language === "es" ? es : enUS}
             selected={date}
             onSelect={(range) => {
               setDate(range);

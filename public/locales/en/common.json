@@ -294,12 +294,6 @@
       "search": {
         "placeholder": "Search..."
       },
-      "status": {
-        "label": "Status"
-      },
-      "amount": {
-        "label": "Amount Range"
-      },
       "engagement": {
         "label": "Engagements",
         "select": "Select Engagement"
@@ -312,6 +306,27 @@
       },
       "actions": {
         "create": "Create Escrow"
+      },
+      "amount": {
+        "label": "Amount Range",
+        "all": "All amounts",
+        "0-100": "Under $100",
+        "100-500": "$100 - $500",
+        "500-1000": "$500 - $1000",
+        "1000+": "Over $1000"
+      },
+      "status": {
+        "label": "Status",
+        "all": "All statuses",
+        "working": "Working",
+        "pendingRelease": "Pending Release",
+        "released": "Released",
+        "resolved": "Resolved",
+        "inDispute": "In Dispute"
+      },
+      "active": {
+        "active": "Active",
+        "trashed": "Trash"
       }
     },
     "table": {
