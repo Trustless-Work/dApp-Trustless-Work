@@ -12,7 +12,12 @@
     "support": "Soporte",
     "reportIssue": "Reportar un Problema API",
     "help": "Ayuda",
-    "contacts": "Contactos"
+    "contacts": "Contactos",
+    "contact": "Contactos",
+    "escrow": "Escrows",
+    "my-escrows": "Mis Escrows",
+    "public-profile": "Perfil Público",
+    "report-issue": "Reportar Problema"
   },
   "home": {
     "hero": {
