@@ -1,7 +1,7 @@
 import { useValidData } from "@/utils/hook/valid-data.hook";
 import { z } from "zod";
 
-export const GetFormSchema = () => {
+const getBaseSchema = () => {
   const { isValidWallet } = useValidData();
 
   return z.object({
@@ -79,14 +79,6 @@ export const GetFormSchema = () => {
         message:
           "Platform fee must be a number with at most one decimal place.",
       }),
-    amount: z
-      .string()
-      .min(1, {
-        message: "Amount is required.",
-      })
-      .regex(/^[1-9][0-9]*$/, {
-        message: "Amount must be a whole number greater than 0 (no decimals).",
-      }),
     receiverMemo: z
       .string()
       .optional()
@@ -97,12 +89,52 @@ export const GetFormSchema = () => {
         message:
           "Receiver Memo must be a whole number greater than 0 (no decimals).",
       }),
+  });
+};
+
+export const GetSingleReleaseFormSchema = () => {
+  const baseSchema = getBaseSchema();
+
+  return baseSchema.extend({
+    amount: z
+      .string()
+      .min(1, {
+        message: "Amount is required.",
+      })
+      .regex(/^[1-9][0-9]*$/, {
+        message: "Amount must be a whole number greater than 0 (no decimals).",
+      }),
     milestones: z
       .array(
         z.object({
           description: z.string().min(1, {
             message: "Milestone description is required.",
           }),
+        }),
+      )
+      .min(1, { message: "At least one milestone is required." }),
+  });
+};
+
+export const GetMultiReleaseFormSchema = () => {
+  const baseSchema = getBaseSchema();
+
+  return baseSchema.extend({
+    milestones: z
+      .array(
+        z.object({
+          description: z.string().min(1, {
+            message: "Milestone description is required.",
+          }),
+          amount: z
+            .string()
+            .min(1, {
+              message: "Milestone amount is required.",
+            })
+            .regex(/^[1-9][0-9]*$/, {
+              message:
+                "Milestone amount must be a whole number greater than 0 (no decimals).",
+            }),
         }),
       )
       .min(1, { message: "At least one milestone is required." }),
