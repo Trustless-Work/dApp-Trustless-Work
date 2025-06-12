@@ -25,7 +25,7 @@ import {
 } from "@trustless-work/escrow/hooks";
 import { Escrow } from "@/@types/escrow.entity";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import { GetSingleReleaseFormSchema } from "../../schema/initialize-escrow.schema";
+import { useInitializeEscrowSchema } from "../../schema/initialize-escrow.schema";
 
 type ExtendedRoles = Roles & {
   issuer: string;
@@ -61,7 +61,8 @@ export const useInitializeSingleEscrow = () => {
   const address = useGlobalAuthenticationStore((state) => state.address);
   const trustlines = useGlobalBoundedStore((state) => state.trustlines);
   const escrowType = useEscrowUIBoundedStore((state) => state.escrowType);
-  const formSchema = GetSingleReleaseFormSchema();
+  const { getSingleReleaseFormSchema } = useInitializeEscrowSchema();
+  const formSchema = getSingleReleaseFormSchema();
 
   const { deployEscrow } = useInitializeEscrowHook();
   const { sendTransaction } = useSendTransaction();
