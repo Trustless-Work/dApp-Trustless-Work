@@ -10,14 +10,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useInitializeEscrow } from "@/components/modules/escrow/hooks/initialize-escrow.hook";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { DollarSign, Trash2 } from "lucide-react";
+import { useEscrowUIBoundedStore } from "../../../store/ui";
+import { useInitializeSingleEscrow } from "../../../hooks/single-release/initialize-single-escrow.hook";
+import { Card } from "@/components/ui/card";
 
-const InitializeEscrowForm = () => {
+export const InitializeSingleEscrowForm = () => {
   const {
     form,
     milestones,
@@ -30,7 +32,15 @@ const InitializeEscrowForm = () => {
     handleAddMilestone,
     handleRemoveMilestone,
     fillTemplateForm,
-  } = useInitializeEscrow();
+  } = useInitializeSingleEscrow();
+
+  const setEscrowType = useEscrowUIBoundedStore((state) => state.setEscrowType);
+  const toggleStep = useEscrowUIBoundedStore((state) => state.toggleStep);
+
+  const handleChangeType = () => {
+    setEscrowType(null);
+    toggleStep(2);
+  };
 
   return (
     <Form {...form}>
@@ -38,19 +48,38 @@ const InitializeEscrowForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-6"
       >
-        {(process.env.NEXT_PUBLIC_ENV === "DEV" ||
-          process.env.NEXT_PUBLIC_ENV === "LOCAL") && (
-          <div className="flex justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={fillTemplateForm}
-              className="mb-4"
-            >
-              Use Template
-            </Button>
+        <Card className="flex justify-between items-center gap-4 p-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-primary" />
+              <h2 className="text-xl font-semibold">Single Release Escrow</h2>
+            </div>
+            <p className="text-muted-foreground mt-1">
+              A single payment will be released upon completion of all
+              milestones
+            </p>
           </div>
-        )}
+          <div className="flex flex-col gap-4">
+            <Button
+              variant="outline"
+              onClick={handleChangeType}
+              className="flex items-center gap-2"
+            >
+              Change Escrow Type
+            </Button>
+            {(process.env.NEXT_PUBLIC_ENV === "DEV" ||
+              process.env.NEXT_PUBLIC_ENV === "LOCAL") && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={fillTemplateForm}
+                className="shrink-0"
+              >
+                Use Template
+              </Button>
+            )}
+          </div>
+        </Card>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <FormField
             control={form.control}
@@ -541,5 +570,3 @@ const InitializeEscrowForm = () => {
     </Form>
   );
 };
-
-export default InitializeEscrowForm;
