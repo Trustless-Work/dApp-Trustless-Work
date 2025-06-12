@@ -25,9 +25,12 @@ export const fetchAllEscrows = async ({
     throw new Error("contractIds is not a valid array.");
   }
 
-  const { data } = await http.get("/helper/get-multiple-escrow-balance", {
-    params: { addresses: contractIds, signer: address || "" },
-  });
+  const { data } = await http.get(
+    "/escrow/single-release/get-multiple-escrow-balance",
+    {
+      params: { addresses: contractIds, signer: address || "" },
+    },
+  );
 
   const balances = data as unknown as BalanceItem[];
 

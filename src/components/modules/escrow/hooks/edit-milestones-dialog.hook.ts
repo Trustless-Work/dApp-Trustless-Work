@@ -81,14 +81,6 @@ const useEditMilestonesDialog = ({
         milestones: payload.milestones,
       };
 
-      // Plain the trustline
-      if (
-        updatedEscrow.trustline &&
-        typeof updatedEscrow.trustline === "object"
-      ) {
-        // Keep trustline object as is - no need for self assignment
-      }
-
       delete updatedEscrow.createdAt;
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;

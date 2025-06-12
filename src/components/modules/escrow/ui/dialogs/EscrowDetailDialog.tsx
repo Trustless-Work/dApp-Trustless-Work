@@ -27,6 +27,9 @@ import {
   Pencil,
   Trash2,
   Wallet,
+  Info,
+  Users,
+  ListChecks,
 } from "lucide-react";
 import EditMilestonesDialog from "./EditMilestonesDialog";
 import {
@@ -55,6 +58,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { DeleteEscrowDialog } from "./DeleteEscrowDialog";
 import { RestoreEscrowDialog } from "./RestoreEscrowDialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -90,6 +94,15 @@ const EscrowDetailDialog = ({
 
   const { formatText, formatDollar } = useFormatUtils();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+  const trustlessWorkAmount = useEscrowUIBoundedStore(
+    (state) => state.trustlessWorkAmount,
+  );
+  const receiverAmount = useEscrowUIBoundedStore(
+    (state) => state.receiverAmount,
+  );
+  const platformFeeAmount = useEscrowUIBoundedStore(
+    (state) => state.platformFeeAmount,
+  );
 
   if (!isDialogOpen || !selectedEscrow) return null;
   return (
@@ -114,36 +127,6 @@ const EscrowDetailDialog = ({
                 <DialogDescription>
                   {selectedEscrow.description}
                 </DialogDescription>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex gap-2">
-                    <strong>{t("escrowDetailDialog.rolesLabel")} </strong>
-                    <span className="uppercase">
-                      {userRolesInEscrow
-                        .map((role) => formatText(role))
-                        .join(", ")}
-                    </span>
-                  </div>
-
-                  <div className="border-r-2" />
-
-                  <div className="flex gap-2">
-                    <strong className="truncate">
-                      {t("escrowDetailDialog.memoLabel")}
-                    </strong>
-                    {selectedEscrow?.receiverMemo ||
-                      t("escrowDetailDialog.noMemo")}
-                  </div>
-
-                  <div className="border-r-2" />
-
-                  <div className="flex gap-2">
-                    <strong className="truncate">
-                      {t("escrowDetailDialog.engagementLabel")}
-                    </strong>
-                    {selectedEscrow?.engagementId ||
-                      t("escrowDetailDialog.noEngagement")}
-                  </div>
-                </div>
               </div>
             </div>
           </DialogHeader>
@@ -213,80 +196,281 @@ const EscrowDetailDialog = ({
             />
           </div>
 
-          {/* Main Content */}
+          {/* Main Content with Tabs */}
           <Card className={cn("overflow-hidden h-full")}>
             <CardContent className="p-6">
-              <div className="flex w-full justify-between">
-                <label htmlFor="milestones" className="flex items-center">
-                  {t("escrowDetailDialog.entitiesLabel")}
-                  <TooltipInfo
-                    content={t("escrowDetailDialog.entitiesTooltip")}
-                  />
-                </label>
+              <Tabs defaultValue="general" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 mb-6 bg-muted/50">
+                  <TabsTrigger
+                    value="general"
+                    className="flex items-center gap-2 data-[state=active]:bg-background"
+                  >
+                    <Info className="h-4 w-4" />
+                    <span>General Information</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="entities"
+                    className="flex items-center gap-2 data-[state=active]:bg-background"
+                  >
+                    <Users className="h-4 w-4" />
+                    <span>Entities</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="milestones"
+                    className="flex items-center gap-2 data-[state=active]:bg-background"
+                  >
+                    <ListChecks className="h-4 w-4" />
+                    <span>Milestones</span>
+                  </TabsTrigger>
+                </TabsList>
 
-                {userRolesInEscrow.includes("platformAddress") &&
-                  !selectedEscrow?.flags?.disputed &&
-                  !selectedEscrow?.flags?.resolved &&
-                  !selectedEscrow?.flags?.released &&
-                  activeTab === "platformAddress" && (
-                    <TooltipInfo
-                      content={t("escrowDetailDialog.editRolesTooltip")}
+                <div className="min-h-[400px]">
+                  {/* General Information Tab */}
+                  <TabsContent
+                    value="general"
+                    className="mt-4 space-y-6 h-full"
+                  >
+                    <div
+                      className={cn(
+                        "grid gap-6 h-full",
+                        !selectedEscrow.flags?.released &&
+                          !selectedEscrow.flags?.resolved
+                          ? "grid-cols-1 md:grid-cols-2"
+                          : "grid-cols-1 md:grid-cols-1 max-w-2xl mx-auto",
+                      )}
                     >
-                      <Button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          dialogStates.editEntities.setIsOpen(true);
-                        }}
-                        className="mt-6 md:mt-0 w-full md:w-1/12 text-xs"
-                        variant="ghost"
-                        disabled={Number(selectedEscrow.balance) === 0}
-                      >
-                        <Pencil />
-                        {t("escrowDetailDialog.editButton")}
-                      </Button>
-                    </TooltipInfo>
-                  )}
-              </div>
+                      <Card className="p-4 h-full">
+                        <h3 className="text-lg font-semibold mb-4">
+                          Basic Information
+                        </h3>
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                            <div className="flex items-center gap-2">
+                              <div className="flex flex-col gap-2">
+                                <div className="flex items-center gap-2">
+                                  <Users className="h-4 w-4 text-primary" />
+                                  <span className="text-sm text-muted-foreground">
+                                    Roles
+                                  </span>
+                                </div>
+                                <div className="flex flex-wrap gap-2 mt-1">
+                                  {userRolesInEscrow.map((role) => (
+                                    <span
+                                      key={role}
+                                      className="px-2 py-1 bg-primary/10 rounded-md text-sm uppercase"
+                                    >
+                                      {formatText(role)}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-              <div className="flex flex-col md:flex-row gap-4 mt-2">
-                <EntityCard
-                  type={t("reusable.approver")}
-                  entity={selectedEscrow.roles?.approver}
-                  inDispute={selectedEscrow.flags?.disputed}
-                />
-                <EntityCard
-                  type={t("reusable.serviceProvider")}
-                  entity={selectedEscrow.roles?.serviceProvider}
-                  inDispute={selectedEscrow.flags?.disputed}
-                />
-                <EntityCard
-                  type={t("reusable.disputeResolver")}
-                  entity={selectedEscrow.roles?.disputeResolver}
-                />
-                <EntityCard
-                  type={t("reusable.platformAddress")}
-                  entity={selectedEscrow.roles?.platformAddress}
-                  hasPercentage
-                  percentage={selectedEscrow.platformFee}
-                />
+                          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                            <div className="flex items-center gap-2">
+                              <Info className="h-4 w-4 text-primary" />
+                              <div className="flex flex-col">
+                                <span className="text-sm text-muted-foreground">
+                                  Memo
+                                </span>
+                                <span className="font-medium">
+                                  {selectedEscrow?.receiverMemo ||
+                                    t("escrowDetailDialog.noMemo")}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
 
-                <EntityCard
-                  type={t("reusable.releaseSigner")}
-                  entity={selectedEscrow.roles?.releaseSigner}
-                />
-                <EntityCard
-                  type={t("reusable.receiver")}
-                  entity={selectedEscrow.roles?.receiver}
-                />
-              </div>
+                          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                            <div className="flex items-center gap-2">
+                              <CircleDollarSign className="h-4 w-4 text-primary" />
+                              <div className="flex flex-col">
+                                <span className="text-sm text-muted-foreground">
+                                  Engagement ID
+                                </span>
+                                <span className="font-medium">
+                                  {selectedEscrow?.engagementId ||
+                                    t("escrowDetailDialog.noEngagement")}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
 
-              {/* Milestones */}
-              <Milestones
-                selectedEscrow={selectedEscrow}
-                userRolesInEscrow={userRolesInEscrow}
-                setEvidenceVisibleMap={setEvidenceVisibleMap}
-                evidenceVisibleMap={evidenceVisibleMap}
-              />
+                      {!selectedEscrow.flags?.released &&
+                        !selectedEscrow.flags?.resolved && (
+                          <Card className="p-4 h-full">
+                            <h3 className="text-lg font-semibold mb-4">
+                              Release Amount Distribution
+                            </h3>
+                            <div className="space-y-4">
+                              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                                <div className="flex items-center gap-2">
+                                  <CircleDollarSign className="h-4 w-4 text-primary" />
+                                  <div className="flex flex-col">
+                                    <span className="text-sm text-muted-foreground">
+                                      Total Amount
+                                    </span>
+                                    <span className="font-medium">
+                                      {formatDollar(selectedEscrow.amount)}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                  100%
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                                  <div className="flex items-center gap-2">
+                                    <Users className="h-4 w-4 text-primary" />
+                                    <div className="flex flex-col">
+                                      <span className="text-sm text-muted-foreground">
+                                        Receiver
+                                      </span>
+                                      <span className="font-medium">
+                                        {formatDollar(
+                                          receiverAmount.toFixed(2),
+                                        )}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">
+                                    {100 - Number(selectedEscrow.platformFee)}%
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                                  <div className="flex items-center gap-2">
+                                    <Wallet className="h-4 w-4 text-primary" />
+                                    <div className="flex flex-col">
+                                      <span className="text-sm text-muted-foreground">
+                                        Platform Fee
+                                      </span>
+                                      <span className="font-medium">
+                                        {formatDollar(
+                                          platformFeeAmount.toFixed(2),
+                                        )}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">
+                                    {selectedEscrow.platformFee}%
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                                <div className="flex items-center gap-2">
+                                  <Wallet className="h-4 w-4 text-primary" />
+                                  <div className="flex flex-col">
+                                    <span className="text-sm text-muted-foreground">
+                                      {t("escrowDetailDialog.trustlessWork")}
+                                    </span>
+                                    <span className="font-medium">
+                                      {formatDollar(
+                                        trustlessWorkAmount.toFixed(2),
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                  0.3%
+                                </div>
+                              </div>
+                            </div>
+                          </Card>
+                        )}
+                    </div>
+                  </TabsContent>
+
+                  {/* Entities Tab */}
+                  <TabsContent
+                    value="entities"
+                    className="mt-4 space-y-6 h-full"
+                  >
+                    <Card className="p-4 h-full">
+                      <div className="flex justify-between items-center mb-6">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-lg font-semibold">Entities</h3>
+                          <TooltipInfo
+                            content={t("escrowDetailDialog.entitiesTooltip")}
+                          />
+                        </div>
+
+                        {userRolesInEscrow.includes("platformAddress") &&
+                          !selectedEscrow?.flags?.disputed &&
+                          !selectedEscrow?.flags?.resolved &&
+                          !selectedEscrow?.flags?.released &&
+                          activeTab === "platformAddress" && (
+                            <TooltipInfo
+                              content={t("escrowDetailDialog.editRolesTooltip")}
+                            >
+                              <Button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  dialogStates.editEntities.setIsOpen(true);
+                                }}
+                                className="text-xs"
+                                variant="ghost"
+                                disabled={Number(selectedEscrow.balance) === 0}
+                              >
+                                <Pencil className="h-4 w-4 mr-2" />
+                                {t("escrowDetailDialog.editButton")}
+                              </Button>
+                            </TooltipInfo>
+                          )}
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <EntityCard
+                          type={t("reusable.approver")}
+                          entity={selectedEscrow.roles?.approver}
+                          inDispute={selectedEscrow.flags?.disputed}
+                        />
+                        <EntityCard
+                          type={t("reusable.serviceProvider")}
+                          entity={selectedEscrow.roles?.serviceProvider}
+                          inDispute={selectedEscrow.flags?.disputed}
+                        />
+                        <EntityCard
+                          type={t("reusable.disputeResolver")}
+                          entity={selectedEscrow.roles?.disputeResolver}
+                        />
+                        <EntityCard
+                          type={t("reusable.platformAddress")}
+                          entity={selectedEscrow.roles?.platformAddress}
+                          hasPercentage
+                          percentage={selectedEscrow.platformFee}
+                        />
+                        <EntityCard
+                          type={t("reusable.releaseSigner")}
+                          entity={selectedEscrow.roles?.releaseSigner}
+                        />
+                        <EntityCard
+                          type={t("reusable.receiver")}
+                          entity={selectedEscrow.roles?.receiver}
+                        />
+                      </div>
+                    </Card>
+                  </TabsContent>
+
+                  {/* Milestones Tab */}
+                  <TabsContent value="milestones" className="mt-4 h-full">
+                    <Card className="p-4 h-full">
+                      <Milestones
+                        selectedEscrow={selectedEscrow}
+                        userRolesInEscrow={userRolesInEscrow}
+                        setEvidenceVisibleMap={setEvidenceVisibleMap}
+                        evidenceVisibleMap={evidenceVisibleMap}
+                      />
+                    </Card>
+                  </TabsContent>
+                </div>
+              </Tabs>
             </CardContent>
 
             <Separator className="my-4" />
@@ -307,8 +491,10 @@ const EscrowDetailDialog = ({
                       <Button
                         variant="destructive"
                         onClick={() => setIsDeleteConfirmOpen(true)}
+                        className="gap-2"
                       >
-                        <Trash2 />
+                        <Trash2 className="h-4 w-4" />
+                        <span>Delete</span>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -323,8 +509,10 @@ const EscrowDetailDialog = ({
                       <Button
                         variant="default"
                         onClick={() => setIsRestoreConfirmOpen(true)}
+                        className="gap-2"
                       >
-                        <ArchiveRestore />
+                        <ArchiveRestore className="h-4 w-4" />
+                        <span>Restore</span>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>

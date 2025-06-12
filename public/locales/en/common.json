@@ -269,7 +269,7 @@
     "serviceProvider": "Service Provider",
     "disputeResolver": "Dispute Resolver",
     "releaseSigner": "Release Signer",
-    "receiver": "Receptor",
+    "receiver": "Receiver",
     "platformAddress": "Platform"
   },
   "escrowDetailDialog": {
