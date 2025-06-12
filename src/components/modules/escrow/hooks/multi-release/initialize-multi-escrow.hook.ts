@@ -10,9 +10,7 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../store/ui";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
-import { GetFormSchema } from "../schema/initialize-escrow.schema";
 import { toast } from "sonner";
 import { useContactStore } from "@/core/store/data/slices/contacts.slice";
 import {
@@ -26,12 +24,14 @@ import {
   useSendTransaction,
 } from "@trustless-work/escrow/hooks";
 import { Escrow } from "@/@types/escrow.entity";
+import { useEscrowUIBoundedStore } from "../../store/ui";
+import { GetMultiReleaseFormSchema } from "../../schema/initialize-escrow.schema";
 
 type ExtendedRoles = Roles & {
   issuer: string;
 };
 
-export const useInitializeEscrow = () => {
+export const useInitializeMultiEscrow = () => {
   const [showSelect, setShowSelect] = useState({
     approver: false,
     serviceProvider: false,
@@ -42,14 +42,14 @@ export const useInitializeEscrow = () => {
   });
 
   const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
-  const setCurrentStep = useEscrowUIBoundedStore(
-    (state) => state.setCurrentStep,
-  );
   const router = useRouter();
   const setIsSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
   );
   const resetSteps = useGlobalUIBoundedStore((state) => state.resetSteps);
+  const setCurrentStep = useEscrowUIBoundedStore(
+    (state) => state.setCurrentStep,
+  );
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
@@ -60,7 +60,8 @@ export const useInitializeEscrow = () => {
   );
   const address = useGlobalAuthenticationStore((state) => state.address);
   const trustlines = useGlobalBoundedStore((state) => state.trustlines);
-  const formSchema = GetFormSchema();
+  const escrowType = useEscrowUIBoundedStore((state) => state.escrowType);
+  const formSchema = GetMultiReleaseFormSchema();
 
   const { deployEscrow } = useInitializeEscrowHook();
   const { sendTransaction } = useSendTransaction();
@@ -79,7 +80,6 @@ export const useInitializeEscrow = () => {
       title: "",
       description: "",
       platformFee: "",
-      amount: "",
       receiverMemo: "",
       trustline: {
         address: "",
@@ -114,7 +114,6 @@ export const useInitializeEscrow = () => {
       title: "Design Landing Page",
       description: "Landing for the new product of the company.",
       platformFee: "5",
-      amount: "5",
       receiverMemo: "123",
       trustline: {
         address: usdcTrustline.address,
@@ -128,11 +127,7 @@ export const useInitializeEscrow = () => {
         releaseSigner: address || "",
         disputeResolver: address || "",
       },
-      milestones: [
-        { description: "Design the wireframe" },
-        { description: "Implementation in React" },
-        { description: "Final delivery and review" },
-      ],
+      milestones: [{ description: "Design the wireframe", amount: "2" }],
     };
 
     // Set form values
@@ -152,7 +147,10 @@ export const useInitializeEscrow = () => {
 
   const handleAddMilestone = () => {
     const currentMilestones = form.getValues("milestones");
-    const updatedMilestones = [...currentMilestones, { description: "" }];
+    const updatedMilestones = [
+      ...currentMilestones,
+      { description: "", amount: "" },
+    ];
     form.setValue("milestones", updatedMilestones);
   };
 
@@ -163,8 +161,12 @@ export const useInitializeEscrow = () => {
   };
 
   const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+    if (!escrowType) {
+      toast.error("Please select a escrow type first");
+      return;
+    }
+
     setIsLoading(true);
-    setIsSuccessDialogOpen(false);
 
     try {
       const finalPayload: InitializeEscrowPayload = {
@@ -180,7 +182,7 @@ export const useInitializeEscrow = () => {
 
       const { unsignedTransaction } = await deployEscrow({
         payload: finalPayload,
-        type: "single-release",
+        type: "multi-release",
       });
 
       if (!unsignedTransaction) {
@@ -210,22 +212,14 @@ export const useInitializeEscrow = () => {
         });
         resetSteps();
         setCurrentStep(1);
-        form.reset();
         router.push("/dashboard/escrow/my-escrows");
-        setIsLoading(false);
-      } else {
-        resetSteps();
-        setCurrentStep(1);
-        setIsLoading(false);
-        setIsSuccessDialogOpen(false);
-        toast.error(response.message || "An error occurred");
       }
     } catch (err) {
-      setIsLoading(false);
-      setIsSuccessDialogOpen(false);
       toast.error(
         err instanceof Error ? err.message : "An unknown error occurred",
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
