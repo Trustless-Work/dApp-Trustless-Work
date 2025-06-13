@@ -1,4 +1,4 @@
-import { Flags, Milestone, Roles, Trustline } from "@trustless-work/escrow";
+import { EscrowType, Flags, SingleReleaseMilestone, MultiReleaseMilestone, Roles, Trustline } from "@trustless-work/escrow";
 import { CreatedAt, UpdatedAt } from "./dates.entity";
 
 export type RolesInEscrow =
@@ -28,7 +28,7 @@ export interface Escrow {
   amount: string;
   platformFee: string;
   balance?: string;
-  milestones: Milestone[];
+  milestones: SingleReleaseMilestone[] | MultiReleaseMilestone[];
   flags?: Flags;
   trustline: Trustline & { name: string };
   receiverMemo?: number;
@@ -39,4 +39,5 @@ export interface Escrow {
   user: string;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;
+  type: EscrowType;
 }
