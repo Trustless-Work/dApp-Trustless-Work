@@ -141,7 +141,7 @@ export const Milestones = ({
               key={`milestone-${milestoneIndex}-${milestone.description}-${milestone.status}`}
               className="flex flex-col sm:flex-row items-center space-x-4"
             >
-              {milestone.approved ? (
+              {"approved" in milestone && milestone.approved ? (
                 <Badge className="uppercase max-w-24 mb-4 md:mb-0">
                   {t("reusable.approved")}
                 </Badge>
@@ -168,7 +168,7 @@ export const Milestones = ({
               {userRolesInEscrow.includes("serviceProvider") &&
                 activeTab === "serviceProvider" &&
                 milestone.status !== "completed" &&
-                !milestone.flags?.approved && (
+                !("flags" in milestone && milestone.flags?.approved) && (
                   <Button
                     className="max-w-32"
                     onClick={(e) => {
@@ -248,7 +248,8 @@ export const Milestones = ({
               {userRolesInEscrow.includes("approver") &&
                 activeTab === "approver" &&
                 milestone.status === "completed" &&
-                !milestone.approved && ( // !milestone.flags?.approved
+                "approved" in milestone &&
+                !milestone.approved && (
                   <Button
                     className="max-w-32"
                     disabled={isChangingFlag}
