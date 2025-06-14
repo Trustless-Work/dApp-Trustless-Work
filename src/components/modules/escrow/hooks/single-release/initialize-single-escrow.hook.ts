@@ -14,8 +14,8 @@ import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { toast } from "sonner";
 import { useContactStore } from "@/core/store/data/slices/contacts.slice";
 import {
-  InitializeEscrowPayload,
-  InitializeEscrowResponse,
+  InitializeSingleReleaseEscrowPayload,
+  InitializeSingleReleaseEscrowResponse,
   Roles,
 } from "@trustless-work/escrow/types";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
@@ -168,7 +168,7 @@ export const useInitializeSingleEscrow = () => {
     setIsLoading(true);
 
     try {
-      const finalPayload: InitializeEscrowPayload = {
+      const finalPayload: InitializeSingleReleaseEscrowPayload = {
         ...payload,
         receiverMemo: Number(payload.receiverMemo) ?? 0,
         signer: address,
@@ -201,7 +201,7 @@ export const useInitializeSingleEscrow = () => {
 
       const response = (await sendTransaction(
         signedTxXdr,
-      )) as InitializeEscrowResponse & { escrow: Escrow };
+      )) as InitializeSingleReleaseEscrowResponse & { escrow: Escrow };
 
       if (response.status === "SUCCESS") {
         setIsSuccessDialogOpen(true);
