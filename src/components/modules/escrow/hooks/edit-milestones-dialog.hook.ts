@@ -10,12 +10,16 @@ import {
 import { formSchema } from "../schema/edit-milestone.schema";
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { toast } from "sonner";
-import { Escrow, UpdateEscrowPayload } from "@trustless-work/escrow/types";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import {
   useUpdateEscrow,
   useSendTransaction,
 } from "@trustless-work/escrow/hooks";
+import {
+  UpdateMultiReleaseEscrowPayload,
+  UpdateSingleReleaseEscrowPayload,
+} from "@trustless-work/escrow";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface useEditMilestonesDialogProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
@@ -85,7 +89,9 @@ const useEditMilestonesDialog = ({
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
 
-      const finalPayload: UpdateEscrowPayload = {
+      const finalPayload:
+        | UpdateMultiReleaseEscrowPayload
+        | UpdateSingleReleaseEscrowPayload = {
         escrow: updatedEscrow as Escrow,
         signer: address,
         contractId: selectedEscrow.contractId || "",
