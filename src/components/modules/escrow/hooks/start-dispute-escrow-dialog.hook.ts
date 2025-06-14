@@ -6,12 +6,15 @@ import {
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { toast } from "sonner";
-import { StartDisputePayload } from "@trustless-work/escrow/types";
 import {
   useStartDispute,
   useSendTransaction,
 } from "@trustless-work/escrow/hooks";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
+import {
+  MultiReleaseStartDisputePayload,
+  SingleReleaseStartDisputePayload,
+} from "@trustless-work/escrow";
 
 const useStartDisputeEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -40,7 +43,9 @@ const useStartDisputeEscrowDialog = () => {
     if (!selectedEscrow) return;
 
     try {
-      const finalPayload: StartDisputePayload = {
+      const finalPayload:
+        | MultiReleaseStartDisputePayload
+        | SingleReleaseStartDisputePayload = {
         contractId: selectedEscrow?.contractId || "",
         signer: address,
       };
