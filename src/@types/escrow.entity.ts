@@ -1,4 +1,11 @@
-import { EscrowType, Flags, SingleReleaseMilestone, MultiReleaseMilestone, Roles, Trustline } from "@trustless-work/escrow";
+import {
+  EscrowType,
+  Flags,
+  SingleReleaseMilestone,
+  MultiReleaseMilestone,
+  Roles,
+  Trustline,
+} from "@trustless-work/escrow";
 import { CreatedAt, UpdatedAt } from "./dates.entity";
 
 export type RolesInEscrow =
