@@ -1,7 +1,6 @@
 import { BalanceItem, Escrow } from "@/@types/escrow.entity";
 import { getAllEscrowsByUser, updateEscrow } from "../server/escrow.firebase";
 import http from "@/core/config/axios/http";
-import { MultiReleaseEscrow, SingleReleaseEscrow } from "@trustless-work/escrow";
 
 export const fetchAllEscrows = async ({
   address,
@@ -19,12 +18,20 @@ export const fetchAllEscrows = async ({
     typeof isActive === "boolean"
       ? escrowsByUser.data.filter((e: Escrow) => e.isActive === isActive)
       : escrowsByUser.data;
-  console.log({ filtered })
-  const multiReleaseEscrow = filtered.filter((escrow: Escrow) => escrow.type === "multi-release");
-  const singleReleaseEscrow = filtered.filter((escrow: Escrow) => escrow.type === "single-release");
 
-  const multiReleaseEscrowContractsId = multiReleaseEscrow.map((escrow: Escrow) => escrow.contractId);
-  const singleReleaseEscrowContractsId = singleReleaseEscrow.map((escrow: Escrow) => escrow.contractId);
+  const multiReleaseEscrow = filtered.filter(
+    (escrow: Escrow) => escrow.type === "multi-release",
+  );
+  const singleReleaseEscrow = filtered.filter(
+    (escrow: Escrow) => escrow.type === "single-release",
+  );
+
+  const multiReleaseEscrowContractsId = multiReleaseEscrow.map(
+    (escrow: Escrow) => escrow.contractId,
+  );
+  const singleReleaseEscrowContractsId = singleReleaseEscrow.map(
+    (escrow: Escrow) => escrow.contractId,
+  );
 
   if (!Array.isArray(multiReleaseEscrowContractsId)) {
     throw new Error("contractIds is not a valid array.");
@@ -37,14 +44,20 @@ export const fetchAllEscrows = async ({
   const { data: singleData } = await http.get(
     "/escrow/single-release/get-multiple-escrow-balance",
     {
-      params: { addresses: singleReleaseEscrowContractsId, signer: address || "" },
+      params: {
+        addresses: singleReleaseEscrowContractsId,
+        signer: address || "",
+      },
     },
   );
-  
+
   const { data: multiData } = await http.get(
     "/escrow/multi-release/get-multiple-escrow-balance",
     {
-      params: { addresses: multiReleaseEscrowContractsId, signer: address || "" },
+      params: {
+        addresses: multiReleaseEscrowContractsId,
+        signer: address || "",
+      },
     },
   );
 
