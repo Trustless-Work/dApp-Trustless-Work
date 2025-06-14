@@ -1,6 +1,9 @@
-import { Milestone } from "@trustless-work/escrow/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalBoundedStore } from "@/core/store/data";
+import {
+  MultiReleaseMilestone,
+  SingleReleaseMilestone,
+} from "@trustless-work/escrow";
 
 const SkeletonMilestones = () => {
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
@@ -12,13 +15,15 @@ const SkeletonMilestones = () => {
         <Skeleton className="w-24 h-4 rounded-md" />
         <Skeleton className="ml-2 w-6 h-6 rounded-full" />
       </div>
-      {milestones.map((_: Milestone, index: number) => (
-        <div key={index} className="flex items-center space-x-4">
-          <Skeleton className="w-24 h-6 rounded-md" />
-          <Skeleton className="flex-1 h-10 rounded-md" />
-          <Skeleton className="w-32 h-10 rounded-md" />
-        </div>
-      ))}
+      {milestones.map(
+        (_: MultiReleaseMilestone | SingleReleaseMilestone, index: number) => (
+          <div key={index} className="flex items-center space-x-4">
+            <Skeleton className="w-24 h-6 rounded-md" />
+            <Skeleton className="flex-1 h-10 rounded-md" />
+            <Skeleton className="w-32 h-10 rounded-md" />
+          </div>
+        ),
+      )}
 
       <div className="flex flex-col gap-2 mt-4">
         <div className="flex w-full justify-between">

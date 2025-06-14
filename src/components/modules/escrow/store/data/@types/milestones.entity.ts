@@ -1,8 +1,13 @@
-import { Milestone } from "@trustless-work/escrow/types";
+import {
+  MultiReleaseMilestone,
+  SingleReleaseMilestone,
+} from "@trustless-work/escrow";
 
 export interface MilestonesEscrowStore {
-  completingMilestone: Milestone | null;
+  completingMilestone: MultiReleaseMilestone | SingleReleaseMilestone | null;
   milestoneIndex: number | null;
-  setCompletingMilestone: (value: Milestone | null) => void;
+  setCompletingMilestone: (
+    value: MultiReleaseMilestone | SingleReleaseMilestone | null,
+  ) => void;
   setMilestoneIndex: (value: number | null) => void;
 }

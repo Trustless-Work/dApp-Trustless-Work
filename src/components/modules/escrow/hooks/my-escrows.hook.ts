@@ -1,4 +1,7 @@
-import { Milestone } from "@trustless-work/escrow/types";
+import {
+  MultiReleaseMilestone,
+  SingleReleaseMilestone,
+} from "@trustless-work/escrow/types";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
@@ -67,11 +70,13 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         escrow.description?.toLowerCase().includes(searchQuery);
 
       const completedMilestones = escrow.milestones.filter(
-        (milestone: Milestone) => milestone.status === "completed",
+        (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
+          milestone.status === "completed",
       ).length;
 
       const approvedMilestones = escrow.milestones.filter(
-        (milestone: Milestone) => milestone.flags?.approved === true,
+        (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
+          "flags" in milestone && milestone.flags?.approved === true,
       ).length;
 
       const totalMilestones = escrow.milestones.length;

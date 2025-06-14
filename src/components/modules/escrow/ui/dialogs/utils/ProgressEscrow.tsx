@@ -1,5 +1,9 @@
 import { Escrow } from "@/@types/escrow.entity";
 import { cn } from "@/lib/utils";
+import {
+  MultiReleaseMilestone,
+  SingleReleaseMilestone,
+} from "@trustless-work/escrow";
 import { useTranslation } from "react-i18next";
 
 interface ProgressEscrowProps {
@@ -66,7 +70,8 @@ const ProgressEscrow = ({
     (milestone) => milestone.status === "completed",
   ).length;
   const approvedMilestones = escrow.milestones.filter(
-    (milestone) => milestone.approved === true, // !milestone.flags?.approved
+    (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
+      "flags" in milestone && milestone.flags?.approved === true,
   ).length;
   const totalMilestones = escrow.milestones.length;
 
@@ -127,7 +132,8 @@ const ProgressEscrow = ({
                   totalMilestones > 1 ? (i / (totalMilestones - 1)) * 100 : 0;
 
                 const isCompleted = milestone.status === "completed";
-                const isApproved = milestone.flags?.approved === true;
+                const isApproved =
+                  "flags" in milestone && milestone.flags?.approved === true;
 
                 return (
                   <div
