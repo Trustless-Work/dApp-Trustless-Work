@@ -1,5 +1,6 @@
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import useMyEscrows from "../../hooks/my-escrows.hook";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
@@ -53,6 +54,7 @@ interface MyEscrowsCardsProps {
 }
 
 const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
+  const { t } = useTranslation();
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -122,7 +124,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       return (
         <Badge variant="destructive" className="gap-1">
           <CircleAlert className="h-3.5 w-3.5" />
-          <span>In Dispute</span>
+          <span>{t("myEscrows.cards.badges.dispute")}</span>
         </Badge>
       );
     }
@@ -134,7 +136,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
           className="gap-1 border-yellow-500 text-yellow-600"
         >
           <TriangleAlert className="h-3.5 w-3.5" />
-          <span>Pending Release</span>
+          <span>{t("myEscrows.cards.badges.pending")}</span>
         </Badge>
       );
     }
@@ -146,7 +148,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
           className="gap-1 border-green-500 text-green-600"
         >
           <CircleCheckBig className="h-3.5 w-3.5" />
-          <span>Released</span>
+          <span>{t("myEscrows.cards.badges.released")}</span>
         </Badge>
       );
     }
@@ -158,7 +160,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
           className="gap-1 border-green-500 text-green-600"
         >
           <Handshake className="h-3.5 w-3.5" />
-          <span>Resolved</span>
+          <span>{t("myEscrows.cards.badges.resolved")}</span>
         </Badge>
       );
     }
@@ -166,7 +168,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
     return (
       <Badge variant="secondary" className="gap-1">
         <Layers className="h-3.5 w-3.5" />
-        <span>Working</span>
+        <span>{t("myEscrows.cards.badges.working")}</span>
       </Badge>
     );
   };
@@ -193,17 +195,20 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                     <CardHeader className="p-4 pb-0 flex-col sm:flex-row justify-between items-start space-y-2 sm:space-y-0">
                       <div className="space-y-1.5 w-full sm:w-2/3">
                         <CardTitle className="text-base font-medium line-clamp-2">
-                          {escrow.title || "No title"}
+                          {escrow.title || t("myEscrows.cards.fallback.title")}
                         </CardTitle>
                         <p className="text-xs text-muted-foreground line-clamp-2">
-                          {escrow.description || "No description"}
+                          {escrow.description ||
+                            t("myEscrows.cards.fallback.description")}
                         </p>
                       </div>
 
                       <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 w-full sm:w-auto">
                         {getStatusBadge(escrow)}
 
-                        <TooltipInfo content="View from TW Escrow Viewer">
+                        <TooltipInfo
+                          content={t("myEscrows.cards.tooltip.viewer")}
+                        >
                           <Link
                             href={`https://viewer.trustlesswork.com/${escrow.contractId}`}
                             target="_blank"
@@ -226,7 +231,8 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                         <h3 className="text-xl sm:text-2xl font-semibold">
                           {formatDollar(escrow?.balance) || "N/A"}
                           <span className="text-sm text-muted-foreground font-normal ml-1">
-                            of {formatDollar(escrow.amount) || "N/A"}
+                            {t("myEscrows.cards.balance.of")}{" "}
+                            {formatDollar(escrow.amount) || "N/A"}
                           </span>
                         </h3>
                       </div>
@@ -237,7 +243,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
 
                   <CardFooter className="p-4 pt-0 justify-end items-end mt-auto">
                     <p className="text-xs text-muted-foreground italic">
-                      Created:{" "}
+                      {t("myEscrows.cards.created")}:{" "}
                       {formatDateFromFirebase(
                         escrow.createdAt.seconds,
                         escrow.createdAt.nanoseconds,
@@ -251,7 +257,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
             <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mt-8 mb-3">
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground whitespace-nowrap">
-                  Items per page:
+                  {t("myEscrows.cards.pagination.itemsPerPage")}
                 </span>
                 <Input
                   type="number"
@@ -268,10 +274,13 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                   size="sm"
                   className="w-full sm:w-auto"
                 >
-                  Previous
+                  {t("myEscrows.cards.pagination.previous")}
                 </Button>
                 <span className="text-sm text-muted-foreground whitespace-nowrap">
-                  Page {currentPage} of {totalPages}
+                  {t("myEscrows.cards.pagination.pageOf", {
+                    currentPage,
+                    totalPages,
+                  })}
                 </span>
                 <Button
                   onClick={() => setCurrentPage(currentPage + 1)}
@@ -280,7 +289,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                   size="sm"
                   className="w-full sm:w-auto"
                 >
-                  Next
+                  {t("myEscrows.cards.pagination.next")}
                 </Button>
               </div>
             </div>
@@ -303,8 +312,12 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       <SuccessDialog
         isSuccessDialogOpen={isSuccessDialogOpen}
         setIsSuccessDialogOpen={setIsSuccessDialogOpen}
-        title={`${loggedUser?.saveEscrow ? "Escrow initialized successfully" : "Escrow initialized successfully, but according to your settings, it was not saved"}`}
-        description="Now that your escrow is initialized, you will be able to view it directly in"
+        title={
+          loggedUser?.saveEscrow
+            ? t("myEscrows.cards.success.initialized.title.saved")
+            : t("myEscrows.cards.success.initialized.title.unsaved")
+        }
+        description={t("myEscrows.cards.success.initialized.description")}
         recentEscrow={recentEscrow}
       />
 
@@ -312,8 +325,8 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
       <SuccessReleaseDialog
         isSuccessReleaseDialogOpen={isSuccessReleaseDialogOpen}
         setIsSuccessReleaseDialogOpen={setIsSuccessReleaseDialogOpen}
-        title={"Escrow released"}
-        description="Now that your escrow is released, you will be able to view it directly in"
+        title={t("myEscrows.cards.success.released.title")}
+        description={t("myEscrows.cards.success.released.description")}
         recentEscrow={recentEscrow}
       />
 
@@ -323,8 +336,8 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
         setIsSuccessResolveDisputeDialogOpen={
           setIsSuccessResolveDisputeDialogOpen
         }
-        title={"Escrow's dispute resolved"}
-        description="Now that your escrow's dispute is resolved, you will be able to view it directly in"
+        title={t("myEscrows.cards.success.resolved.title")}
+        description={t("myEscrows.cards.success.resolved.description")}
         recentEscrow={recentEscrow}
       />
     </>

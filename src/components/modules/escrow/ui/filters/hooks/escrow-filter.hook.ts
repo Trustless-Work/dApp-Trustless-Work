@@ -1,11 +1,13 @@
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 
 export const useEscrowFilter = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const { t } = useTranslation();
   const escrows = useGlobalBoundedStore((state) => state.escrows);
 
   const [search, setSearch] = useState(searchParams.get("q") || "");
@@ -59,38 +61,40 @@ export const useEscrowFilter = () => {
   }, [escrows]);
 
   const mapNameParams = (paramName: string) => {
-    if (!paramName) return "No Filter";
+    if (!paramName) return t("myEscrows.filter.status.all");
 
     switch (paramName) {
       // Statuses
       case "all":
-        return "No Filter";
+        return t("myEscrows.filter.status.all");
       case "working":
-        return "Working";
+        return t("myEscrows.filter.status.working");
       case "pendingRelease":
-        return "Pending Release";
+        return t("myEscrows.filter.status.pendingRelease");
       case "released":
-        return "Released";
+        return t("myEscrows.filter.status.released");
       case "resolved":
-        return "Resolved";
+        return t("myEscrows.filter.status.resolved");
       case "inDispute":
-        return "In Dispute";
+        return t("myEscrows.filter.status.inDispute");
 
       // Amounts
       case "0-100":
-        return "$0 - $100";
+        return t("myEscrows.filter.amount.0-100");
       case "100-500":
-        return "$100 - $500";
+        return t("myEscrows.filter.amount.100-500");
       case "500-1000":
-        return "$500 - $1000";
+        return t("myEscrows.filter.amount.500-1000");
       case "1000+":
-        return "Over $1000";
+        return t("myEscrows.filter.amount.1000+");
 
       // Active
       case "active":
-        return "Active";
+        return t("myEscrows.filter.active.active");
       case "trashed":
-        return "Trash";
+        return t("myEscrows.filter.active.trashed");
+      default:
+        return paramName;
     }
   };
 
