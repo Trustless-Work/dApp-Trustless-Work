@@ -41,6 +41,10 @@ import SuccessDialog, {
 import SkeletonTable from "../utils/SkeletonTable";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Escrow } from "@/@types/escrow.entity";
+import {
+  MultiReleaseMilestone,
+  SingleReleaseMilestone,
+} from "@trustless-work/escrow";
 
 interface MyEscrowsTableProps {
   type:
@@ -131,7 +135,11 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                   ).length;
 
                   const approvedMilestones = escrow.milestones.filter(
-                    (milestone) => milestone.flags?.approved === true,
+                    (
+                      milestone: SingleReleaseMilestone | MultiReleaseMilestone,
+                    ) =>
+                      "flags" in milestone &&
+                      milestone.flags?.approved === true,
                   ).length;
 
                   const totalMilestones = escrow.milestones.length;

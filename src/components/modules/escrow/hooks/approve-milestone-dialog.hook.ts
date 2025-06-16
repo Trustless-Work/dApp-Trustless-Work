@@ -12,7 +12,8 @@ import {
 } from "@trustless-work/escrow/hooks";
 import {
   ApproveMilestonePayload,
-  Milestone,
+  MultiReleaseMilestone,
+  SingleReleaseMilestone,
 } from "@trustless-work/escrow/types";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { Escrow } from "@/@types/escrow.entity";
@@ -38,7 +39,7 @@ const useApproveMilestoneDialog = () => {
 
   const approveMilestoneSubmit = async (
     selectedEscrow: Escrow,
-    milestone: Milestone,
+    milestone: MultiReleaseMilestone | SingleReleaseMilestone,
     index: number,
   ) => {
     setIsChangingFlag(true);

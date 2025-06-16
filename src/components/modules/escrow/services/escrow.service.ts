@@ -19,21 +19,56 @@ export const fetchAllEscrows = async ({
       ? escrowsByUser.data.filter((e: Escrow) => e.isActive === isActive)
       : escrowsByUser.data;
 
-  const contractIds = filtered.map((escrow: Escrow) => escrow.contractId);
+  const multiReleaseEscrow = filtered.filter(
+    (escrow: Escrow) => escrow.type === "multi-release",
+  );
+  const singleReleaseEscrow = filtered.filter(
+    (escrow: Escrow) => escrow.type === "single-release",
+  );
 
-  if (!Array.isArray(contractIds)) {
+  const multiReleaseEscrowContractsId = multiReleaseEscrow.map(
+    (escrow: Escrow) => escrow.contractId,
+  );
+  const singleReleaseEscrowContractsId = singleReleaseEscrow.map(
+    (escrow: Escrow) => escrow.contractId,
+  );
+
+  if (!Array.isArray(multiReleaseEscrowContractsId)) {
     throw new Error("contractIds is not a valid array.");
   }
 
-  const { data } = await http.get("/helper/get-multiple-escrow-balance", {
-    params: { addresses: contractIds, signer: address || "" },
-  });
+  if (!Array.isArray(singleReleaseEscrowContractsId)) {
+    throw new Error("contractIds is not a valid array.");
+  }
 
-  const balances = data as unknown as BalanceItem[];
+  const { data: singleData } = await http.get(
+    "/escrow/single-release/get-multiple-escrow-balance",
+    {
+      params: {
+        addresses: singleReleaseEscrowContractsId,
+        signer: address || "",
+      },
+    },
+  );
+
+  const { data: multiData } = await http.get(
+    "/escrow/multi-release/get-multiple-escrow-balance",
+    {
+      params: {
+        addresses: multiReleaseEscrowContractsId,
+        signer: address || "",
+      },
+    },
+  );
+
+  const singleBalances = singleData as unknown as BalanceItem[];
+  const multiBalances = multiData as unknown as BalanceItem[];
+
+  const balancesMerged = [...singleBalances, ...multiBalances];
 
   return Promise.all(
     filtered.map(async (escrow: Escrow) => {
-      const matchedBalance = balances.find(
+      const matchedBalance = balancesMerged.find(
         (item) => item.address === escrow.contractId,
       );
       const plainBalance = matchedBalance ? matchedBalance.balance : 0;

@@ -7,6 +7,12 @@ import {
 } from "../@types/dashboard.entity";
 import { Escrow } from "@/@types/escrow.entity";
 
+type MilestoneWithInjectedFlags = MilestoneWithEscrow & {
+  approved?: boolean;
+  disputed?: boolean;
+  released?: boolean;
+};
+
 export const useMilestoneDashboardData = ({
   address,
   type = "approver",
@@ -20,25 +26,27 @@ export const useMilestoneDashboardData = ({
 
   useEffect(() => {
     const processData = () => {
-      const allMilestones = escrows.flatMap((escrow) =>
-        escrow.milestones.map((milestone) => ({
-          ...milestone,
-          escrowId: escrow.id,
-          escrowTitle: escrow.title,
-          disputed: escrow.flags?.disputed,
-          released: escrow.flags?.released,
-        })),
+      const allMilestones: MilestoneWithInjectedFlags[] = escrows.flatMap(
+        (escrow) =>
+          escrow.milestones.map((milestone) => ({
+            ...milestone,
+            escrowId: escrow.id,
+            escrowTitle: escrow.title,
+            disputed: escrow.flags?.disputed,
+            released: escrow.flags?.released,
+            approved: escrow.flags?.approved,
+          })),
       );
 
       setData({
         totalMilestones: allMilestones.length,
         pendingApproval: allMilestones.filter(
-          (m) => m.status === "completed" && !m.flags?.approved,
+          (m) => m.status === "completed" && !m.approved,
         ).length,
         approvedNotReleased: allMilestones.filter(
-          (m) => m.flags?.approved && !m.released,
+          (m) => m.approved && !m.released,
         ).length,
-        disputed: allMilestones.filter((m) => m.flags?.disputed).length,
+        disputed: allMilestones.filter((m) => m.disputed).length,
         milestoneStatusCounts: getMilestoneStatusCounts(allMilestones),
         milestoneApprovalTrend: getMilestoneApprovalTrend(allMilestones),
         milestonesByStatus: getMilestonesByStatus(allMilestones),
@@ -52,20 +60,20 @@ export const useMilestoneDashboardData = ({
 };
 
 const getMilestoneStatusCounts = (
-  milestones: MilestoneWithEscrow[],
+  milestones: MilestoneWithInjectedFlags[],
 ): MilestoneDashboardData["milestoneStatusCounts"] => {
   const statusMap = new Map<string, number>();
 
   milestones.forEach((milestone) => {
     let status = "Pending";
 
-    if (milestone.status === "completed" && !milestone.flags?.approved) {
+    if (milestone.status === "completed" && !milestone.approved) {
       status = "Completed";
-    } else if (milestone.flags?.approved) {
+    } else if (milestone.approved) {
       status = "Approved";
     }
 
-    if (milestone.flags?.disputed) {
+    if (milestone.disputed) {
       status = "Disputed";
     }
 
@@ -79,22 +87,22 @@ const getMilestoneStatusCounts = (
 };
 
 const getMilestoneApprovalTrend = (
-  milestones: MilestoneWithEscrow[],
+  milestones: MilestoneWithInjectedFlags[],
 ): MilestoneDashboardData["milestoneApprovalTrend"] => {
-  const approvedMilestones = milestones.filter((m) => m.flags?.approved);
+  const approvedMilestones = milestones.filter((m) => m.approved);
 
   // Since we don't have approval timestamps, we'll return a simple count
   return [{ month: "current", count: approvedMilestones.length }];
 };
 
-const getMilestonesByStatus = (milestones: MilestoneWithEscrow[]) => {
+const getMilestonesByStatus = (milestones: MilestoneWithInjectedFlags[]) => {
   return {
     pending: milestones.filter((m) => m.status === "pending").slice(0, 5),
     completed: milestones
-      .filter((m) => m.status === "completed" && !m.flags?.approved)
+      .filter((m) => m.status === "completed" && !m.approved)
       .slice(0, 5),
-    approved: milestones.filter((m) => m.flags?.approved).slice(0, 5),
-    disputed: milestones.filter((m) => m.flags?.disputed).slice(0, 5),
+    approved: milestones.filter((m) => m.approved).slice(0, 5),
+    disputed: milestones.filter((m) => m.disputed).slice(0, 5),
     platformFees: 0,
     depositsVsReleases: { deposits: 0, releases: 0, difference: 0 },
     pendingFunds: 0,

@@ -13,9 +13,10 @@ import {
   useUpdateEscrow,
   useSendTransaction,
 } from "@trustless-work/escrow/hooks";
-import { Escrow, UpdateEscrowPayload } from "@trustless-work/escrow/types";
 import { toast } from "sonner";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
+import { Escrow } from "@/@types/escrow.entity";
+import { UpdateSingleReleaseEscrowPayload } from "@trustless-work/escrow";
 
 interface useEditBasicPropertiesDialogProps {
   setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
@@ -81,7 +82,9 @@ const useEditBasicPropertiesDialog = ({
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
 
-      const finalPayload: UpdateEscrowPayload = {
+      const finalPayload:
+        | UpdateSingleReleaseEscrowPayload
+        | UpdateSingleReleaseEscrowPayload = {
         escrow: updatedEscrow as Escrow,
         signer: address,
         contractId: selectedEscrow.contractId || "",

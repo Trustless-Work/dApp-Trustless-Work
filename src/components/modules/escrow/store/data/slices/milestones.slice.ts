@@ -1,6 +1,9 @@
 import { StateCreator } from "zustand";
 import { MilestonesEscrowStore } from "../@types/milestones.entity";
-import { Milestone } from "@trustless-work/escrow/types";
+import {
+  MultiReleaseMilestone,
+  SingleReleaseMilestone,
+} from "@trustless-work/escrow";
 
 export const useEscrowMilestoneSlice: StateCreator<
   MilestonesEscrowStore,
@@ -14,8 +17,9 @@ export const useEscrowMilestoneSlice: StateCreator<
     milestoneIndex: null,
 
     // Modifiers
-    setCompletingMilestone: (value: Milestone | null) =>
-      set({ completingMilestone: value }),
+    setCompletingMilestone: (
+      value: MultiReleaseMilestone | SingleReleaseMilestone | null,
+    ) => set({ completingMilestone: value }),
     setMilestoneIndex: (value: number | null) => set({ milestoneIndex: value }),
   };
 };

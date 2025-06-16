@@ -11,12 +11,15 @@ import { MouseEvent } from "react";
 import { getFormSchema } from "../schema/resolve-dispute-escrow.schema";
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { toast } from "sonner";
-import { ResolveDisputePayload } from "@trustless-work/escrow/types";
 import {
   useResolveDispute,
   useSendTransaction,
 } from "@trustless-work/escrow/hooks";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
+import {
+  MultiReleaseResolveDisputePayload,
+  SingleReleaseResolveDisputePayload,
+} from "@trustless-work/escrow";
 
 interface useResolveDisputeEscrowDialogProps {
   setIsResolveDisputeDialogOpen: (value: boolean) => void;
@@ -75,7 +78,9 @@ const useResolveDisputeEscrowDialog = ({
     if (!selectedEscrow) return;
 
     try {
-      const finalPayload: ResolveDisputePayload = {
+      const finalPayload:
+        | MultiReleaseResolveDisputePayload
+        | SingleReleaseResolveDisputePayload = {
         contractId: selectedEscrow?.contractId || "",
         disputeResolver: selectedEscrow?.roles?.disputeResolver,
         approverFunds: approverFunds,

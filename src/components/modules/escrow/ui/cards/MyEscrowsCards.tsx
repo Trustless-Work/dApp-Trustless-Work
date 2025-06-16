@@ -36,7 +36,10 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Escrow } from "@/@types/escrow.entity";
-import { Milestone } from "@trustless-work/escrow";
+import {
+  MultiReleaseMilestone,
+  SingleReleaseMilestone,
+} from "@trustless-work/escrow";
 
 // todo: unify this based on the roles
 interface MyEscrowsCardsProps {
@@ -94,11 +97,13 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
 
   const getStatusBadge = (escrow: Escrow) => {
     const completedMilestones = escrow.milestones.filter(
-      (milestone: Milestone) => milestone.status === "completed",
+      (milestone: MultiReleaseMilestone | SingleReleaseMilestone) =>
+        milestone.status === "completed",
     ).length;
 
     const approvedMilestones = escrow.milestones.filter(
-      (milestone: Milestone) => milestone.flags?.approved === true,
+      (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
+        "flags" in milestone && milestone.flags?.approved === true,
     ).length;
 
     const totalMilestones = escrow.milestones.length;

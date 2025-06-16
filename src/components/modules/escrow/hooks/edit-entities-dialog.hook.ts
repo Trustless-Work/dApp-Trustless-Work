@@ -12,12 +12,16 @@ import { useMemo, useState } from "react";
 import { GetFormSchema } from "../schema/edit-entities.schema";
 import { toast } from "sonner";
 import { useUsersQuery } from "@/components/modules/contact/hooks/tanstack/useUsersQuery";
-import { Escrow, UpdateEscrowPayload } from "@trustless-work/escrow/types";
 import {
   useSendTransaction,
   useUpdateEscrow,
 } from "@trustless-work/escrow/hooks";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
+import {
+  UpdateMultiReleaseEscrowPayload,
+  UpdateSingleReleaseEscrowPayload,
+} from "@trustless-work/escrow";
+import { Escrow } from "@/@types/escrow.entity";
 
 interface useEditEntitiesDialogProps {
   setIsEditEntitiesDialogOpen: (value: boolean) => void;
@@ -102,7 +106,9 @@ const useEditEntitiesDialog = ({
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
 
-      const finalPayload: UpdateEscrowPayload = {
+      const finalPayload:
+        | UpdateMultiReleaseEscrowPayload
+        | UpdateSingleReleaseEscrowPayload = {
         escrow: updatedEscrow as Escrow,
         signer: address,
         contractId: selectedEscrow.contractId || "",

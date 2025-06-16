@@ -1,5 +1,8 @@
 import { Escrow } from "@/@types/escrow.entity";
-import { Milestone } from "@trustless-work/escrow";
+import {
+  SingleReleaseMilestone,
+  MultiReleaseMilestone,
+} from "@trustless-work/escrow";
 
 export type DashboardData = {
   escrows: Escrow[];
@@ -29,12 +32,14 @@ export type DashboardData = {
   };
 };
 
-export type MilestoneWithEscrow = Milestone & {
-  escrowId: string;
-  escrowTitle: string;
-  disputed?: boolean;
-  released?: boolean;
-};
+export type MilestoneWithEscrow =
+  | SingleReleaseMilestone
+  | (MultiReleaseMilestone & {
+      escrowId: string;
+      escrowTitle: string;
+      disputed?: boolean;
+      released?: boolean;
+    });
 
 export type MilestoneDashboardData = {
   totalMilestones: number;
