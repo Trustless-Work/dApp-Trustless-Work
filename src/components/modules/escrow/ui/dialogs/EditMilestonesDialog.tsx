@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGlobalBoundedStore } from "@/core/store/data";
-import useEditMilestonesDialog from "../../hooks/edit-milestones-dialog.hook";
 import { Form, FormLabel } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
@@ -16,6 +15,7 @@ import { Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import SkeletonEditMilestones from "./utils/SkeletonEditMilestones";
+import { useEditSingleMilestonesDialog } from "../../hooks/single-release/edit-single-milestones-dialog.hook";
 
 interface EditEscrowDialogProps {
   isEditMilestoneDialogOpen: boolean;
@@ -34,7 +34,7 @@ const EditMilestonesDialog = ({
     handleAddMilestone,
     handleRemoveMilestone,
     isAnyMilestoneEmpty,
-  } = useEditMilestonesDialog({
+  } = useEditSingleMilestonesDialog({
     setIsEditMilestoneDialogOpen,
   });
 

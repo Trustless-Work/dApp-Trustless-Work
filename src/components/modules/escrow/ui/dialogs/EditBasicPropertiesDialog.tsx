@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import useEditBasicPropertiesDialog from "../../hooks/edit-basic-properties-dialog.hook";
+import { useEditSingleBasicPropertiesDialog } from "../../hooks/single-release/edit-single-basic-properties-dialog.hook";
 import { EditBasicPropertiesForm } from "./forms/EditBasicPropertiesForm";
 import { SkeletonEditBasicProperties } from "./utils/SkeletonEditBasicProperties";
 
@@ -20,7 +20,7 @@ const EditBasicPropertiesDialog = ({
   isEditBasicPropertiesDialogOpen,
   setIsEditBasicPropertiesDialogOpen,
 }: EditBasicPropertiesDialogProps) => {
-  const { handleClose } = useEditBasicPropertiesDialog({
+  const { handleClose } = useEditSingleBasicPropertiesDialog({
     setIsEditBasicPropertiesDialogOpen,
   });
 
