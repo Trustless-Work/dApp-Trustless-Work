@@ -40,6 +40,7 @@ export interface Escrow {
   trustline: Trustline & { name: string };
   receiverMemo?: number;
   disputeStartedBy?: string;
+  fundedBy?: string;
   isActive?: boolean;
   approverFunds?: string;
   receiverFunds?: string;
