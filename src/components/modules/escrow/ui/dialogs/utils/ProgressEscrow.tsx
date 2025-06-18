@@ -73,14 +73,34 @@ const ProgressEscrow = ({
     (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
       "flags" in milestone && milestone.flags?.approved === true,
   ).length;
+  const disputedMilestones = escrow.milestones.filter(
+    (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
+      "flags" in milestone && milestone.flags?.disputed === true,
+  ).length;
+  const resolvedMilestones = escrow.milestones.filter(
+    (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
+      "flags" in milestone && milestone.flags?.resolved === true,
+  ).length;
+  const releasedMilestones = escrow.milestones.filter(
+    (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
+      "flags" in milestone && milestone.flags?.released === true,
+  ).length;
   const totalMilestones = escrow.milestones.length;
 
   const progressPercentageCompleted =
     totalMilestones > 0 ? (completedMilestones / totalMilestones) * 100 : 0;
   const progressPercentageApproved =
     totalMilestones > 0 ? (approvedMilestones / totalMilestones) * 100 : 0;
+  const progressPercentageDisputed =
+    totalMilestones > 0 ? (disputedMilestones / totalMilestones) * 100 : 0;
+  const progressPercentageResolved =
+    totalMilestones > 0 ? (resolvedMilestones / totalMilestones) * 100 : 0;
+  const progressPercentageReleased =
+    totalMilestones > 0 ? (releasedMilestones / totalMilestones) * 100 : 0;
 
   const shouldHideProgress = escrow.flags?.released || escrow.flags?.resolved;
+  const isMultiRelease =
+    escrow.milestones[0] && "flags" in escrow.milestones[0];
 
   if (shouldHideProgress || totalMilestones === 0) {
     return null;
@@ -89,33 +109,156 @@ const ProgressEscrow = ({
   return (
     <div className="my-4 space-y-4">
       {/* Summary circles */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <ProgressCircle
-            percentage={progressPercentageCompleted}
-            color="#006be4"
-          />
-          <div className="text-xs">
-            <div className="font-medium">{t("reusable.completed")}</div>
-            <div className="text-muted-foreground">
-              {completedMilestones}/{totalMilestones}
+      {showTimeline ? (
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <ProgressCircle
+              percentage={progressPercentageCompleted}
+              color="#006be4"
+            />
+            <div className="text-xs">
+              <div className="font-medium">{t("reusable.completed")}</div>
+              <div className="text-muted-foreground">
+                {completedMilestones}/{totalMilestones}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-3">
-          <div className="text-xs text-right">
-            <div className="font-medium">{t("reusable.approved")}</div>
-            <div className="text-muted-foreground">
-              {approvedMilestones}/{totalMilestones}
+          <div className="flex items-center gap-3">
+            <ProgressCircle
+              percentage={progressPercentageApproved}
+              color="#15803d"
+            />
+            <div className="text-xs">
+              <div className="font-medium">{t("reusable.approved")}</div>
+              <div className="text-muted-foreground">
+                {approvedMilestones}/{totalMilestones}
+              </div>
             </div>
           </div>
-          <ProgressCircle
-            percentage={progressPercentageApproved}
-            color="#15803d"
-          />
+
+          {isMultiRelease && (
+            <>
+              <div className="flex items-center gap-3">
+                <ProgressCircle
+                  percentage={progressPercentageDisputed}
+                  color="#dc2626"
+                />
+                <div className="text-xs">
+                  <div className="font-medium">{t("reusable.disputed")}</div>
+                  <div className="text-muted-foreground">
+                    {disputedMilestones}/{totalMilestones}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <ProgressCircle
+                  percentage={progressPercentageResolved}
+                  color="#15803d"
+                />
+                <div className="text-xs">
+                  <div className="font-medium">{t("reusable.resolved")}</div>
+                  <div className="text-muted-foreground">
+                    {resolvedMilestones}/{totalMilestones}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <ProgressCircle
+                  percentage={progressPercentageReleased}
+                  color="#15803d"
+                />
+                <div className="text-xs">
+                  <div className="font-medium">{t("reusable.released")}</div>
+                  <div className="text-muted-foreground">
+                    {releasedMilestones}/{totalMilestones}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <ProgressCircle
+                percentage={progressPercentageCompleted}
+                color="#006be4"
+              />
+              <div className="text-xs">
+                <div className="font-medium">{t("reusable.completed")}</div>
+                <div className="text-muted-foreground">
+                  {completedMilestones}/{totalMilestones}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="text-xs text-right">
+                <div className="font-medium">{t("reusable.approved")}</div>
+                <div className="text-muted-foreground">
+                  {approvedMilestones}/{totalMilestones}
+                </div>
+              </div>
+              <ProgressCircle
+                percentage={progressPercentageApproved}
+                color="#15803d"
+              />
+            </div>
+          </div>
+
+          {/* Additional circles for multi-release */}
+          {isMultiRelease && (
+            <>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <ProgressCircle
+                    percentage={progressPercentageDisputed}
+                    color="#dc2626"
+                  />
+                  <div className="text-xs">
+                    <div className="font-medium">{t("reusable.disputed")}</div>
+                    <div className="text-muted-foreground">
+                      {disputedMilestones}/{totalMilestones}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="text-xs text-right">
+                    <div className="font-medium">{t("reusable.resolved")}</div>
+                    <div className="text-muted-foreground">
+                      {resolvedMilestones}/{totalMilestones}
+                    </div>
+                  </div>
+                  <ProgressCircle
+                    percentage={progressPercentageResolved}
+                    color="#15803d"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <ProgressCircle
+                    percentage={progressPercentageReleased}
+                    color="#15803d"
+                  />
+                  <div className="text-xs">
+                    <div className="font-medium">{t("reusable.released")}</div>
+                    <div className="text-muted-foreground">
+                      {releasedMilestones}/{totalMilestones}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </>
+      )}
 
       {/* Timeline */}
       {showTimeline && (
@@ -134,6 +277,12 @@ const ProgressEscrow = ({
                 const isCompleted = milestone.status === "completed";
                 const isApproved =
                   "flags" in milestone && milestone.flags?.approved === true;
+                const isDisputed =
+                  "flags" in milestone && milestone.flags?.disputed === true;
+                const isResolved =
+                  "flags" in milestone && milestone.flags?.resolved === true;
+                const isReleased =
+                  "flags" in milestone && milestone.flags?.released === true;
 
                 return (
                   <div
@@ -147,20 +296,41 @@ const ProgressEscrow = ({
                     <div
                       className={cn(
                         "w-[18px] h-[18px] rounded-full flex items-center justify-center transition-colors duration-300",
-                        isApproved
+                        isReleased
                           ? "bg-[#15803d] text-white"
-                          : isCompleted
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted-foreground border border-muted/50 text-muted-foreground",
+                          : isResolved
+                            ? "bg-[#15803d] text-white"
+                            : isDisputed
+                              ? "bg-[#dc2626] text-white"
+                              : isApproved
+                                ? "bg-[#15803d] text-white"
+                                : isCompleted
+                                  ? "bg-primary text-primary-foreground"
+                                  : "bg-muted-foreground border border-muted/50 text-muted-foreground",
                       )}
                     >
-                      {isApproved && (
+                      {(isApproved ||
+                        isDisputed ||
+                        isResolved ||
+                        isReleased) && (
                         <div className="w-[6px] h-[6px] rounded-full bg-white"></div>
                       )}
                     </div>
 
                     <div className="mt-2 text-[10px] font-medium">
-                      {isCompleted && isApproved ? (
+                      {isReleased ? (
+                        <span className="text-muted-foreground">
+                          {t("reusable.released")}
+                        </span>
+                      ) : isResolved ? (
+                        <span className="text-muted-foreground">
+                          {t("reusable.resolved")}
+                        </span>
+                      ) : isDisputed ? (
+                        <span className="text-muted-foreground">
+                          {t("reusable.disputed")}
+                        </span>
+                      ) : isCompleted && isApproved ? (
                         <span className="text-muted-foreground">
                           {t("reusable.approved")}
                         </span>

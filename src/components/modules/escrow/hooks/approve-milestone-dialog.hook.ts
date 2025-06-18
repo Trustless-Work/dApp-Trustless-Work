@@ -54,7 +54,7 @@ const useApproveMilestoneDialog = () => {
 
       const { unsignedTransaction } = await approveMilestone({
         payload: finalPayload,
-        type: "single-release",
+        type: selectedEscrow.type,
       });
 
       if (!unsignedTransaction) {

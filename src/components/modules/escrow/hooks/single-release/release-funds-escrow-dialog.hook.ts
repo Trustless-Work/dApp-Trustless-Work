@@ -4,19 +4,16 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../store/ui";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import { toast } from "sonner";
 import {
   useReleaseFunds,
   useSendTransaction,
 } from "@trustless-work/escrow/hooks";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
-import {
-  MultiReleaseReleaseFundsPayload,
-  SingleReleaseReleaseFundsPayload,
-} from "@trustless-work/escrow";
+import { SingleReleaseReleaseFundsPayload } from "@trustless-work/escrow";
 
-const useReleaseFundsEscrowDialog = () => {
+export const useReleaseFundsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
   const setIsReleasingFunds = useEscrowUIBoundedStore(
     (state) => state.setIsReleasingFunds,
@@ -46,9 +43,7 @@ const useReleaseFundsEscrowDialog = () => {
     if (!selectedEscrow) return;
 
     try {
-      const finalPayload:
-        | SingleReleaseReleaseFundsPayload
-        | MultiReleaseReleaseFundsPayload = {
+      const finalPayload: SingleReleaseReleaseFundsPayload = {
         contractId: selectedEscrow?.contractId || "",
         signer: address,
         releaseSigner: selectedEscrow?.roles?.releaseSigner,
@@ -100,5 +95,3 @@ const useReleaseFundsEscrowDialog = () => {
 
   return { releaseFundsSubmit };
 };
-
-export default useReleaseFundsEscrowDialog;

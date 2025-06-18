@@ -1,10 +1,10 @@
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
-import useReleaseFundsEscrowDialog from "../../../hooks/release-funds-dialog.hook";
 import { Button } from "@/components/ui/button";
 import { CircleDollarSign, Loader2 } from "lucide-react";
 import { Escrow } from "@/@types/escrow.entity";
 import { useTranslation } from "react-i18next";
+import { useReleaseFundsEscrowDialog } from "../../../hooks/single-release/release-funds-escrow-dialog.hook";
 
 interface FooterDetailsProps {
   selectedEscrow: Escrow;
@@ -42,7 +42,8 @@ export const FooterDetails = ({
         </p>
       </div>
 
-      {areAllMilestonesCompleted &&
+      {selectedEscrow.type === "single-release" &&
+        areAllMilestonesCompleted &&
         areAllMilestonesCompletedAndFlag &&
         userRolesInEscrow.includes("releaseSigner") &&
         !selectedEscrow.flags?.released &&

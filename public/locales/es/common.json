@@ -270,7 +270,11 @@
     "disputeResolver": "Resolutor de disputas",
     "releaseSigner": "Firmante de liberación",
     "receiver": "Receptor",
-    "platformAddress": "Plataforma"
+    "platformAddress": "Plataforma",
+    "multiRelease": "Multi Release",
+    "singleRelease": "Single Release",
+    "type": "Tipo",
+    "disputed": "Disputado"
   },
   "escrowDetailDialog": {
     "rolesLabel": "Roles",
@@ -281,7 +285,7 @@
     "status": "Estado",
     "seeDetails": "Ver detalles",
     "by": "Por:",
-    "amount": "Monto",
+    "amount": "Monto Total",
     "amountTooltip": "Monto total del depósito en garantía.",
     "balance": "Saldo",
     "balanceTooltip": "Saldo actual del depósito (contrato inteligente).",
@@ -324,7 +328,9 @@
   "common": {
     "cancel": "Cancelar",
     "restore": "Restaurar",
-    "delete": "Eliminar"
+    "restoring": "Restaurando...",
+    "delete": "Eliminar",
+    "deleting": "Eliminando..."
   },
   "settings": {
     "title": "Configuración",

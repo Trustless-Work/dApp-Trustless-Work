@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
+import { Badge } from "@/components/ui/badge";
+import { useFormatUtils } from "@/utils/hook/format.hook";
 
 interface StatisticsCardProps {
   title: string;
@@ -18,6 +20,7 @@ interface StatisticsCardProps {
   className?: string;
   iconSize?: number;
   tooltipContent?: string;
+  fundedBy?: string;
 }
 
 export const StatisticsCard = ({
@@ -31,7 +34,10 @@ export const StatisticsCard = ({
   className,
   iconSize = 30,
   tooltipContent,
+  fundedBy,
 }: StatisticsCardProps) => {
+  const { formatText } = useFormatUtils();
+
   return (
     <Card
       className={cn(
@@ -57,6 +63,14 @@ export const StatisticsCard = ({
             </h3>
             {subValue}
           </div>
+          {fundedBy && (
+            <Badge
+              variant="outline"
+              className="text-xs text-muted-foreground uppercase"
+            >
+              Funded by {formatText(fundedBy)}
+            </Badge>
+          )}
           {actionLabel && onAction && (
             <Button
               variant="link"

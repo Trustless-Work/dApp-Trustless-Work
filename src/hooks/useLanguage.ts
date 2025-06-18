@@ -4,6 +4,9 @@ export const useLanguage = () => {
   const { i18n, t } = useTranslation("common");
 
   const changeLanguage = async (language: string) => {
+    localStorage.removeItem("i18nextLng");
+
+    await i18n.reloadResources();
     await i18n.changeLanguage(language);
   };
 

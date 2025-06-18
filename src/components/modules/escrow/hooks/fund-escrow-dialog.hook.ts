@@ -36,6 +36,7 @@ const useFundEscrowDialog = ({
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
+  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const setAmountMoonpay = useEscrowUIBoundedStore(
     (state) => state.setAmountMoonpay,
@@ -86,7 +87,7 @@ const useFundEscrowDialog = ({
 
       const { unsignedTransaction } = await fundEscrow({
         payload: finalPayload,
-        type: "single-release",
+        type: selectedEscrow?.type || "single-release",
       });
 
       if (!unsignedTransaction) {
@@ -110,11 +111,19 @@ const useFundEscrowDialog = ({
         form.reset();
         setIsSecondDialogOpen?.(false);
         setIsDialogOpen(false);
+        updateEscrow({
+          escrowId: selectedEscrow!.id,
+          payload: {
+            ...selectedEscrow!,
+            fundedBy: activeTab,
+          },
+        });
         fetchAllEscrows({ address, type: activeTab || "approver" });
 
         toast.success("Escrow funded successfully");
       }
     } catch (err) {
+      console.log(err);
       toast.error(
         err instanceof Error ? err.message : "An unknown error occurred",
       );

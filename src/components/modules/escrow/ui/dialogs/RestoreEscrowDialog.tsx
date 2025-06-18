@@ -8,6 +8,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 interface RestoreEscrowDialogProps {
   isOpen: boolean;
@@ -23,11 +25,20 @@ export const RestoreEscrowDialog = ({
   escrowTitle,
 }: RestoreEscrowDialogProps) => {
   const { t } = useTranslation();
+  const [isRestoring, setIsRestoring] = useState(false);
 
   const handleConfirm = async () => {
-    await onConfirm();
-    toast.success(t("confirmDialog.restoreSuccess"));
-    onClose();
+    try {
+      setIsRestoring(true);
+      await onConfirm();
+      toast.success(t("confirmDialog.restoreSuccess"));
+      onClose();
+    } catch (error) {
+      console.error(error);
+      toast.error(t("common.error"));
+    } finally {
+      setIsRestoring(false);
+    }
   };
 
   return (
@@ -45,8 +56,19 @@ export const RestoreEscrowDialog = ({
           <Button variant="outline" onClick={onClose}>
             {t("common.cancel")}
           </Button>
-          <Button variant="default" onClick={handleConfirm}>
-            {t("common.restore")}
+          <Button
+            variant="default"
+            onClick={handleConfirm}
+            disabled={isRestoring}
+          >
+            {isRestoring ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {t("common.restoring")}
+              </>
+            ) : (
+              t("common.restore")
+            )}
           </Button>
         </div>
       </DialogContent>

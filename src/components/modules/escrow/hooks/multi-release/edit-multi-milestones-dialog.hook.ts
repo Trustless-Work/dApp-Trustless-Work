@@ -7,8 +7,8 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { formSchema } from "../schema/edit-milestone.schema";
-import { useEscrowUIBoundedStore } from "../store/ui";
+import { formSchemaMulti } from "../../schema/edit-milestone.schema";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import { toast } from "sonner";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import {
@@ -17,17 +17,16 @@ import {
 } from "@trustless-work/escrow/hooks";
 import {
   UpdateMultiReleaseEscrowPayload,
-  UpdateSingleReleaseEscrowPayload,
+  MultiReleaseEscrow,
 } from "@trustless-work/escrow";
-import { Escrow } from "@/@types/escrow.entity";
 
-interface useEditMilestonesDialogProps {
+interface useEditMultiMilestonesDialogProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
 }
 
-const useEditMilestonesDialog = ({
+export const useEditMultiMilestonesDialog = ({
   setIsEditMilestoneDialogOpen,
-}: useEditMilestonesDialogProps) => {
+}: useEditMultiMilestonesDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsEditingMilestones = useEscrowUIBoundedStore(
@@ -44,26 +43,28 @@ const useEditMilestonesDialog = ({
   const { updateEscrow } = useUpdateEscrow();
   const { sendTransaction } = useSendTransaction();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof formSchemaMulti>>({
+    resolver: zodResolver(formSchemaMulti),
     defaultValues: {
-      milestones: selectedEscrow?.milestones || [{ description: "" }],
+      milestones: selectedEscrow?.milestones || [
+        { description: "", amount: "" },
+      ],
     },
     mode: "onChange",
   });
 
-  const milestones: z.infer<typeof formSchema>["milestones"] =
+  const milestones: z.infer<typeof formSchemaMulti>["milestones"] =
     form.watch("milestones");
 
   const isAnyMilestoneEmpty = milestones.some(
-    (milestone) => milestone.description === "",
+    (milestone) => milestone.description === "" || milestone.amount === "",
   );
 
   const handleAddMilestone = () => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = [
       ...currentMilestones,
-      { description: "", status: "pending" },
+      { description: "", amount: "", status: "pending" },
     ];
     form.setValue("milestones", updatedMilestones);
   };
@@ -74,7 +75,7 @@ const useEditMilestonesDialog = ({
     form.setValue("milestones", updatedMilestones);
   };
 
-  const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+  const onSubmit = async (payload: z.infer<typeof formSchemaMulti>) => {
     if (!selectedEscrow) return;
 
     setIsEditingMilestones(true);
@@ -89,17 +90,15 @@ const useEditMilestonesDialog = ({
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
 
-      const finalPayload:
-        | UpdateMultiReleaseEscrowPayload
-        | UpdateSingleReleaseEscrowPayload = {
-        escrow: updatedEscrow as Escrow,
+      const finalPayload: UpdateMultiReleaseEscrowPayload = {
+        escrow: updatedEscrow as MultiReleaseEscrow,
         signer: address,
         contractId: selectedEscrow.contractId || "",
       };
 
       const { unsignedTransaction } = await updateEscrow({
         payload: finalPayload,
-        type: "single-release",
+        type: "multi-release",
       });
 
       if (!unsignedTransaction) {
@@ -151,5 +150,3 @@ const useEditMilestonesDialog = ({
     isAnyMilestoneEmpty,
   };
 };
-
-export default useEditMilestonesDialog;
