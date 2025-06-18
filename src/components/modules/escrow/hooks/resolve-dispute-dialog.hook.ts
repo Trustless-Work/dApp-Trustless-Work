@@ -20,14 +20,10 @@ import {
   MultiReleaseResolveDisputePayload,
   SingleReleaseResolveDisputePayload,
 } from "@trustless-work/escrow";
+import { useEscrowDialogs } from "../ui/dialogs/hooks/use-escrow-dialogs.hook";
+import { useEscrowBoundedStore } from "../store/data";
 
-interface useResolveDisputeEscrowDialogProps {
-  setIsResolveDisputeDialogOpen: (value: boolean) => void;
-}
-
-const useResolveDisputeEscrowDialog = ({
-  setIsResolveDisputeDialogOpen,
-}: useResolveDisputeEscrowDialogProps) => {
+export const useResolveDisputeDialog = () => {
   const setIsResolvingDispute = useEscrowUIBoundedStore(
     (state) => state.setIsResolvingDispute,
   );
@@ -54,8 +50,13 @@ const useResolveDisputeEscrowDialog = ({
     (state) => state.setApproverResolve,
   );
 
+  const dialogStates = useEscrowDialogs();
+  const setIsResolveDisputeDialogOpen = dialogStates.resolveDispute.setIsOpen;
+
   const { resolveDispute } = useResolveDispute();
   const { sendTransaction } = useSendTransaction();
+
+  const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,30 +67,37 @@ const useResolveDisputeEscrowDialog = ({
     mode: "onChange",
   });
 
-  const onSubmit = async ({
-    approverFunds,
-    receiverFunds,
-  }: {
-    approverFunds: string;
-    receiverFunds: string;
-  }) => {
+  const onSubmit = async (
+    {
+      approverFunds,
+      receiverFunds,
+    }: {
+      approverFunds: string;
+      receiverFunds: string;
+    },
+    onComplete?: () => void,
+  ) => {
     setIsResolvingDispute(true);
 
     if (!selectedEscrow) return;
 
     try {
       const finalPayload:
-        | MultiReleaseResolveDisputePayload
-        | SingleReleaseResolveDisputePayload = {
+        | SingleReleaseResolveDisputePayload
+        | MultiReleaseResolveDisputePayload = {
         contractId: selectedEscrow?.contractId || "",
         disputeResolver: selectedEscrow?.roles?.disputeResolver,
         approverFunds: approverFunds,
         receiverFunds: receiverFunds,
+        milestoneIndex:
+          selectedEscrow.type === "multi-release"
+            ? milestoneIndex?.toString() || ""
+            : "",
       };
 
       const { unsignedTransaction } = await resolveDispute({
         payload: finalPayload,
-        type: "single-release",
+        type: selectedEscrow.type || "single-release",
       });
 
       if (!unsignedTransaction) {
@@ -130,6 +138,7 @@ const useResolveDisputeEscrowDialog = ({
       );
     } finally {
       setIsResolvingDispute(false);
+      onComplete?.();
     }
   };
 
@@ -151,5 +160,3 @@ const useResolveDisputeEscrowDialog = ({
 
   return { onSubmit, form, handleClose, handleOpen };
 };
-
-export default useResolveDisputeEscrowDialog;
