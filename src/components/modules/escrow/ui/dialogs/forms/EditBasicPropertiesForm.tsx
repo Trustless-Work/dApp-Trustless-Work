@@ -10,7 +10,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import useEditBasicPropertiesDialog from "../../../hooks/edit-basic-properties-dialog.hook";
+import { useEditSingleBasicPropertiesDialog } from "../../../hooks/single-release/edit-single-basic-properties-dialog.hook";
 import { DollarSign } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -21,7 +21,7 @@ interface EditBasicPropertiesFormProps {
 export const EditBasicPropertiesForm = ({
   setIsEditBasicPropertiesDialogOpen,
 }: EditBasicPropertiesFormProps) => {
-  const { form, onSubmit } = useEditBasicPropertiesDialog({
+  const { form, onSubmit } = useEditSingleBasicPropertiesDialog({
     setIsEditBasicPropertiesDialogOpen,
   });
 
