@@ -20,13 +20,13 @@ import {
   MultiReleaseEscrow,
 } from "@trustless-work/escrow";
 
-interface useEditMilestonesDialogProps {
+interface useEditMultiMilestonesDialogProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
 }
 
-export const useEditSingleMilestonesDialog = ({
+export const useEditMultiMilestonesDialog = ({
   setIsEditMilestoneDialogOpen,
-}: useEditMilestonesDialogProps) => {
+}: useEditMultiMilestonesDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsEditingMilestones = useEscrowUIBoundedStore(

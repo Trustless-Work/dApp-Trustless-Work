@@ -14,13 +14,13 @@ import { useEditSingleBasicPropertiesDialog } from "../../../hooks/single-releas
 import { DollarSign } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
-interface EditBasicPropertiesFormProps {
+interface EditSingleBasicPropertiesFormProps {
   setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
 }
 
-export const EditBasicPropertiesForm = ({
+export const EditSingleBasicPropertiesForm = ({
   setIsEditBasicPropertiesDialogOpen,
-}: EditBasicPropertiesFormProps) => {
+}: EditSingleBasicPropertiesFormProps) => {
   const { form, onSubmit } = useEditSingleBasicPropertiesDialog({
     setIsEditBasicPropertiesDialogOpen,
   });
