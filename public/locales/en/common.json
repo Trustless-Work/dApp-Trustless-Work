@@ -138,6 +138,15 @@
       "button": "Explore Our Solutions"
     }
   },
+  "actions": {
+    "fundEscrow": "Fund Escrow",
+    "approveMilestone": "Approve Milestone",
+    "startDispute": "Start Dispute",
+    "completeMilestone": "Complete Milestone",
+    "resolveDispute": "Resolve Dispute",
+    "releasePayment": "Release payment",
+    "editEscrow": "Edit Escrow"
+  },
   "help": {
     "videos": {
       "items": {
@@ -231,15 +240,6 @@
       "releaseSigner": "Release Signer",
       "platformAddress": "Platform Address",
       "receiver": "Receiver"
-    },
-    "actions": {
-      "fundEscrow": "Fund Escrow",
-      "approveMilestone": "Approve Milestone",
-      "startDispute": "Start Dispute",
-      "completeMilestone": "Complete Milestone",
-      "resolveDispute": "Resolve Dispute",
-      "releasePayment": "Release payment",
-      "editEscrow": "Edit Escrow"
     }
   },
   "header": {
@@ -270,7 +270,11 @@
     "disputeResolver": "Dispute Resolver",
     "releaseSigner": "Release Signer",
     "receiver": "Receiver",
-    "platformAddress": "Platform"
+    "platformAddress": "Platform",
+    "multiRelease": "Multi Release",
+    "singleRelease": "Single Release",
+    "type": "Type",
+    "disputed": "Disputed"
   },
   "escrowDetailDialog": {
     "rolesLabel": "Roles",
@@ -281,7 +285,7 @@
     "status": "Status",
     "seeDetails": "See Details",
     "by": "By:",
-    "amount": "Amount",
+    "amount": "Total Amount",
     "amountTooltip": "Total amount of the escrow.",
     "balance": "Balance",
     "balanceTooltip": "Current balance of the escrow (smart contract).",
@@ -324,7 +328,9 @@
   "common": {
     "cancel": "Cancel",
     "restore": "Restore",
-    "delete": "Delete"
+    "restoring": "Restoring...",
+    "delete": "Delete",
+    "deleting": "Deleting..."
   },
   "settings": {
     "title": "Settings",
