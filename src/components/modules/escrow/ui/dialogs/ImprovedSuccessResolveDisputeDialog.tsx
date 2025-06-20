@@ -74,7 +74,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
           ?.amount;
 
   const trustlessWorkAmount = Number(amount) * trustlessWorkFee;
-  const platformFee = parseFloat(escrow?.platformFee || "0");
+  const platformFee = escrow?.platformFee || 0;
 
   const parsedApproverFunds = parseFloat(approverResolve || "0") || 0;
   const parsedReceiverFunds = parseFloat(receiverResolve || "0") || 0;
@@ -186,7 +186,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     hasPercentage={false}
                     hasAmount={true}
                     isNet={true}
-                    amount={receiverNet.toString()}
+                    amount={receiverNet}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -196,7 +196,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     hasPercentage={false}
                     hasAmount={true}
                     isNet={true}
-                    amount={approverNet.toString()}
+                    amount={approverNet}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -204,9 +204,9 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     type="Trustless Work"
                     entity={"0x"}
                     hasPercentage={true}
-                    percentage={trustlessPercentage.toString()}
+                    percentage={trustlessPercentage}
                     hasAmount={true}
-                    amount={trustlessWorkAmount.toString()}
+                    amount={trustlessWorkAmount}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -214,9 +214,9 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     type="Platform"
                     entity={escrow?.roles?.platformAddress}
                     hasPercentage={true}
-                    percentage={platformPercentage.toString()}
+                    percentage={platformPercentage}
                     hasAmount={true}
-                    amount={totalPlatformAmount.toString()}
+                    amount={totalPlatformAmount}
                   />
                 </motion.div>
               </motion.div>

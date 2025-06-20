@@ -122,7 +122,7 @@ const useMyEscrows = ({ type }: useMyEscrowsProps) => {
         !engagementFilter || escrow.engagementId === engagementFilter;
 
       let matchesAmount = true;
-      const amount = parseFloat(escrow.amount);
+      const amount = escrow.amount;
       if (!isNaN(amount) && amountFilter && amountFilter !== "all") {
         if (amountFilter.includes("+")) {
           const min = parseFloat(amountFilter.replace("+", ""));

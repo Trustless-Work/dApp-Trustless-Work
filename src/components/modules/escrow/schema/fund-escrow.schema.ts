@@ -3,19 +3,19 @@ import { z } from "zod";
 export const formSchema = z
   .object({
     amount: z
-      .string()
+      .number()
       .min(1, {
         message: "Amount is required.",
       })
-      .regex(/^[1-9][0-9]*$/, {
-        message: "Amount must be a number greater than 0.",
+      .refine((val) => val % 1 === 0, {
+        message: "Amount must be a whole number.",
       }),
     paymentMethod: z.string().nonempty({
       message: "Payment method is required.",
     }),
   })
   .superRefine((data, ctx) => {
-    if (data.paymentMethod === "card" && parseInt(data.amount, 10) < 20) {
+    if (data.paymentMethod === "card" && data.amount < 20) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["amount"],

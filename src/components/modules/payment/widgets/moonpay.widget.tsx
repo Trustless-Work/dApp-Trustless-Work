@@ -26,7 +26,7 @@ export const MoonpayWidget = ({ visible, wallet }: MoonpayWidgetProps) => {
 
       variant="overlay"
       baseCurrencyCode="usd"
-      baseCurrencyAmount={amountMoonpay}
+      baseCurrencyAmount={amountMoonpay.toString()}
       visible={visible}
       redirectURL="https://moonpay.com/"
       walletAddress={wallet}

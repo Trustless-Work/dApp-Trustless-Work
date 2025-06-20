@@ -72,13 +72,12 @@ export const useInitializeEscrowSchema = () => {
         message: "Description must be at least 10 characters long.",
       }),
       platformFee: z
-        .string()
+        .number()
         .min(1, {
           message: "Platform fee is required.",
         })
-        .regex(/^\d+(\.\d{1})?$/, {
-          message:
-            "Platform fee must be a number with at most one decimal place.",
+        .refine((val) => val % 1 === 0, {
+          message: "Platform fee must be a whole number.",
         }),
       receiverMemo: z
         .string()
@@ -98,13 +97,12 @@ export const useInitializeEscrowSchema = () => {
 
     return baseSchema.extend({
       amount: z
-        .string()
+        .number()
         .min(1, {
           message: "Amount is required.",
         })
-        .regex(/^[1-9][0-9]*$/, {
-          message:
-            "Amount must be a whole number greater than 0 (no decimals).",
+        .refine((val) => val % 1 === 0, {
+          message: "Amount must be a whole number.",
         }),
       milestones: z
         .array(
@@ -129,13 +127,12 @@ export const useInitializeEscrowSchema = () => {
               message: "Milestone description is required.",
             }),
             amount: z
-              .string()
+              .number()
               .min(1, {
                 message: "Milestone amount is required.",
               })
-              .regex(/^[1-9][0-9]*$/, {
-                message:
-                  "Milestone amount must be a whole number greater than 0 (no decimals).",
+              .refine((val) => val % 1 === 0, {
+                message: "Milestone amount must be a whole number.",
               }),
           }),
         )

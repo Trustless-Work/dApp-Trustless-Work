@@ -62,7 +62,11 @@ const getStatusCounts = (escrows: Escrow[]) => {
 
 const getTop5ByValue = (escrows: Escrow[]) => {
   const top5 = [...escrows]
-    .sort((a, b) => parseFloat(b.amount) - parseFloat(a.amount))
+    .sort(
+      (a, b) =>
+        parseFloat(b.amount?.toString() || "0") -
+        parseFloat(a.amount?.toString() || "0"),
+    )
     .slice(0, 5);
 
   return top5.sort((a, b) => {
@@ -99,7 +103,7 @@ const getVolumeTrend = (escrows: Escrow[]) => {
       new Date(escrow.createdAt.seconds * 1000),
       "yyyy-MM-dd",
     );
-    const value = parseFloat(escrow.amount);
+    const value = parseFloat(escrow.amount?.toString() || "0");
     map.set(date, (map.get(date) || 0) + value);
   });
 
@@ -135,20 +139,20 @@ const getAvgResolutionTime = (escrows: Escrow[]): number => {
 
 const getPlatformFees = (escrows: Escrow[]) => {
   return escrows.reduce((total, escrow) => {
-    const fee = parseFloat(escrow.platformFee || "0");
+    const fee = parseFloat(escrow.platformFee?.toString() || "0");
     return total + fee;
   }, 0);
 };
 
 const getDepositsVsReleases = (escrows: Escrow[]) => {
   const deposits = escrows.reduce((total, escrow) => {
-    return total + parseFloat(escrow.amount);
+    return total + parseFloat(escrow.amount?.toString() || "0");
   }, 0);
 
   const releases = escrows
     .filter((e) => e.flags?.released)
     .reduce((total, escrow) => {
-      return total + parseFloat(escrow.amount);
+      return total + parseFloat(escrow.amount?.toString() || "0");
     }, 0);
 
   return {
@@ -162,7 +166,7 @@ const getPendingFunds = (escrows: Escrow[]) => {
   return escrows
     .filter((e) => !e.flags?.released && !e.flags?.disputed)
     .reduce((total, escrow) => {
-      return total + parseFloat(escrow.amount);
+      return total + parseFloat(escrow.amount?.toString() || "0");
     }, 0);
 };
 
@@ -176,7 +180,7 @@ const getFeesByTimePeriod = (escrows: Escrow[]) => {
   };
 
   escrows.forEach((escrow) => {
-    const fee = parseFloat(escrow.platformFee || "0");
+    const fee = parseFloat(escrow.platformFee?.toString() || "0");
     const createdAt = new Date(escrow.createdAt.seconds * 1000);
     periods.allTime += fee;
     if (format(createdAt, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")) {

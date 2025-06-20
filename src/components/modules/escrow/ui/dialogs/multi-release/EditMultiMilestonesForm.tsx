@@ -79,13 +79,15 @@ export const EditMultiMilestonesForm = ({
                       size={18}
                     />
                     <Input
-                      type="string"
+                      type="number"
                       className="pl-10"
                       placeholder="Enter milestone amount"
                       value={milestone.amount || ""}
                       onChange={(e) => {
                         const updatedMilestones = [...milestones];
-                        updatedMilestones[index].amount = e.target.value;
+                        updatedMilestones[index].amount = Number(
+                          e.target.value,
+                        );
                         form.setValue("milestones", updatedMilestones);
                       }}
                     />
