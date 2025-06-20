@@ -145,17 +145,7 @@ export const Home = () => {
           <h1 className="text-center text-2xl font-bold mt-10">
             texting this to see if it works
           </h1>
-          <FloatingChat
-            messages={messages}
-            setMessages={setMessages}
-            inputMessage={inputMessage}
-            setInputMessage={setInputMessage}
-            sendMessage={sendMessage}
-            handleKeyPress={handleKeyPress}
-            formatDate={formatDate}
-            formatTime={formatTime}
-            messageGroups={messageGroups}
-          />
+          <FloatingChat />
         </main>
       </Bounded>
     </>
