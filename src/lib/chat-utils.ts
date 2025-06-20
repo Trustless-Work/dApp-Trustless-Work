@@ -60,7 +60,7 @@ export const groupMessagesByDate = (messages: Message[]): MessageGroup => {
 };
 
 // Generar respuesta automática del bot
-export const generateBotResponse = (userMessage: string): string => {
+export const generateBotResponse = (): string => {
   const responses = [
     "Gracias por tu mensaje. Un agente se pondrá en contacto contigo pronto.",
     "Entiendo tu consulta. ¿Hay algo más en lo que pueda ayudarte?",
