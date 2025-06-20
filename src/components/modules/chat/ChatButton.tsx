@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { MessageCircle, X } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { MessageCircle, X } from "lucide-react";
 
 interface ChatButtonProps {
-  isOpen: boolean
-  onClick: () => void
+  isOpen: boolean;
+  onClick: () => void;
 }
 
 export function ChatButton({ isOpen, onClick }: ChatButtonProps) {
@@ -16,7 +16,11 @@ export function ChatButton({ isOpen, onClick }: ChatButtonProps) {
       variant={isOpen ? "secondary" : "default"}
       size="icon"
     >
-      {isOpen ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
+      {isOpen ? (
+        <X className="h-5 w-5" />
+      ) : (
+        <MessageCircle className="h-5 w-5" />
+      )}
     </Button>
-  )
+  );
 }

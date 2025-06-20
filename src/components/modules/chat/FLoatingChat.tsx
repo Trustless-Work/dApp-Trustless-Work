@@ -1,19 +1,17 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { X } from "lucide-react"
-import type { Message } from "@/lib/chat-type"
-import { generateBotResponse } from "@/lib/chat-utils"
-import { ChatButton } from "./ChatButton"
-import { MessageList } from "./MessageList"
-import { MessageInput } from "./MessageInput"
-
-
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { X } from "lucide-react";
+import type { Message } from "@/lib/chat-type";
+import { generateBotResponse } from "@/lib/chat-utils";
+import { ChatButton } from "./ChatButton";
+import { MessageList } from "./MessageList";
+import { MessageInput } from "./MessageInput";
 
 export function FloatingChat() {
-  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -21,11 +19,11 @@ export function FloatingChat() {
       sender: "bot",
       timestamp: new Date(),
     },
-  ])
+  ]);
 
   const toggleChat = () => {
-    setIsChatOpen(!isChatOpen)
-  }
+    setIsChatOpen(!isChatOpen);
+  };
 
   const handleSendMessage = (messageText: string) => {
     const newMessage: Message = {
@@ -33,9 +31,9 @@ export function FloatingChat() {
       text: messageText,
       sender: "user",
       timestamp: new Date(),
-    }
+    };
 
-    setMessages((prev) => [...prev, newMessage])
+    setMessages((prev) => [...prev, newMessage]);
 
     // Simular respuesta del bot después de un breve delay
     setTimeout(() => {
@@ -44,10 +42,10 @@ export function FloatingChat() {
         text: generateBotResponse(messageText),
         sender: "bot",
         timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, botResponse])
-    }, 1000)
-  }
+      };
+      setMessages((prev) => [...prev, botResponse]);
+    }, 1000);
+  };
 
   return (
     <>
@@ -57,8 +55,15 @@ export function FloatingChat() {
         <Card className="fixed bottom-24 right-6 w-80 h-[500px] shadow-lg z-40 animate-in slide-in-from-bottom-5 duration-300 border overflow-hidden">
           <CardHeader className="p-4 pb-2 space-y-1">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-base font-medium">Chat de Soporte</CardTitle>
-              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggleChat}>
+              <CardTitle className="text-base font-medium">
+                Chat de Soporte
+              </CardTitle>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={toggleChat}
+              >
                 <X className="h-4 w-4" />
               </Button>
             </div>
@@ -74,5 +79,5 @@ export function FloatingChat() {
         </Card>
       )}
     </>
-  )
+  );
 }

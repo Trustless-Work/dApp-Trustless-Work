@@ -1,16 +1,15 @@
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { groupMessagesByDate } from "@/lib/chat-utils"
-import type { Message } from "@/lib/chat-type"
-import { DateSeparator } from "./DateSeparator"
-import { MessageBubble } from "./MessageBubble"
-
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { groupMessagesByDate } from "@/lib/chat-utils";
+import type { Message } from "@/lib/chat-type";
+import { DateSeparator } from "./DateSeparator";
+import { MessageBubble } from "./MessageBubble";
 
 interface MessageListProps {
-  messages: Message[]
+  messages: Message[];
 }
 
 export function MessageList({ messages }: MessageListProps) {
-  const messageGroups = groupMessagesByDate(messages)
+  const messageGroups = groupMessagesByDate(messages);
 
   return (
     <ScrollArea className="flex-1 px-4">
@@ -25,5 +24,5 @@ export function MessageList({ messages }: MessageListProps) {
         ))}
       </div>
     </ScrollArea>
-  )
+  );
 }

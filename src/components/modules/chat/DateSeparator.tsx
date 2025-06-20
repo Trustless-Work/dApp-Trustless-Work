@@ -1,7 +1,7 @@
-import { formatDate } from "@/lib/chat-utils"
+import { formatDate } from "@/lib/chat-utils";
 
 interface DateSeparatorProps {
-  date: Date
+  date: Date;
 }
 
 export function DateSeparator({ date }: DateSeparatorProps) {
@@ -11,5 +11,5 @@ export function DateSeparator({ date }: DateSeparatorProps) {
         {formatDate(date)}
       </div>
     </div>
-  )
+  );
 }
