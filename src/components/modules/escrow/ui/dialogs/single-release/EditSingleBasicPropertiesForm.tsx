@@ -73,8 +73,9 @@ export const EditSingleBasicPropertiesForm = ({
                 </FormLabel>
                 <FormControl>
                   <Input
+                    type="number"
                     placeholder="Enter platform fee"
-                    value={field.value !== "" ? `${field.value}%` : ""}
+                    value={field.value ? `${field.value}%` : ""}
                     onChange={(e) => {
                       let rawValue = e.target.value;
                       rawValue = rawValue.replace(/[^0-9.]/g, "");

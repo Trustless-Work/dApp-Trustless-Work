@@ -47,9 +47,9 @@ export const useEditSingleBasicPropertiesDialog = ({
       title: selectedEscrow?.title || "",
       engagementId: selectedEscrow?.engagementId || "",
       description: selectedEscrow?.description || "",
-      amount: selectedEscrow?.amount || "",
+      amount: selectedEscrow?.amount || 0,
       receiverMemo: selectedEscrow?.receiverMemo?.toString() || "",
-      platformFee: selectedEscrow?.platformFee || "",
+      platformFee: selectedEscrow?.platformFee || 0,
     },
     mode: "onChange",
   });

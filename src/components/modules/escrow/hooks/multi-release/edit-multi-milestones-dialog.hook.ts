@@ -47,7 +47,7 @@ export const useEditMultiMilestonesDialog = ({
     resolver: zodResolver(formSchemaMulti),
     defaultValues: {
       milestones: selectedEscrow?.milestones || [
-        { description: "", amount: "" },
+        { description: "", amount: 0 },
       ],
     },
     mode: "onChange",
@@ -57,14 +57,14 @@ export const useEditMultiMilestonesDialog = ({
     form.watch("milestones");
 
   const isAnyMilestoneEmpty = milestones.some(
-    (milestone) => milestone.description === "" || milestone.amount === "",
+    (milestone) => milestone.description === "" || milestone.amount === 0,
   );
 
   const handleAddMilestone = () => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = [
       ...currentMilestones,
-      { description: "", amount: "", status: "pending" },
+      { description: "", amount: 0, status: "pending" },
     ];
     form.setValue("milestones", updatedMilestones);
   };

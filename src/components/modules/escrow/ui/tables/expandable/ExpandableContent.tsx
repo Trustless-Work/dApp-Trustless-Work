@@ -11,6 +11,7 @@ import Divider from "@/components/utils/ui/Divider";
 import EntityCard from "../../dialogs/cards/EntityCard";
 import ProgressEscrow from "../../dialogs/utils/ProgressEscrow";
 import { Escrow } from "@/@types/escrow.entity";
+import { MultiReleaseMilestone } from "@trustless-work/escrow";
 
 interface ExpandableContentProps {
   escrow: Escrow;
@@ -27,31 +28,59 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
             <TableHeader>
               <TableRow>
                 <TableHead>Description</TableHead>
-                {/* <TableHead>Amount</TableHead> */}
-                {/* <TableHead>In Dispute</TableHead> */}
                 <TableHead>Status</TableHead>
+                <TableHead>Amount</TableHead>
+
+                {escrow.type === "multi-release" && (
+                  <>
+                    <TableHead>Disputed</TableHead>
+                    <TableHead>Approved</TableHead>
+                    <TableHead>Released</TableHead>
+                    <TableHead>Resolved</TableHead>
+                  </>
+                )}
               </TableRow>
             </TableHeader>
             <TableBody>
               {escrow.milestones.map((milestone, index) => (
                 <TableRow key={index}>
                   <TableCell>{milestone.description}</TableCell>
-                  {/* <TableCell>amount</TableCell> */}
-                  {/* <TableCell>
-                    {milestone.approvedFlag ? (
-                      <Badge variant="destructive" className="uppercase">
-                        Yes
-                      </Badge>
-                    ) : (
-                      <Badge variant="secondary" className="uppercase">
-                        No
-                      </Badge>
-                    )}
-                  </TableCell> */}
-
                   <TableCell>
                     <Badge className="uppercase">{milestone.status}</Badge>
                   </TableCell>
+                  <TableCell>
+                    {(escrow.type === "multi-release" &&
+                      (milestone as MultiReleaseMilestone).amount) ||
+                      "N/A"}
+                  </TableCell>
+                  {escrow.type === "multi-release" && (
+                    <>
+                      <TableCell>
+                        {(milestone as MultiReleaseMilestone).flags
+                          ?.disputed && (
+                          <Badge className="uppercase">Disputed</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {(milestone as MultiReleaseMilestone).flags
+                          ?.approved && (
+                          <Badge className="uppercase">Approved</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {(milestone as MultiReleaseMilestone).flags
+                          ?.released && (
+                          <Badge className="uppercase">Released</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {(milestone as MultiReleaseMilestone).flags
+                          ?.resolved && (
+                          <Badge className="uppercase">Resolved</Badge>
+                        )}
+                      </TableCell>
+                    </>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

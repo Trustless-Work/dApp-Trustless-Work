@@ -24,13 +24,12 @@ export const formSchemaMulti = z.object({
         }),
         status: z.string(),
         amount: z
-          .string()
+          .number()
           .min(1, {
             message: "Milestone amount is required.",
           })
-          .regex(/^[1-9][0-9]*$/, {
-            message:
-              "Milestone amount must be a whole number greater than 0 (no decimals).",
+          .refine((val) => val % 1 === 0, {
+            message: "Milestone amount must be a whole number.",
           }),
         evidence: z.string().optional(),
         flags: z

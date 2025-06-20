@@ -148,9 +148,9 @@ export const ImprovedSuccessReleaseDialog = ({
                     type="Receiver"
                     entity={escrow?.roles?.receiver}
                     hasPercentage={true}
-                    percentage={receiverPercentage.toString()}
+                    percentage={receiverPercentage}
                     hasAmount={true}
-                    amount={receiverAmount.toString()}
+                    amount={receiverAmount}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -158,9 +158,9 @@ export const ImprovedSuccessReleaseDialog = ({
                     type="Trustless Work"
                     entity={"0x"}
                     hasPercentage={true}
-                    percentage={trustlessPercentage.toString()}
+                    percentage={trustlessPercentage}
                     hasAmount={true}
-                    amount={trustlessAmount.toString()}
+                    amount={trustlessAmount}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -168,9 +168,9 @@ export const ImprovedSuccessReleaseDialog = ({
                     type="Platform"
                     entity={escrow?.roles?.platformAddress}
                     hasPercentage={true}
-                    percentage={platformFee.toString()}
+                    percentage={platformFee}
                     hasAmount={true}
-                    amount={platformAmount.toString()}
+                    amount={platformAmount}
                   />
                 </motion.div>
               </motion.div>

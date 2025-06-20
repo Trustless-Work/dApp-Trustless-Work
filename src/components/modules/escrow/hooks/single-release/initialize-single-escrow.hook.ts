@@ -80,7 +80,7 @@ export const useInitializeSingleEscrow = () => {
       engagementId: "",
       title: "",
       description: "",
-      platformFee: "",
+      platformFee: 0,
       receiverMemo: "",
       trustline: {
         address: "",
@@ -114,8 +114,8 @@ export const useInitializeSingleEscrow = () => {
       engagementId: "ENG-001",
       title: "Design Landing Page",
       description: "Landing for the new product of the company.",
-      platformFee: "5",
-      amount: "5",
+      platformFee: 5,
+      amount: 5,
       receiverMemo: "123",
       trustline: {
         address: usdcTrustline.address,

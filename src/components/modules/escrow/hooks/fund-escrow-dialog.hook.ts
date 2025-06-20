@@ -48,7 +48,7 @@ const useFundEscrowDialog = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: "",
+      amount: 0,
       paymentMethod: "",
     },
     mode: "onChange",
@@ -64,7 +64,7 @@ const useFundEscrowDialog = ({
   }, [amount, setAmountMoonpay]);
 
   useEffect(() => {
-    if (paymentMethod === "card" && parseInt(amount, 10) < 20) {
+    if (paymentMethod === "card" && amount < 20) {
       setError("amount", {
         type: "custom",
         message:
@@ -75,7 +75,7 @@ const useFundEscrowDialog = ({
     }
   }, [paymentMethod, amount, setError, clearErrors]);
 
-  const onSubmit = async ({ amount }: { amount: string }) => {
+  const onSubmit = async ({ amount }: { amount: number }) => {
     setIsFundingEscrow(true);
 
     try {

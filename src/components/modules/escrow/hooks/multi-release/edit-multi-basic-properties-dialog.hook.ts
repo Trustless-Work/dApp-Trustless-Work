@@ -50,7 +50,7 @@ export const useEditMultiBasicPropertiesDialog = ({
       engagementId: selectedEscrow?.engagementId || "",
       description: selectedEscrow?.description || "",
       receiverMemo: selectedEscrow?.receiverMemo?.toString() || "",
-      platformFee: selectedEscrow?.platformFee || "",
+      platformFee: selectedEscrow?.platformFee || 0,
     },
     mode: "onChange",
   });

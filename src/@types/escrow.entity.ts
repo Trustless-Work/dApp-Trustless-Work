@@ -32,9 +32,9 @@ export interface Escrow {
   title: string;
   roles: Roles;
   description: string;
-  amount: string;
-  platformFee: string;
-  balance?: string;
+  amount: number;
+  platformFee: number;
+  balance?: number;
   milestones: SingleReleaseMilestone[] | MultiReleaseMilestone[];
   flags?: Flags;
   trustline: Trustline & { name: string };

@@ -71,7 +71,7 @@ const ResolveDisputeEscrowDialog = ({
   const receiverFunds = form.watch("receiverFunds");
 
   useEffect(() => {
-    const platformFee = parseFloat(escrow?.platformFee || "0") / 100;
+    const platformFee = (escrow?.platformFee || 0) / 100;
     const parsedApproverFunds = parseFloat(approverFunds) || 0;
     const parsedReceiverFunds = parseFloat(receiverFunds) || 0;
 
@@ -126,13 +126,11 @@ const ResolveDisputeEscrowDialog = ({
 
     setIsEqualToAmount(
       parsedApproverFunds + parsedReceiverFunds ===
-        parseFloat(balanceToCheck || "0"),
+        Number(balanceToCheck || "0"),
     );
 
     setIsMissing(
-      parsedApproverFunds +
-        parsedReceiverFunds -
-        parseFloat(balanceToCheck || "0"),
+      parsedApproverFunds + parsedReceiverFunds - Number(balanceToCheck || "0"),
     );
   }, [
     approverFunds,

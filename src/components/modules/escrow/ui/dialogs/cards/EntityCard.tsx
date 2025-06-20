@@ -15,8 +15,8 @@ interface EntityCardProps {
   type: string;
   hasPercentage?: boolean;
   hasAmount?: boolean;
-  percentage?: string;
-  amount?: string;
+  percentage?: number;
+  amount?: number;
   inDispute?: boolean;
   isNet?: boolean;
 }
