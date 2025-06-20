@@ -8,6 +8,7 @@ export const LanguageProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     // Ensure translations are loaded
     const loadTranslations = async () => {
+      await i18n.reloadResources();
       await i18n.loadNamespaces("common");
     };
 

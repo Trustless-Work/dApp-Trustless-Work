@@ -18,6 +18,8 @@ import { useEscrowUIBoundedStore } from "../../store/ui";
 import TransferAnimation from "./TransferAnimation";
 import { motion } from "framer-motion";
 import { Escrow } from "@/@types/escrow.entity";
+import { MultiReleaseMilestone } from "@trustless-work/escrow";
+import { useEscrowBoundedStore } from "../../store/data";
 
 interface SuccessResolveDisputeProps {
   title: string;
@@ -45,6 +47,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
   const approverResolveFromStore = useEscrowUIBoundedStore(
     (state) => state.approverResolve,
   );
+  const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
 
   const receiverResolve =
     receiverResolveFromStore && receiverResolveFromStore !== ""
@@ -63,7 +66,14 @@ export const ImprovedSuccessResolveDisputeDialog = ({
   const trustlessWorkFee = 0.003;
   const platformPercentage = Number(escrow?.platformFee);
 
-  const trustlessWorkAmount = Number(escrow?.amount) * trustlessWorkFee;
+  // Get the amount based on escrow type
+  const amount =
+    escrow?.type === "single-release"
+      ? escrow?.amount
+      : (escrow?.milestones[milestoneIndex || 0] as MultiReleaseMilestone)
+          ?.amount;
+
+  const trustlessWorkAmount = Number(amount) * trustlessWorkFee;
   const platformFee = parseFloat(escrow?.platformFee || "0");
 
   const parsedApproverFunds = parseFloat(approverResolve || "0") || 0;
@@ -81,9 +91,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
   const receiverNet = parsedReceiverFunds - receiverDeductions;
 
   const totalPlatformAmount =
-    selectedEscrow?.amount && !isNaN(Number(selectedEscrow.amount))
-      ? Number(selectedEscrow.amount) * (platformFee / 100)
-      : 0;
+    amount && !isNaN(Number(amount)) ? Number(amount) * (platformFee / 100) : 0;
 
   const containerAnimation = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -136,7 +144,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
               <div className="flex justify-start gap-10">
                 <p className="text-sm">
                   <span className="font-bold">Total Amount: </span>
-                  {formatDollar(escrow?.amount)}
+                  {formatDollar(amount)}
                 </p>
                 {recentEscrow && (
                   <p className="text-sm">
@@ -151,7 +159,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
               <TransferAnimation
                 title="Dispute Resolved"
                 fromLabel="Contract"
-                fromAmount={formatDollar(escrow?.amount).replace("$", "")}
+                fromAmount={formatDollar(amount).replace("$", "")}
                 fromCurrency="USD"
                 toLabel="Resolution"
                 toAmount={formatDollar(

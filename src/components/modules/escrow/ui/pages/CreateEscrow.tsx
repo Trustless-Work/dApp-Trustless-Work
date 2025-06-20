@@ -3,9 +3,15 @@
 import { Bounded } from "@/components/layout/Bounded";
 import { Button } from "@/components/ui/button";
 import { useEscrowUIBoundedStore } from "../../store/ui";
+import { useGlobalBoundedStore } from "@/core/store/data";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { FileWarning } from "lucide-react";
+
+const MAX_ESCROWS = 20;
 
 const CreateEscrowPage = () => {
   const toggleStep = useEscrowUIBoundedStore((state) => state.toggleStep);
+  const escrows = useGlobalBoundedStore((state) => state.escrows);
 
   const handleStart = async () => {
     toggleStep(2);
@@ -18,6 +24,19 @@ const CreateEscrowPage = () => {
           <h1 className="text-center text-3xl md:text-4xl font-semibold">
             Create an Escrow
           </h1>
+          {escrows.length >= MAX_ESCROWS && (
+            <Alert variant="destructive">
+              <FileWarning />
+              <div className="flex flex-col ml-4">
+                <AlertTitle className="font-bold">Attention!</AlertTitle>
+                <AlertDescription>
+                  You cannot create up to 20 escrows. Please delete some escrows
+                  to create a new one.
+                </AlertDescription>
+              </div>
+            </Alert>
+          )}
+
           <hr className="hidden md:block bg-gray-200 w-full h-0.5" />
           <p className="text-xl text-center md:text-left">
             <span className="text-primary font-bold">
@@ -28,6 +47,7 @@ const CreateEscrowPage = () => {
           </p>
         </div>
         <Button
+          disabled={escrows.length >= MAX_ESCROWS}
           type="submit"
           onClick={handleStart}
           className="w-2/5 mx-auto bg-primary text-white bg-gradient-to-br 0 text-lg font-semibold rounded-lg px-2 py-1 text-center"

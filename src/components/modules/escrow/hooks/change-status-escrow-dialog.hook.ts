@@ -70,7 +70,7 @@ const useChangeMilestoneStatusDialogHook = ({
 
       const { unsignedTransaction } = await changeMilestoneStatus({
         payload: finalPayload,
-        type: "single-release",
+        type: selectedEscrow?.type || "single-release",
       });
 
       if (!unsignedTransaction) {
