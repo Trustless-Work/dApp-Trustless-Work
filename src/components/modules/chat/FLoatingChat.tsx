@@ -39,7 +39,7 @@ export function FloatingChat() {
     setTimeout(() => {
       const botResponse: Message = {
         id: messages.length + 2,
-        text: generateBotResponse(messageText),
+        text: generateBotResponse(),
         sender: "bot",
         timestamp: new Date(),
       };
