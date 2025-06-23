@@ -12,7 +12,12 @@
     "support": "Support",
     "reportIssue": "Report an API Issue",
     "help": "Help",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "contact": "Contacts",
+    "escrow": "Escrows",
+    "my-escrows": "My Escrows",
+    "public-profile": "Public profiles",
+    "report-issue": "Report problem"
   },
   "home": {
     "hero": {
@@ -269,8 +274,114 @@
     "serviceProvider": "Service Provider",
     "disputeResolver": "Dispute Resolver",
     "releaseSigner": "Release Signer",
-    "receiver": "Receiver",
+    "receiver": "Receptor",
     "platformAddress": "Platform",
+    "tooltips": {
+      "help": "Help"
+    }
+  },
+  "myEscrows": {
+    "tabs": {
+      "issuer": "Initiated Escrows",
+      "approver": "Approver",
+      "serviceProvider": "Service Provider",
+      "disputeResolver": "Dispute Resolver",
+      "releaseSigner": "Release Signer",
+      "platformAddress": "Platform Address",
+      "receiver": "Receiver"
+    },
+    "view": {
+      "placeholder": "Select view",
+      "table": "Table",
+      "cards": "Cards"
+    },
+    "filter": {
+      "search": {
+        "placeholder": "Search..."
+      },
+      "engagement": {
+        "label": "Engagements",
+        "select": "Select Engagement"
+      },
+      "visibility": {
+        "label": "Visibility"
+      },
+      "date": {
+        "label": "Created At"
+      },
+      "actions": {
+        "create": "Create Escrow"
+      },
+      "amount": {
+        "label": "Amount Range",
+        "all": "All amounts",
+        "0-100": "Under $100",
+        "100-500": "$100 - $500",
+        "500-1000": "$500 - $1000",
+        "1000+": "Over $1000"
+      },
+      "status": {
+        "label": "Status",
+        "all": "All statuses",
+        "working": "Working",
+        "pendingRelease": "Pending Release",
+        "released": "Released",
+        "resolved": "Resolved",
+        "inDispute": "In Dispute"
+      },
+      "active": {
+        "active": "Active",
+        "trashed": "Trash"
+      }
+    },
+    "table": {
+      "headers": {
+        "title": "Title",
+        "description": "Description",
+        "balance": "Balance",
+        "engagement": "Engagement",
+        "serviceProvider": "Service Provider",
+        "approver": "Approver",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "tooltips": {
+        "disputed": "Escrow in Dispute",
+        "pending": "Escrow pending release",
+        "released": "Escrow released",
+        "resolved": "Escrow resolved"
+      },
+      "dropdown": {
+        "label": "Actions",
+        "moreDetails": "More Details",
+        "viewViewer": "View from TW Escrow Viewer",
+        "openMenu": "Open menu"
+      },
+      "pagination": {
+        "itemsPerPage": "Items per page:",
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {{currentPage}} of {{totalPages}}"
+      },
+      "success": {
+        "initialized": {
+          "title": "Escrow initialized successfully",
+          "description": "Now that your escrow is initialized, you will be able to view it directly in"
+        },
+        "released": {
+          "title": "Escrow released",
+          "description": "Now that your escrow is released, you will be able to view it directly in"
+        },
+        "resolved": {
+          "title": "Escrow's dispute resolved",
+          "description": "Now that your escrow's dispute is resolved, you will be able to view it directly in"
+        }
+      },
+      "noTitle": "No title",
+      "noDescription": "No description",
+      "noBalance": "No balance",
+      "noEngagement": "No engagement"
+    },
     "multiRelease": "Multi Release",
     "singleRelease": "Single Release",
     "type": "Type",
@@ -328,6 +439,8 @@
   "common": {
     "cancel": "Cancel",
     "restore": "Restore",
+    "pickDate": "Pick Date",
+    "noData": "No Data Available",
     "restoring": "Restoring...",
     "delete": "Delete",
     "deleting": "Deleting..."
@@ -341,5 +454,34 @@
       "apiKeys": "API Keys",
       "goBack": "Back"
     }
-  }
+  },
+    "onboarding": {
+      "buttons": {
+        "back": "Back",
+        "next": "Next",
+        "skip": "Skip",
+        "close": "Close",
+        "last": "Finish"
+      },
+      "steps": {
+        "welcome": {
+          "title": "Welcome to Trustless Work!",
+          "logoAlt": "Trustless Work Logo",
+          "content": "Here you can understand how to use our API!"
+        },
+        "1": {
+          "title": "Roles in Trustless Work",
+          "content": "Here you'll find all the roles in each Escrow."
+        },
+        "2": {
+          "title": "Initialize an Escrow",
+          "content": "Start by setting up a new escrow agreement. This includes specifying the terms, amounts, and parties involved."
+        },
+        "3": {
+          "title": "Your Escrows",
+          "content": "Here you can see all the escrows you've created or are involved in depending on your role. Take actions like Fund or Release."
+        }
+      }
+    }
+  
 }

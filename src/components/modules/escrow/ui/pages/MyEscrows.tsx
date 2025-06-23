@@ -15,14 +15,16 @@ import MyEscrowsCards from "@/components/modules/escrow/ui/cards/MyEscrowsCards"
 import MyEscrowsFilter from "@/components/modules/escrow/ui/filters/MyEscrowsFilter";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import Joyride from "react-joyride";
-import { steps } from "@/constants/steps/steps";
+import { useSteps } from "@/constants/steps/steps";
 import { useState } from "react";
 import { CircleHelp } from "lucide-react";
 import { MoonpayWidget } from "@/components/modules/payment/widgets/moonpay.widget";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
+import { useTranslation } from "react-i18next";
 
 const MyEscrows = () => {
+  const { t } = useTranslation();
   const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
   const setActiveTab = useEscrowUIBoundedStore((state) => state.setActiveTab);
   const setActiveMode = useEscrowUIBoundedStore((state) => state.setActiveMode);
@@ -34,6 +36,8 @@ const MyEscrows = () => {
   const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
     (state) => state.isMoonpayWidgetOpen,
   );
+
+  const steps = useSteps();
 
   return (
     <>
@@ -49,6 +53,13 @@ const MyEscrows = () => {
           <Joyride
             run={run}
             steps={steps}
+            locale={{
+              back: t("onboarding.buttons.back"),
+              next: t("onboarding.buttons.next"),
+              skip: t("onboarding.buttons.skip"),
+              close: t("onboarding.buttons.close"),
+              last: t("onboarding.buttons.last"),
+            }}
             continuous
             showSkipButton
             hideCloseButton
@@ -92,43 +103,43 @@ const MyEscrows = () => {
                     onClick={() => setActiveTab("issuer")}
                     value="issuer"
                   >
-                    Initiated Escrows
+                    {t("myEscrows.tabs.issuer")}
                   </TabsTrigger>
                   <TabsTrigger
                     onClick={() => setActiveTab("approver")}
                     value="approver"
                   >
-                    Approver
+                    {t("myEscrows.tabs.approver")}
                   </TabsTrigger>
                   <TabsTrigger
                     onClick={() => setActiveTab("serviceProvider")}
                     value="service-provider"
                   >
-                    Service Provider
+                    {t("myEscrows.tabs.serviceProvider")}
                   </TabsTrigger>
                   <TabsTrigger
                     onClick={() => setActiveTab("disputeResolver")}
                     value="dispute-resolver"
                   >
-                    Dispute Resolver
+                    {t("myEscrows.tabs.disputeResolver")}
                   </TabsTrigger>
                   <TabsTrigger
                     onClick={() => setActiveTab("releaseSigner")}
                     value="release-signer"
                   >
-                    Release Signer
+                    {t("myEscrows.tabs.releaseSigner")}
                   </TabsTrigger>
                   <TabsTrigger
                     onClick={() => setActiveTab("platformAddress")}
                     value="platform-address"
                   >
-                    Platform Address
+                    {t("myEscrows.tabs.platformAddress")}
                   </TabsTrigger>
                   <TabsTrigger
                     onClick={() => setActiveTab("receiver")}
                     value="receiver"
                   >
-                    Receiver
+                    {t("myEscrows.tabs.receiver")}
                   </TabsTrigger>
                 </TabsList>
 
@@ -140,16 +151,22 @@ const MyEscrows = () => {
                     }
                   >
                     <SelectTrigger className="w-32">
-                      <SelectValue placeholder="Select view" />
+                      <SelectValue
+                        placeholder={t("myEscrows.view.placeholder")}
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="table">Table</SelectItem>
-                      <SelectItem value="cards">Cards</SelectItem>
+                      <SelectItem value="table">
+                        {t("myEscrows.view.table")}
+                      </SelectItem>
+                      <SelectItem value="cards">
+                        {t("myEscrows.view.cards")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <TooltipInfo content="Help">
+                <TooltipInfo content={t("reusable.tooltips.help")}>
                   <button
                     className="btn-dark"
                     type="button"

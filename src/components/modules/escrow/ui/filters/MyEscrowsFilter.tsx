@@ -11,16 +11,18 @@ import Divider from "@/components/utils/ui/Divider";
 import { Search, Trash2 } from "lucide-react";
 import { useEscrowFilter } from "./hooks/escrow-filter.hook";
 import {
-  amountOptionsFilters,
-  statusOptionsFilters,
-  activeOptionsFilters,
+  getAmountOptionsFilters,
+  getStatusOptionsFilters,
+  getActiveOptionsFilters,
 } from "./constants/filters-options.constant";
 import { getRoleActionIcons } from "@/utils/get-role-actions";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import Link from "next/link";
 import { DatePickerWithRange } from "@/components/ui/calendar-range";
+import { useTranslation } from "react-i18next";
 
 const MyEscrowsFilter = () => {
+  const { t } = useTranslation();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
   const {
@@ -37,6 +39,10 @@ const MyEscrowsFilter = () => {
     mapNameParams,
   } = useEscrowFilter();
 
+  const amountOptions = getAmountOptionsFilters(t);
+  const statusOptions = getStatusOptionsFilters(t);
+  const activeOptions = getActiveOptionsFilters(t);
+
   return (
     <form className="flex flex-col space-y-4 w-full">
       <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
@@ -44,7 +50,7 @@ const MyEscrowsFilter = () => {
           <div className="relative flex-1 sm:w-[300px]">
             <Input
               id="search"
-              placeholder="Search..."
+              placeholder={t("myEscrows.filter.search.placeholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pr-8"
@@ -69,12 +75,12 @@ const MyEscrowsFilter = () => {
             href="/dashboard/help#roles"
             className="text-xs text-muted-foreground font-bold hover:underline"
           >
-            {getRoleActionIcons(activeTab)}
+            {getRoleActionIcons(activeTab, t)}
           </Link>
 
           <CreateButton
             className="shrink-0"
-            label="Create Escrow"
+            label={t("myEscrows.filter.actions.create")}
             url={"/dashboard/escrow/initialize-escrow"}
             id="step-2"
           />
@@ -90,7 +96,7 @@ const MyEscrowsFilter = () => {
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="status"
           >
-            Status
+            {t("myEscrows.filter.status.label")}
           </label>
           <Select
             value={status}
@@ -100,7 +106,7 @@ const MyEscrowsFilter = () => {
               {mapNameParams(searchParams.get("status") || "")}
             </SelectTrigger>
             <SelectContent>
-              {statusOptionsFilters.map((opt) => (
+              {statusOptions.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
                 </SelectItem>
@@ -115,7 +121,7 @@ const MyEscrowsFilter = () => {
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="amount"
           >
-            Amount Range
+            {t("myEscrows.filter.amount.label")}
           </label>
           <Select
             value={amountRange}
@@ -125,7 +131,7 @@ const MyEscrowsFilter = () => {
               {mapNameParams(searchParams.get("amount") || "")}
             </SelectTrigger>
             <SelectContent>
-              {amountOptionsFilters.map((opt) => (
+              {amountOptions.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
                 </SelectItem>
@@ -140,14 +146,15 @@ const MyEscrowsFilter = () => {
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="engagement"
           >
-            Engagements
+            {t("myEscrows.filter.engagement.label")}
           </label>
           <Select
             value={engagement}
             onValueChange={(value) => updateQuery("engagement", value)}
           >
             <SelectTrigger className="w-full">
-              {searchParams.get("engagement") || "Select Engagement"}
+              {searchParams.get("engagement") ||
+                t("myEscrows.filter.engagement.select")}
             </SelectTrigger>
             <SelectContent>
               {uniqueEngagements.map((opt) => (
@@ -165,7 +172,7 @@ const MyEscrowsFilter = () => {
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="active"
           >
-            Visibility
+            {t("myEscrows.filter.visibility.label")}
           </label>
           <Select
             value={active}
@@ -175,7 +182,7 @@ const MyEscrowsFilter = () => {
               {mapNameParams(active)}
             </SelectTrigger>
             <SelectContent>
-              {activeOptionsFilters.map((opt) => (
+              {activeOptions.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>
                   {opt.label}
                 </SelectItem>
@@ -190,7 +197,7 @@ const MyEscrowsFilter = () => {
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="dateRange"
           >
-            Created At
+            {t("myEscrows.filter.date.label")}
           </label>
           <div className="w-full">
             <DatePickerWithRange className="w-full" />

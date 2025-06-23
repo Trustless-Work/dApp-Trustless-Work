@@ -12,7 +12,12 @@
     "support": "Soporte",
     "reportIssue": "Reportar un Problema API",
     "help": "Ayuda",
-    "contacts": "Contactos"
+    "contacts": "Contactos",
+    "contact": "Contactos",
+    "escrow": "Escrows",
+    "my-escrows": "Mis Escrows",
+    "public-profile": "Perfil Público",
+    "report-issue": "Reportar Problema"
   },
   "home": {
     "hero": {
@@ -238,7 +243,7 @@
       "startDispute": "Iniciar Disputa",
       "completeMilestone": "Completar Hito",
       "resolveDispute": "Resolver Disputa",
-      "releasePayment": "Liberar pago",
+      "releasePayment": "Liberar Pago",
       "editEscrow": "Editar Depósito"
     }
   },
@@ -262,15 +267,18 @@
     "inProgress": "En Progreso",
     "connect": "Conectar",
     "disconnect": "Desconectar",
-    "inDispute": "En disputa",
+    "inDispute": "En Disputa",
     "released": "Liberado",
     "resolved": "Resuelto",
     "approver": "Aprobador",
-    "serviceProvider": "Proveedor de servicios",
-    "disputeResolver": "Resolutor de disputas",
-    "releaseSigner": "Firmante de liberación",
+    "serviceProvider": "Proveedor de Servicio",
+    "disputeResolver": "Resolutor de Disputas",
+    "releaseSigner": "Firmante de Liberación",
     "receiver": "Receptor",
     "platformAddress": "Plataforma",
+    "tooltips": {
+      "help": "Ayuda"
+    },
     "multiRelease": "Multi Release",
     "singleRelease": "Single Release",
     "type": "Tipo",
@@ -328,6 +336,8 @@
   "common": {
     "cancel": "Cancelar",
     "restore": "Restaurar",
+    "pickDate": "Seleccionar fecha",
+    "noData": "No hay datos disponibles",
     "restoring": "Restaurando...",
     "delete": "Eliminar",
     "deleting": "Eliminando..."
@@ -340,6 +350,137 @@
       "preferences": "Preferencias",
       "apiKeys": "API Keys",
       "goBack": "Atrás"
+    }
+  },
+  "myEscrows": {
+    "tabs": {
+      "issuer": "Escrows Iniciados",
+      "approver": "Aprobador",
+      "serviceProvider": "Proveedor de Servicio",
+      "disputeResolver": "Resolutor de Disputas",
+      "releaseSigner": "Firmante de Liberación",
+      "platformAddress": "Dirección de Plataforma",
+      "receiver": "Receptor"
+    },
+    "view": {
+      "placeholder": "Seleccionar vista",
+      "table": "Tabla",
+      "cards": "Tarjetas"
+    },
+    "filter": {
+      "search": {
+        "placeholder": "Buscar..."
+      },
+      "engagement": {
+        "label": "Proyectos",
+        "select": "Seleccionar Proyecto"
+      },
+      "visibility": {
+        "label": "Visibilidad"
+      },
+      "date": {
+        "label": "Fecha de Creación"
+      },
+      "actions": {
+        "create": "Crear Depósito"
+      },
+      "amount": {
+        "label": "Rango de Monto",
+        "all": "Todos los montos",
+        "0-100": "Menos de $100",
+        "100-500": "$100 - $500",
+        "500-1000": "$500 - $1000",
+        "1000+": "Más de $1000"
+      },
+      "status": {
+        "label": "Estado",
+        "all": "Todos los estados",
+        "working": "Trabajando",
+        "pendingRelease": "Pendiente de Liberación",
+        "released": "Liberado",
+        "resolved": "Resuelto",
+        "inDispute": "En Disputa"
+      },
+      "active": {
+        "active": "Activo",
+        "trashed": "Papelera"
+      }
+    },
+    "table": {
+      "headers": {
+        "title": "Título",
+        "description": "Descripción",
+        "balance": "Balance",
+        "engagement": "Proyecto",
+        "serviceProvider": "Proveedor de Servicio",
+        "approver": "Aprobador",
+        "created": "Creado",
+        "actions": "Acciones"
+      },
+      "tooltips": {
+        "disputed": "Depósito en disputa",
+        "pending": "Depósito pendiente de liberación",
+        "released": "Depósito liberado",
+        "resolved": "Depósito resuelto"
+      },
+      "dropdown": {
+        "label": "Acciones",
+        "moreDetails": "Ver más detalles",
+        "viewViewer": "Ver en Visor de Trustless Work",
+        "openMenu": "Abrir menú"
+      },
+      "pagination": {
+        "itemsPerPage": "Elementos por página:",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "pageOf": "Página {{currentPage}} de {{totalPages}}"
+      },
+      "success": {
+        "initialized": {
+          "title": "Depósito inicializado con éxito",
+          "description": "Ahora que tu depósito ha sido inicializado, podrás verlo directamente en"
+        },
+        "released": {
+          "title": "Depósito liberado",
+          "description": "Ahora que tu depósito ha sido liberado, podrás verlo directamente en"
+        },
+        "resolved": {
+          "title": "Disputa del depósito resuelta",
+          "description": "Ahora que la disputa se ha resuelto, podrás verla directamente en"
+        }
+      },
+      "noTitle": "Sin título",
+      "noDescription": "Sin descripción",
+      "noBalance": "Sin balance",
+      "noEngagement": "Sin proyecto"
+    }
+  },
+  "onboarding": {
+    "buttons": {
+      "back": "Atrás",
+      "next": "Siguiente",
+      "skip": "Saltar",
+      "close": "Cerrar",
+      "last": "Finalizar"
+    },
+    "steps": {
+      "welcome": {
+        "title": "¡Bienvenido a Trustless Work!",
+        "logoAlt": "Logo de Trustless Work",
+        "content": "Aquí puedes entender cómo usar nuestra API."
+      },
+      "1": {
+        "title": "Roles en Trustless Work",
+        "content": "Aquí encontrarás todos los roles en cada depósito en garantía."
+      },
+      "2": {
+        "title": "Inicializar un Depósito",
+        "content": "Comienza configurando un nuevo acuerdo, incluyendo términos, montos y partes."
+      },
+      "3": {
+        "title": "Tus Depósitos",
+        "content": "Aquí puedes ver todos los depósitos en los que participas y tomar acciones como Financiar o Liberar."
+      }
     }
   }
 }
