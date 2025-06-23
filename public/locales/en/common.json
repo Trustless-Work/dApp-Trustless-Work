@@ -455,33 +455,32 @@
       "goBack": "Back"
     }
   },
-    "onboarding": {
-      "buttons": {
-        "back": "Back",
-        "next": "Next",
-        "skip": "Skip",
-        "close": "Close",
-        "last": "Finish"
+  "onboarding": {
+    "buttons": {
+      "back": "Back",
+      "next": "Next",
+      "skip": "Skip",
+      "close": "Close",
+      "last": "Finish"
+    },
+    "steps": {
+      "welcome": {
+        "title": "Welcome to Trustless Work!",
+        "logoAlt": "Trustless Work Logo",
+        "content": "Here you can understand how to use our API!"
       },
-      "steps": {
-        "welcome": {
-          "title": "Welcome to Trustless Work!",
-          "logoAlt": "Trustless Work Logo",
-          "content": "Here you can understand how to use our API!"
-        },
-        "1": {
-          "title": "Roles in Trustless Work",
-          "content": "Here you'll find all the roles in each Escrow."
-        },
-        "2": {
-          "title": "Initialize an Escrow",
-          "content": "Start by setting up a new escrow agreement. This includes specifying the terms, amounts, and parties involved."
-        },
-        "3": {
-          "title": "Your Escrows",
-          "content": "Here you can see all the escrows you've created or are involved in depending on your role. Take actions like Fund or Release."
-        }
+      "1": {
+        "title": "Roles in Trustless Work",
+        "content": "Here you'll find all the roles in each Escrow."
+      },
+      "2": {
+        "title": "Initialize an Escrow",
+        "content": "Start by setting up a new escrow agreement. This includes specifying the terms, amounts, and parties involved."
+      },
+      "3": {
+        "title": "Your Escrows",
+        "content": "Here you can see all the escrows you've created or are involved in depending on your role. Take actions like Fund or Release."
       }
     }
-  
+  }
 }
