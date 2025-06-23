@@ -41,11 +41,11 @@ export const StatisticsCard = ({
   return (
     <Card
       className={cn(
-        "overflow-hidden cursor-pointer hover:shadow-lg w-full md:w-2/5",
+        "overflow-hidden cursor-pointer hover:shadow-lg w-full",
         className,
       )}
     >
-      <CardContent className="p-6 min-h-36">
+      <CardContent className="py-4 px-8 min-h-20">
         <div className="flex items-center justify-between">
           <div className="flex">
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -56,11 +56,7 @@ export const StatisticsCard = ({
         </div>
         <div className="mt-2 flex items-baseline justify-between">
           <div>
-            <h3
-              className={`text-2xl font-semibold ${!actionLabel && "text-4xl"}`}
-            >
-              {value}
-            </h3>
+            <h3 className="text-2xl font-semibold">{value}</h3>
             {subValue}
           </div>
           {fundedBy && (

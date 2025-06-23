@@ -26,7 +26,7 @@ const TooltipInfo = ({ content, children }: TooltipInfoProps) => {
             </span>
           )}
         </TooltipTrigger>
-        <TooltipContent className="border border-black/50 dark:border-white/30 rounded-md shadow-md p-2">
+        <TooltipContent className="border border-black/50 dark:border-white/30 rounded-md shadow-md p-2 uppercase">
           <p>{content}</p>
         </TooltipContent>
       </Tooltip>

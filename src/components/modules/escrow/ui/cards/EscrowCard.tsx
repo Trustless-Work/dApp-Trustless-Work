@@ -12,12 +12,12 @@ import {
   ExternalLink,
   GalleryHorizontalEnd,
   AudioWaveform,
+  Hash,
 } from "lucide-react";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useTranslation } from "react-i18next";
 import { Escrow } from "@/@types/escrow.entity";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import ProgressEscrow from "../dialogs/utils/ProgressEscrow";
 import { getStatusBadge } from "@/components/utils/ui/StatusBadge";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
 
@@ -48,75 +48,78 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
 
   return (
     <Card
-      className="overflow-hidden cursor-pointer hover:shadow-md transition-all border border-border/40 min-h-[280px] flex flex-col justify-between"
+      className="overflow-hidden cursor-pointer hover:shadow-md transition-all border border-border/40 min-h-[220px] flex flex-col justify-between"
       onClick={(e) => {
         e.stopPropagation();
         onCardClick(escrow);
       }}
     >
-      <div>
-        <CardHeader className="p-4 pb-0 flex-col sm:flex-row justify-between items-start space-y-2 sm:space-y-0">
-          <div className="space-y-1.5 w-full sm:w-2/3">
-            <CardTitle className="text-base font-medium line-clamp-2">
-              {escrow.title || "No title"}
-            </CardTitle>
-            <p className="text-xs text-muted-foreground line-clamp-2">
-              {escrow.description || "No description"}
-            </p>
-          </div>
+      <CardHeader className="p-4 pb-0 flex flex-col sm:flex-row justify-between items-start space-y-3 sm:space-y-0">
+        <div className="space-y-1.5 w-full sm:w-2/3">
+          <CardTitle className="text-base font-medium line-clamp-2">
+            {escrow.title || "No title"}
+          </CardTitle>
+          <p className="text-xs text-muted-foreground line-clamp-2">
+            {escrow.description || "No description"}
+          </p>
+        </div>
 
-          <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 w-full sm:w-auto">
-            {escrow.type === "single-release" && getStatusBadge(escrow)}
+        <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 w-full sm:w-auto justify-between sm:justify-start">
+          {escrow.type === "single-release" && getStatusBadge(escrow)}
 
-            <TooltipInfo content="View from TW Escrow Viewer">
-              <Link
-                href={`https://viewer.trustlesswork.com/${escrow.contractId}`}
-                target="_blank"
-                className="sm:ml-2"
+          <TooltipInfo content="View from TW Escrow Viewer">
+            <Link
+              href={`https://viewer.trustlesswork.com/${escrow.contractId}`}
+              target="_blank"
+              className="sm:ml-2"
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 hover:bg-transparent"
               >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 hover:bg-transparent"
-                >
-                  <ExternalLink className="h-4 w-4 text-muted-foreground" />
-                </Button>
-              </Link>
-            </TooltipInfo>
-          </div>
-        </CardHeader>
+                <ExternalLink className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </Link>
+          </TooltipInfo>
+        </div>
+      </CardHeader>
 
-        <CardContent className="p-4">
-          <div className="mt-2">
-            <h3 className="text-xl sm:text-2xl font-semibold">
-              <span className="font-extrabold">
-                {formatDollar(escrow?.balance) || "N/A"}
-              </span>
-              <span className="text-sm text-muted-foreground font-normal ml-1">
-                of {formatDollar(calculateTotalAmount(escrow)) || "N/A"}
-              </span>
-            </h3>
-          </div>
+      <CardContent className="p-4">
+        <div className="mt-2">
+          <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold">
+            <span className="font-extrabold">
+              {formatDollar(escrow?.balance) || "N/A"}
+            </span>
+            <span className="text-xs sm:text-sm text-muted-foreground font-normal ml-1">
+              of {formatDollar(calculateTotalAmount(escrow)) || "N/A"}
+            </span>
+          </h3>
+        </div>
+      </CardContent>
 
-          <ProgressEscrow escrow={escrow} />
-        </CardContent>
-      </div>
+      <CardFooter className="p-4 pt-0 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 sm:gap-0 mt-auto">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+          <Badge variant="outline" className="gap-2 w-fit">
+            {escrow.type === "multi-release" ? (
+              <GalleryHorizontalEnd className="h-3.5 w-3.5" />
+            ) : (
+              <AudioWaveform className="h-3.5 w-3.5" />
+            )}
+            <span>
+              {escrow.type === "multi-release"
+                ? t("reusable.multiRelease")
+                : t("reusable.singleRelease")}
+            </span>
+          </Badge>
 
-      <CardFooter className="p-4 pt-0 justify-between items-end mt-auto">
-        <Badge variant="outline" className="gap-2">
-          {escrow.type === "multi-release" ? (
-            <GalleryHorizontalEnd className="h-3.5 w-3.5" />
-          ) : (
-            <AudioWaveform className="h-3.5 w-3.5" />
-          )}
-          <span>
-            {escrow.type === "multi-release"
-              ? t("reusable.multiRelease")
-              : t("reusable.singleRelease")}
-          </span>
-        </Badge>
+          <Badge variant="outline" className="gap-2 w-fit">
+            <Hash className="h-3.5 w-3.5" />
+            <span>{escrow.milestones.length} milestones</span>
+          </Badge>
+        </div>
 
-        <p className="text-xs text-muted-foreground italic">
+        <p className="text-xs text-muted-foreground italic w-full sm:w-auto text-center sm:text-right">
           Created:{" "}
           {formatDateFromFirebase(
             escrow.createdAt.seconds,

@@ -1,5 +1,4 @@
 import { Escrow } from "@/@types/escrow.entity";
-import { cn } from "@/lib/utils";
 import {
   MultiReleaseMilestone,
   SingleReleaseMilestone,
@@ -8,7 +7,6 @@ import { useTranslation } from "react-i18next";
 
 interface ProgressEscrowProps {
   escrow: Escrow;
-  showTimeline?: boolean;
 }
 
 const ProgressCircle = ({
@@ -61,10 +59,7 @@ const ProgressCircle = ({
   );
 };
 
-const ProgressEscrow = ({
-  escrow,
-  showTimeline = false,
-}: ProgressEscrowProps) => {
+const ProgressEscrow = ({ escrow }: ProgressEscrowProps) => {
   const { t } = useTranslation();
   const completedMilestones = escrow.milestones.filter(
     (milestone) => milestone.status === "completed",
@@ -107,250 +102,84 @@ const ProgressEscrow = ({
   }
 
   return (
-    <div className="my-4 space-y-4">
+    <div className="space-y-4 px-10 w-full">
       {/* Summary circles */}
-      {showTimeline ? (
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <ProgressCircle
-              percentage={progressPercentageCompleted}
-              color="#006be4"
-            />
-            <div className="text-xs">
-              <div className="font-medium">{t("reusable.completed")}</div>
-              <div className="text-muted-foreground">
-                {completedMilestones}/{totalMilestones}
-              </div>
+      <div className="flex flex-wrap items-center justify-center gap-6">
+        {/* Completed */}
+        <div className="flex items-center gap-3">
+          <ProgressCircle
+            percentage={progressPercentageCompleted}
+            color="#006be4"
+          />
+          <div className="text-xs">
+            <div className="font-medium">{t("reusable.completed")}</div>
+            <div className="text-muted-foreground">
+              {completedMilestones}/{totalMilestones}
             </div>
           </div>
-
-          <div className="flex items-center gap-3">
-            <ProgressCircle
-              percentage={progressPercentageApproved}
-              color="#15803d"
-            />
-            <div className="text-xs">
-              <div className="font-medium">{t("reusable.approved")}</div>
-              <div className="text-muted-foreground">
-                {approvedMilestones}/{totalMilestones}
-              </div>
-            </div>
-          </div>
-
-          {isMultiRelease && (
-            <>
-              <div className="flex items-center gap-3">
-                <ProgressCircle
-                  percentage={progressPercentageDisputed}
-                  color="#dc2626"
-                />
-                <div className="text-xs">
-                  <div className="font-medium">{t("reusable.disputed")}</div>
-                  <div className="text-muted-foreground">
-                    {disputedMilestones}/{totalMilestones}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <ProgressCircle
-                  percentage={progressPercentageResolved}
-                  color="#15803d"
-                />
-                <div className="text-xs">
-                  <div className="font-medium">{t("reusable.resolved")}</div>
-                  <div className="text-muted-foreground">
-                    {resolvedMilestones}/{totalMilestones}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <ProgressCircle
-                  percentage={progressPercentageReleased}
-                  color="#15803d"
-                />
-                <div className="text-xs">
-                  <div className="font-medium">{t("reusable.released")}</div>
-                  <div className="text-muted-foreground">
-                    {releasedMilestones}/{totalMilestones}
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
         </div>
-      ) : (
-        <>
-          <div className="flex items-center justify-between">
+
+        {/* Approved */}
+        <div className="flex items-center gap-3">
+          <ProgressCircle
+            percentage={progressPercentageApproved}
+            color="#15803d"
+          />
+          <div className="text-xs">
+            <div className="font-medium">{t("reusable.approved")}</div>
+            <div className="text-muted-foreground">
+              {approvedMilestones}/{totalMilestones}
+            </div>
+          </div>
+        </div>
+
+        {/* Additional circles for multi-release */}
+        {isMultiRelease && (
+          <>
+            {/* Disputed */}
             <div className="flex items-center gap-3">
               <ProgressCircle
-                percentage={progressPercentageCompleted}
-                color="#006be4"
+                percentage={progressPercentageDisputed}
+                color="#dc2626"
               />
               <div className="text-xs">
-                <div className="font-medium">{t("reusable.completed")}</div>
+                <div className="font-medium">{t("reusable.disputed")}</div>
                 <div className="text-muted-foreground">
-                  {completedMilestones}/{totalMilestones}
+                  {disputedMilestones}/{totalMilestones}
                 </div>
               </div>
             </div>
 
+            {/* Resolved */}
             <div className="flex items-center gap-3">
-              <div className="text-xs text-right">
-                <div className="font-medium">{t("reusable.approved")}</div>
-                <div className="text-muted-foreground">
-                  {approvedMilestones}/{totalMilestones}
-                </div>
-              </div>
               <ProgressCircle
-                percentage={progressPercentageApproved}
+                percentage={progressPercentageResolved}
                 color="#15803d"
               />
-            </div>
-          </div>
-
-          {/* Additional circles for multi-release */}
-          {isMultiRelease && (
-            <>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <ProgressCircle
-                    percentage={progressPercentageDisputed}
-                    color="#dc2626"
-                  />
-                  <div className="text-xs">
-                    <div className="font-medium">{t("reusable.disputed")}</div>
-                    <div className="text-muted-foreground">
-                      {disputedMilestones}/{totalMilestones}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="text-xs text-right">
-                    <div className="font-medium">{t("reusable.resolved")}</div>
-                    <div className="text-muted-foreground">
-                      {resolvedMilestones}/{totalMilestones}
-                    </div>
-                  </div>
-                  <ProgressCircle
-                    percentage={progressPercentageResolved}
-                    color="#15803d"
-                  />
+              <div className="text-xs">
+                <div className="font-medium">{t("reusable.resolved")}</div>
+                <div className="text-muted-foreground">
+                  {resolvedMilestones}/{totalMilestones}
                 </div>
               </div>
+            </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <ProgressCircle
-                    percentage={progressPercentageReleased}
-                    color="#15803d"
-                  />
-                  <div className="text-xs">
-                    <div className="font-medium">{t("reusable.released")}</div>
-                    <div className="text-muted-foreground">
-                      {releasedMilestones}/{totalMilestones}
-                    </div>
-                  </div>
+            {/* Released */}
+            <div className="flex items-center gap-3">
+              <ProgressCircle
+                percentage={progressPercentageReleased}
+                color="#15803d"
+              />
+              <div className="text-xs">
+                <div className="font-medium">{t("reusable.released")}</div>
+                <div className="text-muted-foreground">
+                  {releasedMilestones}/{totalMilestones}
                 </div>
               </div>
-            </>
-          )}
-        </>
-      )}
-
-      {/* Timeline */}
-      {showTimeline && (
-        <div className="pt-1">
-          <div className="relative">
-            {/* Progress line */}
-            <div className="absolute left-0 right-0 h-0.5 bg-muted/30 top-[9px]"></div>
-            <div className="absolute left-0 h-0.5 bg-muted-foreground top-[9px] transition-all duration-300 ease-in-out w-full"></div>
-
-            {/* Milestone dots */}
-            <div className="flex justify-between relative py-1">
-              {escrow.milestones.map((milestone, i) => {
-                const position =
-                  totalMilestones > 1 ? (i / (totalMilestones - 1)) * 100 : 0;
-
-                const isCompleted = milestone.status === "completed";
-                const isApproved =
-                  "flags" in milestone && milestone.flags?.approved === true;
-                const isDisputed =
-                  "flags" in milestone && milestone.flags?.disputed === true;
-                const isResolved =
-                  "flags" in milestone && milestone.flags?.resolved === true;
-                const isReleased =
-                  "flags" in milestone && milestone.flags?.released === true;
-
-                return (
-                  <div
-                    key={i}
-                    className="absolute top-0 flex flex-col items-center"
-                    style={{
-                      left: `${position}%`,
-                      transform: "translateX(-50%)",
-                    }}
-                  >
-                    <div
-                      className={cn(
-                        "w-[18px] h-[18px] rounded-full flex items-center justify-center transition-colors duration-300",
-                        isReleased
-                          ? "bg-[#15803d] text-white"
-                          : isResolved
-                            ? "bg-[#15803d] text-white"
-                            : isDisputed
-                              ? "bg-[#dc2626] text-white"
-                              : isApproved
-                                ? "bg-[#15803d] text-white"
-                                : isCompleted
-                                  ? "bg-primary text-primary-foreground"
-                                  : "bg-muted-foreground border border-muted/50 text-muted-foreground",
-                      )}
-                    >
-                      {(isApproved ||
-                        isDisputed ||
-                        isResolved ||
-                        isReleased) && (
-                        <div className="w-[6px] h-[6px] rounded-full bg-white"></div>
-                      )}
-                    </div>
-
-                    <div className="mt-2 text-[10px] font-medium">
-                      {isReleased ? (
-                        <span className="text-muted-foreground">
-                          {t("reusable.released")}
-                        </span>
-                      ) : isResolved ? (
-                        <span className="text-muted-foreground">
-                          {t("reusable.resolved")}
-                        </span>
-                      ) : isDisputed ? (
-                        <span className="text-muted-foreground">
-                          {t("reusable.disputed")}
-                        </span>
-                      ) : isCompleted && isApproved ? (
-                        <span className="text-muted-foreground">
-                          {t("reusable.approved")}
-                        </span>
-                      ) : isCompleted ? (
-                        <span className="text-muted-foreground">
-                          {t("reusable.completed")}
-                        </span>
-                      ) : (
-                        <span className="text-muted-foreground">
-                          {t("reusable.pending")}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
             </div>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
