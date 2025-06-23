@@ -6,7 +6,6 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import {
   CheckCheck,
   CircleDollarSign,
-  DollarSign,
   FileCheck2,
   Flame,
   Handshake,

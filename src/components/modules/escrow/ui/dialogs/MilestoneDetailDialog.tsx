@@ -70,13 +70,6 @@ export const MilestoneDetailDialog = ({
   isOpen,
   onClose,
   selectedMilestone,
-  selectedEscrow,
-  userRolesInEscrow,
-  activeTab,
-  evidenceVisibleMap,
-  setEvidenceVisibleMap,
-  loadingMilestoneStates,
-  setLoadingMilestoneStates,
 }: MilestoneDetailDialogProps) => {
   const { t } = useTranslation();
   const { isValidUrl } = useValidData();
