@@ -278,7 +278,11 @@
     "platformAddress": "Platform",
     "tooltips": {
       "help": "Help"
-    }
+    },
+    "multiRelease": "Multi Release",
+    "singleRelease": "Single Release",
+    "type": "Type",
+    "disputed": "Disputed"
   },
   "myEscrows": {
     "tabs": {
@@ -381,11 +385,7 @@
       "noDescription": "No description",
       "noBalance": "No balance",
       "noEngagement": "No engagement"
-    },
-    "multiRelease": "Multi Release",
-    "singleRelease": "Single Release",
-    "type": "Type",
-    "disputed": "Disputed"
+    }
   },
   "escrowDetailDialog": {
     "rolesLabel": "Roles",
