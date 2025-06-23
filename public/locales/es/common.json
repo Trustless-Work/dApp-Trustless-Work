@@ -17,7 +17,8 @@
     "escrow": "Escrows",
     "my-escrows": "Mis Escrows",
     "public-profile": "Perfil Público",
-    "report-issue": "Reportar Problema"
+    "report-issue": "Reportar Problema",
+    "initialize-escrow": "Inicializar Escrow"
   },
   "home": {
     "hero": {
