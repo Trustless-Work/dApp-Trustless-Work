@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { groupMessagesByDate } from "@/lib/chat-utils";
-import type { Message } from "@/lib/chat-type";
+import { groupMessagesByDate } from "@/components/modules/chat/utils/chat.utils";
+import type { Message } from "@/@types/message.entity";
 import { DateSeparator } from "./DateSeparator";
 import { MessageBubble } from "./MessageBubble";
 
