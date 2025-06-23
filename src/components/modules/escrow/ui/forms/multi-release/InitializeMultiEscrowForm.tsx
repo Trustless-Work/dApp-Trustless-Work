@@ -14,7 +14,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { DollarSign, Trash2 } from "lucide-react";
+import { DollarSign, Percent, Trash2 } from "lucide-react";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { useInitializeMultiEscrow } from "../../../hooks/multi-release/initialize-multi-escrow.hook";
 import { Card } from "@/components/ui/card";
@@ -413,20 +413,27 @@ export const InitializeMultiEscrowForm = () => {
                   <TooltipInfo content="Commission that the platform will receive when the escrow is completed." />
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter platform fee"
-                    value={field.value ? `${field.value}%` : ""}
-                    onChange={(e) => {
-                      let rawValue = e.target.value;
-                      rawValue = rawValue.replace(/[^0-9.]/g, "");
+                  <div className="relative">
+                    <Percent
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      size={18}
+                    />
+                    <Input
+                      placeholder="Enter platform fee"
+                      className="pl-10"
+                      value={field.value || ""}
+                      onChange={(e) => {
+                        let rawValue = e.target.value;
+                        rawValue = rawValue.replace(/[^0-9.]/g, "");
 
-                      if (rawValue.split(".").length > 2) {
-                        rawValue = rawValue.slice(0, -1);
-                      }
+                        if (rawValue.split(".").length > 2) {
+                          rawValue = rawValue.slice(0, -1);
+                        }
 
-                      field.onChange(rawValue);
-                    }}
-                  />
+                        field.onChange(rawValue ? Number(rawValue) : undefined);
+                      }}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
