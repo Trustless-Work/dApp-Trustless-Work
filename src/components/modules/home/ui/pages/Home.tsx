@@ -31,6 +31,10 @@ export const Home = () => {
           <HowItWorksSection />
           <SmartEscrowSection />
           <CTASection />
+          <h1 className="text-center text-2xl font-bold mt-10">
+            texting this to see if it works
+          </h1>
+          {/* <FloatingChat /> */}
         </main>
       </Bounded>
     </>

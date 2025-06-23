@@ -116,7 +116,7 @@ const useEditEntitiesDialog = ({
 
       const { unsignedTransaction } = await updateEscrow({
         payload: finalPayload,
-        type: "single-release",
+        type: selectedEscrow.type,
       });
 
       if (!unsignedTransaction) {

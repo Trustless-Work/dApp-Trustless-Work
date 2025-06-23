@@ -77,9 +77,9 @@ export const fetchAllEscrows = async ({
       if (currentBalance !== plainBalance) {
         await updateEscrow({
           escrowId: escrow.id,
-          payload: { balance: String(plainBalance) },
+          payload: { balance: plainBalance },
         });
-        escrow.balance = String(plainBalance);
+        escrow.balance = plainBalance;
       }
 
       return escrow;
@@ -96,7 +96,7 @@ export const updateExistingEscrow = async ({
 }): Promise<Escrow | undefined> => {
   const response = await updateEscrow({
     escrowId,
-    payload: { ...payload, balance: String(payload.balance || 0) },
+    payload: { ...payload, balance: payload.balance || 0 },
   });
   return response?.data;
 };

@@ -55,10 +55,11 @@ import {
 } from "@/components/ui/tooltip";
 import { Escrow } from "@/@types/escrow.entity";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { DeleteEscrowDialog } from "./DeleteEscrowDialog";
 import { RestoreEscrowDialog } from "./RestoreEscrowDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
+import { MultiReleaseMilestone } from "@trustless-work/escrow";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -103,6 +104,21 @@ const EscrowDetailDialog = ({
   const platformFeeAmount = useEscrowUIBoundedStore(
     (state) => state.platformFeeAmount,
   );
+
+  const totalAmount = useMemo(() => {
+    if (!selectedEscrow) return 0;
+
+    const milestones = selectedEscrow.milestones as MultiReleaseMilestone[];
+
+    if (selectedEscrow?.type === "single-release") {
+      return selectedEscrow.amount;
+    } else {
+      return milestones.reduce(
+        (acc, milestone) => acc + Number(milestone.amount),
+        0,
+      );
+    }
+  }, [selectedEscrow]);
 
   if (!isDialogOpen || !selectedEscrow) return null;
   return (
@@ -178,7 +194,7 @@ const EscrowDetailDialog = ({
             <StatisticsCard
               title={t("escrowDetailDialog.amount")}
               icon={CircleDollarSign}
-              value={formatDollar(selectedEscrow.amount)}
+              value={formatDollar(totalAmount)}
               tooltipContent={t("escrowDetailDialog.amountTooltip")}
             />
 
@@ -187,6 +203,7 @@ const EscrowDetailDialog = ({
               icon={Wallet}
               value={formatDollar(selectedEscrow.balance ?? "null")}
               tooltipContent={t("escrowDetailDialog.balanceTooltip")}
+              fundedBy={selectedEscrow.fundedBy}
             />
 
             {/* Escrow ID and Actions */}
@@ -235,7 +252,9 @@ const EscrowDetailDialog = ({
                         "grid gap-6 h-full",
                         !selectedEscrow.flags?.released &&
                           !selectedEscrow.flags?.resolved
-                          ? "grid-cols-1 md:grid-cols-2"
+                          ? selectedEscrow?.type === "multi-release"
+                            ? "grid-cols-1 md:grid-cols-1 max-w-2xl mx-auto"
+                            : "grid-cols-1 md:grid-cols-2"
                           : "grid-cols-1 md:grid-cols-1 max-w-2xl mx-auto",
                       )}
                     >
@@ -282,7 +301,7 @@ const EscrowDetailDialog = ({
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                          <div className="flex items-center justify-evenly p-3 bg-muted/50 rounded-lg">
                             <div className="flex items-center gap-2">
                               <CircleDollarSign className="h-4 w-4 text-primary" />
                               <div className="flex flex-col">
@@ -295,11 +314,26 @@ const EscrowDetailDialog = ({
                                 </span>
                               </div>
                             </div>
+
+                            <div className="flex items-center gap-2">
+                              <CircleDollarSign className="h-4 w-4 text-primary" />
+                              <div className="flex flex-col">
+                                <span className="text-sm text-muted-foreground">
+                                  {t("reusable.type")}
+                                </span>
+                                <span className="font-medium">
+                                  {selectedEscrow?.type === "multi-release"
+                                    ? t("reusable.multiRelease")
+                                    : t("reusable.singleRelease")}
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </Card>
 
-                      {!selectedEscrow.flags?.released &&
+                      {selectedEscrow?.type !== "multi-release" &&
+                        !selectedEscrow.flags?.released &&
                         !selectedEscrow.flags?.resolved && (
                           <Card className="p-4 h-full">
                             <h3 className="text-lg font-semibold mb-4">
@@ -567,7 +601,6 @@ const EscrowDetailDialog = ({
 
       <ResolveDisputeEscrowDialog
         isResolveDisputeDialogOpen={dialogStates.resolveDispute.isOpen}
-        setIsResolveDisputeDialogOpen={dialogStates.resolveDispute.setIsOpen}
       />
 
       <EditMilestonesDialog

@@ -278,7 +278,11 @@
     "platformAddress": "Plataforma",
     "tooltips": {
       "help": "Ayuda"
-    }
+    },
+    "multiRelease": "Multi Release",
+    "singleRelease": "Single Release",
+    "type": "Tipo",
+    "disputed": "Disputado"
   },
   "escrowDetailDialog": {
     "rolesLabel": "Roles",
@@ -289,7 +293,7 @@
     "status": "Estado",
     "seeDetails": "Ver detalles",
     "by": "Por:",
-    "amount": "Monto",
+    "amount": "Monto Total",
     "amountTooltip": "Monto total del depósito en garantía.",
     "balance": "Saldo",
     "balanceTooltip": "Saldo actual del depósito (contrato inteligente).",
@@ -332,9 +336,11 @@
   "common": {
     "cancel": "Cancelar",
     "restore": "Restaurar",
-    "delete": "Eliminar",
     "pickDate": "Seleccionar fecha",
-    "noData": "No hay datos disponibles"
+    "noData": "No hay datos disponibles",
+    "restoring": "Restaurando...",
+    "delete": "Eliminar",
+    "deleting": "Eliminando..."
   },
   "settings": {
     "title": "Configuración",

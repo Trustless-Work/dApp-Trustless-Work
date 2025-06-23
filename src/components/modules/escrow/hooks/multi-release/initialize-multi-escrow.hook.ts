@@ -80,7 +80,7 @@ export const useInitializeMultiEscrow = () => {
       engagementId: "",
       title: "",
       description: "",
-      platformFee: "",
+      platformFee: 0,
       receiverMemo: "",
       trustline: {
         address: "",
@@ -114,7 +114,7 @@ export const useInitializeMultiEscrow = () => {
       engagementId: "ENG-001",
       title: "Design Landing Page",
       description: "Landing for the new product of the company.",
-      platformFee: "5",
+      platformFee: 5,
       receiverMemo: "123",
       trustline: {
         address: usdcTrustline.address,
@@ -128,7 +128,7 @@ export const useInitializeMultiEscrow = () => {
         releaseSigner: address || "",
         disputeResolver: address || "",
       },
-      milestones: [{ description: "Design the wireframe", amount: "2" }],
+      milestones: [{ description: "Design the wireframe", amount: 2 }],
     };
 
     // Set form values
@@ -150,7 +150,7 @@ export const useInitializeMultiEscrow = () => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = [
       ...currentMilestones,
-      { description: "", amount: "" },
+      { description: "", amount: 0 },
     ];
     form.setValue("milestones", updatedMilestones);
   };

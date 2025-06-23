@@ -17,10 +17,13 @@ i18n
     },
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
+      requestOptions: {
+        cache: "no-store",
+      },
     },
     detection: {
       order: ["localStorage", "navigator"],
-      caches: ["localStorage"],
+      caches: [],
     },
     load: "languageOnly",
     supportedLngs: ["en", "es"],

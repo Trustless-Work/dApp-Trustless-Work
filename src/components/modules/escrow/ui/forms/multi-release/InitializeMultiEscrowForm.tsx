@@ -415,7 +415,7 @@ export const InitializeMultiEscrowForm = () => {
                 <FormControl>
                   <Input
                     placeholder="Enter platform fee"
-                    value={field.value !== "" ? `${field.value}%` : ""}
+                    value={field.value ? `${field.value}%` : ""}
                     onChange={(e) => {
                       let rawValue = e.target.value;
                       rawValue = rawValue.replace(/[^0-9.]/g, "");
@@ -506,13 +506,13 @@ export const InitializeMultiEscrowForm = () => {
                     size={18}
                   />
                   <Input
-                    type="string"
+                    type="number"
                     className="pl-10"
                     placeholder="Enter milestone amount"
                     value={milestone.amount || ""}
                     onChange={(e) => {
                       const updatedMilestones = [...milestones];
-                      updatedMilestones[index].amount = e.target.value;
+                      updatedMilestones[index].amount = Number(e.target.value);
                       form.setValue("milestones", updatedMilestones);
                     }}
                   />
@@ -521,7 +521,7 @@ export const InitializeMultiEscrowForm = () => {
                 <Button
                   onClick={() => handleRemoveMilestone(index)}
                   className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
-                  disabled={index === 0}
+                  disabled={milestones.length === 1}
                 >
                   <Trash2 className="h-5 w-5" />
                 </Button>

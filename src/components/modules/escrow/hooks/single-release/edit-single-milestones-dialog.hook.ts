@@ -7,25 +7,22 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { formSchema } from "../schema/edit-milestone.schema";
-import { useEscrowUIBoundedStore } from "../store/ui";
+import { formSchemaSingle } from "../../schema/edit-milestone.schema";
+import { useEscrowUIBoundedStore } from "../../store/ui";
 import { toast } from "sonner";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import {
   useUpdateEscrow,
   useSendTransaction,
 } from "@trustless-work/escrow/hooks";
-import {
-  UpdateMultiReleaseEscrowPayload,
-  UpdateSingleReleaseEscrowPayload,
-} from "@trustless-work/escrow";
+import { UpdateSingleReleaseEscrowPayload } from "@trustless-work/escrow";
 import { Escrow } from "@/@types/escrow.entity";
 
 interface useEditMilestonesDialogProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
 }
 
-const useEditMilestonesDialog = ({
+export const useEditSingleMilestonesDialog = ({
   setIsEditMilestoneDialogOpen,
 }: useEditMilestonesDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
@@ -44,15 +41,15 @@ const useEditMilestonesDialog = ({
   const { updateEscrow } = useUpdateEscrow();
   const { sendTransaction } = useSendTransaction();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof formSchemaSingle>>({
+    resolver: zodResolver(formSchemaSingle),
     defaultValues: {
       milestones: selectedEscrow?.milestones || [{ description: "" }],
     },
     mode: "onChange",
   });
 
-  const milestones: z.infer<typeof formSchema>["milestones"] =
+  const milestones: z.infer<typeof formSchemaSingle>["milestones"] =
     form.watch("milestones");
 
   const isAnyMilestoneEmpty = milestones.some(
@@ -74,7 +71,7 @@ const useEditMilestonesDialog = ({
     form.setValue("milestones", updatedMilestones);
   };
 
-  const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+  const onSubmit = async (payload: z.infer<typeof formSchemaSingle>) => {
     if (!selectedEscrow) return;
 
     setIsEditingMilestones(true);
@@ -89,9 +86,7 @@ const useEditMilestonesDialog = ({
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
 
-      const finalPayload:
-        | UpdateMultiReleaseEscrowPayload
-        | UpdateSingleReleaseEscrowPayload = {
+      const finalPayload: UpdateSingleReleaseEscrowPayload = {
         escrow: updatedEscrow as Escrow,
         signer: address,
         contractId: selectedEscrow.contractId || "",
@@ -151,5 +146,3 @@ const useEditMilestonesDialog = ({
     isAnyMilestoneEmpty,
   };
 };
-
-export default useEditMilestonesDialog;

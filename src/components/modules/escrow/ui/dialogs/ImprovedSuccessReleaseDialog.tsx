@@ -17,6 +17,8 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import TransferAnimation from "./TransferAnimation";
 import { motion } from "framer-motion";
 import { Escrow } from "@/@types/escrow.entity";
+import { MultiReleaseMilestone } from "@trustless-work/escrow";
+import { useEscrowBoundedStore } from "../../store/data";
 
 interface SuccessReleaseDialogProps {
   title: string;
@@ -38,9 +40,17 @@ export const ImprovedSuccessReleaseDialog = ({
   });
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
   const escrow = selectedEscrow || recentEscrow;
 
   const { formatDollar } = useFormatUtils();
+
+  // Get the amount based on escrow type
+  const amount =
+    escrow?.type === "single-release"
+      ? escrow?.amount
+      : (escrow?.milestones[milestoneIndex || 0] as MultiReleaseMilestone)
+          ?.amount;
 
   // Percentage
   const trustlessPercentage = 0.3;
@@ -48,7 +58,7 @@ export const ImprovedSuccessReleaseDialog = ({
   const receiverPercentage = 100 - (trustlessPercentage + platformFee);
 
   // Amount
-  const totalAmount = Number(escrow?.amount || 0);
+  const totalAmount = Number(amount || 0);
   const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
   const receiverAmount = (totalAmount * receiverPercentage) / 100;
   const platformAmount = (totalAmount * platformFee) / 100;
@@ -104,7 +114,7 @@ export const ImprovedSuccessReleaseDialog = ({
               <div className="flex justify-start gap-10">
                 <p className="text-sm">
                   <span className="font-bold">Total Amount: </span>
-                  {formatDollar(escrow?.amount)}
+                  {formatDollar(amount)}
                 </p>
                 {recentEscrow && (
                   <p className="text-sm">
@@ -119,10 +129,10 @@ export const ImprovedSuccessReleaseDialog = ({
               <TransferAnimation
                 title="Funds Released Successfully"
                 fromLabel="Contract"
-                fromAmount={formatDollar(escrow?.amount).replace("$", "")}
+                fromAmount={formatDollar(amount).replace("$", "")}
                 fromCurrency={escrow?.trustline?.name}
                 toLabel="Distributed"
-                toAmount={formatDollar(escrow?.amount).replace("$", "")}
+                toAmount={formatDollar(amount).replace("$", "")}
                 toCurrency={escrow?.trustline?.name}
                 additionalInfo={`Contract ID: ${escrow?.contractId?.slice(0, 8)}...${escrow?.contractId?.slice(-6)}`}
               />
@@ -138,9 +148,9 @@ export const ImprovedSuccessReleaseDialog = ({
                     type="Receiver"
                     entity={escrow?.roles?.receiver}
                     hasPercentage={true}
-                    percentage={receiverPercentage.toString()}
+                    percentage={receiverPercentage}
                     hasAmount={true}
-                    amount={receiverAmount.toString()}
+                    amount={receiverAmount}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -148,9 +158,9 @@ export const ImprovedSuccessReleaseDialog = ({
                     type="Trustless Work"
                     entity={"0x"}
                     hasPercentage={true}
-                    percentage={trustlessPercentage.toString()}
+                    percentage={trustlessPercentage}
                     hasAmount={true}
-                    amount={trustlessAmount.toString()}
+                    amount={trustlessAmount}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -158,9 +168,9 @@ export const ImprovedSuccessReleaseDialog = ({
                     type="Platform"
                     entity={escrow?.roles?.platformAddress}
                     hasPercentage={true}
-                    percentage={platformFee.toString()}
+                    percentage={platformFee}
                     hasAmount={true}
-                    amount={platformAmount.toString()}
+                    amount={platformAmount}
                   />
                 </motion.div>
               </motion.div>

@@ -416,7 +416,7 @@ export const InitializeSingleEscrowForm = () => {
                 <FormControl>
                   <Input
                     placeholder="Enter platform fee"
-                    value={field.value !== "" ? `${field.value}%` : ""}
+                    value={field.value ? `${field.value}%` : ""}
                     onChange={(e) => {
                       let rawValue = e.target.value;
                       rawValue = rawValue.replace(/[^0-9.]/g, "");
@@ -534,7 +534,7 @@ export const InitializeSingleEscrowForm = () => {
                 <Button
                   onClick={() => handleRemoveMilestone(index)}
                   className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
-                  disabled={index === 0}
+                  disabled={milestones.length === 1}
                 >
                   <Trash2 className="h-5 w-5" />
                 </Button>

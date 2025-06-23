@@ -1,7 +1,6 @@
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
-import useStartDisputeEscrowDialog from "../../../hooks/start-dispute-escrow-dialog.hook";
-import useResolveDisputeEscrowDialog from "../../../hooks/resolve-dispute-escrow-dialog.hook";
+import { useDisputeEscrowDialog } from "../../../hooks/single-release/dispute-escrow-dialog.hook";
 import { useEscrowDialogs } from "../hooks/use-escrow-dialogs.hook";
 import {
   Check,
@@ -17,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { toast } from "sonner";
 import { Escrow } from "@/@types/escrow.entity";
+import { useTranslation } from "react-i18next";
+import { useResolveDisputeDialog } from "../../../hooks/resolve-dispute-dialog.hook";
 
 interface EscrowIDActionProps {
   selectedEscrow: Escrow;
@@ -27,18 +28,16 @@ export const EscrowIDActions = ({
   selectedEscrow,
   userRolesInEscrow,
 }: EscrowIDActionProps) => {
-  const dialogStates = useEscrowDialogs();
-
-  const { handleOpen } = useResolveDisputeEscrowDialog({
-    setIsResolveDisputeDialogOpen: dialogStates.resolveDispute.setIsOpen,
-  });
+  const { handleOpen } = useResolveDisputeDialog();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const isStartingDispute = useEscrowUIBoundedStore(
     (state) => state.isStartingDispute,
   );
-  const { startDisputeSubmit } = useStartDisputeEscrowDialog();
+  const { startDisputeSubmit } = useDisputeEscrowDialog();
   const { formatAddress } = useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
+  const { t } = useTranslation();
+  const dialogStates = useEscrowDialogs();
 
   return (
     <div className="flex flex-col justify-center w-full md:w-1/4 px-2">
@@ -96,8 +95,9 @@ export const EscrowIDActions = ({
             Show QR Code
           </Button>
 
-          {(userRolesInEscrow.includes("approver") ||
-            userRolesInEscrow.includes("serviceProvider")) &&
+          {selectedEscrow.type === "single-release" &&
+            (userRolesInEscrow.includes("approver") ||
+              userRolesInEscrow.includes("serviceProvider")) &&
             (activeTab === "approver" || activeTab === "serviceProvider") &&
             !selectedEscrow?.flags?.disputed &&
             !selectedEscrow?.flags?.resolved && (
@@ -128,13 +128,14 @@ export const EscrowIDActions = ({
                 ) : (
                   <>
                     <Flame className="mr-2" />
-                    Start Dispute
+                    {t("actions.startDispute")}
                   </>
                 )}
               </Button>
             )}
 
-          {userRolesInEscrow.includes("disputeResolver") &&
+          {selectedEscrow.type === "single-release" &&
+            userRolesInEscrow.includes("disputeResolver") &&
             activeTab === "disputeResolver" &&
             !selectedEscrow?.flags?.resolved &&
             selectedEscrow?.flags?.disputed && (

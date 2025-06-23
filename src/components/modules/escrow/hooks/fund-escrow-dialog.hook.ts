@@ -36,6 +36,7 @@ const useFundEscrowDialog = ({
   const fetchAllEscrows = useGlobalBoundedStore(
     (state) => state.fetchAllEscrows,
   );
+  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const setAmountMoonpay = useEscrowUIBoundedStore(
     (state) => state.setAmountMoonpay,
@@ -47,7 +48,7 @@ const useFundEscrowDialog = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: "",
+      amount: 0,
       paymentMethod: "",
     },
     mode: "onChange",
@@ -63,7 +64,7 @@ const useFundEscrowDialog = ({
   }, [amount, setAmountMoonpay]);
 
   useEffect(() => {
-    if (paymentMethod === "card" && parseInt(amount, 10) < 20) {
+    if (paymentMethod === "card" && amount < 20) {
       setError("amount", {
         type: "custom",
         message:
@@ -74,7 +75,7 @@ const useFundEscrowDialog = ({
     }
   }, [paymentMethod, amount, setError, clearErrors]);
 
-  const onSubmit = async ({ amount }: { amount: string }) => {
+  const onSubmit = async ({ amount }: { amount: number }) => {
     setIsFundingEscrow(true);
 
     try {
@@ -86,7 +87,7 @@ const useFundEscrowDialog = ({
 
       const { unsignedTransaction } = await fundEscrow({
         payload: finalPayload,
-        type: "single-release",
+        type: selectedEscrow?.type || "single-release",
       });
 
       if (!unsignedTransaction) {
@@ -110,11 +111,19 @@ const useFundEscrowDialog = ({
         form.reset();
         setIsSecondDialogOpen?.(false);
         setIsDialogOpen(false);
+        updateEscrow({
+          escrowId: selectedEscrow!.id,
+          payload: {
+            ...selectedEscrow!,
+            fundedBy: activeTab,
+          },
+        });
         fetchAllEscrows({ address, type: activeTab || "approver" });
 
         toast.success("Escrow funded successfully");
       }
     } catch (err) {
+      console.log(err);
       toast.error(
         err instanceof Error ? err.message : "An unknown error occurred",
       );

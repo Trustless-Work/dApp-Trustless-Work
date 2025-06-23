@@ -7,8 +7,8 @@ import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
 } from "@/core/store/data";
-import { useEscrowUIBoundedStore } from "../store/ui";
-import { formSchema } from "../schema/edit-basic-properties.schema";
+import { useEscrowUIBoundedStore } from "../../store/ui";
+import { formSchemaSingle } from "../../schema/edit-basic-properties.schema";
 import {
   useUpdateEscrow,
   useSendTransaction,
@@ -18,13 +18,13 @@ import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { Escrow } from "@/@types/escrow.entity";
 import { UpdateSingleReleaseEscrowPayload } from "@trustless-work/escrow";
 
-interface useEditBasicPropertiesDialogProps {
+interface useEditSingleBasicPropertiesDialogProps {
   setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
 }
 
-const useEditBasicPropertiesDialog = ({
+export const useEditSingleBasicPropertiesDialog = ({
   setIsEditBasicPropertiesDialogOpen,
-}: useEditBasicPropertiesDialogProps) => {
+}: useEditSingleBasicPropertiesDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const setIsEditingBasicProperties = useEscrowUIBoundedStore(
@@ -41,20 +41,20 @@ const useEditBasicPropertiesDialog = ({
   const { updateEscrow } = useUpdateEscrow();
   const { sendTransaction } = useSendTransaction();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof formSchemaSingle>>({
+    resolver: zodResolver(formSchemaSingle),
     defaultValues: {
       title: selectedEscrow?.title || "",
       engagementId: selectedEscrow?.engagementId || "",
       description: selectedEscrow?.description || "",
-      amount: selectedEscrow?.amount || "",
+      amount: selectedEscrow?.amount || 0,
       receiverMemo: selectedEscrow?.receiverMemo?.toString() || "",
-      platformFee: selectedEscrow?.platformFee || "",
+      platformFee: selectedEscrow?.platformFee || 0,
     },
     mode: "onChange",
   });
 
-  const onSubmit = async (payload: z.infer<typeof formSchema>) => {
+  const onSubmit = async (payload: z.infer<typeof formSchemaSingle>) => {
     if (!selectedEscrow) return;
 
     setIsEditingBasicProperties(true);
@@ -70,21 +70,11 @@ const useEditBasicPropertiesDialog = ({
         platformFee: payload.platformFee,
       };
 
-      // Plain the trustline
-      if (
-        updatedEscrow.trustline &&
-        typeof updatedEscrow.trustline === "object"
-      ) {
-        // Keep trustline object as is - no need for self assignment
-      }
-
       delete updatedEscrow.createdAt;
       delete updatedEscrow.updatedAt;
       delete updatedEscrow.id;
 
-      const finalPayload:
-        | UpdateSingleReleaseEscrowPayload
-        | UpdateSingleReleaseEscrowPayload = {
+      const finalPayload: UpdateSingleReleaseEscrowPayload = {
         escrow: updatedEscrow as Escrow,
         signer: address,
         contractId: selectedEscrow.contractId || "",
@@ -140,5 +130,3 @@ const useEditBasicPropertiesDialog = ({
     handleClose,
   };
 };
-
-export default useEditBasicPropertiesDialog;
