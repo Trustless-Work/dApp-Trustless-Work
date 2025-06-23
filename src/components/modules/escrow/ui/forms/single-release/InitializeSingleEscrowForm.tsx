@@ -457,7 +457,7 @@ export const InitializeSingleEscrowForm = () => {
                       size={18}
                     />
                     <Input
-                      placeholder="Enter platform fee"
+                      placeholder="Enter amount"
                       className="pl-10"
                       value={field.value || ""}
                       onChange={(e) => {

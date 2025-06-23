@@ -99,7 +99,7 @@ export const Milestones = ({
     }
     if ("flags" in milestone && milestone.flags?.released) {
       return (
-        <Badge className="uppercase text-xs bg-green-600 px-2 py-1">
+        <Badge className="uppercase text-xs bg-green-800 px-2 py-1">
           {t("reusable.released")}
         </Badge>
       );
@@ -120,7 +120,7 @@ export const Milestones = ({
       ("approved" in milestone && milestone.approved)
     ) {
       return (
-        <Badge className="uppercase text-xs bg-green-600 px-2 py-1">
+        <Badge className="uppercase text-xs bg-green-800 hover:bg-green-800 px-2 py-1">
           {t("reusable.approved")}
         </Badge>
       );
@@ -361,7 +361,7 @@ export const Milestones = ({
         <Button
           key="approve"
           size="sm"
-          className="bg-green-600 hover:bg-green-700 text-white flex-1 min-w-0"
+          className="bg-green-800 hover:bg-green-700 text-white flex-1 min-w-0"
           disabled={isChangingFlag}
           onClick={(e) => {
             e.stopPropagation();
@@ -438,11 +438,11 @@ export const Milestones = ({
             return (
               <Card
                 key={`milestone-${milestoneIndex}-${milestone.description}-${milestone.status}`}
-                className="hover:shadow-lg transition-all duration-200 border-0 shadow-sm bg-gradient-to-br from-white to-gray-50/50"
+                className="hover:shadow-lg transition-all duration-200 border-0 shadow-sm"
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-base font-semibold text-gray-900">
+                    <CardTitle className="text-base font-semibold text-foreground">
                       Milestone {milestoneIndex + 1}
                     </CardTitle>
                     {getMilestoneStatusBadge(milestone)}
@@ -452,10 +452,10 @@ export const Milestones = ({
                 <CardContent className="pt-0 space-y-4">
                   {/* Description */}
                   <div className="space-y-2">
-                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                       Description
                     </p>
-                    <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
                       {milestone.description}
                     </p>
                   </div>
@@ -463,7 +463,7 @@ export const Milestones = ({
                   {/* Amount */}
                   {"amount" in milestone && (
                     <div className="flex items-center gap-2 py-2">
-                      <span className="text-2xl font-bold text-gray-900">
+                      <span className="text-2xl font-bold text-foreground">
                         {formatDollar(milestone.amount)}
                       </span>
                     </div>
@@ -471,9 +471,9 @@ export const Milestones = ({
 
                   {/* Evidence indicator */}
                   {milestone.evidence && (
-                    <div className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
-                      <FileCheck2 className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                      <span className="text-xs text-blue-700 font-medium">
+                    <div className="flex items-center gap-2 p-2 border-primary/20 rounded-lg">
+                      <FileCheck2 className="w-4 h-4 text-primary flex-shrink-0" />
+                      <span className="text-xs text-muted-foreground font-medium">
                         Evidence provided
                       </span>
                     </div>
@@ -492,7 +492,7 @@ export const Milestones = ({
                   <Button
                     size="sm"
                     variant="outline"
-                    className="w-full border-gray-200 hover:bg-gray-50 text-gray-700"
+                    className="w-full border-border  text-muted-foreground"
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedMilestoneForDetail({

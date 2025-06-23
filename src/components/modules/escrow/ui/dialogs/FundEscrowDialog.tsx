@@ -20,9 +20,8 @@ import {
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import useFundEscrowDialogHook from "../../hooks/fund-escrow-dialog.hook";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import SkeletonFundEscrow from "./utils/SkeletonFundEscrow";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CircleDollarSignIcon, DollarSign } from "lucide-react";
+import { CircleDollarSignIcon, DollarSign, Loader2 } from "lucide-react";
 
 interface FundEscrowDialogProps {
   isSecondDialogOpen: boolean;
@@ -61,105 +60,119 @@ const FundEscrowDialog = ({
             </DialogDescription>
           </DialogHeader>
 
-          {isFundingEscrow ? (
-            <SkeletonFundEscrow />
-          ) : (
-            <FormProvider {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="grid gap-4 py-4"
-              >
-                <div className="flex flex-col ms-center gap-4">
-                  <FormField
-                    control={form.control}
-                    name="amount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center">
-                          Amount{" "}
-                          <span className="text-destructive ml-1">*</span>
-                          <TooltipInfo content="The amount to be funded." />
-                        </FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <DollarSign
-                              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                              size={18}
-                            />
-                            <Input
-                              className="pl-10"
-                              placeholder="The amount to be funded"
-                              {...field}
-                              onChange={(e) => {
-                                field.onChange(e);
-                              }}
-                            />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="grid gap-4 py-4"
+            >
+              <div className="flex flex-col ms-center gap-4">
+                <FormField
+                  control={form.control}
+                  name="amount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center">
+                        Amount <span className="text-destructive ml-1">*</span>
+                        <TooltipInfo content="The amount to be funded." />
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <DollarSign
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                            size={18}
+                          />
+                          <Input
+                            placeholder="Enter amount"
+                            className="pl-10"
+                            value={field.value || ""}
+                            onChange={(e) => {
+                              let rawValue = e.target.value;
+                              rawValue = rawValue.replace(/[^0-9.]/g, "");
 
-                  <FormField
-                    control={form.control}
-                    name="paymentMethod"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Payment Method</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            value={field.value}
-                            defaultValue="wallet"
-                            className="flex justify-between"
-                          >
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="wallet" />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                Pay by Wallet
-                              </FormLabel>
-                            </FormItem>
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="card" />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                Pay by Card (via MoonPay)
-                              </FormLabel>
-                            </FormItem>
-                          </RadioGroup>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                              if (rawValue.split(".").length > 2) {
+                                rawValue = rawValue.slice(0, -1);
+                              }
 
-                <DialogFooter>
-                  {paymentMethod === "card" ? (
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        setIsDialogOpen(false);
-                        setIsSecondDialogOpen(false);
-                        setIsMoonpayWidgetOpen(!isMoonpayWidgetOpen);
-                      }}
-                    >
-                      <CircleDollarSignIcon />
-                      Fund Escrow
-                    </Button>
-                  ) : (
-                    <Button type="submit">
-                      <CircleDollarSignIcon />
-                      Fund Escrow
-                    </Button>
+                              field.onChange(
+                                rawValue ? Number(rawValue) : undefined,
+                              );
+                            }}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </DialogFooter>
-              </form>
-            </FormProvider>
-          )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="paymentMethod"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Payment Method</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          defaultValue="wallet"
+                          className="flex justify-between"
+                        >
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="wallet" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Pay by Wallet
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="card" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              Pay by Card (via MoonPay)
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <DialogFooter>
+                {paymentMethod === "card" ? (
+                  <Button
+                    type="button"
+                    disabled={isFundingEscrow}
+                    onClick={() => {
+                      setIsDialogOpen(false);
+                      setIsSecondDialogOpen(false);
+                      setIsMoonpayWidgetOpen(!isMoonpayWidgetOpen);
+                    }}
+                  >
+                    <CircleDollarSignIcon />
+                    Fund Escrow
+                  </Button>
+                ) : (
+                  <Button type="submit" disabled={isFundingEscrow}>
+                    {isFundingEscrow ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Funding...
+                      </>
+                    ) : (
+                      <>
+                        <CircleDollarSignIcon />
+                        Fund Escrow
+                      </>
+                    )}
+                  </Button>
+                )}
+              </DialogFooter>
+            </form>
+          </FormProvider>
         </DialogContent>
       </Dialog>
     </>
