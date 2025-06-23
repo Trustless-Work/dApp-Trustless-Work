@@ -1,4 +1,4 @@
-import { formatDate } from "@/lib/chat-utils";
+import { formatDate } from "@/components/modules/chat/utils/chat.utils";
 
 interface DateSeparatorProps {
   date: Date;

@@ -1,6 +1,5 @@
-import type { Message, MessageGroup } from "./chat-type";
+import type { Message, MessageGroup } from "@/@types/message.entity";
 
-// Función para formatear la fecha
 export const formatDate = (date: Date): string => {
   const today = new Date();
   const yesterday = new Date(today);
@@ -36,7 +35,6 @@ export const formatDate = (date: Date): string => {
   }
 };
 
-// Función para formatear la hora
 export const formatTime = (date: Date): string => {
   return date.toLocaleTimeString("es-ES", {
     hour: "2-digit",
@@ -44,7 +42,6 @@ export const formatTime = (date: Date): string => {
   });
 };
 
-// Agrupar mensajes por fecha
 export const groupMessagesByDate = (messages: Message[]): MessageGroup => {
   const groups: MessageGroup = {};
 
@@ -59,7 +56,6 @@ export const groupMessagesByDate = (messages: Message[]): MessageGroup => {
   return groups;
 };
 
-// Generar respuesta automática del bot
 export const generateBotResponse = (): string => {
   const responses = [
     "Gracias por tu mensaje. Un agente se pondrá en contacto contigo pronto.",

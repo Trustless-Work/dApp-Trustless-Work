@@ -11,8 +11,6 @@ import { SmartEscrowSection } from "../sections/SmartEscrow";
 import { MotionValue } from "framer-motion";
 import { ConnectArrow } from "../utils/ConnectArrow";
 
-import { FloatingChat } from "@/components/modules/chat/FLoatingChat";
-
 export const Home = () => {
   const homeHook = useHome();
   const containerRef = homeHook?.containerRef ?? null;
@@ -36,7 +34,7 @@ export const Home = () => {
           <h1 className="text-center text-2xl font-bold mt-10">
             texting this to see if it works
           </h1>
-          <FloatingChat />
+          {/* <FloatingChat /> */}
         </main>
       </Bounded>
     </>

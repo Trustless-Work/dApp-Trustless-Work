@@ -1,5 +1,5 @@
-import { formatTime } from "@/lib/chat-utils";
-import type { Message } from "@/lib/chat-type";
+import { Message } from "@/@types/message.entity";
+import { formatTime } from "@/components/modules/chat/utils/chat.utils";
 
 interface MessageBubbleProps {
   message: Message;
