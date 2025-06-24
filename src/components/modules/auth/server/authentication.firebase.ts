@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { User, UserPayload } from "@/@types/user.entity";
+import { UserPayload } from "@/@types/user.entity";
 import { db } from "@/core/config/firebase/firebase";
 import {
   doc,

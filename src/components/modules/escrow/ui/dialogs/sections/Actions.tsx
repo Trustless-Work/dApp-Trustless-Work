@@ -6,7 +6,6 @@ import {
   Handshake,
   Loader2,
   Pencil,
-  QrCode,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEscrowUIBoundedStore } from "../../../store/ui";

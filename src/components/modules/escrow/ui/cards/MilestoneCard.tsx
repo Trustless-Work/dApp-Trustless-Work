@@ -67,7 +67,6 @@ export const MilestoneCard = ({
   onViewDetails,
   onCompleteMilestone,
 }: MilestoneCardProps) => {
-  const { t } = useTranslation();
   const { formatDollar } = useFormatUtils();
   const isChangingFlag = useEscrowUIBoundedStore(
     (state) => state.isChangingFlag,
