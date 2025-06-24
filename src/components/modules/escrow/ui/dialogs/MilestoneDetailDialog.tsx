@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,12 +14,7 @@ import {
   User,
   Calendar,
   Hash,
-  CheckCircle,
-  XCircle,
-  Clock,
   ExternalLink,
-  CircleAlert,
-  CircleCheckBig,
 } from "lucide-react";
 import { useValidData } from "@/utils/hook/valid-data.hook";
 import { useTranslation } from "react-i18next";
@@ -30,6 +24,10 @@ import {
   SingleReleaseMilestone,
 } from "@trustless-work/escrow";
 import Link from "next/link";
+import {
+  getFlagBadge,
+  getMilestoneStatusBadge,
+} from "@/components/utils/ui/Status";
 
 interface MilestoneDetailDialogProps {
   isOpen: boolean;
@@ -75,88 +73,6 @@ export const MilestoneDetailDialog = ({
   const { t } = useTranslation();
   const { isValidUrl } = useValidData();
 
-  const getMilestoneStatusBadge = (
-    milestone: MultiReleaseMilestone | SingleReleaseMilestone,
-  ) => {
-    if (
-      "disputeStartedBy" in milestone &&
-      "flags" in milestone &&
-      !milestone.flags?.resolved
-    ) {
-      return (
-        <Badge variant="destructive" className="gap-1">
-          <CircleAlert className="h-3.5 w-3.5" />
-          <span>{t("reusable.disputed")}</span>
-        </Badge>
-      );
-    }
-    if ("flags" in milestone && milestone.flags?.released) {
-      return (
-        <Badge
-          variant="outline"
-          className="gap-1 border-green-500 text-green-600"
-        >
-          <CircleCheckBig className="h-3.5 w-3.5" />
-          <span>{t("reusable.released")}</span>
-        </Badge>
-      );
-    }
-    if (
-      "flags" in milestone &&
-      milestone.flags?.resolved &&
-      !milestone.flags?.disputed
-    ) {
-      return (
-        <Badge className="uppercase text-xs px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white">
-          <CheckCircle className="w-3 h-3 mr-1" />
-          {t("reusable.resolved")}
-        </Badge>
-      );
-    }
-    if (
-      ("flags" in milestone && milestone.flags?.approved) ||
-      ("approved" in milestone && milestone.approved)
-    ) {
-      return (
-        <Badge className="uppercase text-xs px-3 py-1 bg-green-800 hover:bg-green-800 text-white">
-          <CheckCircle className="w-3 h-3 mr-1" />
-          {t("reusable.approved")}
-        </Badge>
-      );
-    }
-    return (
-      <Badge className="uppercase text-xs px-3 py-1" variant="outline">
-        <Clock className="w-3 h-3 mr-1" />
-        {t(`reusable.${milestone.status?.toLowerCase() ?? "pending"}`)}
-      </Badge>
-    );
-  };
-
-  const getFlagBadge = (
-    flag: boolean,
-    label: string,
-    variant: "default" | "secondary" | "destructive" = "default",
-  ) => {
-    return (
-      <Badge
-        variant={flag ? variant : "secondary"}
-        className="px-3 py-1 text-xs font-medium"
-      >
-        {flag ? (
-          <>
-            <CheckCircle className="w-3 h-3 mr-1" />
-            {label}
-          </>
-        ) : (
-          <>
-            <XCircle className="w-3 h-3 mr-1" />
-            {label}
-          </>
-        )}
-      </Badge>
-    );
-  };
-
   if (!selectedMilestone) return null;
 
   return (
@@ -168,8 +84,8 @@ export const MilestoneDetailDialog = ({
               <Hash className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <DialogTitle className="text-xl font-semibold">
-                Milestone {selectedMilestone.index + 1}
+              <DialogTitle className="text-xl font-semibold truncate">
+                {selectedMilestone.milestone.description}
               </DialogTitle>
               <p className="text-sm text-muted-foreground">
                 Detailed information about this milestone
@@ -180,7 +96,7 @@ export const MilestoneDetailDialog = ({
 
         <div className="space-y-6 pt-4">
           {/* Status Overview */}
-          <div className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg border border-border">
+          <div className="flex items-center justify-between p-4  rounded-lg border border-border">
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-center w-8 h-8 bg-background rounded-full shadow-sm border border-border">
                 <Calendar className="w-4 h-4 text-primary" />

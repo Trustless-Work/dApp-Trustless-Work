@@ -18,7 +18,7 @@ import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useTranslation } from "react-i18next";
 import { Escrow } from "@/@types/escrow.entity";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import { getStatusBadge } from "@/components/utils/ui/StatusBadge";
+import { getStatusBadge } from "@/components/utils/ui/Status";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
 
 interface EscrowCardProps {

@@ -142,7 +142,7 @@ export const GeneralInformation = ({
             ? selectedEscrow?.type === "multi-release"
               ? "grid-cols-1 md:grid-cols-1 mx-auto"
               : "grid-cols-1 lg:grid-cols-4"
-            : "grid-cols-1 md:grid-cols-1 max-w-2xl mx-auto",
+            : "grid-cols-1 md:grid-cols-1 w-full mx-auto",
         )}
       >
         {/* Escrow ID and Actions */}
