@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileCheck2, Eye } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { Escrow } from "@/@types/escrow.entity";
 import {
   MultiReleaseMilestone,

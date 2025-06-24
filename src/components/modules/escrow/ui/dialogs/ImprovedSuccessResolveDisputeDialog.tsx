@@ -50,12 +50,12 @@ export const ImprovedSuccessResolveDisputeDialog = ({
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
 
   const receiverResolve =
-    receiverResolveFromStore && receiverResolveFromStore !== ""
+    receiverResolveFromStore && receiverResolveFromStore !== 0
       ? receiverResolveFromStore
       : selectedEscrow?.receiverFunds;
 
   const approverResolve =
-    approverResolveFromStore && approverResolveFromStore !== ""
+    approverResolveFromStore && approverResolveFromStore !== 0
       ? approverResolveFromStore
       : selectedEscrow?.approverFunds;
 
@@ -76,8 +76,10 @@ export const ImprovedSuccessResolveDisputeDialog = ({
   const trustlessWorkAmount = Number(amount) * trustlessWorkFee;
   const platformFee = escrow?.platformFee || 0;
 
-  const parsedApproverFunds = parseFloat(approverResolve || "0") || 0;
-  const parsedReceiverFunds = parseFloat(receiverResolve || "0") || 0;
+  const parsedApproverFunds =
+    parseFloat(approverResolve?.toString() || "0") || 0;
+  const parsedReceiverFunds =
+    parseFloat(receiverResolve?.toString() || "0") || 0;
 
   const approverDeductions =
     parsedApproverFunds * (platformFee / 100) +
