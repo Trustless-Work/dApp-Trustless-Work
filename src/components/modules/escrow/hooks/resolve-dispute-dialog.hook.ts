@@ -61,8 +61,8 @@ export const useResolveDisputeDialog = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      approverFunds: "",
-      receiverFunds: "",
+      approverFunds: 0,
+      receiverFunds: 0,
     },
     mode: "onChange",
   });
@@ -72,8 +72,8 @@ export const useResolveDisputeDialog = () => {
       approverFunds,
       receiverFunds,
     }: {
-      approverFunds: string;
-      receiverFunds: string;
+      approverFunds: number;
+      receiverFunds: number;
     },
     onComplete?: () => void,
   ) => {
@@ -153,8 +153,8 @@ export const useResolveDisputeDialog = () => {
   };
 
   const handleClose = () => {
-    setReceiverResolve("");
-    setApproverResolve("");
+    setReceiverResolve(0);
+    setApproverResolve(0);
     setIsResolveDisputeDialogOpen(false);
   };
 

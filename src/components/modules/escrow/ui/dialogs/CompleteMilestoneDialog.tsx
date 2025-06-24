@@ -17,10 +17,9 @@ import {
 } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import { PackageCheck } from "lucide-react";
+import { Loader2, PackageCheck } from "lucide-react";
 import useCompleteMilestoneDialogHook from "../../hooks/change-status-escrow-dialog.hook";
 import { useEscrowBoundedStore } from "../../store/data";
-import SkeletonCompleteMilestone from "./utils/SkeletonCompleteMilestone";
 import { Textarea } from "@/components/ui/textarea";
 
 interface CompleteMilestoneDialogProps {
@@ -58,50 +57,53 @@ const CompleteMilestoneDialog = ({
             </DialogDescription>
           </DialogHeader>
 
-          {isChangingStatus ? (
-            <SkeletonCompleteMilestone />
-          ) : (
-            <FormProvider {...form}>
-              <form
-                onSubmit={form.handleSubmit((data) =>
-                  onSubmit(data.newEvidence),
-                )}
-                className="grid gap-4 py-4"
-              >
-                <div className="flex flex-col ms-center gap-4">
-                  <FormField
-                    control={form.control}
-                    name="newEvidence"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center">
-                          Evidence (optional){" "}
-                          <TooltipInfo content="The evidence that you've completed the milestone." />
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="The evidence of your work"
-                            {...field}
-                            onChange={(e) => {
-                              field.onChange(e);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit((data) => onSubmit(data.newEvidence))}
+              className="grid gap-4 py-4"
+            >
+              <div className="flex flex-col ms-center gap-4">
+                <FormField
+                  control={form.control}
+                  name="newEvidence"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center">
+                        Evidence (optional){" "}
+                        <TooltipInfo content="The evidence that you've completed the milestone." />
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="The evidence of your work"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-                <DialogFooter>
-                  <Button type="submit">
-                    <PackageCheck />
-                    Complete
-                  </Button>
-                </DialogFooter>
-              </form>
-            </FormProvider>
-          )}
+              <DialogFooter>
+                <Button type="submit" disabled={isChangingStatus}>
+                  {isChangingStatus ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Completing...
+                    </>
+                  ) : (
+                    <>
+                      <PackageCheck className="w-4 h-4" />
+                      Complete
+                    </>
+                  )}
+                </Button>
+              </DialogFooter>
+            </form>
+          </FormProvider>
         </DialogContent>
       </Dialog>
     </>

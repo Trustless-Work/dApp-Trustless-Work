@@ -19,10 +19,9 @@ import {
 } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { useResolveDisputeDialog } from "../../hooks/resolve-dispute-dialog.hook";
-import SkeletonResolveDispute from "./utils/SkeletonResolveDispute";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/core/store/data";
-import { DollarSign } from "lucide-react";
+import { DollarSign, Handshake, Loader2 } from "lucide-react";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { Card } from "@/components/ui/card";
 import { Escrow } from "@/@types/escrow.entity";
@@ -31,6 +30,7 @@ import {
   MultiReleaseMilestone,
   SingleReleaseMilestone,
 } from "@trustless-work/escrow";
+import { t } from "i18next";
 
 interface ResolveDisputeEscrowDialogProps {
   isResolveDisputeDialogOpen: boolean;
@@ -72,8 +72,8 @@ const ResolveDisputeEscrowDialog = ({
 
   useEffect(() => {
     const platformFee = (escrow?.platformFee || 0) / 100;
-    const parsedApproverFunds = parseFloat(approverFunds) || 0;
-    const parsedReceiverFunds = parseFloat(receiverFunds) || 0;
+    const parsedApproverFunds = parseFloat(approverFunds.toString()) || 0;
+    const parsedReceiverFunds = parseFloat(receiverFunds.toString()) || 0;
 
     // Get the amount based on escrow type
     const amount =
@@ -199,93 +199,129 @@ const ResolveDisputeEscrowDialog = ({
           </Card>
         </DialogHeader>
 
-        {isResolvingDispute ? (
-          <SkeletonResolveDispute />
-        ) : (
-          <FormProvider {...form}>
-            <form
-              onSubmit={form.handleSubmit((data) => onSubmit(data))}
-              className="grid gap-4 py-4"
-            >
-              <div className="flex flex-col gap-4">
-                <FormField
-                  control={form.control}
-                  name="approverFunds"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center">
-                        Approver Amount{" "}
-                        <span className="text-destructive ml-1">*</span>
-                        <TooltipInfo content="The amount for the approver." />
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <DollarSign
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                            size={18}
-                          />
-                          <Input
-                            className="pl-10"
-                            placeholder="The amount for the approver"
-                            {...field}
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="receiverFunds"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex items-center">
-                        Receiver Amount{" "}
-                        <span className="text-destructive ml-1">*</span>
-                        <TooltipInfo content="The amount for the receiver." />
-                      </FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <DollarSign
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                            size={18}
-                          />
-                          <Input
-                            className="pl-10"
-                            placeholder="The amount for the receiver"
-                            {...field}
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+        <FormProvider {...form}>
+          <form
+            onSubmit={form.handleSubmit((data) => onSubmit(data))}
+            className="grid gap-4 py-4"
+          >
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="approverFunds"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      Approver Amount{" "}
+                      <span className="text-destructive ml-1">*</span>
+                      <TooltipInfo content="The amount for the approver." />
+                    </FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <DollarSign
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                          size={18}
+                        />
+                        <Input
+                          className="pl-10"
+                          placeholder="The amount for the approver"
+                          {...field}
+                          onChange={(e) => {
+                            let rawValue = e.target.value;
+                            rawValue = rawValue.replace(/[^0-9.]/g, "");
 
-              {!isEqualToAmount && (
-                <p className="text-destructive text-xs font-bold text-end">
-                  Both amounts must be equal to the balance (
-                  {formatDollar(
-                    escrow.type === "single-release"
-                      ? escrow.balance
-                      : (milestone as MultiReleaseMilestone)?.amount || 0,
-                  )}
-                  )
-                  <br />
-                  Difference: {formatDollar(isMissing.toString())}
-                </p>
-              )}
+                            if (rawValue.split(".").length > 2) {
+                              rawValue = rawValue.slice(0, -1);
+                            }
 
-              <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-between items-center">
-                <Button type="submit" disabled={!isEqualToAmount}>
-                  Resolve Conflicts
-                </Button>
-              </DialogFooter>
-            </form>
-          </FormProvider>
-        )}
+                            field.onChange(
+                              rawValue ? Number(rawValue) : undefined,
+                            );
+                          }}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="receiverFunds"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center">
+                      Receiver Amount{" "}
+                      <span className="text-destructive ml-1">*</span>
+                      <TooltipInfo content="The amount for the receiver." />
+                    </FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <DollarSign
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                          size={18}
+                        />
+                        <Input
+                          className="pl-10"
+                          placeholder="The amount for the receiver"
+                          {...field}
+                          onChange={(e) => {
+                            let rawValue = e.target.value;
+                            rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+                            if (rawValue.split(".").length > 2) {
+                              rawValue = rawValue.slice(0, -1);
+                            }
+
+                            field.onChange(
+                              rawValue ? Number(rawValue) : undefined,
+                            );
+                          }}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {!isEqualToAmount && (
+              <p className="text-destructive text-xs font-bold text-end">
+                Both amounts must be equal to the balance (
+                {formatDollar(
+                  escrow.type === "single-release"
+                    ? escrow.balance
+                    : (milestone as MultiReleaseMilestone)?.amount || 0,
+                )}
+                )
+                <br />
+                Difference: {formatDollar(isMissing.toString())}
+              </p>
+            )}
+
+            <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-end items-center">
+              <Button
+                type="submit"
+                className="bg-green-800 hover:bg-green-700 text-white"
+                disabled={!isEqualToAmount || isResolvingDispute}
+              >
+                {isResolvingDispute ? (
+                  <>
+                    <Loader2 className="w-3 h-3 mr-1 animate-spin flex-shrink-0" />
+                    <span className="truncate">Resolving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Handshake className="w-3 h-3 mr-1 flex-shrink-0" />
+                    <span className="truncate">
+                      {t("actions.resolveDispute")}
+                    </span>
+                  </>
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
+        </FormProvider>
       </DialogContent>
     </Dialog>
   );

@@ -96,7 +96,6 @@ export const MilestoneCard = ({
     releaseFundsSubmit,
     setMilestoneIndex,
     handleOpen,
-    t,
   );
   const hasActions = actionButtons.length > 0;
 
@@ -110,7 +109,7 @@ export const MilestoneCard = ({
           <CardTitle className="text-base font-semibold text-foreground truncate">
             {milestone.description}
           </CardTitle>
-          {getMilestoneStatusBadge(milestone, t)}
+          {getMilestoneStatusBadge(milestone)}
         </div>
       </CardHeader>
 

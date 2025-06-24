@@ -215,7 +215,7 @@ export const getActionButtons = (
       <Button
         key="complete"
         size="sm"
-        className="bg-blue-600 hover:bg-blue-700 text-white flex-1 min-w-0"
+        className="bg-primary hover:bg-primary/80 text-white flex-1 min-w-0"
         onClick={(e) => {
           e.stopPropagation();
           onCompleteMilestone(milestone, milestoneIndex);
@@ -243,7 +243,7 @@ export const getActionButtons = (
       <Button
         key="release"
         size="sm"
-        className="bg-green-600 hover:bg-green-700 text-white flex-1 min-w-0"
+        className="bg-green-800 hover:bg-green-700 text-white flex-1 min-w-0"
         disabled={
           loadingMilestoneStates[milestoneIndex]?.isReleasing ||
           Number(selectedEscrow.balance) === 0 ||
@@ -357,7 +357,7 @@ export const getActionButtons = (
       <Button
         key="resolve"
         size="sm"
-        className="bg-green-600 hover:bg-green-700 text-white flex-1 min-w-0"
+        className="bg-green-800 hover:bg-green-700 text-white flex-1 min-w-0"
         disabled={loadingMilestoneStates[milestoneIndex]?.isResolving}
         onClick={(e) => {
           e.stopPropagation();

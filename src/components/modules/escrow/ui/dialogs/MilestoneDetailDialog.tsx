@@ -24,10 +24,7 @@ import {
   SingleReleaseMilestone,
 } from "@trustless-work/escrow";
 import Link from "next/link";
-import {
-  getFlagBadge,
-  getMilestoneStatusBadge,
-} from "@/components/utils/ui/Status";
+import { getMilestoneStatusBadge } from "@/components/utils/ui/Status";
 
 interface MilestoneDetailDialogProps {
   isOpen: boolean;
@@ -216,71 +213,18 @@ export const MilestoneDetailDialog = ({
                   <User className="w-5 h-5 text-red-600 dark:text-red-400" />
                   <div>
                     <p className="text-sm font-medium text-red-700 dark:text-red-300">
-                      Disputed by:{" "}
+                      <span className="font-bold">Disputed by:</span>{" "}
                       {selectedMilestone.milestone.disputeStartedBy ===
                       "serviceProvider"
                         ? t("reusable.serviceProvider")
                         : t("reusable.approver")}
                     </p>
-                    <p className="text-xs text-red-600 dark:text-red-400">
-                      This milestone is currently under dispute
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Flags Information */}
-          {"flags" in selectedMilestone.milestone && (
-            <Card className="border border-border shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <div className="w-1 h-6 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
-                  Milestone Flags
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 gap-3">
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-md">
-                    <span className="text-sm font-medium text-foreground">
-                      Approved
-                    </span>
-                    {getFlagBadge(
-                      selectedMilestone.milestone.flags?.approved || false,
-                      "Approved",
-                      "default",
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-md">
-                    <span className="text-sm font-medium text-foreground">
-                      Released
-                    </span>
-                    {getFlagBadge(
-                      selectedMilestone.milestone.flags?.released || false,
-                      "Released",
-                      "default",
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-md">
-                    <span className="text-sm font-medium text-foreground">
-                      Disputed
-                    </span>
-                    {getFlagBadge(
-                      selectedMilestone.milestone.flags?.disputed || false,
-                      "Disputed",
-                      "destructive",
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between p-3 bg-muted/50 rounded-md">
-                    <span className="text-sm font-medium text-foreground">
-                      Resolved
-                    </span>
-                    {getFlagBadge(
-                      selectedMilestone.milestone.flags?.resolved || false,
-                      "Resolved",
-                      "default",
-                    )}
+                    {"flags" in selectedMilestone.milestone &&
+                      !selectedMilestone.milestone.flags?.resolved && (
+                        <p className="text-xs text-red-600 dark:text-red-400">
+                          This milestone is currently under dispute
+                        </p>
+                      )}
                   </div>
                 </div>
               </CardContent>

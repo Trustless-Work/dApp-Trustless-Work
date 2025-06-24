@@ -97,19 +97,6 @@ const TransferAnimation = ({
               <div className="flex flex-col items-start gap-2">
                 <div className="space-y-1.5">
                   <span className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-                    <svg
-                      className="w-3 h-3"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <title>From</title>
-                      <path d="M12 19V5M5 12l7-7 7 7" />
-                    </svg>
                     {fromLabel}
                   </span>
                   <div className="flex items-center gap-2.5 group transition-all">
@@ -124,19 +111,6 @@ const TransferAnimation = ({
                 <div className="w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
                 <div className="space-y-1.5">
                   <span className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-                    <svg
-                      className="w-3 h-3"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <title>To</title>
-                      <path d="M12 5v14M5 12l7 7 7-7" />
-                    </svg>
                     {toLabel}
                   </span>
                   <div className="flex items-center gap-2.5 group transition-all">

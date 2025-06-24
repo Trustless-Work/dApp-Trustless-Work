@@ -12,8 +12,8 @@ export const useEscrowAmountSlice: StateCreator<
     receiverAmount: 0,
     platformFeeAmount: 0,
     trustlessWorkAmount: 0,
-    receiverResolve: "",
-    approverResolve: "",
+    receiverResolve: 0,
+    approverResolve: 0,
     amountMoonpay: 0,
 
     // Modifiers
