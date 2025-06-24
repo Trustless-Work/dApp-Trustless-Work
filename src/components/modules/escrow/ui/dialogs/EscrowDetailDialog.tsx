@@ -14,7 +14,14 @@ import FundEscrowDialog from "./FundEscrowDialog";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";
 import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
-import { ArchiveRestore, Trash2, Info, Users, ListChecks } from "lucide-react";
+import {
+  ArchiveRestore,
+  Trash2,
+  Info,
+  Users,
+  ListChecks,
+  QrCode,
+} from "lucide-react";
 import EditMilestonesDialog from "./EditMilestonesDialog";
 import {
   SuccessReleaseDialog,
@@ -187,43 +194,56 @@ const EscrowDetailDialog = ({
                       areAllMilestonesCompletedAndFlag
                     }
                   />
-                  {selectedEscrow?.isActive !== false ? (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="destructive"
-                            onClick={() => setIsDeleteConfirmOpen(true)}
-                            className="gap-2"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            <span>Delete</span>
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          {t("escrowDetailDialog.softDeleteTooltip")}
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  ) : (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="default"
-                            onClick={() => setIsRestoreConfirmOpen(true)}
-                            className="gap-2"
-                          >
-                            <ArchiveRestore className="h-4 w-4" />
-                            <span>Restore</span>
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          {t("escrowDetailDialog.restoreTooltip")}
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )}
+
+                  <div className="flex gap-4">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dialogStates.qr.setIsOpen(true);
+                      }}
+                      className="w-1/4"
+                      variant="outline"
+                    >
+                      <QrCode className="h-4 w-4" />
+                    </Button>
+                    {selectedEscrow?.isActive !== false ? (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="destructive"
+                              onClick={() => setIsDeleteConfirmOpen(true)}
+                              className="gap-2"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              <span>Delete</span>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {t("escrowDetailDialog.softDeleteTooltip")}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="default"
+                              onClick={() => setIsRestoreConfirmOpen(true)}
+                              className="gap-2"
+                            >
+                              <ArchiveRestore className="h-4 w-4" />
+                              <span>Restore</span>
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {t("escrowDetailDialog.restoreTooltip")}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
+                  </div>
                 </>
               )}
             </CardFooter>

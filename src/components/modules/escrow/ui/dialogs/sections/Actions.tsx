@@ -55,18 +55,6 @@ export const Actions = ({
             </Button>
           )}
 
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            dialogStates.qr.setIsOpen(true);
-          }}
-          className="w-full"
-          variant="outline"
-        >
-          <QrCode className="mr-2 h-4 w-4" />
-          Show QR Code
-        </Button>
-
         {selectedEscrow.type === "single-release" &&
           (userRolesInEscrow.includes("approver") ||
             userRolesInEscrow.includes("serviceProvider")) &&
