@@ -17,6 +17,8 @@ import {
 } from "@trustless-work/escrow/hooks";
 import { ChangeMilestoneStatusPayload } from "@trustless-work/escrow/types";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
+import { AxiosError } from "axios";
+import { handleError } from "@/errors/utils/handle-errors";
 
 interface changeMilestoneStatusDialogHook {
   setIsCompleteMilestoneDialogOpen: (value: boolean) => void;
@@ -102,9 +104,7 @@ const useChangeMilestoneStatusDialogHook = ({
         );
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
+      toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsChangingStatus(false);
     }

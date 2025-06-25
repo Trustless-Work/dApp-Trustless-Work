@@ -22,6 +22,8 @@ import {
   UpdateSingleReleaseEscrowPayload,
 } from "@trustless-work/escrow";
 import { Escrow } from "@/@types/escrow.entity";
+import { handleError } from "@/errors/utils/handle-errors";
+import { AxiosError } from "axios";
 
 interface useEditEntitiesDialogProps {
   setIsEditEntitiesDialogOpen: (value: boolean) => void;
@@ -146,9 +148,7 @@ const useEditEntitiesDialog = ({
         );
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
+      toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsEditingEntities(false);
     }

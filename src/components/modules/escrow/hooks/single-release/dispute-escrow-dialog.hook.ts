@@ -12,6 +12,8 @@ import {
 } from "@trustless-work/escrow/hooks";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { SingleReleaseStartDisputePayload } from "@trustless-work/escrow";
+import { handleError } from "@/errors/utils/handle-errors";
+import { AxiosError } from "axios";
 
 export const useDisputeEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -86,9 +88,7 @@ export const useDisputeEscrowDialog = () => {
         toast.success(`You have started a dispute in ${selectedEscrow.title}.`);
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
+      toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsStartingDispute(false);
     }

@@ -19,6 +19,8 @@ import {
   MultiReleaseEscrow,
   UpdateMultiReleaseEscrowPayload,
 } from "@trustless-work/escrow";
+import { handleError } from "@/errors/utils/handle-errors";
+import { AxiosError } from "axios";
 
 interface useEditMultiBasicPropertiesDialogProps {
   setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
@@ -112,9 +114,7 @@ export const useEditMultiBasicPropertiesDialog = ({
         );
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
+      toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsEditingBasicProperties(false);
     }

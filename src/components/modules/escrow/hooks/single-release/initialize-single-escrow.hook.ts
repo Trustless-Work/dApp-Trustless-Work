@@ -26,6 +26,8 @@ import {
 import { Escrow } from "@/@types/escrow.entity";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useInitializeEscrowSchema } from "../../schema/initialize-escrow.schema";
+import { handleError } from "@/errors/utils/handle-errors";
+import { AxiosError } from "axios";
 
 type ExtendedRoles = Roles & {
   issuer: string;
@@ -214,9 +216,7 @@ export const useInitializeSingleEscrow = () => {
         router.push("/dashboard/escrow/my-escrows");
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
+      toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsLoading(false);
     }

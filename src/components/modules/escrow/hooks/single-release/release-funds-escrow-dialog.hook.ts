@@ -12,6 +12,8 @@ import {
 } from "@trustless-work/escrow/hooks";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { SingleReleaseReleaseFundsPayload } from "@trustless-work/escrow";
+import { AxiosError } from "axios";
+import { handleError } from "@/errors/utils/handle-errors";
 
 export const useReleaseFundsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -85,9 +87,7 @@ export const useReleaseFundsEscrowDialog = () => {
         );
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
+      toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsReleasingFunds(false);
     }

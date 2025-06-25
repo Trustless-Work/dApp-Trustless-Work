@@ -22,6 +22,8 @@ import {
 } from "@trustless-work/escrow";
 import { useEscrowDialogs } from "../ui/dialogs/hooks/use-escrow-dialogs.hook";
 import { useEscrowBoundedStore } from "../store/data";
+import { AxiosError } from "axios";
+import { handleError } from "@/errors/utils/handle-errors";
 
 export const useResolveDisputeDialog = () => {
   const setIsResolvingDispute = useEscrowUIBoundedStore(
@@ -133,9 +135,7 @@ export const useResolveDisputeDialog = () => {
         toast.success("Dispute resolved successfully");
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
+      toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsResolvingDispute(false);
       onComplete?.();

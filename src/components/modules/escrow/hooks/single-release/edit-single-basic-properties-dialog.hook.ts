@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { Escrow } from "@/@types/escrow.entity";
 import { UpdateSingleReleaseEscrowPayload } from "@trustless-work/escrow";
+import { handleError } from "@/errors/utils/handle-errors";
+import { AxiosError } from "axios";
 
 interface useEditSingleBasicPropertiesDialogProps {
   setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
@@ -112,9 +114,7 @@ export const useEditSingleBasicPropertiesDialog = ({
         );
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
+      toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsEditingBasicProperties(false);
     }

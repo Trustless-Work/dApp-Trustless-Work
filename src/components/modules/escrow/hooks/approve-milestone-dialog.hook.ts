@@ -17,6 +17,8 @@ import {
 } from "@trustless-work/escrow/types";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { Escrow } from "@/@types/escrow.entity";
+import { AxiosError } from "axios";
+import { handleError } from "@/errors/utils/handle-errors";
 
 const useApproveMilestoneDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -84,9 +86,7 @@ const useApproveMilestoneDialog = () => {
         );
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "An unknown error occurred",
-      );
+      toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsChangingFlag(false);
     }
