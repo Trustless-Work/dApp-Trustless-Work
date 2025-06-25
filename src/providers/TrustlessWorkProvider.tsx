@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { development, TrustlessWorkConfig } from "@trustless-work/escrow";
+import {
+  development,
+  mainNet,
+  TrustlessWorkConfig,
+} from "@trustless-work/escrow";
 
 interface TrustlessWorkProviderProps {
   children: React.ReactNode;
@@ -15,8 +19,11 @@ export function TrustlessWorkProvider({
    */
   const apiKey = process.env.NEXT_PUBLIC_API_KEY || "";
 
+  const baseURL =
+    process.env.NEXT_PUBLIC_ENV === "PROD" ? mainNet : development;
+
   return (
-    <TrustlessWorkConfig baseURL={development} apiKey={apiKey}>
+    <TrustlessWorkConfig baseURL={baseURL} apiKey={apiKey}>
       {children}
     </TrustlessWorkConfig>
   );
