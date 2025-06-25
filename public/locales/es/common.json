@@ -483,5 +483,19 @@
         "content": "Aquí puedes ver todos los depósitos en los que participas y tomar acciones como Financiar o Liberar."
       }
     }
+  },
+  "dashboard": {
+    "noEscrows": "¿No tienes ningún escrow?",
+    "createEscrow": "Crear Escrow",
+    "welcomeBack": "Bienvenido de nuevo,",
+    "fallbackName": "Sin nombre",
+    "tabs": {
+      "general": "General",
+      "milestoneOverview": "Resumen de Hitos",
+      "disputeAnalytics": "Análisis de Disputas"
+    },
+    "sections": {
+      "escrowOverview": "Resumen de Escrows"
+    }
   }
 }

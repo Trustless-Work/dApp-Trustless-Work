@@ -483,5 +483,19 @@
         "content": "Here you can see all the escrows you've created or are involved in depending on your role. Take actions like Fund or Release."
       }
     }
+  },
+  "dashboard": {
+    "noEscrows": "Don't have any escrow?",
+    "createEscrow": "Create Escrow",
+    "welcomeBack": "Welcome back,",
+    "fallbackName": "Without Name",
+    "tabs": {
+      "general": "General",
+      "milestoneOverview": "Milestone Overview",
+      "disputeAnalytics": "Dispute Analytics"
+    },
+    "sections": {
+      "escrowOverview": "Escrow Overview"
+    }
   }
 }
