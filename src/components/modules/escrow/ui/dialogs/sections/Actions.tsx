@@ -61,7 +61,7 @@ export const Actions = ({
   return (
     <div className="flex items-start justify-start flex-col gap-2 w-full">
       {hasConditionalButtons && (
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full">
           {shouldShowEditButton && (
             <Button
               disabled={Number(selectedEscrow.balance) === 0}
