@@ -49,7 +49,7 @@ const useFundEscrowDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       amount: 0,
-      paymentMethod: "",
+      paymentMethod: "wallet",
     },
     mode: "onChange",
   });
@@ -60,7 +60,7 @@ const useFundEscrowDialog = ({
   const clearErrors = form.clearErrors;
 
   useEffect(() => {
-    setAmountMoonpay(amount);
+    setAmountMoonpay(amount || 0);
   }, [amount, setAmountMoonpay]);
 
   useEffect(() => {

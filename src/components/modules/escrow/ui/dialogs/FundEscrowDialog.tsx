@@ -84,7 +84,7 @@ const FundEscrowDialog = ({
                           <Input
                             placeholder="Enter amount"
                             className="pl-10"
-                            value={field.value || ""}
+                            value={field.value === 0 ? "" : field.value || ""}
                             onChange={(e) => {
                               let rawValue = e.target.value;
                               rawValue = rawValue.replace(/[^0-9.]/g, "");
@@ -93,9 +93,7 @@ const FundEscrowDialog = ({
                                 rawValue = rawValue.slice(0, -1);
                               }
 
-                              field.onChange(
-                                rawValue ? Number(rawValue) : undefined,
-                              );
+                              field.onChange(rawValue ? Number(rawValue) : 0);
                             }}
                           />
                         </div>
@@ -115,7 +113,6 @@ const FundEscrowDialog = ({
                         <RadioGroup
                           onValueChange={field.onChange}
                           value={field.value}
-                          defaultValue="wallet"
                           className="flex justify-between"
                         >
                           <FormItem className="flex items-center space-x-3 space-y-0">
