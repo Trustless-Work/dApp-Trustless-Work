@@ -513,6 +513,32 @@
         }
       }
     },
+    "general": {
+      "table": {
+        "title": "Title",
+        "amount": "Amount",
+        "status": "Status",
+        "created": "Created",
+        "updated": "Updated",
+        "actions": "Actions",
+        "openMenu": "Open menu",
+        "moreDetails": "More Details",
+        "viewInViewer": "View from TW Escrow Viewer"
+      },
+      "releaseTrend": {
+        "title": "Escrow Release Trend"
+      },
+      "status": {
+        "title": "Escrow Status"
+      },
+      "volumeTrend": {
+        "title": "Escrow Volume Trend",
+        "desc": "Amounts at each date"
+      },
+      "topList": {
+        "title": "Most Recent Escrows"
+      }
+    },
     "metrics": {
       "totalPlatformFees": {
         "title": "Total Platform Fees",

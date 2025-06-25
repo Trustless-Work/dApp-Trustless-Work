@@ -513,6 +513,32 @@
         }
       }
     },
+    "general": {
+      "table": {
+        "title": "Título",
+        "amount": "Monto",
+        "status": "Estado",
+        "created": "Creado",
+        "updated": "Actualizado",
+        "actions": "Acciones",
+        "openMenu": "Abrir menú",
+        "moreDetails": "Más detalles",
+        "viewInViewer": "Ver en Visor de Escrows"
+      },
+      "releaseTrend": {
+        "title": "Tendencia de Liberación de Escrows"
+      },
+      "status": {
+        "title": "Estado de los Escrows"
+      },
+      "volumeTrend": {
+        "title": "Tendencia de Volumen de Escrows",
+        "desc": "Montos por cada fecha"
+      },
+      "topList": {
+        "title": "Escrows Más Recientes"
+      }
+    },
     "metrics": {
       "totalPlatformFees": {
         "title": "Comisiones Totales de la Plataforma",

@@ -16,9 +16,7 @@ export const TopEscrowsList = ({ escrows }: TopEscrowsListProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          {t("dashboard.sections.general.topEscrows.title")}
-        </CardTitle>
+        <CardTitle>{t("dashboard.general.topList.title")}</CardTitle>
       </CardHeader>
       <CardContent className="overflow-auto px-5">
         {escrows ? (

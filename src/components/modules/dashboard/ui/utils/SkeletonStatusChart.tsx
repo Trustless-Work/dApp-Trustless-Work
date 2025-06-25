@@ -8,12 +8,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslation } from "react-i18next";
 
 export const SkeletonEscrowStatusChart = () => {
+  const { t } = useTranslation();
+
   return (
     <Card>
       <CardHeader className="items-center pb-0">
-        <CardTitle>Escrow Status</CardTitle>
+        <CardTitle>{t("dashboard.general.status.title")}</CardTitle>
       </CardHeader>
       <CardContent className="pb-0">
         <div className="mx-auto aspect-square max-h-[250px] flex items-center justify-center">
