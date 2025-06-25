@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -23,8 +25,10 @@ import { useFormatUtils } from "@/utils/hook/format.hook";
 import { getStatus } from "../../utils/escrow-status.util";
 import NoData from "@/components/utils/ui/NoData";
 import { Escrow } from "@/@types/escrow.entity";
+import { useTranslation } from "react-i18next";
 
 export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
+  const { t } = useTranslation();
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -42,12 +46,22 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead className="text-center">Amount</TableHead>
-            <TableHead className="text-center">Status</TableHead>
-            <TableHead className="text-center">Created</TableHead>
-            <TableHead className="text-center">Updated</TableHead>
-            <TableHead className="text-start">Actions</TableHead>
+            <TableHead>{t("dashboard.general.table.title")}</TableHead>
+            <TableHead className="text-center">
+              {t("dashboard.general.table.amount")}
+            </TableHead>
+            <TableHead className="text-center">
+              {t("dashboard.general.table.status")}
+            </TableHead>
+            <TableHead className="text-center">
+              {t("dashboard.general.table.created")}
+            </TableHead>
+            <TableHead className="text-center">
+              {t("dashboard.general.table.updated")}
+            </TableHead>
+            <TableHead className="text-start">
+              {t("dashboard.general.table.actions")}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="px-5">
@@ -77,12 +91,16 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
+                        <span className="sr-only">
+                          {t("dashboard.general.table.openMenu")}
+                        </span>
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuLabel>
+                        {t("dashboard.general.table.actions")}
+                      </DropdownMenuLabel>
                       <DropdownMenuItem
                         className="cursor-pointer"
                         onClick={(e) => {
@@ -91,7 +109,7 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
                           setSelectedEscrow(escrow);
                         }}
                       >
-                        More Details
+                        {t("dashboard.general.table.moreDetails")}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="cursor-pointer"
@@ -103,7 +121,7 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
                           );
                         }}
                       >
-                        View from TW Escrow Viewer
+                        {t("dashboard.general.table.viewInViewer")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

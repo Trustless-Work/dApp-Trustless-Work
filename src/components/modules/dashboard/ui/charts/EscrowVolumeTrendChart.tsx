@@ -23,6 +23,7 @@ import {
 import { useVolumeTrendChartData } from "../../hooks/volume-trend-chart-data.hook";
 import NoData from "@/components/utils/ui/NoData";
 import { SkeletonEscrowVolumeTrendChart } from "../utils/SkeletonEscrowVolumeTrendChart";
+import { useTranslation } from "react-i18next";
 
 type VolumeTrend = {
   date: string;
@@ -38,6 +39,7 @@ export const EscrowVolumeTrendChart = ({
   data,
   isLoading = false,
 }: EscrowVolumeTrendChartProps) => {
+  const { t } = useTranslation();
   const { chartConfig, formatted, currencyFormatter } =
     useVolumeTrendChartData(data);
   const hasData = data && data.length > 0;
@@ -49,8 +51,12 @@ export const EscrowVolumeTrendChart = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Escrow Volume Trend</CardTitle>
-        <CardDescription>Amounts at each date</CardDescription>
+        <CardTitle>
+          {t("dashboard.sections.general.volumeTrend.title")}
+        </CardTitle>
+        <CardDescription>
+          {t("dashboard.sections.general.volumeTrend.desc")}
+        </CardDescription>
       </CardHeader>
       <CardContent className="pb-0">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">

@@ -23,8 +23,10 @@ import { useEscrowDashboardData } from "../../hooks/escrow-dashboard-data.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const MetricsSection = () => {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const data = useEscrowDashboardData({ address });
@@ -51,27 +53,30 @@ const MetricsSection = () => {
     <div className="space-y-4">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard
-          title="Total Platform Fees"
+          title={t("dashboard.metrics.totalPlatformFees.title")}
           value={formatCurrency(platformFees)}
-          description="All-time platform fees collected"
+          description={t("dashboard.metrics.totalPlatformFees.desc")}
           icon={<DollarSign className="h-4 w-4 text-muted-foreground" />}
         />
         <MetricCard
-          title="Net Volume"
+          title={t("dashboard.metrics.netVolume.title")}
           value={formatCurrency(depositsVsReleases.difference)}
-          description={`${formatCurrency(depositsVsReleases.deposits)} deposits - ${formatCurrency(depositsVsReleases.releases)} releases`}
+          description={t("dashboard.metrics.netVolume.desc", {
+            deposits: formatCurrency(depositsVsReleases.deposits),
+            releases: formatCurrency(depositsVsReleases.releases),
+          })}
           icon={<TrendingUp className="h-4 w-4 text-muted-foreground" />}
         />
         <MetricCard
-          title="Pending Funds"
+          title={t("dashboard.metrics.pendingFunds.title")}
           value={formatCurrency(pendingFunds)}
-          description="Funds currently locked in escrow"
+          description={t("dashboard.metrics.pendingFunds.desc")}
           icon={<Lock className="h-4 w-4 text-muted-foreground" />}
         />
         <MetricCard
-          title="Escrows in Dispute"
+          title={t("dashboard.metrics.escrowsInDispute.title")}
           value={totalInDispute}
-          description="Active disputes requiring resolution"
+          description={t("dashboard.metrics.escrowsInDispute.desc")}
           icon={<AlertCircle className="h-4 w-4 text-muted-foreground" />}
         />
       </div>
@@ -87,54 +92,58 @@ const MetricsSection = () => {
             className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 overflow-hidden mt-4"
           >
             <MetricCard
-              title="Total Escrows"
+              title={t("dashboard.metrics.totalEscrows.title")}
               value={String(data.totalEscrows).padStart(2, "0")}
-              subValue="All time escrow count"
+              subValue={t("dashboard.metrics.totalEscrows.sub")}
               icon={<Layers className="h-7 w-7" />}
               isLoading={!data}
             />
             <MetricCard
-              title="Resolved Escrows"
+              title={t("dashboard.metrics.resolvedEscrows.title")}
               value={String(data.totalResolved).padStart(2, "0")}
-              subValue="Disputes successfully resolved"
+              subValue={t("dashboard.metrics.resolvedEscrows.sub")}
               icon={<Handshake className="h-7 w-7" />}
               isLoading={!data}
             />
             <MetricCard
-              title="Released Escrows"
+              title={t("dashboard.metrics.releasedEscrows.title")}
               value={String(data.totalReleased).padStart(2, "0")}
-              subValue="Successfully released"
+              subValue={t("dashboard.metrics.releasedEscrows.sub")}
               icon={<CircleCheckBig className="h-7 w-7" />}
               isLoading={!data}
             />
             <MetricCard
-              title="Working Escrows"
+              title={t("dashboard.metrics.workingEscrows.title")}
               value={String(
                 data.totalEscrows -
                   data.totalResolved -
                   data.totalInDispute -
                   data.totalReleased,
               ).padStart(2, "0")}
-              subValue="Awaiting for milestone completion"
+              subValue={t("dashboard.metrics.workingEscrows.sub")}
               icon={<Hand className="h-7 w-7" />}
               isLoading={!data}
             />
             <MetricCard
-              title="In Dispute Escrows"
+              title={t("dashboard.metrics.inDisputeEscrows.title")}
               value={String(data.totalInDispute).padStart(2, "0")}
-              subValue="Escrows in dispute"
+              subValue={t("dashboard.metrics.inDisputeEscrows.sub")}
               icon={<Ban className="h-7 w-7" />}
               isLoading={!data}
             />
             <MetricCard
-              title="Resolution Rate"
+              title={t("dashboard.metrics.resolutionRate.title")}
               value={data.resolvedPercentage + "%"}
               subValue={
                 <div className="flex items-center gap-1">
                   <p
                     className={`text-sm ${data.isPositive ? "text-green-500" : ""}`}
                   >
-                    {data.isPositive ? "Good" : "Needs improvement"}
+                    {t(
+                      data.isPositive
+                        ? "dashboard.metrics.resolutionRate.good"
+                        : "dashboard.metrics.resolutionRate.bad",
+                    )}
                   </p>
 
                   {data.isPositive ? (
@@ -160,12 +169,12 @@ const MetricsSection = () => {
         >
           {isExpanded ? (
             <>
-              Show Less Metrics
+              {t("dashboard.metrics.actions.showLess")}
               <ChevronUp className="h-7 w-7" />
             </>
           ) : (
             <>
-              Show More Metrics
+              {t("dashboard.metrics.actions.showMore")}
               <ChevronDown className="h-7 w-7" />
             </>
           )}

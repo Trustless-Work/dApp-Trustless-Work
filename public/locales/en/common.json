@@ -483,5 +483,108 @@
         "content": "Here you can see all the escrows you've created or are involved in depending on your role. Take actions like Fund or Release."
       }
     }
+  },
+  "dashboard": {
+    "noEscrows": "Don't have any escrow?",
+    "createEscrow": "Create Escrow",
+    "welcomeBack": "Welcome back,",
+    "fallbackName": "Without Name",
+    "tabs": {
+      "general": "General",
+      "milestoneOverview": "Milestone Overview",
+      "disputeAnalytics": "Dispute Analytics"
+    },
+    "sections": {
+      "escrowOverview": "Escrow Overview",
+      "general": {
+        "volumeTrend": {
+          "title": "Escrow Volume Trend",
+          "desc": "Amounts at each date"
+        },
+        "status": {
+          "title": "Escrow Status",
+          "total": "Total"
+        },
+        "releaseTrend": {
+          "title": "Escrow Release Trend"
+        },
+        "topEscrows": {
+          "title": "Most Recent Escrows"
+        }
+      }
+    },
+    "general": {
+      "table": {
+        "title": "Title",
+        "amount": "Amount",
+        "status": "Status",
+        "created": "Created",
+        "updated": "Updated",
+        "actions": "Actions",
+        "openMenu": "Open menu",
+        "moreDetails": "More Details",
+        "viewInViewer": "View from TW Escrow Viewer"
+      },
+      "releaseTrend": {
+        "title": "Escrow Release Trend"
+      },
+      "status": {
+        "title": "Escrow Status"
+      },
+      "volumeTrend": {
+        "title": "Escrow Volume Trend",
+        "desc": "Amounts at each date"
+      },
+      "topList": {
+        "title": "Most Recent Escrows"
+      }
+    },
+    "metrics": {
+      "totalPlatformFees": {
+        "title": "Total Platform Fees",
+        "desc": "All-time platform fees collected"
+      },
+      "netVolume": {
+        "title": "Net Volume",
+        "desc": "{{deposits}} deposits - {{releases}} releases"
+      },
+      "pendingFunds": {
+        "title": "Pending Funds",
+        "desc": "Funds currently locked in escrow"
+      },
+      "escrowsInDispute": {
+        "title": "Escrows in Dispute",
+        "desc": "Active disputes requiring resolution"
+      },
+      "totalEscrows": {
+        "title": "Total Escrows",
+        "sub": "All time escrow count"
+      },
+      "resolvedEscrows": {
+        "title": "Resolved Escrows",
+        "sub": "Disputes successfully resolved"
+      },
+      "releasedEscrows": {
+        "title": "Released Escrows",
+        "sub": "Successfully released"
+      },
+      "workingEscrows": {
+        "title": "Working Escrows",
+        "sub": "Awaiting for milestone completion"
+      },
+      "inDisputeEscrows": {
+        "title": "In Dispute Escrows",
+        "sub": "Escrows in dispute"
+      },
+      "resolutionRate": {
+        "title": "Resolution Rate",
+        "good": "Good",
+        "bad": "Needs improvement"
+      },
+      "actions": {
+        "showMore": "Show More Metrics",
+        "showLess": "Show Less Metrics"
+      }
+    }
   }
 }

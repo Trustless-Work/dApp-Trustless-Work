@@ -483,5 +483,108 @@
         "content": "Aquí puedes ver todos los depósitos en los que participas y tomar acciones como Financiar o Liberar."
       }
     }
+  },
+  "dashboard": {
+    "noEscrows": "¿No tienes ningún escrow?",
+    "createEscrow": "Crear Escrow",
+    "welcomeBack": "Bienvenido de nuevo,",
+    "fallbackName": "Sin nombre",
+    "tabs": {
+      "general": "General",
+      "milestoneOverview": "Resumen de Hitos",
+      "disputeAnalytics": "Análisis de Disputas"
+    },
+    "sections": {
+      "escrowOverview": "Resumen de Escrows",
+      "general": {
+        "volumeTrend": {
+          "title": "Tendencia del Volumen de Escrows",
+          "desc": "Montos por fecha"
+        },
+        "status": {
+          "title": "Estado de los Escrows",
+          "total": "Total"
+        },
+        "releaseTrend": {
+          "title": "Tendencia de Liberación de Escrows"
+        },
+        "topEscrows": {
+          "title": "Escrows Más Recientes"
+        }
+      }
+    },
+    "general": {
+      "table": {
+        "title": "Título",
+        "amount": "Monto",
+        "status": "Estado",
+        "created": "Creado",
+        "updated": "Actualizado",
+        "actions": "Acciones",
+        "openMenu": "Abrir menú",
+        "moreDetails": "Más detalles",
+        "viewInViewer": "Ver en Visor de Escrows"
+      },
+      "releaseTrend": {
+        "title": "Tendencia de Liberación de Escrows"
+      },
+      "status": {
+        "title": "Estado de los Escrows"
+      },
+      "volumeTrend": {
+        "title": "Tendencia de Volumen de Escrows",
+        "desc": "Montos por cada fecha"
+      },
+      "topList": {
+        "title": "Escrows Más Recientes"
+      }
+    },
+    "metrics": {
+      "totalPlatformFees": {
+        "title": "Comisiones Totales de la Plataforma",
+        "desc": "Comisiones de plataforma acumuladas"
+      },
+      "netVolume": {
+        "title": "Volumen Neto",
+        "desc": "{{deposits}} depósitos - {{releases}} liberaciones"
+      },
+      "pendingFunds": {
+        "title": "Fondos Pendientes",
+        "desc": "Fondos actualmente bloqueados en escrow"
+      },
+      "escrowsInDispute": {
+        "title": "Escrows en Disputa",
+        "desc": "Disputas activas que requieren resolución"
+      },
+      "totalEscrows": {
+        "title": "Escrows Totales",
+        "sub": "Cantidad total de escrows"
+      },
+      "resolvedEscrows": {
+        "title": "Escrows Resueltos",
+        "sub": "Disputas resueltas con éxito"
+      },
+      "releasedEscrows": {
+        "title": "Escrows Liberados",
+        "sub": "Liberados exitosamente"
+      },
+      "workingEscrows": {
+        "title": "Escrows en Proceso",
+        "sub": "Esperando finalización de hitos"
+      },
+      "inDisputeEscrows": {
+        "title": "Escrows en Disputa",
+        "sub": "Escrows en disputa"
+      },
+      "resolutionRate": {
+        "title": "Tasa de Resolución",
+        "good": "Buena",
+        "bad": "Necesita mejorar"
+      },
+      "actions": {
+        "showMore": "Mostrar Más Métricas",
+        "showLess": "Mostrar Menos Métricas"
+      }
+    }
   }
 }
