@@ -16,6 +16,7 @@ import {
 import { useStatusChartData } from "../../hooks/status-chart-data.hook";
 import NoData from "@/components/utils/ui/NoData";
 import { SkeletonEscrowStatusChart } from "../utils/SkeletonStatusChart";
+import { useTranslation } from "react-i18next";
 
 type StatusCounts = {
   name: string;
@@ -31,6 +32,7 @@ export const EscrowStatusChart = ({
   data,
   isLoading = false,
 }: EscrowStatusChartProps) => {
+  const { t } = useTranslation();
   const { total, formattedData, chartConfig } = useStatusChartData(data);
   const hasData = data && data.length > 0;
 
@@ -41,7 +43,7 @@ export const EscrowStatusChart = ({
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Escrow Status</CardTitle>
+        <CardTitle>{t("dashboard.sections.general.status.title")}</CardTitle>
       </CardHeader>
       <CardContent className="pb-0">
         <ChartContainer
@@ -84,7 +86,7 @@ export const EscrowStatusChart = ({
                           y={cy + 20}
                           className="fill-muted-foreground text-sm"
                         >
-                          Total
+                          {t("dashboard.sections.general.status.total")}
                         </tspan>
                       </text>
                     );

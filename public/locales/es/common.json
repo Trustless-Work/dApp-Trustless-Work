@@ -495,7 +495,23 @@
       "disputeAnalytics": "Análisis de Disputas"
     },
     "sections": {
-      "escrowOverview": "Resumen de Escrows"
+      "escrowOverview": "Resumen de Escrows",
+      "general": {
+        "volumeTrend": {
+          "title": "Tendencia del Volumen de Escrows",
+          "desc": "Montos por fecha"
+        },
+        "status": {
+          "title": "Estado de los Escrows",
+          "total": "Total"
+        },
+        "releaseTrend": {
+          "title": "Tendencia de Liberación de Escrows"
+        },
+        "topEscrows": {
+          "title": "Escrows Más Recientes"
+        }
+      }
     },
     "metrics": {
       "totalPlatformFees": {

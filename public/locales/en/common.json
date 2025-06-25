@@ -495,7 +495,23 @@
       "disputeAnalytics": "Dispute Analytics"
     },
     "sections": {
-      "escrowOverview": "Escrow Overview"
+      "escrowOverview": "Escrow Overview",
+      "general": {
+        "volumeTrend": {
+          "title": "Escrow Volume Trend",
+          "desc": "Amounts at each date"
+        },
+        "status": {
+          "title": "Escrow Status",
+          "total": "Total"
+        },
+        "releaseTrend": {
+          "title": "Escrow Release Trend"
+        },
+        "topEscrows": {
+          "title": "Most Recent Escrows"
+        }
+      }
     },
     "metrics": {
       "totalPlatformFees": {
