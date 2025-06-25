@@ -496,6 +496,53 @@
     },
     "sections": {
       "escrowOverview": "Resumen de Escrows"
+    },
+    "metrics": {
+      "totalPlatformFees": {
+        "title": "Comisiones Totales de la Plataforma",
+        "desc": "Comisiones de plataforma acumuladas"
+      },
+      "netVolume": {
+        "title": "Volumen Neto",
+        "desc": "{{deposits}} depósitos - {{releases}} liberaciones"
+      },
+      "pendingFunds": {
+        "title": "Fondos Pendientes",
+        "desc": "Fondos actualmente bloqueados en escrow"
+      },
+      "escrowsInDispute": {
+        "title": "Escrows en Disputa",
+        "desc": "Disputas activas que requieren resolución"
+      },
+      "totalEscrows": {
+        "title": "Escrows Totales",
+        "sub": "Cantidad total de escrows"
+      },
+      "resolvedEscrows": {
+        "title": "Escrows Resueltos",
+        "sub": "Disputas resueltas con éxito"
+      },
+      "releasedEscrows": {
+        "title": "Escrows Liberados",
+        "sub": "Liberados exitosamente"
+      },
+      "workingEscrows": {
+        "title": "Escrows en Proceso",
+        "sub": "Esperando finalización de hitos"
+      },
+      "inDisputeEscrows": {
+        "title": "Escrows en Disputa",
+        "sub": "Escrows en disputa"
+      },
+      "resolutionRate": {
+        "title": "Tasa de Resolución",
+        "good": "Buena",
+        "bad": "Necesita mejorar"
+      },
+      "actions": {
+        "showMore": "Mostrar Más Métricas",
+        "showLess": "Mostrar Menos Métricas"
+      }
     }
   }
 }
