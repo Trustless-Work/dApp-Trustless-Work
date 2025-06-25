@@ -12,8 +12,10 @@ import CreateButton from "@/components/utils/ui/Create";
 import { MilestonesOverview } from "../sections/MilestoneOverview";
 import { DisputeAnalytics } from "../sections/DisputeAnalytics";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
+import { useTranslation } from "react-i18next";
 
 export const Dashboard = () => {
+  const { t } = useTranslation();
   const address = useGlobalAuthenticationStore((state) => state.address);
   const data = useEscrowDashboardData({ address });
 
@@ -30,20 +32,20 @@ export const Dashboard = () => {
       (!data?.volumeTrend || !data?.statusCounts || !data?.releaseTrend) ? (
         <div className="flex items-center justify-end w-full gap-2">
           <span className="text-sm flex items-center text-muted-foreground mr-2">
-            Don't have any escrow? <ArrowRight className="ml-2" />
+            {t("dashboard.noEscrows")} <ArrowRight className="ml-2" />
           </span>
           <CreateButton
             className="mr-auto w-full md:w-auto"
-            label="Create Escrow"
+            label={t("dashboard.createEscrow")}
             url={"/dashboard/escrow/initialize-escrow"}
           />
         </div>
       ) : (
         <div className="flex items-center justify-end w-full gap-2">
           <p className="text-xl flex items-center text-muted-foreground mr-2">
-            Welcome back,{" "}
+            {t("dashboard.welcomeBack")}{" "}
             <strong className="flex gap-2 ml-2">
-              {loggedUser?.firstName || "Without Name"}!👋🏼
+              {loggedUser?.firstName || t("dashboard.fallbackName")}!👋🏼
             </strong>
           </p>
         </div>
@@ -54,18 +56,22 @@ export const Dashboard = () => {
 
         <Tabs defaultValue="general" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-10">
-            <TabsTrigger value="general">General</TabsTrigger>
+            <TabsTrigger value="general">
+              {t("dashboard.tabs.general")}
+            </TabsTrigger>
             <TabsTrigger value="milestone-overview">
-              Milestone Overview
+              {t("dashboard.tabs.milestoneOverview")}
             </TabsTrigger>
             <TabsTrigger value="dispute-analytics">
-              Dispute Analytics
+              {t("dashboard.tabs.disputeAnalytics")}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-              <h1 className="text-2xl font-bold">Escrow Overview</h1>
+              <h1 className="text-2xl font-bold">
+                {t("dashboard.sections.escrowOverview")}
+              </h1>
               <div className="md:col-span-2">
                 <EscrowVolumeTrendChart
                   data={volumeTrend || []}

@@ -17,6 +17,7 @@ import {
 import { useReleaseTrendChartData } from "../../hooks/release-trend-chart-data.hook";
 import NoData from "@/components/utils/ui/NoData";
 import { SkeletonEscrowReleaseTrendChart } from "../utils/SkeletonEscrowReleaseTrendChart";
+import { useTranslation } from "react-i18next";
 
 type ReleaseTrend = {
   month: string;
@@ -32,6 +33,7 @@ export const EscrowReleaseTrendChart = ({
   data,
   isLoading = false,
 }: EscrowReleaseTrendChartProps) => {
+  const { t } = useTranslation();
   const { chartConfig, formatted } = useReleaseTrendChartData(data);
   const hasData = data && data.length > 0;
 
@@ -42,7 +44,9 @@ export const EscrowReleaseTrendChart = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Escrow Release Trend</CardTitle>
+        <CardTitle>
+          {t("dashboard.sections.general.releaseTrend.title")}
+        </CardTitle>
       </CardHeader>
       <CardContent className="pb-0">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
