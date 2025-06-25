@@ -32,14 +32,37 @@ export const Actions = ({
   const { t } = useTranslation();
   const dialogStates = useEscrowDialogs();
 
+  // Check if any of the conditional buttons should be displayed
+  const shouldShowEditButton =
+    userRolesInEscrow.includes("platformAddress") &&
+    !selectedEscrow?.flags?.disputed &&
+    !selectedEscrow?.flags?.resolved &&
+    !selectedEscrow?.flags?.released &&
+    activeTab === "platformAddress";
+
+  const shouldShowDisputeButton =
+    selectedEscrow.type === "single-release" &&
+    (userRolesInEscrow.includes("approver") ||
+      userRolesInEscrow.includes("serviceProvider")) &&
+    (activeTab === "approver" || activeTab === "serviceProvider") &&
+    !selectedEscrow?.flags?.disputed &&
+    !selectedEscrow?.flags?.resolved;
+
+  const shouldShowResolveButton =
+    selectedEscrow.type === "single-release" &&
+    userRolesInEscrow.includes("disputeResolver") &&
+    activeTab === "disputeResolver" &&
+    !selectedEscrow?.flags?.resolved &&
+    selectedEscrow?.flags?.disputed;
+
+  const hasConditionalButtons =
+    shouldShowEditButton || shouldShowDisputeButton || shouldShowResolveButton;
+
   return (
-    <div className="flex flex-col gap-2 pt-2 w-full">
-      <div className="flex flex-col sm:flex-row gap-2">
-        {userRolesInEscrow.includes("platformAddress") &&
-          !selectedEscrow?.flags?.disputed &&
-          !selectedEscrow?.flags?.resolved &&
-          !selectedEscrow?.flags?.released &&
-          activeTab === "platformAddress" && (
+    <div className="flex items-start justify-start flex-col gap-2 w-full">
+      {hasConditionalButtons && (
+        <div className="flex flex-col sm:flex-row gap-2">
+          {shouldShowEditButton && (
             <Button
               disabled={Number(selectedEscrow.balance) === 0}
               onClick={(e) => {
@@ -54,12 +77,7 @@ export const Actions = ({
             </Button>
           )}
 
-        {selectedEscrow.type === "single-release" &&
-          (userRolesInEscrow.includes("approver") ||
-            userRolesInEscrow.includes("serviceProvider")) &&
-          (activeTab === "approver" || activeTab === "serviceProvider") &&
-          !selectedEscrow?.flags?.disputed &&
-          !selectedEscrow?.flags?.resolved && (
+          {shouldShowDisputeButton && (
             <Button
               onClick={() => {
                 if (
@@ -93,11 +111,7 @@ export const Actions = ({
             </Button>
           )}
 
-        {selectedEscrow.type === "single-release" &&
-          userRolesInEscrow.includes("disputeResolver") &&
-          activeTab === "disputeResolver" &&
-          !selectedEscrow?.flags?.resolved &&
-          selectedEscrow?.flags?.disputed && (
+          {shouldShowResolveButton && (
             <Button
               onClick={handleOpen}
               className="bg-green-800 hover:bg-green-700 w-full"
@@ -106,7 +120,8 @@ export const Actions = ({
               Resolve Dispute
             </Button>
           )}
-      </div>
+        </div>
+      )}
 
       <Button
         onClick={(e) => {
