@@ -17,19 +17,13 @@ import SkeletonCards from "../utils/SkeletonCards";
 import { Button } from "@/components/ui/button";
 import EscrowCard from "./EscrowCard";
 import { Escrow } from "@/@types/escrow.entity";
+import { Role } from "@trustless-work/escrow";
 
 interface MyEscrowsCardsProps {
-  type:
-    | "issuer"
-    | "approver"
-    | "disputeResolver"
-    | "serviceProvider"
-    | "releaseSigner"
-    | "platformAddress"
-    | "receiver";
+  role: Role;
 }
 
-const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
+const MyEscrowsCards = ({ role }: MyEscrowsCardsProps) => {
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -37,7 +31,6 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
-  const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
   const isSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.isSuccessDialogOpen,
   );
@@ -60,13 +53,14 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
   const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
 
   const {
-    currentData,
+    escrows,
     currentPage,
     totalPages,
     itemsPerPage,
+    isLoading,
     setItemsPerPage,
     setCurrentPage,
-  } = useMyEscrows({ type });
+  } = useMyEscrows({ role });
 
   const handleCardClick = (escrow: Escrow) => {
     setIsDialogOpen(true);
@@ -75,13 +69,13 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
 
   return (
     <>
-      {loadingEscrows ? (
+      {isLoading ? (
         <SkeletonCards />
-      ) : currentData.length !== 0 ? (
+      ) : escrows.length !== 0 ? (
         <div className="py-3" id="step-3">
           <div className="flex flex-col">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {currentData.map((escrow, index) => (
+              {escrows.map((escrow, index) => (
                 <EscrowCard
                   key={index}
                   escrow={escrow}

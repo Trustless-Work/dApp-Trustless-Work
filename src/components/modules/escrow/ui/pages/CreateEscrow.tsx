@@ -3,15 +3,24 @@
 import { Bounded } from "@/components/layout/Bounded";
 import { Button } from "@/components/ui/button";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import { useGlobalBoundedStore } from "@/core/store/data";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/core/store/data";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FileWarning } from "lucide-react";
+import { useEscrowsBySignerQuery } from "../../hooks/tanstack/useEscrowsBySignerQuery";
 
 const MAX_ESCROWS = 20;
 
 const CreateEscrowPage = () => {
   const toggleStep = useEscrowUIBoundedStore((state) => state.toggleStep);
-  const escrows = useGlobalBoundedStore((state) => state.escrows);
+  const address = useGlobalAuthenticationStore((state) => state.address);
+
+  const { data: escrows = [] } = useEscrowsBySignerQuery({
+    signer: address,
+    isActive: true,
+  });
 
   const handleStart = async () => {
     toggleStep(2);

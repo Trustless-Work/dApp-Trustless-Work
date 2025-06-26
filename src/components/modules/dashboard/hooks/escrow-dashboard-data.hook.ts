@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 import { format, subDays } from "date-fns";
-import { fetchAllEscrows } from "../../escrow/services/escrow.service";
 import { DashboardData } from "../@types/dashboard.entity";
 import { Escrow } from "@/@types/escrow.entity";
+import { useEscrowsBySignerQuery } from "../../escrow/hooks/tanstack/useEscrowsBySignerQuery";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 
-export const useEscrowDashboardData = ({
-  address,
-  type = "approver",
-}: {
-  address: string;
-  type?: string;
-}): DashboardData | null => {
+export const useEscrowDashboardData = (): DashboardData | null => {
+  const address = useGlobalAuthenticationStore((state) => state.address);
+
   const [data, setData] = useState<DashboardData | null>(null);
+  const {
+    data: escrows = [],
+    isLoading,
+    error,
+  } = useEscrowsBySignerQuery({
+    signer: address,
+    isActive: true,
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
-      const escrows = await fetchAllEscrows({ address, type });
-
+    if (escrows.length > 0 || (!isLoading && !error)) {
       setData({
         escrows,
         statusCounts: getStatusCounts(escrows),
@@ -24,9 +27,9 @@ export const useEscrowDashboardData = ({
         releaseTrend: getReleaseTrend(escrows),
         volumeTrend: getVolumeTrend(escrows),
         totalEscrows: escrows.length,
-        totalResolved: escrows.filter((e) => e.flags?.resolved).length,
-        totalReleased: escrows.filter((e) => e.flags?.released).length,
-        totalInDispute: escrows.filter((e) => e.flags?.disputed).length,
+        totalResolved: escrows.filter((e: Escrow) => e.flags?.resolved).length,
+        totalReleased: escrows.filter((e: Escrow) => e.flags?.released).length,
+        totalInDispute: escrows.filter((e: Escrow) => e.flags?.disputed).length,
         resolvedPercentage: getResolvedPercentage(escrows),
         isPositive: getIsPositive(getResolvedPercentage(escrows)),
         avgResolutionTime: getAvgResolutionTime(escrows),
@@ -35,10 +38,8 @@ export const useEscrowDashboardData = ({
         pendingFunds: getPendingFunds(escrows),
         feesByTimePeriod: getFeesByTimePeriod(escrows),
       });
-    };
-
-    if (address) fetchData();
-  }, [address, type]);
+    }
+  }, [escrows, isLoading, error]);
 
   return data;
 };
@@ -72,7 +73,10 @@ const getTop5ByValue = (escrows: Escrow[]) => {
   return top5.sort((a, b) => {
     const getTimestamp = (e: Escrow) => {
       const ts = e.updatedAt || e.createdAt;
-      return ts.seconds * 1000 + ts.nanoseconds / 1_000_000;
+      if (!ts?._seconds || ts._seconds <= 0) {
+        return 0;
+      }
+      return ts._seconds * 1000 + (ts._nanoseconds || 0) / 1_000_000;
     };
 
     return getTimestamp(b) - getTimestamp(a);
@@ -83,12 +87,20 @@ const getReleaseTrend = (escrows: Escrow[]) => {
   const map = new Map<string, number>();
 
   escrows.forEach((escrow) => {
-    if (escrow.flags?.released && escrow.updatedAt?.seconds) {
-      const month = format(
-        new Date(escrow.updatedAt.seconds * 1000),
-        "yyyy-MM",
-      );
-      map.set(month, (map.get(month) || 0) + 1);
+    if (
+      escrow.flags?.released &&
+      escrow.updatedAt?._seconds &&
+      escrow.updatedAt._seconds > 0
+    ) {
+      try {
+        const month = format(
+          new Date(escrow.updatedAt._seconds * 1000),
+          "yyyy-MM",
+        );
+        map.set(month, (map.get(month) || 0) + 1);
+      } catch (error) {
+        console.warn("Invalid timestamp in escrow:", escrow.engagementId);
+      }
     }
   });
 
@@ -99,12 +111,18 @@ const getVolumeTrend = (escrows: Escrow[]) => {
   const map = new Map<string, number>();
 
   escrows.forEach((escrow) => {
-    const date = format(
-      new Date(escrow.createdAt.seconds * 1000),
-      "yyyy-MM-dd",
-    );
-    const value = parseFloat(escrow.amount?.toString() || "0");
-    map.set(date, (map.get(date) || 0) + value);
+    if (escrow.createdAt?._seconds && escrow.createdAt._seconds > 0) {
+      try {
+        const date = format(
+          new Date(escrow.createdAt._seconds * 1000),
+          "yyyy-MM-dd",
+        );
+        const value = parseFloat(escrow.amount?.toString() || "0");
+        map.set(date, (map.get(date) || 0) + value);
+      } catch (error) {
+        console.warn("Invalid timestamp in escrow:", escrow.engagementId);
+      }
+    }
   });
 
   return Array.from(map.entries())
@@ -114,7 +132,7 @@ const getVolumeTrend = (escrows: Escrow[]) => {
 
 const getResolvedPercentage = (escrows: Escrow[]): number => {
   if (escrows.length === 0) return 0;
-  const resolvedCount = escrows.filter((e) => e.flags?.resolved).length;
+  const resolvedCount = escrows.filter((e: Escrow) => e.flags?.resolved).length;
   return Math.round((resolvedCount / escrows.length) * 100);
 };
 
@@ -123,16 +141,26 @@ const getIsPositive = (resolvedPercentage: number): boolean => {
 };
 
 const getAvgResolutionTime = (escrows: Escrow[]): number => {
-  const resolvedEscrows = escrows.filter((e) => e.flags?.resolved);
+  const resolvedEscrows = escrows.filter((e: Escrow) => e.flags?.resolved);
   return resolvedEscrows.length
     ? Math.round(
         resolvedEscrows
-          .map((e) => {
-            const start = e.createdAt.seconds * 1000;
-            const end = (e.updatedAt ?? e.createdAt).seconds * 1000;
+          .map((e: Escrow) => {
+            if (!e.createdAt?._seconds || e.createdAt._seconds <= 0) {
+              return 0;
+            }
+            const start = e.createdAt._seconds * 1000;
+            const end =
+              e.updatedAt?._seconds && e.updatedAt._seconds > 0
+                ? e.updatedAt._seconds * 1000
+                : start;
             return (end - start) / (1000 * 60 * 60 * 24);
           })
-          .reduce((sum, days) => sum + days, 0) / resolvedEscrows.length,
+          .filter((days) => days > 0)
+          .reduce((sum, days) => sum + days, 0) /
+          resolvedEscrows.filter(
+            (e) => e.createdAt?._seconds && e.createdAt._seconds > 0,
+          ).length,
       )
     : 0;
 };
@@ -150,7 +178,7 @@ const getDepositsVsReleases = (escrows: Escrow[]) => {
   }, 0);
 
   const releases = escrows
-    .filter((e) => e.flags?.released)
+    .filter((e: Escrow) => e.flags?.released)
     .reduce((total, escrow) => {
       return total + parseFloat(escrow.amount?.toString() || "0");
     }, 0);
@@ -164,7 +192,7 @@ const getDepositsVsReleases = (escrows: Escrow[]) => {
 
 const getPendingFunds = (escrows: Escrow[]) => {
   return escrows
-    .filter((e) => !e.flags?.released && !e.flags?.disputed)
+    .filter((e: Escrow) => !e.flags?.released && !e.flags?.disputed)
     .reduce((total, escrow) => {
       return total + parseFloat(escrow.amount?.toString() || "0");
     }, 0);
@@ -181,16 +209,25 @@ const getFeesByTimePeriod = (escrows: Escrow[]) => {
 
   escrows.forEach((escrow) => {
     const fee = parseFloat(escrow.platformFee?.toString() || "0");
-    const createdAt = new Date(escrow.createdAt.seconds * 1000);
-    periods.allTime += fee;
-    if (format(createdAt, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")) {
-      periods.today += fee;
-    }
-    if (createdAt >= subDays(today, 7)) {
-      periods.last7Days += fee;
-    }
-    if (createdAt >= subDays(today, 30)) {
-      periods.last30Days += fee;
+    if (escrow.createdAt?._seconds && escrow.createdAt._seconds > 0) {
+      try {
+        const createdAt = new Date(escrow.createdAt._seconds * 1000);
+        periods.allTime += fee;
+        if (format(createdAt, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")) {
+          periods.today += fee;
+        }
+        if (createdAt >= subDays(today, 7)) {
+          periods.last7Days += fee;
+        }
+        if (createdAt >= subDays(today, 30)) {
+          periods.last30Days += fee;
+        }
+      } catch (error) {
+        console.warn("Invalid timestamp in escrow:", escrow.engagementId);
+        periods.allTime += fee; // Still count the fee even if date is invalid
+      }
+    } else {
+      periods.allTime += fee; // Count fees even if no valid timestamp
     }
   });
 

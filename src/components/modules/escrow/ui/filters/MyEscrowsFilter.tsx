@@ -37,7 +37,7 @@ const MyEscrowsFilter = () => {
     updateQuery,
     deleteParams,
     mapNameParams,
-  } = useEscrowFilter();
+  } = useEscrowFilter({ role: activeTab });
 
   const amountOptions = getAmountOptionsFilters(t);
   const statusOptions = getStatusOptionsFilters(t);
