@@ -256,7 +256,7 @@ const EscrowDetailDialog = ({
         isOpen={isDeleteConfirmOpen}
         onClose={() => setIsDeleteConfirmOpen(false)}
         onConfirm={async () => {
-          await softDeleteEscrow(selectedEscrow.id);
+          await softDeleteEscrow(selectedEscrow.contractId);
           handleClose();
         }}
         escrowTitle={selectedEscrow.title}
@@ -266,7 +266,7 @@ const EscrowDetailDialog = ({
         isOpen={isRestoreConfirmOpen}
         onClose={() => setIsRestoreConfirmOpen(false)}
         onConfirm={async () => {
-          await restoreEscrow(selectedEscrow.id);
+          await restoreEscrow(selectedEscrow.contractId);
           handleClose();
         }}
         escrowTitle={selectedEscrow.title}

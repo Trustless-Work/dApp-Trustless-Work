@@ -67,7 +67,7 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
         <TableBody className="px-5">
           {hasData ? (
             escrows.map((escrow) => (
-              <TableRow key={escrow.id}>
+              <TableRow key={escrow.contractId}>
                 <TableCell className="font-medium">{escrow.title}</TableCell>
                 <TableCell className="text-center">
                   {formatDollar(escrow.amount)}
@@ -77,14 +77,14 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
                 </TableCell>
                 <TableCell className="text-center">
                   {formatDateFromFirebase(
-                    escrow.createdAt.seconds,
-                    escrow.createdAt.nanoseconds,
+                    escrow.createdAt._seconds,
+                    escrow.createdAt._nanoseconds,
                   )}
                 </TableCell>
                 <TableCell className="text-center">
                   {formatDateFromFirebase(
-                    escrow.updatedAt.seconds,
-                    escrow.updatedAt.nanoseconds,
+                    escrow.updatedAt._seconds,
+                    escrow.updatedAt._nanoseconds,
                   )}
                 </TableCell>
                 <TableCell>

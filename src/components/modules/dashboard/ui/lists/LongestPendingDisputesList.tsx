@@ -22,7 +22,7 @@ export const LongestPendingDisputesList = ({
           <div className="space-y-2">
             {pendingDisputes.map((escrow) => (
               <div
-                key={escrow.id}
+                key={escrow.contractId}
                 className="p-4 rounded-lg border bg-card text-card-foreground"
               >
                 <div className="flex justify-between items-center">

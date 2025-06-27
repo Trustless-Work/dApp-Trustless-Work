@@ -8,24 +8,9 @@ import {
 } from "@trustless-work/escrow";
 import { CreatedAt, UpdatedAt } from "./dates.entity";
 
-export type RolesInEscrow =
-  | "issuer"
-  | "approver"
-  | "disputeResolver"
-  | "serviceProvider"
-  | "releaseSigner"
-  | "platformAddress"
-  | "receiver";
-
 export type MilestoneStatus = "completed" | "approved" | "pending";
 
-export interface BalanceItem {
-  address: string;
-  balance: number;
-}
-
 export interface Escrow {
-  id: string;
   signer?: string;
   contractId?: string;
   engagementId: string;
@@ -49,3 +34,10 @@ export interface Escrow {
   updatedAt: UpdatedAt;
   type: EscrowType;
 }
+
+export type SingleReleaseEscrowStatus =
+  | "working"
+  | "pendingRelease"
+  | "released"
+  | "resolved"
+  | "inDispute";

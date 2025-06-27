@@ -9,16 +9,14 @@ import { Escrow } from "@/@types/escrow.entity";
 
 interface DisputeAnalyticsProps {
   address: string;
-  type?: string;
   escrows: Escrow[];
 }
 
 export const DisputeAnalytics = ({
   address,
-  type = "approver",
   escrows = [],
 }: DisputeAnalyticsProps) => {
-  const data = useEscrowDashboardData({ address, type });
+  const data = useEscrowDashboardData({ address });
   const isLoading = !data;
   const displayData = data || {
     escrows: [],

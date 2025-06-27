@@ -1,4 +1,3 @@
-import { getUserRoleInEscrow } from "../../../server/escrow.firebase";
 import {
   useGlobalAuthenticationStore,
   useGlobalBoundedStore,
@@ -57,10 +56,30 @@ const useEscrowDetailDialog = ({
 
   const fetchUserRoleInEscrow = useCallback(async () => {
     if (!selectedEscrow?.contractId || !address) return null;
-    return getUserRoleInEscrow({
-      contractId: selectedEscrow.contractId,
-      address,
-    });
+
+    const roleMappings = [
+      { name: "approver", address: selectedEscrow.roles.approver },
+      {
+        name: "serviceProvider",
+        address: selectedEscrow.roles.serviceProvider,
+      },
+      {
+        name: "platformAddress",
+        address: selectedEscrow.roles.platformAddress,
+      },
+      { name: "releaseSigner", address: selectedEscrow.roles.releaseSigner },
+      {
+        name: "disputeResolver",
+        address: selectedEscrow.roles.disputeResolver,
+      },
+      { name: "receiver", address: selectedEscrow.roles.receiver },
+    ];
+
+    const userRoles = roleMappings
+      .filter((role) => role.address === address)
+      .map((role) => role.name);
+
+    return userRoles;
   }, [selectedEscrow?.contractId, address]);
 
   useEffect(() => {
@@ -78,7 +97,7 @@ const useEscrowDetailDialog = ({
         lastFetchKey.current = fetchKey;
         const roleData = await fetchUserRoleInEscrow();
         if (isMounted && roleData) {
-          setUserRolesInEscrow(roleData.roles || []);
+          setUserRolesInEscrow(roleData);
         }
       } catch (error) {
         console.error("[EscrowDetailDialog] Error fetching roles:", error);
