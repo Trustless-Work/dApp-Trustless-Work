@@ -14,7 +14,7 @@ export const useGlobalEscrowsSlice: StateCreator<
   [["zustand/devtools", never]],
   [],
   EscrowGlobalStore
-> = (set, get) => {
+> = (set) => {
   return {
     // Stores
     selectedEscrow: null,

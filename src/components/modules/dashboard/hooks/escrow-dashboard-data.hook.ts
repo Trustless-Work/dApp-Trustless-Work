@@ -99,7 +99,11 @@ const getReleaseTrend = (escrows: Escrow[]) => {
         );
         map.set(month, (map.get(month) || 0) + 1);
       } catch (error) {
-        console.warn("Invalid timestamp in escrow:", escrow.engagementId);
+        console.warn(
+          "Invalid timestamp in escrow:",
+          escrow.engagementId,
+          error,
+        );
       }
     }
   });
@@ -120,7 +124,11 @@ const getVolumeTrend = (escrows: Escrow[]) => {
         const value = parseFloat(escrow.amount?.toString() || "0");
         map.set(date, (map.get(date) || 0) + value);
       } catch (error) {
-        console.warn("Invalid timestamp in escrow:", escrow.engagementId);
+        console.warn(
+          "Invalid timestamp in escrow:",
+          escrow.engagementId,
+          error,
+        );
       }
     }
   });
@@ -223,7 +231,11 @@ const getFeesByTimePeriod = (escrows: Escrow[]) => {
           periods.last30Days += fee;
         }
       } catch (error) {
-        console.warn("Invalid timestamp in escrow:", escrow.engagementId);
+        console.warn(
+          "Invalid timestamp in escrow:",
+          escrow.engagementId,
+          error,
+        );
         periods.allTime += fee; // Still count the fee even if date is invalid
       }
     } else {

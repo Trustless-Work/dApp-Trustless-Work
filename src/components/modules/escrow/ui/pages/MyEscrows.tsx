@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Loader from "@/components/utils/ui/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";

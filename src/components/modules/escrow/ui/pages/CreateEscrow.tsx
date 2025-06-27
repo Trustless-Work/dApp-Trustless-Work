@@ -3,10 +3,7 @@
 import { Bounded } from "@/components/layout/Bounded";
 import { Button } from "@/components/ui/button";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import {
-  useGlobalAuthenticationStore,
-  useGlobalBoundedStore,
-} from "@/core/store/data";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FileWarning } from "lucide-react";
 import { useEscrowsBySignerQuery } from "../../hooks/tanstack/useEscrowsBySignerQuery";
