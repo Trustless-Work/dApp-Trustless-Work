@@ -25,8 +25,8 @@ export const useHistory = () => {
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const [filters, setFilters] = useState<HistoryFilters>({
     search: "",
-    status: "",
-    activityType: "",
+    status: "all",
+    activityType: "all",
   });
 
   // Fetch history data
@@ -49,6 +49,7 @@ export const useHistory = () => {
 
       const matchesStatus =
         !filters.status ||
+        filters.status === "all" ||
         (filters.status === "released" && item.flags?.released) ||
         (filters.status === "resolved" && item.flags?.resolved) ||
         (filters.status === "disputed" && item.flags?.disputed) ||
@@ -58,7 +59,9 @@ export const useHistory = () => {
           !item.flags?.disputed);
 
       const matchesActivityType =
-        !filters.activityType || item.activityType === filters.activityType;
+        !filters.activityType ||
+        filters.activityType === "all" ||
+        item.activityType === filters.activityType;
 
       return matchesSearch && matchesStatus && matchesActivityType;
     });
@@ -75,8 +78,8 @@ export const useHistory = () => {
   const handleClearFilters = () => {
     setFilters({
       search: "",
-      status: "",
-      activityType: "",
+      status: "all",
+      activityType: "all",
     });
     setCurrentPage(1);
   };

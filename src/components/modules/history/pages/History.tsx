@@ -88,7 +88,7 @@ const History = () => {
                 />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">
+                <SelectItem value="all">
                   {t("history.filters.allStatuses")}
                 </SelectItem>
                 <SelectItem value="active">
@@ -115,7 +115,7 @@ const History = () => {
                 />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">
+                <SelectItem value="all">
                   {t("history.filters.allActivities")}
                 </SelectItem>
                 <SelectItem value="created">
@@ -160,25 +160,37 @@ const History = () => {
         <CardContent>
           <Tabs value={activeTab} onValueChange={handleTabChange}>
             <TabsList className="grid w-full grid-cols-7">
-              <TabsTrigger value="approver">
+              <TabsTrigger value="approver" className="text-xs px-2 truncate">
                 {t("history.tabs.approver")}
               </TabsTrigger>
-              <TabsTrigger value="serviceProvider">
+              <TabsTrigger
+                value="serviceProvider"
+                className="text-xs px-2 truncate"
+              >
                 {t("history.tabs.serviceProvider")}
               </TabsTrigger>
-              <TabsTrigger value="issuer">
+              <TabsTrigger value="issuer" className="text-xs px-2 truncate">
                 {t("history.tabs.issuer")}
               </TabsTrigger>
-              <TabsTrigger value="disputeResolver">
+              <TabsTrigger
+                value="disputeResolver"
+                className="text-xs px-2 truncate"
+              >
                 {t("history.tabs.disputeResolver")}
               </TabsTrigger>
-              <TabsTrigger value="releaseSigner">
+              <TabsTrigger
+                value="releaseSigner"
+                className="text-xs px-2 truncate"
+              >
                 {t("history.tabs.releaseSigner")}
               </TabsTrigger>
-              <TabsTrigger value="platformAddress">
+              <TabsTrigger
+                value="platformAddress"
+                className="text-xs px-2 truncate"
+              >
                 {t("history.tabs.platformAddress")}
               </TabsTrigger>
-              <TabsTrigger value="receiver">
+              <TabsTrigger value="receiver" className="text-xs px-2 truncate">
                 {t("history.tabs.receiver")}
               </TabsTrigger>
             </TabsList>
