@@ -2467,7 +2467,7 @@
   dependencies:
     "@tanstack/query-devtools" "5.74.7"
 
-"@tanstack/react-query@^5.75.0", "@tanstack/react-query@^5.76.1":
+"@tanstack/react-query@^5.75.0":
   version "5.79.2"
   resolved "https://registry.npmjs.org/@tanstack/react-query/-/react-query-5.79.2.tgz"
   integrity sha512-kadeprsH6bWuhHCpqukXHRykJkxcLBxAaF0cQ05yawPmLZ/KiCpR1DyQenonF7A/70rnRUxhJD0RJejqk9wImQ==
@@ -2663,12 +2663,11 @@
     varuint-bitcoin "2.0.0"
     wif "^5.0.0"
 
-"@trustless-work/escrow@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.npmjs.org/@trustless-work/escrow/-/escrow-1.0.5.tgz"
-  integrity sha512-WJDWmTxV9jIFBt0rQdXLVo6fSp4M2a+6FvLLMz8H61xmsKoYZsJKUPMq6k/hUdm+6VnSi19ebcHQ9hiuw9a1cA==
+"@trustless-work/escrow@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.npmjs.org/@trustless-work/escrow/-/escrow-1.0.6.tgz"
+  integrity sha512-12KV1kPQDpp+5SKmNmssfT+kCiK5AEWyDuSGVY28GM1WAHUwi+RusR2AHcZzKUEbEftjV0rOX9ccIlBRAOROwQ==
   dependencies:
-    "@tanstack/react-query" "^5.76.1"
     axios "^1.9.0"
 
 "@types/d3-array@^3.0.3", "@types/d3-array@^3.2.1":
