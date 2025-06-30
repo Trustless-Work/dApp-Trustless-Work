@@ -5,6 +5,7 @@ import {
   Layers,
   LayoutDashboard,
   LucideContactRound,
+  MessageCircle,
 } from "lucide-react";
 
 export const ItemsSidebar = {
@@ -30,6 +31,13 @@ export const ItemsSidebar = {
           title: "sidebar.contacts",
           url: "/dashboard/contact",
           icon: LucideContactRound,
+          isActive: true,
+          isExpandable: false,
+        },
+        {
+          title: "sidebar.chats",
+          url: "/dashboard/chats",
+          icon: MessageCircle,
           isActive: true,
           isExpandable: false,
         },
