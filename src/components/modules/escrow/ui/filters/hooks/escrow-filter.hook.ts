@@ -2,7 +2,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Role } from "@trustless-work/escrow/types";
-import useMyEscrows from "@/components/modules/escrow/hooks/my-escrows.hook";
 
 interface UseEscrowFilterProps {
   role: Role;
@@ -19,7 +18,7 @@ export const useEscrowFilter = ({ role }: UseEscrowFilterProps) => {
   const [engagement] = useState(searchParams.get("engagement") || "");
   const active = searchParams.get("active") || "active";
 
-  const { escrows } = useMyEscrows({ role });
+  // const { escrows } = useMyEscrows({ role });
 
   const updateQuery = useCallback(
     (key: string, value: string) => {
@@ -52,18 +51,18 @@ export const useEscrowFilter = ({ role }: UseEscrowFilterProps) => {
     return () => clearTimeout(delayDebounce);
   }, [search, updateQuery]);
 
-  const uniqueEngagements = useMemo(() => {
-    const engagementsSet = new Set<string>();
-    escrows.forEach((escrow) => {
-      if (escrow.engagementId) {
-        engagementsSet.add(escrow.engagementId);
-      }
-    });
-    return Array.from(engagementsSet).map((engagement) => ({
-      value: engagement,
-      label: engagement,
-    }));
-  }, [escrows]);
+  // const uniqueEngagements = useMemo(() => {
+  //   const engagementsSet = new Set<string>();
+  //   escrows.forEach((escrow) => {
+  //     if (escrow.engagementId) {
+  //       engagementsSet.add(escrow.engagementId);
+  //     }
+  //   });
+  //   return Array.from(engagementsSet).map((engagement) => ({
+  //     value: engagement,
+  //     label: engagement,
+  //   }));
+  // }, [escrows]);
 
   const mapNameParams = (paramName: string) => {
     if (!paramName) return t("myEscrows.filter.status.all");
@@ -109,7 +108,7 @@ export const useEscrowFilter = ({ role }: UseEscrowFilterProps) => {
     amountRange,
     engagement,
     active,
-    uniqueEngagements,
+    uniqueEngagements: [], // todo: add all the engagements from the escrows
     searchParams,
     setSearch,
     updateQuery,
