@@ -122,8 +122,8 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
         <p className="text-xs text-muted-foreground italic w-full sm:w-auto text-center sm:text-right">
           Created:{" "}
           {formatDateFromFirebase(
-            escrow.createdAt.seconds,
-            escrow.createdAt.nanoseconds,
+            escrow.createdAt._seconds,
+            escrow.createdAt._nanoseconds,
           )}
         </p>
       </CardFooter>
