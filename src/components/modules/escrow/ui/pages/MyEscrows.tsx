@@ -231,18 +231,7 @@ const MyEscrows = () => {
           </div>
 
           <TabsContent value="signer" className="flex flex-col gap-3">
-            <Card className={cn("overflow-hidden")}>
-              <CardContent className="p-6">
-                <MyEscrowsFilter />
-              </CardContent>
-            </Card>
-            {activeMode === "table" ? (
-              <Card className={cn("overflow-hidden")}>
-                <MyEscrowsTable role="signer" />
-              </Card>
-            ) : (
-              <MyEscrowsCards role="signer" />
-            )}
+            {renderTabContent("signer")}
           </TabsContent>
 
           <TabsContent value="approver">
