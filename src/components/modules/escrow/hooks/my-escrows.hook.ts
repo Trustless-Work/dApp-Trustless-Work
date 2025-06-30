@@ -1,12 +1,34 @@
 import { Role } from "@trustless-work/escrow/types";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useSearchParams } from "next/navigation";
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useEscrowsByRoleQuery } from "./tanstack/useEscrowsByRoleQuery";
+import { useEscrowsBySignerQuery } from "./tanstack/useEscrowsBySignerQuery";
 import { SingleReleaseEscrowStatus } from "@/@types/escrow.entity";
+import { VercelLogoIcon } from "@radix-ui/react-icons";
 
 interface useMyEscrowsProps {
   role: Role;
+}
+
+function useEscrowsFlexibleQuery({
+  role,
+  roleAddress,
+  signer,
+  ...baseParams
+}: any) {
+  if (role === "signer") {
+    return useEscrowsBySignerQuery({
+      ...baseParams,
+      signer,
+    });
+  } else {
+    return useEscrowsByRoleQuery({
+      ...baseParams,
+      role,
+      roleAddress,
+    });
+  }
 }
 
 const useMyEscrows = ({ role }: useMyEscrowsProps) => {
@@ -15,7 +37,6 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(15);
 
-  const lastQueryKey = useRef<string>("");
   const searchParams = useSearchParams();
 
   const filters = useMemo(() => {
@@ -43,7 +64,7 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
     };
   }, [searchParams]);
 
-  const queryParams = useMemo(() => {
+  const baseParams = useMemo(() => {
     const {
       searchQuery,
       statusFilter,
@@ -54,8 +75,6 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
     } = filters;
 
     return {
-      role,
-      roleAddress: address,
       isActive,
       page: currentPage,
       orderDirection: "desc" as const,
@@ -72,19 +91,14 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
       engagementId: engagementFilter,
       status: statusFilter as SingleReleaseEscrowStatus,
     };
-  }, [role, address, currentPage, filters]);
+  }, [currentPage, filters]);
 
-  const queryKey = useMemo(() => {
-    return JSON.stringify(queryParams);
-  }, [queryParams]);
-
-  const hasQueryChanged = queryKey !== lastQueryKey.current;
-
-  const { data: escrows = [], isLoading } = useEscrowsByRoleQuery(queryParams);
-
-  if (hasQueryChanged) {
-    lastQueryKey.current = queryKey;
-  }
+  const { data: escrows = [], isLoading } = useEscrowsFlexibleQuery({
+    ...baseParams,
+    role,
+    roleAddress: address,
+    signer: address,
+  });
 
   const totalPages = useMemo(() => {
     return Math.ceil(escrows.length / itemsPerPage);
