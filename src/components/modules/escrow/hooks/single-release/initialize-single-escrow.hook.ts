@@ -28,6 +28,7 @@ import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useInitializeEscrowSchema } from "../../schema/initialize-escrow.schema";
 import { handleError } from "@/errors/utils/handle-errors";
 import { AxiosError } from "axios";
+import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
 
 type ExtendedRoles = Roles & {
   issuer: string;
@@ -66,7 +67,7 @@ export const useInitializeSingleEscrow = () => {
   const { getSingleReleaseFormSchema } = useInitializeEscrowSchema();
   const formSchema = getSingleReleaseFormSchema();
 
-  const { deployEscrow } = useInitializeEscrowHook();
+  const { deployEscrow } = useEscrowsMutations();
   const { sendTransaction } = useSendTransaction();
 
   useEffect(() => {
@@ -181,7 +182,7 @@ export const useInitializeSingleEscrow = () => {
         milestones: payload.milestones,
       };
 
-      const { unsignedTransaction } = await deployEscrow({
+      const { unsignedTransaction } = await deployEscrow.mutateAsync({
         payload: finalPayload,
         type: "single-release",
       });
