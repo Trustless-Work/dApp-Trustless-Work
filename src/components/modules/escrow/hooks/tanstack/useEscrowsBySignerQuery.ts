@@ -1,23 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { useGetEscrowsFromIndexerBySigner } from "@trustless-work/escrow";
-import { useMemo } from "react";
-import { SingleReleaseEscrowStatus } from "@/@types/escrow.entity";
-import { EscrowType } from "@trustless-work/escrow";
+import {
+  GetEscrowsFromIndexerBySignerParams,
+  useGetEscrowsFromIndexerBySigner,
+} from "@trustless-work/escrow";
 
-interface GetEscrowsFromIndexerBySignerParams {
-  signer: string;
-  isActive?: boolean;
-  page?: number;
-  orderDirection?: "asc" | "desc";
-  orderBy?: "createdAt" | "updatedAt" | "amount";
-  startDate?: string;
-  endDate?: string;
-  maxAmount?: number;
-  minAmount?: number;
-  title?: string;
-  engagementId?: string;
-  status?: SingleReleaseEscrowStatus;
-  type?: EscrowType;
+interface UseEscrowsBySignerQueryParams
+  extends GetEscrowsFromIndexerBySignerParams {
+  enabled?: boolean;
 }
 
 export const useEscrowsBySignerQuery = ({
@@ -34,30 +23,27 @@ export const useEscrowsBySignerQuery = ({
   engagementId,
   status,
   type,
-}: GetEscrowsFromIndexerBySignerParams) => {
+  enabled = true,
+}: UseEscrowsBySignerQueryParams) => {
   const { getEscrowsBySigner } = useGetEscrowsFromIndexerBySigner();
 
-  const queryKey = useMemo(() => ["escrows", signer], [signer]);
-
   return useQuery({
-    queryKey,
+    queryKey: ["escrows", signer],
     queryFn: async () => {
       const escrows = await getEscrowsBySigner({
-        params: {
-          signer,
-          isActive,
-          page,
-          orderDirection,
-          orderBy,
-          startDate,
-          endDate,
-          maxAmount,
-          minAmount,
-          title,
-          engagementId,
-          status,
-          type,
-        },
+        signer,
+        isActive,
+        page,
+        orderDirection,
+        orderBy,
+        startDate,
+        endDate,
+        maxAmount,
+        minAmount,
+        title,
+        engagementId,
+        status,
+        type,
       });
 
       if (!escrows) {
@@ -66,7 +52,7 @@ export const useEscrowsBySignerQuery = ({
 
       return escrows;
     },
-    enabled: !!signer,
+    enabled: enabled && !!signer,
     staleTime: 1000 * 60 * 5, // 5 min
   });
 };

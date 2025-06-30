@@ -1,9 +1,14 @@
+import { Escrow } from "@/@types/escrow.entity";
 import { useQuery } from "@tanstack/react-query";
 import {
   GetEscrowsFromIndexerByRoleParams,
   useGetEscrowsFromIndexerByRole,
 } from "@trustless-work/escrow";
-import { useMemo } from "react";
+
+interface UseEscrowsByRoleQueryParams
+  extends GetEscrowsFromIndexerByRoleParams {
+  enabled?: boolean;
+}
 
 export const useEscrowsByRoleQuery = ({
   role,
@@ -20,34 +25,28 @@ export const useEscrowsByRoleQuery = ({
   engagementId,
   status,
   type,
-}: GetEscrowsFromIndexerByRoleParams) => {
+  enabled = true,
+}: UseEscrowsByRoleQueryParams) => {
   const { getEscrowsByRole } = useGetEscrowsFromIndexerByRole();
 
-  const queryKey = useMemo(
-    () => ["escrows", roleAddress, role],
-    [roleAddress, role],
-  );
-
   return useQuery({
-    queryKey,
-    queryFn: async () => {
+    queryKey: ["escrows", roleAddress, role],
+    queryFn: async (): Promise<Escrow[]> => {
       const escrows = await getEscrowsByRole({
-        params: {
-          role,
-          roleAddress,
-          isActive,
-          page,
-          orderDirection,
-          orderBy,
-          startDate,
-          endDate,
-          maxAmount,
-          minAmount,
-          title,
-          engagementId,
-          status,
-          type,
-        },
+        role,
+        roleAddress,
+        isActive,
+        page,
+        orderDirection,
+        orderBy,
+        startDate,
+        endDate,
+        maxAmount,
+        minAmount,
+        title,
+        engagementId,
+        status,
+        type,
       });
 
       if (!escrows) {
@@ -56,7 +55,7 @@ export const useEscrowsByRoleQuery = ({
 
       return escrows;
     },
-    enabled: !!roleAddress && !!role,
+    enabled: enabled && !!roleAddress && !!role,
     staleTime: 1000 * 60 * 5,
   });
 };
