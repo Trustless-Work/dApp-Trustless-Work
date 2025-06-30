@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   if (address === "") {
     redirect("/");
   }
-
+ 
   return (
     <SidebarProvider>
       <Lights />
