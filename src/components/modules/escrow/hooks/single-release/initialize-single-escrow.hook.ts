@@ -23,6 +23,8 @@ import { useInitializeEscrowSchema } from "../../schema/initialize-escrow.schema
 import { handleError } from "@/errors/utils/handle-errors";
 import { AxiosError } from "axios";
 import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
+import useNetwork from "@/hooks/useNetwork";
+import { trustlines } from "@/constants/trustlines.constant";
 
 export const useInitializeSingleEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -48,23 +50,19 @@ export const useInitializeSingleEscrow = () => {
   );
   const fetchContacts = useContactStore((state) => state.fetchContacts);
   const contacts = useContactStore((state) => state.contacts);
-  const getAllTrustlines = useGlobalBoundedStore(
-    (state) => state.getAllTrustlines,
-  );
   const address = useGlobalAuthenticationStore((state) => state.address);
-  const trustlines = useGlobalBoundedStore((state) => state.trustlines);
   const escrowType = useEscrowUIBoundedStore((state) => state.escrowType);
   const { getSingleReleaseFormSchema } = useInitializeEscrowSchema();
   const formSchema = getSingleReleaseFormSchema();
+  const { currentNetwork } = useNetwork();
 
   const { deployEscrow } = useEscrowsMutations();
 
   useEffect(() => {
     if (address) {
       fetchContacts(address);
-      getAllTrustlines();
     }
-  }, [fetchContacts, getAllTrustlines, address]);
+  }, [fetchContacts, address]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,13 +90,18 @@ export const useInitializeSingleEscrow = () => {
   });
 
   const fillTemplateForm = () => {
-    // Find the USDC trustline
+    // Filter trustlines by current network
+    const networkTrustlines = trustlines.filter(
+      (tl) => tl.network === currentNetwork,
+    );
+
+    // Find the USDC trustline for current network
     const usdcTrustline =
-      trustlines.find((tl) => tl.name?.toLowerCase().includes("usdc")) ||
-      trustlines[0];
+      networkTrustlines.find((tl) => tl.name?.toLowerCase().includes("usdc")) ||
+      networkTrustlines[0];
 
     if (!usdcTrustline) {
-      toast.error("No trustline available");
+      toast.error(`No trustline available for ${currentNetwork}`);
       return;
     }
 
@@ -198,13 +201,18 @@ export const useInitializeSingleEscrow = () => {
   }, [contacts]);
 
   const trustlineOptions = useMemo(() => {
-    const options = trustlines.map((trustline) => ({
+    // Filter trustlines by current network
+    const networkTrustlines = trustlines.filter(
+      (tl) => tl.network === currentNetwork,
+    );
+
+    const options = networkTrustlines.map((trustline) => ({
       value: trustline.address,
       label: trustline.name,
     }));
 
     return [{ value: "", label: "Select a Trustline" }, ...options];
-  }, [trustlines]);
+  }, [trustlines, currentNetwork]);
 
   const toggleField = (field: string, value: boolean) => {
     setShowSelect((prev) => ({ ...prev, [field]: value }));
