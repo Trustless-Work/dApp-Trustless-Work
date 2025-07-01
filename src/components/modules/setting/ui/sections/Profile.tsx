@@ -39,8 +39,8 @@ export const Profile = ({ onSave }: ProfileProps) => {
           <span className="text-xs text-muted-foreground">
             Created:{" "}
             {formatDateFromFirebase(
-              loggedUser?.createdAt?.seconds ?? 0,
-              loggedUser?.createdAt?.nanoseconds ?? 0,
+              loggedUser?.createdAt?._seconds ?? 0,
+              loggedUser?.createdAt?._nanoseconds ?? 0,
             )}
           </span>
         </div>

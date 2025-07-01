@@ -1,24 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
 import CreateButton from "@/components/utils/ui/Create";
 import Divider from "@/components/utils/ui/Divider";
 import { Search, Trash2 } from "lucide-react";
 import { useEscrowFilter } from "./hooks/escrow-filter.hook";
-import {
-  getAmountOptionsFilters,
-  getStatusOptionsFilters,
-  getActiveOptionsFilters,
-} from "./constants/filters-options.constant";
 import { getRoleActionIcons } from "@/utils/get-role-actions";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import Link from "next/link";
-import { DatePickerWithRange } from "@/components/ui/calendar-range";
 import { useTranslation } from "react-i18next";
 
 const MyEscrowsFilter = () => {
@@ -27,21 +15,21 @@ const MyEscrowsFilter = () => {
 
   const {
     search,
-    status,
-    amountRange,
-    engagement,
-    active,
-    uniqueEngagements,
-    searchParams,
+    // status,
+    // amountRange,
+    // engagement,
+    // active,
+    // uniqueEngagements,
+    // searchParams,
+    // mapNameParams,
+    // updateQuery,
     setSearch,
-    updateQuery,
     deleteParams,
-    mapNameParams,
   } = useEscrowFilter();
 
-  const amountOptions = getAmountOptionsFilters(t);
-  const statusOptions = getStatusOptionsFilters(t);
-  const activeOptions = getActiveOptionsFilters(t);
+  // const amountOptions = getAmountOptionsFilters(t);
+  // const statusOptions = getStatusOptionsFilters(t);
+  // const activeOptions = getActiveOptionsFilters(t);
 
   return (
     <form className="flex flex-col space-y-4 w-full">
@@ -91,7 +79,7 @@ const MyEscrowsFilter = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Status */}
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <label
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="status"
@@ -113,10 +101,10 @@ const MyEscrowsFilter = () => {
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         {/* Amount */}
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <label
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="amount"
@@ -138,10 +126,10 @@ const MyEscrowsFilter = () => {
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         {/* Engagement */}
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <label
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="engagement"
@@ -164,10 +152,10 @@ const MyEscrowsFilter = () => {
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         {/* Visibility */}
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <label
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="active"
@@ -189,10 +177,10 @@ const MyEscrowsFilter = () => {
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         {/* Created At */}
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <label
             className="text-xs text-muted-foreground font-bold mb-2 ml-2"
             htmlFor="dateRange"
@@ -202,7 +190,7 @@ const MyEscrowsFilter = () => {
           <div className="w-full">
             <DatePickerWithRange className="w-full" />
           </div>
-        </div>
+        </div> */}
       </div>
     </form>
   );

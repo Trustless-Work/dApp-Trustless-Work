@@ -12,6 +12,7 @@ import {
   CheckCheck,
   CheckCircle,
   XCircle,
+  SquareCheckBig,
 } from "lucide-react";
 import { Escrow } from "@/@types/escrow.entity";
 import {
@@ -48,7 +49,7 @@ export const getStatusBadge = (escrow: Escrow) => {
 
   if (escrow.flags?.disputed) {
     return (
-      <Badge variant="destructive" className="gap-1">
+      <Badge variant="outline" className="gap-1 border-red-700 text-red-600">
         <CircleAlert className="h-3.5 w-3.5" />
         <span>{t("reusable.disputed")}</span>
       </Badge>
@@ -99,16 +100,38 @@ export const getStatusBadge = (escrow: Escrow) => {
   );
 };
 
+export const getMultiReleaseStatusBadge = (escrow: Escrow) => {
+  const allMilestonesReleased = escrow.milestones.every(
+    (milestone: MultiReleaseMilestone | SingleReleaseMilestone) => {
+      if ("flags" in milestone) {
+        return (
+          milestone.flags?.released === true ||
+          milestone.flags?.resolved === true
+        );
+      }
+      return false;
+    },
+  );
+
+  if (allMilestonesReleased) {
+    return (
+      <Badge
+        variant="outline"
+        className="gap-1 border-green-500 text-green-600"
+      >
+        <SquareCheckBig className="h-3.5 w-3.5" />
+        <span>Finished</span>
+      </Badge>
+    );
+  }
+};
+
 export const getMilestoneStatusBadge = (
   milestone: SingleReleaseMilestone | MultiReleaseMilestone,
 ) => {
-  if (
-    "disputeStartedBy" in milestone &&
-    "flags" in milestone &&
-    !milestone.flags?.resolved
-  ) {
+  if ("flags" in milestone && milestone.flags?.disputed) {
     return (
-      <Badge variant="destructive" className="gap-1">
+      <Badge variant="outline" className="gap-1 border-red-700 text-red-600">
         <CircleAlert className="h-3.5 w-3.5" />
         <span>{t("reusable.disputed")}</span>
       </Badge>
@@ -149,7 +172,7 @@ export const getMilestoneStatusBadge = (
         variant="outline"
         className="gap-1 border-green-500 text-green-600"
       >
-        <Handshake className="h-3.5 w-3.5" />
+        <CheckCheck className="h-3.5 w-3.5" />
         <span>{t("reusable.approved")}</span>
       </Badge>
     );

@@ -18,7 +18,10 @@ import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useTranslation } from "react-i18next";
 import { Escrow } from "@/@types/escrow.entity";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import { getStatusBadge } from "@/components/utils/ui/Status";
+import {
+  getMultiReleaseStatusBadge,
+  getStatusBadge,
+} from "@/components/utils/ui/Status";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
 
 interface EscrowCardProps {
@@ -66,6 +69,9 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
 
         <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 w-full sm:w-auto justify-between sm:justify-start">
           {escrow.type === "single-release" && getStatusBadge(escrow)}
+
+          {escrow.type === "multi-release" &&
+            getMultiReleaseStatusBadge(escrow)}
 
           <TooltipInfo content="View from TW Escrow Viewer">
             <Link
@@ -122,8 +128,8 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
         <p className="text-xs text-muted-foreground italic w-full sm:w-auto text-center sm:text-right">
           Created:{" "}
           {formatDateFromFirebase(
-            escrow.createdAt.seconds,
-            escrow.createdAt.nanoseconds,
+            escrow.createdAt._seconds,
+            escrow.createdAt._nanoseconds,
           )}
         </p>
       </CardFooter>

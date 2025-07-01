@@ -30,7 +30,7 @@ export const useMilestoneDashboardData = ({
         (escrow) =>
           escrow.milestones.map((milestone) => ({
             ...milestone,
-            escrowId: escrow.id,
+            escrowId: escrow.contractId,
             escrowTitle: escrow.title,
             disputed: escrow.flags?.disputed,
             released: escrow.flags?.released,

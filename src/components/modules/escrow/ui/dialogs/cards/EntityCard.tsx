@@ -58,7 +58,10 @@ const EntityCard = ({
                 {type}
               </span>
               {inDispute && (
-                <Badge variant="destructive" className="h-5 text-[10px]">
+                <Badge
+                  variant="outline"
+                  className="gap-1 border-red-700 text-red-600"
+                >
                   In Dispute
                 </Badge>
               )}

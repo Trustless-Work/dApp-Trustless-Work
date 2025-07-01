@@ -67,8 +67,8 @@ export default function PublicProfile() {
                       <span>
                         Member since{" "}
                         {formatDateFromFirebase(
-                          user?.createdAt?.seconds ?? 0,
-                          user?.createdAt?.nanoseconds ?? 0,
+                          user?.createdAt?._seconds ?? 0,
+                          user?.createdAt?._nanoseconds ?? 0,
                         )}
                       </span>
                     </div>

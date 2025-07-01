@@ -14,14 +14,7 @@ import FundEscrowDialog from "./FundEscrowDialog";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";
 import ResolveDisputeEscrowDialog from "./ResolveDisputeEscrowDialog";
-import {
-  ArchiveRestore,
-  Trash2,
-  Info,
-  Users,
-  ListChecks,
-  QrCode,
-} from "lucide-react";
+import { Info, Users, ListChecks, QrCode } from "lucide-react";
 import EditMilestonesDialog from "./EditMilestonesDialog";
 import {
   SuccessReleaseDialog,
@@ -36,17 +29,9 @@ import { FooterDetails } from "./sections/Footer";
 import { Button } from "@/components/ui/button";
 import EditEntitiesDialog from "./EditEntitiesDialog";
 import EditBasicPropertiesDialog from "./EditBasicPropertiesDialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Escrow } from "@/@types/escrow.entity";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import { DeleteEscrowDialog } from "./DeleteEscrowDialog";
-import { RestoreEscrowDialog } from "./RestoreEscrowDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
 import { GeneralInformation } from "./sections/GeneralInformation";
 import { Entities } from "./sections/Entities";
@@ -66,11 +51,11 @@ const EscrowDetailDialog = ({
   const { t } = useTranslation();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const dialogStates = useEscrowDialogs();
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [isRestoreConfirmOpen, setIsRestoreConfirmOpen] = useState(false);
+  // const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  // const [isRestoreConfirmOpen, setIsRestoreConfirmOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("general");
 
-  const { softDeleteEscrow, restoreEscrow } = useGlobalBoundedStore();
+  // const { softDeleteEscrow, restoreEscrow } = useGlobalBoundedStore();
 
   const {
     handleClose,
@@ -152,6 +137,10 @@ const EscrowDetailDialog = ({
                       selectedEscrow={selectedEscrow}
                       userRolesInEscrow={userRolesInEscrow}
                       dialogStates={dialogStates}
+                      areAllMilestonesCompleted={areAllMilestonesCompleted}
+                      areAllMilestonesCompletedAndFlag={
+                        areAllMilestonesCompletedAndFlag
+                      }
                     />
                   </TabsContent>
 
@@ -186,14 +175,7 @@ const EscrowDetailDialog = ({
                 <ProgressEscrow escrow={selectedEscrow} />
               ) : (
                 <>
-                  <FooterDetails
-                    selectedEscrow={selectedEscrow}
-                    userRolesInEscrow={userRolesInEscrow}
-                    areAllMilestonesCompleted={areAllMilestonesCompleted}
-                    areAllMilestonesCompletedAndFlag={
-                      areAllMilestonesCompletedAndFlag
-                    }
-                  />
+                  <FooterDetails selectedEscrow={selectedEscrow} />
 
                   <div className="flex gap-4">
                     <Button
@@ -206,7 +188,7 @@ const EscrowDetailDialog = ({
                     >
                       <QrCode className="h-4 w-4" />
                     </Button>
-                    {selectedEscrow?.isActive !== false ? (
+                    {/* {selectedEscrow?.isActive !== false ? (
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -242,7 +224,7 @@ const EscrowDetailDialog = ({
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    )}
+                    )} */}
                   </div>
                 </>
               )}
@@ -252,25 +234,25 @@ const EscrowDetailDialog = ({
       </Dialog>
 
       {/* Confirmation Dialogs */}
-      <DeleteEscrowDialog
+      {/* <DeleteEscrowDialog
         isOpen={isDeleteConfirmOpen}
         onClose={() => setIsDeleteConfirmOpen(false)}
         onConfirm={async () => {
-          await softDeleteEscrow(selectedEscrow.id);
+          await softDeleteEscrow(selectedEscrow.contractId);
           handleClose();
         }}
         escrowTitle={selectedEscrow.title}
-      />
+      /> */}
 
-      <RestoreEscrowDialog
+      {/* <RestoreEscrowDialog
         isOpen={isRestoreConfirmOpen}
         onClose={() => setIsRestoreConfirmOpen(false)}
         onConfirm={async () => {
-          await restoreEscrow(selectedEscrow.id);
+          await restoreEscrow(selectedEscrow.contractId);
           handleClose();
         }}
         escrowTitle={selectedEscrow.title}
-      />
+      /> */}
 
       {/* External Dialogs */}
       <FundEscrowDialog

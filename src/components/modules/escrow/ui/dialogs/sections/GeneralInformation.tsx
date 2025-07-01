@@ -30,12 +30,16 @@ interface GeneralInformationProps {
   selectedEscrow: Escrow;
   userRolesInEscrow: string[];
   dialogStates: ReturnType<typeof useEscrowDialogs>;
+  areAllMilestonesCompleted: boolean;
+  areAllMilestonesCompletedAndFlag: boolean;
 }
 
 export const GeneralInformation = ({
   selectedEscrow,
   userRolesInEscrow,
   dialogStates,
+  areAllMilestonesCompleted,
+  areAllMilestonesCompletedAndFlag,
 }: GeneralInformationProps) => {
   const { t } = useTranslation();
   const { formatText, formatDollar, formatAddress } = useFormatUtils();
@@ -132,6 +136,8 @@ export const GeneralInformation = ({
           <Actions
             selectedEscrow={selectedEscrow}
             userRolesInEscrow={userRolesInEscrow}
+            areAllMilestonesCompleted={areAllMilestonesCompleted}
+            areAllMilestonesCompletedAndFlag={areAllMilestonesCompletedAndFlag}
           />
         </div>
       </div>

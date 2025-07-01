@@ -1,6 +1,5 @@
-import { useGlobalBoundedStore } from "@/core/store/data";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 export const useEscrowFilter = () => {
@@ -8,8 +7,6 @@ export const useEscrowFilter = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { t } = useTranslation();
-  const escrows = useGlobalBoundedStore((state) => state.escrows);
-
   const [search, setSearch] = useState(searchParams.get("q") || "");
   const [status] = useState(searchParams.get("status") || "");
   const [amountRange] = useState(searchParams.get("amount") || "");
@@ -47,18 +44,18 @@ export const useEscrowFilter = () => {
     return () => clearTimeout(delayDebounce);
   }, [search, updateQuery]);
 
-  const uniqueEngagements = useMemo(() => {
-    const engagementsSet = new Set<string>();
-    escrows.forEach((escrow) => {
-      if (escrow.engagementId) {
-        engagementsSet.add(escrow.engagementId);
-      }
-    });
-    return Array.from(engagementsSet).map((engagement) => ({
-      value: engagement,
-      label: engagement,
-    }));
-  }, [escrows]);
+  // const uniqueEngagements = useMemo(() => {
+  //   const engagementsSet = new Set<string>();
+  //   escrows.forEach((escrow) => {
+  //     if (escrow.engagementId) {
+  //       engagementsSet.add(escrow.engagementId);
+  //     }
+  //   });
+  //   return Array.from(engagementsSet).map((engagement) => ({
+  //     value: engagement,
+  //     label: engagement,
+  //   }));
+  // }, [escrows]);
 
   const mapNameParams = (paramName: string) => {
     if (!paramName) return t("myEscrows.filter.status.all");
@@ -104,7 +101,7 @@ export const useEscrowFilter = () => {
     amountRange,
     engagement,
     active,
-    uniqueEngagements,
+    uniqueEngagements: [], // todo: add all the engagements from the escrows
     searchParams,
     setSearch,
     updateQuery,

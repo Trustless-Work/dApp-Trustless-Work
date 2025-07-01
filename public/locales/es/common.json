@@ -231,7 +231,7 @@
       }
     },
     "roleLabels": {
-      "issuer": "Emisor",
+      "signer": "Firmante",
       "approver": "Aprobador",
       "serviceProvider": "Proveedor de Servicio",
       "disputeResolver": "Resolutor de Disputas",
@@ -356,7 +356,7 @@
   },
   "myEscrows": {
     "tabs": {
-      "issuer": "Escrows Iniciados",
+      "signer": "Escrows Iniciados",
       "approver": "Aprobador",
       "serviceProvider": "Proveedor de Servicio",
       "disputeResolver": "Resolutor de Disputas",

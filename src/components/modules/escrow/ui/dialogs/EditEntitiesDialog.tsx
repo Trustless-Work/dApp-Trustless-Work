@@ -9,7 +9,6 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import useEditEntitiesDialog from "../../hooks/edit-entities-dialog.hook";
 import { EditEntitiesForm } from "./EditEntitiesForm";
-import { SkeletonEditEntities } from "./utils/SkeletonEditEntities";
 
 interface EditEntitiesDialogProps {
   isEditEntitiesDialogOpen: boolean;
@@ -42,13 +41,10 @@ const EditEntitiesDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        {isEditingEntities ? (
-          <SkeletonEditEntities />
-        ) : (
-          <EditEntitiesForm
-            setIsEditEntitiesDialogOpen={setIsEditEntitiesDialogOpen}
-          />
-        )}
+        <EditEntitiesForm
+          setIsEditEntitiesDialogOpen={setIsEditEntitiesDialogOpen}
+          isEditingEntities={isEditingEntities}
+        />
       </DialogContent>
     </Dialog>
   );

@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dialog";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import SkeletonEditMilestones from "./utils/SkeletonEditMilestones";
 import { useEditSingleMilestonesDialog } from "../../hooks/single-release/edit-single-milestones-dialog.hook";
 import { EditSingleMilestonesForm } from "./single-release/EditSingleMilestonesForm";
 import { EditMultiMilestonesForm } from "./multi-release/EditMultiMilestonesForm";
@@ -34,7 +33,7 @@ const EditMilestonesDialog = ({
 
   return (
     <Dialog open={isEditMilestoneDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>
           <DialogTitle>Editing - {selectedEscrow?.title}</DialogTitle>
           <DialogDescription>
@@ -43,15 +42,15 @@ const EditMilestonesDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        {isEditingMilestones ? (
-          <SkeletonEditMilestones />
-        ) : selectedEscrow.type === "single-release" ? (
+        {selectedEscrow.type === "single-release" ? (
           <EditSingleMilestonesForm
             setIsEditMilestoneDialogOpen={setIsEditMilestoneDialogOpen}
+            isEditingMilestones={isEditingMilestones}
           />
         ) : (
           <EditMultiMilestonesForm
             setIsEditMilestoneDialogOpen={setIsEditMilestoneDialogOpen}
+            isEditingMilestones={isEditingMilestones}
           />
         )}
       </DialogContent>

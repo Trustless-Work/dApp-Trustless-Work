@@ -23,8 +23,8 @@ export const NotificationItem = ({ notification }: NotificationItemProps) => {
             <h4 className="text-sm font-medium">{notification.title}</h4>
             <p className="text-xs text-muted-foreground">
               {formatDateFromFirebase(
-                notification.createdAt.seconds,
-                notification.createdAt.nanoseconds,
+                notification.createdAt._seconds,
+                notification.createdAt._nanoseconds,
               )}
             </p>
           </div>
