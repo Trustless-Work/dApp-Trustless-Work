@@ -78,7 +78,6 @@ export const subscribeToChats = (
   const q = query(
     chatsCollection,
     where("participants", "array-contains", userId),
-    orderBy("updatedAt", "desc"),
   );
 
   return onSnapshot(q, (snapshot) => {
@@ -90,6 +89,11 @@ export const subscribeToChats = (
         lastMessage: data.lastMessage,
         updatedAt: data.updatedAt,
       } as Chat;
+    });
+    chats.sort((a, b) => {
+      const aTime = a.updatedAt?.seconds || 0;
+      const bTime = b.updatedAt?.seconds || 0;
+      return bTime - aTime;
     });
     callback(chats);
   });
