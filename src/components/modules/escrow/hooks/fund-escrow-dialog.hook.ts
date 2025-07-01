@@ -11,14 +11,9 @@ import {
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { FundEscrowPayload } from "@trustless-work/escrow/types";
-import {
-  useFundEscrow,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
-import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { handleError } from "@/errors/utils/handle-errors";
 import { AxiosError } from "axios";
+import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen?: (value: boolean) => void;
@@ -29,23 +24,20 @@ const useFundEscrowDialog = ({
 }: useFundEscrowDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
+  );
   const setIsFundingEscrow = useEscrowUIBoundedStore(
     (state) => state.setIsFundingEscrow,
   );
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
-  const fetchAllEscrows = useGlobalBoundedStore(
-    (state) => state.fetchAllEscrows,
-  );
-  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
-  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const setAmountMoonpay = useEscrowUIBoundedStore(
     (state) => state.setAmountMoonpay,
   );
 
-  const { fundEscrow } = useFundEscrow();
-  const { sendTransaction } = useSendTransaction();
+  const { fundEscrow } = useEscrowsMutations();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -77,53 +69,38 @@ const useFundEscrowDialog = ({
     }
   }, [paymentMethod, amount, setError, clearErrors]);
 
+  if (!selectedEscrow) {
+    return {
+      onSubmit: async () => {},
+      form,
+      handleClose: () => {},
+      paymentMethod,
+      amount,
+      setIsDialogOpen,
+    };
+  }
+
   const onSubmit = async ({ amount }: { amount: number }) => {
     setIsFundingEscrow(true);
 
     try {
-      const finalPayload: FundEscrowPayload = {
-        signer: address,
-        amount: amount,
-        contractId: selectedEscrow!.contractId || "",
-      };
-
-      const { unsignedTransaction } = await fundEscrow({
-        payload: finalPayload,
+      await fundEscrow.mutateAsync({
+        payload: {
+          signer: address,
+          amount: amount,
+          contractId: selectedEscrow!.contractId || "",
+        },
         type: selectedEscrow?.type || "single-release",
-      });
-
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from fundEscrow response.",
-        );
-      }
-
-      const signedTxXdr = await signTransaction({
-        unsignedTransaction,
         address,
       });
 
-      if (!signedTxXdr) {
-        throw new Error("Signed transaction is missing.");
-      }
-
-      const response = await sendTransaction(signedTxXdr);
-
-      if (response.status === "SUCCESS") {
-        form.reset();
-        setIsSecondDialogOpen?.(false);
-        setIsDialogOpen(false);
-        updateEscrow({
-          escrowId: selectedEscrow!.id,
-          payload: {
-            ...selectedEscrow!,
-            fundedBy: activeTab,
-          },
-        });
-        fetchAllEscrows({ address, type: activeTab || "approver" });
-
-        toast.success("Escrow funded successfully");
-      }
+      form.reset();
+      setIsSecondDialogOpen?.(false);
+      setSelectedEscrow({
+        ...selectedEscrow,
+        balance: (selectedEscrow?.balance || 0) + amount,
+      });
+      toast.success("Escrow funded successfully");
     } catch (err) {
       console.log(err);
       toast.error(handleError(err as AxiosError).message);

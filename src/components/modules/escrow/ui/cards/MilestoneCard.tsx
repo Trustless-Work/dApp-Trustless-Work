@@ -100,7 +100,7 @@ export const MilestoneCard = ({
   return (
     <Card
       key={`milestone-${milestoneIndex}-${milestone.description}-${milestone.status}`}
-      className="hover:shadow-lg transition-all duration-200 border-0 shadow-md"
+      className="hover:shadow-lg transition-all duration-200"
     >
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">

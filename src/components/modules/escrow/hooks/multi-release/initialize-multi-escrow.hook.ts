@@ -16,22 +16,13 @@ import { useContactStore } from "@/core/store/data/slices/contacts.slice";
 import {
   InitializeMultiReleaseEscrowPayload,
   InitializeMultiReleaseEscrowResponse,
-  Roles,
 } from "@trustless-work/escrow/types";
-import { signTransaction } from "@/lib/stellar-wallet-kit";
-import {
-  useInitializeEscrow as useInitializeEscrowHook,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
 import { Escrow } from "@/@types/escrow.entity";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useInitializeEscrowSchema } from "../../schema/initialize-escrow.schema";
 import { AxiosError } from "axios";
 import { handleError } from "@/errors/utils/handle-errors";
-
-type ExtendedRoles = Roles & {
-  issuer: string;
-};
+import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
 
 export const useInitializeMultiEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -66,8 +57,7 @@ export const useInitializeMultiEscrow = () => {
   const { getMultiReleaseFormSchema } = useInitializeEscrowSchema();
   const formSchema = getMultiReleaseFormSchema();
 
-  const { deployEscrow } = useInitializeEscrowHook();
-  const { sendTransaction } = useSendTransaction();
+  const { deployEscrow } = useEscrowsMutations();
 
   useEffect(() => {
     if (address) {
@@ -176,47 +166,23 @@ export const useInitializeMultiEscrow = () => {
         ...payload,
         receiverMemo: Number(payload.receiverMemo) ?? 0,
         signer: address,
-        roles: {
-          ...payload.roles,
-          issuer: address,
-        } as ExtendedRoles,
         milestones: payload.milestones,
       };
 
-      const { unsignedTransaction } = await deployEscrow({
+      const response = (await deployEscrow.mutateAsync({
         payload: finalPayload,
         type: "multi-release",
-      });
-
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from deployEscrow response.",
-        );
-      }
-
-      const signedTxXdr = await signTransaction({
-        unsignedTransaction,
         address,
+      })) as InitializeMultiReleaseEscrowResponse & { escrow: Escrow };
+
+      setIsSuccessDialogOpen(true);
+      setRecentEscrow({
+        ...response.escrow,
+        contractId: response.contractId,
       });
-
-      if (!signedTxXdr) {
-        throw new Error("Signed transaction is missing.");
-      }
-
-      const response = (await sendTransaction(
-        signedTxXdr,
-      )) as InitializeMultiReleaseEscrowResponse & { escrow: Escrow };
-
-      if (response.status === "SUCCESS") {
-        setIsSuccessDialogOpen(true);
-        setRecentEscrow({
-          ...response.escrow,
-          contractId: response.contractId,
-        });
-        resetSteps();
-        setCurrentStep(1);
-        router.push("/dashboard/escrow/my-escrows");
-      }
+      resetSteps();
+      setCurrentStep(1);
+      router.push("/dashboard/escrow/my-escrows");
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
     } finally {

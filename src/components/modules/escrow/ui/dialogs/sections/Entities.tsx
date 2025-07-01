@@ -45,7 +45,7 @@ export const Entities = ({
                 }}
                 className="text-xs"
                 variant="ghost"
-                disabled={Number(selectedEscrow.balance) === 0}
+                disabled={selectedEscrow.balance !== 0}
               >
                 <Pencil className="h-4 w-4 mr-2" />
                 {t("escrowDetailDialog.editButton")}

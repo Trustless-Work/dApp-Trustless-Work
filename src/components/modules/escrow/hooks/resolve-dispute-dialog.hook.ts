@@ -12,11 +12,6 @@ import { getFormSchema } from "../schema/resolve-dispute-escrow.schema";
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { toast } from "sonner";
 import {
-  useResolveDispute,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
-import { signTransaction } from "@/lib/stellar-wallet-kit";
-import {
   MultiReleaseResolveDisputePayload,
   SingleReleaseResolveDisputePayload,
 } from "@trustless-work/escrow";
@@ -24,19 +19,19 @@ import { useEscrowDialogs } from "../ui/dialogs/hooks/use-escrow-dialogs.hook";
 import { useEscrowBoundedStore } from "../store/data";
 import { AxiosError } from "axios";
 import { handleError } from "@/errors/utils/handle-errors";
+import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 
 export const useResolveDisputeDialog = () => {
   const setIsResolvingDispute = useEscrowUIBoundedStore(
     (state) => state.setIsResolvingDispute,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
+  );
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
-  const fetchAllEscrows = useGlobalBoundedStore(
-    (state) => state.fetchAllEscrows,
-  );
-  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
@@ -55,8 +50,7 @@ export const useResolveDisputeDialog = () => {
   const dialogStates = useEscrowDialogs();
   const setIsResolveDisputeDialogOpen = dialogStates.resolveDispute.setIsOpen;
 
-  const { resolveDispute } = useResolveDispute();
-  const { sendTransaction } = useSendTransaction();
+  const { resolveDispute } = useEscrowsMutations();
 
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
 
@@ -97,43 +91,47 @@ export const useResolveDisputeDialog = () => {
             : "",
       };
 
-      const { unsignedTransaction } = await resolveDispute({
+      await resolveDispute.mutateAsync({
         payload: finalPayload,
         type: selectedEscrow.type || "single-release",
-      });
-
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from resolveDispute response.",
-        );
-      }
-
-      const signedTxXdr = await signTransaction({
-        unsignedTransaction,
         address,
       });
 
-      if (!signedTxXdr) {
-        throw new Error("Signed transaction is missing.");
+      form.reset();
+      setReceiverResolve(receiverFunds);
+      setApproverResolve(approverFunds);
+      setIsResolveDisputeDialogOpen(false);
+      setIsSuccessResolveDisputeDialogOpen(true);
+
+      if (selectedEscrow) {
+        setRecentEscrow(selectedEscrow);
       }
 
-      const response = await sendTransaction(signedTxXdr);
-
-      if (response.status === "SUCCESS") {
-        form.reset();
-        setReceiverResolve(receiverFunds);
-        setApproverResolve(approverFunds);
-        setIsResolveDisputeDialogOpen(false);
+      if (selectedEscrow && milestoneIndex !== null) {
+        const updatedEscrow = {
+          ...selectedEscrow,
+          milestones: selectedEscrow.milestones.map((milestone, i) =>
+            i === milestoneIndex
+              ? {
+                  ...milestone,
+                  ...("flags" in milestone && {
+                    flags: {
+                      ...milestone.flags,
+                      resolved: true,
+                      disputed: false,
+                    },
+                  }),
+                }
+              : milestone,
+          ),
+        };
+        setSelectedEscrow(updatedEscrow);
+      } else {
         setIsDialogOpen(false);
-        fetchAllEscrows({ address, type: activeTab || "client" });
-        setIsSuccessResolveDisputeDialogOpen(true);
-
-        if (selectedEscrow) {
-          setRecentEscrow(selectedEscrow);
-        }
-
-        toast.success("Dispute resolved successfully");
+        setSelectedEscrow(undefined);
       }
+
+      toast.success("Dispute resolved successfully");
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
     } finally {

@@ -23,7 +23,6 @@ import {
   MoreHorizontal,
   TriangleAlert,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import useMyEscrows from "../../hooks/my-escrows.hook";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import NoData from "@/components/utils/ui/NoData";
@@ -43,21 +42,22 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Escrow } from "@/@types/escrow.entity";
 import {
   MultiReleaseMilestone,
+  Role,
   SingleReleaseMilestone,
 } from "@trustless-work/escrow";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface MyEscrowsTableProps {
-  type:
-    | "issuer"
-    | "approver"
-    | "disputeResolver"
-    | "serviceProvider"
-    | "releaseSigner"
-    | "platformAddress"
-    | "receiver";
+  role: Role;
 }
 
-const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
+const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
   const { t } = useTranslation();
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowUIBoundedStore(
@@ -66,7 +66,6 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
-  const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
   const isSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.isSuccessDialogOpen,
   );
@@ -89,23 +88,26 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
   const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
 
   const {
-    currentData,
+    escrows,
     currentPage,
     itemsPerPage,
+    itemsPerPageOptions,
     totalPages,
+    totalItems,
+    isLoading,
+    expandedRows,
     setItemsPerPage,
     setCurrentPage,
-    expandedRows,
     toggleRowExpansion,
-  } = useMyEscrows({ type });
+  } = useMyEscrows({ role });
 
   const { formatDateFromFirebase, formatAddress } = useFormatUtils();
 
   return (
     <div className="container mx-auto py-3" id="step-3">
-      {loadingEscrows ? (
+      {isLoading ? (
         <SkeletonTable />
-      ) : currentData.length !== 0 ? (
+      ) : escrows.length !== 0 ? (
         <>
           <div className="rounded-lg p-3">
             <Table>
@@ -128,7 +130,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentData.map((escrow: Escrow) => {
+                {escrows.map((escrow: Escrow) => {
                   // todo: use these constants in zusntand
                   const completedMilestones = escrow.milestones.filter(
                     (milestone) => milestone.status === "completed",
@@ -160,10 +162,12 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                     !escrow.flags?.released;
 
                   return (
-                    <React.Fragment key={escrow.id}>
+                    <React.Fragment key={escrow.contractId || ""}>
                       <TableRow
                         className="animate-fade-in"
-                        onClick={() => toggleRowExpansion(escrow.id)}
+                        onClick={() =>
+                          toggleRowExpansion(escrow.contractId || "")
+                        }
                       >
                         <TableCell className="font-medium">
                           {escrow.title || t("myEscrows.table.noTitle")}
@@ -187,8 +191,8 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         </TableCell>
                         <TableCell>
                           {formatDateFromFirebase(
-                            escrow.createdAt.seconds,
-                            escrow.createdAt.nanoseconds,
+                            escrow.createdAt._seconds,
+                            escrow.createdAt._nanoseconds,
                           )}
                         </TableCell>
                         <TableCell>
@@ -235,10 +239,12 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                             className="w-5 h-5 cursor-pointer border border-gray-400 dark:border-gray-500 rounded-lg flex justify-center items-center"
                             onClick={(e) => {
                               e.stopPropagation();
-                              toggleRowExpansion(escrow.id);
+                              toggleRowExpansion(escrow.contractId || "");
                             }}
                           >
-                            {expandedRows.includes(escrow.id) ? "-" : "+"}
+                            {expandedRows.includes(escrow.contractId || "")
+                              ? "-"
+                              : "+"}
                           </p>
                         </TableCell>
                         {escrow.flags?.disputed && (
@@ -291,7 +297,7 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
                         )}
                       </TableRow>
                       {escrow.milestones &&
-                        expandedRows.includes(escrow.id) && (
+                        expandedRows.includes(escrow.contractId || "") && (
                           <TableRow>
                             <ExpandableContent escrow={escrow} />
                           </TableRow>
@@ -306,12 +312,24 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
           <div className="flex justify-end items-center gap-4 mt-10 mb-3 px-3">
             <div className="flex items-center gap-2">
               <span>{t("myEscrows.table.pagination.itemsPerPage")}</span>
-              <Input
-                type="number"
-                value={itemsPerPage}
-                onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                className="w-16"
-              />
+              <Select
+                value={itemsPerPage.toString()}
+                onValueChange={(value) => setItemsPerPage(Number(value))}
+              >
+                <SelectTrigger className="w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {itemsPerPageOptions.map((option) => (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value.toString()}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <Button
               onClick={() => setCurrentPage(currentPage - 1)}
@@ -323,7 +341,8 @@ const MyEscrowsTable = ({ type }: MyEscrowsTableProps) => {
               {t("myEscrows.table.pagination.pageOf", {
                 currentPage,
                 totalPages,
-              })}
+              })}{" "}
+              ({totalItems} total)
             </span>
             <Button
               onClick={() => setCurrentPage(currentPage + 1)}

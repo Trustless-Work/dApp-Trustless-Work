@@ -4,19 +4,19 @@ export const getFormSchema = () => {
   return z.object({
     approverFunds: z
       .number()
-      .min(1, {
-        message: "Approver funds is required.",
+      .min(0, {
+        message: "Approver funds must be 0 or greater.",
       })
       .refine((val) => val % 1 === 0, {
-        message: "Approver funds be a whole number.",
+        message: "Approver funds must be a whole number.",
       }),
     receiverFunds: z
       .number()
-      .min(1, {
-        message: "Receiver funds is required.",
+      .min(0, {
+        message: "Receiver funds must be 0 or greater.",
       })
       .refine((val) => val % 1 === 0, {
-        message: "Receiver funds be a whole number.",
+        message: "Receiver funds must be a whole number.",
       }),
   });
 };

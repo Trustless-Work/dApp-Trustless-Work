@@ -66,7 +66,9 @@ const ProgressEscrow = ({ escrow }: ProgressEscrowProps) => {
   ).length;
   const approvedMilestones = escrow.milestones.filter(
     (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
-      "flags" in milestone && milestone.flags?.approved === true,
+      ("flags" in milestone && milestone.flags?.approved === true) ||
+      (!("flags" in milestone) &&
+        (milestone as SingleReleaseMilestone).approved === true),
   ).length;
   const disputedMilestones = escrow.milestones.filter(
     (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
