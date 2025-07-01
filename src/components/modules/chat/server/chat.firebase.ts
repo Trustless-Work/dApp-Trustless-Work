@@ -1,3 +1,4 @@
+import { Chat, ChatMessage } from "@/@types/conversation.entity";
 import { db } from "@/core/config/firebase/firebase";
 import {
   addDoc,
@@ -16,30 +17,14 @@ import {
 
 const chatsCollection = collection(db, "chats");
 
-export interface Chat {
-  id: string;
-  participants: string[];
-  lastMessage: string;
-  updatedAt: any;
-}
-
-export interface ChatMessage {
-  id: string;
-  senderId: string;
-  text: string;
-  createdAt: any;
-  attachment?: {
-    name: string;
-    type: string;
-    data: string;
-  };
-}
-
 export const getOrCreateChat = async (
   userId: string,
   contactId: string,
 ): Promise<string> => {
-  const q = query(chatsCollection, where("participants", "array-contains", userId));
+  const q = query(
+    chatsCollection,
+    where("participants", "array-contains", userId),
+  );
   const snapshot = await getDocs(q);
 
   for (const docSnap of snapshot.docs) {
