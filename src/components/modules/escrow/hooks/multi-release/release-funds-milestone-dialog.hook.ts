@@ -18,8 +18,8 @@ export const useReleaseFundsMilestoneDialog = () => {
     (state) => state.setIsReleasingFunds,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
   );
   const setIsSuccessReleaseDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessReleaseDialogOpen,
@@ -53,10 +53,26 @@ export const useReleaseFundsMilestoneDialog = () => {
       });
 
       setIsSuccessReleaseDialogOpen(true);
-      setIsDialogOpen(false);
 
       if (selectedEscrow) {
         setRecentEscrow(selectedEscrow);
+      }
+
+      if (selectedEscrow && milestoneIndex !== null) {
+        const updatedEscrow = {
+          ...selectedEscrow,
+          milestones: selectedEscrow.milestones.map((milestone, i) =>
+            i === milestoneIndex
+              ? {
+                  ...milestone,
+                  ...("flags" in milestone && {
+                    flags: { ...milestone.flags, released: true },
+                  }),
+                }
+              : milestone,
+          ),
+        };
+        setSelectedEscrow(updatedEscrow);
       }
 
       toast.success(

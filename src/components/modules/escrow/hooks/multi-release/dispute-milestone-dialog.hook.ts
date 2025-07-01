@@ -52,7 +52,22 @@ export const useDisputeMilestoneDialog = () => {
         address,
       });
 
-      setSelectedEscrow(undefined);
+      if (selectedEscrow && index !== null) {
+        const updatedEscrow = {
+          ...selectedEscrow,
+          milestones: selectedEscrow.milestones.map((milestone, i) =>
+            i === index
+              ? {
+                  ...milestone,
+                  ...("flags" in milestone && {
+                    flags: { ...milestone.flags, disputed: true },
+                  }),
+                }
+              : milestone,
+          ),
+        };
+        setSelectedEscrow(updatedEscrow);
+      }
 
       toast.success(`You have started a dispute in ${milestone.description}.`);
     } catch (err) {

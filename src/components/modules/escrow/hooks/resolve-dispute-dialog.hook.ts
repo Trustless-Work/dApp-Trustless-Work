@@ -26,6 +26,9 @@ export const useResolveDisputeDialog = () => {
     (state) => state.setIsResolvingDispute,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
+  );
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
@@ -98,11 +101,34 @@ export const useResolveDisputeDialog = () => {
       setReceiverResolve(receiverFunds);
       setApproverResolve(approverFunds);
       setIsResolveDisputeDialogOpen(false);
-      setIsDialogOpen(false);
       setIsSuccessResolveDisputeDialogOpen(true);
 
       if (selectedEscrow) {
         setRecentEscrow(selectedEscrow);
+      }
+
+      if (selectedEscrow && milestoneIndex !== null) {
+        const updatedEscrow = {
+          ...selectedEscrow,
+          milestones: selectedEscrow.milestones.map((milestone, i) =>
+            i === milestoneIndex
+              ? {
+                  ...milestone,
+                  ...("flags" in milestone && {
+                    flags: {
+                      ...milestone.flags,
+                      resolved: true,
+                      disputed: false,
+                    },
+                  }),
+                }
+              : milestone,
+          ),
+        };
+        setSelectedEscrow(updatedEscrow);
+      } else {
+        setIsDialogOpen(false);
+        setSelectedEscrow(undefined);
       }
 
       toast.success("Dispute resolved successfully");

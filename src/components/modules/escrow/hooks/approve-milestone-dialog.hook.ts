@@ -48,9 +48,6 @@ const useApproveMilestoneDialog = () => {
         address,
       });
 
-      setIsDialogOpen(false);
-      setSelectedEscrow(undefined);
-
       if (selectedEscrow && index !== null) {
         const updatedEscrow = {
           ...selectedEscrow,
