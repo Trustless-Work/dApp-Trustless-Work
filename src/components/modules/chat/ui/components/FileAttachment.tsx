@@ -1,10 +1,11 @@
 "use client";
 
-import { X, Upload, File, Image } from "lucide-react";
+import { X, File, Image } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import type { AttachedFile } from "../../hooks/useFileAttachment.hook";
+import { useFormatUtils } from "@/utils/hook/format.hook";
 
 interface FileAttachmentProps {
   file: AttachedFile;
@@ -17,13 +18,7 @@ export function FileAttachment({
   onRemove,
   isUploading = false,
 }: FileAttachmentProps) {
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
+  const { formatFileSize } = useFormatUtils();
 
   return (
     <div

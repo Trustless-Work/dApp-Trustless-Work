@@ -28,7 +28,6 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
     handleDragLeave,
     removeFile,
     clearFiles,
-    openFilePicker,
   } = useFileAttachment({
     maxFiles: 3,
     maxFileSize: 10 * 1024 * 1024, // 10MB
@@ -37,11 +36,10 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if ((message.trim() || hasFiles) && !disabled) {
-      // Here you could handle both message and files
       if (message.trim()) {
         onSendMessage(message);
       }
-      // Handle files separately or together with message
+
       setMessage("");
       clearFiles();
       setShowFileZone(false);
@@ -50,11 +48,10 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
 
   const handleOnEnter = (text: string) => {
     if ((text.trim() || hasFiles) && !disabled) {
-      // Here you could handle both message and files
       if (text.trim()) {
         onSendMessage(text);
       }
-      // Handle files separately or together with message
+
       setMessage("");
       clearFiles();
       setShowFileZone(false);
