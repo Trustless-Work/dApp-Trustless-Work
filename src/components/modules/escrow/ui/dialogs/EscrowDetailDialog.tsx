@@ -71,7 +71,7 @@ const EscrowDetailDialog = ({
   const [activeTab, setActiveTab] = useState("general");
 
   const { softDeleteEscrow, restoreEscrow } = useGlobalBoundedStore();
-
+  console.log(selectedEscrow);
   const {
     handleClose,
     setEvidenceVisibleMap,

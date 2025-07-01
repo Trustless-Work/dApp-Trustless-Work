@@ -46,6 +46,13 @@ import {
   Role,
   SingleReleaseMilestone,
 } from "@trustless-work/escrow";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface MyEscrowsTableProps {
   role: Role;
@@ -85,7 +92,9 @@ const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
     escrows,
     currentPage,
     itemsPerPage,
+    itemsPerPageOptions,
     totalPages,
+    totalItems,
     isLoading,
     expandedRows,
     setItemsPerPage,
@@ -304,12 +313,24 @@ const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
           <div className="flex justify-end items-center gap-4 mt-10 mb-3 px-3">
             <div className="flex items-center gap-2">
               <span>{t("myEscrows.table.pagination.itemsPerPage")}</span>
-              <Input
-                type="number"
-                value={itemsPerPage}
-                onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                className="w-16"
-              />
+              <Select
+                value={itemsPerPage.toString()}
+                onValueChange={(value) => setItemsPerPage(Number(value))}
+              >
+                <SelectTrigger className="w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {itemsPerPageOptions.map((option) => (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value.toString()}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <Button
               onClick={() => setCurrentPage(currentPage - 1)}
@@ -321,7 +342,8 @@ const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
               {t("myEscrows.table.pagination.pageOf", {
                 currentPage,
                 totalPages,
-              })}
+              })}{" "}
+              ({totalItems} total)
             </span>
             <Button
               onClick={() => setCurrentPage(currentPage + 1)}
