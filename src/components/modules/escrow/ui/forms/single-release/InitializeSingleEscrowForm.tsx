@@ -14,7 +14,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { DollarSign, Percent, Trash2 } from "lucide-react";
+import { DollarSign, Link, Percent, Trash2 } from "lucide-react";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { useInitializeSingleEscrow } from "../../../hooks/single-release/initialize-single-escrow.hook";
 import { Card } from "@/components/ui/card";
@@ -49,7 +49,11 @@ export const InitializeSingleEscrowForm = () => {
         className="flex flex-col space-y-6"
       >
         <Card className="flex justify-between items-center gap-4 p-4">
-          <div className="flex-1">
+          <Link
+            className="flex-1"
+            href="https://docs.trustlesswork.com/trustless-work/technology-overview/escrow-types"
+            target="_blank"
+          >
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary" />
               <h2 className="text-xl font-semibold">Single Release Escrow</h2>
@@ -58,7 +62,7 @@ export const InitializeSingleEscrowForm = () => {
               A single payment will be released upon completion of all
               milestones
             </p>
-          </div>
+          </Link>
           <div className="flex flex-col gap-4">
             <Button
               variant="outline"

@@ -18,6 +18,7 @@ import { DollarSign, Percent, Trash2 } from "lucide-react";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { useInitializeMultiEscrow } from "../../../hooks/multi-release/initialize-multi-escrow.hook";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 export const InitializeMultiEscrowForm = () => {
   const {
@@ -49,7 +50,11 @@ export const InitializeMultiEscrowForm = () => {
         className="flex flex-col space-y-6"
       >
         <Card className="flex justify-between items-center gap-4 p-4">
-          <div className="flex-1">
+          <Link
+            className="flex-1"
+            href="https://docs.trustlesswork.com/trustless-work/technology-overview/escrow-types"
+            target="_blank"
+          >
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary" />
               <h2 className="text-xl font-semibold">Multi Release Escrow</h2>
@@ -57,7 +62,7 @@ export const InitializeMultiEscrowForm = () => {
             <p className="text-muted-foreground mt-1">
               Payments will be released as each milestone is completed
             </p>
-          </div>
+          </Link>
           <div className="flex flex-col gap-4">
             <Button
               variant="outline"
