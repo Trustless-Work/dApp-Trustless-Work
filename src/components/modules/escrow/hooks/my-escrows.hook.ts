@@ -10,23 +10,47 @@ interface useMyEscrowsProps {
   role: Role;
 }
 
+interface BaseParams {
+  isActive: boolean;
+  page: number;
+  orderDirection: "desc";
+  orderBy: "updatedAt";
+  startDate: string;
+  endDate: string;
+  maxAmount?: number;
+  minAmount?: number;
+  title: string;
+  engagementId: string;
+  status: SingleReleaseEscrowStatus;
+}
+
+interface FlexibleQueryParams extends BaseParams {
+  role: Role;
+  roleAddress: string;
+  signer: string;
+}
+
 function useEscrowsFlexibleQuery({
   role,
   roleAddress,
   signer,
   ...baseParams
-}: any) {
+}: FlexibleQueryParams) {
+  const signerQuery = useEscrowsBySignerQuery({
+    ...baseParams,
+    signer,
+  });
+
+  const roleQuery = useEscrowsByRoleQuery({
+    ...baseParams,
+    role,
+    roleAddress,
+  });
+
   if (role === "signer") {
-    return useEscrowsBySignerQuery({
-      ...baseParams,
-      signer,
-    });
+    return signerQuery;
   } else {
-    return useEscrowsByRoleQuery({
-      ...baseParams,
-      role,
-      roleAddress,
-    });
+    return roleQuery;
   }
 }
 

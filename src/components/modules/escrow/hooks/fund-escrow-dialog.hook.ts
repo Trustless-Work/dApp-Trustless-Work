@@ -37,8 +37,6 @@ const useFundEscrowDialog = ({
     (state) => state.setAmountMoonpay,
   );
 
-  if (!selectedEscrow) return;
-
   const { fundEscrow } = useEscrowsMutations();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,6 +68,17 @@ const useFundEscrowDialog = ({
       clearErrors("amount");
     }
   }, [paymentMethod, amount, setError, clearErrors]);
+
+  if (!selectedEscrow) {
+    return {
+      onSubmit: async () => {},
+      form,
+      handleClose: () => {},
+      paymentMethod,
+      amount,
+      setIsDialogOpen,
+    };
+  }
 
   const onSubmit = async ({ amount }: { amount: number }) => {
     setIsFundingEscrow(true);

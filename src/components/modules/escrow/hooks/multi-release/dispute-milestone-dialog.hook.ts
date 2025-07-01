@@ -20,9 +20,6 @@ export const useDisputeMilestoneDialog = () => {
   const setIsStartingDispute = useEscrowUIBoundedStore(
     (state) => state.setIsStartingDispute,
   );
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
-  );
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );

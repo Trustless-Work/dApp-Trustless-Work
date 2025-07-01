@@ -1,13 +1,8 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Role } from "@trustless-work/escrow/types";
 
-interface UseEscrowFilterProps {
-  role: Role;
-}
-
-export const useEscrowFilter = ({ role }: UseEscrowFilterProps) => {
+export const useEscrowFilter = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -17,8 +12,6 @@ export const useEscrowFilter = ({ role }: UseEscrowFilterProps) => {
   const [amountRange] = useState(searchParams.get("amount") || "");
   const [engagement] = useState(searchParams.get("engagement") || "");
   const active = searchParams.get("active") || "active";
-
-  // const { escrows } = useMyEscrows({ role });
 
   const updateQuery = useCallback(
     (key: string, value: string) => {

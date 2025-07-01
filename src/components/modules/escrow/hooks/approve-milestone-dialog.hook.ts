@@ -20,9 +20,6 @@ const useApproveMilestoneDialog = () => {
   const setIsChangingFlag = useEscrowUIBoundedStore(
     (state) => state.setIsChangingFlag,
   );
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
-  );
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
