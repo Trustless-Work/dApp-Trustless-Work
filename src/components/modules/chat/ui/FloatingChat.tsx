@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { X } from "lucide-react";
 import type { Message } from "@/@types/message.entity";
-import { generateBotResponse } from "@/components/modules/chat/utils/chat.utils";
 import { ChatButton } from "./ChatButton";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
@@ -39,7 +38,7 @@ export function FloatingChat() {
     setTimeout(() => {
       const botResponse: Message = {
         id: messages.length + 2,
-        text: generateBotResponse(),
+        text: "Hola, ¿en qué puedo ayudarte hoy?",
         sender: "bot",
         timestamp: new Date(),
       };

@@ -1,5 +1,4 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { groupMessagesByDate } from "@/components/modules/chat/utils/chat.utils";
 import type { Message } from "@/@types/message.entity";
 import { DateSeparator } from "./DateSeparator";
 import { MessageBubble } from "./MessageBubble";
@@ -7,6 +6,22 @@ import { MessageBubble } from "./MessageBubble";
 interface MessageListProps {
   messages: Message[];
 }
+
+const groupMessagesByDate = (
+  messages: Message[],
+): Record<string, Message[]> => {
+  return messages.reduce(
+    (groups, message) => {
+      const date = message.timestamp.toDateString();
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(message);
+      return groups;
+    },
+    {} as Record<string, Message[]>,
+  );
+};
 
 export function MessageList({ messages }: MessageListProps) {
   const messageGroups = groupMessagesByDate(messages);
