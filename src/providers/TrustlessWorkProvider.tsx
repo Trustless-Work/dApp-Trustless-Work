@@ -19,8 +19,13 @@ export function TrustlessWorkProvider({
    */
   const apiKey = process.env.NEXT_PUBLIC_API_KEY || "";
 
-  const baseURL =
-    process.env.NEXT_PUBLIC_ENV === "PROD" ? mainNet : development;
+  // Leer directamente de localStorage para evitar problemas de sincronización
+  const currentNetwork =
+    typeof window !== "undefined"
+      ? (localStorage.getItem("network") as "testnet" | "mainnet") || "testnet"
+      : "testnet";
+
+  const baseURL = currentNetwork === "mainnet" ? mainNet : development;
 
   return (
     <TrustlessWorkConfig baseURL={baseURL} apiKey={apiKey}>
