@@ -36,20 +36,22 @@ function useEscrowsFlexibleQuery({
   signer,
   ...baseParams
 }: FlexibleQueryParams) {
-  if (role === "signer") {
-    const signerQuery = useEscrowsBySignerQuery({
-      ...baseParams,
-      signer,
-    });
+  const signerQuery = useEscrowsBySignerQuery({
+    ...baseParams,
+    signer,
+    enabled: role === "signer",
+  });
 
+  const roleQuery = useEscrowsByRoleQuery({
+    ...baseParams,
+    role,
+    roleAddress,
+    enabled: role !== "signer",
+  });
+
+  if (role === "signer") {
     return signerQuery;
   } else {
-    const roleQuery = useEscrowsByRoleQuery({
-      ...baseParams,
-      role,
-      roleAddress,
-    });
-
     return roleQuery;
   }
 }
