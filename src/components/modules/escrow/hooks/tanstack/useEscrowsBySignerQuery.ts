@@ -28,7 +28,22 @@ export const useEscrowsBySignerQuery = ({
   const { getEscrowsBySigner } = useGetEscrowsFromIndexerBySigner();
 
   return useQuery({
-    queryKey: ["escrows", signer],
+    queryKey: [
+      "escrows",
+      signer,
+      isActive,
+      page,
+      orderDirection,
+      orderBy,
+      startDate,
+      endDate,
+      maxAmount,
+      minAmount,
+      title,
+      engagementId,
+      status,
+      type,
+    ],
     queryFn: async () => {
       const escrows = await getEscrowsBySigner({
         signer,

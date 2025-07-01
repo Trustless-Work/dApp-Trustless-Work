@@ -30,7 +30,23 @@ export const useEscrowsByRoleQuery = ({
   const { getEscrowsByRole } = useGetEscrowsFromIndexerByRole();
 
   return useQuery({
-    queryKey: ["escrows", roleAddress, role],
+    queryKey: [
+      "escrows",
+      roleAddress,
+      role,
+      isActive,
+      page,
+      orderDirection,
+      orderBy,
+      startDate,
+      endDate,
+      maxAmount,
+      minAmount,
+      title,
+      engagementId,
+      status,
+      type,
+    ],
     queryFn: async (): Promise<Escrow[]> => {
       const escrows = await getEscrowsByRole({
         role,
