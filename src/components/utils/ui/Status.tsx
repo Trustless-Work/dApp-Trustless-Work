@@ -54,7 +54,7 @@ export const getStatusBadge = (escrow: Escrow) => {
       </Badge>
     );
   }
-
+  console.log(escrow);
   if (pendingRelease) {
     return (
       <Badge

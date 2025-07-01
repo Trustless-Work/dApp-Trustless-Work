@@ -39,7 +39,6 @@ const MyEscrows = () => {
   const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
     (state) => state.isMoonpayWidgetOpen,
   );
-
   const steps = useSteps();
 
   const handleSetActiveTab = useCallback(
@@ -230,9 +229,7 @@ const MyEscrows = () => {
             </TooltipInfo>
           </div>
 
-          <TabsContent value="signer" className="flex flex-col gap-3">
-            {renderTabContent("signer")}
-          </TabsContent>
+          <TabsContent value="signer">{renderTabContent("signer")}</TabsContent>
 
           <TabsContent value="approver">
             {renderTabContent("approver")}

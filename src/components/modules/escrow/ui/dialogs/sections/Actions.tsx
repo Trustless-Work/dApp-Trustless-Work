@@ -13,15 +13,20 @@ import { toast } from "sonner";
 import { Escrow } from "@/@types/escrow.entity";
 import { useTranslation } from "react-i18next";
 import { useResolveDisputeDialog } from "../../../hooks/resolve-dispute-dialog.hook";
+import { useReleaseFundsEscrowDialog } from "../../../hooks/single-release/release-funds-escrow-dialog.hook";
 
 interface ActionsProps {
   selectedEscrow: Escrow;
   userRolesInEscrow: string[];
+  areAllMilestonesCompleted: boolean;
+  areAllMilestonesCompletedAndFlag: boolean;
 }
 
 export const Actions = ({
   selectedEscrow,
   userRolesInEscrow,
+  areAllMilestonesCompleted,
+  areAllMilestonesCompletedAndFlag,
 }: ActionsProps) => {
   const { handleOpen } = useResolveDisputeDialog();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
@@ -31,6 +36,10 @@ export const Actions = ({
   const { startDisputeSubmit } = useDisputeEscrowDialog();
   const { t } = useTranslation();
   const dialogStates = useEscrowDialogs();
+  const { releaseFundsSubmit } = useReleaseFundsEscrowDialog();
+  const isReleasingFunds = useEscrowUIBoundedStore(
+    (state) => state.isReleasingFunds,
+  );
 
   // Check if any of the conditional buttons should be displayed
   const shouldShowEditButton =
@@ -55,8 +64,19 @@ export const Actions = ({
     !selectedEscrow?.flags?.resolved &&
     selectedEscrow?.flags?.disputed;
 
+  const shouldShowReleaseFundsButton =
+    selectedEscrow.type === "single-release" &&
+    areAllMilestonesCompleted &&
+    areAllMilestonesCompletedAndFlag &&
+    userRolesInEscrow.includes("releaseSigner") &&
+    !selectedEscrow.flags?.released &&
+    activeTab === "releaseSigner";
+
   const hasConditionalButtons =
-    shouldShowEditButton || shouldShowDisputeButton || shouldShowResolveButton;
+    shouldShowEditButton ||
+    shouldShowDisputeButton ||
+    shouldShowResolveButton ||
+    shouldShowReleaseFundsButton;
 
   return (
     <div className="flex items-start justify-start flex-col gap-2 w-full">
@@ -118,6 +138,27 @@ export const Actions = ({
             >
               <Handshake className="mr-2 h-4 w-4" />
               Resolve Dispute
+            </Button>
+          )}
+
+          {shouldShowReleaseFundsButton && (
+            <Button
+              onClick={releaseFundsSubmit}
+              type="button"
+              className="bg-green-800 hover:bg-green-700 w-full"
+              disabled={isReleasingFunds}
+            >
+              {isReleasingFunds ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {t("escrowDetailDialog.releasing")}
+                </>
+              ) : (
+                <>
+                  <CircleDollarSign />
+                  {t("escrowDetailDialog.releaseFunds")}
+                </>
+              )}
             </Button>
           )}
         </div>

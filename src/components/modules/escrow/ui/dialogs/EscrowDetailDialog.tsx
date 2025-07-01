@@ -71,7 +71,7 @@ const EscrowDetailDialog = ({
   const [activeTab, setActiveTab] = useState("general");
 
   const { softDeleteEscrow, restoreEscrow } = useGlobalBoundedStore();
-  console.log(selectedEscrow);
+
   const {
     handleClose,
     setEvidenceVisibleMap,
@@ -152,6 +152,10 @@ const EscrowDetailDialog = ({
                       selectedEscrow={selectedEscrow}
                       userRolesInEscrow={userRolesInEscrow}
                       dialogStates={dialogStates}
+                      areAllMilestonesCompleted={areAllMilestonesCompleted}
+                      areAllMilestonesCompletedAndFlag={
+                        areAllMilestonesCompletedAndFlag
+                      }
                     />
                   </TabsContent>
 
@@ -186,14 +190,7 @@ const EscrowDetailDialog = ({
                 <ProgressEscrow escrow={selectedEscrow} />
               ) : (
                 <>
-                  <FooterDetails
-                    selectedEscrow={selectedEscrow}
-                    userRolesInEscrow={userRolesInEscrow}
-                    areAllMilestonesCompleted={areAllMilestonesCompleted}
-                    areAllMilestonesCompletedAndFlag={
-                      areAllMilestonesCompletedAndFlag
-                    }
-                  />
+                  <FooterDetails selectedEscrow={selectedEscrow} />
 
                   <div className="flex gap-4">
                     <Button
