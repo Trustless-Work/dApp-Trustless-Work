@@ -149,7 +149,7 @@ export const getMilestoneStatusBadge = (
         variant="outline"
         className="gap-1 border-green-500 text-green-600"
       >
-        <Handshake className="h-3.5 w-3.5" />
+        <CheckCheck className="h-3.5 w-3.5" />
         <span>{t("reusable.approved")}</span>
       </Badge>
     );
@@ -419,7 +419,7 @@ export const getActionButtons = (
     activeTab === "approver" &&
     milestone.status === "completed" &&
     (("approved" in milestone && !milestone.approved) ||
-      ("flags" in milestone && !milestone.flags?.approved)) // posible problema
+      ("flags" in milestone && !milestone.flags?.approved))
   ) {
     buttons.push(
       <Button
