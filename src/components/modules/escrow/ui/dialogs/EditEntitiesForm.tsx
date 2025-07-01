@@ -13,13 +13,16 @@ import SelectField from "@/components/utils/ui/SelectSearch";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import useEditEntitiesDialog from "../../hooks/edit-entities-dialog.hook";
+import { Loader2, Save } from "lucide-react";
 
 interface EditEntitiesFormProps {
   setIsEditEntitiesDialogOpen: (value: boolean) => void;
+  isEditingEntities: boolean;
 }
 
 export const EditEntitiesForm = ({
   setIsEditEntitiesDialogOpen,
+  isEditingEntities,
 }: EditEntitiesFormProps) => {
   const { form, userOptions, showSelect, toggleField, onSubmit } =
     useEditEntitiesDialog({
@@ -266,7 +269,23 @@ export const EditEntitiesForm = ({
         </div>
 
         <DialogFooter>
-          <Button type="submit">Save</Button>
+          <Button
+            type="submit"
+            className="bg-green-800 hover:bg-green-700 text-white"
+            disabled={isEditingEntities}
+          >
+            {isEditingEntities ? (
+              <>
+                <Loader2 className="w-3 h-3 mr-1 animate-spin flex-shrink-0" />
+                <span className="truncate">Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-3 h-3 mr-1 flex-shrink-0" />
+                <span className="truncate">Save Changes</span>
+              </>
+            )}
+          </Button>
         </DialogFooter>
       </form>
     </Form>

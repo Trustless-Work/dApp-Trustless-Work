@@ -28,10 +28,9 @@ export const useEditSingleMilestonesDialog = ({
   const setIsEditingMilestones = useEscrowUIBoundedStore(
     (state) => state.setIsEditingMilestones,
   );
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
   );
-
   const { updateEscrow } = useEscrowsMutations();
 
   const form = useForm<z.infer<typeof formSchemaSingle>>({
@@ -89,6 +88,11 @@ export const useEditSingleMilestonesDialog = ({
         payload: finalPayload,
         type: "single-release",
         address,
+      });
+
+      setSelectedEscrow({
+        ...selectedEscrow,
+        milestones: payload.milestones,
       });
 
       setIsEditMilestoneDialogOpen(false);

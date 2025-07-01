@@ -1,7 +1,7 @@
 import { Form, FormLabel } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
-import { DollarSign, Trash2 } from "lucide-react";
+import { DollarSign, Loader2, Save, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
@@ -9,10 +9,12 @@ import { useEditMultiMilestonesDialog } from "../../../hooks/multi-release/edit-
 
 interface EditMultiMilestonesFormProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
+  isEditingMilestones: boolean;
 }
 
 export const EditMultiMilestonesForm = ({
   setIsEditMilestoneDialogOpen,
+  isEditingMilestones,
 }: EditMultiMilestonesFormProps) => {
   const {
     form,
@@ -127,11 +129,22 @@ export const EditMultiMilestonesForm = ({
 
         <DialogFooter>
           <Button
-            disabled={isAnyMilestoneEmpty}
             type="button"
             onClick={() => onSubmit(form.getValues())}
+            className="bg-green-800 hover:bg-green-700 text-white"
+            disabled={isAnyMilestoneEmpty || isEditingMilestones}
           >
-            Save
+            {isEditingMilestones ? (
+              <>
+                <Loader2 className="w-3 h-3 mr-1 animate-spin flex-shrink-0" />
+                <span className="truncate">Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-3 h-3 mr-1 flex-shrink-0" />
+                <span className="truncate">Save Changes</span>
+              </>
+            )}
           </Button>
         </DialogFooter>
       </div>

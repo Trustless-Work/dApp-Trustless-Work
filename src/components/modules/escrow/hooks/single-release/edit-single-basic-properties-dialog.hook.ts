@@ -25,11 +25,11 @@ export const useEditSingleBasicPropertiesDialog = ({
 }: useEditSingleBasicPropertiesDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
+  );
   const setIsEditingBasicProperties = useEscrowUIBoundedStore(
     (state) => state.setIsEditingBasicProperties,
-  );
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
   );
 
   const { updateEscrow } = useEscrowsMutations();
@@ -80,6 +80,16 @@ export const useEditSingleBasicPropertiesDialog = ({
       });
 
       setIsEditBasicPropertiesDialogOpen(false);
+
+      setSelectedEscrow({
+        ...selectedEscrow,
+        title: payload.title,
+        engagementId: payload.engagementId,
+        description: payload.description,
+        amount: payload.amount,
+        receiverMemo: payload.receiverMemo ? Number(payload.receiverMemo) : 0,
+        platformFee: payload.platformFee,
+      });
 
       toast.success(
         `You have edited the basic properties of ${selectedEscrow.title}.`,

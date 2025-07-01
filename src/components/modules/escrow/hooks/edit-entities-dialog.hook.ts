@@ -44,8 +44,8 @@ const useEditEntitiesDialog = ({
   const setIsEditingEntities = useEscrowUIBoundedStore(
     (state) => state.setIsEditingEntities,
   );
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
   );
   const { data: users = [] } = useUsersQuery();
 
@@ -114,6 +114,18 @@ const useEditEntitiesDialog = ({
       });
 
       setIsEditEntitiesDialogOpen(false);
+
+      setSelectedEscrow({
+        ...selectedEscrow,
+        roles: {
+          approver: payload.approver,
+          serviceProvider: payload.serviceProvider,
+          platformAddress: payload.platformAddress,
+          receiver: payload.receiver,
+          releaseSigner: payload.releaseSigner,
+          disputeResolver: payload.disputeResolver,
+        },
+      });
 
       toast.success(`You have edited the entities of ${selectedEscrow.title}.`);
     } catch (err) {

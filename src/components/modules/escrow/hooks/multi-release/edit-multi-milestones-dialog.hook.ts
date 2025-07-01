@@ -30,8 +30,8 @@ export const useEditMultiMilestonesDialog = ({
   const setIsEditingMilestones = useEscrowUIBoundedStore(
     (state) => state.setIsEditingMilestones,
   );
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
   );
 
   const { updateEscrow } = useEscrowsMutations();
@@ -96,6 +96,11 @@ export const useEditMultiMilestonesDialog = ({
       });
 
       setIsEditMilestoneDialogOpen(false);
+
+      setSelectedEscrow({
+        ...selectedEscrow,
+        milestones: payload.milestones,
+      });
 
       toast.success(
         `You have edited the milestones of ${selectedEscrow.title}.`,
