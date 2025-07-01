@@ -19,7 +19,6 @@ export function TrustlessWorkProvider({
    */
   const apiKey = process.env.NEXT_PUBLIC_API_KEY || "";
 
-  // Leer directamente de localStorage para evitar problemas de sincronización
   const currentNetwork =
     typeof window !== "undefined"
       ? (localStorage.getItem("network") as "testnet" | "mainnet") || "testnet"

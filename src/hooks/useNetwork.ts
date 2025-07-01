@@ -22,7 +22,6 @@ const useNetwork = () => {
     setNetwork(newNetwork);
     localStorage.setItem("network", newNetwork);
 
-    // Reiniciar la aplicación después de un breve delay
     setTimeout(() => {
       window.location.reload();
     }, 500);
