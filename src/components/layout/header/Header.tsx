@@ -11,6 +11,7 @@ import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 import { Button } from "@/components/ui/button";
 import { NotificationBell } from "@/components/modules/notifications/NotificationBell"; // 👈 Asegúrate que la ruta sea correcta
 import LanguageToggle from "./LanguageToggle";
+import NetworkToggle from "./NetworkToggle";
 
 const Header = ({ className }: { className?: string }) => {
   const { handleConnect, handleDisconnect } = useWallet();
@@ -41,6 +42,7 @@ const Header = ({ className }: { className?: string }) => {
             </>
 
             <div className="flex gap-5 ml-auto items-center">
+              <NetworkToggle />
               <LanguageToggle />
               <ThemeToggle />
               <NotificationBell />
@@ -51,6 +53,7 @@ const Header = ({ className }: { className?: string }) => {
           </>
         ) : (
           <div className="flex gap-5 ml-auto">
+            <NetworkToggle />
             <LanguageToggle />
             <ThemeToggle />
             <Button variant="outline" onClick={handleConnect}>
