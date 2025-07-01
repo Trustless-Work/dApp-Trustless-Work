@@ -58,6 +58,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
     "react-i18next": "^15.5.2",
+    "react-input-emoji": "^5.9.0",
     "react-joyride": "^3.0.0-7",
     "react-loader-spinner": "^6.1.6",
     "react-qr-code": "^2.0.15",
