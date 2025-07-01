@@ -6,10 +6,7 @@ import {
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { toast } from "sonner";
-import {
-  useApproveMilestone,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
+import { useSendTransaction } from "@trustless-work/escrow/hooks";
 import {
   ApproveMilestonePayload,
   MultiReleaseMilestone,
@@ -19,6 +16,7 @@ import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { Escrow } from "@/@types/escrow.entity";
 import { AxiosError } from "axios";
 import { handleError } from "@/errors/utils/handle-errors";
+import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 
 const useApproveMilestoneDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -31,12 +29,8 @@ const useApproveMilestoneDialog = () => {
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
-  const fetchAllEscrows = useGlobalBoundedStore(
-    (state) => state.fetchAllEscrows,
-  );
-  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
-  const { approveMilestone } = useApproveMilestone();
+  const { approveMilestone } = useEscrowsMutations();
   const { sendTransaction } = useSendTransaction();
 
   const approveMilestoneSubmit = async (
@@ -54,7 +48,7 @@ const useApproveMilestoneDialog = () => {
         approver: address,
       };
 
-      const { unsignedTransaction } = await approveMilestone({
+      const { unsignedTransaction } = await approveMilestone.mutateAsync({
         payload: finalPayload,
         type: selectedEscrow.type,
       });
@@ -79,7 +73,24 @@ const useApproveMilestoneDialog = () => {
       if (response.status === "SUCCESS") {
         setIsDialogOpen(false);
         setSelectedEscrow(undefined);
-        fetchAllEscrows({ address, type: activeTab || "approver" });
+
+        if (selectedEscrow && index !== null) {
+          const updatedEscrow = {
+            ...selectedEscrow,
+            milestones: selectedEscrow.milestones.map(
+              (milestone, milestoneIndex) =>
+                milestoneIndex === index
+                  ? {
+                      ...milestone,
+                      ...("flags" in milestone
+                        ? { flags: { ...milestone.flags, approved: true } }
+                        : { approved: true }),
+                    }
+                  : milestone,
+            ),
+          };
+          setSelectedEscrow(updatedEscrow);
+        }
 
         toast.success(
           `The Milestone ${milestone.description} has been approved.`,

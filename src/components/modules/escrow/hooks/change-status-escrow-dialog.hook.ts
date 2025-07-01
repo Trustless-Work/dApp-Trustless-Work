@@ -11,14 +11,13 @@ import { useEscrowUIBoundedStore } from "../store/ui";
 import { formSchema } from "../schema/complete-milestone.schema";
 import { useEscrowBoundedStore } from "../store/data";
 import { toast } from "sonner";
-import {
-  useChangeMilestoneStatus,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
+import { useSendTransaction } from "@trustless-work/escrow/hooks";
 import { ChangeMilestoneStatusPayload } from "@trustless-work/escrow/types";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { AxiosError } from "axios";
 import { handleError } from "@/errors/utils/handle-errors";
+import { queryClient } from "@/lib/react-query-client";
+import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 
 interface changeMilestoneStatusDialogHook {
   setIsCompleteMilestoneDialogOpen: (value: boolean) => void;
@@ -42,12 +41,8 @@ const useChangeMilestoneStatusDialogHook = ({
     (state) => state.completingMilestone,
   );
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
-  const fetchAllEscrows = useGlobalBoundedStore(
-    (state) => state.fetchAllEscrows,
-  );
-  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
-  const { changeMilestoneStatus } = useChangeMilestoneStatus();
+  const { changeMilestoneStatus } = useEscrowsMutations();
   const { sendTransaction } = useSendTransaction();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,7 +65,7 @@ const useChangeMilestoneStatusDialogHook = ({
         newEvidence: newEvidence || "",
       };
 
-      const { unsignedTransaction } = await changeMilestoneStatus({
+      const { unsignedTransaction } = await changeMilestoneStatus.mutateAsync({
         payload: finalPayload,
         type: selectedEscrow?.type || "single-release",
       });
@@ -94,10 +89,23 @@ const useChangeMilestoneStatusDialogHook = ({
 
       if (response.status === "SUCCESS") {
         setIsChangingStatus(false);
-        setIsDialogOpen(false);
         setIsCompleteMilestoneDialogOpen(false);
-        setSelectedEscrow(undefined);
-        fetchAllEscrows({ address, type: activeTab || "serviceProvider" });
+
+        if (selectedEscrow && milestoneIndex !== null) {
+          const updatedEscrow = {
+            ...selectedEscrow,
+            milestones: selectedEscrow.milestones.map((milestone, index) =>
+              index === milestoneIndex
+                ? {
+                    ...milestone,
+                    status: finalPayload.newStatus,
+                    evidence: finalPayload.newEvidence || milestone.evidence,
+                  }
+                : milestone,
+            ),
+          };
+          setSelectedEscrow(updatedEscrow);
+        }
 
         toast.success(
           `The Milestone ${completingMilestone?.description} has been completed.`,

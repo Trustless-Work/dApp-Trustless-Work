@@ -5,7 +5,6 @@ import { useState, useCallback, useMemo, useEffect } from "react";
 import { useEscrowsByRoleQuery } from "./tanstack/useEscrowsByRoleQuery";
 import { useEscrowsBySignerQuery } from "./tanstack/useEscrowsBySignerQuery";
 import { SingleReleaseEscrowStatus } from "@/@types/escrow.entity";
-import { VercelLogoIcon } from "@radix-ui/react-icons";
 
 interface useMyEscrowsProps {
   role: Role;
@@ -93,16 +92,33 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
     };
   }, [currentPage, filters]);
 
-  const { data: escrows = [], isLoading } = useEscrowsFlexibleQuery({
+  const { data: allEscrows = [], isLoading } = useEscrowsFlexibleQuery({
     ...baseParams,
     role,
     roleAddress: address,
     signer: address,
   });
 
+  const totalItems = allEscrows.length;
   const totalPages = useMemo(() => {
-    return Math.ceil(escrows.length / itemsPerPage);
-  }, [escrows, itemsPerPage]);
+    return Math.max(1, Math.ceil(totalItems / itemsPerPage));
+  }, [totalItems, itemsPerPage]);
+
+  const escrows = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return allEscrows.slice(startIndex, endIndex);
+  }, [allEscrows, currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   const toggleRowExpansion = useCallback((rowId: string) => {
     setExpandedRows((prev) =>
@@ -123,13 +139,31 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
     [],
   );
 
-  const setItemsPerPageCallback = useCallback((value: number) => {
-    setItemsPerPage(value);
-  }, []);
+  const setItemsPerPageCallback = useCallback(
+    (value: number) => {
+      // Validate items per page
+      const validValues = itemsPerPageOptions.map((option) => option.value);
+      if (validValues.includes(value)) {
+        setItemsPerPage(value);
+        setCurrentPage(1); // Reset to first page when changing items per page
+      }
+    },
+    [itemsPerPageOptions],
+  );
 
-  const setCurrentPageCallback = useCallback((value: number) => {
-    setCurrentPage(value);
-  }, []);
+  const setCurrentPageCallback = useCallback(
+    (value: number) => {
+      // Validate page number
+      if (value < 1) {
+        setCurrentPage(1);
+      } else if (value > totalPages) {
+        setCurrentPage(totalPages);
+      } else {
+        setCurrentPage(value);
+      }
+    },
+    [totalPages],
+  );
 
   return {
     escrows,
@@ -137,6 +171,7 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
     itemsPerPage,
     itemsPerPageOptions,
     totalPages,
+    totalItems,
     expandedRows,
     isLoading,
     setItemsPerPage: setItemsPerPageCallback,

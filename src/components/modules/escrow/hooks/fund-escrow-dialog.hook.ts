@@ -19,6 +19,8 @@ import {
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { handleError } from "@/errors/utils/handle-errors";
 import { AxiosError } from "axios";
+import { queryClient } from "@/lib/react-query-client";
+import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 
 interface useFundEscrowDialogProps {
   setIsSecondDialogOpen?: (value: boolean) => void;
@@ -35,16 +37,11 @@ const useFundEscrowDialog = ({
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
-  const fetchAllEscrows = useGlobalBoundedStore(
-    (state) => state.fetchAllEscrows,
-  );
-  const updateEscrow = useGlobalBoundedStore((state) => state.updateEscrow);
-  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const setAmountMoonpay = useEscrowUIBoundedStore(
     (state) => state.setAmountMoonpay,
   );
 
-  const { fundEscrow } = useFundEscrow();
+  const { fundEscrow } = useEscrowsMutations();
   const { sendTransaction } = useSendTransaction();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -87,7 +84,7 @@ const useFundEscrowDialog = ({
         contractId: selectedEscrow!.contractId || "",
       };
 
-      const { unsignedTransaction } = await fundEscrow({
+      const { unsignedTransaction } = await fundEscrow.mutateAsync({
         payload: finalPayload,
         type: selectedEscrow?.type || "single-release",
       });
@@ -113,14 +110,6 @@ const useFundEscrowDialog = ({
         form.reset();
         setIsSecondDialogOpen?.(false);
         setIsDialogOpen(false);
-        updateEscrow({
-          escrowId: selectedEscrow!.id,
-          payload: {
-            ...selectedEscrow!,
-            fundedBy: activeTab,
-          },
-        });
-        fetchAllEscrows({ address, type: activeTab || "approver" });
 
         toast.success("Escrow funded successfully");
       }
