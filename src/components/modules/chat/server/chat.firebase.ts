@@ -65,12 +65,17 @@ export const sendMessage = async (
   attachment?: { name: string; type: string; data: string },
 ): Promise<void> => {
   const messagesCol = collection(db, `chats/${chatId}/messages`);
-  await addDoc(messagesCol, {
+  const messageData: Record<string, any> = {
     senderId,
     text,
     createdAt: serverTimestamp(),
-    attachment,
-  });
+  };
+
+  if (attachment) {
+    messageData.attachment = attachment;
+  }
+
+  await addDoc(messagesCol, messageData);
 
   const chatRef = doc(db, "chats", chatId);
   await updateDoc(chatRef, {
