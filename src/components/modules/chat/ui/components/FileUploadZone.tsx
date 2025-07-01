@@ -26,7 +26,7 @@ export function FileUploadZone({
   disabled = false,
   accept,
   multiple = true,
-  compact = false
+  compact = false,
 }: FileUploadZoneProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -71,7 +71,7 @@ export function FileUploadZone({
         className="hidden"
         disabled={disabled}
       />
-      
+
       <div
         onDrop={onDrop}
         onDragOver={onDragOver}
@@ -79,8 +79,9 @@ export function FileUploadZone({
         className={cn(
           "border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer",
           dragActive && "border-primary bg-primary/5",
-          !dragActive && "border-muted-foreground/25 hover:border-muted-foreground/50",
-          disabled && "opacity-50 cursor-not-allowed"
+          !dragActive &&
+            "border-muted-foreground/25 hover:border-muted-foreground/50",
+          disabled && "opacity-50 cursor-not-allowed",
         )}
         onClick={openFilePicker}
       >
@@ -94,4 +95,4 @@ export function FileUploadZone({
       </div>
     </>
   );
-} 
+}

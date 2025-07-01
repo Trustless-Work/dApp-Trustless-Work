@@ -158,4 +158,4 @@ export const MOCK_CHAT_MESSAGES: Record<string, ChatMessage[]> = {
       isRead: false,
     },
   ],
-}; 
+};

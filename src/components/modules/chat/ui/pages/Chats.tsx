@@ -26,7 +26,9 @@ export default function Chats() {
   return (
     <div className="h-[calc(100vh-220px)] flex gap-4">
       {/* Conversations Sidebar */}
-      <Card className={`w-80 flex flex-col ${selectedConversation ? 'hidden md:flex' : 'flex'}`}>
+      <Card
+        className={`w-80 flex flex-col ${selectedConversation ? "hidden md:flex" : "flex"}`}
+      >
         <div className="p-4 border-b space-y-4">
           <div className="flex w-full items-center justify-between">
             <div className="text-foreground text-base font-medium flex items-center gap-2">
@@ -35,8 +37,8 @@ export default function Chats() {
             </div>
             <Label className="flex items-center gap-2 text-sm">
               <span>Unread</span>
-              <Switch 
-                className="shadow-none" 
+              <Switch
+                className="shadow-none"
                 checked={showUnreadOnly}
                 onCheckedChange={setShowUnreadOnly}
               />
@@ -44,15 +46,15 @@ export default function Chats() {
           </div>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input 
-              placeholder="Search conversations..." 
+            <Input
+              placeholder="Search conversations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9"
             />
           </div>
         </div>
-        
+
         <div className="flex-1 overflow-hidden">
           <ConversationList
             conversations={conversations}
@@ -63,7 +65,9 @@ export default function Chats() {
       </Card>
 
       {/* Chat Interface */}
-      <Card className={`flex-1 flex flex-col ${selectedConversation ? 'flex' : 'hidden md:flex'}`}>
+      <Card
+        className={`flex-1 flex flex-col ${selectedConversation ? "flex" : "hidden md:flex"}`}
+      >
         {selectedConversation ? (
           <ChatInterface
             conversation={selectedConversation}
@@ -80,7 +84,8 @@ export default function Chats() {
               <div className="space-y-2">
                 <h3 className="text-lg font-medium">Welcome to Chats</h3>
                 <p className="text-muted-foreground text-sm">
-                  Select a conversation from the sidebar to start messaging with your contacts about escrow projects and collaborations.
+                  Select a conversation from the sidebar to start messaging with
+                  your contacts about escrow projects and collaborations.
                 </p>
               </div>
             </div>
@@ -89,4 +94,4 @@ export default function Chats() {
       </Card>
     </div>
   );
-} 
+}

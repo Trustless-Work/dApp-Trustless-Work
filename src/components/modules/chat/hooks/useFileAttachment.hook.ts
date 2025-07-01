@@ -25,16 +25,16 @@ export const useFileAttachment = (options: UseFileAttachmentOptions = {}) => {
     maxFileSize = 10 * 1024 * 1024, // 10MB
     allowedTypes = [
       "image/jpeg",
-      "image/png", 
+      "image/png",
       "image/gif",
       "image/webp",
       "application/pdf",
       "text/plain",
       "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ],
     maxFiles = 5,
-    onUpload
+    onUpload,
   } = options;
 
   const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
@@ -43,85 +43,100 @@ export const useFileAttachment = (options: UseFileAttachmentOptions = {}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Generate file preview for images
-  const generatePreview = useCallback((file: File): Promise<string | undefined> => {
-    return new Promise((resolve) => {
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target?.result as string);
-        reader.onerror = () => resolve(undefined);
-        reader.readAsDataURL(file);
-      } else {
-        resolve(undefined);
-      }
-    });
-  }, []);
+  const generatePreview = useCallback(
+    (file: File): Promise<string | undefined> => {
+      return new Promise((resolve) => {
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = (e) => resolve(e.target?.result as string);
+          reader.onerror = () => resolve(undefined);
+          reader.readAsDataURL(file);
+        } else {
+          resolve(undefined);
+        }
+      });
+    },
+    [],
+  );
 
   // Validate file
-  const validateFile = useCallback((file: File): string | undefined => {
-    if (file.size > maxFileSize) {
-      return `File size exceeds ${Math.round(maxFileSize / (1024 * 1024))}MB limit`;
-    }
-    
-    if (!allowedTypes.includes(file.type)) {
-      return "File type not supported";
-    }
+  const validateFile = useCallback(
+    (file: File): string | undefined => {
+      if (file.size > maxFileSize) {
+        return `File size exceeds ${Math.round(maxFileSize / (1024 * 1024))}MB limit`;
+      }
 
-    if (attachedFiles.length >= maxFiles) {
-      return `Maximum ${maxFiles} files allowed`;
-    }
+      if (!allowedTypes.includes(file.type)) {
+        return "File type not supported";
+      }
 
-    return undefined;
-  }, [maxFileSize, allowedTypes, maxFiles, attachedFiles.length]);
+      if (attachedFiles.length >= maxFiles) {
+        return `Maximum ${maxFiles} files allowed`;
+      }
+
+      return undefined;
+    },
+    [maxFileSize, allowedTypes, maxFiles, attachedFiles.length],
+  );
 
   // Process and add files
-  const processFiles = useCallback(async (files: FileList | File[]) => {
-    const fileArray = Array.from(files);
-    const newFiles: AttachedFile[] = [];
+  const processFiles = useCallback(
+    async (files: FileList | File[]) => {
+      const fileArray = Array.from(files);
+      const newFiles: AttachedFile[] = [];
 
-    for (const file of fileArray) {
-      const error = validateFile(file);
-      const preview = await generatePreview(file);
-      
-      const attachedFile: AttachedFile = {
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        file,
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        preview,
-        error,
-        uploadProgress: 0
-      };
+      for (const file of fileArray) {
+        const error = validateFile(file);
+        const preview = await generatePreview(file);
 
-      newFiles.push(attachedFile);
-    }
+        const attachedFile: AttachedFile = {
+          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          file,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          preview,
+          error,
+          uploadProgress: 0,
+        };
 
-    setAttachedFiles(prev => [...prev, ...newFiles]);
-    return newFiles;
-  }, [validateFile, generatePreview]);
+        newFiles.push(attachedFile);
+      }
+
+      setAttachedFiles((prev) => [...prev, ...newFiles]);
+      return newFiles;
+    },
+    [validateFile, generatePreview],
+  );
 
   // Handle file input change
-  const handleFileSelect = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      await processFiles(files);
-    }
-    // Reset input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  }, [processFiles]);
+  const handleFileSelect = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = event.target.files;
+      if (files && files.length > 0) {
+        await processFiles(files);
+      }
+      // Reset input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    },
+    [processFiles],
+  );
 
   // Handle drag and drop
-  const handleDrop = useCallback(async (event: React.DragEvent<HTMLElement>) => {
-    event.preventDefault();
-    setDragActive(false);
+  const handleDrop = useCallback(
+    async (event: React.DragEvent<HTMLElement>) => {
+      event.preventDefault();
+      setDragActive(false);
 
-    const files = event.dataTransfer.files;
-    if (files && files.length > 0) {
-      await processFiles(files);
-    }
-  }, [processFiles]);
+      const files = event.dataTransfer.files;
+      if (files && files.length > 0) {
+        await processFiles(files);
+      }
+    },
+    [processFiles],
+  );
 
   const handleDragOver = useCallback((event: React.DragEvent<HTMLElement>) => {
     event.preventDefault();
@@ -135,7 +150,7 @@ export const useFileAttachment = (options: UseFileAttachmentOptions = {}) => {
 
   // Remove file
   const removeFile = useCallback((fileId: string) => {
-    setAttachedFiles(prev => prev.filter(file => file.id !== fileId));
+    setAttachedFiles((prev) => prev.filter((file) => file.id !== fileId));
   }, []);
 
   // Clear all files
@@ -153,46 +168,43 @@ export const useFileAttachment = (options: UseFileAttachmentOptions = {}) => {
     if (attachedFiles.length === 0 || isUploading) return;
 
     setIsUploading(true);
-    
+
     try {
       // Simulate upload progress
       for (let i = 0; i < attachedFiles.length; i++) {
         const file = attachedFiles[i];
-        
+
         // Skip files with errors
         if (file.error) continue;
 
         // Simulate upload progress
         for (let progress = 0; progress <= 100; progress += 20) {
-          await new Promise(resolve => setTimeout(resolve, 200));
-          
-          setAttachedFiles(prev => 
-            prev.map(f => 
-              f.id === file.id 
-                ? { ...f, uploadProgress: progress }
-                : f
-            )
+          await new Promise((resolve) => setTimeout(resolve, 200));
+
+          setAttachedFiles((prev) =>
+            prev.map((f) =>
+              f.id === file.id ? { ...f, uploadProgress: progress } : f,
+            ),
           );
         }
       }
 
       // Call external upload handler if provided
       if (onUpload) {
-        const validFiles = attachedFiles.filter(f => !f.error);
+        const validFiles = attachedFiles.filter((f) => !f.error);
         await onUpload(validFiles);
       }
 
       // Clear files after successful upload
       clearFiles();
-      
     } catch (error) {
       console.error("Upload failed:", error);
       // Mark files with upload error
-      setAttachedFiles(prev =>
-        prev.map(file => ({
+      setAttachedFiles((prev) =>
+        prev.map((file) => ({
           ...file,
-          error: file.error || "Upload failed"
-        }))
+          error: file.error || "Upload failed",
+        })),
       );
     } finally {
       setIsUploading(false);
@@ -202,11 +214,11 @@ export const useFileAttachment = (options: UseFileAttachmentOptions = {}) => {
   // Format file size
   const formatFileSize = useCallback((bytes: number): string => {
     if (bytes === 0) return "0 Bytes";
-    
+
     const k = 1024;
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
+
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   }, []);
 
@@ -225,7 +237,7 @@ export const useFileAttachment = (options: UseFileAttachmentOptions = {}) => {
     isUploading,
     dragActive,
     fileInputRef,
-    
+
     // Actions
     handleFileSelect,
     handleDrop,
@@ -235,15 +247,18 @@ export const useFileAttachment = (options: UseFileAttachmentOptions = {}) => {
     clearFiles,
     openFilePicker,
     uploadFiles,
-    
+
     // Helpers
     formatFileSize,
     getFileIcon,
-    
+
     // Info
     hasFiles: attachedFiles.length > 0,
-    hasErrors: attachedFiles.some(f => f.error),
-    validFiles: attachedFiles.filter(f => !f.error),
-    canUpload: attachedFiles.length > 0 && !isUploading && attachedFiles.some(f => !f.error)
+    hasErrors: attachedFiles.some((f) => f.error),
+    validFiles: attachedFiles.filter((f) => !f.error),
+    canUpload:
+      attachedFiles.length > 0 &&
+      !isUploading &&
+      attachedFiles.some((f) => !f.error),
   };
-}; 
+};

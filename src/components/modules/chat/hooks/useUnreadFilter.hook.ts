@@ -5,7 +5,7 @@ import type { Conversation, ChatMessage } from "@/@types/conversation.entity";
 
 export const useUnreadFilter = (
   conversations: Conversation[],
-  messages: Record<string, ChatMessage[]>
+  messages: Record<string, ChatMessage[]>,
 ) => {
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
 
@@ -14,7 +14,7 @@ export const useUnreadFilter = (
       return conversations;
     }
 
-    return conversations.filter(conversation => {
+    return conversations.filter((conversation) => {
       // Check if conversation has unread count
       if (conversation.unreadCount > 0) {
         return true;
@@ -23,7 +23,7 @@ export const useUnreadFilter = (
       // Check if conversation has unread messages
       const conversationMessages = messages[conversation.id] || [];
       const hasUnreadMessages = conversationMessages.some(
-        msg => !msg.isRead && msg.sender === "contact"
+        (msg) => !msg.isRead && msg.sender === "contact",
       );
 
       return hasUnreadMessages;
@@ -34,15 +34,15 @@ export const useUnreadFilter = (
     return conversations.reduce((total, conversation) => {
       const conversationMessages = messages[conversation.id] || [];
       const unreadMessages = conversationMessages.filter(
-        msg => !msg.isRead && msg.sender === "contact"
+        (msg) => !msg.isRead && msg.sender === "contact",
       ).length;
-      
+
       return total + Math.max(conversation.unreadCount, unreadMessages);
     }, 0);
   }, [conversations, messages]);
 
   const toggleUnreadFilter = () => {
-    setShowUnreadOnly(prev => !prev);
+    setShowUnreadOnly((prev) => !prev);
   };
 
   return {
@@ -52,4 +52,4 @@ export const useUnreadFilter = (
     filteredConversations,
     unreadCount,
   };
-}; 
+};

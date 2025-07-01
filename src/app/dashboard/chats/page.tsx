@@ -2,7 +2,7 @@
 
 import Chats from "@/components/modules/chat/ui/pages/Chats";
 const ChatsPage: React.FC = () => {
-  return <Chats />; 
+  return <Chats />;
 };
 
-export default ChatsPage; 
+export default ChatsPage;

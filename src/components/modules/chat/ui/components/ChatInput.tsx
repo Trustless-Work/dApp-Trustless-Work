@@ -16,7 +16,7 @@ interface ChatInputProps {
 export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   const [message, setMessage] = useState("");
   const [showFileZone, setShowFileZone] = useState(false);
-  
+
   const {
     attachedFiles,
     isUploading,
@@ -71,7 +71,9 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
       {hasFiles && (
         <div className="p-4 border-b bg-muted/30">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium">Attached files ({attachedFiles.length})</span>
+            <span className="text-sm font-medium">
+              Attached files ({attachedFiles.length})
+            </span>
             <Button variant="ghost" size="sm" onClick={clearFiles}>
               <X className="h-4 w-4" />
               Clear all
@@ -107,17 +109,17 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
 
       {/* Message Input */}
       <form onSubmit={handleSubmit} className="flex items-center gap-2 p-4">
-        <Button 
-          type="button" 
-          variant="ghost" 
-          size="icon" 
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
           className="h-8 w-8 shrink-0"
           onClick={toggleFileZone}
           disabled={disabled}
         >
           <Paperclip className="h-4 w-4" />
         </Button>
-        
+
         <div className="flex-1">
           <InputEmoji
             value={message}
@@ -139,10 +141,10 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
             placeholderColor="hsl(var(--muted-foreground))"
           />
         </div>
-        
-        <Button 
-          type="submit" 
-          size="icon" 
+
+        <Button
+          type="submit"
+          size="icon"
           className="h-8 w-8 shrink-0"
           disabled={(!message.trim() && !hasFiles) || disabled}
         >
@@ -151,4 +153,4 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
       </form>
     </div>
   );
-} 
+}

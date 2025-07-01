@@ -12,7 +12,11 @@ interface FileAttachmentProps {
   isUploading?: boolean;
 }
 
-export function FileAttachment({ file, onRemove, isUploading = false }: FileAttachmentProps) {
+export function FileAttachment({
+  file,
+  onRemove,
+  isUploading = false,
+}: FileAttachmentProps) {
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -22,11 +26,13 @@ export function FileAttachment({ file, onRemove, isUploading = false }: FileAtta
   };
 
   return (
-    <div className={cn(
-      "relative group border rounded-lg p-3 bg-background",
-      file.error && "border-destructive bg-destructive/5",
-      !file.error && "border-border"
-    )}>
+    <div
+      className={cn(
+        "relative group border rounded-lg p-3 bg-background",
+        file.error && "border-destructive bg-destructive/5",
+        !file.error && "border-border",
+      )}
+    >
       {/* Remove button */}
       <Button
         variant="ghost"
@@ -43,8 +49,8 @@ export function FileAttachment({ file, onRemove, isUploading = false }: FileAtta
         <div className="flex-shrink-0">
           {file.preview ? (
             <div className="w-12 h-12 rounded-md overflow-hidden bg-muted">
-              <img 
-                src={file.preview} 
+              <img
+                src={file.preview}
                 alt={file.name}
                 className="w-full h-full object-cover"
               />
@@ -63,13 +69,15 @@ export function FileAttachment({ file, onRemove, isUploading = false }: FileAtta
         {/* File info */}
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium truncate">{file.name}</p>
-          <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
-          
+          <p className="text-xs text-muted-foreground">
+            {formatFileSize(file.size)}
+          </p>
+
           {/* Error message */}
           {file.error && (
             <p className="text-xs text-destructive mt-1">{file.error}</p>
           )}
-          
+
           {/* Upload progress */}
           {isUploading && file.uploadProgress !== undefined && !file.error && (
             <div className="mt-2">
@@ -83,4 +91,4 @@ export function FileAttachment({ file, onRemove, isUploading = false }: FileAtta
       </div>
     </div>
   );
-} 
+}

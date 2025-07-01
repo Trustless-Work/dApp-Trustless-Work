@@ -49,7 +49,8 @@ export function ConversationList({
           }}
           className={cn(
             "flex items-start gap-3 p-4 text-left hover:bg-sidebar-accent hover:text-sidebar-accent-foreground border-b last:border-b-0 transition-colors",
-            selectedConversationId === conversation.id && "bg-sidebar-accent text-sidebar-accent-foreground"
+            selectedConversationId === conversation.id &&
+              "bg-sidebar-accent text-sidebar-accent-foreground",
           )}
         >
           <div className="relative">
@@ -72,8 +73,13 @@ export function ConversationList({
                   {formatTimestamp(conversation.timestamp)}
                 </span>
                 {conversation.unreadCount > 0 && (
-                  <Badge variant="default" className="h-5 w-5 p-0 text-xs rounded-full flex items-center justify-center min-w-[20px]">
-                    {conversation.unreadCount > 9 ? "9+" : conversation.unreadCount}
+                  <Badge
+                    variant="default"
+                    className="h-5 w-5 p-0 text-xs rounded-full flex items-center justify-center min-w-[20px]"
+                  >
+                    {conversation.unreadCount > 9
+                      ? "9+"
+                      : conversation.unreadCount}
                   </Badge>
                 )}
               </div>
@@ -93,4 +99,4 @@ export function ConversationList({
       )}
     </div>
   );
-} 
+}

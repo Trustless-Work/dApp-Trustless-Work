@@ -56,7 +56,7 @@ export function ChatHeader({ conversation, onClose }: ChatHeaderProps) {
         <Button variant="ghost" size="icon" className="h-8 w-8">
           <Video className="h-4 w-4" />
         </Button>
-        
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -67,16 +67,23 @@ export function ChatHeader({ conversation, onClose }: ChatHeaderProps) {
             <DropdownMenuItem>View Profile</DropdownMenuItem>
             <DropdownMenuItem>Mute Notifications</DropdownMenuItem>
             <DropdownMenuItem>Block User</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">Delete Conversation</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">
+              Delete Conversation
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
         {onClose && (
-          <Button variant="ghost" size="icon" className="h-8 w-8 md:hidden" onClick={onClose}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 md:hidden"
+            onClick={onClose}
+          >
             <X className="h-4 w-4" />
           </Button>
         )}
       </div>
     </div>
   );
-} 
+}

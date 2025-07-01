@@ -6,7 +6,10 @@ import { ChatHeader } from "./ChatHeader";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { DateSeparator } from "../DateSeparator";
-import type { Conversation, ChatMessage as ChatMessageType } from "@/@types/conversation.entity";
+import type {
+  Conversation,
+  ChatMessage as ChatMessageType,
+} from "@/@types/conversation.entity";
 
 interface ChatInterfaceProps {
   conversation: Conversation;
@@ -15,11 +18,11 @@ interface ChatInterfaceProps {
   onClose?: () => void;
 }
 
-export function ChatInterface({ 
-  conversation, 
-  messages, 
-  onSendMessage, 
-  onClose 
+export function ChatInterface({
+  conversation,
+  messages,
+  onSendMessage,
+  onClose,
 }: ChatInterfaceProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -27,25 +30,30 @@ export function ChatInterface({
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (messagesEndRef.current && scrollAreaRef.current) {
-      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      const scrollContainer = scrollAreaRef.current.querySelector(
+        "[data-radix-scroll-area-viewport]",
+      );
       if (scrollContainer) {
         scrollContainer.scrollTo({
           top: scrollContainer.scrollHeight,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       }
     }
   }, [messages]);
 
   // Group messages by date
-  const groupedMessages = messages.reduce((groups, message) => {
-    const date = message.timestamp.toDateString();
-    if (!groups[date]) {
-      groups[date] = [];
-    }
-    groups[date].push(message);
-    return groups;
-  }, {} as Record<string, ChatMessageType[]>);
+  const groupedMessages = messages.reduce(
+    (groups, message) => {
+      const date = message.timestamp.toDateString();
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(message);
+      return groups;
+    },
+    {} as Record<string, ChatMessageType[]>,
+  );
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -56,17 +64,17 @@ export function ChatInterface({
     const messageDate = new Date(
       date.getFullYear(),
       date.getMonth(),
-      date.getDate()
+      date.getDate(),
     );
     const todayDate = new Date(
       today.getFullYear(),
       today.getMonth(),
-      today.getDate()
+      today.getDate(),
     );
     const yesterdayDate = new Date(
       yesterday.getFullYear(),
       yesterday.getMonth(),
-      yesterday.getDate()
+      yesterday.getDate(),
     );
 
     if (messageDate.getTime() === todayDate.getTime()) {
@@ -86,7 +94,7 @@ export function ChatInterface({
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <ChatHeader conversation={conversation} onClose={onClose} />
-      
+
       <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
         <div className="space-y-1">
           {Object.entries(groupedMessages).map(([date, dateMessages]) => (
@@ -102,18 +110,18 @@ export function ChatInterface({
               ))}
             </div>
           ))}
-          
+
           {messages.length === 0 && (
             <div className="flex items-center justify-center h-32 text-muted-foreground">
               <p>Start your conversation with {conversation.name}</p>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
       </ScrollArea>
-      
+
       <ChatInput onSendMessage={onSendMessage} />
     </div>
   );
-} 
+}

@@ -10,7 +10,11 @@ interface ChatMessageProps {
   senderAvatar?: string;
 }
 
-export function ChatMessage({ message, senderName, senderAvatar }: ChatMessageProps) {
+export function ChatMessage({
+  message,
+  senderName,
+  senderAvatar,
+}: ChatMessageProps) {
   const isUser = message.sender === "user";
 
   const formatTime = (timestamp: Date) => {
@@ -41,19 +45,19 @@ export function ChatMessage({ message, senderName, senderAvatar }: ChatMessagePr
           </AvatarFallback>
         </Avatar>
       )}
-      
+
       <div className={cn("flex flex-col gap-1", isUser && "items-end")}>
         <div
           className={cn(
             "max-w-xs lg:max-w-md px-3 py-2 rounded-lg text-sm",
             isUser
               ? "bg-primary text-primary-foreground rounded-br-sm"
-              : "bg-muted rounded-bl-sm"
+              : "bg-muted rounded-bl-sm",
           )}
         >
           <p className="break-words">{message.text}</p>
         </div>
-        
+
         <div className="flex items-center gap-1 px-1">
           <span className="text-xs text-muted-foreground">
             {formatTime(message.timestamp)}
@@ -79,4 +83,4 @@ export function ChatMessage({ message, senderName, senderAvatar }: ChatMessagePr
       )}
     </div>
   );
-} 
+}

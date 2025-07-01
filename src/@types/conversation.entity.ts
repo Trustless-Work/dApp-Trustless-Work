@@ -21,4 +21,4 @@ export interface ChatMessage {
 export interface ChatSession {
   conversation: Conversation;
   messages: ChatMessage[];
-} 
+}
