@@ -239,7 +239,7 @@
       }
     },
     "roleLabels": {
-      "issuer": "Issuer",
+      "signer": "Signer",
       "approver": "Approver",
       "serviceProvider": "Service Provider",
       "disputeResolver": "Dispute Resolver",
