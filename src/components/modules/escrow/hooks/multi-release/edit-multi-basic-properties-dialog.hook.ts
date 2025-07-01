@@ -9,18 +9,14 @@ import {
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { formSchemaMulti } from "../../schema/edit-basic-properties.schema";
-import {
-  useUpdateEscrow,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
 import { toast } from "sonner";
-import { signTransaction } from "@/lib/stellar-wallet-kit";
 import {
   MultiReleaseEscrow,
   UpdateMultiReleaseEscrowPayload,
 } from "@trustless-work/escrow";
 import { handleError } from "@/errors/utils/handle-errors";
 import { AxiosError } from "axios";
+import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
 
 interface useEditMultiBasicPropertiesDialogProps {
   setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
@@ -34,16 +30,7 @@ export const useEditMultiBasicPropertiesDialog = ({
   const setIsEditingBasicProperties = useEscrowUIBoundedStore(
     (state) => state.setIsEditingBasicProperties,
   );
-  const fetchAllEscrows = useGlobalBoundedStore(
-    (state) => state.fetchAllEscrows,
-  );
-  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
-  );
-
-  const { updateEscrow } = useUpdateEscrow();
-  const { sendTransaction } = useSendTransaction();
+  const { updateEscrow } = useEscrowsMutations();
 
   const form = useForm<z.infer<typeof formSchemaMulti>>({
     resolver: zodResolver(formSchemaMulti),
@@ -82,37 +69,17 @@ export const useEditMultiBasicPropertiesDialog = ({
         contractId: selectedEscrow.contractId || "",
       };
 
-      const { unsignedTransaction } = await updateEscrow({
+      await updateEscrow.mutateAsync({
         payload: finalPayload,
         type: "multi-release",
-      });
-
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from updateEscrow response.",
-        );
-      }
-
-      const signedTxXdr = await signTransaction({
-        unsignedTransaction,
         address,
       });
 
-      if (!signedTxXdr) {
-        throw new Error("Signed transaction is missing.");
-      }
+      setIsEditBasicPropertiesDialogOpen(false);
 
-      const response = await sendTransaction(signedTxXdr);
-
-      if (response.status === "SUCCESS") {
-        fetchAllEscrows({ address, type: activeTab || "approver" });
-        setIsEditBasicPropertiesDialogOpen(false);
-        setIsDialogOpen(false);
-
-        toast.success(
-          `You have edited the basic properties of ${selectedEscrow.title}.`,
-        );
-      }
+      toast.success(
+        `You have edited the basic properties of ${selectedEscrow.title}.`,
+      );
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
     } finally {

@@ -6,15 +6,11 @@ import {
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { toast } from "sonner";
-import {
-  useReleaseFunds,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
-import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { MultiReleaseReleaseFundsPayload } from "@trustless-work/escrow";
 import { useEscrowBoundedStore } from "../../store/data";
 import { handleError } from "@/errors/utils/handle-errors";
 import { AxiosError } from "axios";
+import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
 
 export const useReleaseFundsMilestoneDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -31,15 +27,10 @@ export const useReleaseFundsMilestoneDialog = () => {
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
-  const fetchAllEscrows = useGlobalBoundedStore(
-    (state) => state.fetchAllEscrows,
-  );
-  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
   const milestone = selectedEscrow?.milestones[milestoneIndex || 0];
 
-  const { releaseFunds } = useReleaseFunds();
-  const { sendTransaction } = useSendTransaction();
+  const { releaseFunds } = useEscrowsMutations();
 
   const releaseFundsSubmit = async (onComplete?: () => void) => {
     setIsReleasingFunds(true);
@@ -55,41 +46,22 @@ export const useReleaseFundsMilestoneDialog = () => {
         milestoneIndex: milestoneIndex?.toString() || "0",
       };
 
-      const { unsignedTransaction } = await releaseFunds({
+      await releaseFunds.mutateAsync({
         payload: finalPayload,
         type: "multi-release",
-      });
-
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from releaseFunds response.",
-        );
-      }
-
-      const signedTxXdr = await signTransaction({
-        unsignedTransaction,
         address,
       });
 
-      if (!signedTxXdr) {
-        throw new Error("Signed transaction is missing.");
+      setIsSuccessReleaseDialogOpen(true);
+      setIsDialogOpen(false);
+
+      if (selectedEscrow) {
+        setRecentEscrow(selectedEscrow);
       }
 
-      const response = await sendTransaction(signedTxXdr);
-
-      if (response.status === "SUCCESS") {
-        setIsSuccessReleaseDialogOpen(true);
-        fetchAllEscrows({ address, type: activeTab || "approver" });
-        setIsDialogOpen(false);
-
-        if (selectedEscrow) {
-          setRecentEscrow(selectedEscrow);
-        }
-
-        toast.success(
-          `You have released the payment in ${milestone?.description}.`,
-        );
-      }
+      toast.success(
+        `You have released the payment in ${milestone?.description}.`,
+      );
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
     } finally {
