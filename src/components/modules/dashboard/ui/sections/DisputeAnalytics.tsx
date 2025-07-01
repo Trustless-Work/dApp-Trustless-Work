@@ -8,15 +8,11 @@ import { SkeletonPendingDisputes } from "../utils/SkeletonPendingDisputes";
 import { Escrow } from "@/@types/escrow.entity";
 
 interface DisputeAnalyticsProps {
-  address: string;
   escrows: Escrow[];
 }
 
-export const DisputeAnalytics = ({
-  address,
-  escrows = [],
-}: DisputeAnalyticsProps) => {
-  const data = useEscrowDashboardData({ address });
+export const DisputeAnalytics = ({ escrows = [] }: DisputeAnalyticsProps) => {
+  const data = useEscrowDashboardData();
   const isLoading = !data;
   const displayData = data || {
     escrows: [],
