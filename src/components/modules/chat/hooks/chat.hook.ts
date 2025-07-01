@@ -18,7 +18,9 @@ export const useChat = () => {
   const contacts = useContactStore((state) => state.contacts);
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
+  const [selectedConversationId, setSelectedConversationId] = useState<
+    string | null
+  >(null);
   const [messages, setMessages] = useState<Record<string, ChatMessage[]>>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
@@ -56,11 +58,13 @@ export const useChat = () => {
   useEffect(() => {
     if (!selectedConversationId) return;
     const unsubscribe = subscribeToMessages(selectedConversationId, (msgs) => {
-      const mapped = msgs.map((m) => ({
+      const mapped: ChatMessage[] = msgs.map((m) => ({
         id: m.id,
         text: m.text,
         sender: m.senderId === address ? "user" : "contact",
-        timestamp: m.createdAt ? new Date(m.createdAt.seconds * 1000) : new Date(),
+        timestamp: m.createdAt
+          ? new Date(m.createdAt.seconds * 1000)
+          : new Date(),
         type: m.attachment
           ? m.attachment.type.startsWith("image/")
             ? "image"
