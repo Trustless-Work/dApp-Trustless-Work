@@ -10,9 +10,16 @@ export const signTransaction = async ({
   unsignedTransaction,
   address,
 }: signTransactionProps): Promise<string> => {
+  // Get current network from localStorage since this is a utility function
+  const currentNetwork =
+    (localStorage.getItem("network") as "testnet" | "mainnet") || "testnet";
+
+  const networkPassphrase =
+    currentNetwork === "mainnet" ? WalletNetwork.PUBLIC : WalletNetwork.TESTNET;
+
   const { signedTxXdr } = await kit.signTransaction(unsignedTransaction, {
     address,
-    networkPassphrase: WalletNetwork.TESTNET,
+    networkPassphrase,
   });
 
   return signedTxXdr;
