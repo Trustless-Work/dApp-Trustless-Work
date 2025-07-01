@@ -24,6 +24,9 @@ const useFundEscrowDialog = ({
 }: useFundEscrowDialogProps) => {
   const { address } = useGlobalAuthenticationStore();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
+  );
   const setIsFundingEscrow = useEscrowUIBoundedStore(
     (state) => state.setIsFundingEscrow,
   );
@@ -33,6 +36,8 @@ const useFundEscrowDialog = ({
   const setAmountMoonpay = useEscrowUIBoundedStore(
     (state) => state.setAmountMoonpay,
   );
+
+  if (!selectedEscrow) return;
 
   const { fundEscrow } = useEscrowsMutations();
 
@@ -82,6 +87,10 @@ const useFundEscrowDialog = ({
 
       form.reset();
       setIsSecondDialogOpen?.(false);
+      setSelectedEscrow({
+        ...selectedEscrow,
+        balance: (selectedEscrow?.balance || 0) + amount,
+      });
       toast.success("Escrow funded successfully");
     } catch (err) {
       console.log(err);
