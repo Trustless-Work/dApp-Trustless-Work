@@ -14,7 +14,7 @@ import type {
 interface ChatInterfaceProps {
   conversation: Conversation;
   messages: ChatMessageType[];
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, files: File[]) => void;
   onDeleteConversation: () => void;
   onClose?: () => void;
 }

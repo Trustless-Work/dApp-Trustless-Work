@@ -28,6 +28,11 @@ export interface ChatMessage {
   senderId: string;
   text: string;
   createdAt: any;
+  attachment?: {
+    name: string;
+    type: string;
+    data: string;
+  };
 }
 
 export const getOrCreateChat = async (
@@ -57,17 +62,19 @@ export const sendMessage = async (
   chatId: string,
   senderId: string,
   text: string,
+  attachment?: { name: string; type: string; data: string },
 ): Promise<void> => {
   const messagesCol = collection(db, `chats/${chatId}/messages`);
   await addDoc(messagesCol, {
     senderId,
     text,
     createdAt: serverTimestamp(),
+    attachment,
   });
 
   const chatRef = doc(db, "chats", chatId);
   await updateDoc(chatRef, {
-    lastMessage: text,
+    lastMessage: text || attachment?.name || "",
     updatedAt: serverTimestamp(),
   });
 };
@@ -115,6 +122,7 @@ export const subscribeToMessages = (
         senderId: data.senderId,
         text: data.text,
         createdAt: data.createdAt,
+        attachment: data.attachment,
       } as ChatMessage;
     });
     callback(messages);

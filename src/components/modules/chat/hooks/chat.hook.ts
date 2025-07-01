@@ -61,7 +61,12 @@ export const useChat = () => {
         text: m.text,
         sender: m.senderId === address ? "user" : "contact",
         timestamp: m.createdAt ? new Date(m.createdAt.seconds * 1000) : new Date(),
-        type: "text",
+        type: m.attachment
+          ? m.attachment.type.startsWith("image/")
+            ? "image"
+            : "file"
+          : "text",
+        attachment: m.attachment,
         isRead: true,
       }));
       setMessages((prev) => ({ ...prev, [selectedConversationId]: mapped }));
@@ -110,10 +115,31 @@ export const useChat = () => {
     [address],
   );
 
+  const readFile = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = () => reject();
+      reader.readAsDataURL(file);
+    });
+  };
+
   const sendMessage = useCallback(
-    async (text: string) => {
-      if (!selectedConversationId || !address || !text.trim()) return;
-      await sendMessageFirebase(selectedConversationId, address, text.trim());
+    async (text: string, files: File[] = []) => {
+      if (!selectedConversationId || !address) return;
+
+      if (text.trim()) {
+        await sendMessageFirebase(selectedConversationId, address, text.trim());
+      }
+
+      for (const file of files) {
+        const data = await readFile(file);
+        await sendMessageFirebase(selectedConversationId, address, file.name, {
+          name: file.name,
+          type: file.type,
+          data,
+        });
+      }
     },
     [selectedConversationId, address],
   );

@@ -15,6 +15,11 @@ export interface ChatMessage {
   sender: "user" | "contact";
   timestamp: Date;
   type: "text" | "image" | "file";
+  attachment?: {
+    name: string;
+    type: string;
+    data: string;
+  };
   isRead: boolean;
 }
 
