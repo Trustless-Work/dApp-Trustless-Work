@@ -84,7 +84,7 @@ export const Actions = ({
         <div className="flex flex-col sm:flex-row gap-2 w-full">
           {shouldShowEditButton && (
             <Button
-              disabled={Number(selectedEscrow.balance) === 0}
+              disabled={selectedEscrow.balance !== 0}
               onClick={(e) => {
                 e.stopPropagation();
                 dialogStates.editBasicProperties.setIsOpen(true);

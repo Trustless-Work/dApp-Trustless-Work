@@ -14,10 +14,11 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import SelectField from "@/components/utils/ui/SelectSearch";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { DollarSign, Link, Percent, Trash2 } from "lucide-react";
+import { DollarSign, Percent, Trash2 } from "lucide-react";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { useInitializeSingleEscrow } from "../../../hooks/single-release/initialize-single-escrow.hook";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 export const InitializeSingleEscrowForm = () => {
   const {

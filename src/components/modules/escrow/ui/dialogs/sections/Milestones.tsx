@@ -99,7 +99,7 @@ export const Milestones = ({
                   content={t("escrowDetailDialog.editMilestonesTooltip")}
                 >
                   <Button
-                    disabled={Number(selectedEscrow.balance) === 0}
+                    disabled={selectedEscrow.balance !== 0}
                     onClick={(e) => {
                       e.stopPropagation();
                       dialogStates.editMilestone.setIsOpen(true);
