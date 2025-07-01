@@ -11,15 +11,8 @@ import {
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { FundEscrowPayload } from "@trustless-work/escrow/types";
-import {
-  useFundEscrow,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
-import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { handleError } from "@/errors/utils/handle-errors";
 import { AxiosError } from "axios";
-import { queryClient } from "@/lib/react-query-client";
 import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 
 interface useFundEscrowDialogProps {
@@ -42,7 +35,6 @@ const useFundEscrowDialog = ({
   );
 
   const { fundEscrow } = useEscrowsMutations();
-  const { sendTransaction } = useSendTransaction();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -78,41 +70,19 @@ const useFundEscrowDialog = ({
     setIsFundingEscrow(true);
 
     try {
-      const finalPayload: FundEscrowPayload = {
-        signer: address,
-        amount: amount,
-        contractId: selectedEscrow!.contractId || "",
-      };
-
-      const { unsignedTransaction } = await fundEscrow.mutateAsync({
-        payload: finalPayload,
+      await fundEscrow.mutateAsync({
+        payload: {
+          signer: address,
+          amount: amount,
+          contractId: selectedEscrow!.contractId || "",
+        },
         type: selectedEscrow?.type || "single-release",
-      });
-
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from fundEscrow response.",
-        );
-      }
-
-      const signedTxXdr = await signTransaction({
-        unsignedTransaction,
         address,
       });
 
-      if (!signedTxXdr) {
-        throw new Error("Signed transaction is missing.");
-      }
-
-      const response = await sendTransaction(signedTxXdr);
-
-      if (response.status === "SUCCESS") {
-        form.reset();
-        setIsSecondDialogOpen?.(false);
-        setIsDialogOpen(false);
-
-        toast.success("Escrow funded successfully");
-      }
+      form.reset();
+      setIsSecondDialogOpen?.(false);
+      toast.success("Escrow funded successfully");
     } catch (err) {
       console.log(err);
       toast.error(handleError(err as AxiosError).message);

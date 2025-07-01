@@ -11,12 +11,8 @@ import { useEscrowUIBoundedStore } from "../store/ui";
 import { formSchema } from "../schema/complete-milestone.schema";
 import { useEscrowBoundedStore } from "../store/data";
 import { toast } from "sonner";
-import { useSendTransaction } from "@trustless-work/escrow/hooks";
-import { ChangeMilestoneStatusPayload } from "@trustless-work/escrow/types";
-import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { AxiosError } from "axios";
 import { handleError } from "@/errors/utils/handle-errors";
-import { queryClient } from "@/lib/react-query-client";
 import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 
 interface changeMilestoneStatusDialogHook {
@@ -43,7 +39,6 @@ const useChangeMilestoneStatusDialogHook = ({
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
 
   const { changeMilestoneStatus } = useEscrowsMutations();
-  const { sendTransaction } = useSendTransaction();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,60 +52,40 @@ const useChangeMilestoneStatusDialogHook = ({
     setIsChangingStatus(true);
 
     try {
-      const finalPayload: ChangeMilestoneStatusPayload = {
-        contractId: selectedEscrow?.contractId || "",
-        milestoneIndex: milestoneIndex?.toString() || "0",
-        newStatus: "completed",
-        serviceProvider: address,
-        newEvidence: newEvidence || "",
-      };
-
-      const { unsignedTransaction } = await changeMilestoneStatus.mutateAsync({
-        payload: finalPayload,
+      await changeMilestoneStatus.mutateAsync({
+        payload: {
+          contractId: selectedEscrow?.contractId || "",
+          milestoneIndex: milestoneIndex?.toString() || "0",
+          newStatus: "completed",
+          serviceProvider: address,
+          newEvidence: newEvidence || "",
+        },
         type: selectedEscrow?.type || "single-release",
-      });
-
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from changeMilestoneStatus response.",
-        );
-      }
-
-      const signedTxXdr = await signTransaction({
-        unsignedTransaction,
         address,
       });
 
-      if (!signedTxXdr) {
-        throw new Error("Signed transaction is missing.");
+      setIsChangingStatus(false);
+      setIsCompleteMilestoneDialogOpen(false);
+
+      if (selectedEscrow && milestoneIndex !== null) {
+        const updatedEscrow = {
+          ...selectedEscrow,
+          milestones: selectedEscrow.milestones.map((milestone, index) =>
+            index === milestoneIndex
+              ? {
+                  ...milestone,
+                  status: "completed",
+                  evidence: newEvidence || milestone.evidence,
+                }
+              : milestone,
+          ),
+        };
+        setSelectedEscrow(updatedEscrow);
       }
 
-      const response = await sendTransaction(signedTxXdr);
-
-      if (response.status === "SUCCESS") {
-        setIsChangingStatus(false);
-        setIsCompleteMilestoneDialogOpen(false);
-
-        if (selectedEscrow && milestoneIndex !== null) {
-          const updatedEscrow = {
-            ...selectedEscrow,
-            milestones: selectedEscrow.milestones.map((milestone, index) =>
-              index === milestoneIndex
-                ? {
-                    ...milestone,
-                    status: finalPayload.newStatus,
-                    evidence: finalPayload.newEvidence || milestone.evidence,
-                  }
-                : milestone,
-            ),
-          };
-          setSelectedEscrow(updatedEscrow);
-        }
-
-        toast.success(
-          `The Milestone ${completingMilestone?.description} has been completed.`,
-        );
-      }
+      toast.success(
+        `The Milestone ${completingMilestone?.description} has been completed.`,
+      );
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
     } finally {
