@@ -146,7 +146,7 @@ export const Actions = ({
               onClick={releaseFundsSubmit}
               type="button"
               className="bg-green-800 hover:bg-green-700 w-full"
-              disabled={isReleasingFunds}
+              disabled={isReleasingFunds || selectedEscrow.balance === 0}
             >
               {isReleasingFunds ? (
                 <>
