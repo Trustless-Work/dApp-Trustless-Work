@@ -3,6 +3,7 @@ import {
   addDoc,
   collection,
   doc,
+  deleteDoc,
   getDocs,
   onSnapshot,
   orderBy,
@@ -118,4 +119,12 @@ export const subscribeToMessages = (
     });
     callback(messages);
   });
+};
+
+export const deleteChat = async (chatId: string): Promise<void> => {
+  const messagesCol = collection(db, `chats/${chatId}/messages`);
+  const snapshot = await getDocs(messagesCol);
+  await Promise.all(snapshot.docs.map((docSnap) => deleteDoc(docSnap.ref)));
+  const chatRef = doc(db, "chats", chatId);
+  await deleteDoc(chatRef);
 };

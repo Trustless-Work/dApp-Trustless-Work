@@ -30,6 +30,7 @@ export default function Chats() {
     selectConversation,
     startConversation,
     sendMessage,
+    deleteConversation,
     clearSelection,
     contacts,
   } = useChat();
@@ -105,6 +106,9 @@ export default function Chats() {
             conversation={selectedConversation}
             messages={selectedMessages}
             onSendMessage={sendMessage}
+            onDeleteConversation={() =>
+              deleteConversation(selectedConversation.id)
+            }
             onClose={clearSelection}
           />
         ) : (

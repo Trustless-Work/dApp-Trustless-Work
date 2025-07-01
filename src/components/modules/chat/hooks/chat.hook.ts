@@ -9,6 +9,7 @@ import {
   sendMessage as sendMessageFirebase,
   subscribeToChats,
   subscribeToMessages,
+  deleteChat,
 } from "../server/chat.firebase";
 
 export const useChat = () => {
@@ -117,6 +118,24 @@ export const useChat = () => {
     [selectedConversationId, address],
   );
 
+  const deleteConversation = useCallback(
+    async (conversationId: string) => {
+      await deleteChat(conversationId);
+      setMessages((prev) => {
+        const updated = { ...prev };
+        delete updated[conversationId];
+        return updated;
+      });
+      setConversations((prev) =>
+        prev.filter((conversation) => conversation.id !== conversationId),
+      );
+      if (selectedConversationId === conversationId) {
+        setSelectedConversationId(null);
+      }
+    },
+    [selectedConversationId],
+  );
+
   const clearSelection = useCallback(() => {
     setSelectedConversationId(null);
   }, []);
@@ -132,6 +151,7 @@ export const useChat = () => {
     selectConversation,
     startConversation,
     sendMessage,
+    deleteConversation,
     clearSelection,
     contacts,
   };
