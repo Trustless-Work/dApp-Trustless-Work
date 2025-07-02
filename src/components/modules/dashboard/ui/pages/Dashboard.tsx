@@ -35,7 +35,6 @@ export const Dashboard = () => {
             {t("dashboard.noEscrows")} <ArrowRight className="ml-2" />
           </span>
           <CreateButton
-            className="mr-auto w-full md:w-auto"
             label={t("dashboard.createEscrow")}
             url={"/dashboard/escrow/initialize-escrow"}
           />
