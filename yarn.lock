@@ -2673,10 +2673,10 @@
     varuint-bitcoin "2.0.0"
     wif "^5.0.0"
 
-"@trustless-work/escrow@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.npmjs.org/@trustless-work/escrow/-/escrow-1.0.6.tgz"
-  integrity sha512-12KV1kPQDpp+5SKmNmssfT+kCiK5AEWyDuSGVY28GM1WAHUwi+RusR2AHcZzKUEbEftjV0rOX9ccIlBRAOROwQ==
+"@trustless-work/escrow@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.npmjs.org/@trustless-work/escrow/-/escrow-1.0.9.tgz"
+  integrity sha512-ceRRau/5RrzxwXs03hLh9WogKeHsV7mHvWczG7pcuUkotv0MS9Ty8z0DZWy16PDGiMfxC4s4ReutCnPvvEmJWA==
   dependencies:
     axios "^1.9.0"
 
