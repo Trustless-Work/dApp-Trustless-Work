@@ -1,6 +1,7 @@
 import ReportIssueForm from "@/components/modules/report-issue/ui/forms/ReportIssueForm";
 import { WrapperForm } from "@/components/layout/Wrappers";
 import { Bounded } from "@/components/layout/Bounded";
+import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 import {
   Card,
   CardContent,
@@ -8,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 
 const ReportIssueNoLogged = () => {
   return (
