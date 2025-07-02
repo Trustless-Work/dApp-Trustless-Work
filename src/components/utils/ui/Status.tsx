@@ -10,8 +10,6 @@ import {
   CircleDollarSign,
   Flame,
   CheckCheck,
-  CheckCircle,
-  XCircle,
   SquareCheckBig,
 } from "lucide-react";
 import { Escrow } from "@/@types/escrow.entity";
