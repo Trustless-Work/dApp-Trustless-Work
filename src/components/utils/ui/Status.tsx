@@ -440,12 +440,11 @@ export const getActionButtons = (
   if (
     userRolesInEscrow.includes("approver") &&
     activeTab === "approver" &&
-    "flags" in milestone &&
-    !milestone.flags?.resolved &&
-    !milestone.flags?.released &&
     milestone.status === "completed" &&
     (("approved" in milestone && !milestone.approved) ||
-      ("flags" in milestone && !milestone.flags?.approved))
+      ("flags" in milestone && !milestone.flags?.approved) ||
+      ("flags" in milestone && !milestone.flags?.disputed) ||
+      ("flags" in milestone && !milestone.flags?.released))
   ) {
     buttons.push(
       <Button
