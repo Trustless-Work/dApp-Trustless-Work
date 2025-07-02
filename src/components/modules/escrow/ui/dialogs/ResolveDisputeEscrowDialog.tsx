@@ -104,11 +104,11 @@ const ResolveDisputeEscrowDialog = ({
     }
 
     const approverDeductions =
-      parsedApproverFunds * (platformFee / 100) +
+      parsedApproverFunds * platformFee +
       parsedApproverFunds * trustlessWorkFee;
 
     const receiverDeductions =
-      parsedReceiverFunds * (platformFee / 100) +
+      parsedReceiverFunds * platformFee +
       parsedReceiverFunds * trustlessWorkFee;
 
     setApproverNet(parsedApproverFunds - approverDeductions);

@@ -76,6 +76,8 @@ export const Milestones = ({
     dialogStates.completeMilestone.setIsOpen(true);
   };
 
+  console.log(selectedEscrow.milestones);
+
   return (
     <div className="flex w-full">
       <div className="flex flex-col gap-6 w-full">
