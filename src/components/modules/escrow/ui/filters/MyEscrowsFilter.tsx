@@ -124,7 +124,6 @@ const MyEscrowsFilter = () => {
             </Link>
 
             <CreateButton
-              className="flex items-center gap-2 px-4 py-2 text-xs text-primary-700 dark:text-primary-300 bg-primary-50 border border-primary-200 dark:border-primary-700/50 rounded-lg hover:bg-primary-50 dark:bg-primary-900/50 dark:hover:bg-primary-900 transition-colors duration-200"
               label={t("myEscrows.filter.actions.create")}
               url={"/dashboard/escrow/initialize-escrow"}
               id="step-2"
