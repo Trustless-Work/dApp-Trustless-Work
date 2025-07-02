@@ -63,6 +63,7 @@ export const useEscrowsByRoleQuery = ({
         engagementId,
         status,
         type,
+        validateOnChain: true,
       });
 
       if (!escrows) {

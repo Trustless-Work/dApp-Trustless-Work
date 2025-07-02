@@ -59,6 +59,7 @@ export const useEscrowsBySignerQuery = ({
         engagementId,
         status,
         type,
+        validateOnChain: true,
       });
 
       if (!escrows) {
