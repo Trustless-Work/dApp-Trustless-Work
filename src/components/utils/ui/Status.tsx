@@ -30,7 +30,8 @@ export const getStatusBadge = (escrow: Escrow) => {
 
   const approvedMilestones = escrow.milestones.filter(
     (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
-      "flags" in milestone && milestone.flags?.approved === true,
+      ("flags" in milestone && milestone.flags?.approved === true) ||
+      ("approved" in milestone && milestone.approved === true),
   ).length;
 
   const totalMilestones = escrow.milestones.length;
