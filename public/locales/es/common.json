@@ -355,6 +355,11 @@
     }
   },
   "myEscrows": {
+    "blockchainSync": {
+      "title": "Sincronización Blockchain Garantizada",
+      "description": "Los escrows mostrados están perfectamente sincronizados entre nuestra base de datos y la blockchain de Stellar. Cualquier inconsistencia de datos sería detectada inmediatamente, por lo que puedes estar completamente tranquilo de que toda la información refleja exactamente el estado actual en la blockchain.",
+      "close": "¡Entendido!"
+    },
     "tabs": {
       "signer": "Escrows Iniciados",
       "approver": "Aprobador",

@@ -155,6 +155,15 @@
     "editEscrow": "Edit Escrow"
   },
   "help": {
+    "actions": {
+      "fundEscrow": "Fund Escrow",
+      "approveMilestone": "Approve Milestone",
+      "startDispute": "Start Dispute",
+      "completeMilestone": "Complete Milestone",
+      "resolveDispute": "Resolve Dispute",
+      "releasePayment": "Release Payment",
+      "editEscrow": "Edit Escrow"
+    },
     "videos": {
       "items": {
         "intro": {
@@ -287,6 +296,11 @@
     "disputed": "Disputed"
   },
   "myEscrows": {
+    "blockchainSync": {
+      "title": "Blockchain Synchronization Guaranteed",
+      "description": "The escrows shown here are perfectly synchronized between our database and the Stellar blockchain. Any data inconsistency would be detected immediately, so you can be completely confident that all information reflects exactly the current state on the blockchain.",
+      "close": "Got it!"
+    },
     "tabs": {
       "signer": "Initiated Escrows",
       "approver": "Approver",
