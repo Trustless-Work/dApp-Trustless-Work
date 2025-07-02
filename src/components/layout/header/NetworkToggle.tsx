@@ -65,7 +65,7 @@ const NetworkToggle = () => {
           className={cn(
             "text-sm font-medium cursor-pointer",
             currentNetwork === "mainnet"
-              ? "text-blue-600 dark:text-blue-400"
+              ? "text-primary-600 dark:text-primary-500"
               : "text-gray-600 dark:text-gray-400",
             isLoading && "opacity-50",
           )}
