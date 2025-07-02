@@ -89,7 +89,7 @@ const FundEscrowDialog = ({
                 <FormField
                   control={form.control}
                   name="amount"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel className="flex items-center">
                         Amount <span className="text-destructive ml-1">*</span>

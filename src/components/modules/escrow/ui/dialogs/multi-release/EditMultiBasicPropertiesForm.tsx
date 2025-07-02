@@ -87,7 +87,7 @@ export const EditMultiBasicPropertiesForm = ({
           <FormField
             control={form.control}
             name="platformFee"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="flex items-center">
                   Platform Fee<span className="text-destructive ml-1">*</span>

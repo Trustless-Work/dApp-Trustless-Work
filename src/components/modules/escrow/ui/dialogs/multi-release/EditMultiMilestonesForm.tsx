@@ -1,17 +1,11 @@
 import { Form, FormLabel } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
-import { DollarSign, Loader2, Save, Trash2, Plus } from "lucide-react";
+import { DollarSign, Loader2, Save, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { useEditMultiMilestonesDialog } from "../../../hooks/multi-release/edit-multi-milestones-dialog.hook";
-import {
-  FormField,
-  FormControl,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
 
 interface EditMultiMilestonesFormProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
@@ -25,7 +19,6 @@ export const EditMultiMilestonesForm = ({
   const {
     form,
     onSubmit,
-    handleClose,
     milestones,
     handleAddMilestone,
     handleRemoveMilestone,
