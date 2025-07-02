@@ -15,10 +15,34 @@ export interface ChatMessage {
   sender: "user" | "contact";
   timestamp: Date;
   type: "text" | "image" | "file";
+  attachment?: {
+    name: string;
+    type: string;
+    data: string;
+  };
   isRead: boolean;
 }
 
 export interface ChatSession {
   conversation: Conversation;
   messages: ChatMessage[];
+}
+
+export interface Chat {
+  id: string;
+  participants: string[];
+  lastMessage: string;
+  updatedAt: any;
+}
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  text: string;
+  createdAt: any;
+  attachment?: {
+    name: string;
+    type: string;
+    data: string;
+  };
 }

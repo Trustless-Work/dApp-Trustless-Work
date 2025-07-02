@@ -1,21 +1,82 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { Conversation, ChatMessage } from "@/@types/conversation.entity";
+import { useContactStore } from "@/core/store/data/slices/contacts.slice";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
 import {
-  MOCK_CONVERSATIONS,
-  MOCK_CHAT_MESSAGES,
-} from "../constants/mock-conversations.constant";
+  getOrCreateChat,
+  sendMessage as sendMessageFirebase,
+  subscribeToChats,
+  subscribeToMessages,
+  deleteChat,
+} from "../server/chat.firebase";
 
 export const useChat = () => {
-  const [conversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
+  const address = useGlobalAuthenticationStore((state) => state.address);
+  const fetchContacts = useContactStore((state) => state.fetchContacts);
+  const contacts = useContactStore((state) => state.contacts);
+
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversationId, setSelectedConversationId] = useState<
     string | null
   >(null);
-  const [messages, setMessages] =
-    useState<Record<string, ChatMessage[]>>(MOCK_CHAT_MESSAGES);
+  const [messages, setMessages] = useState<Record<string, ChatMessage[]>>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+
+  useEffect(() => {
+    if (address) {
+      fetchContacts(address);
+    }
+  }, [address, fetchContacts]);
+
+  useEffect(() => {
+    if (!address) return;
+    const unsubscribe = subscribeToChats(address, (chats) => {
+      const mapped = chats.map((chat) => {
+        const other = chat.participants.find((p) => p !== address) || "";
+        const contact = contacts.find((c) => c.address === other);
+        return {
+          id: chat.id,
+          name: contact?.name || other,
+          email: contact?.email || "",
+          avatar: "/avatars/default.jpg",
+          lastMessage: chat.lastMessage || "",
+          timestamp: chat.updatedAt
+            ? new Date(chat.updatedAt.seconds * 1000)
+            : new Date(),
+          unreadCount: 0,
+          isOnline: false,
+        } as Conversation;
+      });
+      setConversations(mapped);
+    });
+    return () => unsubscribe();
+  }, [address, contacts]);
+
+  useEffect(() => {
+    if (!selectedConversationId) return;
+    const unsubscribe = subscribeToMessages(selectedConversationId, (msgs) => {
+      const mapped: ChatMessage[] = msgs.map((m) => ({
+        id: m.id,
+        text: m.text,
+        sender: m.senderId === address ? "user" : "contact",
+        timestamp: m.createdAt
+          ? new Date(m.createdAt.seconds * 1000)
+          : new Date(),
+        type: m.attachment
+          ? m.attachment.type.startsWith("image/")
+            ? "image"
+            : "file"
+          : "text",
+        attachment: m.attachment,
+        isRead: true,
+      }));
+      setMessages((prev) => ({ ...prev, [selectedConversationId]: mapped }));
+    });
+    return () => unsubscribe();
+  }, [selectedConversationId, address]);
 
   const selectedConversation = selectedConversationId
     ? conversations.find((c) => c.id === selectedConversationId)
@@ -47,67 +108,60 @@ export const useChat = () => {
 
   const selectConversation = useCallback((conversationId: string) => {
     setSelectedConversationId(conversationId);
-
-    // Mark messages as read when conversation is selected
-    setMessages((prev) => ({
-      ...prev,
-      [conversationId]: (prev[conversationId] || []).map((msg) => ({
-        ...msg,
-        isRead: true,
-      })),
-    }));
   }, []);
 
+  const startConversation = useCallback(
+    async (contactAddress: string) => {
+      if (!address) return;
+      const chatId = await getOrCreateChat(address, contactAddress);
+      setSelectedConversationId(chatId);
+    },
+    [address],
+  );
+
+  const readFile = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = () => reject();
+      reader.readAsDataURL(file);
+    });
+  };
+
   const sendMessage = useCallback(
-    (text: string) => {
-      if (!selectedConversationId || !text.trim()) return;
+    async (text: string, files: File[] = []) => {
+      if (!selectedConversationId || !address) return;
 
-      const newMessage: ChatMessage = {
-        id: `msg-${Date.now()}`,
-        text: text.trim(),
-        sender: "user",
-        timestamp: new Date(),
-        type: "text",
-        isRead: true,
-      };
+      if (text.trim()) {
+        await sendMessageFirebase(selectedConversationId, address, text.trim());
+      }
 
-      setMessages((prev) => ({
-        ...prev,
-        [selectedConversationId]: [
-          ...(prev[selectedConversationId] || []),
-          newMessage,
-        ],
-      }));
+      for (const file of files) {
+        const data = await readFile(file);
+        await sendMessageFirebase(selectedConversationId, address, file.name, {
+          name: file.name,
+          type: file.type,
+          data,
+        });
+      }
+    },
+    [selectedConversationId, address],
+  );
 
-      // Simulate a response after a short delay
-      setTimeout(
-        () => {
-          const responses = [
-            "Thanks for your message! I'll get back to you soon.",
-            "Received! Let me check on that for you.",
-            "Got it! I'll review this and respond shortly.",
-            "Thanks! I'll take a look and get back to you.",
-          ];
-
-          const responseMessage: ChatMessage = {
-            id: `msg-${Date.now() + 1}`,
-            text: responses[Math.floor(Math.random() * responses.length)],
-            sender: "contact",
-            timestamp: new Date(),
-            type: "text",
-            isRead: false,
-          };
-
-          setMessages((prev) => ({
-            ...prev,
-            [selectedConversationId]: [
-              ...(prev[selectedConversationId] || []),
-              responseMessage,
-            ],
-          }));
-        },
-        1000 + Math.random() * 2000,
-      ); // Random delay between 1-3 seconds
+  const deleteConversation = useCallback(
+    async (conversationId: string) => {
+      await deleteChat(conversationId);
+      setMessages((prev) => {
+        const updated = { ...prev };
+        delete updated[conversationId];
+        return updated;
+      });
+      setConversations((prev) =>
+        prev.filter((conversation) => conversation.id !== conversationId),
+      );
+      if (selectedConversationId === conversationId) {
+        setSelectedConversationId(null);
+      }
     },
     [selectedConversationId],
   );
@@ -125,7 +179,10 @@ export const useChat = () => {
     showUnreadOnly,
     setShowUnreadOnly,
     selectConversation,
+    startConversation,
     sendMessage,
+    deleteConversation,
     clearSelection,
+    contacts,
   };
 };

@@ -14,7 +14,8 @@ import type {
 interface ChatInterfaceProps {
   conversation: Conversation;
   messages: ChatMessageType[];
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, files: File[]) => void;
+  onDeleteConversation: () => void;
   onClose?: () => void;
 }
 
@@ -22,6 +23,7 @@ export function ChatInterface({
   conversation,
   messages,
   onSendMessage,
+  onDeleteConversation,
   onClose,
 }: ChatInterfaceProps) {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -55,7 +57,11 @@ export function ChatInterface({
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <ChatHeader conversation={conversation} onClose={onClose} />
+      <ChatHeader
+        conversation={conversation}
+        onClose={onClose}
+        onDelete={onDeleteConversation}
+      />
 
       <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
         <div className="space-y-1">
