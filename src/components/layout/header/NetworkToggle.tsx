@@ -97,6 +97,15 @@ const NetworkToggle = () => {
                 <li>• All transactions are permanent and irreversible</li>
                 <li>• You will be using real funds, not test tokens</li>
                 <li>• Make sure you understand the risks involved</li>
+                <li>• You will be using real funds, not test tokens</li>
+                <li>
+                  • Make sure that your wallet is connected to the correct
+                  network (Mainnet) or (Testnet)
+                </li>
+                <li>
+                  • If you are having problems when switching to mainnet, please
+                  re-connect your wallet
+                </li>
               </ul>
             </div>
 
