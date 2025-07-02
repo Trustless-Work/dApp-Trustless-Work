@@ -165,12 +165,26 @@ export const useInitializeMultiEscrow = () => {
     setIsLoading(true);
 
     try {
-      const finalPayload: InitializeMultiReleaseEscrowPayload = {
+      // Convert string values to numbers for the payload
+      const processedPayload = {
         ...payload,
+        platformFee:
+          typeof payload.platformFee === "string"
+            ? Number(payload.platformFee)
+            : payload.platformFee,
         receiverMemo: Number(payload.receiverMemo) ?? 0,
         signer: address,
-        milestones: payload.milestones,
+        milestones: payload.milestones.map((milestone) => ({
+          ...milestone,
+          amount:
+            typeof milestone.amount === "string"
+              ? Number(milestone.amount)
+              : milestone.amount,
+        })),
       };
+
+      const finalPayload: InitializeMultiReleaseEscrowPayload =
+        processedPayload;
 
       const response = (await deployEscrow.mutateAsync({
         payload: finalPayload,

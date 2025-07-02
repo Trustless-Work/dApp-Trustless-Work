@@ -1,11 +1,17 @@
 import { Form, FormLabel } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
-import { DollarSign, Loader2, Save, Trash2 } from "lucide-react";
+import { DollarSign, Loader2, Save, Trash2, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import { useEditMultiMilestonesDialog } from "../../../hooks/multi-release/edit-multi-milestones-dialog.hook";
+import {
+  FormField,
+  FormControl,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 
 interface EditMultiMilestonesFormProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
@@ -19,6 +25,7 @@ export const EditMultiMilestonesForm = ({
   const {
     form,
     onSubmit,
+    handleClose,
     milestones,
     handleAddMilestone,
     handleRemoveMilestone,
@@ -26,6 +33,34 @@ export const EditMultiMilestonesForm = ({
   } = useEditMultiMilestonesDialog({
     setIsEditMilestoneDialogOpen,
   });
+
+  const handleMilestoneAmountChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    const updatedMilestones = [...milestones];
+    updatedMilestones[index] = {
+      ...updatedMilestones[index],
+      amount: rawValue,
+    };
+    form.setValue("milestones", updatedMilestones);
+  };
 
   return (
     <Form {...form}>
@@ -86,27 +121,7 @@ export const EditMultiMilestonesForm = ({
                       value={
                         milestone.amount ? milestone.amount.toString() : ""
                       }
-                      onChange={(e) => {
-                        let rawValue = e.target.value;
-                        rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                        if (rawValue.split(".").length > 2) {
-                          rawValue = rawValue.slice(0, -1);
-                        }
-
-                        const updatedMilestones = [...milestones];
-
-                        if (rawValue === "" || rawValue === ".") {
-                          updatedMilestones[index].amount = 0;
-                        } else {
-                          const numValue = Number(rawValue);
-                          updatedMilestones[index].amount = isNaN(numValue)
-                            ? 0
-                            : numValue;
-                        }
-
-                        form.setValue("milestones", updatedMilestones);
-                      }}
+                      onChange={(e) => handleMilestoneAmountChange(index, e)}
                     />
                   </div>
 

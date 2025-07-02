@@ -74,9 +74,21 @@ export const useEditMultiMilestonesDialog = ({
     setIsEditingMilestones(true);
 
     try {
+      // Convert string values to numbers for the payload
+      const processedPayload = {
+        ...payload,
+        milestones: payload.milestones.map((milestone) => ({
+          ...milestone,
+          amount:
+            typeof milestone.amount === "string"
+              ? Number(milestone.amount)
+              : milestone.amount,
+        })),
+      };
+
       const updatedEscrow = {
         ...JSON.parse(JSON.stringify(selectedEscrow)),
-        milestones: payload.milestones,
+        milestones: processedPayload.milestones,
       };
 
       delete updatedEscrow.createdAt;
@@ -99,7 +111,7 @@ export const useEditMultiMilestonesDialog = ({
 
       setSelectedEscrow({
         ...selectedEscrow,
-        milestones: payload.milestones,
+        milestones: processedPayload.milestones,
       });
 
       toast.success(

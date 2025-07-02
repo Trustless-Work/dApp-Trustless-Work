@@ -48,10 +48,30 @@ const FundEscrowDialog = ({
     (state) => state.setIsMoonpayWidgetOpen,
   );
 
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("amount", rawValue);
+  };
+
   return (
     <>
       <Dialog open={isSecondDialogOpen} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[550px]">
           <DialogHeader>
             <DialogTitle>Funding - {selectedEscrow?.title}</DialogTitle>
             <DialogDescription>
@@ -84,30 +104,8 @@ const FundEscrowDialog = ({
                           <Input
                             placeholder="Enter amount"
                             className="pl-10"
-                            value={field.value || ""}
-                            onChange={(e) => {
-                              let rawValue = e.target.value;
-                              rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                              if (rawValue.split(".").length > 2) {
-                                rawValue = rawValue.slice(0, -1);
-                              }
-
-                              // Allow partial values like "5." or "5.5"
-                              if (rawValue === "" || rawValue === ".") {
-                                field.onChange("");
-                              } else if (rawValue.endsWith(".")) {
-                                // Keep the dot for partial input
-                                field.onChange(rawValue);
-                              } else {
-                                const numValue = Number(rawValue);
-                                if (!isNaN(numValue)) {
-                                  field.onChange(numValue);
-                                } else {
-                                  field.onChange(rawValue);
-                                }
-                              }
-                            }}
+                            value={form.watch("amount")?.toString() || ""}
+                            onChange={handleAmountChange}
                           />
                         </div>
                       </FormControl>

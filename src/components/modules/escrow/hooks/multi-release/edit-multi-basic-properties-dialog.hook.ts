@@ -53,13 +53,22 @@ export const useEditMultiBasicPropertiesDialog = ({
     setIsEditingBasicProperties(true);
 
     try {
+      // Convert string values to numbers for the payload
+      const processedPayload = {
+        ...payload,
+        platformFee:
+          typeof payload.platformFee === "string"
+            ? Number(payload.platformFee)
+            : payload.platformFee,
+      };
+
       const updatedEscrow = {
         ...JSON.parse(JSON.stringify(selectedEscrow)),
-        title: payload.title,
-        engagementId: payload.engagementId,
-        description: payload.description,
-        receiverMemo: payload.receiverMemo,
-        platformFee: payload.platformFee,
+        title: processedPayload.title,
+        engagementId: processedPayload.engagementId,
+        description: processedPayload.description,
+        receiverMemo: processedPayload.receiverMemo,
+        platformFee: processedPayload.platformFee,
       };
 
       delete updatedEscrow.createdAt;
@@ -82,11 +91,13 @@ export const useEditMultiBasicPropertiesDialog = ({
 
       setSelectedEscrow({
         ...selectedEscrow,
-        title: payload.title,
-        engagementId: payload.engagementId,
-        description: payload.description,
-        receiverMemo: payload.receiverMemo ? Number(payload.receiverMemo) : 0,
-        platformFee: payload.platformFee,
+        title: processedPayload.title,
+        engagementId: processedPayload.engagementId,
+        description: processedPayload.description,
+        receiverMemo: processedPayload.receiverMemo
+          ? Number(processedPayload.receiverMemo)
+          : 0,
+        platformFee: processedPayload.platformFee,
       });
 
       toast.success(

@@ -68,8 +68,8 @@ export const useResolveDisputeDialog = () => {
       approverFunds,
       receiverFunds,
     }: {
-      approverFunds: number;
-      receiverFunds: number;
+      approverFunds: number | string;
+      receiverFunds: number | string;
     },
     onComplete?: () => void,
   ) => {
@@ -78,13 +78,23 @@ export const useResolveDisputeDialog = () => {
     if (!selectedEscrow) return;
 
     try {
+      // Convert string values to numbers
+      const numericApproverFunds =
+        typeof approverFunds === "string"
+          ? Number(approverFunds)
+          : approverFunds;
+      const numericReceiverFunds =
+        typeof receiverFunds === "string"
+          ? Number(receiverFunds)
+          : receiverFunds;
+
       const finalPayload:
         | SingleReleaseResolveDisputePayload
         | MultiReleaseResolveDisputePayload = {
         contractId: selectedEscrow?.contractId || "",
         disputeResolver: selectedEscrow?.roles?.disputeResolver,
-        approverFunds: approverFunds,
-        receiverFunds: receiverFunds,
+        approverFunds: numericApproverFunds,
+        receiverFunds: numericReceiverFunds,
         milestoneIndex:
           selectedEscrow.type === "multi-release"
             ? milestoneIndex?.toString() || ""
@@ -98,8 +108,8 @@ export const useResolveDisputeDialog = () => {
       });
 
       form.reset();
-      setReceiverResolve(receiverFunds);
-      setApproverResolve(approverFunds);
+      setReceiverResolve(numericReceiverFunds);
+      setApproverResolve(numericApproverFunds);
       setIsResolveDisputeDialogOpen(false);
       setIsSuccessResolveDisputeDialogOpen(true);
 

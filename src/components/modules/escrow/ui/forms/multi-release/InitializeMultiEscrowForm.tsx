@@ -43,6 +43,54 @@ export const InitializeMultiEscrowForm = () => {
     toggleStep(2);
   };
 
+  const handlePlatformFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("platformFee", rawValue);
+  };
+
+  const handleMilestoneAmountChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    const updatedMilestones = [...milestones];
+    updatedMilestones[index] = {
+      ...updatedMilestones[index],
+      amount: rawValue,
+    };
+    form.setValue("milestones", updatedMilestones);
+  };
+
   return (
     <Form {...form}>
       <form
@@ -426,30 +474,8 @@ export const InitializeMultiEscrowForm = () => {
                     <Input
                       placeholder="Enter platform fee"
                       className="pl-10"
-                      value={field.value || ""}
-                      onChange={(e) => {
-                        let rawValue = e.target.value;
-                        rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                        if (rawValue.split(".").length > 2) {
-                          rawValue = rawValue.slice(0, -1);
-                        }
-
-                        // Allow partial values like "5." or "5.5"
-                        if (rawValue === "" || rawValue === ".") {
-                          field.onChange("");
-                        } else if (rawValue.endsWith(".")) {
-                          // Keep the dot for partial input
-                          field.onChange(rawValue);
-                        } else {
-                          const numValue = Number(rawValue);
-                          if (!isNaN(numValue)) {
-                            field.onChange(numValue);
-                          } else {
-                            field.onChange(rawValue);
-                          }
-                        }
-                      }}
+                      value={form.watch("platformFee")?.toString() || ""}
+                      onChange={handlePlatformFeeChange}
                     />
                   </div>
                 </FormControl>
@@ -532,29 +558,9 @@ export const InitializeMultiEscrowForm = () => {
                   />
                   <Input
                     className="pl-10"
-                    placeholder="Enter milestone amount"
-                    value={milestone.amount ? milestone.amount.toString() : ""}
-                    onChange={(e) => {
-                      let rawValue = e.target.value;
-                      rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                      if (rawValue.split(".").length > 2) {
-                        rawValue = rawValue.slice(0, -1);
-                      }
-
-                      const updatedMilestones = [...milestones];
-
-                      if (rawValue === "" || rawValue === ".") {
-                        updatedMilestones[index].amount = 0;
-                      } else {
-                        const numValue = Number(rawValue);
-                        updatedMilestones[index].amount = isNaN(numValue)
-                          ? 0
-                          : numValue;
-                      }
-
-                      form.setValue("milestones", updatedMilestones);
-                    }}
+                    placeholder="Enter amount"
+                    value={milestone.amount?.toString() || ""}
+                    onChange={(e) => handleMilestoneAmountChange(index, e)}
                   />
                 </div>
 

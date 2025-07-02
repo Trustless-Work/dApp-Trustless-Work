@@ -54,11 +54,15 @@ const useFundEscrowDialog = ({
   const clearErrors = form.clearErrors;
 
   useEffect(() => {
-    setAmountMoonpay(amount || 0);
+    const numericAmount =
+      typeof amount === "string" ? Number(amount) || 0 : amount || 0;
+    setAmountMoonpay(numericAmount);
   }, [amount, setAmountMoonpay]);
 
   useEffect(() => {
-    if (paymentMethod === "card" && amount < 20) {
+    const numericAmount =
+      typeof amount === "string" ? Number(amount) || 0 : amount || 0;
+    if (paymentMethod === "card" && numericAmount < 20) {
       setError("amount", {
         type: "custom",
         message:
@@ -80,14 +84,18 @@ const useFundEscrowDialog = ({
     };
   }
 
-  const onSubmit = async ({ amount }: { amount: number }) => {
+  const onSubmit = async ({ amount }: { amount: number | string }) => {
     setIsFundingEscrow(true);
 
     try {
+      // Convert string to number if needed
+      const numericAmount =
+        typeof amount === "string" ? Number(amount) : amount;
+
       await fundEscrow.mutateAsync({
         payload: {
           signer: address,
-          amount: amount,
+          amount: numericAmount,
           contractId: selectedEscrow!.contractId || "",
         },
         type: selectedEscrow?.type || "single-release",
@@ -98,7 +106,7 @@ const useFundEscrowDialog = ({
       setIsSecondDialogOpen?.(false);
       setSelectedEscrow({
         ...selectedEscrow,
-        balance: (selectedEscrow?.balance || 0) + amount,
+        balance: (selectedEscrow?.balance || 0) + numericAmount,
       });
       toast.success("Escrow funded successfully");
     } catch (err) {

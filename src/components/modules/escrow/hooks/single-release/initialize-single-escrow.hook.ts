@@ -164,12 +164,24 @@ export const useInitializeSingleEscrow = () => {
     setIsLoading(true);
 
     try {
-      const finalPayload: InitializeSingleReleaseEscrowPayload = {
+      // Convert string values to numbers for the payload
+      const processedPayload = {
         ...payload,
+        amount:
+          typeof payload.amount === "string"
+            ? Number(payload.amount)
+            : payload.amount,
+        platformFee:
+          typeof payload.platformFee === "string"
+            ? Number(payload.platformFee)
+            : payload.platformFee,
         receiverMemo: Number(payload.receiverMemo) ?? 0,
         signer: address,
         milestones: payload.milestones,
       };
+
+      const finalPayload: InitializeSingleReleaseEscrowPayload =
+        processedPayload;
 
       const response = (await deployEscrow.mutateAsync({
         payload: finalPayload,
