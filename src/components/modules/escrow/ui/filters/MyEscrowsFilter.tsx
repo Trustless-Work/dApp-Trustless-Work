@@ -73,8 +73,7 @@ const MyEscrowsFilter = () => {
               <DialogTrigger asChild>
                 <motion.button
                   type="button"
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors duration-200"
-                  whileHover={{ scale: 1.02 }}
+                  className="flex items-center gap-2 px-4 py-2 text-xs text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors duration-200"
                   whileTap={{ scale: 0.98 }}
                 >
                   <motion.div
