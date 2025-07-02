@@ -303,7 +303,7 @@ export const GeneralInformation = ({
                         </div>
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        {100 - Number(selectedEscrow.platformFee)}%
+                        {100 - selectedEscrow.platformFee - 0.3}%
                       </div>
                     </div>
 
