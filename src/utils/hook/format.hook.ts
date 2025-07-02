@@ -30,7 +30,7 @@ export const useFormatUtils = () => {
     if (isNaN(parsedAmount)) return "$0.00";
 
     // ! ALL THE DECIMALS
-    //return `$${parsedAmount.toString().replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
+    // return `$${parsedAmount.toString().replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
 
     // ! ONLY 2 DECIMALS
     return `$${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
