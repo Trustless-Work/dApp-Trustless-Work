@@ -127,6 +127,7 @@ const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
                     {t("myEscrows.table.headers.serviceProvider")}
                   </TableHead>
                   <TableHead>{t("myEscrows.table.headers.approver")}</TableHead>
+                  <TableHead>Type</TableHead>
                   <TableHead>{t("myEscrows.table.headers.created")}</TableHead>
                   <TableHead>{t("myEscrows.table.headers.actions")}</TableHead>
                 </TableRow>
@@ -178,9 +179,7 @@ const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
                           {escrow.description ||
                             t("myEscrows.table.noDescription")}
                         </TableCell>
-                        <TableCell>
-                          {escrow.balance || t("myEscrows.table.noBalance")}
-                        </TableCell>
+                        <TableCell>{escrow.balance || 0}</TableCell>
                         <TableCell>
                           {escrow.engagementId ||
                             t("myEscrows.table.noEngagement")}
@@ -190,6 +189,11 @@ const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
                         </TableCell>
                         <TableCell>
                           {formatAddress(escrow.roles?.approver)}
+                        </TableCell>
+                        <TableCell>
+                          {escrow.type === "single-release"
+                            ? "Single"
+                            : "Multi"}
                         </TableCell>
                         <TableCell>
                           {formatDateFromFirebase(

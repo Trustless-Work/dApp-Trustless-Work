@@ -1,4 +1,5 @@
 import { Escrow } from "@/@types/escrow.entity";
+import { cn } from "@/lib/utils";
 import {
   MultiReleaseMilestone,
   SingleReleaseMilestone,
@@ -7,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 interface ProgressEscrowProps {
   escrow: Escrow;
+  className?: string;
 }
 
 const ProgressCircle = ({
@@ -59,7 +61,7 @@ const ProgressCircle = ({
   );
 };
 
-const ProgressEscrow = ({ escrow }: ProgressEscrowProps) => {
+const ProgressEscrow = ({ escrow, className }: ProgressEscrowProps) => {
   const { t } = useTranslation();
   const completedMilestones = escrow.milestones.filter(
     (milestone) => milestone.status === "completed",
@@ -104,7 +106,7 @@ const ProgressEscrow = ({ escrow }: ProgressEscrowProps) => {
   }
 
   return (
-    <div className="space-y-4 px-10 w-full">
+    <div className={cn("space-y-4 px-10 w-full", className)}>
       {/* Summary circles */}
       <div className="flex flex-wrap items-center justify-center gap-6">
         {/* Completed */}

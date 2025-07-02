@@ -21,7 +21,7 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
   return (
     <>
       <TableCell colSpan={5} className="p-4">
-        <h3 className="mb-1 font-bold text-xs">Milestones</h3>
+        <h3 className="mb-3 font-bold text-lg">Milestones</h3>
         <Divider type="horizontal" />
         <div className="flex flex-col">
           <Table>
@@ -29,10 +29,10 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
               <TableRow>
                 <TableHead>Description</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Amount</TableHead>
 
                 {escrow.type === "multi-release" && (
                   <>
+                    <TableHead>Amount</TableHead>
                     <TableHead>Disputed</TableHead>
                     <TableHead>Approved</TableHead>
                     <TableHead>Released</TableHead>
@@ -49,34 +49,41 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
                     <Badge className="uppercase">{milestone.status}</Badge>
                   </TableCell>
                   <TableCell>
-                    {(escrow.type === "multi-release" &&
-                      (milestone as MultiReleaseMilestone).amount) ||
-                      "N/A"}
+                    {escrow.type === "multi-release" &&
+                      (milestone as MultiReleaseMilestone).amount}
                   </TableCell>
                   {escrow.type === "multi-release" && (
                     <>
                       <TableCell>
                         {(milestone as MultiReleaseMilestone).flags
-                          ?.disputed && (
-                          <Badge className="uppercase">Disputed</Badge>
+                          ?.disputed ? (
+                          <Badge variant="destructive">Disputed</Badge>
+                        ) : (
+                          <span>N/A</span>
                         )}
                       </TableCell>
                       <TableCell>
                         {(milestone as MultiReleaseMilestone).flags
-                          ?.approved && (
-                          <Badge className="uppercase">Approved</Badge>
+                          ?.approved ? (
+                          <Badge variant="success">Approved</Badge>
+                        ) : (
+                          <span>N/A</span>
                         )}
                       </TableCell>
                       <TableCell>
                         {(milestone as MultiReleaseMilestone).flags
-                          ?.released && (
-                          <Badge className="uppercase">Released</Badge>
+                          ?.released ? (
+                          <Badge variant="success">Released</Badge>
+                        ) : (
+                          <span>N/A</span>
                         )}
                       </TableCell>
                       <TableCell>
                         {(milestone as MultiReleaseMilestone).flags
-                          ?.resolved && (
-                          <Badge className="uppercase">Resolved</Badge>
+                          ?.resolved ? (
+                          <Badge variant="success">Resolved</Badge>
+                        ) : (
+                          <span>N/A</span>
                         )}
                       </TableCell>
                     </>
@@ -86,7 +93,7 @@ const ExpandableContent = ({ escrow }: ExpandableContentProps) => {
             </TableBody>
           </Table>
 
-          <ProgressEscrow escrow={escrow} />
+          <ProgressEscrow className="mt-20" escrow={escrow} />
         </div>
       </TableCell>
 

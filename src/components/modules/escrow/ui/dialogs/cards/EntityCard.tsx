@@ -57,14 +57,7 @@ const EntityCard = ({
               <span className="text-xs font-medium text-muted-foreground">
                 {type}
               </span>
-              {inDispute && (
-                <Badge
-                  variant="outline"
-                  className="gap-1 border-red-700 text-red-600"
-                >
-                  In Dispute
-                </Badge>
-              )}
+              {inDispute && <Badge variant="destructive">In Dispute</Badge>}
             </div>
 
             <div className="flex items-center gap-2 text-xs">
