@@ -443,9 +443,9 @@ export const getActionButtons = (
     activeTab === "approver" &&
     milestone.status === "completed" &&
     (("approved" in milestone && !milestone.approved) ||
-      ("flags" in milestone && !milestone.flags?.approved) ||
-      ("flags" in milestone && !milestone.flags?.disputed) ||
-      ("flags" in milestone && !milestone.flags?.released))
+      ("flags" in milestone && !milestone.flags?.approved)) &&
+    !("flags" in milestone && milestone.flags?.disputed) &&
+    !("flags" in milestone && milestone.flags?.released)
   ) {
     buttons.push(
       <Button
