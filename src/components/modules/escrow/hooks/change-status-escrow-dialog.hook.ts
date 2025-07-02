@@ -83,6 +83,8 @@ const useChangeMilestoneStatusDialogHook = ({
         setSelectedEscrow(updatedEscrow);
       }
 
+      form.reset();
+
       toast.success(
         `The Milestone ${completingMilestone?.description} has been completed.`,
       );
