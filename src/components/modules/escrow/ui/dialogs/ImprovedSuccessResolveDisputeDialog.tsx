@@ -20,6 +20,7 @@ import { motion } from "framer-motion";
 import { Escrow } from "@/@types/escrow.entity";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
 import { useEscrowBoundedStore } from "../../store/data";
+import useNetwork from "@/hooks/useNetwork";
 
 interface SuccessResolveDisputeProps {
   title: string;
@@ -40,6 +41,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
     setIsSuccessResolveDisputeDialogOpen,
   });
 
+  const { currentNetwork } = useNetwork();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const receiverResolveFromStore = useEscrowUIBoundedStore(
     (state) => state.receiverResolve,
@@ -95,6 +97,17 @@ export const ImprovedSuccessResolveDisputeDialog = ({
   const totalPlatformAmount =
     amount && !isNaN(Number(amount)) ? Number(amount) * (platformFee / 100) : 0;
 
+  // Get the appropriate URLs based on network
+  const stellarExplorerUrl =
+    currentNetwork === "testnet"
+      ? `https://stellar.expert/explorer/testnet/contract/${escrow?.contractId}`
+      : `https://stellar.expert/explorer/public/contract/${escrow?.contractId}`;
+
+  const escrowViewerUrl =
+    currentNetwork === "testnet"
+      ? `https://viewer.trustlesswork.com/${escrow?.contractId}`
+      : `https://viewer.trustlesswork.com/${escrow?.contractId}`;
+
   const containerAnimation = {
     hidden: { opacity: 0, scale: 0.95 },
     visible: {
@@ -127,7 +140,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
               <DialogDescription className="mb-2">
                 {description}{" "}
                 <Link
-                  href={`https://stellar.expert/explorer/testnet/contract/${escrow?.contractId}`}
+                  href={stellarExplorerUrl}
                   className="text-primary"
                   target="_blank"
                 >
@@ -135,7 +148,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 </Link>
                 <span className="mx-2">or</span>
                 <Link
-                  href={`https://viewer.trustlesswork.com/${escrow?.contractId}`}
+                  href={escrowViewerUrl}
                   className="text-primary"
                   target="_blank"
                 >

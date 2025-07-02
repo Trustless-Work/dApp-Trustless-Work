@@ -9,7 +9,7 @@ import useHeader from "./hooks/header.hook";
 import { LogIn, LogOut } from "lucide-react";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 import { Button } from "@/components/ui/button";
-import { NotificationBell } from "@/components/modules/notifications/NotificationBell"; // 👈 Asegúrate que la ruta sea correcta
+import { NotificationBell } from "@/components/modules/notifications/NotificationBell";
 import LanguageToggle from "./LanguageToggle";
 import NetworkToggle from "./NetworkToggle";
 

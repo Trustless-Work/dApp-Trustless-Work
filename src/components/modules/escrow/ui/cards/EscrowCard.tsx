@@ -23,6 +23,7 @@ import {
   getStatusBadge,
 } from "@/components/utils/ui/Status";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
+import useNetwork from "@/hooks/useNetwork";
 
 interface EscrowCardProps {
   escrow: Escrow;
@@ -31,6 +32,7 @@ interface EscrowCardProps {
 
 const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
   const { t } = useTranslation();
+  const { currentNetwork } = useNetwork();
   const { formatDateFromFirebase, formatDollar } = useFormatUtils();
 
   const calculateTotalAmount = (escrow: Escrow) => {
@@ -48,6 +50,12 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
       );
     }
   };
+
+  // Get the appropriate escrow viewer URL based on network
+  const escrowViewerUrl =
+    currentNetwork === "testnet"
+      ? `https://viewer.trustlesswork.com/${escrow.contractId}`
+      : `https://viewer.trustlesswork.com/${escrow.contractId}`;
 
   return (
     <Card
@@ -74,11 +82,7 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
             getMultiReleaseStatusBadge(escrow)}
 
           <TooltipInfo content="View from TW Escrow Viewer">
-            <Link
-              href={`https://viewer.trustlesswork.com/${escrow.contractId}`}
-              target="_blank"
-              className="sm:ml-2"
-            >
+            <Link href={escrowViewerUrl} target="_blank" className="sm:ml-2">
               <Button
                 variant="ghost"
                 size="icon"

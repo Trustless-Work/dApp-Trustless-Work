@@ -52,6 +52,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useNetwork from "@/hooks/useNetwork";
 
 interface MyEscrowsTableProps {
   role: Role;
@@ -59,6 +60,7 @@ interface MyEscrowsTableProps {
 
 const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
   const { t } = useTranslation();
+  const { currentNetwork } = useNetwork();
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -223,10 +225,11 @@ const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
                                 className="cursor-pointer"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  window.open(
-                                    `https://viewer.trustlesswork.com/${escrow.contractId}`,
-                                    "_blank",
-                                  );
+                                  const escrowViewerUrl =
+                                    currentNetwork === "testnet"
+                                      ? `https://viewer.trustlesswork.com/${escrow.contractId}`
+                                      : `https://viewer.trustlesswork.com/${escrow.contractId}`;
+                                  window.open(escrowViewerUrl, "_blank");
                                 }}
                               >
                                 {t("myEscrows.table.dropdown.viewViewer")}

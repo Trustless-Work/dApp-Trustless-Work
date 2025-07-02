@@ -36,6 +36,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
 import { GeneralInformation } from "./sections/GeneralInformation";
 import { Entities } from "./sections/Entities";
 import ProgressEscrow from "./utils/ProgressEscrow";
+import useNetwork from "@/hooks/useNetwork";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -49,6 +50,7 @@ const EscrowDetailDialog = ({
   setSelectedEscrow,
 }: EscrowDetailDialogProps) => {
   const { t } = useTranslation();
+  const { currentNetwork } = useNetwork();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const dialogStates = useEscrowDialogs();
   // const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
@@ -70,6 +72,12 @@ const EscrowDetailDialog = ({
     selectedEscrow,
   });
 
+  // Get the appropriate Stellar Explorer URL based on network
+  const stellarExplorerUrl =
+    currentNetwork === "testnet"
+      ? `https://stellar.expert/explorer/testnet/contract/${selectedEscrow?.contractId}`
+      : `https://stellar.expert/explorer/public/contract/${selectedEscrow?.contractId}`;
+
   if (!isDialogOpen || !selectedEscrow) return null;
   return (
     <>
@@ -80,7 +88,7 @@ const EscrowDetailDialog = ({
               <div className="flex flex-col gap-2">
                 <div className="w-full">
                   <Link
-                    href={`https://stellar.expert/explorer/testnet/contract/${selectedEscrow.contractId}`}
+                    href={stellarExplorerUrl}
                     target="_blank"
                     className="hover:underline"
                   >
