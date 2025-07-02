@@ -28,9 +28,16 @@ export const formSchemaMulti = z.object({
           .min(1, {
             message: "Milestone amount is required.",
           })
-          .refine((val) => val % 1 === 0, {
-            message: "Milestone amount must be a whole number.",
-          }),
+          .refine(
+            (val) => {
+              const decimalPlaces = (val.toString().split(".")[1] || "").length;
+              return decimalPlaces <= 2;
+            },
+            {
+              message:
+                "Milestone amount can have a maximum of 2 decimal places.",
+            },
+          ),
         evidence: z.string().optional(),
         flags: z
           .object({

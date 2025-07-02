@@ -7,9 +7,15 @@ export const formSchema = z
       .min(1, {
         message: "Amount is required.",
       })
-      .refine((val) => val % 1 === 0, {
-        message: "Amount must be a whole number.",
-      }),
+      .refine(
+        (val) => {
+          const decimalPlaces = (val.toString().split(".")[1] || "").length;
+          return decimalPlaces <= 2;
+        },
+        {
+          message: "Amount can have a maximum of 2 decimal places.",
+        },
+      ),
     paymentMethod: z.string().nonempty({
       message: "Payment method is required.",
     }),

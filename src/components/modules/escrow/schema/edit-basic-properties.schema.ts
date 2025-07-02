@@ -15,17 +15,29 @@ export const formSchemaSingle = z.object({
     .min(1, {
       message: "Platform fee is required.",
     })
-    .refine((val) => val % 1 === 0, {
-      message: "Platform fee must be a whole number.",
-    }),
+    .refine(
+      (val) => {
+        const decimalPlaces = (val.toString().split(".")[1] || "").length;
+        return decimalPlaces <= 2;
+      },
+      {
+        message: "Platform fee can have a maximum of 2 decimal places.",
+      },
+    ),
   amount: z
     .number()
     .min(1, {
       message: "Amount is required.",
     })
-    .refine((val) => val % 1 === 0, {
-      message: "Amount must be a whole number.",
-    }),
+    .refine(
+      (val) => {
+        const decimalPlaces = (val.toString().split(".")[1] || "").length;
+        return decimalPlaces <= 2;
+      },
+      {
+        message: "Amount can have a maximum of 2 decimal places.",
+      },
+    ),
   receiverMemo: z
     .string()
     .optional()
@@ -53,9 +65,15 @@ export const formSchemaMulti = z.object({
     .min(1, {
       message: "Platform fee is required.",
     })
-    .refine((val) => val % 1 === 0, {
-      message: "Platform fee must be a whole number.",
-    }),
+    .refine(
+      (val) => {
+        const decimalPlaces = (val.toString().split(".")[1] || "").length;
+        return decimalPlaces <= 2;
+      },
+      {
+        message: "Platform fee can have a maximum of 2 decimal places.",
+      },
+    ),
   receiverMemo: z
     .string()
     .optional()
