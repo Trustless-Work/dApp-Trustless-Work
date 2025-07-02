@@ -193,7 +193,8 @@ const MyEscrows = () => {
                 onClick={() => handleSetActiveTab("platformAddress")}
                 value="platform-address"
               >
-                {t("myEscrows.tabs.platformAddress")}
+                {/* {t("myEscrows.tabs.platformAddress")} */}
+                Platform
               </TabsTrigger>
               <TabsTrigger
                 onClick={() => handleSetActiveTab("receiver")}
