@@ -81,15 +81,30 @@ export const EditMultiMilestonesForm = ({
                       size={18}
                     />
                     <Input
-                      type="number"
                       className="pl-10"
                       placeholder="Enter milestone amount"
-                      value={milestone.amount || ""}
+                      value={
+                        milestone.amount ? milestone.amount.toString() : ""
+                      }
                       onChange={(e) => {
+                        let rawValue = e.target.value;
+                        rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+                        if (rawValue.split(".").length > 2) {
+                          rawValue = rawValue.slice(0, -1);
+                        }
+
                         const updatedMilestones = [...milestones];
-                        updatedMilestones[index].amount = Number(
-                          e.target.value,
-                        );
+
+                        if (rawValue === "" || rawValue === ".") {
+                          updatedMilestones[index].amount = 0;
+                        } else {
+                          const numValue = Number(rawValue);
+                          updatedMilestones[index].amount = isNaN(numValue)
+                            ? 0
+                            : numValue;
+                        }
+
                         form.setValue("milestones", updatedMilestones);
                       }}
                     />

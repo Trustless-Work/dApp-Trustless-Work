@@ -84,7 +84,7 @@ const FundEscrowDialog = ({
                           <Input
                             placeholder="Enter amount"
                             className="pl-10"
-                            value={field.value === 0 ? "" : field.value || ""}
+                            value={field.value || ""}
                             onChange={(e) => {
                               let rawValue = e.target.value;
                               rawValue = rawValue.replace(/[^0-9.]/g, "");
@@ -93,7 +93,20 @@ const FundEscrowDialog = ({
                                 rawValue = rawValue.slice(0, -1);
                               }
 
-                              field.onChange(rawValue ? Number(rawValue) : 0);
+                              // Allow partial values like "5." or "5.5"
+                              if (rawValue === "" || rawValue === ".") {
+                                field.onChange("");
+                              } else if (rawValue.endsWith(".")) {
+                                // Keep the dot for partial input
+                                field.onChange(rawValue);
+                              } else {
+                                const numValue = Number(rawValue);
+                                if (!isNaN(numValue)) {
+                                  field.onChange(numValue);
+                                } else {
+                                  field.onChange(rawValue);
+                                }
+                              }
                             }}
                           />
                         </div>

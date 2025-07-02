@@ -222,9 +222,9 @@ const ResolveDisputeEscrowDialog = ({
                           size={18}
                         />
                         <Input
+                          placeholder="Enter approver funds"
                           className="pl-10"
-                          placeholder="The amount for the approver"
-                          {...field}
+                          value={field.value || ""}
                           onChange={(e) => {
                             let rawValue = e.target.value;
                             rawValue = rawValue.replace(/[^0-9.]/g, "");
@@ -233,9 +233,20 @@ const ResolveDisputeEscrowDialog = ({
                               rawValue = rawValue.slice(0, -1);
                             }
 
-                            field.onChange(
-                              rawValue ? Number(rawValue) : undefined,
-                            );
+                            // Allow partial values like "5." or "5.5"
+                            if (rawValue === "" || rawValue === ".") {
+                              field.onChange("");
+                            } else if (rawValue.endsWith(".")) {
+                              // Keep the dot for partial input
+                              field.onChange(rawValue);
+                            } else {
+                              const numValue = Number(rawValue);
+                              if (!isNaN(numValue)) {
+                                field.onChange(numValue);
+                              } else {
+                                field.onChange(rawValue);
+                              }
+                            }
                           }}
                         />
                       </div>
@@ -261,9 +272,9 @@ const ResolveDisputeEscrowDialog = ({
                           size={18}
                         />
                         <Input
+                          placeholder="Enter receiver funds"
                           className="pl-10"
-                          placeholder="The amount for the receiver"
-                          {...field}
+                          value={field.value || ""}
                           onChange={(e) => {
                             let rawValue = e.target.value;
                             rawValue = rawValue.replace(/[^0-9.]/g, "");
@@ -272,9 +283,20 @@ const ResolveDisputeEscrowDialog = ({
                               rawValue = rawValue.slice(0, -1);
                             }
 
-                            field.onChange(
-                              rawValue ? Number(rawValue) : undefined,
-                            );
+                            // Allow partial values like "5." or "5.5"
+                            if (rawValue === "" || rawValue === ".") {
+                              field.onChange("");
+                            } else if (rawValue.endsWith(".")) {
+                              // Keep the dot for partial input
+                              field.onChange(rawValue);
+                            } else {
+                              const numValue = Number(rawValue);
+                              if (!isNaN(numValue)) {
+                                field.onChange(numValue);
+                              } else {
+                                field.onChange(rawValue);
+                              }
+                            }
                           }}
                         />
                       </div>

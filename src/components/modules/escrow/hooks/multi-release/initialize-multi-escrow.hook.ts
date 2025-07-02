@@ -84,7 +84,7 @@ export const useInitializeMultiEscrow = () => {
         releaseSigner: "",
         disputeResolver: "",
       },
-      milestones: [{ description: "" }],
+      milestones: [{ description: "", amount: 0 }],
     },
     mode: "onChange",
   });

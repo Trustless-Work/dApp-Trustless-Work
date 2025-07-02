@@ -436,7 +436,20 @@ export const InitializeSingleEscrowForm = () => {
                           rawValue = rawValue.slice(0, -1);
                         }
 
-                        field.onChange(rawValue ? Number(rawValue) : undefined);
+                        // Allow partial values like "5." or "5.5"
+                        if (rawValue === "" || rawValue === ".") {
+                          field.onChange("");
+                        } else if (rawValue.endsWith(".")) {
+                          // Keep the dot for partial input
+                          field.onChange(rawValue);
+                        } else {
+                          const numValue = Number(rawValue);
+                          if (!isNaN(numValue)) {
+                            field.onChange(numValue);
+                          } else {
+                            field.onChange(rawValue);
+                          }
+                        }
                       }}
                     />
                   </div>
@@ -473,7 +486,20 @@ export const InitializeSingleEscrowForm = () => {
                           rawValue = rawValue.slice(0, -1);
                         }
 
-                        field.onChange(rawValue ? Number(rawValue) : undefined);
+                        // Allow partial values like "5." or "5.5"
+                        if (rawValue === "" || rawValue === ".") {
+                          field.onChange("");
+                        } else if (rawValue.endsWith(".")) {
+                          // Keep the dot for partial input
+                          field.onChange(rawValue);
+                        } else {
+                          const numValue = Number(rawValue);
+                          if (!isNaN(numValue)) {
+                            field.onChange(numValue);
+                          } else {
+                            field.onChange(rawValue);
+                          }
+                        }
                       }}
                     />
                   </div>
