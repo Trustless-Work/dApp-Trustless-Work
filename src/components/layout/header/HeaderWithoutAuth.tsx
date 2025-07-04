@@ -11,7 +11,7 @@ import LanguageToggle from "./LanguageToggle";
 import { useTranslation } from "react-i18next";
 
 const HeaderWithoutAuth: React.FC = () => {
-  const { handleConnect, handleDisconnect } = useWallet();
+  const { handleDisconnect } = useWallet();
   const { address, handleReportIssue } = useHeaderWithoutAuth();
   const { t } = useTranslation("common");
 
@@ -35,9 +35,11 @@ const HeaderWithoutAuth: React.FC = () => {
           <Button variant="destructive" onClick={handleReportIssue}>
             <Bug /> {t("header.reportIssue")}
           </Button>
-          <Button variant="outline" onClick={handleConnect}>
-            <LogIn /> {t("header.connect")}
-          </Button>
+          <Link href="/login">
+            <Button variant="outline">
+              <LogIn /> Login
+            </Button>
+          </Link>
         </div>
       )}
     </div>
