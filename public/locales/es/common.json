@@ -1,5 +1,6 @@
 {
   "sidebar": {
+    "history": "Historial",
     "platform": "Plataforma",
     "dashboard": "Panel de Control",
     "financials": "Finanzas",
@@ -591,6 +592,67 @@
         "showMore": "Mostrar Más Métricas",
         "showLess": "Mostrar Menos Métricas"
       }
+    }
+  },
+  "history": {
+    "title": "Historial de Escrows",
+    "description": "Ver y gestionar el historial de transacciones de escrows en todos los roles y actividades.",
+    "connectWallet": "Por favor conecta tu wallet para ver el historial",
+    "error": "Error al cargar el historial",
+    "filters": {
+      "title": "Filtros",
+      "searchPlaceholder": "Buscar escrows...",
+      "statusPlaceholder": "Seleccionar estado",
+      "activityPlaceholder": "Seleccionar tipo de actividad",
+      "allStatuses": "Todos los Estados",
+      "active": "Activo",
+      "released": "Liberado",
+      "resolved": "Resuelto",
+      "disputed": "En Disputa",
+      "allActivities": "Todas las Actividades",
+      "created": "Creado",
+      "funded": "Financiado",
+      "milestoneCompleted": "Hito Completado",
+      "milestoneApproved": "Hito Aprobado",
+      "clear": "Limpiar Filtros"
+    },
+    "table": {
+      "title": "Historial de Escrows",
+      "headers": {
+        "title": "Título",
+        "description": "Descripción",
+        "amount": "Monto",
+        "balance": "Balance",
+        "status": "Estado",
+        "serviceProvider": "Proveedor de Servicio",
+        "approver": "Aprobador",
+        "created": "Creado",
+        "lastActivity": "Última Actividad",
+        "actions": "Acciones"
+      },
+      "dropdown": {
+        "label": "Acciones",
+        "moreDetails": "Más Detalles",
+        "viewViewer": "Ver en Visor de TW",
+        "openMenu": "Abrir menú"
+      },
+      "pagination": {
+        "itemsPerPage": "Elementos por página:",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "pageOf": "Página {{currentPage}} de {{totalPages}}"
+      },
+      "noTitle": "Sin título",
+      "noDescription": "Sin descripción"
+    },
+    "tabs": {
+      "approver": "Aprobador",
+      "serviceProvider": "Proveedor de Servicio",
+      "issuer": "Emisor",
+      "disputeResolver": "Resolutor de Disputas",
+      "releaseSigner": "Firmante de Liberación",
+      "platformAddress": "Dirección de Plataforma",
+      "receiver": "Receptor"
     }
   }
 }

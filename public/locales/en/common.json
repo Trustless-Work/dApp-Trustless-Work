@@ -1,5 +1,6 @@
 {
   "sidebar": {
+    "history": "History",
     "platform": "Platform",
     "dashboard": "Dashboard",
     "financials": "Financials",
@@ -600,6 +601,67 @@
         "showMore": "Show More Metrics",
         "showLess": "Show Less Metrics"
       }
+    }
+  },
+  "history": {
+    "title": "Escrow History",
+    "description": "View and manage your escrow transaction history across all roles and activities.",
+    "connectWallet": "Please connect your wallet to view history",
+    "error": "Error loading history",
+    "filters": {
+      "title": "Filters",
+      "searchPlaceholder": "Search escrows...",
+      "statusPlaceholder": "Select status",
+      "activityPlaceholder": "Select activity type",
+      "allStatuses": "All Statuses",
+      "active": "Active",
+      "released": "Released",
+      "resolved": "Resolved",
+      "disputed": "Disputed",
+      "allActivities": "All Activities",
+      "created": "Created",
+      "funded": "Funded",
+      "milestoneCompleted": "Milestone Completed",
+      "milestoneApproved": "Milestone Approved",
+      "clear": "Clear Filters"
+    },
+    "table": {
+      "title": "Escrow History",
+      "headers": {
+        "title": "Title",
+        "description": "Description",
+        "amount": "Amount",
+        "balance": "Balance",
+        "status": "Status",
+        "serviceProvider": "Service Provider",
+        "approver": "Approver",
+        "created": "Created",
+        "lastActivity": "Last Activity",
+        "actions": "Actions"
+      },
+      "dropdown": {
+        "label": "Actions",
+        "moreDetails": "More Details",
+        "viewViewer": "View in TW Escrow Viewer",
+        "openMenu": "Open menu"
+      },
+      "pagination": {
+        "itemsPerPage": "Items per page:",
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {{currentPage}} of {{totalPages}}"
+      },
+      "noTitle": "No title",
+      "noDescription": "No description"
+    },
+    "tabs": {
+      "approver": "Approver",
+      "serviceProvider": "Service Provider",
+      "issuer": "Issuer",
+      "disputeResolver": "Dispute Resolver",
+      "releaseSigner": "Release Signer",
+      "platformAddress": "Platform Address",
+      "receiver": "Receiver"
     }
   }
 }
