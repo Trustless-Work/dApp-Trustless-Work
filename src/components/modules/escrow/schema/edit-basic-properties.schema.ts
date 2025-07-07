@@ -11,21 +11,77 @@ export const formSchemaSingle = z.object({
     message: "Description must be at least 10 characters long.",
   }),
   platformFee: z
-    .number()
-    .min(1, {
-      message: "Platform fee is required.",
-    })
-    .refine((val) => val % 1 === 0, {
-      message: "Platform fee must be a whole number.",
-    }),
+    .union([z.string(), z.number()])
+    .refine(
+      (val) => {
+        // Allow partial input like "0." or "0.5"
+        if (typeof val === "string") {
+          if (val === "" || val === "." || val.endsWith(".")) {
+            return true; // Allow partial input
+          }
+          const numVal = Number(val);
+          return !isNaN(numVal) && numVal > 0;
+        }
+        return val > 0;
+      },
+      {
+        message: "Platform fee must be greater than 0.",
+      },
+    )
+    .refine(
+      (val) => {
+        if (typeof val === "string") {
+          if (val === "" || val === "." || val.endsWith(".")) {
+            return true; // Allow partial input
+          }
+          const numVal = Number(val);
+          if (isNaN(numVal)) return false;
+          const decimalPlaces = (numVal.toString().split(".")[1] || "").length;
+          return decimalPlaces <= 2;
+        }
+        const decimalPlaces = (val.toString().split(".")[1] || "").length;
+        return decimalPlaces <= 2;
+      },
+      {
+        message: "Platform fee can have a maximum of 2 decimal places.",
+      },
+    ),
   amount: z
-    .number()
-    .min(1, {
-      message: "Amount is required.",
-    })
-    .refine((val) => val % 1 === 0, {
-      message: "Amount must be a whole number.",
-    }),
+    .union([z.string(), z.number()])
+    .refine(
+      (val) => {
+        // Allow partial input like "0." or "0.5"
+        if (typeof val === "string") {
+          if (val === "" || val === "." || val.endsWith(".")) {
+            return true; // Allow partial input
+          }
+          const numVal = Number(val);
+          return !isNaN(numVal) && numVal > 0;
+        }
+        return val > 0;
+      },
+      {
+        message: "Amount must be greater than 0.",
+      },
+    )
+    .refine(
+      (val) => {
+        if (typeof val === "string") {
+          if (val === "" || val === "." || val.endsWith(".")) {
+            return true; // Allow partial input
+          }
+          const numVal = Number(val);
+          if (isNaN(numVal)) return false;
+          const decimalPlaces = (numVal.toString().split(".")[1] || "").length;
+          return decimalPlaces <= 2;
+        }
+        const decimalPlaces = (val.toString().split(".")[1] || "").length;
+        return decimalPlaces <= 2;
+      },
+      {
+        message: "Amount can have a maximum of 2 decimal places.",
+      },
+    ),
   receiverMemo: z
     .string()
     .optional()
@@ -49,13 +105,41 @@ export const formSchemaMulti = z.object({
     message: "Description must be at least 10 characters long.",
   }),
   platformFee: z
-    .number()
-    .min(1, {
-      message: "Platform fee is required.",
-    })
-    .refine((val) => val % 1 === 0, {
-      message: "Platform fee must be a whole number.",
-    }),
+    .union([z.string(), z.number()])
+    .refine(
+      (val) => {
+        // Allow partial input like "0." or "0.5"
+        if (typeof val === "string") {
+          if (val === "" || val === "." || val.endsWith(".")) {
+            return true; // Allow partial input
+          }
+          const numVal = Number(val);
+          return !isNaN(numVal) && numVal > 0;
+        }
+        return val > 0;
+      },
+      {
+        message: "Platform fee must be greater than 0.",
+      },
+    )
+    .refine(
+      (val) => {
+        if (typeof val === "string") {
+          if (val === "" || val === "." || val.endsWith(".")) {
+            return true; // Allow partial input
+          }
+          const numVal = Number(val);
+          if (isNaN(numVal)) return false;
+          const decimalPlaces = (numVal.toString().split(".")[1] || "").length;
+          return decimalPlaces <= 2;
+        }
+        const decimalPlaces = (val.toString().split(".")[1] || "").length;
+        return decimalPlaces <= 2;
+      },
+      {
+        message: "Platform fee can have a maximum of 2 decimal places.",
+      },
+    ),
   receiverMemo: z
     .string()
     .optional()

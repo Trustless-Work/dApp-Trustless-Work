@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { MetricCard } from "./MetricCard";
 import { useEscrowDashboardData } from "../../hooks/escrow-dashboard-data.hook";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
@@ -28,8 +27,7 @@ import { useTranslation } from "react-i18next";
 const MetricsSection = () => {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
-  const address = useGlobalAuthenticationStore((state) => state.address);
-  const data = useEscrowDashboardData({ address });
+  const data = useEscrowDashboardData();
 
   if (!data) {
     return (

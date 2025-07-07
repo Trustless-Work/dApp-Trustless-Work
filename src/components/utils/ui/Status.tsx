@@ -10,8 +10,7 @@ import {
   CircleDollarSign,
   Flame,
   CheckCheck,
-  CheckCircle,
-  XCircle,
+  SquareCheckBig,
 } from "lucide-react";
 import { Escrow } from "@/@types/escrow.entity";
 import {
@@ -29,7 +28,8 @@ export const getStatusBadge = (escrow: Escrow) => {
 
   const approvedMilestones = escrow.milestones.filter(
     (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
-      "flags" in milestone && milestone.flags?.approved === true,
+      ("flags" in milestone && milestone.flags?.approved === true) ||
+      ("approved" in milestone && milestone.approved === true),
   ).length;
 
   const totalMilestones = escrow.milestones.length;
@@ -48,7 +48,7 @@ export const getStatusBadge = (escrow: Escrow) => {
 
   if (escrow.flags?.disputed) {
     return (
-      <Badge variant="destructive" className="gap-1">
+      <Badge variant="destructive">
         <CircleAlert className="h-3.5 w-3.5" />
         <span>{t("reusable.disputed")}</span>
       </Badge>
@@ -57,10 +57,7 @@ export const getStatusBadge = (escrow: Escrow) => {
 
   if (pendingRelease) {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-yellow-500 text-yellow-600"
-      >
+      <Badge variant="warning">
         <TriangleAlert className="h-3.5 w-3.5" />
         <span>Pending Release</span>
       </Badge>
@@ -69,10 +66,7 @@ export const getStatusBadge = (escrow: Escrow) => {
 
   if (escrow.flags?.released) {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-green-500 text-green-600"
-      >
+      <Badge variant="success">
         <CircleCheckBig className="h-3.5 w-3.5" />
         <span>{t("reusable.released")}</span>
       </Badge>
@@ -81,10 +75,7 @@ export const getStatusBadge = (escrow: Escrow) => {
 
   if (escrow.flags?.resolved) {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-green-500 text-green-600"
-      >
+      <Badge variant="success">
         <Handshake className="h-3.5 w-3.5" />
         <span>{t("reusable.resolved")}</span>
       </Badge>
@@ -92,23 +83,42 @@ export const getStatusBadge = (escrow: Escrow) => {
   }
 
   return (
-    <Badge variant="secondary" className="gap-1">
+    <Badge variant="outline" className="gap-1">
       <Layers className="h-3.5 w-3.5" />
       <span>Working</span>
     </Badge>
   );
 };
 
+export const getMultiReleaseStatusBadge = (escrow: Escrow) => {
+  const allMilestonesReleased = escrow.milestones.every(
+    (milestone: MultiReleaseMilestone | SingleReleaseMilestone) => {
+      if ("flags" in milestone) {
+        return (
+          milestone.flags?.released === true ||
+          milestone.flags?.resolved === true
+        );
+      }
+      return false;
+    },
+  );
+
+  if (allMilestonesReleased) {
+    return (
+      <Badge variant="success">
+        <SquareCheckBig className="h-3.5 w-3.5" />
+        <span>Finished</span>
+      </Badge>
+    );
+  }
+};
+
 export const getMilestoneStatusBadge = (
   milestone: SingleReleaseMilestone | MultiReleaseMilestone,
 ) => {
-  if (
-    "disputeStartedBy" in milestone &&
-    "flags" in milestone &&
-    !milestone.flags?.resolved
-  ) {
+  if ("flags" in milestone && milestone.flags?.disputed) {
     return (
-      <Badge variant="destructive" className="gap-1">
+      <Badge variant="destructive">
         <CircleAlert className="h-3.5 w-3.5" />
         <span>{t("reusable.disputed")}</span>
       </Badge>
@@ -116,10 +126,7 @@ export const getMilestoneStatusBadge = (
   }
   if ("flags" in milestone && milestone.flags?.released) {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-green-500 text-green-600"
-      >
+      <Badge variant="success">
         <CircleCheckBig className="h-3.5 w-3.5" />
         <span>{t("reusable.released")}</span>
       </Badge>
@@ -131,10 +138,7 @@ export const getMilestoneStatusBadge = (
     !milestone.flags?.disputed
   ) {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-green-500 text-green-600"
-      >
+      <Badge variant="success">
         <Handshake className="h-3.5 w-3.5" />
         <span>{t("reusable.resolved")}</span>
       </Badge>
@@ -145,17 +149,14 @@ export const getMilestoneStatusBadge = (
     ("approved" in milestone && milestone.approved)
   ) {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-green-500 text-green-600"
-      >
-        <Handshake className="h-3.5 w-3.5" />
+      <Badge variant="success">
+        <CheckCheck className="h-3.5 w-3.5" />
         <span>{t("reusable.approved")}</span>
       </Badge>
     );
   }
   return (
-    <Badge variant="outline" className="gap-1">
+    <Badge variant="outline">
       <Layers className="h-3.5 w-3.5" />
       <span>
         {t(`reusable.${milestone.status?.toLowerCase() ?? "pending"}`)}
@@ -215,7 +216,7 @@ export const getActionButtons = (
       <Button
         key="complete"
         size="sm"
-        className="bg-primary hover:bg-primary/80 text-white flex-1 min-w-0"
+        variant="default"
         onClick={(e) => {
           e.stopPropagation();
           onCompleteMilestone(milestone, milestoneIndex);
@@ -243,7 +244,7 @@ export const getActionButtons = (
       <Button
         key="release"
         size="sm"
-        className="bg-green-800 hover:bg-green-700 text-white flex-1 min-w-0"
+        variant="success"
         disabled={
           loadingMilestoneStates[milestoneIndex]?.isReleasing ||
           Number(selectedEscrow.balance) === 0 ||
@@ -357,7 +358,7 @@ export const getActionButtons = (
       <Button
         key="resolve"
         size="sm"
-        className="bg-green-800 hover:bg-green-700 text-white flex-1 min-w-0"
+        variant="success"
         disabled={loadingMilestoneStates[milestoneIndex]?.isResolving}
         onClick={(e) => {
           e.stopPropagation();
@@ -419,13 +420,19 @@ export const getActionButtons = (
     activeTab === "approver" &&
     milestone.status === "completed" &&
     (("approved" in milestone && !milestone.approved) ||
-      ("flags" in milestone && !milestone.flags?.approved))
+      ("flags" in milestone && !milestone.flags?.approved)) &&
+    "flags" in milestone &&
+    !milestone.flags?.disputed &&
+    "flags" in milestone &&
+    !milestone.flags?.released &&
+    "flags" in milestone &&
+    !milestone.flags?.resolved
   ) {
     buttons.push(
       <Button
         key="approve"
         size="sm"
-        className="bg-green-800 hover:bg-green-700 text-white flex-1 min-w-0"
+        variant="success"
         disabled={isChangingFlag}
         onClick={(e) => {
           e.stopPropagation();
@@ -452,29 +459,4 @@ export const getActionButtons = (
   }
 
   return buttons;
-};
-
-export const getFlagBadge = (
-  flag: boolean,
-  label: string,
-  variant: "default" | "secondary" | "destructive" = "default",
-) => {
-  return (
-    <Badge
-      variant={flag ? variant : "secondary"}
-      className="px-3 py-1 text-xs font-medium"
-    >
-      {flag ? (
-        <>
-          <CheckCircle className="w-3 h-3 mr-1" />
-          {label}
-        </>
-      ) : (
-        <>
-          <XCircle className="w-3 h-3 mr-1" />
-          {label}
-        </>
-      )}
-    </Badge>
-  );
 };

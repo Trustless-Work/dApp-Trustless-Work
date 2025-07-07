@@ -1,7 +1,13 @@
 import useMyEscrows from "../../hooks/my-escrows.hook";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import NoData from "@/components/utils/ui/NoData";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowUIBoundedStore } from "../../store/ui";
@@ -17,19 +23,13 @@ import SkeletonCards from "../utils/SkeletonCards";
 import { Button } from "@/components/ui/button";
 import EscrowCard from "./EscrowCard";
 import { Escrow } from "@/@types/escrow.entity";
+import { Role } from "@trustless-work/escrow";
 
 interface MyEscrowsCardsProps {
-  type:
-    | "issuer"
-    | "approver"
-    | "disputeResolver"
-    | "serviceProvider"
-    | "releaseSigner"
-    | "platformAddress"
-    | "receiver";
+  role: Role;
 }
 
-const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
+const MyEscrowsCards = ({ role }: MyEscrowsCardsProps) => {
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -37,7 +37,6 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
   const setSelectedEscrow = useGlobalBoundedStore(
     (state) => state.setSelectedEscrow,
   );
-  const loadingEscrows = useGlobalBoundedStore((state) => state.loadingEscrows);
   const isSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.isSuccessDialogOpen,
   );
@@ -60,13 +59,16 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
   const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
 
   const {
-    currentData,
+    escrows,
     currentPage,
     totalPages,
+    totalItems,
     itemsPerPage,
+    itemsPerPageOptions,
+    isLoading,
     setItemsPerPage,
     setCurrentPage,
-  } = useMyEscrows({ type });
+  } = useMyEscrows({ role });
 
   const handleCardClick = (escrow: Escrow) => {
     setIsDialogOpen(true);
@@ -75,13 +77,13 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
 
   return (
     <>
-      {loadingEscrows ? (
+      {isLoading ? (
         <SkeletonCards />
-      ) : currentData.length !== 0 ? (
+      ) : escrows.length !== 0 ? (
         <div className="py-3" id="step-3">
           <div className="flex flex-col">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {currentData.map((escrow, index) => (
+              {escrows.map((escrow, index) => (
                 <EscrowCard
                   key={index}
                   escrow={escrow}
@@ -95,12 +97,24 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                 <span className="text-sm text-muted-foreground whitespace-nowrap">
                   Items per page:
                 </span>
-                <Input
-                  type="number"
-                  value={itemsPerPage}
-                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                  className="w-20 h-8 text-sm"
-                />
+                <Select
+                  value={itemsPerPage.toString()}
+                  onValueChange={(value) => setItemsPerPage(Number(value))}
+                >
+                  <SelectTrigger className="w-20 h-8 text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {itemsPerPageOptions.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        value={option.value.toString()}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex items-center gap-2 justify-between sm:justify-end">
                 <Button
@@ -113,7 +127,7 @@ const MyEscrowsCards = ({ type }: MyEscrowsCardsProps) => {
                   Previous
                 </Button>
                 <span className="text-sm text-muted-foreground whitespace-nowrap">
-                  Page {currentPage} of {totalPages}
+                  Page {currentPage} of {totalPages} ({totalItems} total)
                 </span>
                 <Button
                   onClick={() => setCurrentPage(currentPage + 1)}

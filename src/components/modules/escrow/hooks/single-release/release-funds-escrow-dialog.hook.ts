@@ -6,14 +6,10 @@ import {
 } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { toast } from "sonner";
-import {
-  useReleaseFunds,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
-import { signTransaction } from "@/lib/stellar-wallet-kit";
 import { SingleReleaseReleaseFundsPayload } from "@trustless-work/escrow";
 import { AxiosError } from "axios";
 import { handleError } from "@/errors/utils/handle-errors";
+import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
 
 export const useReleaseFundsEscrowDialog = () => {
   const { address } = useGlobalAuthenticationStore();
@@ -30,13 +26,8 @@ export const useReleaseFundsEscrowDialog = () => {
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
-  const fetchAllEscrows = useGlobalBoundedStore(
-    (state) => state.fetchAllEscrows,
-  );
-  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
-  const { releaseFunds } = useReleaseFunds();
-  const { sendTransaction } = useSendTransaction();
+  const { releaseFunds } = useEscrowsMutations();
 
   const releaseFundsSubmit = async () => {
     setIsReleasingFunds(true);
@@ -51,41 +42,22 @@ export const useReleaseFundsEscrowDialog = () => {
         releaseSigner: selectedEscrow?.roles?.releaseSigner,
       };
 
-      const { unsignedTransaction } = await releaseFunds({
+      await releaseFunds.mutateAsync({
         payload: finalPayload,
         type: "single-release",
-      });
-
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from releaseFunds response.",
-        );
-      }
-
-      const signedTxXdr = await signTransaction({
-        unsignedTransaction,
         address,
       });
 
-      if (!signedTxXdr) {
-        throw new Error("Signed transaction is missing.");
+      setIsSuccessReleaseDialogOpen(true);
+      setIsDialogOpen(false);
+
+      if (selectedEscrow) {
+        setRecentEscrow(selectedEscrow);
       }
 
-      const response = await sendTransaction(signedTxXdr);
-
-      if (response.status === "SUCCESS") {
-        setIsSuccessReleaseDialogOpen(true);
-        fetchAllEscrows({ address, type: activeTab || "approver" });
-        setIsDialogOpen(false);
-
-        if (selectedEscrow) {
-          setRecentEscrow(selectedEscrow);
-        }
-
-        toast.success(
-          `You have released the payment in ${selectedEscrow.title}.`,
-        );
-      }
+      toast.success(
+        `You have released the payment in ${selectedEscrow.title}.`,
+      );
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
     } finally {

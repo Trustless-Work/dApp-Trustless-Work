@@ -104,11 +104,11 @@ const ResolveDisputeEscrowDialog = ({
     }
 
     const approverDeductions =
-      parsedApproverFunds * (platformFee / 100) +
+      parsedApproverFunds * platformFee +
       parsedApproverFunds * trustlessWorkFee;
 
     const receiverDeductions =
-      parsedReceiverFunds * (platformFee / 100) +
+      parsedReceiverFunds * platformFee +
       parsedReceiverFunds * trustlessWorkFee;
 
     setApproverNet(parsedApproverFunds - approverDeductions);
@@ -140,6 +140,50 @@ const ResolveDisputeEscrowDialog = ({
     selectedEscrow?.milestones,
     milestoneIndex,
   ]);
+
+  const handleApproverFundsChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("approverFunds", rawValue);
+  };
+
+  const handleReceiverFundsChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("receiverFunds", rawValue);
+  };
 
   if (!escrow) {
     return null;
@@ -222,21 +266,10 @@ const ResolveDisputeEscrowDialog = ({
                           size={18}
                         />
                         <Input
+                          placeholder="Enter approver funds"
                           className="pl-10"
-                          placeholder="The amount for the approver"
-                          {...field}
-                          onChange={(e) => {
-                            let rawValue = e.target.value;
-                            rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                            if (rawValue.split(".").length > 2) {
-                              rawValue = rawValue.slice(0, -1);
-                            }
-
-                            field.onChange(
-                              rawValue ? Number(rawValue) : undefined,
-                            );
-                          }}
+                          value={field.value?.toString() || ""}
+                          onChange={handleApproverFundsChange}
                         />
                       </div>
                     </FormControl>
@@ -261,21 +294,10 @@ const ResolveDisputeEscrowDialog = ({
                           size={18}
                         />
                         <Input
+                          placeholder="Enter receiver funds"
                           className="pl-10"
-                          placeholder="The amount for the receiver"
-                          {...field}
-                          onChange={(e) => {
-                            let rawValue = e.target.value;
-                            rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                            if (rawValue.split(".").length > 2) {
-                              rawValue = rawValue.slice(0, -1);
-                            }
-
-                            field.onChange(
-                              rawValue ? Number(rawValue) : undefined,
-                            );
-                          }}
+                          value={field.value?.toString() || ""}
+                          onChange={handleReceiverFundsChange}
                         />
                       </div>
                     </FormControl>

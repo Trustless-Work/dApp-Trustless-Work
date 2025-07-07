@@ -1,13 +1,13 @@
-import { RolesInEscrow } from "@/@types/escrow.entity";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import {
   actionIcons,
   roleActions,
 } from "@/constants/role-actions/role-actions.constant";
+import { Role } from "@trustless-work/escrow";
 import { TFunction } from "i18next";
 
 export const getRoleActionIcons = (
-  role: RolesInEscrow,
+  role: Role,
   t: TFunction,
 ): React.ReactNode[] => {
   const roleData = roleActions.find((r) => r.role === role);

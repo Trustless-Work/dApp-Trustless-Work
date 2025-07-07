@@ -76,6 +76,8 @@ export const Milestones = ({
     dialogStates.completeMilestone.setIsOpen(true);
   };
 
+  console.log(selectedEscrow.milestones);
+
   return (
     <div className="flex w-full">
       <div className="flex flex-col gap-6 w-full">
@@ -99,7 +101,7 @@ export const Milestones = ({
                   content={t("escrowDetailDialog.editMilestonesTooltip")}
                 >
                   <Button
-                    disabled={Number(selectedEscrow.balance) === 0}
+                    disabled={selectedEscrow.balance !== 0}
                     onClick={(e) => {
                       e.stopPropagation();
                       dialogStates.editMilestone.setIsOpen(true);

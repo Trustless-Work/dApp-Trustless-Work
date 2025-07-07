@@ -14,7 +14,7 @@ import {
 
 export const roleActions: RoleAction[] = [
   {
-    role: "issuer",
+    role: "signer",
     actions: ["fundEscrow"],
     icon: <Wallet className="h-6 w-6 text-primary" />,
     color: "",

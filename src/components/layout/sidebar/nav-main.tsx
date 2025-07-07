@@ -15,7 +15,9 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "@/hooks/useLanguage";
+import useNetwork from "@/hooks/useNetwork";
 
 const NavMain = ({
   groups,
@@ -29,15 +31,67 @@ const NavMain = ({
       isActive?: boolean;
       isExternal?: boolean;
       isExpandable?: boolean;
+      isDynamic?: boolean;
       items?: {
         title: string;
         url: string;
         isExternal?: boolean;
+        isDynamic?: boolean;
       }[];
     }[];
   }[];
 }) => {
   const { t } = useLanguage();
+  const { currentNetwork } = useNetwork();
+  const pathname = usePathname();
+
+  // Helper function to get dynamic URLs based on network
+  const getDynamicUrl = (url: string) => {
+    if (url === "stellar-expert") {
+      return currentNetwork === "testnet"
+        ? "https://stellar.expert/explorer/testnet"
+        : "https://stellar.expert/explorer/public";
+    }
+    if (url === "escrow-viewer") {
+      return currentNetwork === "testnet"
+        ? "https://viewer.trustlesswork.com/"
+        : "https://viewer.trustlesswork.com/";
+    }
+    return url;
+  };
+
+  const isItemActive = (itemUrl: string) => {
+    if (itemUrl === "#") return false;
+
+    if (itemUrl.startsWith("http")) return false;
+
+    if (itemUrl === "/dashboard") {
+      return pathname === "/dashboard";
+    }
+
+    if (itemUrl === "/dashboard/contact") {
+      return pathname.startsWith("/dashboard/contact");
+    }
+
+    if (itemUrl === "/dashboard/escrow/my-escrows") {
+      return pathname.startsWith("/dashboard/escrow");
+    }
+
+    if (itemUrl === "/dashboard/report-issue") {
+      return pathname.startsWith("/dashboard/report-issue");
+    }
+
+    if (itemUrl === "/dashboard/help") {
+      return pathname.startsWith("/dashboard/help");
+    }
+
+    return pathname === itemUrl;
+  };
+
+  const isSubItemActive = (subItemUrl: string) => {
+    if (subItemUrl.startsWith("http")) return false;
+    return pathname === subItemUrl;
+  };
 
   return (
     <>
@@ -62,10 +116,10 @@ const NavMain = ({
                           <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton
                               asChild
-                              isActive={item.isActive}
+                              isActive={isSubItemActive(subItem.url)}
                             >
                               <Link
-                                href={subItem.url}
+                                href={getDynamicUrl(subItem.url)}
                                 target={
                                   subItem.isExternal ? "_blank" : undefined
                                 }
@@ -84,9 +138,9 @@ const NavMain = ({
                     </CollapsibleContent>
                   </Collapsible>
                 ) : (
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild isActive={isItemActive(item.url)}>
                     <Link
-                      href={item.url}
+                      href={getDynamicUrl(item.url)}
                       target={item.isExternal ? "_blank" : undefined}
                       rel={item.isExternal ? "noopener noreferrer" : undefined}
                     >

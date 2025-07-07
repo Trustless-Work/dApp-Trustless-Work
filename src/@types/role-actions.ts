@@ -1,7 +1,7 @@
-import { RolesInEscrow } from "@/@types/escrow.entity";
+import { Role } from "@trustless-work/escrow/types";
 
 export interface RoleAction {
-  role: RolesInEscrow;
+  role: Role;
   label?: string;
   actions: string[];
   icon: React.ReactNode;

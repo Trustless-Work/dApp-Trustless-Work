@@ -1,7 +1,7 @@
 import { Form, FormLabel } from "@/components/ui/form";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { Input } from "@/components/ui/input";
-import { DollarSign, Trash2 } from "lucide-react";
+import { DollarSign, Loader2, Save, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
@@ -9,10 +9,12 @@ import { useEditMultiMilestonesDialog } from "../../../hooks/multi-release/edit-
 
 interface EditMultiMilestonesFormProps {
   setIsEditMilestoneDialogOpen: (value: boolean) => void;
+  isEditingMilestones: boolean;
 }
 
 export const EditMultiMilestonesForm = ({
   setIsEditMilestoneDialogOpen,
+  isEditingMilestones,
 }: EditMultiMilestonesFormProps) => {
   const {
     form,
@@ -24,6 +26,34 @@ export const EditMultiMilestonesForm = ({
   } = useEditMultiMilestonesDialog({
     setIsEditMilestoneDialogOpen,
   });
+
+  const handleMilestoneAmountChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    const updatedMilestones = [...milestones];
+    updatedMilestones[index] = {
+      ...updatedMilestones[index],
+      amount: rawValue,
+    };
+    form.setValue("milestones", updatedMilestones);
+  };
 
   return (
     <Form {...form}>
@@ -79,17 +109,12 @@ export const EditMultiMilestonesForm = ({
                       size={18}
                     />
                     <Input
-                      type="number"
                       className="pl-10"
                       placeholder="Enter milestone amount"
-                      value={milestone.amount || ""}
-                      onChange={(e) => {
-                        const updatedMilestones = [...milestones];
-                        updatedMilestones[index].amount = Number(
-                          e.target.value,
-                        );
-                        form.setValue("milestones", updatedMilestones);
-                      }}
+                      value={
+                        milestone.amount ? milestone.amount.toString() : ""
+                      }
+                      onChange={(e) => handleMilestoneAmountChange(index, e)}
                     />
                   </div>
 
@@ -127,11 +152,22 @@ export const EditMultiMilestonesForm = ({
 
         <DialogFooter>
           <Button
-            disabled={isAnyMilestoneEmpty}
             type="button"
             onClick={() => onSubmit(form.getValues())}
+            className="bg-green-800 hover:bg-green-700 text-white"
+            disabled={isAnyMilestoneEmpty || isEditingMilestones}
           >
-            Save
+            {isEditingMilestones ? (
+              <>
+                <Loader2 className="w-3 h-3 mr-1 animate-spin flex-shrink-0" />
+                <span className="truncate">Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-3 h-3 mr-1 flex-shrink-0" />
+                <span className="truncate">Save Changes</span>
+              </>
+            )}
           </Button>
         </DialogFooter>
       </div>

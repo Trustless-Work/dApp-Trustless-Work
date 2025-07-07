@@ -1,5 +1,4 @@
 import { Message } from "@/@types/message.entity";
-import { formatTime } from "@/components/modules/chat/utils/chat.utils";
 
 interface MessageBubbleProps {
   message: Message;
@@ -20,7 +19,8 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         {message.text}
       </div>
       <span className="text-xs text-muted-foreground mt-1 px-1">
-        {formatTime(message.timestamp)}
+        {/* {formatTime(message.timestamp)} */}
+        {message.timestamp.toLocaleTimeString()}
       </span>
     </div>
   );

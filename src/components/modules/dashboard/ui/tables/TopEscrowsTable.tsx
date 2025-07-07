@@ -26,9 +26,11 @@ import { getStatus } from "../../utils/escrow-status.util";
 import NoData from "@/components/utils/ui/NoData";
 import { Escrow } from "@/@types/escrow.entity";
 import { useTranslation } from "react-i18next";
+import useNetwork from "@/hooks/useNetwork";
 
 export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
   const { t } = useTranslation();
+  const { currentNetwork } = useNetwork();
   const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
@@ -67,7 +69,7 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
         <TableBody className="px-5">
           {hasData ? (
             escrows.map((escrow) => (
-              <TableRow key={escrow.id}>
+              <TableRow key={escrow.contractId}>
                 <TableCell className="font-medium">{escrow.title}</TableCell>
                 <TableCell className="text-center">
                   {formatDollar(escrow.amount)}
@@ -77,14 +79,14 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
                 </TableCell>
                 <TableCell className="text-center">
                   {formatDateFromFirebase(
-                    escrow.createdAt.seconds,
-                    escrow.createdAt.nanoseconds,
+                    escrow.createdAt._seconds,
+                    escrow.createdAt._nanoseconds,
                   )}
                 </TableCell>
                 <TableCell className="text-center">
                   {formatDateFromFirebase(
-                    escrow.updatedAt.seconds,
-                    escrow.updatedAt.nanoseconds,
+                    escrow.updatedAt._seconds,
+                    escrow.updatedAt._nanoseconds,
                   )}
                 </TableCell>
                 <TableCell>
@@ -115,10 +117,11 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
                         className="cursor-pointer"
                         onClick={(e) => {
                           e.stopPropagation();
-                          window.open(
-                            `https://viewer.trustlesswork.com/${escrow.contractId}`,
-                            "_blank",
-                          );
+                          const escrowViewerUrl =
+                            currentNetwork === "testnet"
+                              ? `https://viewer.trustlesswork.com/${escrow.contractId}`
+                              : `https://viewer.trustlesswork.com/${escrow.contractId}`;
+                          window.open(escrowViewerUrl, "_blank");
                         }}
                       >
                         {t("dashboard.general.table.viewInViewer")}

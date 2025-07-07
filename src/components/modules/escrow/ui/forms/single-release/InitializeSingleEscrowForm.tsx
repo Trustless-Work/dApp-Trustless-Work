@@ -18,6 +18,7 @@ import { DollarSign, Percent, Trash2 } from "lucide-react";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { useInitializeSingleEscrow } from "../../../hooks/single-release/initialize-single-escrow.hook";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 export const InitializeSingleEscrowForm = () => {
   const {
@@ -42,6 +43,46 @@ export const InitializeSingleEscrowForm = () => {
     toggleStep(2);
   };
 
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("amount", rawValue);
+  };
+
+  const handlePlatformFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("platformFee", rawValue);
+  };
+
   return (
     <Form {...form}>
       <form
@@ -49,7 +90,11 @@ export const InitializeSingleEscrowForm = () => {
         className="flex flex-col space-y-6"
       >
         <Card className="flex justify-between items-center gap-4 p-4">
-          <div className="flex-1">
+          <Link
+            className="flex-1"
+            href="https://docs.trustlesswork.com/trustless-work/technology-overview/escrow-types"
+            target="_blank"
+          >
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary" />
               <h2 className="text-xl font-semibold">Single Release Escrow</h2>
@@ -58,7 +103,7 @@ export const InitializeSingleEscrowForm = () => {
               A single payment will be released upon completion of all
               milestones
             </p>
-          </div>
+          </Link>
           <div className="flex flex-col gap-4">
             <Button
               variant="outline"
@@ -407,7 +452,7 @@ export const InitializeSingleEscrowForm = () => {
           <FormField
             control={form.control}
             name="platformFee"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="flex items-center">
                   Platform Fee<span className="text-destructive ml-1">*</span>
@@ -422,17 +467,8 @@ export const InitializeSingleEscrowForm = () => {
                     <Input
                       placeholder="Enter platform fee"
                       className="pl-10"
-                      value={field.value || ""}
-                      onChange={(e) => {
-                        let rawValue = e.target.value;
-                        rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                        if (rawValue.split(".").length > 2) {
-                          rawValue = rawValue.slice(0, -1);
-                        }
-
-                        field.onChange(rawValue ? Number(rawValue) : undefined);
-                      }}
+                      value={form.watch("platformFee")?.toString() || ""}
+                      onChange={handlePlatformFeeChange}
                     />
                   </div>
                 </FormControl>
@@ -444,7 +480,7 @@ export const InitializeSingleEscrowForm = () => {
           <FormField
             control={form.control}
             name="amount"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="flex items-center">
                   Amount<span className="text-destructive ml-1">*</span>
@@ -459,17 +495,8 @@ export const InitializeSingleEscrowForm = () => {
                     <Input
                       placeholder="Enter amount"
                       className="pl-10"
-                      value={field.value || ""}
-                      onChange={(e) => {
-                        let rawValue = e.target.value;
-                        rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                        if (rawValue.split(".").length > 2) {
-                          rawValue = rawValue.slice(0, -1);
-                        }
-
-                        field.onChange(rawValue ? Number(rawValue) : undefined);
-                      }}
+                      value={form.watch("amount")?.toString() || ""}
+                      onChange={handleAmountChange}
                     />
                   </div>
                 </FormControl>

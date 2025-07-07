@@ -30,8 +30,10 @@ export const useFormatUtils = () => {
     if (isNaN(parsedAmount)) return "$0.00";
 
     // ! ALL THE DECIMALS
-    return `$${parsedAmount.toString().replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
-    //return `$${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
+    // return `$${parsedAmount.toString().replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
+
+    // ! ONLY 2 DECIMALS
+    return `$${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
   };
 
   const formatText = (role: string | undefined = "") => {
@@ -51,6 +53,14 @@ export const useFormatUtils = () => {
     return num.toString();
   };
 
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
+
   return {
     formatAddress,
     formatDateFromFirebase,
@@ -58,6 +68,7 @@ export const useFormatUtils = () => {
     formatText,
     formatPercentage,
     formatNumber,
+    formatFileSize,
   };
 };
 

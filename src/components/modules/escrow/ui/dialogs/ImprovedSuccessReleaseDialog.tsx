@@ -19,6 +19,7 @@ import { motion } from "framer-motion";
 import { Escrow } from "@/@types/escrow.entity";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
 import { useEscrowBoundedStore } from "../../store/data";
+import useNetwork from "@/hooks/useNetwork";
 
 interface SuccessReleaseDialogProps {
   title: string;
@@ -39,6 +40,7 @@ export const ImprovedSuccessReleaseDialog = ({
     setIsSuccessReleaseDialogOpen,
   });
 
+  const { currentNetwork } = useNetwork();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
   const escrow = selectedEscrow || recentEscrow;
@@ -62,6 +64,17 @@ export const ImprovedSuccessReleaseDialog = ({
   const trustlessAmount = (totalAmount * trustlessPercentage) / 100;
   const receiverAmount = (totalAmount * receiverPercentage) / 100;
   const platformAmount = (totalAmount * platformFee) / 100;
+
+  // Get the appropriate URLs based on network
+  const stellarExplorerUrl =
+    currentNetwork === "testnet"
+      ? `https://stellar.expert/explorer/testnet/contract/${escrow?.contractId}`
+      : `https://stellar.expert/explorer/public/contract/${escrow?.contractId}`;
+
+  const escrowViewerUrl =
+    currentNetwork === "testnet"
+      ? `https://viewer.trustlesswork.com/${escrow?.contractId}`
+      : `https://viewer.trustlesswork.com/${escrow?.contractId}`;
 
   const containerAnimation = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -95,7 +108,7 @@ export const ImprovedSuccessReleaseDialog = ({
               <DialogDescription className="mb-2">
                 {description}{" "}
                 <Link
-                  href={`https://stellar.expert/explorer/testnet/contract/${escrow?.contractId}`}
+                  href={stellarExplorerUrl}
                   className="text-primary"
                   target="_blank"
                 >
@@ -103,7 +116,7 @@ export const ImprovedSuccessReleaseDialog = ({
                 </Link>
                 <span className="mx-2">or</span>
                 <Link
-                  href={`https://viewer.trustlesswork.com/${escrow?.contractId}`}
+                  href={escrowViewerUrl}
                   className="text-primary"
                   target="_blank"
                 >

@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 export const Dashboard = () => {
   const { t } = useTranslation();
   const address = useGlobalAuthenticationStore((state) => state.address);
-  const data = useEscrowDashboardData({ address });
+  const data = useEscrowDashboardData();
 
   const { statusCounts, releaseTrend, volumeTrend, top5ByValue, escrows } =
     data || {};
@@ -35,7 +35,6 @@ export const Dashboard = () => {
             {t("dashboard.noEscrows")} <ArrowRight className="ml-2" />
           </span>
           <CreateButton
-            className="mr-auto w-full md:w-auto"
             label={t("dashboard.createEscrow")}
             url={"/dashboard/escrow/initialize-escrow"}
           />
@@ -106,7 +105,7 @@ export const Dashboard = () => {
           </TabsContent>
 
           <TabsContent value="dispute-analytics" className="space-y-4">
-            <DisputeAnalytics address={address} escrows={escrows || []} />
+            <DisputeAnalytics escrows={escrows || []} />
           </TabsContent>
         </Tabs>
       </div>

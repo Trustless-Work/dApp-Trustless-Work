@@ -18,6 +18,7 @@ import { DollarSign, Percent, Trash2 } from "lucide-react";
 import { useEscrowUIBoundedStore } from "../../../store/ui";
 import { useInitializeMultiEscrow } from "../../../hooks/multi-release/initialize-multi-escrow.hook";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 export const InitializeMultiEscrowForm = () => {
   const {
@@ -42,6 +43,54 @@ export const InitializeMultiEscrowForm = () => {
     toggleStep(2);
   };
 
+  const handlePlatformFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("platformFee", rawValue);
+  };
+
+  const handleMilestoneAmountChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    const updatedMilestones = [...milestones];
+    updatedMilestones[index] = {
+      ...updatedMilestones[index],
+      amount: rawValue,
+    };
+    form.setValue("milestones", updatedMilestones);
+  };
+
   return (
     <Form {...form}>
       <form
@@ -49,7 +98,11 @@ export const InitializeMultiEscrowForm = () => {
         className="flex flex-col space-y-6"
       >
         <Card className="flex justify-between items-center gap-4 p-4">
-          <div className="flex-1">
+          <Link
+            className="flex-1"
+            href="https://docs.trustlesswork.com/trustless-work/technology-overview/escrow-types"
+            target="_blank"
+          >
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary" />
               <h2 className="text-xl font-semibold">Multi Release Escrow</h2>
@@ -57,7 +110,7 @@ export const InitializeMultiEscrowForm = () => {
             <p className="text-muted-foreground mt-1">
               Payments will be released as each milestone is completed
             </p>
-          </div>
+          </Link>
           <div className="flex flex-col gap-4">
             <Button
               variant="outline"
@@ -406,7 +459,7 @@ export const InitializeMultiEscrowForm = () => {
           <FormField
             control={form.control}
             name="platformFee"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="flex items-center">
                   Platform Fee<span className="text-destructive ml-1">*</span>
@@ -421,17 +474,8 @@ export const InitializeMultiEscrowForm = () => {
                     <Input
                       placeholder="Enter platform fee"
                       className="pl-10"
-                      value={field.value || ""}
-                      onChange={(e) => {
-                        let rawValue = e.target.value;
-                        rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                        if (rawValue.split(".").length > 2) {
-                          rawValue = rawValue.slice(0, -1);
-                        }
-
-                        field.onChange(rawValue ? Number(rawValue) : undefined);
-                      }}
+                      value={form.watch("platformFee")?.toString() || ""}
+                      onChange={handlePlatformFeeChange}
                     />
                   </div>
                 </FormControl>
@@ -513,15 +557,10 @@ export const InitializeMultiEscrowForm = () => {
                     size={18}
                   />
                   <Input
-                    type="number"
                     className="pl-10"
-                    placeholder="Enter milestone amount"
-                    value={milestone.amount || ""}
-                    onChange={(e) => {
-                      const updatedMilestones = [...milestones];
-                      updatedMilestones[index].amount = Number(e.target.value);
-                      form.setValue("milestones", updatedMilestones);
-                    }}
+                    placeholder="Enter amount"
+                    value={milestone.amount?.toString() || ""}
+                    onChange={(e) => handleMilestoneAmountChange(index, e)}
                   />
                 </div>
 

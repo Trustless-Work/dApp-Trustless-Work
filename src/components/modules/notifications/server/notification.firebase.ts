@@ -30,9 +30,9 @@ export const NotificationService = {
 
     return notifications.sort((a, b) => {
       const aTime =
-        a.createdAt.seconds * 1000 + a.createdAt.nanoseconds / 1000000;
+        a.createdAt._seconds * 1000 + a.createdAt._nanoseconds / 1000000;
       const bTime =
-        b.createdAt.seconds * 1000 + b.createdAt.nanoseconds / 1000000;
+        b.createdAt._seconds * 1000 + b.createdAt._nanoseconds / 1000000;
       return bTime - aTime;
     });
   },
@@ -98,9 +98,9 @@ export const NotificationService = {
       callback(
         notifications.sort((a, b) => {
           const aTime =
-            a.createdAt.seconds * 1000 + a.createdAt.nanoseconds / 1000000;
+            a.createdAt._seconds * 1000 + a.createdAt._nanoseconds / 1000000;
           const bTime =
-            b.createdAt.seconds * 1000 + b.createdAt.nanoseconds / 1000000;
+            b.createdAt._seconds * 1000 + b.createdAt._nanoseconds / 1000000;
           return bTime - aTime;
         }),
       );

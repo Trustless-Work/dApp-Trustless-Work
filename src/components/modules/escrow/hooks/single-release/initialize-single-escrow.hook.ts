@@ -16,22 +16,15 @@ import { useContactStore } from "@/core/store/data/slices/contacts.slice";
 import {
   InitializeSingleReleaseEscrowPayload,
   InitializeSingleReleaseEscrowResponse,
-  Roles,
 } from "@trustless-work/escrow/types";
-import { signTransaction } from "@/lib/stellar-wallet-kit";
-import {
-  useInitializeEscrow as useInitializeEscrowHook,
-  useSendTransaction,
-} from "@trustless-work/escrow/hooks";
 import { Escrow } from "@/@types/escrow.entity";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useInitializeEscrowSchema } from "../../schema/initialize-escrow.schema";
 import { handleError } from "@/errors/utils/handle-errors";
 import { AxiosError } from "axios";
-
-type ExtendedRoles = Roles & {
-  issuer: string;
-};
+import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
+import useNetwork from "@/hooks/useNetwork";
+import { trustlines } from "@/constants/trustlines.constant";
 
 export const useInitializeSingleEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -57,24 +50,19 @@ export const useInitializeSingleEscrow = () => {
   );
   const fetchContacts = useContactStore((state) => state.fetchContacts);
   const contacts = useContactStore((state) => state.contacts);
-  const getAllTrustlines = useGlobalBoundedStore(
-    (state) => state.getAllTrustlines,
-  );
   const address = useGlobalAuthenticationStore((state) => state.address);
-  const trustlines = useGlobalBoundedStore((state) => state.trustlines);
   const escrowType = useEscrowUIBoundedStore((state) => state.escrowType);
   const { getSingleReleaseFormSchema } = useInitializeEscrowSchema();
   const formSchema = getSingleReleaseFormSchema();
+  const { currentNetwork } = useNetwork();
 
-  const { deployEscrow } = useInitializeEscrowHook();
-  const { sendTransaction } = useSendTransaction();
+  const { deployEscrow } = useEscrowsMutations();
 
   useEffect(() => {
     if (address) {
       fetchContacts(address);
-      getAllTrustlines();
     }
-  }, [fetchContacts, getAllTrustlines, address]);
+  }, [fetchContacts, address]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -83,6 +71,7 @@ export const useInitializeSingleEscrow = () => {
       title: "",
       description: "",
       platformFee: 0,
+      amount: 0,
       receiverMemo: "",
       trustline: {
         address: "",
@@ -102,13 +91,18 @@ export const useInitializeSingleEscrow = () => {
   });
 
   const fillTemplateForm = () => {
-    // Find the USDC trustline
+    // Filter trustlines by current network
+    const networkTrustlines = trustlines.filter(
+      (tl) => tl.network === currentNetwork,
+    );
+
+    // Find the USDC trustline for current network
     const usdcTrustline =
-      trustlines.find((tl) => tl.name?.toLowerCase().includes("usdc")) ||
-      trustlines[0];
+      networkTrustlines.find((tl) => tl.name?.toLowerCase().includes("usdc")) ||
+      networkTrustlines[0];
 
     if (!usdcTrustline) {
-      toast.error("No trustline available");
+      toast.error(`No trustline available for ${currentNetwork}`);
       return;
     }
 
@@ -170,51 +164,39 @@ export const useInitializeSingleEscrow = () => {
     setIsLoading(true);
 
     try {
-      const finalPayload: InitializeSingleReleaseEscrowPayload = {
+      // Convert string values to numbers for the payload
+      const processedPayload = {
         ...payload,
+        amount:
+          typeof payload.amount === "string"
+            ? Number(payload.amount)
+            : payload.amount,
+        platformFee:
+          typeof payload.platformFee === "string"
+            ? Number(payload.platformFee)
+            : payload.platformFee,
         receiverMemo: Number(payload.receiverMemo) ?? 0,
         signer: address,
-        roles: {
-          ...payload.roles,
-          issuer: address,
-        } as ExtendedRoles,
         milestones: payload.milestones,
       };
 
-      const { unsignedTransaction } = await deployEscrow({
+      const finalPayload: InitializeSingleReleaseEscrowPayload =
+        processedPayload;
+
+      const response = (await deployEscrow.mutateAsync({
         payload: finalPayload,
         type: "single-release",
-      });
-
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from deployEscrow response.",
-        );
-      }
-
-      const signedTxXdr = await signTransaction({
-        unsignedTransaction,
         address,
+      })) as InitializeSingleReleaseEscrowResponse & { escrow: Escrow };
+
+      setIsSuccessDialogOpen(true);
+      setCurrentStep(1);
+      setRecentEscrow({
+        ...response.escrow,
+        contractId: response.contractId,
       });
-
-      if (!signedTxXdr) {
-        throw new Error("Signed transaction is missing.");
-      }
-
-      const response = (await sendTransaction(
-        signedTxXdr,
-      )) as InitializeSingleReleaseEscrowResponse & { escrow: Escrow };
-
-      if (response.status === "SUCCESS") {
-        setIsSuccessDialogOpen(true);
-        setCurrentStep(1);
-        setRecentEscrow({
-          ...response.escrow,
-          contractId: response.contractId,
-        });
-        resetSteps();
-        router.push("/dashboard/escrow/my-escrows");
-      }
+      resetSteps();
+      router.push("/dashboard/escrow/my-escrows");
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
     } finally {
@@ -232,13 +214,18 @@ export const useInitializeSingleEscrow = () => {
   }, [contacts]);
 
   const trustlineOptions = useMemo(() => {
-    const options = trustlines.map((trustline) => ({
+    // Filter trustlines by current network
+    const networkTrustlines = trustlines.filter(
+      (tl) => tl.network === currentNetwork,
+    );
+
+    const options = networkTrustlines.map((trustline) => ({
       value: trustline.address,
       label: trustline.name,
     }));
 
     return [{ value: "", label: "Select a Trustline" }, ...options];
-  }, [trustlines]);
+  }, [trustlines, currentNetwork]);
 
   const toggleField = (field: string, value: boolean) => {
     setShowSelect((prev) => ({ ...prev, [field]: value }));

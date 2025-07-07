@@ -1,10 +1,10 @@
 import { Escrow } from "@/@types/escrow.entity";
 
 export const useLongestPendingDisputes = (escrows: Escrow[]) => {
-  const getTimeInfo = (timestamp?: { seconds: number }) => {
+  const getTimeInfo = (timestamp?: { _seconds: number }) => {
     if (!timestamp) return "N/A";
     const now = new Date();
-    const updated = new Date(timestamp.seconds * 1000);
+    const updated = new Date(timestamp._seconds * 1000);
     const diffTime = Math.abs(now.getTime() - updated.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return `${diffDays} ${diffDays === 1 ? "day" : "days"}`;
@@ -13,8 +13,8 @@ export const useLongestPendingDisputes = (escrows: Escrow[]) => {
   const pendingDisputes = escrows
     .filter((e) => e.flags?.disputed && !e.flags?.resolved)
     .sort((a, b) => {
-      const aTime = a.updatedAt?.seconds || 0;
-      const bTime = b.updatedAt?.seconds || 0;
+      const aTime = a.updatedAt?._seconds || 0;
+      const bTime = b.updatedAt?._seconds || 0;
       return aTime - bTime;
     })
     .slice(0, 5);

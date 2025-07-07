@@ -9,7 +9,6 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useEditSingleBasicPropertiesDialog } from "../../hooks/single-release/edit-single-basic-properties-dialog.hook";
 import { EditSingleBasicPropertiesForm } from "./single-release/EditSingleBasicPropertiesForm";
-import { SkeletonEditBasicProperties } from "./utils/SkeletonEditBasicProperties";
 import { EditMultiBasicPropertiesForm } from "./multi-release/EditMultiBasicPropertiesForm";
 
 interface EditBasicPropertiesDialogProps {
@@ -43,19 +42,19 @@ const EditBasicPropertiesDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        {isEditingBasicProperties ? (
-          <SkeletonEditBasicProperties />
-        ) : selectedEscrow.type === "single-release" ? (
+        {selectedEscrow.type === "single-release" ? (
           <EditSingleBasicPropertiesForm
             setIsEditBasicPropertiesDialogOpen={
               setIsEditBasicPropertiesDialogOpen
             }
+            isEditingBasicProperties={isEditingBasicProperties}
           />
         ) : (
           <EditMultiBasicPropertiesForm
             setIsEditBasicPropertiesDialogOpen={
               setIsEditBasicPropertiesDialogOpen
             }
+            isEditingBasicProperties={isEditingBasicProperties}
           />
         )}
       </DialogContent>

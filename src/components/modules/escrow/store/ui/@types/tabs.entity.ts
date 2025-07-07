@@ -1,9 +1,8 @@
-import { RolesInEscrow } from "@/@types/escrow.entity";
-import { EscrowType } from "@trustless-work/escrow";
+import { EscrowType, Role } from "@trustless-work/escrow";
 
 export interface TabsEscrowStore {
-  activeTab: RolesInEscrow;
+  activeTab: Role;
   escrowType: EscrowType | null;
-  setActiveTab: (value: RolesInEscrow) => void;
+  setActiveTab: (value: Role) => void;
   setEscrowType: (value: EscrowType | null) => void;
 }

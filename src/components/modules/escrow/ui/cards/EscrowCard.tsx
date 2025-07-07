@@ -18,8 +18,12 @@ import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useTranslation } from "react-i18next";
 import { Escrow } from "@/@types/escrow.entity";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
-import { getStatusBadge } from "@/components/utils/ui/Status";
+import {
+  getMultiReleaseStatusBadge,
+  getStatusBadge,
+} from "@/components/utils/ui/Status";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
+import useNetwork from "@/hooks/useNetwork";
 
 interface EscrowCardProps {
   escrow: Escrow;
@@ -28,6 +32,7 @@ interface EscrowCardProps {
 
 const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
   const { t } = useTranslation();
+  const { currentNetwork } = useNetwork();
   const { formatDateFromFirebase, formatDollar } = useFormatUtils();
 
   const calculateTotalAmount = (escrow: Escrow) => {
@@ -45,6 +50,12 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
       );
     }
   };
+
+  // Get the appropriate escrow viewer URL based on network
+  const escrowViewerUrl =
+    currentNetwork === "testnet"
+      ? `https://viewer.trustlesswork.com/${escrow.contractId}`
+      : `https://viewer.trustlesswork.com/${escrow.contractId}`;
 
   return (
     <Card
@@ -67,12 +78,11 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
         <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 w-full sm:w-auto justify-between sm:justify-start">
           {escrow.type === "single-release" && getStatusBadge(escrow)}
 
+          {escrow.type === "multi-release" &&
+            getMultiReleaseStatusBadge(escrow)}
+
           <TooltipInfo content="View from TW Escrow Viewer">
-            <Link
-              href={`https://viewer.trustlesswork.com/${escrow.contractId}`}
-              target="_blank"
-              className="sm:ml-2"
-            >
+            <Link href={escrowViewerUrl} target="_blank" className="sm:ml-2">
               <Button
                 variant="ghost"
                 size="icon"
@@ -122,8 +132,8 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
         <p className="text-xs text-muted-foreground italic w-full sm:w-auto text-center sm:text-right">
           Created:{" "}
           {formatDateFromFirebase(
-            escrow.createdAt.seconds,
-            escrow.createdAt.nanoseconds,
+            escrow.createdAt._seconds,
+            escrow.createdAt._nanoseconds,
           )}
         </p>
       </CardFooter>

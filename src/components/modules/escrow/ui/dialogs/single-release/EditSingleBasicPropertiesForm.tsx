@@ -11,19 +11,61 @@ import { Input } from "@/components/ui/input";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useEditSingleBasicPropertiesDialog } from "../../../hooks/single-release/edit-single-basic-properties-dialog.hook";
-import { DollarSign } from "lucide-react";
+import { DollarSign, Loader2, Percent, Save } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
 interface EditSingleBasicPropertiesFormProps {
   setIsEditBasicPropertiesDialogOpen: (value: boolean) => void;
+  isEditingBasicProperties: boolean;
 }
 
 export const EditSingleBasicPropertiesForm = ({
   setIsEditBasicPropertiesDialogOpen,
+  isEditingBasicProperties,
 }: EditSingleBasicPropertiesFormProps) => {
   const { form, onSubmit } = useEditSingleBasicPropertiesDialog({
     setIsEditBasicPropertiesDialogOpen,
   });
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("amount", rawValue);
+  };
+
+  const handlePlatformFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("platformFee", rawValue);
+  };
 
   return (
     <Form {...form}>
@@ -65,28 +107,25 @@ export const EditSingleBasicPropertiesForm = ({
           <FormField
             control={form.control}
             name="platformFee"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="flex items-center">
                   Platform Fee<span className="text-destructive ml-1">*</span>
                   <TooltipInfo content="Fee charged by the platform for this escrow." />
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter platform fee"
-                    value={field.value ? `${field.value}%` : ""}
-                    onChange={(e) => {
-                      let rawValue = e.target.value;
-                      rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-                      if (rawValue.split(".").length > 2) {
-                        rawValue = rawValue.slice(0, -1);
-                      }
-
-                      field.onChange(rawValue);
-                    }}
-                  />
+                  <div className="relative">
+                    <Percent
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      size={18}
+                    />
+                    <Input
+                      placeholder="Enter platform fee"
+                      className="pl-10"
+                      value={form.watch("platformFee")?.toString() || ""}
+                      onChange={handlePlatformFeeChange}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -98,7 +137,7 @@ export const EditSingleBasicPropertiesForm = ({
           <FormField
             control={form.control}
             name="amount"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
                 <FormLabel className="flex items-center">
                   Amount<span className="text-destructive ml-1">*</span>
@@ -111,10 +150,10 @@ export const EditSingleBasicPropertiesForm = ({
                       size={18}
                     />
                     <Input
-                      type="string"
+                      placeholder="Enter amount"
                       className="pl-10"
-                      placeholder="Enter the escrow amount"
-                      {...field}
+                      value={form.watch("amount")?.toString() || ""}
+                      onChange={handleAmountChange}
                     />
                   </div>
                 </FormControl>
@@ -163,7 +202,23 @@ export const EditSingleBasicPropertiesForm = ({
         />
 
         <DialogFooter>
-          <Button type="submit">Save</Button>
+          <Button
+            type="submit"
+            className="bg-green-800 hover:bg-green-700 text-white"
+            disabled={isEditingBasicProperties}
+          >
+            {isEditingBasicProperties ? (
+              <>
+                <Loader2 className="w-3 h-3 mr-1 animate-spin flex-shrink-0" />
+                <span className="truncate">Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-3 h-3 mr-1 flex-shrink-0" />
+                <span className="truncate">Save Changes</span>
+              </>
+            )}
+          </Button>
         </DialogFooter>
       </form>
     </Form>

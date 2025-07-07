@@ -15,6 +15,7 @@
     "help": "Ayuda",
     "contacts": "Contactos",
     "contact": "Contactos",
+    "chats": "Chats",
     "escrow": "Escrows",
     "my-escrows": "Mis Escrows",
     "public-profile": "Perfil Público",
@@ -231,7 +232,7 @@
       }
     },
     "roleLabels": {
-      "issuer": "Emisor",
+      "signer": "Firmante",
       "approver": "Aprobador",
       "serviceProvider": "Proveedor de Servicio",
       "disputeResolver": "Resolutor de Disputas",
@@ -355,8 +356,13 @@
     }
   },
   "myEscrows": {
+    "blockchainSync": {
+      "title": "Sincronización Blockchain Garantizada",
+      "description": "Los escrows mostrados están perfectamente sincronizados entre nuestra base de datos y la blockchain de Stellar. Cualquier inconsistencia de datos sería detectada inmediatamente, por lo que puedes estar completamente tranquilo de que toda la información refleja exactamente el estado actual en la blockchain.",
+      "close": "¡Entendido!"
+    },
     "tabs": {
-      "issuer": "Escrows Iniciados",
+      "signer": "Escrows Iniciados",
       "approver": "Aprobador",
       "serviceProvider": "Proveedor de Servicio",
       "disputeResolver": "Resolutor de Disputas",

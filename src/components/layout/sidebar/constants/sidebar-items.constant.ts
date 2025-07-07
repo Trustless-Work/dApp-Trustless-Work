@@ -6,7 +6,24 @@ import {
   LayoutDashboard,
   LucideContactRound,
   History,
+  MessageCircle,
 } from "lucide-react";
+
+// Helper function to get network-specific URLs
+const getNetworkUrls = () => {
+  // This will be called in components that use this constant
+  // For now, we'll return a function that can be called with the network
+  return {
+    stellarExpert: (network: string) =>
+      network === "testnet"
+        ? "https://stellar.expert/explorer/testnet"
+        : "https://stellar.expert/explorer/public",
+    escrowViewer: (network: string) =>
+      network === "testnet"
+        ? "https://viewer.trustlesswork.com/"
+        : "https://viewer.trustlesswork.com/",
+  };
+};
 
 export const ItemsSidebar = {
   teams: [
@@ -38,6 +55,13 @@ export const ItemsSidebar = {
           title: "sidebar.history",
           url: "/dashboard/history",
           icon: History,
+          isActive: true,
+          isExpandable: false,
+        },
+        {
+          title: "sidebar.chats",
+          url: "/dashboard/chats",
+          icon: MessageCircle,
           isActive: true,
           isExpandable: false,
         },
@@ -76,13 +100,15 @@ export const ItemsSidebar = {
             },
             {
               title: "sidebar.stellarExpert",
-              url: "https://stellar.expert/explorer/testnet",
+              url: "stellar-expert", // This will be replaced dynamically
               isExternal: true,
+              isDynamic: true,
             },
             {
               title: "sidebar.escrowViewer",
-              url: "https://viewer.trustlesswork.com/",
+              url: "escrow-viewer", // This will be replaced dynamically
               isExternal: true,
+              isDynamic: true,
             },
           ],
         },
@@ -109,3 +135,5 @@ export const ItemsSidebar = {
     },
   ],
 };
+
+export { getNetworkUrls };

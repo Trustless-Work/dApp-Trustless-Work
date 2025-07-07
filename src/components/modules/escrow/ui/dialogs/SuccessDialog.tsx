@@ -18,6 +18,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import ImprovedSuccessReleaseDialog from "./ImprovedSuccessReleaseDialog";
 import ImprovedSuccessResolveDisputeDialog from "./ImprovedSuccessResolveDisputeDialog";
 import { Escrow } from "@/@types/escrow.entity";
+import useNetwork from "@/hooks/useNetwork";
 
 interface SuccessDialogProps {
   title: string;
@@ -37,6 +38,18 @@ const SuccessDialog = ({
   const { handleClose } = useSuccessDialogHook({ setIsSuccessDialogOpen });
   const { copyText, copiedKeyId } = useCopyUtils();
   const { formatAddress } = useFormatUtils();
+  const { currentNetwork } = useNetwork();
+
+  // Get the appropriate URLs based on network
+  const stellarExplorerUrl =
+    currentNetwork === "testnet"
+      ? `https://stellar.expert/explorer/testnet/contract/${recentEscrow?.contractId}`
+      : `https://stellar.expert/explorer/public/contract/${recentEscrow?.contractId}`;
+
+  const escrowViewerUrl =
+    currentNetwork === "testnet"
+      ? `https://viewer.trustlesswork.com/${recentEscrow?.contractId}`
+      : `https://viewer.trustlesswork.com/${recentEscrow?.contractId}`;
 
   return (
     <Dialog open={isSuccessDialogOpen} onOpenChange={handleClose}>
@@ -46,7 +59,7 @@ const SuccessDialog = ({
           <DialogDescription className="mb-5">
             {description}{" "}
             <Link
-              href={`https://stellar.expert/explorer/testnet/contract/${recentEscrow?.contractId}`}
+              href={stellarExplorerUrl}
               className="text-primary"
               target="_blank"
             >
@@ -54,7 +67,7 @@ const SuccessDialog = ({
             </Link>
             <span className="mx-2">or</span>
             <Link
-              href={`https://viewer.trustlesswork.com/${recentEscrow?.contractId}`}
+              href={escrowViewerUrl}
               className="text-primary"
               target="_blank"
             >
