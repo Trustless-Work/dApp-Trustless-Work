@@ -66,7 +66,7 @@ export const useFileAttachment = (options: UseFileAttachmentOptions = {}) => {
         return `File size exceeds ${Math.round(maxFileSize / (1024 * 1024))}MB limit`;
       }
 
-      if (!allowedTypes.includes(file.type)) {
+      if (allowedTypes.length > 0 && !allowedTypes.includes(file.type)) {
         return "File type not supported";
       }
 

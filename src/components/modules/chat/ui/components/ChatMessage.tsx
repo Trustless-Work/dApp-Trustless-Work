@@ -2,6 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { FileDown } from "lucide-react";
 import type { ChatMessage } from "@/@types/conversation.entity";
 
 interface ChatMessageProps {
@@ -49,13 +50,35 @@ export function ChatMessage({
       <div className={cn("flex flex-col gap-1", isUser && "items-end")}>
         <div
           className={cn(
-            "max-w-xs lg:max-w-md px-3 py-2 rounded-lg text-sm",
+            "max-w-xs lg:max-w-md px-3 py-2 rounded-lg text-sm space-y-2",
             isUser
               ? "bg-primary text-primary-foreground rounded-br-sm"
               : "bg-muted rounded-bl-sm",
           )}
         >
-          <p className="break-words">{message.text}</p>
+          {message.attachment && (
+            <a
+              href={message.attachment.data}
+              download={message.attachment.name}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+            >
+              {message.type === "image" ? (
+                <img
+                  src={message.attachment.data}
+                  alt={message.attachment.name}
+                  className="max-w-full rounded-md"
+                />
+              ) : (
+                <div className="flex items-center gap-2 text-sm underline">
+                  <FileDown className="h-4 w-4" />
+                  <span>{message.attachment.name}</span>
+                </div>
+              )}
+            </a>
+          )}
+          {message.text && <p className="break-words">{message.text}</p>}
         </div>
 
         <div className="flex items-center gap-1 px-1">

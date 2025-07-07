@@ -14,9 +14,10 @@ import type { Conversation } from "@/@types/conversation.entity";
 interface ChatHeaderProps {
   conversation: Conversation;
   onClose?: () => void;
+  onDelete?: () => void;
 }
 
-export function ChatHeader({ conversation, onClose }: ChatHeaderProps) {
+export function ChatHeader({ conversation, onClose, onDelete }: ChatHeaderProps) {
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -67,7 +68,10 @@ export function ChatHeader({ conversation, onClose }: ChatHeaderProps) {
             <DropdownMenuItem>View Profile</DropdownMenuItem>
             <DropdownMenuItem>Mute Notifications</DropdownMenuItem>
             <DropdownMenuItem>Block User</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={onDelete}
+            >
               Delete Conversation
             </DropdownMenuItem>
           </DropdownMenuContent>

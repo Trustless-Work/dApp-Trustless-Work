@@ -9,7 +9,7 @@ import { FileAttachment } from "./FileAttachment";
 import { FileUploadZone } from "./FileUploadZone";
 
 interface ChatInputProps {
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, files: File[]) => void;
   disabled?: boolean;
 }
 
@@ -31,14 +31,13 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   } = useFileAttachment({
     maxFiles: 3,
     maxFileSize: 10 * 1024 * 1024, // 10MB
+    allowedTypes: [],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if ((message.trim() || hasFiles) && !disabled) {
-      if (message.trim()) {
-        onSendMessage(message);
-      }
+      onSendMessage(message, attachedFiles.map((f) => f.file));
 
       setMessage("");
       clearFiles();
@@ -48,9 +47,7 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
 
   const handleOnEnter = (text: string) => {
     if ((text.trim() || hasFiles) && !disabled) {
-      if (text.trim()) {
-        onSendMessage(text);
-      }
+      onSendMessage(text, attachedFiles.map((f) => f.file));
 
       setMessage("");
       clearFiles();
@@ -99,7 +96,6 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
             onDragLeave={handleDragLeave}
             dragActive={dragActive}
             disabled={disabled}
-            accept="image/*,.pdf,.doc,.docx,.txt"
           />
         </div>
       )}

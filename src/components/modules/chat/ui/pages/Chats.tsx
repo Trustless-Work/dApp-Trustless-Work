@@ -1,10 +1,19 @@
 "use client";
 
-import { MessageCircle, Search } from "lucide-react";
+import { MessageCircle, Plus, Search } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useChat } from "../../hooks/chat.hook";
 import { ConversationList } from "../components/ConversationList";
 import { ChatInterface } from "../components/ChatInterface";
@@ -19,8 +28,11 @@ export default function Chats() {
     showUnreadOnly,
     setShowUnreadOnly,
     selectConversation,
+    startConversation,
     sendMessage,
+    deleteConversation,
     clearSelection,
+    contacts,
   } = useChat();
 
   return (
@@ -44,6 +56,27 @@ export default function Chats() {
               />
             </Label>
           </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button size="sm" variant="secondary" className="w-full justify-start gap-2">
+                <Plus className="h-4 w-4" /> New Chat
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="p-0 w-60">
+              <Select onValueChange={startConversation}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select contact" />
+                </SelectTrigger>
+                <SelectContent>
+                  {contacts.map((c) => (
+                    <SelectItem key={c.id} value={c.address}>
+                      {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </PopoverContent>
+          </Popover>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -73,6 +106,9 @@ export default function Chats() {
             conversation={selectedConversation}
             messages={selectedMessages}
             onSendMessage={sendMessage}
+            onDeleteConversation={() =>
+              deleteConversation(selectedConversation.id)
+            }
             onClose={clearSelection}
           />
         ) : (
