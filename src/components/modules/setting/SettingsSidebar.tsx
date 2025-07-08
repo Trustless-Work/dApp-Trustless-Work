@@ -29,11 +29,6 @@ const settingsNavItems = [
     icon: User,
   },
   {
-    id: "appearance",
-    title: "settings.sidebar.appearance",
-    icon: Palette,
-  },
-  {
     id: "preferences",
     title: "settings.sidebar.preferences",
     icon: Settings,

@@ -2,7 +2,6 @@ import Header from "@/components/layout/header/Header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import useSettings from "./hooks/settings.hook";
 import { Profile } from "./ui/sections/Profile";
-import { Appearance } from "./ui/sections/Appearance";
 import { Preferences } from "./ui/sections/Preferences";
 import { APIKeys } from "./ui/sections/APIKeys";
 import SettingsSidebar from "./SettingsSidebar";
@@ -10,8 +9,7 @@ import useIsMobile from "@/hooks/mobile.hook";
 import { useTranslation } from "react-i18next";
 
 const Settings = () => {
-  const { currentTab, setCurrentTab, saveProfile, theme, toggleTheme } =
-    useSettings();
+  const { currentTab, setCurrentTab, saveProfile } = useSettings();
   const isMobile = useIsMobile();
   const { t } = useTranslation();
 
@@ -52,9 +50,6 @@ const Settings = () => {
           <div className="flex-1 overflow-auto">
             <main className="p-8">
               {currentTab === "profile" && <Profile onSave={saveProfile} />}
-              {currentTab === "appearance" && (
-                <Appearance theme={theme} onThemeChange={toggleTheme} />
-              )}
               {currentTab === "preferences" && (
                 <Preferences onSave={saveProfile} />
               )}
