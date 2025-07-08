@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import Loader from "@/components/utils/ui/Loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tab";
@@ -28,9 +27,6 @@ import { Role } from "@trustless-work/escrow/types";
 
 const MyEscrows = () => {
   const { t } = useTranslation();
-  const isInitializingEscrow = useEscrowUIBoundedStore(
-    (state) => state.isInitializingEscrow,
-  );
   const setActiveTab = useEscrowUIBoundedStore((state) => state.setActiveTab);
   const setActiveMode = useEscrowUIBoundedStore((state) => state.setActiveMode);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
