@@ -1,3 +1,5 @@
+import { UpdatedAt } from "./dates.entity";
+
 export interface Conversation {
   id: string;
   name: string;
@@ -31,5 +33,5 @@ export interface Chat {
   id: string;
   participants: string[];
   lastMessage: string;
-  updatedAt: any;
+  updatedAt: UpdatedAt;
 }

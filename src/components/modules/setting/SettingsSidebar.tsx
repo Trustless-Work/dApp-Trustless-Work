@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { User, Palette, Settings, Key, ArrowBigLeft } from "lucide-react";
+import { User, Settings, Key, ArrowBigLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import {

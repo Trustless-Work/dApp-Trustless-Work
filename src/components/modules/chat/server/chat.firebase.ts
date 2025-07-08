@@ -1,4 +1,5 @@
-import { Chat, ChatMessage } from "@/@types/conversation.entity";
+import { Chat } from "@/@types/conversation.entity";
+import { UpdatedAt } from "@/@types/dates.entity";
 import { db } from "@/core/config/firebase/firebase";
 import {
   addDoc,
@@ -12,10 +13,39 @@ import {
   serverTimestamp,
   updateDoc,
   where,
-  DocumentData,
+  Timestamp,
 } from "firebase/firestore";
 
 const chatsCollection = collection(db, "chats");
+
+interface FirebaseChatData {
+  participants: string[];
+  lastMessage: string;
+  updatedAt: Timestamp;
+}
+
+interface FirebaseMessageData {
+  senderId: string;
+  text: string;
+  createdAt: Timestamp;
+  attachment?: {
+    name: string;
+    type: string;
+    data: string;
+  };
+}
+
+interface FirebaseMessage {
+  id: string;
+  senderId: string;
+  text: string;
+  createdAt: Timestamp;
+  attachment?: {
+    name: string;
+    type: string;
+    data: string;
+  };
+}
 
 export const getOrCreateChat = async (
   userId: string,
@@ -28,8 +58,8 @@ export const getOrCreateChat = async (
   const snapshot = await getDocs(q);
 
   for (const docSnap of snapshot.docs) {
-    const data = docSnap.data() as DocumentData;
-    const participants = data.participants as string[];
+    const data = docSnap.data() as FirebaseChatData;
+    const participants = data.participants;
     if (participants.includes(contactId) && participants.includes(userId)) {
       return docSnap.id;
     }
@@ -50,10 +80,10 @@ export const sendMessage = async (
   attachment?: { name: string; type: string; data: string },
 ): Promise<void> => {
   const messagesCol = collection(db, `chats/${chatId}/messages`);
-  const messageData: Record<string, any> = {
+  const messageData: FirebaseMessageData = {
     senderId,
     text,
-    createdAt: serverTimestamp(),
+    createdAt: serverTimestamp() as Timestamp,
   };
 
   if (attachment) {
@@ -80,34 +110,25 @@ export const subscribeToChats = (
 
   return onSnapshot(q, (snapshot) => {
     const chats: Chat[] = snapshot.docs.map((docSnap) => {
-      const data = docSnap.data() as DocumentData;
+      const data = docSnap.data() as FirebaseChatData;
       return {
         id: docSnap.id,
         participants: data.participants,
         lastMessage: data.lastMessage,
-        updatedAt: data.updatedAt,
+        updatedAt: {
+          _seconds: data.updatedAt.seconds,
+          _nanoseconds: data.updatedAt.nanoseconds,
+        } as UpdatedAt,
       } as Chat;
     });
     chats.sort((a, b) => {
-      const aTime = a.updatedAt?.seconds || 0;
-      const bTime = b.updatedAt?.seconds || 0;
+      const aTime = a.updatedAt?._seconds || 0;
+      const bTime = b.updatedAt?._seconds || 0;
       return bTime - aTime;
     });
     callback(chats);
   });
 };
-
-interface FirebaseMessage {
-  id: string;
-  senderId: string;
-  text: string;
-  createdAt: any;
-  attachment?: {
-    name: string;
-    type: string;
-    data: string;
-  };
-}
 
 export const subscribeToMessages = (
   chatId: string,
@@ -118,7 +139,7 @@ export const subscribeToMessages = (
 
   return onSnapshot(q, (snapshot) => {
     const messages: FirebaseMessage[] = snapshot.docs.map((docSnap) => {
-      const data = docSnap.data() as DocumentData;
+      const data = docSnap.data() as FirebaseMessageData;
       return {
         id: docSnap.id,
         senderId: data.senderId,

@@ -12,12 +12,13 @@ import {
   deleteChat,
 } from "../server/chat.firebase";
 import { useContact } from "../../contact/hooks/contact.hook";
+import { Timestamp } from "firebase/firestore";
 
 interface FirebaseMessage {
   id: string;
   senderId: string;
   text: string;
-  createdAt: any;
+  createdAt: Timestamp;
   attachment?: {
     name: string;
     type: string;
@@ -60,7 +61,7 @@ export const useChat = () => {
           avatar: user?.profileImage || "/avatars/default.jpg",
           lastMessage: chat.lastMessage || "",
           timestamp: chat.updatedAt
-            ? new Date(chat.updatedAt.seconds * 1000)
+            ? new Date(chat.updatedAt._seconds * 1000)
             : new Date(),
           unreadCount: 0,
           isOnline: false,

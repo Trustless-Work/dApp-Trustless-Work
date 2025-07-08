@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { MoreVertical, Phone, Video, X } from "lucide-react";
+import { MoreVertical, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,9 +52,6 @@ export function ChatHeader({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>View Profile</DropdownMenuItem>
-            <DropdownMenuItem>Mute Notifications</DropdownMenuItem>
-            <DropdownMenuItem>Block User</DropdownMenuItem>
             <DropdownMenuItem className="text-destructive" onClick={onDelete}>
               Delete Conversation
             </DropdownMenuItem>
