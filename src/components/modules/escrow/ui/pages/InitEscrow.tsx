@@ -1,7 +1,6 @@
 "use client";
 
 import Loader from "@/components/utils/ui/Loader";
-import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { InitializeSingleEscrowForm } from "../forms/single-release/InitializeSingleEscrowForm";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { InitializeMultiEscrowForm } from "../forms/multi-release/InitializeMultiEscrowForm";

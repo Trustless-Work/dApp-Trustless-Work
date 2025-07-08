@@ -131,10 +131,6 @@ const MyEscrows = () => {
     [activeMode],
   );
 
-  if (isInitializingEscrow) {
-    return <Loader isLoading={isInitializingEscrow} />;
-  }
-
   return (
     <>
       <MoonpayWidget

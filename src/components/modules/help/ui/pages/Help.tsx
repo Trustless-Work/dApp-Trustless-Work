@@ -1,8 +1,6 @@
 import { Bounded } from "@/components/layout/Bounded";
 import HelpAccordion from "@/components/modules/help/ui/utils/HelpAccordion";
 import { Card, CardContent } from "@/components/ui/card";
-import Loader from "@/components/utils/ui/Loader";
-import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
