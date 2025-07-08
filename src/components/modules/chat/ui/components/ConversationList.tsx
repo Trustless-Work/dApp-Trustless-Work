@@ -60,9 +60,6 @@ export function ConversationList({
                 {getInitials(conversation.name)}
               </AvatarFallback>
             </Avatar>
-            {conversation.isOnline && (
-              <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
-            )}
           </div>
 
           <div className="flex-1 min-w-0">

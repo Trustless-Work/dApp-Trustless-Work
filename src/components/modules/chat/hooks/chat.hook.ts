@@ -11,11 +11,25 @@ import {
   subscribeToMessages,
   deleteChat,
 } from "../server/chat.firebase";
+import { useContact } from "../../contact/hooks/contact.hook";
+
+interface FirebaseMessage {
+  id: string;
+  senderId: string;
+  text: string;
+  createdAt: any;
+  attachment?: {
+    name: string;
+    type: string;
+    data: string;
+  };
+}
 
 export const useChat = () => {
   const address = useGlobalAuthenticationStore((state) => state.address);
   const fetchContacts = useContactStore((state) => state.fetchContacts);
   const contacts = useContactStore((state) => state.contacts);
+  const { users } = useContact();
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversationId, setSelectedConversationId] = useState<
@@ -37,11 +51,13 @@ export const useChat = () => {
       const mapped = chats.map((chat) => {
         const other = chat.participants.find((p) => p !== address) || "";
         const contact = contacts.find((c) => c.address === other);
+        const user = getUserFromStore(other);
+
         return {
           id: chat.id,
-          name: contact?.name || other,
-          email: contact?.email || "",
-          avatar: "/avatars/default.jpg",
+          name: contact?.name || user?.firstName || other,
+          email: contact?.email || user?.email || "",
+          avatar: user?.profileImage || "/avatars/default.jpg",
           lastMessage: chat.lastMessage || "",
           timestamp: chat.updatedAt
             ? new Date(chat.updatedAt.seconds * 1000)
@@ -57,26 +73,33 @@ export const useChat = () => {
 
   useEffect(() => {
     if (!selectedConversationId) return;
-    const unsubscribe = subscribeToMessages(selectedConversationId, (msgs) => {
-      const mapped: ChatMessage[] = msgs.map((m) => ({
-        id: m.id,
-        text: m.text,
-        sender: m.senderId === address ? "user" : "contact",
-        timestamp: m.createdAt
-          ? new Date(m.createdAt.seconds * 1000)
-          : new Date(),
-        type: m.attachment
-          ? m.attachment.type.startsWith("image/")
-            ? "image"
-            : "file"
-          : "text",
-        attachment: m.attachment,
-        isRead: true,
-      }));
-      setMessages((prev) => ({ ...prev, [selectedConversationId]: mapped }));
-    });
+    const unsubscribe = subscribeToMessages(
+      selectedConversationId,
+      (msgs: FirebaseMessage[]) => {
+        const mapped: ChatMessage[] = msgs.map((m) => ({
+          id: m.id,
+          text: m.text,
+          sender: m.senderId === address ? "user" : "contact",
+          timestamp: m.createdAt
+            ? new Date(m.createdAt.seconds * 1000)
+            : new Date(),
+          type: m.attachment
+            ? m.attachment.type.startsWith("image/")
+              ? "image"
+              : "file"
+            : "text",
+          attachment: m.attachment,
+          isRead: true,
+        }));
+        setMessages((prev) => ({ ...prev, [selectedConversationId]: mapped }));
+      },
+    );
     return () => unsubscribe();
   }, [selectedConversationId, address]);
+
+  const getUserFromStore = (address: string) => {
+    return users.find((user) => user.address === address);
+  };
 
   const selectedConversation = selectedConversationId
     ? conversations.find((c) => c.id === selectedConversationId)

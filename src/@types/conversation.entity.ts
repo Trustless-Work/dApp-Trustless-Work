@@ -6,7 +6,6 @@ export interface Conversation {
   lastMessage: string;
   timestamp: Date;
   unreadCount: number;
-  isOnline: boolean;
 }
 
 export interface ChatMessage {
@@ -33,16 +32,4 @@ export interface Chat {
   participants: string[];
   lastMessage: string;
   updatedAt: any;
-}
-
-export interface ChatMessage {
-  id: string;
-  senderId: string;
-  text: string;
-  createdAt: any;
-  attachment?: {
-    name: string;
-    type: string;
-    data: string;
-  };
 }

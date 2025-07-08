@@ -17,7 +17,11 @@ interface ChatHeaderProps {
   onDelete?: () => void;
 }
 
-export function ChatHeader({ conversation, onClose, onDelete }: ChatHeaderProps) {
+export function ChatHeader({
+  conversation,
+  onClose,
+  onDelete,
+}: ChatHeaderProps) {
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -37,16 +41,6 @@ export function ChatHeader({ conversation, onClose, onDelete }: ChatHeaderProps)
               {getInitials(conversation.name)}
             </AvatarFallback>
           </Avatar>
-          {conversation.isOnline && (
-            <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
-          )}
-        </div>
-
-        <div>
-          <h3 className="font-medium">{conversation.name}</h3>
-          <p className="text-sm text-muted-foreground">
-            {conversation.isOnline ? "Online" : "Offline"}
-          </p>
         </div>
       </div>
 
@@ -68,10 +62,7 @@ export function ChatHeader({ conversation, onClose, onDelete }: ChatHeaderProps)
             <DropdownMenuItem>View Profile</DropdownMenuItem>
             <DropdownMenuItem>Mute Notifications</DropdownMenuItem>
             <DropdownMenuItem>Block User</DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-destructive"
-              onClick={onDelete}
-            >
+            <DropdownMenuItem className="text-destructive" onClick={onDelete}>
               Delete Conversation
             </DropdownMenuItem>
           </DropdownMenuContent>

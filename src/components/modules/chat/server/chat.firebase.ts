@@ -97,15 +97,27 @@ export const subscribeToChats = (
   });
 };
 
+interface FirebaseMessage {
+  id: string;
+  senderId: string;
+  text: string;
+  createdAt: any;
+  attachment?: {
+    name: string;
+    type: string;
+    data: string;
+  };
+}
+
 export const subscribeToMessages = (
   chatId: string,
-  callback: (messages: ChatMessage[]) => void,
+  callback: (messages: FirebaseMessage[]) => void,
 ): (() => void) => {
   const messagesCol = collection(db, `chats/${chatId}/messages`);
   const q = query(messagesCol, orderBy("createdAt", "asc"));
 
   return onSnapshot(q, (snapshot) => {
-    const messages: ChatMessage[] = snapshot.docs.map((docSnap) => {
+    const messages: FirebaseMessage[] = snapshot.docs.map((docSnap) => {
       const data = docSnap.data() as DocumentData;
       return {
         id: docSnap.id,
@@ -113,7 +125,7 @@ export const subscribeToMessages = (
         text: data.text,
         createdAt: data.createdAt,
         attachment: data.attachment,
-      } as ChatMessage;
+      };
     });
     callback(messages);
   });
