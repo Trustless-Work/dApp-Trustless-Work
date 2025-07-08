@@ -11,15 +11,18 @@ import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 import Image from "next/image";
 import { Wallet, Fingerprint } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useWallet } from "../../../wallet/hooks/wallet.hook";
 
 export const Login = () => {
+  const { handleConnect } = useWallet();
+
   return (
-    <div className="min-h-screen flex flex-col bg-muted">
+    <div className="min-h-screen flex flex-col">
       <HeaderWithoutAuth />
-      <div className="flex flex-1 items-center justify-center py-8 sm:py-12 px-4 sm:px-2 md:px-0">
+      <div className="flex flex-1 items-start my-0 md:my-20 justify-center py-8 sm:py-4 px-4 sm:px-2 md:px-0">
         <div className="w-full max-w-5xl flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden bg-background/90">
           {/* Left: Welcome + Buttons */}
-          <Card className="flex-1 bg-background border-none rounded-none md:rounded-l-2xl px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16">
+          <Card className="flex-1 rounded-none md:rounded-l-2xl px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 border-r-0">
             <CardHeader className="px-0 pt-0 pb-6 sm:pb-8">
               <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center md:text-left">
                 Welcome to <span className="text-primary">Trustless Work</span>
@@ -33,6 +36,7 @@ export const Login = () => {
                 type="button"
                 variant="outline"
                 size="lg"
+                onClick={handleConnect}
                 className="w-full flex items-center justify-center sm:justify-start gap-2 sm:gap-3 rounded-lg shadow-sm px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold"
                 aria-label="Login with Wallet"
               >
@@ -62,7 +66,7 @@ export const Login = () => {
             </CardContent>
           </Card>
           {/* Right: Logo (only on md+) */}
-          <div className="hidden md:flex flex-col items-center justify-center bg-background/80 dark:bg-muted/80 px-8 lg:px-14 py-8 lg:py-12 w-[400px] lg:w-[440px] border-l">
+          <Card className="hidden md:flex rounded-none md:rounded-r-2xl flex-col items-center justify-center px-8 lg:px-14 py-8 lg:py-12 w-[400px] lg:w-[440px] border-l-0">
             <Image
               src="/logo.png"
               alt="Trustless Work Logo"
@@ -71,7 +75,7 @@ export const Login = () => {
               className="mb-2 drop-shadow-2xl dark:drop-shadow-none"
               priority
             />
-          </div>
+          </Card>
         </div>
       </div>
     </div>
