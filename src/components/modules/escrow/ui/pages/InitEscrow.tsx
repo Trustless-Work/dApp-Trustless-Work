@@ -7,11 +7,13 @@ import { useEscrowUIBoundedStore } from "../../store/ui";
 import { InitializeMultiEscrowForm } from "../forms/multi-release/InitializeMultiEscrowForm";
 
 const InitializeEscrow = () => {
-  const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
+  const isInitializingEscrow = useEscrowUIBoundedStore(
+    (state) => state.isInitializingEscrow,
+  );
   const escrowType = useEscrowUIBoundedStore((state) => state.escrowType);
 
-  if (isLoading) {
-    return <Loader isLoading={isLoading} />;
+  if (isInitializingEscrow) {
+    return <Loader isLoading={isInitializingEscrow} />;
   }
 
   return (

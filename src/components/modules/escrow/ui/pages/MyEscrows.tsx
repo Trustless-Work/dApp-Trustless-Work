@@ -28,7 +28,9 @@ import { Role } from "@trustless-work/escrow/types";
 
 const MyEscrows = () => {
   const { t } = useTranslation();
-  const isLoading = useGlobalUIBoundedStore((state) => state.isLoading);
+  const isInitializingEscrow = useEscrowUIBoundedStore(
+    (state) => state.isInitializingEscrow,
+  );
   const setActiveTab = useEscrowUIBoundedStore((state) => state.setActiveTab);
   const setActiveMode = useEscrowUIBoundedStore((state) => state.setActiveMode);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
@@ -129,8 +131,8 @@ const MyEscrows = () => {
     [activeMode],
   );
 
-  if (isLoading) {
-    return <Loader isLoading={isLoading} />;
+  if (isInitializingEscrow) {
+    return <Loader isLoading={isInitializingEscrow} />;
   }
 
   return (

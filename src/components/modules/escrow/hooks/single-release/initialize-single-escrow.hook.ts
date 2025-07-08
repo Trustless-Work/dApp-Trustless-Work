@@ -36,7 +36,9 @@ export const useInitializeSingleEscrow = () => {
     receiver: false,
   });
 
-  const setIsLoading = useGlobalUIBoundedStore((state) => state.setIsLoading);
+  const setIsInitializingEscrow = useEscrowUIBoundedStore(
+    (state) => state.setIsInitializingEscrow,
+  );
   const router = useRouter();
   const setIsSuccessDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessDialogOpen,
@@ -161,7 +163,7 @@ export const useInitializeSingleEscrow = () => {
       return;
     }
 
-    setIsLoading(true);
+    setIsInitializingEscrow(true);
 
     try {
       // Convert string values to numbers for the payload
@@ -200,7 +202,7 @@ export const useInitializeSingleEscrow = () => {
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
     } finally {
-      setIsLoading(false);
+      setIsInitializingEscrow(false);
     }
   };
 

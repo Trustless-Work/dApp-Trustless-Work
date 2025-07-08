@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const NetworkToggle = () => {
-  const { currentNetwork, changeNetwork, isLoading } = useNetwork();
+  const { currentNetwork, changeNetwork, isReseting } = useNetwork();
   const [showMainnetDialog, setShowMainnetDialog] = useState(false);
   const [pendingNetwork, setPendingNetwork] = useState<
     "testnet" | "mainnet" | null
@@ -57,7 +57,7 @@ const NetworkToggle = () => {
           id="network-mode"
           checked={switchChecked}
           onCheckedChange={handleNetworkChange}
-          disabled={isLoading}
+          disabled={isReseting}
           className="data-[state=checked]:bg-blue-600 disabled:opacity-50"
         />
         <Label
@@ -67,7 +67,7 @@ const NetworkToggle = () => {
             currentNetwork === "mainnet"
               ? "text-primary-600 dark:text-primary-500"
               : "text-gray-600 dark:text-gray-400",
-            isLoading && "opacity-50",
+            isReseting && "opacity-50",
           )}
         >
           {currentNetwork === "mainnet" ? "Mainnet" : "Testnet"}
@@ -125,12 +125,12 @@ const NetworkToggle = () => {
             <Button
               variant="outline"
               onClick={handleCancelMainnet}
-              disabled={isLoading}
+              disabled={isReseting}
             >
               Cancel
             </Button>
-            <Button onClick={handleConfirmMainnet} disabled={isLoading}>
-              {isLoading ? (
+            <Button onClick={handleConfirmMainnet} disabled={isReseting}>
+              {isReseting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Switching...

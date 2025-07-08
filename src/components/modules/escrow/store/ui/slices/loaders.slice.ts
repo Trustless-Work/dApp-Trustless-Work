@@ -9,6 +9,7 @@ export const useEscrowLoadersSlice: StateCreator<
 > = (set) => {
   return {
     // Stores
+    isInitializingEscrow: false,
     isChangingStatus: false,
     isChangingFlag: false,
     isReleasingFunds: false,
@@ -20,6 +21,8 @@ export const useEscrowLoadersSlice: StateCreator<
     isResolvingDispute: false,
 
     // Modifiers
+    setIsInitializingEscrow: (value: boolean) =>
+      set({ isInitializingEscrow: value }),
     setIsChangingStatus: (value: boolean) => set({ isChangingStatus: value }),
     setIsChangingFlag: (value: boolean) => set({ isChangingFlag: value }),
     setIsReleasingFunds: (value: boolean) => set({ isReleasingFunds: value }),

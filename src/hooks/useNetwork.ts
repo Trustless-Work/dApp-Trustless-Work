@@ -6,7 +6,7 @@ export type NetworkType = "testnet" | "mainnet";
 
 const useNetwork = () => {
   const [network, setNetwork] = useState<NetworkType>("testnet");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isReseting, setIsReseting] = useState(false);
 
   useEffect(() => {
     const savedNetwork = localStorage.getItem("network") as NetworkType;
@@ -18,11 +18,12 @@ const useNetwork = () => {
   const changeNetwork = (newNetwork: NetworkType) => {
     if (newNetwork === network) return;
 
-    setIsLoading(true);
+    setIsReseting(true);
     setNetwork(newNetwork);
     localStorage.setItem("network", newNetwork);
 
     setTimeout(() => {
+      setIsReseting(false);
       window.location.reload();
     }, 500);
   };
@@ -30,7 +31,7 @@ const useNetwork = () => {
   return {
     currentNetwork: network,
     changeNetwork,
-    isLoading,
+    isReseting,
   };
 };
 
