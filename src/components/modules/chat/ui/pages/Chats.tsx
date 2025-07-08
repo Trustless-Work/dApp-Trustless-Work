@@ -6,7 +6,11 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -58,7 +62,11 @@ export default function Chats() {
           </div>
           <Popover>
             <PopoverTrigger asChild>
-              <Button size="sm" variant="secondary" className="w-full justify-start gap-2">
+              <Button
+                size="sm"
+                variant="secondary"
+                className="w-full justify-start gap-2"
+              >
                 <Plus className="h-4 w-4" /> New Chat
               </Button>
             </PopoverTrigger>

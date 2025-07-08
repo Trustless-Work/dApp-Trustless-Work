@@ -37,7 +37,10 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if ((message.trim() || hasFiles) && !disabled) {
-      onSendMessage(message, attachedFiles.map((f) => f.file));
+      onSendMessage(
+        message,
+        attachedFiles.map((f) => f.file),
+      );
 
       setMessage("");
       clearFiles();
@@ -47,7 +50,10 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
 
   const handleOnEnter = (text: string) => {
     if ((text.trim() || hasFiles) && !disabled) {
-      onSendMessage(text, attachedFiles.map((f) => f.file));
+      onSendMessage(
+        text,
+        attachedFiles.map((f) => f.file),
+      );
 
       setMessage("");
       clearFiles();
