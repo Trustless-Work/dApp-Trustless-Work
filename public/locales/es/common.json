@@ -390,7 +390,7 @@
         "label": "Fecha de Creación"
       },
       "actions": {
-        "create": "Crear Depósito"
+        "create": "Crear Escrow"
       },
       "amount": {
         "label": "Rango de Monto",
