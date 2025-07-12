@@ -38,7 +38,6 @@ export const useReleaseFundsEscrowDialog = () => {
     try {
       const finalPayload: SingleReleaseReleaseFundsPayload = {
         contractId: selectedEscrow?.contractId || "",
-        signer: address,
         releaseSigner: selectedEscrow?.roles?.releaseSigner,
       };
 
