@@ -88,18 +88,22 @@ export const useResolveDisputeDialog = () => {
           ? Number(receiverFunds)
           : receiverFunds;
 
-      const finalPayload:
-        | SingleReleaseResolveDisputePayload
-        | MultiReleaseResolveDisputePayload = {
+      const basePayload = {
         contractId: selectedEscrow?.contractId || "",
         disputeResolver: selectedEscrow?.roles?.disputeResolver,
         approverFunds: numericApproverFunds,
         receiverFunds: numericReceiverFunds,
-        milestoneIndex:
-          selectedEscrow.type === "multi-release"
-            ? milestoneIndex?.toString() || ""
-            : "",
       };
+
+      const finalPayload:
+        | SingleReleaseResolveDisputePayload
+        | MultiReleaseResolveDisputePayload =
+        selectedEscrow.type === "multi-release"
+          ? {
+              ...basePayload,
+              milestoneIndex: milestoneIndex?.toString() || "",
+            }
+          : basePayload;
 
       await resolveDispute.mutateAsync({
         payload: finalPayload,
