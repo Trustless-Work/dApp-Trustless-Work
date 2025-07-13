@@ -158,8 +158,12 @@ export const getMilestoneStatusBadge = (
   return (
     <Badge variant="outline">
       <Layers className="h-3.5 w-3.5" />
-      <span>
-        {t(`reusable.${milestone.status?.toLowerCase() ?? "pending"}`)}
+      <span className="uppercase">
+        {milestone.status
+          ? milestone.status.match(/[a-z][A-Z]/)
+            ? milestone.status.replace(/([A-Z])/g, " $1").toLowerCase()
+            : milestone.status.toLowerCase()
+          : ""}
       </span>
     </Badge>
   );
