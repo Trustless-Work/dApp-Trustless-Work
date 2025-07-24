@@ -1,7 +1,6 @@
 "use client";
 
 import type { User } from "@/@types/user.entity";
-import { getUser } from "@/components/modules/auth/server/authentication.firebase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { useFormatUtils } from "@/utils/hook/format.hook";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { AuthService } from "@/components/modules/auth/services/auth.service";
 
 interface EntityCardProps {
   entity?: string;
@@ -38,7 +38,7 @@ const EntityCard = ({
     const fetchUser = async () => {
       if (entity) {
         try {
-          const fetchedUser = await getUser({ address: entity });
+          const fetchedUser = await new AuthService().getUser(entity);
           setUser(fetchedUser.data);
         } catch (error) {
           console.error("Error fetching user:", error);

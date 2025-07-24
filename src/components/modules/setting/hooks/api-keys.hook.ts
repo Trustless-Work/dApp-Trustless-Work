@@ -1,11 +1,9 @@
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useChangeUtils } from "@/utils/hook/input-visibility.hook";
 import { useState } from "react";
-import { requestApiKey } from "../services/request-api-key.service";
-import { getUser } from "../../auth/server/authentication.firebase";
-import { removeApiKey } from "../server/api-key-firebase";
 import { toast } from "sonner";
 import { useSettingBoundedStore } from "../store/ui";
+import { AuthService } from "../../auth/services/auth.service";
 
 const useAPIKeys = () => {
   const [showApiKey, setShowApiKey] = useState("password");
@@ -25,8 +23,8 @@ const useAPIKeys = () => {
 
       setIsRequestingAPIKey(false);
     } else {
-      const response = await requestApiKey(address);
-      const { data } = await getUser({ address });
+      const response = await new AuthService().requestApiKey(address); // ! todo: i need this endpoint
+      const { data } = await new AuthService().getUser(address);
       await updateUser(address, data);
 
       if (response) {
@@ -39,17 +37,16 @@ const useAPIKeys = () => {
     }
   };
 
-  const handleRemoveAPiKey = async (apiKey: string) => {
-    const { success } = await removeApiKey(address, apiKey);
-
-    if (success) {
-      toast.success("API key removed");
-
-      const { data } = await getUser({ address });
-      updateUser(address, data);
-    } else {
-      toast.error("Error while removing");
-    }
+  const handleRemoveAPiKey = async (/*apiKey: string*/) => {
+    // ! todo: remove api key from the user with updateUser
+    // const { success } = await new AuthService().updateUser(address, apiKey);
+    // if (success) {
+    //   toast.success("API key removed");
+    //   const { data } = await new AuthService().getUser(address);
+    //   updateUser(address, data);
+    // } else {
+    //   toast.error("Error while removing");
+    // }
   };
 
   const toggleVisibility = () => {

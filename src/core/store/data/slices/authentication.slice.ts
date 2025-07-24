@@ -1,11 +1,7 @@
 import { StateCreator } from "zustand";
 import { AuthenticationGlobalStore } from "../@types/authentication.entity";
-import {
-  addUser,
-  getUser,
-  updateUser,
-} from "@/components/modules/auth/server/authentication.firebase";
 import { UserPayload } from "@/@types/user.entity";
+import { AuthService } from "@/components/modules/auth/services/auth.service";
 
 const AUTHENTICATION_ACTIONS = {
   CONNECT_WALLET: "authentication/connect",
@@ -28,12 +24,11 @@ export const useGlobalAuthenticationSlice: StateCreator<
 
     // Modifiers
     connectWalletStore: async (address: string, name: string) => {
-      const { success, data } = await getUser({ address });
+      const { success, data } = await new AuthService().getUser(address);
 
       if (!success) {
-        const { success: registrationSuccess, data: userData } = await addUser({
-          address,
-        });
+        const { success: registrationSuccess, data: userData } =
+          await new AuthService().createUser(address);
 
         if (registrationSuccess) {
           set(
@@ -59,10 +54,10 @@ export const useGlobalAuthenticationSlice: StateCreator<
       ),
 
     updateUser: async (address: string, payload: UserPayload) => {
-      const { success, data } = await updateUser({
+      const { success, data } = await new AuthService().updateUser(
         address,
         payload,
-      });
+      );
 
       if (success) {
         set({ loggedUser: data }, false, AUTHENTICATION_ACTIONS.UPDATE_USER);
