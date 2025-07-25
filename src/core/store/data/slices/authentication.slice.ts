@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import { AuthenticationGlobalStore } from "../@types/authentication.entity";
+import type { AuthenticationGlobalStore } from "../@types/authentication.entity";
 import {
   addUser,
   getUser,
@@ -25,9 +25,16 @@ export const useGlobalAuthenticationSlice: StateCreator<
     address: "",
     name: "",
     loggedUser: null,
+    keyId: undefined,
 
     // Modifiers
-    connectWalletStore: async (address: string, name: string) => {
+    setKeyId: (keyId: string) => set({ keyId }),
+
+    connectWalletStore: async (
+      address: string,
+      name: string,
+      keyId?: string,
+    ) => {
       const { success, data } = await getUser({ address });
 
       if (!success) {
@@ -37,14 +44,14 @@ export const useGlobalAuthenticationSlice: StateCreator<
 
         if (registrationSuccess) {
           set(
-            { address, name, loggedUser: userData },
+            { address, name, loggedUser: userData, keyId },
             false,
             AUTHENTICATION_ACTIONS.CONNECT_WALLET,
           );
         }
       } else {
         set(
-          { address, name, loggedUser: data },
+          { address, name, loggedUser: data, keyId },
           false,
           AUTHENTICATION_ACTIONS.CONNECT_WALLET,
         );
@@ -53,7 +60,7 @@ export const useGlobalAuthenticationSlice: StateCreator<
 
     disconnectWalletStore: () =>
       set(
-        { address: "", name: "", loggedUser: null },
+        { address: "", name: "", loggedUser: null, keyId: undefined },
         false,
         AUTHENTICATION_ACTIONS.DISCONNECT_WALLET,
       ),

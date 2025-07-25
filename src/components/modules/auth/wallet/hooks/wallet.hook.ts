@@ -14,7 +14,6 @@ export const useWallet = () => {
 
         const { address } = await kit.getAddress();
         const { name } = option;
-
         connectWalletStore(address, name);
       },
     });
