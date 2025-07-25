@@ -10,6 +10,7 @@ interface PasskeyRegisterResult {
   error: string | null;
   success: boolean;
   register: (name: string) => Promise<void>;
+  login: (keyId?: string) => Promise<void>;
   reset: () => void;
 }
 
@@ -41,12 +42,9 @@ export function usePasskeyRegister(): PasskeyRegisterResult {
         setContractId(cid);
 
         // 2. Conectar el wallet (login WebAuthn real)
-        // Esto puede requerir un método como account.connectWallet({ keyId: encodedKeyId, ... })
-        // Si tu SDK lo soporta, hazlo aquí:
         if (typeof account.connectWallet === "function") {
           await account.connectWallet({
             keyId: encodedKeyId,
-            // ...otros parámetros si tu SDK los requiere
           });
         }
 
@@ -65,6 +63,42 @@ export function usePasskeyRegister(): PasskeyRegisterResult {
     [connectWalletStore],
   );
 
+  const login = useCallback(
+    async (inputKeyId?: string) => {
+      setLoading(true);
+      setError(null);
+      setSuccess(false);
+      try {
+        // Usa el keyId proporcionado, el del estado, o ninguno
+        const usedKeyId = inputKeyId || keyId;
+        let res;
+        if (usedKeyId) {
+          // Login rápido con keyId persistido
+          res = await account.connectWallet({
+            keyId: usedKeyId,
+            getContractId: (keyId: string) => server.getContractId({ keyId }),
+          });
+        } else {
+          // Login WebAuthn normal (sin keyId)
+          res = await account.connectWallet();
+        }
+        const { keyId: kid, contractId: cid } = res;
+        const encodedKeyId = base64url(kid);
+        setContractId(cid);
+        setKeyId(encodedKeyId);
+        // Actualizar el slice global de autenticación
+        await connectWalletStore(cid, "Passkey User", encodedKeyId);
+        setSuccess(true);
+      } catch (err: unknown) {
+        const errorMsg = err instanceof Error ? err.message : "Login failed";
+        setError(errorMsg);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [connectWalletStore, keyId],
+  );
+
   const reset = () => {
     setKeyId("");
     setContractId("");
@@ -80,6 +114,7 @@ export function usePasskeyRegister(): PasskeyRegisterResult {
     error,
     success,
     register,
+    login,
     reset,
   };
 }

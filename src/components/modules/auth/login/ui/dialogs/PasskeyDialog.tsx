@@ -17,15 +17,14 @@ interface PasskeyDialogProps {
 
 export function PasskeyDialog({ open, setOpen }: PasskeyDialogProps) {
   const { t } = useTranslation();
-  const { register, loading, error, keyId, contractId, success, reset } =
+  const { register, login, loading, error, keyId, contractId, success, reset } =
     usePasskeyRegister();
 
   const handleCreatePasskey = () => {
     register("User");
   };
   const handleUsePasskey = () => {
-    // TODO: Implementar lógica para usar passkey existente
-    setOpen(false);
+    login();
   };
 
   // Optionally reset state when dialog closes
@@ -50,7 +49,7 @@ export function PasskeyDialog({ open, setOpen }: PasskeyDialogProps) {
             disabled={loading}
           >
             <KeyRound className="w-5 h-5" />
-            {loading
+            {loading && !success
               ? t("common.loading", "Cargando...")
               : t("passkeyDialog.create", "Crear Passkey")}
           </Button>
@@ -61,7 +60,9 @@ export function PasskeyDialog({ open, setOpen }: PasskeyDialogProps) {
             disabled={loading}
           >
             <Fingerprint className="w-5 h-5" />
-            {t("passkeyDialog.useExisting", "Usar Passkey Existente")}
+            {loading && !success
+              ? t("common.loading", "Cargando...")
+              : t("passkeyDialog.useExisting", "Usar Passkey Existente")}
           </Button>
           {error && (
             <div className="text-destructive text-sm text-center">{error}</div>
