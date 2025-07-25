@@ -1,11 +1,9 @@
 import {
   BookOpen,
-  Bug,
   CircleHelp,
   Layers,
   LayoutDashboard,
   LucideContactRound,
-  MessageCircle,
 } from "lucide-react";
 
 // Helper function to get network-specific URLs
@@ -47,13 +45,6 @@ export const ItemsSidebar = {
           title: "sidebar.contacts",
           url: "/dashboard/contact",
           icon: LucideContactRound,
-          isActive: true,
-          isExpandable: false,
-        },
-        {
-          title: "sidebar.chats",
-          url: "/dashboard/chats",
-          icon: MessageCircle,
           isActive: true,
           isExpandable: false,
         },
@@ -109,13 +100,6 @@ export const ItemsSidebar = {
     {
       label: "sidebar.support",
       items: [
-        {
-          title: "sidebar.reportIssue",
-          url: "/dashboard/report-issue",
-          icon: Bug,
-          isActive: true,
-          isExpandable: false,
-        },
         {
           title: "sidebar.help",
           url: "/dashboard/help",

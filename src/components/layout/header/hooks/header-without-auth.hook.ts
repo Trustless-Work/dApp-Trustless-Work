@@ -18,11 +18,7 @@ const useHeaderWithoutAuth = () => {
     router.push("/request-api-key");
   };
 
-  const handleReportIssue = () => {
-    router.push("/report-issue");
-  };
-
-  return { handleRequestApiKey, handleReportIssue, address };
+  return { handleRequestApiKey, address };
 };
 
 export default useHeaderWithoutAuth;

@@ -8,19 +8,24 @@ import useAPIKeys from "../../hooks/api-keys.hook";
 import Link from "next/link";
 import { useCopyUtils } from "@/utils/hook/copy.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { Trash2 } from "lucide-react";
+import { Trash2, Loader2 } from "lucide-react";
 import { useSettingBoundedStore } from "../../store/ui";
 import SkeletonAPIKey from "../utils/SkeletonAPIKey";
 
 export const APIKeys = () => {
-  const { onSubmit, showApiKey, toggleVisibility, handleRemoveAPiKey } =
-    useAPIKeys();
+  const {
+    onSubmit,
+    showApiKey,
+    toggleVisibility,
+    handleRemoveAPiKey,
+    deletingKeys,
+  } = useAPIKeys();
   const { copyText, copiedKeyId } = useCopyUtils();
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const isRequestingAPIKey = useSettingBoundedStore(
     (state) => state.isRequestingAPIKey,
   );
-
+  console.log(loggedUser);
   return (
     <Card className={cn("overflow-hidden")}>
       <CardContent className="p-6">
@@ -55,26 +60,36 @@ export const APIKeys = () => {
         </div>
 
         <div className="flex flex-col gap-4 w-2/3 mt-5">
-          {loggedUser?.apiKey?.map((apiKey, index) => (
-            <div key={index} className="flex items-center gap-4">
-              <div className="flex-grow">
-                <Input type={showApiKey} disabled defaultValue={apiKey} />
+          {loggedUser?.apiKey?.map((apiKey, index) => {
+            const isDeleting = deletingKeys.has(apiKey);
+
+            return (
+              <div key={index} className="flex items-center gap-4">
+                <div className="flex-grow">
+                  <Input type={showApiKey} disabled defaultValue={apiKey} />
+                </div>
+                <Button
+                  className="!mt-0"
+                  variant="outline"
+                  onClick={() => copyText(index.toString(), apiKey)}
+                  disabled={isDeleting}
+                >
+                  {copiedKeyId === index.toString() ? "Copied!" : "Copy"}
+                </Button>
+                <Button
+                  onClick={() => handleRemoveAPiKey(apiKey)}
+                  variant="destructive"
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <Trash2 className="h-5 w-5" />
+                  )}
+                </Button>
               </div>
-              <Button
-                className="!mt-0"
-                variant="outline"
-                onClick={() => copyText(index.toString(), apiKey)}
-              >
-                {copiedKeyId === index.toString() ? "Copied!" : "Copy"}
-              </Button>
-              <Button
-                onClick={() => handleRemoveAPiKey(apiKey)}
-                className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
-              >
-                <Trash2 className="h-5 w-5" />
-              </Button>
-            </div>
-          ))}
+            );
+          })}
 
           {/* Skeleton */}
           {isRequestingAPIKey && <SkeletonAPIKey />}

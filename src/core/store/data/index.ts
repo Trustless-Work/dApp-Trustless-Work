@@ -1,4 +1,4 @@
-import { devtools, DevtoolsOptions, persist } from "zustand/middleware";
+import { devtools, DevtoolsOptions } from "zustand/middleware";
 import { EscrowGlobalStore } from "./@types/escrows.entity";
 import { create } from "zustand";
 import { useGlobalEscrowsSlice } from "./slices/escrows.slice";
@@ -45,13 +45,6 @@ export const useGlobalBoundedStore = create<GlobalState>()(
   ),
 );
 
-export const useGlobalAuthenticationStore = create<AuthState>()(
-  persist(
-    (...b) => ({
-      ...useGlobalAuthenticationSlice(...b),
-    }),
-    {
-      name: "address-wallet",
-    },
-  ),
-);
+export const useGlobalAuthenticationStore = create<AuthState>()((...b) => ({
+  ...useGlobalAuthenticationSlice(...b),
+}));

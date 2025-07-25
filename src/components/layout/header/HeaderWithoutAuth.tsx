@@ -6,7 +6,7 @@ import useScrollHeader from "./hooks/useScrollHeader.hook";
 import ThemeToggle from "./ThemeToggle";
 import Image from "next/image";
 import Link from "next/link";
-import { Bug, LogIn, LogOut } from "lucide-react";
+import { LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LanguageToggle from "./LanguageToggle";
 import { useTranslation } from "react-i18next";
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 const HeaderWithoutAuth: React.FC = () => {
   const { handleDisconnect } = useWallet();
-  const { address, handleReportIssue } = useHeaderWithoutAuth();
+  const { address } = useHeaderWithoutAuth();
   const { isScrolled } = useScrollHeader();
   const { t } = useTranslation("common");
 
@@ -43,9 +43,6 @@ const HeaderWithoutAuth: React.FC = () => {
         <div className="flex gap-5 ml-auto">
           <LanguageToggle />
           <ThemeToggle />
-          <Button variant="destructive" onClick={handleReportIssue}>
-            <Bug /> {t("header.reportIssue")}
-          </Button>
           <Link href="/login">
             <Button variant="outline">
               <LogIn /> Login

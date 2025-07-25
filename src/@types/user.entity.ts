@@ -17,4 +17,7 @@ export interface User {
   address?: string;
 }
 
-export type UserPayload = Omit<User, "createdAt" | "updatedAt" | "id">;
+export type UserPayload = Omit<
+  User,
+  "createdAt" | "updatedAt" | "id" | "address"
+>;
