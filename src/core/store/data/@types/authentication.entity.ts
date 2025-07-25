@@ -7,5 +7,6 @@ export interface AuthenticationGlobalStore {
 
   connectWalletStore: (address: string, name: string) => void;
   disconnectWalletStore: () => void;
-  updateUser: (address: string, payload: UserPayload) => void;
+  updateUser: (address: string, payload: UserPayload | User) => void;
+  refreshUser: (address: string) => void;
 }

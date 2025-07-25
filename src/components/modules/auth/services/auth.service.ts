@@ -1,4 +1,4 @@
-import { UserPayload } from "@/@types/user.entity";
+import { User, UserPayload } from "@/@types/user.entity";
 import http from "@/core/config/axios/http";
 
 export class AuthService {
@@ -24,7 +24,7 @@ export class AuthService {
     }
   }
 
-  async updateUser(address: string, updateData: UserPayload): Promise<any> {
+  async updateUser(address: string, updateData: UserPayload): Promise<User> {
     try {
       const response = await http.patch(`/user/${address}`, updateData);
       return response.data;
@@ -44,7 +44,7 @@ export class AuthService {
     }
   }
 
-  async getUser(address: string): Promise<any> {
+  async getUser(address: string): Promise<User> {
     try {
       const response = await http.get(`/user/${address}`);
       return response.data;
@@ -54,10 +54,10 @@ export class AuthService {
     }
   }
 
-  async requestApiKey(address: string) {
+  async requestApiKey(wallet: string): Promise<User> {
     try {
-      const response = await http.post("/auth/request-api-key", { address });
-      return response;
+      const response = await http.post("/auth/request-api-key", { wallet });
+      return response.data;
     } catch (error) {
       console.error(error);
       throw error;
