@@ -45,13 +45,6 @@ export const useGlobalBoundedStore = create<GlobalState>()(
   ),
 );
 
-export const useGlobalAuthenticationStore = create<AuthState>()(
-  persist(
-    (...b) => ({
-      ...useGlobalAuthenticationSlice(...b),
-    }),
-    {
-      name: "address-wallet",
-    },
-  ),
-);
+export const useGlobalAuthenticationStore = create<AuthState>()((...b) => ({
+  ...useGlobalAuthenticationSlice(...b),
+}));

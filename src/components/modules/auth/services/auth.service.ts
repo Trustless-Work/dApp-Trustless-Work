@@ -41,7 +41,7 @@ export class AuthService {
 
   async getAllUsers(): Promise<User[]> {
     try {
-      const response = await http.get("/get-all-users");
+      const response = await http.get("/user/get-all");
       return response.data;
     } catch (error) {
       console.error(error);
@@ -54,7 +54,6 @@ export class AuthService {
       const response = await http.get(`/user/${address}`);
       return response.data;
     } catch (error: unknown) {
-      // Handle axios error response
       if (error && typeof error === "object" && "response" in error) {
         const axiosError = error as AxiosErrorResponse;
         if (axiosError.response?.status === 404) {
