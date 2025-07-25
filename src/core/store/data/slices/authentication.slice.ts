@@ -25,25 +25,42 @@ export const useGlobalAuthenticationSlice: StateCreator<
 
     // Modifiers
     connectWalletStore: async (address: string, name: string) => {
-      const data = await new AuthService().getUser(address);
+      try {
+        const data = await new AuthService().getUser(address);
 
-      if (!data) {
-        const { success: registrationSuccess, data: userData } =
-          await new AuthService().createUser(address);
+        if (!data) {
+          const { message } = await new AuthService().createUser(address);
 
-        if (registrationSuccess) {
+          // ! todo: remove this, this is a temporary solution to avoid the error. Then we should use the data from the API -> Waiting for CALEB
+          const userData = {
+            createdAt: {
+              _seconds: 0,
+              _nanoseconds: 0,
+            },
+            updatedAt: {
+              _seconds: 0,
+              _nanoseconds: 0,
+            },
+            address,
+          };
+
+          if (message) {
+            set(
+              { address, name, loggedUser: userData },
+              false,
+              AUTHENTICATION_ACTIONS.CONNECT_WALLET,
+            );
+          }
+        } else {
           set(
-            { address, name, loggedUser: userData },
+            { address, name, loggedUser: data },
             false,
             AUTHENTICATION_ACTIONS.CONNECT_WALLET,
           );
         }
-      } else {
-        set(
-          { address, name, loggedUser: data },
-          false,
-          AUTHENTICATION_ACTIONS.CONNECT_WALLET,
-        );
+      } catch (error) {
+        console.error("Error in connectWalletStore:", error);
+        throw error;
       }
     },
 
@@ -55,7 +72,6 @@ export const useGlobalAuthenticationSlice: StateCreator<
       ),
 
     updateUser: async (address: string, payload: UserPayload | User) => {
-      // If payload is a complete User object, just update the state
       if ("id" in payload && "createdAt" in payload && "updatedAt" in payload) {
         set(
           { loggedUser: payload as User },
@@ -77,10 +93,15 @@ export const useGlobalAuthenticationSlice: StateCreator<
     },
 
     refreshUser: async (address: string) => {
-      const data = await new AuthService().getUser(address);
+      try {
+        const data = await new AuthService().getUser(address);
 
-      if (data) {
-        set({ loggedUser: data }, false, AUTHENTICATION_ACTIONS.REFRESH_USER);
+        if (data) {
+          set({ loggedUser: data }, false, AUTHENTICATION_ACTIONS.REFRESH_USER);
+        }
+      } catch (error) {
+        console.error("Error in refreshUser:", error);
+        throw error;
       }
     },
   };

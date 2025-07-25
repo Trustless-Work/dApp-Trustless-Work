@@ -1,22 +1,27 @@
 import { User, UserPayload } from "@/@types/user.entity";
 import http from "@/core/config/axios/http";
 
-export class AuthService {
-  // ! todo: add promise types
+interface CreateUserResponse {
+  message: string;
+}
 
-  async createUser(address: string): Promise<any> {
+interface ApiErrorResponse {
+  message: string;
+  error: string;
+  statusCode: number;
+}
+
+interface AxiosErrorResponse {
+  response: {
+    status: number;
+    data: ApiErrorResponse;
+  };
+}
+
+export class AuthService {
+  async createUser(address: string): Promise<CreateUserResponse> {
     try {
       const response = await http.post("/user/create", { address });
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
-
-  async addAPIKey(address: string, token: string): Promise<any> {
-    try {
-      const response = await http.post(`/user/${address}/api-key`, { token });
       return response.data;
     } catch (error) {
       console.error(error);
@@ -34,7 +39,7 @@ export class AuthService {
     }
   }
 
-  async getAllUsers(): Promise<any[]> {
+  async getAllUsers(): Promise<User[]> {
     try {
       const response = await http.get("/get-all-users");
       return response.data;
@@ -44,11 +49,18 @@ export class AuthService {
     }
   }
 
-  async getUser(address: string): Promise<User> {
+  async getUser(address: string): Promise<User | null> {
     try {
       const response = await http.get(`/user/${address}`);
       return response.data;
-    } catch (error) {
+    } catch (error: unknown) {
+      // Handle axios error response
+      if (error && typeof error === "object" && "response" in error) {
+        const axiosError = error as AxiosErrorResponse;
+        if (axiosError.response?.status === 404) {
+          return null;
+        }
+      }
       console.error(error);
       throw error;
     }

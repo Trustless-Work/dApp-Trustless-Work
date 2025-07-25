@@ -27,12 +27,12 @@ export function usePublicProfile(
       try {
         const response = await new AuthService().getUser(walletAddress);
 
-        if (!response.success) {
+        if (!response) {
           setUser(null);
           return;
         }
 
-        setUser(response.data as User);
+        setUser(response);
       } catch (err: unknown) {
         console.error("Error loading public profile:", err);
         setError("Failed to load user.");

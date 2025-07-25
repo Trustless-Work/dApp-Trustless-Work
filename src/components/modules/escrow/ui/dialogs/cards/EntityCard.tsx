@@ -39,7 +39,7 @@ const EntityCard = ({
       if (entity) {
         try {
           const fetchedUser = await new AuthService().getUser(entity);
-          setUser(fetchedUser.data);
+          setUser(fetchedUser || undefined);
         } catch (error) {
           console.error("Error fetching user:", error);
         }
