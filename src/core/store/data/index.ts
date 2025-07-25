@@ -1,4 +1,4 @@
-import { devtools, DevtoolsOptions, persist } from "zustand/middleware";
+import { devtools, DevtoolsOptions } from "zustand/middleware";
 import { EscrowGlobalStore } from "./@types/escrows.entity";
 import { create } from "zustand";
 import { useGlobalEscrowsSlice } from "./slices/escrows.slice";
