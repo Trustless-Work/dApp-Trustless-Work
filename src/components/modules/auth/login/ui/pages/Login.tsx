@@ -12,9 +12,12 @@ import Image from "next/image";
 import { Wallet, Fingerprint } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "../../../wallet/hooks/wallet.hook";
+import { PasskeyDialog } from "@/components/dialogs/PasskeyDialog";
+import { useState } from "react";
 
 export const Login = () => {
   const { handleConnect } = useWallet();
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -54,6 +57,7 @@ export const Login = () => {
                 size="lg"
                 className="w-full flex items-center justify-center sm:justify-start gap-2 sm:gap-3 rounded-lg shadow-sm px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold"
                 aria-label="Login with Passkey"
+                onClick={() => setOpen(true)}
               >
                 <Fingerprint
                   className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"
@@ -78,6 +82,8 @@ export const Login = () => {
           </Card>
         </div>
       </div>
+      {/* Passkey Dialog */}
+      <PasskeyDialog open={open} setOpen={setOpen} />
     </div>
   );
 };

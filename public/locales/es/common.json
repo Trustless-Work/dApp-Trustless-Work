@@ -654,5 +654,11 @@
       "platformAddress": "Dirección de Plataforma",
       "receiver": "Receptor"
     }
+  },
+  "passkeyDialog": {
+    "title": "Elige una opción de Passkey",
+    "create": "Crear Passkey",
+    "useExisting": "Usar Passkey Existente",
+    "cancel": "Cancelar"
   }
 }
