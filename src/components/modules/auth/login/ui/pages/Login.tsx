@@ -12,7 +12,7 @@ import Image from "next/image";
 import { Wallet, Fingerprint } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "../../../wallet/hooks/wallet.hook";
-import { PasskeyDialog } from "@/components/dialogs/PasskeyDialog";
+import { PasskeyDialog } from "@/components/modules/auth/login/ui/dialogs/PasskeyDialog";
 import { useState } from "react";
 
 export const Login = () => {

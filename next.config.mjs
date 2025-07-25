@@ -5,6 +5,12 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_MAINTENANCE_MODE: process.env.MAINTENANCE_MODE,
   },
+  transpilePackages: [
+    "passkey-kit",
+    "passkey-factory-sdk",
+    "passkey-kit-sdk",
+    "sac-sdk",
+  ],
   // Add configuration for handling static files
   async headers() {
     return [
