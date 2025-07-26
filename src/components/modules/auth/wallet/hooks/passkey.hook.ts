@@ -1,0 +1,113 @@
+import { useState, useCallback } from "react";
+import { account, server } from "@/lib/passkey";
+import base64url from "base64url";
+import { useGlobalAuthenticationStore } from "@/core/store/data";
+
+interface PasskeyRegisterResult {
+  keyId: string;
+  contractId: string;
+  loading: boolean;
+  error: string | null;
+  success: boolean;
+  register: (name: string) => Promise<void>;
+  login: (keyId?: string) => Promise<void>;
+  reset: () => void;
+}
+
+export function usePasskeyRegister(): PasskeyRegisterResult {
+  const [keyId, setKeyId] = useState("");
+  const [contractId, setContractId] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const connectWalletStore = useGlobalAuthenticationStore(
+    (state) => state.connectWalletStore,
+  );
+
+  const register = useCallback(
+    async (name: string) => {
+      setLoading(true);
+      setError(null);
+      setKeyId("");
+      setContractId("");
+      setSuccess(false);
+      try {
+        const res = await account.createWallet("Trustless-Work", name);
+        const { keyId: kid, contractId: cid, signedTx } = res;
+        await server.send(signedTx);
+        const encodedKeyId = base64url(kid);
+        setKeyId(encodedKeyId);
+        setContractId(cid);
+
+        if (typeof account.connectWallet === "function") {
+          await account.connectWallet({
+            keyId: encodedKeyId,
+          });
+        }
+
+        await connectWalletStore(cid, name, encodedKeyId);
+
+        setSuccess(true);
+      } catch (err: unknown) {
+        const errorMsg =
+          err instanceof Error ? err.message : "Registration failed";
+        setError(errorMsg);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [connectWalletStore],
+  );
+
+  const login = useCallback(
+    async (inputKeyId?: string) => {
+      setLoading(true);
+      setError(null);
+      setSuccess(false);
+      try {
+        const usedKeyId = inputKeyId || keyId;
+        let res;
+        if (usedKeyId) {
+          res = await account.connectWallet({
+            keyId: usedKeyId,
+            getContractId: (keyId: string) => server.getContractId({ keyId }),
+          });
+        } else {
+          res = await account.connectWallet();
+        }
+        const { keyId: kid, contractId: cid } = res;
+        const encodedKeyId = base64url(kid);
+        setContractId(cid);
+        setKeyId(encodedKeyId);
+        await connectWalletStore(cid, "Passkey User", encodedKeyId);
+        setSuccess(true);
+      } catch (err: unknown) {
+        const errorMsg = err instanceof Error ? err.message : "Login failed";
+        setError(errorMsg);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [connectWalletStore, keyId],
+  );
+
+  const reset = () => {
+    setKeyId("");
+    setContractId("");
+    setError(null);
+    setSuccess(false);
+    setLoading(false);
+  };
+
+  return {
+    keyId,
+    contractId,
+    loading,
+    error,
+    success,
+    register,
+    login,
+    reset,
+  };
+}

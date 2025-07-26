@@ -663,5 +663,11 @@
       "platformAddress": "Platform Address",
       "receiver": "Receiver"
     }
+  },
+  "passkeyDialog": {
+    "title": "Choose a Passkey option",
+    "create": "Create Passkey",
+    "useExisting": "Use Existing Passkey",
+    "cancel": "Cancel"
   }
 }
