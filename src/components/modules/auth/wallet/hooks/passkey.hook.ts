@@ -33,7 +33,6 @@ export function usePasskeyRegister(): PasskeyRegisterResult {
       setContractId("");
       setSuccess(false);
       try {
-        // 1. Crear el Passkey (registro)
         const res = await account.createWallet("Trustless-Work", name);
         const { keyId: kid, contractId: cid, signedTx } = res;
         await server.send(signedTx);
@@ -41,14 +40,12 @@ export function usePasskeyRegister(): PasskeyRegisterResult {
         setKeyId(encodedKeyId);
         setContractId(cid);
 
-        // 2. Conectar el wallet (login WebAuthn real)
         if (typeof account.connectWallet === "function") {
           await account.connectWallet({
             keyId: encodedKeyId,
           });
         }
 
-        // 3. Actualizar el slice global de autenticación
         await connectWalletStore(cid, name, encodedKeyId);
 
         setSuccess(true);
@@ -69,24 +66,20 @@ export function usePasskeyRegister(): PasskeyRegisterResult {
       setError(null);
       setSuccess(false);
       try {
-        // Usa el keyId proporcionado, el del estado, o ninguno
         const usedKeyId = inputKeyId || keyId;
         let res;
         if (usedKeyId) {
-          // Login rápido con keyId persistido
           res = await account.connectWallet({
             keyId: usedKeyId,
             getContractId: (keyId: string) => server.getContractId({ keyId }),
           });
         } else {
-          // Login WebAuthn normal (sin keyId)
           res = await account.connectWallet();
         }
         const { keyId: kid, contractId: cid } = res;
         const encodedKeyId = base64url(kid);
         setContractId(cid);
         setKeyId(encodedKeyId);
-        // Actualizar el slice global de autenticación
         await connectWalletStore(cid, "Passkey User", encodedKeyId);
         setSuccess(true);
       } catch (err: unknown) {
