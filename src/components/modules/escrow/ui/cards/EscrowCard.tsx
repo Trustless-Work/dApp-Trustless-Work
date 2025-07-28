@@ -123,10 +123,12 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
             </span>
           </Badge>
 
-          <Badge variant="outline" className="gap-2 w-fit">
-            <Hash className="h-3.5 w-3.5" />
-            <span>{escrow.milestones.length} milestones</span>
-          </Badge>
+          <TooltipInfo content="Number of milestones">
+            <Badge variant="outline" className="gap-2 w-fit">
+              <Hash className="h-3.5 w-3.5" />
+              <span>{escrow.milestones.length}</span>
+            </Badge>
+          </TooltipInfo>
         </div>
 
         <p className="text-xs text-muted-foreground italic w-full sm:w-auto text-center sm:text-right">
