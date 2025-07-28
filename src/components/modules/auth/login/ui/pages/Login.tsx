@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 import Image from "next/image";
-import { Wallet, Fingerprint } from "lucide-react";
+import { Wallet /*, Fingerprint*/ } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "../../../wallet/hooks/wallet.hook";
 
@@ -48,7 +48,7 @@ export const Login = () => {
                   Login with Wallet
                 </span>
               </Button>
-              <Button
+              {/* <Button
                 type="button"
                 variant="outline"
                 size="lg"
@@ -62,7 +62,7 @@ export const Login = () => {
                 <span className="flex-1 text-center sm:text-left">
                   Login with Passkey
                 </span>
-              </Button>
+              </Button> */}
             </CardContent>
           </Card>
           {/* Right: Logo (only on md+) */}
