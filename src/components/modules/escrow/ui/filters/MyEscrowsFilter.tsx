@@ -91,7 +91,7 @@ const MyEscrowsFilter = () => {
                   </span>
                 </motion.button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
+              <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
                   <div className="flex items-center gap-3">
                     <motion.div

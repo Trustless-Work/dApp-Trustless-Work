@@ -1,21 +1,28 @@
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useChangeUtils } from "@/utils/hook/input-visibility.hook";
-import { useState } from "react";
-import { requestApiKey } from "../services/request-api-key.service";
-import { getUser } from "../../auth/server/authentication.firebase";
-import { removeApiKey } from "../server/api-key-firebase";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useSettingBoundedStore } from "../store/ui";
+import { AuthService } from "../../auth/services/auth.service";
 
 const useAPIKeys = () => {
   const [showApiKey, setShowApiKey] = useState("password");
+  const [deletingKeys, setDeletingKeys] = useState<Set<string>>(new Set());
   const { changeTypeInput } = useChangeUtils();
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
-  const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
+  const refreshUser = useGlobalAuthenticationStore(
+    (state) => state.refreshUser,
+  );
   const setIsRequestingAPIKey = useSettingBoundedStore(
     (state) => state.setIsRequestingAPIKey,
   );
+
+  useEffect(() => {
+    if (address) {
+      refreshUser(address);
+    }
+  }, [address, refreshUser]);
 
   const onSubmit = async () => {
     setIsRequestingAPIKey(true);
@@ -25,30 +32,52 @@ const useAPIKeys = () => {
 
       setIsRequestingAPIKey(false);
     } else {
-      const response = await requestApiKey(address);
-      const { data } = await getUser({ address });
-      await updateUser(address, data);
+      try {
+        const response = await new AuthService().requestApiKey(address);
 
-      if (response) {
-        toast.success("Your API key has been generated");
-      } else {
-        toast.error("Error while requesting");
+        if (response?.apiKey) {
+          await refreshUser(address);
+
+          toast.success("Your API key has been generated");
+        } else {
+          toast.error("Error while requesting");
+        }
+      } catch (error) {
+        console.error("Error requesting API key:", error);
+        toast.error("Error while requesting API key");
+      } finally {
+        setIsRequestingAPIKey(false);
       }
-
-      setIsRequestingAPIKey(false);
     }
   };
 
   const handleRemoveAPiKey = async (apiKey: string) => {
-    const { success } = await removeApiKey(address, apiKey);
+    setDeletingKeys((prev) => new Set(prev).add(apiKey));
 
-    if (success) {
-      toast.success("API key removed");
+    try {
+      const currentApiKeys = loggedUser?.apiKey || [];
+      const updatedApiKeys = currentApiKeys.filter((key) => key !== apiKey);
 
-      const { data } = await getUser({ address });
-      updateUser(address, data);
-    } else {
-      toast.error("Error while removing");
+      const response = await new AuthService().updateUser(address, {
+        apiKey: updatedApiKeys,
+      });
+
+      if (response) {
+        await refreshUser(address);
+
+        toast.success("API key removed successfully");
+      } else {
+        toast.error("Error while removing API key");
+      }
+    } catch (error) {
+      console.error("Error removing API key:", error);
+      toast.error("Error while removing API key");
+    } finally {
+      setDeletingKeys((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(apiKey);
+        return newSet;
+      });
     }
   };
 
@@ -56,7 +85,13 @@ const useAPIKeys = () => {
     changeTypeInput({ type: showApiKey, setType: setShowApiKey });
   };
 
-  return { onSubmit, showApiKey, toggleVisibility, handleRemoveAPiKey };
+  return {
+    onSubmit,
+    showApiKey,
+    toggleVisibility,
+    handleRemoveAPiKey,
+    deletingKeys,
+  };
 };
 
 export default useAPIKeys;

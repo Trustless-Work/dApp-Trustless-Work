@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { User } from "@/@types/user.entity";
-import { getUser } from "@/components/modules/auth/server/authentication.firebase";
+import { AuthService } from "../../auth/services/auth.service";
 
 interface UsePublicProfileResult {
   user: User | null;
@@ -25,14 +25,14 @@ export function usePublicProfile(
       setError(null);
 
       try {
-        const response = await getUser({ address: walletAddress });
+        const response = await new AuthService().getUser(walletAddress);
 
-        if (!response.success) {
+        if (!response) {
           setUser(null);
           return;
         }
 
-        setUser(response.data as User);
+        setUser(response);
       } catch (err: unknown) {
         console.error("Error loading public profile:", err);
         setError("Failed to load user.");

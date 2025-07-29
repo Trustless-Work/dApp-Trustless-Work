@@ -12,18 +12,16 @@ const useSettings = () => {
   const toggleTheme = useGlobalUIBoundedStore((state) => state.toggleTheme);
   const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
-  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
 
   const saveProfile = async (data: UserPayload | PreferencesForm) => {
     try {
-      const updatedData = {
-        ...loggedUser,
-        ...data,
-      };
+      const user = await updateUser(address, data as UserPayload);
 
-      await updateUser(address, updatedData);
-
-      toast.success("Profile and preferences saved successfully!");
+      if (user) {
+        toast.success("Profile and preferences saved successfully!");
+      } else {
+        toast.error("Failed to save preferences. Please try again.");
+      }
     } catch (error) {
       console.error("Error saving preferences:", error);
       toast.error("Failed to save preferences. Please try again.");
