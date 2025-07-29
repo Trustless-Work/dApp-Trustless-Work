@@ -40,6 +40,7 @@ export const useReleaseFundsMilestoneDialog = () => {
 
     try {
       const finalPayload: MultiReleaseReleaseFundsPayload = {
+        signer: address || "",
         contractId: selectedEscrow?.contractId || "",
         releaseSigner: selectedEscrow?.roles?.releaseSigner,
         milestoneIndex: milestoneIndex?.toString() || "0",

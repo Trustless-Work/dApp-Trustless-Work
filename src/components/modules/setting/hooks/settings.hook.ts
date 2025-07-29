@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User } from "@/@types/user.entity";
+import { UserPayload } from "@/@types/user.entity";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { PreferencesForm } from "./preferences-section.hook";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
@@ -13,9 +13,9 @@ const useSettings = () => {
   const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
 
-  const saveProfile = async (data: User | PreferencesForm) => {
+  const saveProfile = async (data: UserPayload | PreferencesForm) => {
     try {
-      const user = await updateUser(address, data);
+      const user = await updateUser(address, data as UserPayload);
 
       if (user) {
         toast.success("Profile and preferences saved successfully!");

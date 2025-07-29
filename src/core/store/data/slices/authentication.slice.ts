@@ -60,6 +60,7 @@ export const useGlobalAuthenticationSlice: StateCreator<
 
     updateUser: async (address: string, payload: UserPayload | User) => {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { createdAt, updatedAt, ...rest } = payload as User;
 
         const data = await new AuthService().updateUser(
