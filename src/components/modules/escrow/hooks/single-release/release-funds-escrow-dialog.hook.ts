@@ -39,7 +39,6 @@ export const useReleaseFundsEscrowDialog = () => {
       const finalPayload: SingleReleaseReleaseFundsPayload = {
         contractId: selectedEscrow?.contractId || "",
         releaseSigner: selectedEscrow?.roles?.releaseSigner,
-        signer: address || "",
       };
 
       await releaseFunds.mutateAsync({
