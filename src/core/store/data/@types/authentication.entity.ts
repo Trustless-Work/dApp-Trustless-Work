@@ -7,6 +7,9 @@ export interface AuthenticationGlobalStore {
 
   connectWalletStore: (address: string, name: string) => void;
   disconnectWalletStore: () => void;
-  updateUser: (address: string, payload: UserPayload | User) => void;
+  updateUser: (
+    address: string,
+    payload: UserPayload | User,
+  ) => Promise<User | undefined>;
   refreshUser: (address: string) => void;
 }

@@ -59,25 +59,22 @@ export const useGlobalAuthenticationSlice: StateCreator<
       ),
 
     updateUser: async (address: string, payload: UserPayload | User) => {
-      if ("createdAt" in payload && "updatedAt" in payload) {
-        set(
-          { loggedUser: payload as User },
-          false,
-          AUTHENTICATION_ACTIONS.UPDATE_USER,
+      try {
+        const { createdAt, updatedAt, ...rest } = payload as User;
+
+        const data = await new AuthService().updateUser(
+          address,
+          rest as UserPayload,
         );
-        return;
-      }
 
-      console.log(payload);
+        if (data) {
+          set({ loggedUser: data }, false, AUTHENTICATION_ACTIONS.UPDATE_USER);
+        }
 
-      // If payload is UserPayload, update via API and then refresh
-      const data = await new AuthService().updateUser(
-        address,
-        payload as UserPayload,
-      );
-
-      if (data) {
-        set({ loggedUser: data }, false, AUTHENTICATION_ACTIONS.UPDATE_USER);
+        return data;
+      } catch (error) {
+        console.error("Error in updateUser:", error);
+        throw error;
       }
     },
 
