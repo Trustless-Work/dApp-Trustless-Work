@@ -1,8 +1,10 @@
 import { User, UserPayload } from "@/@types/user.entity";
 import http from "@/core/config/axios/http";
+import { Status } from "@trustless-work/escrow";
 
 interface CreateUserResponse {
-  message: string;
+  status: Status;
+  user: User;
 }
 
 interface ApiErrorResponse {
