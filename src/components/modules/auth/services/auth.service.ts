@@ -31,7 +31,7 @@ export class AuthService {
 
   async updateUser(address: string, updateData: UserPayload): Promise<User> {
     try {
-      const response = await http.patch(`/user/${address}`, updateData);
+      const response = await http.put(`/user/${address}`, updateData);
       return response.data;
     } catch (error) {
       console.error(error);

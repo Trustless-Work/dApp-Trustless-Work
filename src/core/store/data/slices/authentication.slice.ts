@@ -72,7 +72,7 @@ export const useGlobalAuthenticationSlice: StateCreator<
       ),
 
     updateUser: async (address: string, payload: UserPayload | User) => {
-      if ("id" in payload && "createdAt" in payload && "updatedAt" in payload) {
+      if ("createdAt" in payload && "updatedAt" in payload) {
         set(
           { loggedUser: payload as User },
           false,
@@ -80,6 +80,8 @@ export const useGlobalAuthenticationSlice: StateCreator<
         );
         return;
       }
+
+      console.log(payload);
 
       // If payload is UserPayload, update via API and then refresh
       const data = await new AuthService().updateUser(

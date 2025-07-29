@@ -24,15 +24,18 @@ export const ProfileAvatar = ({
     <div className="flex flex-col items-center mb-8">
       <div className="relative group">
         <Avatar className="h-32 w-32 border-2 border-background shadow-sm">
-          <AvatarImage
-            className="object-cover"
-            src={profileImage || "/placeholder.svg"}
-            alt={firstName || "User"}
-          />
-          <AvatarFallback className="text-xl">
-            {firstName ? firstName.charAt(0) : ""}
-            {lastName ? lastName.charAt(0) : ""}
-          </AvatarFallback>
+          {profileImage ? (
+            <AvatarImage
+              className="object-cover"
+              src={profileImage}
+              alt={firstName || "User"}
+            />
+          ) : (
+            <AvatarFallback className="text-xl">
+              {firstName ? firstName.charAt(0) : "?"}
+              {lastName ? lastName.charAt(0) : "?"}
+            </AvatarFallback>
+          )}
         </Avatar>
 
         <label className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity rounded-full cursor-pointer">
