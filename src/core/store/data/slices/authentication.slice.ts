@@ -29,24 +29,11 @@ export const useGlobalAuthenticationSlice: StateCreator<
         const data = await new AuthService().getUser(address);
 
         if (!data) {
-          const { message } = await new AuthService().createUser(address);
+          const { status, user } = await new AuthService().createUser(address);
 
-          // ! todo: remove this, this is a temporary solution to avoid the error. Then we should use the data from the API -> Waiting for CALEB
-          const userData = {
-            createdAt: {
-              _seconds: 0,
-              _nanoseconds: 0,
-            },
-            updatedAt: {
-              _seconds: 0,
-              _nanoseconds: 0,
-            },
-            address,
-          };
-
-          if (message) {
+          if (status === "SUCCESS") {
             set(
-              { address, name, loggedUser: userData },
+              { address, name, loggedUser: user },
               false,
               AUTHENTICATION_ACTIONS.CONNECT_WALLET,
             );
