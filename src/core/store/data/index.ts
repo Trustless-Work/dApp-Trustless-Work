@@ -1,4 +1,5 @@
 import { devtools, DevtoolsOptions } from "zustand/middleware";
+import { persist, PersistOptions } from "zustand/middleware";
 import { EscrowGlobalStore } from "./@types/escrows.entity";
 import { create } from "zustand";
 import { useGlobalEscrowsSlice } from "./slices/escrows.slice";
@@ -7,6 +8,8 @@ import { AuthenticationGlobalStore } from "./@types/authentication.entity";
 
 type GlobalState = EscrowGlobalStore;
 type AuthState = AuthenticationGlobalStore;
+
+type PersistedAuthState = Pick<AuthState, "address" | "name" | "loggedUser">;
 
 const devtoolsOptions: DevtoolsOptions = {
   name: "Global State",
@@ -36,6 +39,15 @@ const devtoolsOptions: DevtoolsOptions = {
   },
 };
 
+const persistOptions: PersistOptions<AuthState, PersistedAuthState> = {
+  name: "auth-storage",
+  partialize: (state: AuthState) => ({
+    address: state.address,
+    name: state.name,
+    loggedUser: state.loggedUser,
+  }),
+};
+
 export const useGlobalBoundedStore = create<GlobalState>()(
   devtools(
     (...a) => ({
@@ -45,6 +57,11 @@ export const useGlobalBoundedStore = create<GlobalState>()(
   ),
 );
 
-export const useGlobalAuthenticationStore = create<AuthState>()((...b) => ({
-  ...useGlobalAuthenticationSlice(...b),
-}));
+export const useGlobalAuthenticationStore = create<AuthState>()(
+  persist(
+    (...b) => ({
+      ...useGlobalAuthenticationSlice(...b),
+    }),
+    persistOptions,
+  ),
+);
