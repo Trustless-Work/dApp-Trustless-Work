@@ -20,7 +20,11 @@ import { useInitializeMultiEscrow } from "../../../hooks/multi-release/initializ
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 
-export const InitializeMultiEscrowForm = () => {
+export const InitializeMultiEscrowForm = ({
+  disabled,
+}: {
+  disabled: boolean;
+}) => {
   const {
     form,
     milestones,
@@ -40,7 +44,7 @@ export const InitializeMultiEscrowForm = () => {
 
   const handleChangeType = () => {
     setEscrowType(null);
-    toggleStep(2);
+    toggleStep(1);
   };
 
   const handlePlatformFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -594,7 +598,7 @@ export const InitializeMultiEscrowForm = () => {
           <Button
             className="w-full md:w-1/4"
             type="submit"
-            disabled={isAnyMilestoneEmpty}
+            disabled={isAnyMilestoneEmpty || disabled}
           >
             Initialize Escrow
           </Button>

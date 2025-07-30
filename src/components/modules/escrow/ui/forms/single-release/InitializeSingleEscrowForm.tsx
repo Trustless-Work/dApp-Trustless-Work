@@ -20,7 +20,11 @@ import { useInitializeSingleEscrow } from "../../../hooks/single-release/initial
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 
-export const InitializeSingleEscrowForm = () => {
+export const InitializeSingleEscrowForm = ({
+  disabled,
+}: {
+  disabled: boolean;
+}) => {
   const {
     form,
     milestones,
@@ -40,7 +44,7 @@ export const InitializeSingleEscrowForm = () => {
 
   const handleChangeType = () => {
     setEscrowType(null);
-    toggleStep(2);
+    toggleStep(1);
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -601,7 +605,7 @@ export const InitializeSingleEscrowForm = () => {
           <Button
             className="w-full md:w-1/4"
             type="submit"
-            disabled={isAnyMilestoneEmpty}
+            disabled={isAnyMilestoneEmpty || disabled}
           >
             Initialize Escrow
           </Button>
