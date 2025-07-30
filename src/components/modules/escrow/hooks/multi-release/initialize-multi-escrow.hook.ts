@@ -72,7 +72,7 @@ export const useInitializeMultiEscrow = () => {
       engagementId: "",
       title: "",
       description: "",
-      platformFee: 0,
+      platformFee: undefined,
       receiverMemo: "",
       trustline: {
         address: "",
@@ -86,7 +86,7 @@ export const useInitializeMultiEscrow = () => {
         releaseSigner: "",
         disputeResolver: "",
       },
-      milestones: [{ description: "", amount: 0 }],
+      milestones: [{ description: "", amount: undefined }],
     },
     mode: "onChange",
   });

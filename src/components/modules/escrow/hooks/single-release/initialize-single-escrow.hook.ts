@@ -72,8 +72,8 @@ export const useInitializeSingleEscrow = () => {
       engagementId: "",
       title: "",
       description: "",
-      platformFee: 0,
-      amount: 0,
+      platformFee: undefined,
+      amount: undefined,
       receiverMemo: "",
       trustline: {
         address: "",
