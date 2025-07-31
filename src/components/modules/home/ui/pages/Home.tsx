@@ -3,7 +3,7 @@ import { useHome } from "../../hooks/home.hook";
 import { Bounded } from "@/components/layout/Bounded";
 import { BackgroundLights } from "../utils/BackgroundLights";
 import { HeroSection } from "../sections/Hero";
-import { MissionSection } from "../sections/Mission";
+import { MissionSection } from "../sections/Features";
 import { HowItWorksSection } from "../sections/HowItWorks";
 import { CTASection } from "../sections/CTA";
 import { WhyEscrowsSection } from "../sections/WhyEscrows";
@@ -31,10 +31,6 @@ export const Home = () => {
           <HowItWorksSection />
           <SmartEscrowSection />
           <CTASection />
-          <h1 className="text-center text-2xl font-bold mt-10">
-            texting this to see if it works
-          </h1>
-          {/* <FloatingChat /> */}
         </main>
       </Bounded>
     </>
