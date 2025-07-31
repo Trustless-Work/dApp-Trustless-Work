@@ -66,9 +66,8 @@ const features: Feature[] = [
     id: "5",
     title: "Release Funds",
     videoUrl: {
-      dark: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-      light:
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+      dark: "/videos/release-dark.mp4",
+      light: "/videos/release-light.mp4",
     },
     duration: 16,
     icon: <LockOpenIcon className="text-primary" />,
