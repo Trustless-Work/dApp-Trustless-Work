@@ -159,7 +159,7 @@ const MyEscrowsCards = ({ role }: MyEscrowsCardsProps) => {
       <SuccessDialog
         isSuccessDialogOpen={isSuccessDialogOpen}
         setIsSuccessDialogOpen={setIsSuccessDialogOpen}
-        title={`${loggedUser?.saveEscrow ? "Escrow initialized successfully" : "Escrow initialized successfully, but according to your settings, it was not saved"}`}
+        title="Escrow initialized successfully"
         description="Now that your escrow is initialized, you will be able to view it directly in"
         recentEscrow={recentEscrow}
       />

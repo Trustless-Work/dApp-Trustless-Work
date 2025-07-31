@@ -3,53 +3,76 @@
 import { useState, useRef, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Check,
   CheckCircle,
   CheckSquare,
   DollarSign,
-  Home,
   Layers,
-  LockIcon,
   LockOpenIcon,
 } from "lucide-react";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 
-const features = [
+type VideoUrl = string | { dark: string; light: string };
+
+interface Feature {
+  id: string;
+  title: string;
+  videoUrl: VideoUrl;
+  duration: number;
+  icon: React.ReactNode;
+}
+
+const features: Feature[] = [
   {
     id: "1",
     title: "Deploy an Escrow",
-    videoUrl: "/videos/features-video-1.mp4",
-    duration: 18,
+    videoUrl: {
+      dark: "/videos/deploy-dark.mp4",
+      light: "/videos/deploy-light.mp4",
+    },
+    duration: 37,
     icon: <Layers />,
   },
   {
     id: "2",
     title: "Fund Escrow",
-    videoUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    videoUrl: {
+      dark: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      light:
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    },
     duration: 12,
     icon: <DollarSign />,
   },
   {
     id: "3",
     title: "Complete Milestone",
-    videoUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    videoUrl: {
+      dark: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+      light:
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    },
     duration: 18,
     icon: <CheckSquare />,
   },
   {
     id: "4",
     title: "Approve Milestone",
-    videoUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    videoUrl: {
+      dark: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+      light:
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    },
     duration: 14,
     icon: <CheckCircle />,
   },
   {
     id: "5",
     title: "Release Funds",
-    videoUrl:
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    videoUrl: {
+      dark: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+      light:
+        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+    },
     duration: 16,
     icon: <LockOpenIcon />,
   },
@@ -59,6 +82,24 @@ export default function FeatureShowcase() {
   const [activeTab, setActiveTab] = useState(features[0].id);
   const [progress, setProgress] = useState<Record<string, number>>({});
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
+  const theme = useGlobalUIBoundedStore((state) => state.theme);
+
+  // Get the appropriate video URL based on current theme
+  const getVideoUrl = (feature: Feature): string => {
+    // If the videoUrl is an object with dark/light variants, use theme-based selection
+    if (
+      typeof feature.videoUrl === "object" &&
+      "dark" in feature.videoUrl &&
+      "light" in feature.videoUrl
+    ) {
+      const videoUrlObj = feature.videoUrl as { dark: string; light: string };
+      return videoUrlObj[theme as "dark" | "light"];
+    }
+    // Fallback to the original videoUrl if it's a string
+    return typeof feature.videoUrl === "string"
+      ? feature.videoUrl
+      : (feature.videoUrl as { dark: string; light: string }).dark;
+  };
 
   // Initialize progress for all tabs
   useEffect(() => {
@@ -147,15 +188,19 @@ export default function FeatureShowcase() {
         onValueChange={handleTabChange}
         className="w-full"
       >
-        <TabsList className="grid grid-cols-5 mb-0 h-auto gap-4  bg-transparent">
+        <TabsList className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 mb-0 h-auto gap-2 sm:gap-3 lg:gap-4 bg-transparent">
           {features.map((feature) => (
             <TabsTrigger
               key={feature.id}
               value={feature.id}
-              className="relative py-3 text-base font-medium flex items-center gap-2"
+              className="relative py-2 sm:py-3 text-xs sm:text-sm lg:text-base font-medium flex flex-col sm:flex-row items-center gap-1 sm:gap-2 min-h-[60px] sm:min-h-[50px]"
             >
-              {feature.icon}
-              <span className="text-sm font-medium">{feature.title}</span>
+              <div className="flex items-center gap-1 sm:gap-2">
+                {feature.icon}
+                <span className="text-xs sm:text-sm font-medium text-center sm:text-left line-clamp-2 sm:line-clamp-1">
+                  {feature.title}
+                </span>
+              </div>
 
               <div className="absolute bottom-0 left-0 w-full h-1 rounded-b-md overflow-hidden">
                 <div
@@ -173,15 +218,15 @@ export default function FeatureShowcase() {
           <TabsContent
             key={feature.id}
             value={feature.id}
-            className="mt-6 border rounded-lg overflow-hidden "
+            className="mt-4 sm:mt-6 border rounded-lg overflow-hidden"
           >
             <div className="aspect-video relative">
               <video
                 ref={(el) => {
                   videoRefs.current[feature.id] = el;
                 }}
-                className="w-full h-full object-contain border-2 border-muted rounded-xl"
-                src={feature.videoUrl}
+                className="w-full h-full object-contain rounded-xl"
+                src={getVideoUrl(feature)}
                 muted
                 autoPlay
                 playsInline

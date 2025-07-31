@@ -3,7 +3,7 @@ import { useHome } from "../../hooks/home.hook";
 import { Bounded } from "@/components/layout/Bounded";
 import { BackgroundLights } from "../utils/BackgroundLights";
 import { HeroSection } from "../sections/Hero";
-import { MissionSection } from "../sections/Features";
+import { FeaturesSection } from "../sections/Features";
 import { HowItWorksSection } from "../sections/HowItWorks";
 import { CTASection } from "../sections/CTA";
 import { WhyEscrowsSection } from "../sections/WhyEscrows";
@@ -26,7 +26,7 @@ export const Home = () => {
         <main className="overflow-hidden" ref={containerRef}>
           <BackgroundLights />
           <HeroSection y1={y1} opacity={opacity} />
-          <MissionSection />
+          <FeaturesSection />
           <WhyEscrowsSection />
           <HowItWorksSection />
           <SmartEscrowSection />
