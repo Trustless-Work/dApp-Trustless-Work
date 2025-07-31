@@ -15,10 +15,10 @@ const Footer: React.FC = () => {
           <p>
             Email:{" "}
             <Link
-              href="mailto:trustlesswork@gmail.com"
+              href="mailto:alberto@trustlesswork.com"
               className="text-blue-600 hover:underline dark:text-blue-400"
             >
-              trustlesswork@gmail.com
+              alberto@trustlesswork.com
             </Link>
           </p>
           <p>
