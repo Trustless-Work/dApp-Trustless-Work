@@ -30,40 +30,37 @@ const features: Feature[] = [
       light: "/videos/deploy-light.mp4",
     },
     duration: 37,
-    icon: <Layers />,
+    icon: <Layers className="text-primary" />,
   },
   {
     id: "2",
     title: "Fund Escrow",
     videoUrl: {
-      dark: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-      light:
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      dark: "/videos/fund-dark.mp4",
+      light: "/videos/fund-light.mp4",
     },
     duration: 12,
-    icon: <DollarSign />,
+    icon: <DollarSign className="text-primary" />,
   },
   {
     id: "3",
     title: "Complete Milestone",
     videoUrl: {
-      dark: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-      light:
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+      dark: "/videos/complete-dark.mp4",
+      light: "/videos/complete-light.mp4",
     },
     duration: 18,
-    icon: <CheckSquare />,
+    icon: <CheckSquare className="text-primary" />,
   },
   {
     id: "4",
     title: "Approve Milestone",
     videoUrl: {
-      dark: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-      light:
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+      dark: "/videos/approve-dark.mp4",
+      light: "/videos/approve-light.mp4",
     },
     duration: 14,
-    icon: <CheckCircle />,
+    icon: <CheckCircle className="text-primary" />,
   },
   {
     id: "5",
@@ -74,7 +71,7 @@ const features: Feature[] = [
         "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
     },
     duration: 16,
-    icon: <LockOpenIcon />,
+    icon: <LockOpenIcon className="text-primary" />,
   },
 ];
 
@@ -193,7 +190,9 @@ export default function FeatureShowcase() {
             <TabsTrigger
               key={feature.id}
               value={feature.id}
-              className="relative py-2 sm:py-3 text-xs sm:text-sm lg:text-base font-medium flex flex-col sm:flex-row items-center gap-1 sm:gap-2 min-h-[60px] sm:min-h-[50px]"
+              className={`relative py-2 sm:py-3 text-xs sm:text-sm lg:text-base font-medium flex flex-col sm:flex-row items-center gap-1 sm:gap-2 min-h-[60px] sm:min-h-[50px] ${
+                activeTab === feature.id && "!bg-transparent"
+              }`}
             >
               <div className="flex items-center gap-1 sm:gap-2">
                 {feature.icon}
