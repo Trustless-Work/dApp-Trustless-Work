@@ -11,10 +11,7 @@ import {
 import NoData from "@/components/utils/ui/NoData";
 import EscrowDetailDialog from "../dialogs/EscrowDetailDialog";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import {
-  useGlobalAuthenticationStore,
-  useGlobalBoundedStore,
-} from "@/core/store/data";
+import { useGlobalBoundedStore } from "@/core/store/data";
 import SuccessDialog, {
   SuccessReleaseDialog,
   SuccessResolveDisputeDialog,
@@ -55,7 +52,6 @@ const MyEscrowsCards = ({ role }: MyEscrowsCardsProps) => {
   const setIsSuccessResolveDisputeDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsSuccessResolveDisputeDialogOpen,
   );
-  const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const recentEscrow = useGlobalBoundedStore((state) => state.recentEscrow);
 
   const {

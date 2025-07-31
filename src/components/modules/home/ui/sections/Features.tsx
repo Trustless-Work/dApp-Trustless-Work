@@ -2,11 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Bounded } from "@/components/layout/Bounded";
-import { useTranslation } from "react-i18next";
 import FeatureShowcase from "../cards/FeaturesVideos";
 
 export const FeaturesSection = () => {
-  const { t } = useTranslation("common");
   return (
     <Bounded center={true} className="py-20 relative">
       <div className="absolute inset-0 z-0"></div>
