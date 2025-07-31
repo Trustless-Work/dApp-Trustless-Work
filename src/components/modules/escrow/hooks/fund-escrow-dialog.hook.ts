@@ -42,7 +42,7 @@ const useFundEscrowDialog = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: 0,
+      amount: undefined,
       paymentMethod: "wallet",
     },
     mode: "onChange",
