@@ -134,7 +134,9 @@ export const Actions = ({
           {shouldShowResolveButton && (
             <Button
               onClick={handleOpen}
-              className="bg-green-800 hover:bg-green-700 w-full"
+              type="button"
+              variant="success"
+              className="w-full"
             >
               <Handshake className="mr-2 h-4 w-4" />
               Resolve Dispute
@@ -145,7 +147,8 @@ export const Actions = ({
             <Button
               onClick={releaseFundsSubmit}
               type="button"
-              className="bg-green-800 hover:bg-green-700 w-full"
+              variant="success"
+              className="w-full"
               disabled={isReleasingFunds || selectedEscrow.balance === 0}
             >
               {isReleasingFunds ? (
