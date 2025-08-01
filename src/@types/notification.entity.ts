@@ -15,5 +15,8 @@ export interface Notification {
     receiver?: string;
   };
   read: boolean;
-  createdAt: CreatedAt;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
 }
