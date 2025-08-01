@@ -324,7 +324,7 @@ const ResolveDisputeEscrowDialog = ({
             <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-end items-center">
               <Button
                 type="submit"
-                className="bg-green-800 hover:bg-green-700 text-white"
+                variant="success"
                 disabled={!isEqualToAmount || isResolvingDispute}
               >
                 {isResolvingDispute ? (
