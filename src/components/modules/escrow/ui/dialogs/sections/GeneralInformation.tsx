@@ -72,7 +72,7 @@ export const GeneralInformation = ({
   return (
     <div className="space-y-6 h-full">
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex flex-col md:flex-row w-4/5 gap-4">
+        <div className="flex flex-col md:flex-row w-full mdw-4/5 gap-4">
           {selectedEscrow.flags?.disputed && (
             <StatisticsCard
               title={t("escrowDetailDialog.status")}
