@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useShouldReduceMotion } from "@/hooks/mobile.hook";
 
 interface ServiceCardProps {
   title: string;
@@ -13,10 +14,12 @@ export const ServiceCard = ({
   description,
   delay = 0,
 }: ServiceCardProps) => {
+  const shouldReduceMotion = useShouldReduceMotion();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+      whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
       viewport={{ once: true }}
       className="bg-background/80 dark:bg-background/40 backdrop-blur-md rounded-xl p-6 border border-border shadow-md"

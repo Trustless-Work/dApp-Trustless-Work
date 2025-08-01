@@ -8,6 +8,7 @@ import Link from "next/link";
 import { ScrollIndicator } from "../utils/ScrollIndicator";
 import { useHero } from "../../hooks/hero.hook";
 import { Trans, useTranslation } from "react-i18next";
+import { useShouldReduceMotion } from "@/hooks/mobile.hook";
 
 interface HeroSectionProps {
   y1: MotionValue<number>;
@@ -17,23 +18,27 @@ interface HeroSectionProps {
 export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
   const { currentWord, words } = useHero();
   const { t } = useTranslation("common");
+  const shouldReduceMotion = useShouldReduceMotion();
 
   return (
     <Bounded
       center={true}
       className="min-h-[95vh] flex flex-col justify-center relative"
     >
-      <motion.div style={{ y: y1, opacity }} className="z-10 relative">
+      <div 
+        style={shouldReduceMotion ? {} : { y: y1, opacity }} 
+        className="z-10 relative"
+      >
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={shouldReduceMotion ? {} : { opacity: 0, y: 50 }}
+          animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-8"
         >
           <motion.h1
             className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600 dark:from-primary dark:to-blue-400"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+            animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
             <span className="text-black/80 dark:text-white/80">
@@ -45,8 +50,8 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={shouldReduceMotion ? {} : { opacity: 0, y: 50 }}
+          animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           className="max-w-2xl"
         >
@@ -66,9 +71,9 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
             <AnimatePresence mode="wait">
               <motion.h3
                 key={currentWord}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
+                initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+                animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+                exit={shouldReduceMotion ? {} : { opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
                 className="text-3xl md:text-4xl font-bold text-primary/70 dark:text-primary/80 absolute"
               >
@@ -82,8 +87,8 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
           </p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+            animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
             className="flex flex-wrap gap-4"
           >
@@ -93,7 +98,7 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
                 <motion.span
                   className="inline-block ml-2"
                   initial={{ x: 0 }}
-                  whileHover={{ x: 5 }}
+                  whileHover={shouldReduceMotion ? {} : { x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <ArrowRight className="h-5 w-5" />
@@ -108,9 +113,9 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
             </Link>
           </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
 
-      <ScrollIndicator />
+      {!shouldReduceMotion && <ScrollIndicator />}
     </Bounded>
   );
 };

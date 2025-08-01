@@ -4,17 +4,20 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "react-i18next";
+import { useShouldReduceMotion } from "@/hooks/mobile.hook";
 
 export const SmartEscrowCard = () => {
   const { t } = useTranslation("common");
+  const shouldReduceMotion = useShouldReduceMotion();
+
   return (
     <div className="relative">
       <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-blue-400/20 dark:bg-blue-500/10 rounded-full blur-[80px] z-0"></div>
 
       <motion.div
         className="relative z-10 bg-background/80 dark:bg-background/40 backdrop-blur-md rounded-2xl p-8 border border-border shadow-lg"
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.95 }}
+        whileInView={shouldReduceMotion ? {} : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true, amount: 0.3 }}
       >
