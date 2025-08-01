@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Bounded } from "@/components/layout/Bounded";
-import { ServiceCard } from "../cards/ServiceCard";
 import { useTranslation } from "react-i18next";
 import { useShouldReduceMotion } from "@/hooks/mobile.hook";
 
@@ -30,7 +29,7 @@ export const HowItWorksSection = () => {
           </p>
         </div>
 
-        <ServiceCard />
+        {/* <ServiceCard /> */}
       </motion.div>
     </Bounded>
   );

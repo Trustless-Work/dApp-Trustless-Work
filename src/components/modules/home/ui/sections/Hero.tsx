@@ -25,7 +25,7 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
       center={true}
       className="min-h-[95vh] flex flex-col justify-center relative"
     >
-      <div
+      <motion.div
         style={shouldReduceMotion ? {} : { y: y1, opacity }}
         className="z-10 relative"
       >
@@ -113,7 +113,7 @@ export const HeroSection = ({ y1, opacity }: HeroSectionProps) => {
             </Link>
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
 
       {!shouldReduceMotion && <ScrollIndicator />}
     </Bounded>
