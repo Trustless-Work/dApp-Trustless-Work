@@ -132,16 +132,16 @@ export const ImprovedSuccessResolveDisputeDialog = ({
 
   return (
     <Dialog open={isSuccessResolveDisputeDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[650px] p-0 gap-0 overflow-auto md:overflow-hidden h-auto max-h-[90vh] md:max-h-none">
-        <div className="flex flex-col md:flex-row">
-          <div className="w-full p-6">
-            <DialogHeader className="mb-8">
-              <DialogTitle>{title}</DialogTitle>
-              <DialogDescription className="mb-2">
+      <DialogContent className="sm:max-w-[650px] lg:max-w-[800px] p-0 gap-0 overflow-auto md:overflow-hidden h-auto max-h-[90vh] md:max-h-none">
+        <div className="flex flex-col">
+          <div className="w-full p-4 sm:p-6">
+            <DialogHeader className="mb-6 sm:mb-8">
+              <DialogTitle className="text-lg sm:text-xl">{title}</DialogTitle>
+              <DialogDescription className="mb-2 text-sm sm:text-base">
                 {description}{" "}
                 <Link
                   href={stellarExplorerUrl}
-                  className="text-primary"
+                  className="text-primary hover:underline"
                   target="_blank"
                 >
                   Stellar Explorer
@@ -149,14 +149,14 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 <span className="mx-2">or</span>
                 <Link
                   href={escrowViewerUrl}
-                  className="text-primary"
+                  className="text-primary hover:underline"
                   target="_blank"
                 >
                   Escrow Viewer
                 </Link>
               </DialogDescription>
 
-              <div className="flex justify-start gap-10">
+              <div className="flex flex-col sm:flex-row sm:justify-start gap-2 sm:gap-10">
                 <p className="text-sm">
                   <span className="font-bold">Total Amount: </span>
                   {formatDollar(amount)}
@@ -170,7 +170,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
               </div>
             </DialogHeader>
 
-            <div className="w-full grid grid-cols-2 gap-4 mt-3">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-3">
               <TransferAnimation
                 title="Dispute Resolved"
                 fromLabel="Contract"
@@ -189,7 +189,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
               />
 
               <motion.div
-                className="flex flex-col gap-3 mt-3"
+                className="flex flex-col gap-3 mt-3 lg:mt-0"
                 variants={containerAnimation}
                 initial="hidden"
                 animate="visible"
@@ -237,8 +237,10 @@ export const ImprovedSuccessResolveDisputeDialog = ({
               </motion.div>
             </div>
 
-            <DialogFooter className="mt-4">
-              <Button onClick={handleClose}>Close</Button>
+            <DialogFooter className="mt-4 sm:mt-6">
+              <Button onClick={handleClose} className="w-full sm:w-auto">
+                Close
+              </Button>
             </DialogFooter>
           </div>
         </div>
