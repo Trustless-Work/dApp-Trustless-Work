@@ -1,5 +1,3 @@
-import { CreatedAt } from "./dates.entity";
-
 export interface Notification {
   id: string;
   contractId: string;
@@ -15,5 +13,8 @@ export interface Notification {
     receiver?: string;
   };
   read: boolean;
-  createdAt: CreatedAt;
+  createdAt: {
+    seconds: number;
+    nanoseconds: number;
+  };
 }

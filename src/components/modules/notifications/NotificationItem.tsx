@@ -9,6 +9,7 @@ interface NotificationItemProps {
 export const NotificationItem = ({ notification }: NotificationItemProps) => {
   const { handleClick } = useNotifications({ notification });
   const { formatDateFromFirebase } = useFormatUtils();
+
   return (
     <div
       className={cn(
@@ -23,8 +24,8 @@ export const NotificationItem = ({ notification }: NotificationItemProps) => {
             <h4 className="text-sm font-medium">{notification.title}</h4>
             <p className="text-xs text-muted-foreground">
               {formatDateFromFirebase(
-                notification.createdAt._seconds,
-                notification.createdAt._nanoseconds,
+                notification.createdAt.seconds,
+                notification.createdAt.nanoseconds,
               )}
             </p>
           </div>

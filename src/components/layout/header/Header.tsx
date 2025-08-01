@@ -24,9 +24,7 @@ const Header = ({ className }: { className?: string }) => {
     <header
       className={cn(
         "flex flex-1 h-16 shrink-0 items-center gap-2 transition-all duration-300 ease-in-out group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 mb-4",
-        // Posición fija cuando hay scroll (solo en el contexto del sidebar)
         isScrolled && "sticky top-0 z-50",
-        // Efectos de transparencia y difuminado
         isScrolled
           ? "bg-background/60 backdrop-blur-md border-b border-border/50 shadow-sm"
           : "bg-background",
@@ -49,23 +47,23 @@ const Header = ({ className }: { className?: string }) => {
               </Breadcrumb>
             </>
 
-            <div className="flex gap-5 ml-auto items-center">
+            <div className="flex gap-3 ml-auto items-center">
               <NetworkToggle />
               <LanguageToggle />
               <ThemeToggle />
               <NotificationBell />
               <Button variant="outline" onClick={handleDisconnect}>
-                <LogOut /> Disconnect
+                <LogOut /> <span className="hidden md:block">Disconnect</span>
               </Button>
             </div>
           </>
         ) : (
-          <div className="flex gap-5 ml-auto">
+          <div className="flex gap-3 ml-auto md:ml-0">
             <NetworkToggle />
             <LanguageToggle />
             <ThemeToggle />
             <Button variant="outline" onClick={handleConnect}>
-              <LogIn /> Connect
+              <LogIn /> <span className="hidden md:block">Connect</span>
             </Button>
           </div>
         )}
