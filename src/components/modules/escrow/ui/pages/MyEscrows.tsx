@@ -24,9 +24,11 @@ import { useGlobalBoundedStore } from "@/core/store/data";
 import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { useTranslation } from "react-i18next";
 import { Role } from "@trustless-work/escrow/types";
+import useIsMobile from "@/hooks/mobile.hook";
 
 const MyEscrows = () => {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const setActiveTab = useEscrowUIBoundedStore((state) => state.setActiveTab);
   const setActiveMode = useEscrowUIBoundedStore((state) => state.setActiveMode);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
@@ -34,6 +36,7 @@ const MyEscrows = () => {
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 
   const [run, setRun] = useState(false);
+  const [activeTab, setActiveTabState] = useState<Role>("signer");
   const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
     (state) => state.isMoonpayWidgetOpen,
   );
@@ -42,6 +45,7 @@ const MyEscrows = () => {
   const handleSetActiveTab = useCallback(
     (tab: Role) => {
       setActiveTab(tab);
+      setActiveTabState(tab);
     },
     [setActiveTab],
   );
@@ -107,6 +111,19 @@ const MyEscrows = () => {
     [t],
   );
 
+  const tabOptions = useMemo(
+    () => [
+      { value: "signer", label: t("myEscrows.tabs.signer") },
+      { value: "approver", label: t("myEscrows.tabs.approver") },
+      { value: "serviceProvider", label: t("myEscrows.tabs.serviceProvider") },
+      { value: "disputeResolver", label: t("myEscrows.tabs.disputeResolver") },
+      { value: "releaseSigner", label: t("myEscrows.tabs.releaseSigner") },
+      { value: "platformAddress", label: "Platform" },
+      { value: "receiver", label: t("myEscrows.tabs.receiver") },
+    ],
+    [t],
+  );
+
   const renderTabContent = useCallback(
     (role: Role) => (
       <div className="flex flex-col gap-3">
@@ -148,80 +165,129 @@ const MyEscrows = () => {
 
       <div className="flex gap-3 w-full h-full justify-between">
         <Tabs defaultValue="signer" className="w-full">
-          <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-16 md:gap-3">
-            <TabsList
-              className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-7 gap-4"
-              id="step-1"
-            >
-              <TabsTrigger
-                onClick={() => handleSetActiveTab("signer")}
-                value="signer"
-              >
-                {t("myEscrows.tabs.signer")}
-              </TabsTrigger>
-              <TabsTrigger
-                onClick={() => handleSetActiveTab("approver")}
-                value="approver"
-              >
-                {t("myEscrows.tabs.approver")}
-              </TabsTrigger>
-              <TabsTrigger
-                onClick={() => handleSetActiveTab("serviceProvider")}
-                value="service-provider"
-              >
-                {t("myEscrows.tabs.serviceProvider")}
-              </TabsTrigger>
-              <TabsTrigger
-                onClick={() => handleSetActiveTab("disputeResolver")}
-                value="dispute-resolver"
-              >
-                {t("myEscrows.tabs.disputeResolver")}
-              </TabsTrigger>
-              <TabsTrigger
-                onClick={() => handleSetActiveTab("releaseSigner")}
-                value="release-signer"
-              >
-                {t("myEscrows.tabs.releaseSigner")}
-              </TabsTrigger>
-              <TabsTrigger
-                onClick={() => handleSetActiveTab("platformAddress")}
-                value="platform-address"
-              >
-                {/* {t("myEscrows.tabs.platformAddress")} */}
-                Platform
-              </TabsTrigger>
-              <TabsTrigger
-                onClick={() => handleSetActiveTab("receiver")}
-                value="receiver"
-              >
-                {t("myEscrows.tabs.receiver")}
-              </TabsTrigger>
-            </TabsList>
-
-            <div className="flex items-center gap-2 mt-20 sm:mt-10 xl:mt-10 2xl:mt-0">
-              <Select value={activeMode} onValueChange={handleSetActiveMode}>
-                <SelectTrigger className="w-32">
-                  <SelectValue placeholder={t("myEscrows.view.placeholder")} />
+          <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-2 md:gap-3">
+            {isMobile ? (
+              <Select value={activeTab} onValueChange={handleSetActiveTab}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={t("myEscrows.tabs.placeholder")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {viewOptions.map((option) => (
+                  {tabOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-
-            <TooltipInfo content={t("reusable.tooltips.help")}>
-              <button
-                className="btn-dark"
-                type="button"
-                onClick={handleStartTutorial}
+            ) : (
+              <TabsList
+                className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-7 gap-4"
+                id="step-1"
               >
-                <CircleHelp size={29} />
-              </button>
-            </TooltipInfo>
+                <TabsTrigger
+                  onClick={() => handleSetActiveTab("signer")}
+                  value="signer"
+                >
+                  {t("myEscrows.tabs.signer")}
+                </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => handleSetActiveTab("approver")}
+                  value="approver"
+                >
+                  {t("myEscrows.tabs.approver")}
+                </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => handleSetActiveTab("serviceProvider")}
+                  value="service-provider"
+                >
+                  {t("myEscrows.tabs.serviceProvider")}
+                </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => handleSetActiveTab("disputeResolver")}
+                  value="dispute-resolver"
+                >
+                  {t("myEscrows.tabs.disputeResolver")}
+                </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => handleSetActiveTab("releaseSigner")}
+                  value="release-signer"
+                >
+                  {t("myEscrows.tabs.releaseSigner")}
+                </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => handleSetActiveTab("platformAddress")}
+                  value="platform-address"
+                >
+                  Platform
+                </TabsTrigger>
+                <TabsTrigger
+                  onClick={() => handleSetActiveTab("receiver")}
+                  value="receiver"
+                >
+                  {t("myEscrows.tabs.receiver")}
+                </TabsTrigger>
+              </TabsList>
+            )}
+
+            {isMobile ? (
+              <div className="flex items-center gap-2 mt-4 2xl:mt-0 justify-evenly w-full">
+                <TooltipInfo content={t("reusable.tooltips.help")}>
+                  <button
+                    className="btn-dark"
+                    type="button"
+                    onClick={handleStartTutorial}
+                  >
+                    <CircleHelp size={29} />
+                  </button>
+                </TooltipInfo>
+                <Select value={activeMode} onValueChange={handleSetActiveMode}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue
+                      placeholder={t("myEscrows.view.placeholder")}
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {viewOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2 mt-20 sm:mt-10 xl:mt-10 2xl:mt-0">
+                  <Select
+                    value={activeMode}
+                    onValueChange={handleSetActiveMode}
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue
+                        placeholder={t("myEscrows.view.placeholder")}
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {viewOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <TooltipInfo content={t("reusable.tooltips.help")}>
+                  <button
+                    className="btn-dark"
+                    type="button"
+                    onClick={handleStartTutorial}
+                  >
+                    <CircleHelp size={29} />
+                  </button>
+                </TooltipInfo>
+              </>
+            )}
           </div>
 
           <TabsContent value="signer">{renderTabContent("signer")}</TabsContent>
