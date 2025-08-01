@@ -30,13 +30,13 @@ const MyEscrows = () => {
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const setActiveTab = useEscrowUIBoundedStore((state) => state.setActiveTab);
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const setActiveMode = useEscrowUIBoundedStore((state) => state.setActiveMode);
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const activeMode = useEscrowUIBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 
   const [run, setRun] = useState(false);
-  const [activeTab, setActiveTabState] = useState<Role>("signer");
   const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
     (state) => state.isMoonpayWidgetOpen,
   );
@@ -45,7 +45,13 @@ const MyEscrows = () => {
   const handleSetActiveTab = useCallback(
     (tab: Role) => {
       setActiveTab(tab);
-      setActiveTabState(tab);
+    },
+    [setActiveTab],
+  );
+
+  const handleTabValueChange = useCallback(
+    (value: string) => {
+      setActiveTab(value as Role);
     },
     [setActiveTab],
   );
@@ -164,7 +170,11 @@ const MyEscrows = () => {
       />
 
       <div className="flex gap-3 w-full h-full justify-between">
-        <Tabs defaultValue="signer" className="w-full">
+        <Tabs
+          value={activeTab}
+          onValueChange={handleTabValueChange}
+          className="w-full"
+        >
           <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-2 md:gap-3">
             {isMobile ? (
               <Select value={activeTab} onValueChange={handleSetActiveTab}>
@@ -184,46 +194,23 @@ const MyEscrows = () => {
                 className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-7 gap-4"
                 id="step-1"
               >
-                <TabsTrigger
-                  onClick={() => handleSetActiveTab("signer")}
-                  value="signer"
-                >
+                <TabsTrigger value="signer">
                   {t("myEscrows.tabs.signer")}
                 </TabsTrigger>
-                <TabsTrigger
-                  onClick={() => handleSetActiveTab("approver")}
-                  value="approver"
-                >
+                <TabsTrigger value="approver">
                   {t("myEscrows.tabs.approver")}
                 </TabsTrigger>
-                <TabsTrigger
-                  onClick={() => handleSetActiveTab("serviceProvider")}
-                  value="service-provider"
-                >
+                <TabsTrigger value="serviceProvider">
                   {t("myEscrows.tabs.serviceProvider")}
                 </TabsTrigger>
-                <TabsTrigger
-                  onClick={() => handleSetActiveTab("disputeResolver")}
-                  value="dispute-resolver"
-                >
+                <TabsTrigger value="disputeResolver">
                   {t("myEscrows.tabs.disputeResolver")}
                 </TabsTrigger>
-                <TabsTrigger
-                  onClick={() => handleSetActiveTab("releaseSigner")}
-                  value="release-signer"
-                >
+                <TabsTrigger value="releaseSigner">
                   {t("myEscrows.tabs.releaseSigner")}
                 </TabsTrigger>
-                <TabsTrigger
-                  onClick={() => handleSetActiveTab("platformAddress")}
-                  value="platform-address"
-                >
-                  Platform
-                </TabsTrigger>
-                <TabsTrigger
-                  onClick={() => handleSetActiveTab("receiver")}
-                  value="receiver"
-                >
+                <TabsTrigger value="platformAddress">Platform</TabsTrigger>
+                <TabsTrigger value="receiver">
                   {t("myEscrows.tabs.receiver")}
                 </TabsTrigger>
               </TabsList>
@@ -296,19 +283,19 @@ const MyEscrows = () => {
             {renderTabContent("approver")}
           </TabsContent>
 
-          <TabsContent value="service-provider">
+          <TabsContent value="serviceProvider">
             {renderTabContent("serviceProvider")}
           </TabsContent>
 
-          <TabsContent value="dispute-resolver">
+          <TabsContent value="disputeResolver">
             {renderTabContent("disputeResolver")}
           </TabsContent>
 
-          <TabsContent value="release-signer">
+          <TabsContent value="releaseSigner">
             {renderTabContent("releaseSigner")}
           </TabsContent>
 
-          <TabsContent value="platform-address">
+          <TabsContent value="platformAddress">
             {renderTabContent("platformAddress")}
           </TabsContent>
 
