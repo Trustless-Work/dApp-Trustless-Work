@@ -43,22 +43,23 @@ const MyEscrowsFilter = () => {
   return (
     <>
       <form className="flex flex-col space-y-4 w-full">
-        <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-          <div className="flex flex-row items-center gap-2 w-full sm:w-auto">
-            <div className="relative flex-1 sm:w-[300px]">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          {/* Search and Clear Section */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+            <div className="relative flex-1 min-w-0">
               <Input
                 id="search"
                 placeholder={t("myEscrows.filter.search.placeholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pr-8"
+                className="pr-8 w-full"
               />
-              <Search className="h-4 w-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+              <Search className="h-4 w-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground pointer-events-none" />
             </div>
             <Button
               variant="destructive"
               size="icon"
-              className="shrink-0"
+              className="shrink-0 self-end sm:self-auto"
               onClick={(e) => {
                 e.preventDefault();
                 deleteParams();
@@ -68,25 +69,17 @@ const MyEscrowsFilter = () => {
             </Button>
           </div>
 
-          <div className="flex items-center gap-4 justify-end">
+          {/* Actions Section */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 lg:gap-4 justify-end">
+            {/* Blockchain Sync Dialog */}
             <Dialog>
               <DialogTrigger asChild>
                 <motion.button
                   type="button"
-                  className="flex items-center gap-2 px-4 py-2 text-xs text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors duration-200"
+                  className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors duration-200 whitespace-nowrap"
                   whileTap={{ scale: 0.98 }}
                 >
-                  <motion.div
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <Info className="h-4 w-4" />
-                  </motion.div>
-                  <span className="font-medium">
+                  <span className="font-medium inline">
                     {t("myEscrows.blockchainSync.title")}
                   </span>
                 </motion.button>
@@ -116,13 +109,15 @@ const MyEscrowsFilter = () => {
               </DialogContent>
             </Dialog>
 
+            {/* Role Actions Link */}
             <Link
               href="/dashboard/help#roles"
-              className="text-xs text-muted-foreground font-bold hover:underline"
+              className="flex items-center justify-center text-xs text-muted-foreground font-bold hover:underline px-3 py-2 rounded-lg hover:bg-muted/50 transition-colors"
             >
               {getRoleActionIcons(activeTab, t)}
             </Link>
 
+            {/* Create Button */}
             <CreateButton
               label={t("myEscrows.filter.actions.create")}
               url={"/dashboard/escrow/initialize-escrow"}
