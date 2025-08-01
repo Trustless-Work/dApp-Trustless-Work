@@ -25,14 +25,16 @@ export const APIKeys = () => {
   const isRequestingAPIKey = useSettingBoundedStore(
     (state) => state.isRequestingAPIKey,
   );
-  console.log(loggedUser);
+
   return (
     <Card className={cn("overflow-hidden")}>
-      <CardContent className="p-6">
-        <div className="flex justify-between">
-          <div className="flex flex-col">
-            <h1 className="text-3xl font-bold mb-4">Your API Keys</h1>
-            <p className="text-gray-500 mb-4">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex flex-col lg:flex-row lg:justify-between gap-6">
+          <div className="flex flex-col flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
+              Your API Keys
+            </h1>
+            <p className="text-gray-500 mb-4 text-sm sm:text-base">
               Manage your API keys to access the{" "}
               <Link
                 href="https://docs.trustlesswork.com/trustless-work"
@@ -45,12 +47,16 @@ export const APIKeys = () => {
             </p>
           </div>
 
-          <div className="flex flex-col w-1/6 gap-3">
-            <Button className="w-full" type="button" onClick={onSubmit}>
+          <div className="flex flex-col sm:flex-row lg:flex-col gap-3 w-full sm:w-auto lg:w-48">
+            <Button
+              className="w-full sm:w-auto lg:w-full"
+              type="button"
+              onClick={onSubmit}
+            >
               Request an API Key
             </Button>
             <Button
-              className="w-full"
+              className="w-full sm:w-auto lg:w-full"
               onClick={toggleVisibility}
               variant="outline"
             >
@@ -59,34 +65,45 @@ export const APIKeys = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 w-2/3 mt-5">
+        <div className="flex flex-col gap-4 w-full lg:w-2/3 mt-6">
           {loggedUser?.apiKey?.map((apiKey, index) => {
             const isDeleting = deletingKeys.has(apiKey);
 
             return (
-              <div key={index} className="flex items-center gap-4">
-                <div className="flex-grow">
-                  <Input type={showApiKey} disabled defaultValue={apiKey} />
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
+              >
+                <div className="flex-grow min-w-0">
+                  <Input
+                    type={showApiKey}
+                    disabled
+                    defaultValue={apiKey}
+                    className="w-full"
+                  />
                 </div>
-                <Button
-                  className="!mt-0"
-                  variant="outline"
-                  onClick={() => copyText(index.toString(), apiKey)}
-                  disabled={isDeleting}
-                >
-                  {copiedKeyId === index.toString() ? "Copied!" : "Copy"}
-                </Button>
-                <Button
-                  onClick={() => handleRemoveAPiKey(apiKey)}
-                  variant="destructive"
-                  disabled={isDeleting}
-                >
-                  {isDeleting ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                  ) : (
-                    <Trash2 className="h-5 w-5" />
-                  )}
-                </Button>
+                <div className="flex gap-2 sm:gap-3">
+                  <Button
+                    className="flex-1 sm:flex-none"
+                    variant="outline"
+                    onClick={() => copyText(index.toString(), apiKey)}
+                    disabled={isDeleting}
+                  >
+                    {copiedKeyId === index.toString() ? "Copied!" : "Copy"}
+                  </Button>
+                  <Button
+                    onClick={() => handleRemoveAPiKey(apiKey)}
+                    variant="destructive"
+                    disabled={isDeleting}
+                    className="flex-1 sm:flex-none"
+                  >
+                    {isDeleting ? (
+                      <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
+                    )}
+                  </Button>
+                </div>
               </div>
             );
           })}
