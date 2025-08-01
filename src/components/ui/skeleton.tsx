@@ -10,8 +10,8 @@ function Skeleton({
   return (
     <div
       className={cn(
-        shouldReduceMotion 
-          ? "rounded-md bg-black/5 dark:bg-white/5" 
+        shouldReduceMotion
+          ? "rounded-md bg-black/5 dark:bg-white/5"
           : "animate-pulse rounded-md bg-black/5 dark:bg-white/5",
         className,
       )}

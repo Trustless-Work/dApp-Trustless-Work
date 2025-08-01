@@ -5,20 +5,20 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_MAINTENANCE_MODE: process.env.MAINTENANCE_MODE,
   },
-  
+
   // Optimizaciones para mobile
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['framer-motion', 'lucide-react'],
+    optimizePackageImports: ["framer-motion", "lucide-react"],
   },
-  
+
   // Compresión de imágenes
   images: {
-    formats: ['image/webp', 'image/avif'],
+    formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-  
+
   // Headers para cache y seguridad
   async headers() {
     return [

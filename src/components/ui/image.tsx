@@ -36,7 +36,7 @@ export const OptimizedImage = ({
       },
       {
         rootMargin: "50px",
-      }
+      },
     );
 
     const img = document.createElement("img");
@@ -57,7 +57,7 @@ export const OptimizedImage = ({
           alt={alt}
           className={cn(
             "w-full h-full object-cover transition-opacity duration-300",
-            isLoaded ? "opacity-100" : "opacity-0"
+            isLoaded ? "opacity-100" : "opacity-0",
           )}
           onLoad={handleLoad}
           loading={priority ? "eager" : "lazy"}
@@ -69,4 +69,4 @@ export const OptimizedImage = ({
       )}
     </div>
   );
-}; 
+};
