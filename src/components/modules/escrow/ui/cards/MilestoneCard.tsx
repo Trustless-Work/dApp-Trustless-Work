@@ -134,7 +134,11 @@ export const MilestoneCard = ({
         {/* Action Buttons Section */}
         {hasActions && (
           <div
-            className={`grid gap-2 ${actionButtons.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
+            className={`grid gap-2 sm:gap-3 ${
+              actionButtons.length === 1
+                ? "grid-cols-1"
+                : "grid-cols-1 sm:grid-cols-2"
+            }`}
           >
             {actionButtons}
           </div>
