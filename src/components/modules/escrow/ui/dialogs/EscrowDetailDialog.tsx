@@ -106,7 +106,7 @@ const EscrowDetailDialog = ({
           </DialogHeader>
 
           {/* Main Content with Tabs */}
-          <Card className={cn("overflow-hidden flex-1 flex flex-col")}>
+          <Card className="overflow-hidden flex-1 flex-col hidden sm:flex">
             <CardContent className="p-6 flex-1 overflow-y-auto">
               <Tabs
                 defaultValue="general"
@@ -238,6 +238,103 @@ const EscrowDetailDialog = ({
               )}
             </CardFooter>
           </Card>
+
+          {/* Mobile Content - No Card wrapper */}
+          <div className="flex-1 flex flex-col sm:hidden overflow-hidden">
+            <div className="p-2 flex-1 overflow-y-auto">
+              <Tabs
+                defaultValue="general"
+                className="w-full"
+                value={activeTab}
+                onValueChange={setActiveTab}
+              >
+                <TabsList className="grid w-full grid-cols-3 mb-6 bg-muted/50">
+                  <TabsTrigger
+                    value="general"
+                    className="flex items-center gap-2 data-[state=active]:bg-background"
+                  >
+                    <Info className="h-4 w-4 hidden md:block" />
+                    <span>Information</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="entities"
+                    className="flex items-center gap-2 data-[state=active]:bg-background"
+                  >
+                    <Users className="h-4 w-4 hidden md:block" />
+                    <span>Entities</span>
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="milestones"
+                    className="flex items-center gap-2 data-[state=active]:bg-background"
+                  >
+                    <ListChecks className="h-4 w-4 hidden md:block" />
+                    <span>Milestones</span>
+                  </TabsTrigger>
+                </TabsList>
+
+                <div className="flex-1 min-h-0">
+                  {/* General Information Tab */}
+                  <TabsContent value="general" className="mt-4 h-full">
+                    <GeneralInformation
+                      selectedEscrow={selectedEscrow}
+                      userRolesInEscrow={userRolesInEscrow}
+                      dialogStates={dialogStates}
+                      areAllMilestonesCompleted={areAllMilestonesCompleted}
+                      areAllMilestonesCompletedAndFlag={
+                        areAllMilestonesCompletedAndFlag
+                      }
+                    />
+                  </TabsContent>
+
+                  {/* Entities Tab */}
+                  <TabsContent value="entities" className="mt-4 h-full">
+                    <Entities
+                      selectedEscrow={selectedEscrow}
+                      userRolesInEscrow={userRolesInEscrow}
+                      dialogStates={dialogStates}
+                    />
+                  </TabsContent>
+
+                  {/* Milestones Tab */}
+                  <TabsContent value="milestones" className="mt-4 h-full">
+                    <Card className="p-4 h-full">
+                      <Milestones
+                        selectedEscrow={selectedEscrow}
+                        userRolesInEscrow={userRolesInEscrow}
+                        setEvidenceVisibleMap={setEvidenceVisibleMap}
+                        evidenceVisibleMap={evidenceVisibleMap}
+                      />
+                    </Card>
+                  </TabsContent>
+                </div>
+              </Tabs>
+            </div>
+
+            <Separator className="my-4" />
+
+            <div className="sm:flex-row flex-col w-full justify-between items-center flex-shrink-0 px-6 pb-6 hidden sm:flex">
+              {activeTab === "milestones" ? (
+                <ProgressEscrow escrow={selectedEscrow} />
+              ) : (
+                <>
+                  <FooterDetails selectedEscrow={selectedEscrow} />
+
+                  <div className="flex gap-4">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dialogStates.qr.setIsOpen(true);
+                      }}
+                      className="w-1/4"
+                      variant="outline"
+                    >
+                      <QrCode className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
