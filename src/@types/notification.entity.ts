@@ -1,5 +1,3 @@
-import { CreatedAt } from "./dates.entity";
-
 export interface Notification {
   id: string;
   contractId: string;

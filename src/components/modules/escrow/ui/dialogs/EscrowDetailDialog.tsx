@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import useEscrowDetailDialog from "./hooks/escrow-detail-dialog.hook";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import FundEscrowDialog from "./FundEscrowDialog";
 import { useGlobalBoundedStore } from "@/core/store/data";
 import QREscrowDialog from "./QREscrowDialog";

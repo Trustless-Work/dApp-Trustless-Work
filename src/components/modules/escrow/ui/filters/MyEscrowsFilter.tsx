@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CreateButton from "@/components/utils/ui/Create";
 import Divider from "@/components/utils/ui/Divider";
-import { Search, Trash2, Shield, Database, Info } from "lucide-react";
+import { Search, Trash2, Shield, Database } from "lucide-react";
 import { useEscrowFilter } from "./hooks/escrow-filter.hook";
 import { getRoleActionIcons } from "@/utils/get-role-actions";
 import { useEscrowUIBoundedStore } from "../../store/ui";
