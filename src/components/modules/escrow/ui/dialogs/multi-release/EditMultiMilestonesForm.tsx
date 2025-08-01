@@ -65,52 +65,61 @@ export const EditMultiMilestonesForm = ({
               <TooltipInfo content="Key stages or deliverables for the escrow." />
             </FormLabel>
             {milestones.map((milestone, index) => (
-              <div key={`milestone-${index}`} className="flex flex-col gap-4">
-                <div className="flex items-center space-x-4">
+              <div
+                key={`milestone-${index}`}
+                className="flex flex-col gap-4 p-4 border rounded-lg bg-gray-50/50"
+              >
+                {/* Badges Section - Responsive */}
+                <div className="flex flex-wrap gap-2 items-center">
                   {milestone.flags?.approved && (
-                    <Badge className="uppercase max-w-24">Approved</Badge>
+                    <Badge className="uppercase text-xs">Approved</Badge>
                   )}
 
                   {milestone.flags?.released && (
-                    <Badge className="uppercase max-w-24">Released</Badge>
+                    <Badge className="uppercase text-xs">Released</Badge>
                   )}
 
                   {milestone.flags?.resolved && (
-                    <Badge className="uppercase max-w-24">Resolved</Badge>
+                    <Badge className="uppercase text-xs">Resolved</Badge>
                   )}
 
                   {milestone.flags?.disputed && (
-                    <Badge className="uppercase max-w-24">Disputed</Badge>
+                    <Badge className="uppercase text-xs">Disputed</Badge>
                   )}
 
-                  <Badge className="uppercase max-w-24" variant="outline">
+                  <Badge className="uppercase text-xs" variant="outline">
                     {milestone.status}
                   </Badge>
+                </div>
 
-                  <Input
-                    disabled={
-                      milestone.flags?.approved ||
-                      milestone.flags?.released ||
-                      milestone.flags?.resolved ||
-                      milestone.flags?.disputed
-                    }
-                    placeholder="Milestone Description"
-                    value={milestone.description}
-                    onChange={(e) => {
-                      const updatedMilestones = [...milestones];
-                      updatedMilestones[index].description = e.target.value;
-                      form.setValue("milestones", updatedMilestones);
-                    }}
-                  />
+                {/* Form Fields Section - Responsive */}
+                <div className="flex flex-col lg:flex-row gap-3">
+                  <div className="flex-1">
+                    <Input
+                      disabled={
+                        milestone.flags?.approved ||
+                        milestone.flags?.released ||
+                        milestone.flags?.resolved ||
+                        milestone.flags?.disputed
+                      }
+                      placeholder="Milestone Description"
+                      value={milestone.description}
+                      onChange={(e) => {
+                        const updatedMilestones = [...milestones];
+                        updatedMilestones[index].description = e.target.value;
+                        form.setValue("milestones", updatedMilestones);
+                      }}
+                    />
+                  </div>
 
-                  <div className="relative w-2/5">
+                  <div className="relative flex-1 lg:w-48">
                     <DollarSign
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                       size={18}
                     />
                     <Input
                       className="pl-10"
-                      placeholder="Enter milestone amount"
+                      placeholder="Amount"
                       value={
                         milestone.amount ? milestone.amount.toString() : ""
                       }
@@ -120,7 +129,7 @@ export const EditMultiMilestonesForm = ({
 
                   <Button
                     onClick={() => handleRemoveMilestone(index)}
-                    className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
+                    className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0 self-start lg:self-center"
                     disabled={
                       milestones.length === 1 ||
                       milestone.status === "completed" ||
@@ -134,10 +143,11 @@ export const EditMultiMilestonesForm = ({
                   </Button>
                 </div>
 
+                {/* Add Item Button - Responsive */}
                 {index === milestones.length - 1 && (
                   <Button
                     disabled={isAnyMilestoneEmpty}
-                    className="w-full md:w-1/4"
+                    className="w-full sm:w-auto"
                     variant="outline"
                     onClick={handleAddMilestone}
                     type="button"
@@ -154,8 +164,9 @@ export const EditMultiMilestonesForm = ({
           <Button
             type="button"
             onClick={() => onSubmit(form.getValues())}
-            className="bg-green-800 hover:bg-green-700 text-white"
+            variant="success"
             disabled={isAnyMilestoneEmpty || isEditingMilestones}
+            className="w-full sm:w-auto"
           >
             {isEditingMilestones ? (
               <>

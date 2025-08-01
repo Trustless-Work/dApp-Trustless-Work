@@ -91,7 +91,7 @@ export const EditSingleMilestonesForm = ({
           <Button
             type="button"
             onClick={() => onSubmit(form.getValues())}
-            className="bg-green-800 hover:bg-green-700 text-white"
+            variant="success"
             disabled={isAnyMilestoneEmpty || isEditingMilestones}
           >
             {isEditingMilestones ? (
