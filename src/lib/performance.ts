@@ -1,4 +1,4 @@
-// Performance optimization utilities for mobile devices
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export const isMobile = () => {
   if (typeof window === "undefined") return false;
@@ -22,7 +22,7 @@ export const shouldOptimizeForMobile = () => {
 // Throttle function for performance
 export const throttle = <T extends (...args: any[]) => any>(
   func: T,
-  delay: number
+  delay: number,
 ): T => {
   let timeoutId: NodeJS.Timeout | null = null;
   let lastExecTime = 0;
@@ -35,10 +35,13 @@ export const throttle = <T extends (...args: any[]) => any>(
       lastExecTime = currentTime;
     } else {
       if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-        lastExecTime = Date.now();
-      }, delay - (currentTime - lastExecTime));
+      timeoutId = setTimeout(
+        () => {
+          func(...args);
+          lastExecTime = Date.now();
+        },
+        delay - (currentTime - lastExecTime),
+      );
     }
   }) as T;
 };
@@ -46,7 +49,7 @@ export const throttle = <T extends (...args: any[]) => any>(
 // Debounce function for performance
 export const debounce = <T extends (...args: any[]) => any>(
   func: T,
-  delay: number
+  delay: number,
 ): T => {
   let timeoutId: NodeJS.Timeout | null = null;
 
@@ -59,9 +62,9 @@ export const debounce = <T extends (...args: any[]) => any>(
 // Intersection Observer with mobile optimization
 export const createIntersectionObserver = (
   callback: (entries: IntersectionObserverEntry[]) => void,
-  options: IntersectionObserverInit = {}
+  options: IntersectionObserverInit = {},
 ) => {
-  const mobileOptions = shouldOptimizeForMobile() 
+  const mobileOptions = shouldOptimizeForMobile()
     ? { ...options, rootMargin: "100px" }
     : options;
 
@@ -78,24 +81,11 @@ export const preloadImage = (src: string): Promise<void> => {
   });
 };
 
-// Lazy loading for components
-export const lazyLoadComponent = <T extends React.ComponentType<any>>(
-  importFunc: () => Promise<{ default: T }>,
-  fallback?: React.ReactNode
-) => {
-  const LazyComponent = React.lazy(importFunc);
-  
-  return (props: React.ComponentProps<T>) => (
-    <React.Suspense fallback={fallback || <div>Loading...</div>}>
-      <LazyComponent {...props} />
-    </React.Suspense>
-  );
-};
-
 // Memory management for mobile
 export const cleanupMemory = () => {
   if (typeof window !== "undefined" && "gc" in window) {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error - window.gc() is not in TypeScript definitions but exists in some browsers
     window.gc();
   }
 };
@@ -110,4 +100,4 @@ export const measurePerformance = (name: string, fn: () => void) => {
   } else {
     fn();
   }
-}; 
+};
