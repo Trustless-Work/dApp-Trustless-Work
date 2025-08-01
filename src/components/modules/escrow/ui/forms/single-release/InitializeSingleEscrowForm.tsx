@@ -93,7 +93,7 @@ export const InitializeSingleEscrowForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-6"
       >
-        <Card className="flex justify-between items-center gap-4 p-4">
+        <Card className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4">
           <Link
             className="flex-1"
             href="https://docs.trustlesswork.com/trustless-work/technology-overview/escrow-types"
@@ -108,11 +108,11 @@ export const InitializeSingleEscrowForm = ({
               milestones
             </p>
           </Link>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
             <Button
               variant="outline"
               onClick={handleChangeType}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 w-full sm:w-auto"
             >
               Change Escrow Type
             </Button>
@@ -122,14 +122,14 @@ export const InitializeSingleEscrowForm = ({
                 type="button"
                 variant="outline"
                 onClick={fillTemplateForm}
-                className="shrink-0"
+                className="shrink-0 w-full sm:w-auto"
               >
                 Use Template
               </Button>
             )}
           </div>
         </Card>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="title"
@@ -189,7 +189,7 @@ export const InitializeSingleEscrowForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="roles.approver"
@@ -276,7 +276,7 @@ export const InitializeSingleEscrowForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="roles.releaseSigner"
@@ -366,7 +366,7 @@ export const InitializeSingleEscrowForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="roles.platformAddress"
@@ -452,7 +452,7 @@ export const InitializeSingleEscrowForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="platformFee"
@@ -564,10 +564,11 @@ export const InitializeSingleEscrowForm = ({
           </FormLabel>
           {milestones.map((milestone, index) => (
             <div key={index}>
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                 <Input
                   placeholder="Milestone Description"
                   value={milestone.description}
+                  className="w-full sm:flex-1"
                   onChange={(e) => {
                     const updatedMilestones = [...milestones];
                     updatedMilestones[index].description = e.target.value;
@@ -577,7 +578,7 @@ export const InitializeSingleEscrowForm = ({
 
                 <Button
                   onClick={() => handleRemoveMilestone(index)}
-                  className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0"
+                  className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0 self-start sm:self-center"
                   disabled={milestones.length === 1}
                 >
                   <Trash2 className="h-5 w-5" />

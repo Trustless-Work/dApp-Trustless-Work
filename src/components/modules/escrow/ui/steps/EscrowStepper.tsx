@@ -85,16 +85,29 @@ export const EscrowSteps = React.forwardRef<HTMLDivElement, EscrowStepsProps>(
           </CardContent>
         </Card>
 
-        <Card className={cn("overflow-hidden md:w-4/6 w-full h-auto")}>
-          <CardContent className="p-6 space-y-4">
+        {/* Desktop: Card wrapper, Mobile: Direct content */}
+        <div className="md:w-4/6 w-full rounded-lg">
+          <Card className="hidden md:block overflow-hidden h-auto">
+            <CardContent className="p-6 space-y-4">
+              <div
+                className="rounded-lg p-6 transition-all duration-200"
+                key={currentStep}
+              >
+                {currentComponent}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Mobile: Direct content without Card wrapper */}
+          <div className="md:hidden">
             <div
               className="rounded-lg p-6 transition-all duration-200"
               key={currentStep}
             >
               {currentComponent}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     );
   },
