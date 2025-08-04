@@ -11,12 +11,17 @@ import { Button } from "@/components/ui/button";
 import LanguageToggle from "./LanguageToggle";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 const HeaderWithoutAuth: React.FC = () => {
   const { handleDisconnect } = useWallet();
   const { address } = useHeaderWithoutAuth();
   const { isScrolled } = useScrollHeader();
   const { t } = useTranslation("common");
+  const pathname = usePathname();
+
+  // Don't show login/logout buttons on login page
+  const isLoginPage = pathname === "/login";
 
   return (
     <div
@@ -31,25 +36,25 @@ const HeaderWithoutAuth: React.FC = () => {
       <Link href="/">
         <Image src="/logo.png" alt="Trustless Work" width={80} height={80} />
       </Link>
-      {address ? (
-        <div className="flex gap-5 ml-auto">
-          <LanguageToggle />
-          <ThemeToggle />
-          <Button variant="outline" onClick={handleDisconnect}>
-            <LogOut /> {t("header.disconnect")}
-          </Button>
-        </div>
-      ) : (
-        <div className="flex gap-5 ml-auto">
-          <LanguageToggle />
-          <ThemeToggle />
-          <Link href="/login">
-            <Button variant="outline">
-              <LogIn /> Login
-            </Button>
-          </Link>
-        </div>
-      )}
+      <div className="flex gap-5 ml-auto">
+        <LanguageToggle />
+        <ThemeToggle />
+        {!isLoginPage && (
+          <>
+            {address ? (
+              <Button variant="outline" onClick={handleDisconnect}>
+                <LogOut /> {t("header.disconnect")}
+              </Button>
+            ) : (
+              <Link href="/login">
+                <Button variant="outline">
+                  <LogIn /> Login
+                </Button>
+              </Link>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
