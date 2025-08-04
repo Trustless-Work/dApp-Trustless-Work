@@ -12,11 +12,6 @@ const FeaturesSection = dynamic(() =>
     default: mod.FeaturesSection,
   })),
 );
-const SmartEscrowSection = dynamic(() =>
-  import("../sections/SmartEscrow").then((mod) => ({
-    default: mod.SmartEscrowSection,
-  })),
-);
 
 export const Home = () => {
   const homeHook = useHome();
@@ -34,7 +29,6 @@ export const Home = () => {
         <main className="overflow-hidden" ref={containerRef}>
           <HeroSection y1={y1} opacity={opacity} />
           <FeaturesSection />
-          <SmartEscrowSection />
           <Footer />
         </main>
       </div>
