@@ -17,7 +17,7 @@ export const Login = () => {
   const { handleConnect } = useWallet();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="container mx-auto">
       <HeaderWithoutAuth />
       <div className="flex flex-1 items-start my-0 md:my-20 justify-center py-8 sm:py-4 px-4 sm:px-2 md:px-0">
         <div className="w-full max-w-5xl flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden bg-background/90">

@@ -7,7 +7,7 @@ export const useEscrowTabSlice: StateCreator<
   [],
   TabsEscrowStore
 > = (set) => ({
-  activeTab: "approver",
+  activeTab: "signer",
   escrowType: null,
   setActiveTab: (value) => set({ activeTab: value }),
   setEscrowType: (value) => set({ escrowType: value }),
