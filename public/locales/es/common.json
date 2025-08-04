@@ -727,8 +727,8 @@
     "subtitle": "Obtén acceso a la API de Trustless Work para integrar funcionalidades de escrow en tu aplicación",
     "badge": "Integración API",
     "video": {
-      "title": "Demo de Integración",
-      "description": "Ve cómo integrar la API de Trustless Work en tu aplicación",
+      "title": "Como solicitar el API Key en el dapp",
+      "description": "Ve cómo solicitar tu API Key paso a paso en el dapp",
       "placeholder": "Video de demostración"
     },
     "info": {

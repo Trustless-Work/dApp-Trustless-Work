@@ -24,6 +24,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 export const ApiKeySection = () => {
   const shouldReduceMotion = useShouldReduceMotion();
@@ -199,8 +200,8 @@ export const ApiKeySection = () => {
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                     asChild
                   >
-                    <a
-                      href="https://dapp.dev.trustlesswork.com"
+                    <Link
+                      href="https://dapp.dev.trustlesswork.com/settings"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2"
@@ -208,7 +209,7 @@ export const ApiKeySection = () => {
                       <Key className="w-4 h-4" />
                       {t("apiKey.buttons.testnet")}
                       <ExternalLink className="w-4 h-4" />
-                    </a>
+                    </Link>
                   </Button>
 
                   <Button
@@ -216,8 +217,8 @@ export const ApiKeySection = () => {
                     className="w-full border-primary/20 hover:bg-primary/5"
                     asChild
                   >
-                    <a
-                      href="https://dapp.trustlesswork.com"
+                    <Link
+                      href="https://dapp.trustlesswork.com/settings"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2"
@@ -225,7 +226,7 @@ export const ApiKeySection = () => {
                       <Key className="w-4 h-4" />
                       {t("apiKey.buttons.mainnet")}
                       <ExternalLink className="w-4 h-4" />
-                    </a>
+                    </Link>
                   </Button>
                 </div>
               </CardContent>

@@ -736,8 +736,8 @@
     "subtitle": "Get access to the Trustless Work API to integrate escrow functionality into your application",
     "badge": "API Integration",
     "video": {
-      "title": "Integration Demo",
-      "description": "See how to integrate the Trustless Work API into your application",
+      "title": "How to Request API Key in the dApp",
+      "description": "See how to request your API Key step by step in the dApp",
       "placeholder": "Demo video"
     },
     "info": {
