@@ -654,5 +654,44 @@
       "platformAddress": "Dirección de Plataforma",
       "receiver": "Receptor"
     }
+  },
+  "apiKey": {
+    "title": "API Key para Autenticación",
+    "subtitle": "Obtén acceso a la API de Trustless Work para integrar funcionalidades de escrow en tu aplicación",
+    "badge": "Integración API",
+    "video": {
+      "title": "Demo de Integración",
+      "description": "Ve cómo integrar la API de Trustless Work en tu aplicación",
+      "placeholder": "Video de demostración"
+    },
+    "info": {
+      "title": "Información Importante",
+      "testnet": "Si necesita utilizar la API de <strong>testnet</strong>, debe solicitarla en",
+      "mainnet": "Si necesita la API de <strong>mainnet</strong>, debe solicitarla en"
+    },
+    "buttons": {
+      "testnet": "API Testnet",
+      "mainnet": "API Mainnet"
+    },
+    "steps": {
+      "title": "Cómo Solicitar tu API Key",
+      "subtitle": "Sigue estos simples pasos para obtener tu API key",
+      "connect": {
+        "title": "Conecta tu Wallet",
+        "description": "Ingresa a nuestro dApp usando tu wallet o passkey (próximamente)"
+      },
+      "settings": {
+        "title": "Ve a Configuración",
+        "description": "Navega a la sección de Configuración en la barra lateral"
+      },
+      "profile": {
+        "title": "Configura tu Perfil",
+        "description": "Configura tu perfil - el campo de caso de uso es obligatorio para solicitar tu API key"
+      },
+      "request": {
+        "title": "Solicita tu API Key",
+        "description": "Ve a la opción de API Keys en la barra lateral y solicita tu key"
+      }
+    }
   }
 }

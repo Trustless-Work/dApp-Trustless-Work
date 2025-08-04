@@ -663,5 +663,44 @@
       "platformAddress": "Platform Address",
       "receiver": "Receiver"
     }
+  },
+  "apiKey": {
+    "title": "API Key for Authentication",
+    "subtitle": "Get access to the Trustless Work API to integrate escrow functionality into your application",
+    "badge": "API Integration",
+    "video": {
+      "title": "Integration Demo",
+      "description": "See how to integrate the Trustless Work API into your application",
+      "placeholder": "Demo video"
+    },
+    "info": {
+      "title": "Important Information",
+      "testnet": "If you need to use the <strong>testnet</strong> API, you must request it at",
+      "mainnet": "If you need the <strong>mainnet</strong> API, you must request it at"
+    },
+    "buttons": {
+      "testnet": "API Testnet",
+      "mainnet": "API Mainnet"
+    },
+    "steps": {
+      "title": "How to Request Your API Key",
+      "subtitle": "Follow these simple steps to get your API key",
+      "connect": {
+        "title": "Connect Your Wallet",
+        "description": "Enter our dApp using your wallet or passkey (coming soon)"
+      },
+      "settings": {
+        "title": "Go to Settings",
+        "description": "Navigate to the Settings section in the sidebar"
+      },
+      "profile": {
+        "title": "Configure Your Profile",
+        "description": "Set up your profile - the use case field is mandatory for requesting your API key"
+      },
+      "request": {
+        "title": "Request API Key",
+        "description": "Go to the API Keys option in the sidebar and request your key"
+      }
+    }
   }
 }
