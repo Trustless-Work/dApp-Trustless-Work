@@ -13,6 +13,12 @@ const FeaturesSection = dynamic(() =>
   })),
 );
 
+const ApiKeySection = dynamic(() =>
+  import("../sections/ApiKeySection").then((mod) => ({
+    default: mod.ApiKeySection,
+  })),
+);
+
 export const Home = () => {
   const homeHook = useHome();
   const containerRef = homeHook?.containerRef ?? null;
@@ -29,6 +35,7 @@ export const Home = () => {
         <main className="overflow-hidden" ref={containerRef}>
           <HeroSection y1={y1} opacity={opacity} />
           <FeaturesSection />
+          <ApiKeySection />
           <Footer />
         </main>
       </div>
