@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import { GlobalProvider } from "@/providers/GlobalProvider";
 import { Toaster } from "sonner";
-import { Inter } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 const Exo2 = localFont({
@@ -15,7 +15,7 @@ const Exo2 = localFont({
   display: "swap",
 });
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",
 });
@@ -53,7 +53,9 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Trustless Work" />
         <meta name="format-detection" content="telephone=no" />
       </head>
-      <body className={cn(Exo2.variable, "antialiased", inter.className)}>
+      <body
+        className={cn(Exo2.variable, "antialiased", spaceGrotesk.className)}
+      >
         <Analytics />
         <GlobalProvider>
           <Toaster />
