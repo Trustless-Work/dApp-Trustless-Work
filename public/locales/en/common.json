@@ -144,6 +144,73 @@
       "title": "Ready to get started?",
       "subtitle": "Join us in building the future of trust in global payments.",
       "button": "Explore Our Solutions"
+    },
+    "roles": {
+      "title": "Roles in Trustless Work",
+      "subtitle": "Each role has a distinct function within the escrow process, defining who can perform specific actions and how parties interact with the smart contract.",
+      "badge": "Smart Contract Roles",
+      "examples": {
+        "title": "Examples"
+      },
+      "approver": {
+        "title": "Approver",
+        "description": "Approves or disputes milestones marked as completed by the service provider.",
+        "examples": [
+          "Buyer in a freelance marketplace approves deliverables",
+          "Host in a security deposit scenario approves checkout",
+          "Platform in a crowdfunding campaign approves milestones"
+        ]
+      },
+      "serviceProvider": {
+        "title": "Service Provider",
+        "description": "Delivers the product, service, or objective set on milestones and marks them as completed.",
+        "examples": [
+          "Freelancer delivering a service and marking it complete",
+          "Company updating crowdfunding milestones",
+          "Real Estate inspector marking house inspections as complete"
+        ]
+      },
+      "releaseSigner": {
+        "title": "Release Signer",
+        "description": "Approves the release of funds for the amount set when all milestones are approved.",
+        "examples": [
+          "Airbnb (platform) releasing a deposit",
+          "eBay (platform) releasing payment to a seller",
+          "DAO releasing a payment to a contributor"
+        ]
+      },
+      "disputeResolver": {
+        "title": "Dispute Resolver",
+        "description": "Resolves disputes by adjusting milestone amounts, updating status, or canceling the contract.",
+        "examples": [
+          "Platform acting as arbiter for deposit disputes",
+          "Independent third-party arbitrator setting new milestone prices",
+          "Canceling an escrow and redirecting funds back to client"
+        ]
+      },
+      "platformAddress": {
+        "title": "Platform Address",
+        "description": "Receives the platform fee and can update milestones while they are still pending.",
+        "examples": [
+          "Airbnb collecting platform fees",
+          "Crowdfunding platform taking a fee from funds raised",
+          "Marketplace collecting transaction fees"
+        ]
+      },
+      "receiver": {
+        "title": "Receiver",
+        "description": "The final recipient of funds after conditions are met or disputes are resolved.",
+        "examples": [
+          "Freelancer receiving payment",
+          "Tourist receiving a security deposit back",
+          "Company receiving crowdfunding funds"
+        ]
+      },
+      "cta": {
+        "title": "Learn More About Roles",
+        "description": "Discover how each role interacts within the escrow lifecycle and understand the complete workflow.",
+        "link": "Read Full Documentation"
+      }
     }
   },
   "actions": {

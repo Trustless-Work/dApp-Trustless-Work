@@ -144,6 +144,73 @@
       "title": "¿Listo para comenzar?",
       "subtitle": "Únete a nosotros en la construcción del futuro de la confianza en los pagos globales.",
       "button": "Explorar Nuestras Soluciones"
+    },
+    "roles": {
+      "title": "Roles en Trustless Work",
+      "subtitle": "Cada rol tiene una función distinta dentro del proceso de depósito en garantía, definiendo quién puede realizar acciones específicas y cómo las partes interactúan con el contrato inteligente.",
+      "badge": "Roles del Contrato Inteligente",
+      "examples": {
+        "title": "Ejemplos"
+      },
+      "approver": {
+        "title": "Aprobador",
+        "description": "Aprueba o disputa los hitos marcados como completados por el proveedor de servicio.",
+        "examples": [
+          "Comprador en un marketplace freelance aprueba entregables",
+          "Anfitrión en un escenario de depósito de seguridad aprueba el checkout",
+          "Plataforma en una campaña de crowdfunding aprueba hitos"
+        ]
+      },
+      "serviceProvider": {
+        "title": "Proveedor de Servicio",
+        "description": "Entrega el producto, servicio u objetivo establecido en los hitos y los marca como completados.",
+        "examples": [
+          "Freelancer entregando un servicio y marcándolo como completo",
+          "Empresa actualizando hitos de crowdfunding",
+          "Inspector de bienes raíces marcando inspecciones como completadas"
+        ]
+      },
+      "releaseSigner": {
+        "title": "Firmante de Liberación",
+        "description": "Aprueba la liberación de fondos por el monto establecido cuando todos los hitos están aprobados.",
+        "examples": [
+          "Airbnb (plataforma) liberando un depósito",
+          "eBay (plataforma) liberando pago a un vendedor",
+          "DAO liberando un pago a un contribuidor"
+        ]
+      },
+      "disputeResolver": {
+        "title": "Resolutor de Disputas",
+        "description": "Resuelve disputas ajustando montos de hitos, actualizando estado o cancelando el contrato.",
+        "examples": [
+          "Plataforma actuando como árbitro para disputas de depósitos",
+          "Árbitro independiente estableciendo nuevos precios de hitos",
+          "Cancelando un depósito y redirigiendo fondos al cliente"
+        ]
+      },
+      "platformAddress": {
+        "title": "Dirección de Plataforma",
+        "description": "Recibe la comisión de la plataforma y puede actualizar hitos mientras están pendientes.",
+        "examples": [
+          "Airbnb cobrando comisiones de plataforma",
+          "Plataforma de crowdfunding tomando una comisión de fondos recaudados",
+          "Marketplace cobrando comisiones de transacción"
+        ]
+      },
+      "receiver": {
+        "title": "Receptor",
+        "description": "El destinatario final de los fondos después de que se cumplan las condiciones o se resuelvan las disputas.",
+        "examples": [
+          "Freelancer recibiendo pago",
+          "Turista recibiendo de vuelta un depósito de seguridad",
+          "Empresa recibiendo fondos de crowdfunding"
+        ]
+      },
+      "cta": {
+        "title": "Aprende Más Sobre Roles",
+        "description": "Descubre cómo cada rol interactúa dentro del ciclo de vida del depósito y entiende el flujo de trabajo completo.",
+        "link": "Leer Documentación Completa"
+      }
     }
   },
   "help": {
