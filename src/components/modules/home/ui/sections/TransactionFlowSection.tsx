@@ -83,7 +83,7 @@ export const TransactionFlowSection = () => {
   ];
 
   return (
-    <Bounded center={true} className="py-20 relative">
+    <Bounded center={true} className="py-8 sm:py-12 lg:py-20 relative">
       <div className="absolute inset-0 z-0"></div>
 
       <motion.div
@@ -94,17 +94,17 @@ export const TransactionFlowSection = () => {
         className="w-full mx-auto relative z-10"
       >
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 rounded-full bg-primary/10 border border-primary/20">
-              <Code className="w-6 h-6 text-primary" />
+        <div className="text-center mb-8 sm:mb-12 px-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4 sm:mb-6">
+            <div className="p-2 sm:p-3 rounded-full bg-primary/10 border border-primary/20">
+              <Code className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
             </div>
             <motion.h2
               initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
               whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true, amount: 0.3 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent text-center"
             >
               {t("home.flow.title")}
             </motion.h2>
@@ -115,7 +115,7 @@ export const TransactionFlowSection = () => {
             whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true, amount: 0.3 }}
-            className="text-lg text-muted-foreground max-w-3xl mx-auto"
+            className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto px-4"
           >
             {t("home.flow.subtitle")}
           </motion.p>
@@ -127,24 +127,24 @@ export const TransactionFlowSection = () => {
           whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
           viewport={{ once: true, amount: 0.3 }}
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto px-4"
         >
           <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Code className="w-5 h-5 text-primary" />
+            <CardHeader className="px-4 sm:px-6">
+              <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                <Code className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                 {t("home.flow.diagram.title")}
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-sm sm:text-base">
                 {t("home.flow.diagram.description")}
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-4 sm:px-6">
               <div className="relative">
-                {/* Connection Line */}
-                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-primary/40 to-primary/20"></div>
+                {/* Connection Line - Hidden on mobile, visible on larger screens */}
+                <div className="hidden sm:block absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-primary/40 to-primary/20"></div>
 
-                <div className="space-y-8">
+                <div className="space-y-6 sm:space-y-8">
                   {flowSteps.map((step, index) => (
                     <motion.div
                       key={step.id}
@@ -158,41 +158,45 @@ export const TransactionFlowSection = () => {
                     >
                       {/* Step Card */}
                       <div className="relative">
-                        {/* Connection Dot */}
-                        <div className="absolute left-6 top-6 w-3 h-3 bg-primary rounded-full border-2 border-background transform -translate-x-1/2 z-10"></div>
+                        {/* Connection Dot - Hidden on mobile, visible on larger screens */}
+                        <div className="hidden sm:block absolute left-6 top-6 w-3 h-3 bg-primary rounded-full border-2 border-background transform -translate-x-1/2 z-10"></div>
 
                         <div
-                          className={`ml-12 p-6 rounded-xl border ${step.color} shadow-sm hover:shadow-md transition-all duration-300`}
+                          className={`sm:ml-12 p-4 sm:p-6 rounded-xl border ${step.color} shadow-sm hover:shadow-md transition-all duration-300`}
                         >
-                          <div className="flex items-start gap-4">
+                          <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                             {/* Step Number */}
-                            <div className="flex-shrink-0">
-                              <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-                                <span className="text-lg font-bold text-primary">
+                            <div className="flex-shrink-0 flex justify-center sm:justify-start">
+                              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+                                <span className="text-base sm:text-lg font-bold text-primary">
                                   {step.id}
                                 </span>
                               </div>
                             </div>
 
                             {/* Step Content */}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-3 mb-3">
-                                <div className="p-2 rounded-lg bg-primary/5">
-                                  <step.icon
-                                    className={`w-5 h-5 ${step.iconColor}`}
-                                  />
+                            <div className="flex-1 min-w-0 text-center sm:text-left">
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+                                <div className="flex justify-center sm:justify-start">
+                                  <div className="p-2 rounded-lg bg-primary/5">
+                                    <step.icon
+                                      className={`w-4 h-4 sm:w-5 sm:h-5 ${step.iconColor}`}
+                                    />
+                                  </div>
                                 </div>
-                                <h3 className="text-xl font-semibold text-foreground">
+                                <h3 className="text-lg sm:text-xl font-semibold text-foreground">
                                   {step.title}
                                 </h3>
-                                <Badge
-                                  variant="secondary"
-                                  className="text-xs font-medium"
-                                >
-                                  {step.badge}
-                                </Badge>
+                                <div className="flex justify-center sm:justify-start">
+                                  <Badge
+                                    variant="secondary"
+                                    className="text-xs font-medium"
+                                  >
+                                    {step.badge}
+                                  </Badge>
+                                </div>
                               </div>
-                              <p className="text-base text-muted-foreground leading-relaxed">
+                              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                                 {step.description}
                               </p>
                             </div>
@@ -205,22 +209,24 @@ export const TransactionFlowSection = () => {
               </div>
 
               {/* Summary Section */}
-              <div className="mt-8 pt-6 border-t border-border/50">
+              <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-border/50">
                 <motion.div
                   initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
                   whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 1.2 }}
                   viewport={{ once: true, amount: 0.3 }}
-                  className="flex items-center gap-3 p-4 rounded-lg bg-primary/5 border border-primary/10"
+                  className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-lg bg-primary/5 border border-primary/10"
                 >
-                  <div className="p-2 rounded-full bg-primary/10">
-                    <CheckCircle className="w-5 h-5 text-primary" />
+                  <div className="flex justify-center sm:justify-start">
+                    <div className="p-2 rounded-full bg-primary/10">
+                      <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-foreground mb-1">
+                  <div className="flex-1 text-center sm:text-left">
+                    <h4 className="font-semibold text-foreground mb-1 text-base sm:text-lg">
                       {t("home.flow.summary.title")}
                     </h4>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       {t("home.flow.summary.description")}
                     </p>
                   </div>
