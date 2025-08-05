@@ -211,6 +211,35 @@
         "description": "Descubre cómo cada rol interactúa dentro del ciclo de vida del depósito y entiende el flujo de trabajo completo.",
         "link": "Leer Documentación Completa"
       }
+    },
+    "integration": {
+      "title": "Configuración Rápida de Integración",
+      "subtitle": "Comienza con la API de Trustless Work en minutos. Aprende cómo autenticarte y hacer tu primera llamada a la API.",
+      "badge": "Integración API",
+      "auth": {
+        "title": "Autenticación",
+        "description": "Todas las peticiones a la API requieren autenticación usando tu API key como token Bearer.",
+        "baseUrl": "URL Base",
+        "mainnet": "Mainnet",
+        "testnet": "Testnet",
+        "header": "Header de Autorización",
+        "reactLibrary": "Instalación de React Library"
+      },
+      "endpoint": {
+        "title": "Endpoint de Ejemplo",
+        "description": "Aquí tienes un ejemplo de cómo financiar un escrow usando nuestra API.",
+        "params": "Parámetros Requeridos",
+        "payloads": "Ver todos los tipos de payload"
+      },
+      "examples": {
+        "title": "Ejemplos de Código",
+        "description": "Elige entre API REST o React Library para ver ejemplos de implementación."
+      },
+      "cta": {
+        "title": "¿Listo para Integrar?",
+        "description": "Explora nuestra documentación completa de la API con todos los endpoints disponibles y ejemplos.",
+        "link": "Ver Documentación Completa"
+      }
     }
   },
   "help": {

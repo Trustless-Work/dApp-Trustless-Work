@@ -211,6 +211,35 @@
         "description": "Discover how each role interacts within the escrow lifecycle and understand the complete workflow.",
         "link": "Read Full Documentation"
       }
+    },
+    "integration": {
+      "title": "Quick Integration Setup",
+      "subtitle": "Get started with Trustless Work API in minutes. Learn how to authenticate and make your first API call.",
+      "badge": "API Integration",
+      "auth": {
+        "title": "Authentication",
+        "description": "All API requests require authentication using your API key as a Bearer token.",
+        "baseUrl": "Base URL",
+        "mainnet": "Mainnet",
+        "testnet": "Testnet",
+        "header": "Authorization Header",
+        "reactLibrary": "React Library Installation"
+      },
+      "endpoint": {
+        "title": "Example Endpoint",
+        "description": "Here's an example of how to fund an escrow using our API.",
+        "params": "Required Parameters",
+        "payloads": "View all payload types"
+      },
+      "examples": {
+        "title": "Code Examples",
+        "description": "Choose between REST API or React Library to see implementation examples."
+      },
+      "cta": {
+        "title": "Ready to Integrate?",
+        "description": "Explore our complete API documentation with all available endpoints and examples.",
+        "link": "View Full Documentation"
+      }
     }
   },
   "actions": {

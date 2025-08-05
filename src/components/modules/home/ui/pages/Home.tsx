@@ -25,6 +25,12 @@ const ApiKeySection = dynamic(() =>
   })),
 );
 
+const IntegrationSetupSection = dynamic(() =>
+  import("../sections/IntegrationSetupSection").then((mod) => ({
+    default: mod.IntegrationSetupSection,
+  })),
+);
+
 export const Home = () => {
   const homeHook = useHome();
   const containerRef = homeHook?.containerRef ?? null;
@@ -43,6 +49,7 @@ export const Home = () => {
           <FeaturesSection />
           <RolesSection />
           <ApiKeySection />
+          <IntegrationSetupSection />
           <Footer />
         </main>
       </div>
