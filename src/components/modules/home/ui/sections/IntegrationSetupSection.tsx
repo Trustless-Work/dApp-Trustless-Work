@@ -14,16 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Code,
-  Key,
-  Globe,
-  ArrowRight,
-  Copy,
-  Check,
-  Book,
-  BookA,
-} from "lucide-react";
+import { Code, Key, Globe, ArrowRight, Copy, Check, Book } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { codeExamples } from "./code/api-example.code";

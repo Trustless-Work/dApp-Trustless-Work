@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Bounded } from "@/components/layout/Bounded";
 import { useShouldReduceMotion } from "@/hooks/mobile.hook";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   ExternalLink,
   Key,
@@ -21,7 +21,6 @@ import {
   Wallet,
   Settings,
   User,
-  ArrowRight,
 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
@@ -29,6 +28,7 @@ import Link from "next/link";
 export const ApiKeySection = () => {
   const shouldReduceMotion = useShouldReduceMotion();
   const { t } = useLanguage();
+  const theme = useGlobalUIBoundedStore((state) => state.theme);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const handleVideoPlay = () => {
@@ -106,14 +106,14 @@ export const ApiKeySection = () => {
         </div>
 
         {/* Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid lg:grid-cols-10 gap-8 lg:gap-12 items-start">
           {/* Video Section */}
           <motion.div
             initial={shouldReduceMotion ? {} : { opacity: 0, x: -30 }}
             whileInView={shouldReduceMotion ? {} : { opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
             viewport={{ once: true, amount: 0.3 }}
-            className="relative"
+            className="relative lg:col-span-7"
           >
             <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
               <CardHeader className="pb-4">
@@ -127,28 +127,17 @@ export const ApiKeySection = () => {
               </CardHeader>
               <CardContent>
                 <div className="aspect-video relative rounded-lg overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
-                  {/* Placeholder for video - you can replace with actual video */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
-                        <Play className="w-8 h-8 text-primary" />
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {t("apiKey.video.placeholder")}
-                      </p>
-                    </div>
-                  </div>
-                  {/* Uncomment and replace with actual video when available */}
-                  {/* 
                   <video
                     className="w-full h-full object-cover"
                     controls
                     onPlay={handleVideoPlay}
                     onPause={handleVideoPause}
                   >
-                    <source src="/videos/api-integration.mp4" type="video/mp4" />
+                    <source
+                      src={`/videos/request-api-key-${theme === "dark" ? "dark" : "light"}.mp4`}
+                      type="video/mp4"
+                    />
                   </video>
-                  */}
                 </div>
               </CardContent>
             </Card>
@@ -160,7 +149,7 @@ export const ApiKeySection = () => {
             whileInView={shouldReduceMotion ? {} : { opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
             viewport={{ once: true, amount: 0.3 }}
-            className="space-y-6"
+            className="space-y-6 lg:col-span-3"
           >
             {/* Main API Key Card */}
             <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
