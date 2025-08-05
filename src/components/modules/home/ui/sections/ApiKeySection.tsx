@@ -29,7 +29,7 @@ export const ApiKeySection = () => {
   const shouldReduceMotion = useShouldReduceMotion();
   const { t } = useLanguage();
   const theme = useGlobalUIBoundedStore((state) => state.theme);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [, setIsVideoPlaying] = useState(false);
 
   const handleVideoPlay = () => {
     setIsVideoPlaying(true);
