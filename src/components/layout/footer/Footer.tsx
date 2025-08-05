@@ -10,13 +10,13 @@ const Footer: React.FC = () => {
         <div className="flex items-center">
           <Image src="/logo.png" alt="trustless" width={100} height={100} />
         </div>
-        <div>
+        <div className="flex flex-col gap-1">
           <h4 className="font-semibold text-lg mb-2">Contact</h4>
           <p>
             Email:{" "}
             <Link
               href="mailto:alberto@trustlesswork.com"
-              className="text-blue-600 hover:underline dark:text-blue-400"
+              className="text-primary hover:underline"
             >
               alberto@trustlesswork.com
             </Link>
@@ -27,9 +27,53 @@ const Footer: React.FC = () => {
               href="https://www.trustlesswork.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline dark:text-blue-400"
+              className="text-primary hover:underline"
             >
               trustlesswork.com
+            </Link>
+          </p>
+          <p>
+            Documentation:{" "}
+            <Link
+              href="https://docs.trustlesswork.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              docs.trustlesswork.com
+            </Link>
+          </p>
+          <p>
+            Demo:{" "}
+            <Link
+              href="https://demo.trustlesswork.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              demo.trustlesswork.com
+            </Link>
+          </p>
+          <p>
+            GitHub:{" "}
+            <Link
+              href="https://github.com/Trustless-Work"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              github.com/trustless-work
+            </Link>
+          </p>
+          <p>
+            Escrow Viewer:{" "}
+            <Link
+              href="https://viewer.trustlesswork.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              viewer.trustlesswork.com
             </Link>
           </p>
         </div>
