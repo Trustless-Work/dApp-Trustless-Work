@@ -170,31 +170,39 @@ export const RolesSection = () => {
                     </div>
 
                     <div className="space-y-2">
-                      {(role.examples as string[]).map(
-                        (example: string, exampleIndex: number) => (
-                          <motion.div
-                            key={exampleIndex}
-                            initial={
-                              shouldReduceMotion ? {} : { opacity: 0, x: 10 }
-                            }
-                            whileInView={
-                              shouldReduceMotion ? {} : { opacity: 1, x: 0 }
-                            }
-                            transition={{
-                              duration: 0.4,
-                              delay: 0.7 + index * 0.1 + exampleIndex * 0.05,
-                            }}
-                            viewport={{ once: true, amount: 0.3 }}
-                            className="flex items-start gap-2"
-                          >
-                            <div
-                              className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${role.color.replace("bg-", "bg-").replace("/10", "/30")}`}
-                            />
-                            <span className="text-xs text-muted-foreground leading-relaxed">
-                              {example}
-                            </span>
-                          </motion.div>
-                        ),
+                      {Array.isArray(role.examples) ? (
+                        role.examples.map(
+                          (example: string | object, exampleIndex: number) => (
+                            <motion.div
+                              key={exampleIndex}
+                              initial={
+                                shouldReduceMotion ? {} : { opacity: 0, x: 10 }
+                              }
+                              whileInView={
+                                shouldReduceMotion ? {} : { opacity: 1, x: 0 }
+                              }
+                              transition={{
+                                duration: 0.4,
+                                delay: 0.7 + index * 0.1 + exampleIndex * 0.05,
+                              }}
+                              viewport={{ once: true, amount: 0.3 }}
+                              className="flex items-start gap-2"
+                            >
+                              <div
+                                className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${role.color.replace("bg-", "bg-").replace("/10", "/30")}`}
+                              />
+                              <span className="text-xs text-muted-foreground leading-relaxed">
+                                {typeof example === "string"
+                                  ? example
+                                  : String(example)}
+                              </span>
+                            </motion.div>
+                          ),
+                        )
+                      ) : (
+                        <div className="text-xs text-muted-foreground">
+                          No examples available
+                        </div>
                       )}
                     </div>
                   </div>

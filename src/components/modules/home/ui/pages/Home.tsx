@@ -31,6 +31,12 @@ const IntegrationSetupSection = dynamic(() =>
   })),
 );
 
+const TransactionFlowSection = dynamic(() =>
+  import("../sections/TransactionFlowSection").then((mod) => ({
+    default: mod.TransactionFlowSection,
+  })),
+);
+
 export const Home = () => {
   const homeHook = useHome();
   const containerRef = homeHook?.containerRef ?? null;
@@ -50,6 +56,7 @@ export const Home = () => {
           <RolesSection />
           <ApiKeySection />
           <IntegrationSetupSection />
+          <TransactionFlowSection />
           <Footer />
         </main>
       </div>
