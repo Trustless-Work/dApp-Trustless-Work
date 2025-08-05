@@ -240,6 +240,63 @@
         "description": "Explore our complete API documentation with all available endpoints and examples.",
         "link": "View Full Documentation"
       }
+    },
+    "flow": {
+      "badge": "Transaction Flow",
+      "title": "Escrow Transaction Flow",
+      "subtitle": "Understand the complete process from payload preparation to transaction execution",
+      "diagram": {
+        "title": "Flow Diagram",
+        "description": "Visual representation of the 5-step escrow transaction process"
+      },
+      "step1": {
+        "title": "Prepare Payload",
+        "description": "Create the transaction payload with required parameters"
+      },
+      "step2": {
+        "title": "Execute Endpoint",
+        "description": "Send the payload to the Trustless Work API endpoint"
+      },
+      "step3": {
+        "title": "Get Unsigned TX",
+        "description": "Receive the unsigned transaction from the API"
+      },
+      "step4": {
+        "title": "Sign Transaction",
+        "description": "Sign the transaction using wallet or passkey"
+      },
+      "step5": {
+        "title": "Send Transaction",
+        "description": "Submit the signed transaction to the blockchain"
+      },
+      "summary": {
+        "title": "Transaction Flow Summary",
+        "description": "This 5-step process ensures secure and transparent escrow transactions"
+      },
+      "implementation": {
+        "title": "Implementation Methods",
+        "description": "Choose between REST API or React Library implementation"
+      },
+      "rest": {
+        "step1": "Manual Payload",
+        "step1Desc": "Manually construct the payload object with all required fields",
+        "step2": "HTTP Request",
+        "step2Desc": "Send POST request to the API endpoint with authentication",
+        "step3": "Parse Response",
+        "step3Desc": "Extract the unsigned transaction from the API response",
+        "step4": "Sign & Submit",
+        "step4Desc": "Sign the transaction and submit to the network"
+      },
+      "react": {
+        "step1": "Hook Usage",
+        "step1Desc": "Use the appropriate hook (e.g., useFundEscrow) with payload",
+        "step2": "Automatic Request",
+        "step2Desc": "The hook automatically handles the API request",
+        "step3": "Get Result",
+        "step3Desc": "Receive the unsigned transaction from the hook",
+        "step4": "Sign & Send",
+        "step4Desc": "Use useSendTransaction to sign and submit"
+      }
     }
   },
   "actions": {
@@ -796,61 +853,6 @@
       "request": {
         "title": "Request API Key",
         "description": "Go to the API Keys option in the sidebar and request your key"
-      }
-    }
-  },
-  "home": {
-    "flow": {
-      "badge": "Transaction Flow",
-      "title": "Escrow Transaction Flow",
-      "subtitle": "Understand the complete process from payload preparation to transaction execution",
-      "diagram": {
-        "title": "Flow Diagram",
-        "description": "Visual representation of the 5-step escrow transaction process"
-      },
-      "step1": {
-        "title": "Prepare Payload",
-        "description": "Create the transaction payload with required parameters"
-      },
-      "step2": {
-        "title": "Execute Endpoint",
-        "description": "Send the payload to the Trustless Work API endpoint"
-      },
-      "step3": {
-        "title": "Get Unsigned TX",
-        "description": "Receive the unsigned transaction from the API"
-      },
-      "step4": {
-        "title": "Sign Transaction",
-        "description": "Sign the transaction using wallet or passkey"
-      },
-      "step5": {
-        "title": "Send Transaction",
-        "description": "Submit the signed transaction to the blockchain"
-      },
-      "implementation": {
-        "title": "Implementation Methods",
-        "description": "Choose between REST API or React Library implementation"
-      },
-      "rest": {
-        "step1": "Manual Payload",
-        "step1Desc": "Manually construct the payload object with all required fields",
-        "step2": "HTTP Request",
-        "step2Desc": "Send POST request to the API endpoint with authentication",
-        "step3": "Parse Response",
-        "step3Desc": "Extract the unsigned transaction from the API response",
-        "step4": "Sign & Submit",
-        "step4Desc": "Sign the transaction and submit to the network"
-      },
-      "react": {
-        "step1": "Hook Usage",
-        "step1Desc": "Use the appropriate hook (e.g., useFundEscrow) with payload",
-        "step2": "Automatic Request",
-        "step2Desc": "The hook automatically handles the API request",
-        "step3": "Get Result",
-        "step3Desc": "Receive the unsigned transaction from the hook",
-        "step4": "Sign & Send",
-        "step4Desc": "Use useSendTransaction to sign and submit"
       }
     }
   }

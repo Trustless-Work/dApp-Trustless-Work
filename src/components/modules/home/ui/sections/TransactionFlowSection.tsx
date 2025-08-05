@@ -106,19 +106,9 @@ export const TransactionFlowSection = () => {
               viewport={{ once: true, amount: 0.3 }}
               className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent"
             >
-              {t("home.flow.badge")}
+              {t("home.flow.title")}
             </motion.h2>
           </div>
-
-          <motion.h2
-            initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-            whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4"
-          >
-            {t("home.flow.title")}
-          </motion.h2>
 
           <motion.p
             initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}

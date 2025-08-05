@@ -240,6 +240,63 @@
         "description": "Explora nuestra documentación completa de la API con todos los endpoints disponibles y ejemplos.",
         "link": "Ver Documentación Completa"
       }
+    },
+    "flow": {
+      "badge": "Flujo de Transacción",
+      "title": "Flujo de Transacción de Escrow",
+      "subtitle": "Comprende el proceso completo desde la preparación del payload hasta la ejecución de la transacción",
+      "diagram": {
+        "title": "Diagrama de Flujo",
+        "description": "Representación visual del proceso de transacción de escrow en 5 pasos"
+      },
+      "step1": {
+        "title": "Preparar Payload",
+        "description": "Crear el payload de la transacción con los parámetros requeridos"
+      },
+      "step2": {
+        "title": "Ejecutar Endpoint",
+        "description": "Enviar el payload al endpoint de la API de Trustless Work"
+      },
+      "step3": {
+        "title": "Obtener TX sin Firmar",
+        "description": "Recibir la transacción sin firmar desde la API"
+      },
+      "step4": {
+        "title": "Firmar Transacción",
+        "description": "Firmar la transacción usando wallet o passkey"
+      },
+      "step5": {
+        "title": "Enviar Transacción",
+        "description": "Enviar la transacción firmada a la blockchain"
+      },
+      "summary": {
+        "title": "Resumen del Flujo de Transacción",
+        "description": "Este proceso de 5 pasos asegura transacciones de escrow seguras y transparentes"
+      },
+      "implementation": {
+        "title": "Métodos de Implementación",
+        "description": "Elige entre implementación de API REST o React Library"
+      },
+      "rest": {
+        "step1": "Payload Manual",
+        "step1Desc": "Construir manualmente el objeto payload con todos los campos requeridos",
+        "step2": "Petición HTTP",
+        "step2Desc": "Enviar petición POST al endpoint de la API con autenticación",
+        "step3": "Analizar Respuesta",
+        "step3Desc": "Extraer la transacción sin firmar de la respuesta de la API",
+        "step4": "Firmar y Enviar",
+        "step4Desc": "Firmar la transacción y enviarla a la red"
+      },
+      "react": {
+        "step1": "Uso de Hook",
+        "step1Desc": "Usar el hook apropiado (ej., useFundEscrow) con el payload",
+        "step2": "Petición Automática",
+        "step2Desc": "El hook maneja automáticamente la petición a la API",
+        "step3": "Obtener Resultado",
+        "step3Desc": "Recibir la transacción sin firmar desde el hook",
+        "step4": "Firmar y Enviar",
+        "step4Desc": "Usar useSendTransaction para firmar y enviar"
+      }
     }
   },
   "help": {
@@ -787,61 +844,6 @@
       "request": {
         "title": "Solicita tu API Key",
         "description": "Ve a la opción de API Keys en la barra lateral y solicita tu key"
-      }
-    }
-  },
-  "home": {
-    "flow": {
-      "badge": "Flujo de Transacción",
-      "title": "Flujo de Transacción de Escrow",
-      "subtitle": "Comprende el proceso completo desde la preparación del payload hasta la ejecución de la transacción",
-      "diagram": {
-        "title": "Diagrama de Flujo",
-        "description": "Representación visual del proceso de transacción de escrow en 5 pasos"
-      },
-      "step1": {
-        "title": "Preparar Payload",
-        "description": "Crear el payload de la transacción con los parámetros requeridos"
-      },
-      "step2": {
-        "title": "Ejecutar Endpoint",
-        "description": "Enviar el payload al endpoint de la API de Trustless Work"
-      },
-      "step3": {
-        "title": "Obtener TX sin Firmar",
-        "description": "Recibir la transacción sin firmar desde la API"
-      },
-      "step4": {
-        "title": "Firmar Transacción",
-        "description": "Firmar la transacción usando wallet o passkey"
-      },
-      "step5": {
-        "title": "Enviar Transacción",
-        "description": "Enviar la transacción firmada a la blockchain"
-      },
-      "implementation": {
-        "title": "Métodos de Implementación",
-        "description": "Elige entre implementación de API REST o React Library"
-      },
-      "rest": {
-        "step1": "Payload Manual",
-        "step1Desc": "Construir manualmente el objeto payload con todos los campos requeridos",
-        "step2": "Petición HTTP",
-        "step2Desc": "Enviar petición POST al endpoint de la API con autenticación",
-        "step3": "Analizar Respuesta",
-        "step3Desc": "Extraer la transacción sin firmar de la respuesta de la API",
-        "step4": "Firmar y Enviar",
-        "step4Desc": "Firmar la transacción y enviarla a la red"
-      },
-      "react": {
-        "step1": "Uso de Hook",
-        "step1Desc": "Usar el hook apropiado (ej., useFundEscrow) con el payload",
-        "step2": "Petición Automática",
-        "step2Desc": "El hook maneja automáticamente la petición a la API",
-        "step3": "Obtener Resultado",
-        "step3Desc": "Recibir la transacción sin firmar desde el hook",
-        "step4": "Firmar y Enviar",
-        "step4Desc": "Usar useSendTransaction para firmar y enviar"
       }
     }
   }
