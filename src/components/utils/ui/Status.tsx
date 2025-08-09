@@ -240,7 +240,6 @@ export const getActionButtons = (
     activeTab === "releaseSigner" &&
     "flags" in milestone &&
     !milestone.flags?.disputed &&
-    milestone.status === "completed" &&
     milestone.flags?.approved &&
     !milestone.flags?.released
   ) {
