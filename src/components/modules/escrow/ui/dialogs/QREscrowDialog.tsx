@@ -31,7 +31,7 @@ const QREscrowDialog = ({
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   // const qrCode = `web+stellar:pay?destination=${selectedEscrow?.contractId}&asset_code=${selectedEscrow?.trustline.name}&asset_issuer=${selectedEscrow?.trustline.address}&memo=hasysda987fs&memo_type=MEMO_TEXT&callback=url%3Ahttps%3A%2F%2FsomeSigningService.com%2Fhasysda987fs%3Fasset%3DUSD`;
 
-  const qrCode = `web+stellar:pay?destination=${selectedEscrow?.contractId}&asset_code=USDC&asset_issuer=${selectedEscrow?.trustline.address}`;
+  const qrCode = `web+stellar:pay?destination=${selectedEscrow?.contractId}&asset_code=${selectedEscrow?.trustline.name}&asset_issuer=${selectedEscrow?.trustline.address}`;
 
   return (
     <Dialog open={isQRDialogOpen} onOpenChange={handleClose}>

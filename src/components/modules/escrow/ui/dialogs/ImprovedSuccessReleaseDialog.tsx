@@ -45,7 +45,7 @@ export const ImprovedSuccessReleaseDialog = ({
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
   const escrow = selectedEscrow || recentEscrow;
 
-  const { formatDollar } = useFormatUtils();
+  const { formatCurrency } = useFormatUtils();
 
   // Get the amount based on escrow type
   const amount =
@@ -127,12 +127,12 @@ export const ImprovedSuccessReleaseDialog = ({
               <div className="flex flex-col sm:flex-row sm:justify-start gap-2 sm:gap-10">
                 <p className="text-sm">
                   <span className="font-bold">Total Amount: </span>
-                  {formatDollar(amount)}
+                  {formatCurrency(amount, escrow?.trustline?.name)}
                 </p>
                 {recentEscrow && (
                   <p className="text-sm">
                     <span className="font-bold">Total Balance:</span>{" "}
-                    {formatDollar(escrow?.balance)}
+                    {formatCurrency(escrow?.balance, escrow?.trustline?.name)}
                   </p>
                 )}
               </div>
@@ -142,10 +142,16 @@ export const ImprovedSuccessReleaseDialog = ({
               <TransferAnimation
                 title="Funds Released Successfully"
                 fromLabel="Contract"
-                fromAmount={formatDollar(amount).replace("$", "")}
+                fromAmount={formatCurrency(
+                  amount,
+                  escrow?.trustline?.name,
+                ).replace("$", "")}
                 fromCurrency={escrow?.trustline?.name}
                 toLabel="Distributed"
-                toAmount={formatDollar(amount).replace("$", "")}
+                toAmount={formatCurrency(
+                  amount,
+                  escrow?.trustline?.name,
+                ).replace("$", "")}
                 toCurrency={escrow?.trustline?.name}
                 additionalInfo={`Contract ID: ${escrow?.contractId?.slice(0, 8)}...${escrow?.contractId?.slice(-6)}`}
               />

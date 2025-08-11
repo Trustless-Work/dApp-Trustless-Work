@@ -42,7 +42,7 @@ export const GeneralInformation = ({
   areAllMilestonesCompletedAndFlag,
 }: GeneralInformationProps) => {
   const { t } = useTranslation();
-  const { formatText, formatDollar, formatAddress } = useFormatUtils();
+  const { formatText, formatCurrency, formatAddress } = useFormatUtils();
   const { copyText, copiedKeyId } = useCopyUtils();
   const trustlessWorkAmount = useEscrowUIBoundedStore(
     (state) => state.trustlessWorkAmount,
@@ -119,14 +119,17 @@ export const GeneralInformation = ({
           <StatisticsCard
             title={t("escrowDetailDialog.amount")}
             icon={CircleDollarSign}
-            value={formatDollar(totalAmount)}
+            value={formatCurrency(totalAmount, selectedEscrow.trustline?.name)}
             tooltipContent={t("escrowDetailDialog.amountTooltip")}
           />
 
           <StatisticsCard
             title={t("escrowDetailDialog.balance")}
             icon={Wallet}
-            value={formatDollar(selectedEscrow.balance ?? "null")}
+            value={formatCurrency(
+              selectedEscrow.balance ?? "null",
+              selectedEscrow.trustline?.name,
+            )}
             tooltipContent={t("escrowDetailDialog.balanceTooltip")}
             fundedBy={selectedEscrow.fundedBy}
           />
@@ -282,7 +285,10 @@ export const GeneralInformation = ({
                           Total Amount
                         </span>
                         <span className="font-medium">
-                          {formatDollar(selectedEscrow.amount)}
+                          {formatCurrency(
+                            selectedEscrow.amount,
+                            selectedEscrow.trustline?.name,
+                          )}
                         </span>
                       </div>
                     </div>
@@ -298,7 +304,10 @@ export const GeneralInformation = ({
                             Receiver
                           </span>
                           <span className="font-medium">
-                            {formatDollar(receiverAmount.toFixed(2))}
+                            {formatCurrency(
+                              receiverAmount.toFixed(2),
+                              selectedEscrow.trustline?.name,
+                            )}
                           </span>
                         </div>
                       </div>
@@ -315,7 +324,10 @@ export const GeneralInformation = ({
                             Platform Fee
                           </span>
                           <span className="font-medium">
-                            {formatDollar(platformFeeAmount.toFixed(2))}
+                            {formatCurrency(
+                              platformFeeAmount.toFixed(2),
+                              selectedEscrow.trustline?.name,
+                            )}
                           </span>
                         </div>
                       </div>
@@ -333,7 +345,10 @@ export const GeneralInformation = ({
                           {t("escrowDetailDialog.trustlessWork")}
                         </span>
                         <span className="font-medium">
-                          {formatDollar(trustlessWorkAmount.toFixed(2))}
+                          {formatCurrency(
+                            trustlessWorkAmount.toFixed(2),
+                            selectedEscrow.trustline?.name,
+                          )}
                         </span>
                       </div>
                     </div>

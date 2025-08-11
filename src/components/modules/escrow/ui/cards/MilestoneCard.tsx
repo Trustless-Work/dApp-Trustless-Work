@@ -66,7 +66,7 @@ export const MilestoneCard = ({
   onViewDetails,
   onCompleteMilestone,
 }: MilestoneCardProps) => {
-  const { formatDollar } = useFormatUtils();
+  const { formatCurrency } = useFormatUtils();
   const isChangingFlag = useEscrowUIBoundedStore(
     (state) => state.isChangingFlag,
   );
@@ -116,7 +116,7 @@ export const MilestoneCard = ({
         {"amount" in milestone && (
           <div className="flex items-center gap-2 py-2">
             <span className="text-2xl font-bold text-foreground">
-              {formatDollar(milestone.amount)}
+              {formatCurrency(milestone.amount, selectedEscrow.trustline?.name)}
             </span>
           </div>
         )}

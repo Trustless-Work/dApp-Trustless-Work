@@ -33,7 +33,7 @@ interface EscrowCardProps {
 const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
   const { t } = useTranslation();
   const { currentNetwork } = useNetwork();
-  const { formatDateFromFirebase, formatDollar } = useFormatUtils();
+  const { formatDateFromFirebase, formatCurrency } = useFormatUtils();
 
   const calculateTotalAmount = (escrow: Escrow) => {
     //todo: move to utils function
@@ -99,10 +99,14 @@ const EscrowCard = ({ escrow, onCardClick }: EscrowCardProps) => {
         <div className="mt-2">
           <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold">
             <span className="font-extrabold">
-              {formatDollar(escrow?.balance) || "N/A"}
+              {formatCurrency(escrow?.balance, escrow.trustline?.name)}
             </span>
             <span className="text-xs sm:text-sm text-muted-foreground font-normal ml-1">
-              of {formatDollar(calculateTotalAmount(escrow)) || "N/A"}
+              of{" "}
+              {formatCurrency(
+                calculateTotalAmount(escrow),
+                escrow.trustline?.name,
+              )}
             </span>
           </h3>
         </div>

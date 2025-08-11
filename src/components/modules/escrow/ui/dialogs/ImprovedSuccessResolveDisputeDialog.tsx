@@ -62,7 +62,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
       : selectedEscrow?.approverFunds;
 
   const escrow = selectedEscrow || recentEscrow;
-  const { formatDollar } = useFormatUtils();
+  const { formatCurrency } = useFormatUtils();
 
   const trustlessPercentage = 0.3;
   const trustlessWorkFee = 0.003;
@@ -159,12 +159,12 @@ export const ImprovedSuccessResolveDisputeDialog = ({
               <div className="flex flex-col sm:flex-row sm:justify-start gap-2 sm:gap-10">
                 <p className="text-sm">
                   <span className="font-bold">Total Amount: </span>
-                  {formatDollar(amount)}
+                  {formatCurrency(amount, escrow?.trustline?.name)}
                 </p>
                 {recentEscrow && (
                   <p className="text-sm">
                     <span className="font-bold">Total Balance:</span>{" "}
-                    {formatDollar(escrow?.balance)}
+                    {formatCurrency(escrow?.balance, escrow?.trustline?.name)}
                   </p>
                 )}
               </div>
@@ -174,13 +174,17 @@ export const ImprovedSuccessResolveDisputeDialog = ({
               <TransferAnimation
                 title="Dispute Resolved"
                 fromLabel="Contract"
-                fromAmount={formatDollar(amount).replace("$", "")}
-                fromCurrency="USD"
-                toLabel="Resolution"
-                toAmount={formatDollar(
-                  Number(parsedApproverFunds) + Number(parsedReceiverFunds),
+                fromAmount={formatCurrency(
+                  amount,
+                  escrow?.trustline?.name,
                 ).replace("$", "")}
-                toCurrency="USD"
+                fromCurrency={escrow?.trustline?.name}
+                toLabel="Resolution"
+                toAmount={formatCurrency(
+                  Number(parsedApproverFunds) + Number(parsedReceiverFunds),
+                  escrow?.trustline?.name,
+                ).replace("$", "")}
+                toCurrency={escrow?.trustline?.name}
                 additionalInfo={
                   escrow?.contractId
                     ? `Contract ID: ${escrow.contractId.slice(0, 8)}...${escrow.contractId.slice(-6)}`

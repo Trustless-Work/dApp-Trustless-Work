@@ -43,7 +43,7 @@ const ResolveDisputeEscrowDialog = ({
 }: ResolveDisputeEscrowDialogProps) => {
   const { form, onSubmit, handleClose } = useResolveDisputeDialog();
 
-  const { formatDollar } = useFormatUtils();
+  const { formatCurrency } = useFormatUtils();
 
   const isResolvingDispute = useEscrowUIBoundedStore(
     (state) => state.isResolvingDispute,
@@ -208,36 +208,49 @@ const ResolveDisputeEscrowDialog = ({
             <div className="grid grid-cols-2 gap-4">
               <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Total Balance:</span>{" "}
-                {formatDollar(escrow.balance)}
+                {formatCurrency(escrow.balance, escrow.trustline?.name)}
               </p>
 
               {escrow.type === "multi-release" && (
                 <p className="text-sm text-muted-foreground p-0">
                   <span className="font-extrabold">Milestone Amount:</span>{" "}
-                  {formatDollar(
+                  {formatCurrency(
                     (milestone as MultiReleaseMilestone)?.amount || 0,
+                    escrow.trustline?.name,
                   )}
                 </p>
               )}
 
               <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Approver Net:</span>{" "}
-                {formatDollar(approverNet?.toString())}
+                {formatCurrency(
+                  approverNet?.toString(),
+                  escrow.trustline?.name,
+                )}
               </p>
 
               <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Receiver Net:</span>{" "}
-                {formatDollar(receiverNet?.toString())}
+                {formatCurrency(
+                  receiverNet?.toString(),
+                  escrow.trustline?.name,
+                )}
               </p>
 
               <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Platform Net:</span>{" "}
-                {formatDollar(totalPlatformAmount?.toString())}
+                {formatCurrency(
+                  totalPlatformAmount?.toString(),
+                  escrow.trustline?.name,
+                )}
               </p>
 
               <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Trustless Work Net:</span>{" "}
-                {formatDollar(totalTrustlessWorkAmount?.toString())}
+                {formatCurrency(
+                  totalTrustlessWorkAmount?.toString(),
+                  escrow.trustline?.name,
+                )}
               </p>
             </div>
           </Card>
@@ -310,14 +323,19 @@ const ResolveDisputeEscrowDialog = ({
             {!isEqualToAmount && (
               <p className="text-destructive text-xs font-bold text-end">
                 Both amounts must be equal to the balance (
-                {formatDollar(
+                {formatCurrency(
                   escrow.type === "single-release"
                     ? escrow.balance
                     : (milestone as MultiReleaseMilestone)?.amount || 0,
+                  escrow.trustline?.name,
                 )}
                 )
                 <br />
-                Difference: {formatDollar(isMissing.toString())}
+                Difference:{" "}
+                {formatCurrency(
+                  isMissing.toString(),
+                  escrow.trustline?.name,
+                ).replace("$", "")}
               </p>
             )}
 

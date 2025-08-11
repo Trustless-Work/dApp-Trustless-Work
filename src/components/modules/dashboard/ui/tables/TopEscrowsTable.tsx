@@ -41,7 +41,7 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
 
   const hasData = escrows && escrows.length > 0;
 
-  const { formatDollar, formatDateFromFirebase } = useFormatUtils();
+  const { formatCurrency, formatDateFromFirebase } = useFormatUtils();
 
   return (
     <div className="container mx-auto py-3">
@@ -72,7 +72,7 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
               <TableRow key={escrow.contractId}>
                 <TableCell className="font-medium">{escrow.title}</TableCell>
                 <TableCell className="text-center">
-                  {formatDollar(escrow.amount)}
+                  {formatCurrency(escrow.amount, escrow.trustline?.name)}
                 </TableCell>
                 <TableCell className="text-center">
                   <Badge variant="outline">{getStatus(escrow)}</Badge>

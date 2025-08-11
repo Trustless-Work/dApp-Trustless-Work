@@ -31,7 +31,7 @@ const EntityCard = ({
   inDispute,
   isNet,
 }: EntityCardProps) => {
-  const { formatAddress, formatDollar } = useFormatUtils();
+  const { formatAddress, formatCurrency } = useFormatUtils();
   const [user, setUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const EntityCard = ({
                     {isNet && "Net "}Amount:
                   </span>
                   <span className="font-medium text-emerald-600">
-                    {formatDollar(amount)}
+                    {formatCurrency(amount)}
                   </span>
                 </div>
               )}
