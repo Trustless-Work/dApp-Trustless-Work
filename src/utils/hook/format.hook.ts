@@ -23,17 +23,20 @@ export const useFormatUtils = () => {
     return `${day}/${month}/${year} | ${hours}:${minutes}`;
   };
 
-  const formatDollar = (amount: string | undefined | number): string => {
-    if (!amount) return "$0.00";
+  const formatCurrency = (
+    amount: string | undefined | number,
+    currency: string = "undefined",
+  ): string => {
+    if (!amount) return `${currency} 0.00`;
 
     const parsedAmount = parseFloat(amount.toString());
-    if (isNaN(parsedAmount)) return "$0.00";
+    if (isNaN(parsedAmount)) return `${currency} 0.00`;
 
     // ! ALL THE DECIMALS
     // return `$${parsedAmount.toString().replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
 
     // ! ONLY 2 DECIMALS
-    return `$${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
+    return `${currency} ${parsedAmount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}`;
   };
 
   const formatText = (role: string | undefined = "") => {
@@ -64,7 +67,7 @@ export const useFormatUtils = () => {
   return {
     formatAddress,
     formatDateFromFirebase,
-    formatDollar,
+    formatCurrency,
     formatText,
     formatPercentage,
     formatNumber,
