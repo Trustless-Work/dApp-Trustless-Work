@@ -25,7 +25,7 @@ import TooltipInfo from "@/components/utils/ui/Tooltip";
 import { useTranslation } from "react-i18next";
 import { Role } from "@trustless-work/escrow/types";
 import useIsMobile from "@/hooks/mobile.hook";
-import useMyEscrows from "@/components/modules/escrow/hooks/my-escrows.hook"
+import useMyEscrows from "@/components/modules/escrow/hooks/my-escrows.hook";
 
 const MyEscrows = () => {
   const { t } = useTranslation();
@@ -36,8 +36,7 @@ const MyEscrows = () => {
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const activeMode = useEscrowUIBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
-  const { escrows } = useMyEscrows({ role: activeTab })
-
+  const { escrows } = useMyEscrows({ role: activeTab });
 
   const [run, setRun] = useState(false);
   const isMoonpayWidgetOpen = useEscrowUIBoundedStore(

@@ -1,11 +1,12 @@
 // @ts-nocheck
-import type { Escrow } from "@/@types/escrow.entity"
+import type { Escrow } from "@/@types/escrow.entity";
 
 export const mockEscrowData: Escrow[] = [
   {
     contractId: "mock-contract-1",
     title: "E-Commerce Website Development",
-    description: "Complete redesign and development of modern e-commerce platform with payment integration",
+    description:
+      "Complete redesign and development of modern e-commerce platform with payment integration",
     amount: 7500,
     platformFee: 375,
     balance: 7500,
@@ -63,7 +64,8 @@ export const mockEscrowData: Escrow[] = [
   {
     contractId: "mock-contract-2",
     title: "Smart Contract Security Audit",
-    description: "Comprehensive security audit for DeFi lending protocol smart contracts",
+    description:
+      "Comprehensive security audit for DeFi lending protocol smart contracts",
     amount: 12000,
     platformFee: 600,
     balance: 12000,
@@ -97,7 +99,8 @@ export const mockEscrowData: Escrow[] = [
     milestones: [
       {
         title: "Complete Security Audit",
-        description: "Full security assessment with detailed report and recommendations",
+        description:
+          "Full security assessment with detailed report and recommendations",
         amount: 12000,
         status: "completed",
         flags: { approved: true },
@@ -107,7 +110,8 @@ export const mockEscrowData: Escrow[] = [
   {
     contractId: "mock-contract-3",
     title: "Mobile App Development - iOS & Android",
-    description: "Cross-platform mobile application for fitness tracking with social features",
+    description:
+      "Cross-platform mobile application for fitness tracking with social features",
     amount: 15000,
     platformFee: 750,
     balance: 9000,
@@ -141,21 +145,24 @@ export const mockEscrowData: Escrow[] = [
     milestones: [
       {
         title: "App Architecture & Setup",
-        description: "Project setup, architecture planning, and basic navigation",
+        description:
+          "Project setup, architecture planning, and basic navigation",
         amount: 3000,
         status: "completed",
         flags: { approved: true },
       },
       {
         title: "Core Features Development",
-        description: "User authentication, fitness tracking, and data visualization",
+        description:
+          "User authentication, fitness tracking, and data visualization",
         amount: 6000,
         status: "completed",
         flags: { approved: true },
       },
       {
         title: "Social Features & Testing",
-        description: "Social networking features, testing, and app store deployment",
+        description:
+          "Social networking features, testing, and app store deployment",
         amount: 6000,
         status: "pending",
         flags: { approved: false },
@@ -165,7 +172,8 @@ export const mockEscrowData: Escrow[] = [
   {
     contractId: "mock-contract-4",
     title: "Data Analytics Dashboard",
-    description: "Business intelligence dashboard with real-time analytics and reporting features",
+    description:
+      "Business intelligence dashboard with real-time analytics and reporting features",
     amount: 4500,
     platformFee: 225,
     balance: 4500,
@@ -213,4 +221,4 @@ export const mockEscrowData: Escrow[] = [
       },
     ],
   },
-]
+];

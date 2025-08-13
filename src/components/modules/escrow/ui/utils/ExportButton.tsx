@@ -1,29 +1,35 @@
-"use client"
-import { useTranslation } from "react-i18next"
-import { Download, FileSpreadsheet } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { exportEscrowsToPDF } from "@/utils/pdf-export"
+"use client";
+import { Download, FileSpreadsheet } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { exportEscrowsToPDF } from "@/utils/pdf-export";
+import type { Escrow } from "@/@types/escrow.entity";
 
 interface ExportButtonProps {
-  escrows: any[]
-  role: string
+  escrows: Escrow[];
+  role: string;
 }
 
 export const ExportButton = ({ escrows, role }: ExportButtonProps) => {
-  const { t } = useTranslation()
-
   const handleExportPDF = () => {
     exportEscrowsToPDF(escrows, {
       title: `My Escrows - ${role.toUpperCase()} Role`,
       orientation: "landscape",
-    })
-  }
+    });
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+        <Button
+          variant="outline"
+          className="flex items-center gap-2 bg-transparent"
+        >
           <Download className="h-4 w-4" />
           Export
         </Button>
@@ -39,5 +45,5 @@ export const ExportButton = ({ escrows, role }: ExportButtonProps) => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
+  );
+};

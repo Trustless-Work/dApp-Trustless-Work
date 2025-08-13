@@ -17,22 +17,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Download, FileSpreadsheet } from 'lucide-react';
+import { Download, FileSpreadsheet } from "lucide-react";
 import { exportEscrowsToPDF } from "@/utils/pdf-export";
 import type { Escrow } from "@/@types/escrow.entity";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface MyEscrowsFilterProps {
   escrows?: Escrow[];
   role?: string;
 }
-const MyEscrowsFilter = ({ escrows = [], role = 'signer' }: MyEscrowsFilterProps) => {
+const MyEscrowsFilter = ({
+  escrows = [],
+  role = "signer",
+}: MyEscrowsFilterProps) => {
   const { t } = useTranslation();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const handleExportPDF = () => {
     exportEscrowsToPDF(escrows, {
       title: `My Escrows - ${role.toUpperCase()} Role`,
-      orientation: 'landscape'
+      orientation: "landscape",
     });
   };
   const {
@@ -87,17 +95,26 @@ const MyEscrowsFilter = ({ escrows = [], role = 'signer' }: MyEscrowsFilterProps
             {/* Export Button */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2 bg-transparent"
+                >
                   <Download className="h-4 w-4" />
                   Export
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={handleExportPDF} className="cursor-pointer">
+                <DropdownMenuItem
+                  onClick={handleExportPDF}
+                  className="cursor-pointer"
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export as PDF
                 </DropdownMenuItem>
-                <DropdownMenuItem disabled className="cursor-not-allowed opacity-50">
+                <DropdownMenuItem
+                  disabled
+                  className="cursor-not-allowed opacity-50"
+                >
                   <FileSpreadsheet className="h-4 w-4 mr-2" />
                   Export as Excel (Coming Soon)
                 </DropdownMenuItem>
