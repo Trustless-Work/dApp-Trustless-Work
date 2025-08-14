@@ -98,7 +98,7 @@ export const TransactionFlowSection = () => {
 
         {/* Flow Diagram */}
         <div className="max-w-4xl mx-auto px-4">
-          <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
+          <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
             <CardHeader className="px-4 sm:px-6">
               <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                 <Code className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />

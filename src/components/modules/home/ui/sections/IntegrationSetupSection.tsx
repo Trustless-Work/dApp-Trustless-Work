@@ -49,7 +49,7 @@ export const IntegrationSetupSection = () => {
           {/* Authentication Info */}
           <div className="space-y-6">
             {/* Authentication Card */}
-            <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
+            <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                   <Key className="w-5 h-5 text-primary flex-shrink-0" />
@@ -116,7 +116,7 @@ export const IntegrationSetupSection = () => {
             </Card>
 
             {/* Example Endpoint Card */}
-            <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
+            <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                   <Code className="w-5 h-5 text-primary flex-shrink-0" />
@@ -181,7 +181,7 @@ export const IntegrationSetupSection = () => {
 
           {/* Code Examples */}
           <div className="space-y-6">
-            <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
+            <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
                   <Code className="w-5 h-5 text-primary flex-shrink-0" />
@@ -344,7 +344,7 @@ export const IntegrationSetupSection = () => {
 
             {/* Call to Action */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
+              <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
                 <CardContent className="px-4 py-6">
                   <div className="text-center space-y-4">
                     <div className="flex items-center justify-center gap-3">
@@ -377,7 +377,7 @@ export const IntegrationSetupSection = () => {
                 </CardContent>
               </Card>
 
-              <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
+              <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
                 <CardContent className="px-4 py-6">
                   <div className="text-center space-y-4">
                     <div className="flex items-center justify-center gap-3">

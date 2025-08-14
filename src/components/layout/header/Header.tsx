@@ -11,7 +11,6 @@ import { LogIn, LogOut } from "lucide-react";
 import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 import { Button } from "@/components/ui/button";
 import { NotificationBell } from "@/components/modules/notifications/NotificationBell";
-import LanguageToggle from "./LanguageToggle";
 import NetworkToggle from "./NetworkToggle";
 
 const Header = ({ className }: { className?: string }) => {
@@ -49,7 +48,7 @@ const Header = ({ className }: { className?: string }) => {
 
             <div className="flex gap-3 ml-auto items-center">
               <NetworkToggle />
-              <LanguageToggle />
+              {/* <LanguageToggle /> */}
               <ThemeToggle />
               <NotificationBell />
               <Button variant="outline" onClick={handleDisconnect}>
@@ -60,7 +59,7 @@ const Header = ({ className }: { className?: string }) => {
         ) : (
           <div className="flex gap-3 ml-auto md:ml-0">
             <NetworkToggle />
-            <LanguageToggle />
+            {/* <LanguageToggle /> */}
             <ThemeToggle />
             <Button variant="outline" onClick={handleConnect}>
               <LogIn /> <span className="hidden md:block">Connect</span>

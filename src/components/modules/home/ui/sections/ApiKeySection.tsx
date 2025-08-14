@@ -88,7 +88,7 @@ export const ApiKeySection = () => {
         <div className="grid lg:grid-cols-10 gap-8 lg:gap-12 items-start">
           {/* Video Section */}
           <div className="relative lg:col-span-7">
-            <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
+            <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <Play className="w-5 h-5 text-primary" />
@@ -119,7 +119,7 @@ export const ApiKeySection = () => {
           {/* API Key Information */}
           <div className="space-y-6 lg:col-span-3">
             {/* Main API Key Card */}
-            <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
+            <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Key className="w-5 h-5 text-primary" />
@@ -189,7 +189,7 @@ export const ApiKeySection = () => {
             </Card>
 
             {/* Steps Diagram */}
-            <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
+            <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg">
                   {t("apiKey.steps.title")}
