@@ -125,8 +125,6 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
     signer: address,
   });
 
-
-
   const totalItems = allEscrows.length;
   const totalPages = useMemo(() => {
     return Math.max(1, Math.ceil(totalItems / itemsPerPage));
