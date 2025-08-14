@@ -17,11 +17,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Download, FileSpreadsheet } from "lucide-react";
+import { exportEscrowsToPDF } from "@/utils/pdf-export";
+import type { Escrow } from "@/@types/escrow.entity";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-const MyEscrowsFilter = () => {
+interface MyEscrowsFilterProps {
+  escrows?: Escrow[];
+  role?: string;
+}
+const MyEscrowsFilter = ({
+  escrows = [],
+  role = "signer",
+}: MyEscrowsFilterProps) => {
   const { t } = useTranslation();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
-
+  const handleExportPDF = () => {
+    exportEscrowsToPDF(escrows, {
+      title: `My Escrows - ${role.toUpperCase()} Role`,
+      orientation: "landscape",
+    });
+  };
   const {
     search,
     // status,
@@ -71,6 +92,34 @@ const MyEscrowsFilter = () => {
 
           {/* Actions Section */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 lg:gap-4 justify-end">
+            {/* Export Button */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2 bg-transparent"
+                >
+                  <Download className="h-4 w-4" />
+                  Export
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  onClick={handleExportPDF}
+                  className="cursor-pointer"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Export as PDF
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  disabled
+                  className="cursor-not-allowed opacity-50"
+                >
+                  <FileSpreadsheet className="h-4 w-4 mr-2" />
+                  Export as Excel (Coming Soon)
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             {/* Blockchain Sync Dialog */}
             <Dialog>
               <DialogTrigger asChild>
