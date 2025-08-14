@@ -110,7 +110,7 @@ export const RolesSection = () => {
 
         {/* Roles Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {roles.map((role, index) => (
+          {roles.map((role) => (
             <div key={role.id} className="group">
               <Card className="h-full border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
                 <CardHeader className="pb-4">
