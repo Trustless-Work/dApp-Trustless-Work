@@ -5,7 +5,6 @@ import { useState, useCallback, useMemo, useEffect } from "react";
 import { useEscrowsByRoleQuery } from "./tanstack/useEscrowsByRoleQuery";
 import { useEscrowsBySignerQuery } from "./tanstack/useEscrowsBySignerQuery";
 import { SingleReleaseEscrowStatus } from "@/@types/escrow.entity";
-import { mockEscrowData } from "../constants/mock-escrow-data.constant";
 
 interface useMyEscrowsProps {
   role: Role;
@@ -126,10 +125,9 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
     signer: address,
   });
 
-  const escrowsWithMockFallback =
-    allEscrows.length > 0 ? allEscrows : mockEscrowData;
 
-  const totalItems = escrowsWithMockFallback.length;
+
+  const totalItems = allEscrows.length;
   const totalPages = useMemo(() => {
     return Math.max(1, Math.ceil(totalItems / itemsPerPage));
   }, [totalItems, itemsPerPage]);
@@ -137,8 +135,8 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
   const escrows = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return escrowsWithMockFallback.slice(startIndex, endIndex);
-  }, [escrowsWithMockFallback, currentPage, itemsPerPage]);
+    return allEscrows.slice(startIndex, endIndex);
+  }, [allEscrows, currentPage, itemsPerPage]);
 
   useEffect(() => {
     setCurrentPage(1);
