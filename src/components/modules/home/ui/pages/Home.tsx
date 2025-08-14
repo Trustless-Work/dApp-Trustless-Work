@@ -1,9 +1,10 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import HeaderWithoutAuth from "@/components/layout/header/HeaderWithoutAuth";
 import { useHome } from "../../hooks/home.hook";
 import { BackgroundLights } from "../utils/BackgroundLights";
 import { HeroSection } from "../sections/Hero";
-import { MotionValue } from "framer-motion";
 import Footer from "@/components/layout/footer/Footer";
 
 // Lazy load sections pesadas
@@ -40,8 +41,6 @@ const TransactionFlowSection = dynamic(() =>
 export const Home = () => {
   const homeHook = useHome();
   const containerRef = homeHook?.containerRef ?? null;
-  const y1 = homeHook?.y1 as MotionValue<number>;
-  const opacity = homeHook?.opacity as MotionValue<number>;
 
   return (
     <>
@@ -51,7 +50,7 @@ export const Home = () => {
         <HeaderWithoutAuth />
 
         <main className="overflow-hidden" ref={containerRef}>
-          <HeroSection y1={y1} opacity={opacity} />
+          <HeroSection />
           <FeaturesSection />
           <RolesSection />
           <ApiKeySection />

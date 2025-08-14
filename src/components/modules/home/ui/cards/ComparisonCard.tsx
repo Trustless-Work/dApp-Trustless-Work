@@ -1,24 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { useShouldReduceMotion } from "@/hooks/mobile.hook";
 
 export const ComparisonCard = () => {
   const { t } = useTranslation("common");
-  const shouldReduceMotion = useShouldReduceMotion();
 
   return (
     <div className="relative">
       <div className="absolute -top-20 -left-20 w-60 h-60 bg-primary/20 dark:bg-primary/10 rounded-full blur-[80px] z-0"></div>
-
-      <motion.div
-        className="relative z-10 bg-background/80 dark:bg-background/40 backdrop-blur-md rounded-2xl p-8 border border-border shadow-lg"
-        initial={shouldReduceMotion ? {} : { opacity: 0, y: 50 }}
-        whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        viewport={{ once: true, amount: 0.3 }}
-      >
+      <div className="relative z-10 bg-background/80 dark:bg-background/40 backdrop-blur-md rounded-2xl p-8 border border-border shadow-lg">
         <h3 className="text-2xl font-bold mb-4">
           {t("home.whyEscrows.comparisonCard.title")}
         </h3>
@@ -62,7 +52,7 @@ export const ComparisonCard = () => {
             )}
           />
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

@@ -1,8 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Bounded } from "@/components/layout/Bounded";
-import { useShouldReduceMotion } from "@/hooks/mobile.hook";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useGlobalUIBoundedStore } from "@/core/store/ui";
 import { Button } from "@/components/ui/button";
@@ -26,7 +24,6 @@ import { useState } from "react";
 import Link from "next/link";
 
 export const ApiKeySection = () => {
-  const shouldReduceMotion = useShouldReduceMotion();
   const { t } = useLanguage();
   const theme = useGlobalUIBoundedStore((state) => state.theme);
   const [, setIsVideoPlaying] = useState(false);
@@ -70,51 +67,27 @@ export const ApiKeySection = () => {
     <Bounded center={true} className="py-20 relative">
       <div className="absolute inset-0 z-0"></div>
 
-      <motion.div
-        initial={shouldReduceMotion ? {} : { opacity: 0, y: 50 }}
-        whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true, amount: 0.3 }}
-        className="w-full mx-auto relative z-10"
-      >
+      <div className="w-full mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="p-3 rounded-full bg-primary/10 border border-primary/20">
               <Key className="w-6 h-6 text-primary" />
             </div>
-            <motion.h2
-              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-              whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent"
-            >
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
               {t("apiKey.title")}
-            </motion.h2>
+            </h2>
           </div>
 
-          <motion.p
-            initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-            whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
-          >
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             {t("apiKey.subtitle")}
-          </motion.p>
+          </p>
         </div>
 
         {/* Content Grid */}
         <div className="grid lg:grid-cols-10 gap-8 lg:gap-12 items-start">
           {/* Video Section */}
-          <motion.div
-            initial={shouldReduceMotion ? {} : { opacity: 0, x: -30 }}
-            whileInView={shouldReduceMotion ? {} : { opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="relative lg:col-span-7"
-          >
+          <div className="relative lg:col-span-7">
             <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg">
@@ -141,16 +114,10 @@ export const ApiKeySection = () => {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
           {/* API Key Information */}
-          <motion.div
-            initial={shouldReduceMotion ? {} : { opacity: 0, x: 30 }}
-            whileInView={shouldReduceMotion ? {} : { opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="space-y-6 lg:col-span-3"
-          >
+          <div className="space-y-6 lg:col-span-3">
             {/* Main API Key Card */}
             <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
               <CardHeader>
@@ -232,16 +199,7 @@ export const ApiKeySection = () => {
               <CardContent>
                 <div className="space-y-4">
                   {steps.map((step, index) => (
-                    <motion.div
-                      key={index}
-                      initial={shouldReduceMotion ? {} : { opacity: 0, x: 20 }}
-                      whileInView={
-                        shouldReduceMotion ? {} : { opacity: 1, x: 0 }
-                      }
-                      transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
-                      viewport={{ once: true, amount: 0.3 }}
-                      className="relative"
-                    >
+                    <div key={index} className="relative">
                       <div className="flex items-start gap-4">
                         {/* Step Number */}
                         <div
@@ -270,14 +228,14 @@ export const ApiKeySection = () => {
                       {index < steps.length - 1 && (
                         <div className="absolute left-4 top-8 w-0.5 h-8 bg-gradient-to-b from-primary/30 to-transparent" />
                       )}
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </Bounded>
   );
 };

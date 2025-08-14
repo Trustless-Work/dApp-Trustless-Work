@@ -1,8 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Bounded } from "@/components/layout/Bounded";
-import { useShouldReduceMotion } from "@/hooks/mobile.hook";
 import { useLanguage } from "@/hooks/useLanguage";
 import {
   Card,
@@ -22,7 +20,6 @@ import {
 } from "lucide-react";
 
 export const TransactionFlowSection = () => {
-  const shouldReduceMotion = useShouldReduceMotion();
   const { t } = useLanguage();
 
   const flowSteps = [
@@ -82,49 +79,25 @@ export const TransactionFlowSection = () => {
     <Bounded center={true} className="py-8 sm:py-12 lg:py-20 relative">
       <div className="absolute inset-0 z-0"></div>
 
-      <motion.div
-        initial={shouldReduceMotion ? {} : { opacity: 0, y: 50 }}
-        whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true, amount: 0.3 }}
-        className="w-full mx-auto relative z-10"
-      >
+      <div className="w-full mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12 px-4">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4 sm:mb-6">
             <div className="p-2 sm:p-3 rounded-full bg-primary/10 border border-primary/20">
               <Code className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
             </div>
-            <motion.h2
-              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-              whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent text-center"
-            >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent text-center">
               {t("home.flow.title")}
-            </motion.h2>
+            </h2>
           </div>
 
-          <motion.p
-            initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-            whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto px-4"
-          >
+          <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto px-4">
             {t("home.flow.subtitle")}
-          </motion.p>
+          </p>
         </div>
 
         {/* Flow Diagram */}
-        <motion.div
-          initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
-          whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          viewport={{ once: true, amount: 0.3 }}
-          className="max-w-4xl mx-auto px-4"
-        >
+        <div className="max-w-4xl mx-auto px-4">
           <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
             <CardHeader className="px-4 sm:px-6">
               <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
@@ -141,17 +114,8 @@ export const TransactionFlowSection = () => {
                 <div className="hidden sm:block absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary/20 via-primary/40 to-primary/20"></div>
 
                 <div className="space-y-6 sm:space-y-8">
-                  {flowSteps.map((step, index) => (
-                    <motion.div
-                      key={step.id}
-                      initial={shouldReduceMotion ? {} : { opacity: 0, x: -20 }}
-                      whileInView={
-                        shouldReduceMotion ? {} : { opacity: 1, x: 0 }
-                      }
-                      transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-                      viewport={{ once: true, amount: 0.3 }}
-                      className="relative"
-                    >
+                  {flowSteps.map((step) => (
+                    <div key={step.id} className="relative">
                       {/* Step Card */}
                       <div className="relative">
                         {/* Connection Dot - Hidden on mobile, visible on larger screens */}
@@ -199,20 +163,14 @@ export const TransactionFlowSection = () => {
                           </div>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
 
               {/* Summary Section */}
               <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-border/50">
-                <motion.div
-                  initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-                  whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1.2 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-lg bg-primary/5 border border-primary/10"
-                >
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-lg bg-primary/5 border border-primary/10">
                   <div className="flex justify-center sm:justify-start">
                     <div className="p-2 rounded-full bg-primary/10">
                       <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
@@ -226,12 +184,12 @@ export const TransactionFlowSection = () => {
                       {t("home.flow.summary.description")}
                     </p>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </CardContent>
           </Card>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </Bounded>
   );
 };

@@ -1,8 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Bounded } from "@/components/layout/Bounded";
-import { useShouldReduceMotion } from "@/hooks/mobile.hook";
 import { useLanguage } from "@/hooks/useLanguage";
 import {
   Card,
@@ -22,7 +20,6 @@ import { useCopyUtils } from "@/utils/hook/copy.hook";
 import Link from "next/link";
 
 export const IntegrationSetupSection = () => {
-  const shouldReduceMotion = useShouldReduceMotion();
   const { t } = useLanguage();
   const { copyText, copiedKeyId } = useCopyUtils();
 
@@ -30,51 +27,27 @@ export const IntegrationSetupSection = () => {
     <Bounded center={true} className="py-20 relative">
       <div className="absolute inset-0 z-0"></div>
 
-      <motion.div
-        initial={shouldReduceMotion ? {} : { opacity: 0, y: 50 }}
-        whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true, amount: 0.3 }}
-        className="w-full mx-auto relative z-10"
-      >
+      <div className="w-full mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="p-3 rounded-full bg-primary/10 border border-primary/20">
               <Code className="w-6 h-6 text-primary" />
             </div>
-            <motion.h2
-              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-              whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4"
-            >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4">
               {t("home.integration.title")}
-            </motion.h2>
+            </h2>
           </div>
 
-          <motion.p
-            initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-            whileInView={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto"
-          >
+          <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto">
             {t("home.integration.subtitle")}
-          </motion.p>
+          </p>
         </div>
 
         {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
           {/* Authentication Info */}
-          <motion.div
-            initial={shouldReduceMotion ? {} : { opacity: 0, x: -30 }}
-            whileInView={shouldReduceMotion ? {} : { opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="space-y-6"
-          >
+          <div className="space-y-6">
             {/* Authentication Card */}
             <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
               <CardHeader>
@@ -204,16 +177,10 @@ export const IntegrationSetupSection = () => {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
           {/* Code Examples */}
-          <motion.div
-            initial={shouldReduceMotion ? {} : { opacity: 0, x: 30 }}
-            whileInView={shouldReduceMotion ? {} : { opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="space-y-6"
-          >
+          <div className="space-y-6">
             <Card className="border-2 border-border/50 bg-card/50 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
@@ -443,9 +410,9 @@ export const IntegrationSetupSection = () => {
                 </CardContent>
               </Card>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </Bounded>
   );
 };
