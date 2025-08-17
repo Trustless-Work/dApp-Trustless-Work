@@ -3,7 +3,7 @@ import { kit } from "../constants/wallet-kit.constant";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 export const useWallet = () => {
-  const { connectWalletStore, disconnectWalletStore } =
+  const { connectWalletStore, disconnectWalletStore, address } =
     useGlobalAuthenticationStore();
 
   const connectWallet = async () => {
@@ -48,5 +48,6 @@ export const useWallet = () => {
     disconnectWallet,
     handleConnect,
     handleDisconnect,
+    isConnected: !!address,
   };
 };

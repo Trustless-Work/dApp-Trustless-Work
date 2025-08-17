@@ -12,6 +12,7 @@ import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
 import { Button } from "@/components/ui/button";
 import { NotificationBell } from "@/components/modules/notifications/NotificationBell";
 import NetworkToggle from "./NetworkToggle";
+import { ResponsiveWalletBalance } from "@/components/modules/auth/wallet/responsive-balance";
 
 const Header = ({ className }: { className?: string }) => {
   const { handleConnect, handleDisconnect } = useWallet();
@@ -47,6 +48,7 @@ const Header = ({ className }: { className?: string }) => {
             </>
 
             <div className="flex gap-3 ml-auto items-center">
+              <ResponsiveWalletBalance variant="desktop" />
               <NetworkToggle />
               {/* <LanguageToggle /> */}
               <ThemeToggle />
