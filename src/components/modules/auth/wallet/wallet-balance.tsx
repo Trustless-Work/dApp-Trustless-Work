@@ -32,12 +32,12 @@ export const WalletBalance = () => {
 
   return (
     <div
-      className="flex items-center gap-1 sm:gap-2 px-1.5 sm:px-2 py-1.5 sm:py-2 bg-muted/50 rounded-lg border min-w-0"
+      className="flex items-center justify-between gap-1 px-1.5 py-1.5 bg-muted/50 rounded-lg border min-w-0"
       role="region"
       aria-label="Wallet Balance"
     >
-      <Wallet className="h-4 w-4 text-muted-foreground" />
-      <div className="flex flex-col">
+      <Wallet className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+      <div className="flex flex-col min-w-0">
         <div className="flex items-center gap-1">
           <span className="text-xs text-muted-foreground hidden sm:inline">
             Balance
@@ -45,14 +45,14 @@ export const WalletBalance = () => {
           <span className="text-xs text-muted-foreground sm:hidden">Bal</span>
           <Badge
             variant="outline"
-            className="px-1 py-0 text-xs hidden sm:inline"
+            className="px-1 py-0 text-xs hidden sm:inline flex-shrink-0"
           >
             {currentNetwork}
           </Badge>
         </div>
         <span className="sr-only">Current wallet balance</span>
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 flex-shrink-0">
         {isLoading ? (
           <div className="flex items-center gap-1">
             <div className="h-3 w-8 bg-muted animate-pulse rounded" />
@@ -65,35 +65,41 @@ export const WalletBalance = () => {
           <div className="flex flex-col">
             <span className="text-xs text-destructive">{error}</span>
             <span className="text-xs text-muted-foreground">Click refresh</span>
-            {error === "Network error" && (
+            {error && String(error).toLowerCase().includes("network error") && (
               <span className="text-xs text-muted-foreground">
                 Check connection
               </span>
             )}
-            {error === "Account not found" && (
-              <span className="text-xs text-muted-foreground">New wallet</span>
-            )}
-            {error === "Failed to fetch balance" && (
-              <span className="text-xs text-muted-foreground">Try again</span>
-            )}
+            {error &&
+              String(error)
+                .toLowerCase()
+                .includes("failed to fetch balance") && (
+                <span className="text-xs text-muted-foreground">Try again</span>
+              )}
           </div>
         ) : (
-          <>
-            <span className="text-sm font-medium">
-              {parseFloat(balance) === 0
-                ? "0.00"
-                : parseFloat(balance).toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 6,
-                  })}
-            </span>
+          <div className="flex  items-center gap-1">
+            <div className="flex items-center gap-1">
+              <span className="text-sm font-medium">
+                {parseFloat(balance) === 0
+                  ? "0.00"
+                  : parseFloat(balance).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6,
+                    })}
+              </span>
+              <Badge variant="secondary" className="text-xs px-1 py-0">
+                USDC
+              </Badge>
+            </div>
             {parseFloat(balance) === 0 && (
-              <span className="text-xs text-muted-foreground">No USDC</span>
+              <>
+                <span className="text-xs text-muted-foreground/70">
+                  Get USDC to start
+                </span>
+              </>
             )}
-            <Badge variant="secondary" className="text-xs px-1 py-0">
-              USDC
-            </Badge>
-          </>
+          </div>
         )}
       </div>
       <Button
@@ -101,7 +107,7 @@ export const WalletBalance = () => {
         size="sm"
         onClick={refresh}
         disabled={isLoading}
-        className="h-6 w-6 p-0 hover:bg-muted/70"
+        className="h-6 w-6 p-0 hover:bg-muted/70 flex-shrink-0"
         aria-label="Refresh wallet balance"
         title="Refresh balance"
       >

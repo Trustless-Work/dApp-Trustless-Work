@@ -48,7 +48,7 @@ const Header = ({ className }: { className?: string }) => {
             </>
 
             <div className="flex gap-3 ml-auto items-center">
-              <ResponsiveWalletBalance variant="desktop" />
+              {!isMobile && <ResponsiveWalletBalance />}
               <NetworkToggle />
               {/* <LanguageToggle /> */}
               <ThemeToggle />

@@ -3,14 +3,16 @@
 import { WalletBalance } from "./wallet-balance";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 
-export const ResponsiveWalletBalance = () => {
+export const MobileWalletBalance = () => {
   const { address } = useGlobalAuthenticationStore();
 
   if (!address) {
     return null;
   }
 
-  // Desktop only: renders WalletBalance inline in header
-  // Mobile variant is handled separately by MobileWalletBalance component
-  return <WalletBalance />;
+  return (
+    <div className="md:hidden px-4 py-2 bg-muted/20 border-b border-border/50">
+      <WalletBalance />
+    </div>
+  );
 };

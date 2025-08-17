@@ -7,7 +7,7 @@ import Header from "@/components/layout/header/Header";
 import { redirect } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { Lights } from "@/components/layout/all/ui/utils/Lights";
-import { ResponsiveWalletBalance } from "@/components/modules/auth/wallet/responsive-balance";
+import { MobileWalletBalance } from "@/components/modules/auth/wallet/mobile-wallet-balance";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();
@@ -23,7 +23,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <AppSidebar />
       <SidebarInset>
         <Header />
-        <ResponsiveWalletBalance />
+        <MobileWalletBalance />
         <div className="min-h-screen">
           <div className="flex-1 space-y-4 p-4 md:px-8 h-full">{children}</div>
         </div>

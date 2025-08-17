@@ -1,8 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useWallet } from "./wallet.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import {
+  HORIZON_URLS,
+  USDC_ISSUERS,
+  isValidStellarNetwork,
+  type StellarNetwork,
+} from "../constants";
+
+// Module-level request coordination to prevent duplicate requests across hook instances
+let globalRequestInFlight = false;
 
 interface WalletBalance {
   balance: string;
@@ -16,13 +25,45 @@ export const useWalletBalance = (): WalletBalance => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Clear error state on mount
+  useEffect(() => {
+    setError(null);
+  }, []);
+
+  // Refs for tracking timers and in-flight requests
+  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isRequestInFlightRef = useRef(false);
+
+  // Debug: Log hook instance creation
+  const hookId = useRef(Math.random().toString(36).substr(2, 9));
+  console.log(`[${hookId.current}] useWalletBalance hook instance created`);
+
+  // Helper function to clear retry timeout
+  const clearRetryTimeout = useCallback(() => {
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
+  }, []);
+
   const { address } = useGlobalAuthenticationStore();
   const { isConnected } = useWallet();
 
   const fetchBalance = useCallback(async () => {
+    // Prevent duplicate in-flight requests across all hook instances
+    if (globalRequestInFlight) {
+      console.log(
+        `[${hookId.current}] Global request already in flight, skipping...`,
+      );
+      return;
+    }
+
     if (!address || !isConnected) {
       setBalance("0");
       setError(null);
+      setIsLoading(false);
+      // Don't reset isRequestInFlightRef here - let finally block handle it
       return;
     }
 
@@ -31,39 +72,43 @@ export const useWalletBalance = (): WalletBalance => {
       setError("Browser environment required");
       setBalance("0");
       setIsLoading(false);
+      // Don't reset isRequestInFlightRef here - let finally block handle it
       return;
     }
 
-    console.log("Starting balance fetch for address:", address);
+    console.log(
+      `[${hookId.current}] Starting balance fetch for address:`,
+      address,
+    );
 
     if (!address || address.length < 50 || !address.startsWith("G")) {
       console.error("Invalid Stellar address format - useWalletBalance hook");
       setError("Invalid address format");
       setBalance("0");
       setIsLoading(false);
+      // Don't reset isRequestInFlightRef here - let finally block handle it
       return;
     }
 
+    // Clear any existing retry timeout
+    clearRetryTimeout();
+
     setIsLoading(true);
     setError(null);
+    globalRequestInFlight = true;
+    isRequestInFlightRef.current = true;
 
-    let currentNetwork: string = "testnet"; // Default value
+    let currentNetwork: StellarNetwork = "testnet"; // Default value
 
     try {
-      currentNetwork = localStorage.getItem("network") || "testnet";
+      const storedNetwork = localStorage.getItem("network");
+      currentNetwork =
+        storedNetwork && isValidStellarNetwork(storedNetwork)
+          ? storedNetwork
+          : "testnet";
       console.log("Using network:", currentNetwork);
 
-      if (!["testnet", "mainnet"].includes(currentNetwork)) {
-        throw new Error("Invalid network - useWalletBalance hook");
-      }
-
-      const horizonUrls = {
-        testnet: "https://horizon-testnet.stellar.org",
-        mainnet: "https://horizon.stellar.org",
-      };
-
-      const horizonUrl =
-        horizonUrls[currentNetwork as keyof typeof horizonUrls];
+      const horizonUrl = HORIZON_URLS[currentNetwork];
       if (!horizonUrl) {
         throw new Error("Invalid network - useWalletBalance hook");
       }
@@ -84,10 +129,13 @@ export const useWalletBalance = (): WalletBalance => {
         if (!response.ok) {
           if (response.status === 404) {
             setBalance("0");
-            setError(null);
+            setError(null); // Clear error for new wallets
             console.log(
               "Account not found (new wallet) - setting balance to 0",
             );
+            setIsLoading(false);
+            globalRequestInFlight = false;
+            isRequestInFlightRef.current = false; // Need to reset here since we're in inner try-catch
             return;
           }
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -106,24 +154,21 @@ export const useWalletBalance = (): WalletBalance => {
         throw new Error("Failed to load account - useWalletBalance hook");
       }
 
-      const usdcIssuers = {
-        testnet: "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVBL4LADV2C3B6O4JUEVL", // Testnet USDC
-        mainnet: "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM35XDP5G2O4D3J6I6K6WOH2L3VSE", // Mainnet USDC
-      };
-
-      const currentIssuer =
-        usdcIssuers[currentNetwork as keyof typeof usdcIssuers];
+      // Get USDC issuer for current network
+      const currentIssuer = USDC_ISSUERS[currentNetwork];
       if (!currentIssuer) {
         throw new Error(
           "USDC issuer not found for network - useWalletBalance hook",
         );
       }
 
+      // Validate account structure
       if (!account || !account.balances || !Array.isArray(account.balances)) {
         console.error("Invalid account structure:", account);
         throw new Error("Invalid account structure - useWalletBalance hook");
       }
 
+      // Find USDC asset balance
       const usdcBalance = account.balances.find(
         (balance) =>
           balance.asset_type === "credit_alphanum4" &&
@@ -134,6 +179,7 @@ export const useWalletBalance = (): WalletBalance => {
       console.log("USDC balance found:", usdcBalance);
 
       if (usdcBalance && typeof usdcBalance.balance === "string") {
+        // Validate balance value
         const balanceValue = parseFloat(usdcBalance.balance);
         if (isNaN(balanceValue) || balanceValue < 0) {
           console.error("Invalid balance value:", usdcBalance.balance);
@@ -152,6 +198,7 @@ export const useWalletBalance = (): WalletBalance => {
     } catch (err) {
       console.error("Error fetching wallet balance:", err);
 
+      // Handle different types of errors
       if (err instanceof Error) {
         if (
           err.message.includes("network") ||
@@ -159,8 +206,11 @@ export const useWalletBalance = (): WalletBalance => {
           err.message.includes("HTTP 5") ||
           err.message.includes("fetch")
         ) {
-          setError("Network error - useWalletBalance hook");
-          setTimeout(() => {
+          setError("Network error");
+          // Clear any existing retry timeout before scheduling a new one
+          clearRetryTimeout();
+          // Auto-retry network errors after 5 seconds
+          retryTimeoutRef.current = setTimeout(() => {
             if (address && isConnected) {
               fetchBalance();
             }
@@ -168,14 +218,15 @@ export const useWalletBalance = (): WalletBalance => {
         } else if (err.message.includes("Invalid")) {
           setError(err.message);
         } else if (err.message.includes("HTTP 4")) {
-          setError("API error - useWalletBalance hook");
+          setError("Failed to fetch balance");
         } else {
-          setError("Failed to fetch balance - useWalletBalance hook");
+          setError("Failed to fetch balance");
         }
       } else {
-        setError("Failed to fetch balance - useWalletBalance hook");
+        setError("Failed to fetch balance");
       }
 
+      // Log the error for debugging
       console.error("Wallet balance error details:", {
         error: err,
         address,
@@ -186,6 +237,8 @@ export const useWalletBalance = (): WalletBalance => {
       setBalance("0");
     } finally {
       setIsLoading(false);
+      globalRequestInFlight = false;
+      isRequestInFlightRef.current = false;
     }
   }, [address, isConnected]);
 
@@ -194,22 +247,52 @@ export const useWalletBalance = (): WalletBalance => {
   }, [fetchBalance]);
 
   useEffect(() => {
+    // Clear any previous error state when dependencies change
+    setError(null);
+
     fetchBalance();
 
+    // Set up periodic refresh every 30 seconds when connected
     if (address && isConnected) {
-      const interval = setInterval(fetchBalance, 30000);
-      return () => clearInterval(interval);
+      intervalRef.current = setInterval(fetchBalance, 30000);
+      return () => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      };
     }
   }, [address, isConnected, fetchBalance]);
 
+  // Listen for network changes
   useEffect(() => {
     const handleNetworkChange = () => {
       fetchBalance();
     };
 
     window.addEventListener("storage", handleNetworkChange);
-    return () => window.removeEventListener("storage", handleNetworkChange);
-  }, [fetchBalance]);
+    return () => {
+      // Clear any pending retry timer before removing the storage listener
+      clearRetryTimeout();
+      window.removeEventListener("storage", handleNetworkChange);
+    };
+  }, [fetchBalance, clearRetryTimeout]);
+
+  // Clear retry timeout when dependencies change
+  useEffect(() => {
+    clearRetryTimeout();
+  }, [address, isConnected, clearRetryTimeout]);
+
+  // Cleanup function to clear all timers
+  useEffect(() => {
+    return () => {
+      clearRetryTimeout();
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [clearRetryTimeout]);
 
   return {
     balance,
