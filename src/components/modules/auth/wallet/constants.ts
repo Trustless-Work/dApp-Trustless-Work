@@ -12,7 +12,7 @@ export const HORIZON_URLS: Readonly<Record<StellarNetwork, string>> = {
 
 export const USDC_ISSUERS: Readonly<Record<StellarNetwork, string>> = {
   testnet: "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVBL4LADV2C3B6O4JUEVL", // Testnet USDC
-  mainnet: "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM35XDP5G2O4D3J6I6K6WOH2L3VSE", // Mainnet USDC
+  mainnet: "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM35XDP5G2O4D3J6K6WOH2L3VSE", // Mainnet USDC
 } as const;
 
 // Validation function to ensure network is valid

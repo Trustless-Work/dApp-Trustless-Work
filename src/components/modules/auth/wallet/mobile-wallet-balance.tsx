@@ -2,11 +2,13 @@
 
 import { WalletBalance } from "./wallet-balance";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
+import useIsMobile from "@/hooks/mobile.hook";
 
 export const MobileWalletBalance = () => {
   const { address } = useGlobalAuthenticationStore();
+  const isMobile = useIsMobile();
 
-  if (!address) {
+  if (!address || !isMobile) {
     return null;
   }
 
