@@ -1,4 +1,4 @@
-import { Dashboard } from "@/components/modules/dashboard/ui/pages/Dashboard";
+import { Dashboard } from "@/modules/dashboard/ui/views/Dashboard";
 
 const DashboardPage = () => {
   return <Dashboard />;

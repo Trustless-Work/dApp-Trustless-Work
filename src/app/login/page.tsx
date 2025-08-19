@@ -1,6 +1,6 @@
 "use client";
 
-import { Login } from "@/components/modules/auth/login/ui/pages/Login";
+import { Login } from "@/modules/auth/ui/Login";
 
 export default function LoginPage() {
   return <Login />;

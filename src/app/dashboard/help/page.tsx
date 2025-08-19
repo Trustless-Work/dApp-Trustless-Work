@@ -1,6 +1,6 @@
 "use client";
 
-import Help from "@/components/modules/help/ui/pages/Help";
+import { Help } from "@/modules/help/ui/views/Help";
 
 const HelpPage: React.FC = () => {
   return <Help />;
