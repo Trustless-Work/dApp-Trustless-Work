@@ -1,3 +1,12 @@
+export type StellarNetwork = "testnet" | "mainnet";
+
+// Validation function to ensure network is valid
+export const isValidStellarNetwork = (
+  network: string,
+): network is StellarNetwork => {
+  return network === "testnet" || network === "mainnet";
+};
+
 export const useValidData = () => {
   const isValidWallet = (wallet: string) => {
     // Verify that the wallet is 56 characters long and starts with 'G'

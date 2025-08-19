@@ -5,7 +5,6 @@ import { useWallet } from "./wallet.hook";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import {
   HORIZON_URLS,
-  USDC_ISSUERS,
   isValidStellarNetwork,
   type StellarNetwork,
 } from "../constants";
@@ -35,9 +34,6 @@ export const useWalletBalance = (): WalletBalance => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isRequestInFlightRef = useRef(false);
 
-  // Debug: Log hook instance creation
-  const hookId = useRef(Math.random().toString(36).substr(2, 9));
-  console.log(`[${hookId.current}] useWalletBalance hook instance created`);
 
   // Helper function to clear retry timeout
   const clearRetryTimeout = useCallback(() => {
@@ -53,9 +49,6 @@ export const useWalletBalance = (): WalletBalance => {
   const fetchBalance = useCallback(async () => {
     // Prevent duplicate in-flight requests across all hook instances
     if (globalRequestInFlight) {
-      console.log(
-        `[${hookId.current}] Global request already in flight, skipping...`,
-      );
       return;
     }
 
@@ -76,10 +69,6 @@ export const useWalletBalance = (): WalletBalance => {
       return;
     }
 
-    console.log(
-      `[${hookId.current}] Starting balance fetch for address:`,
-      address,
-    );
 
     if (!address || address.length < 50 || !address.startsWith("G")) {
       console.error("Invalid Stellar address format - useWalletBalance hook");
@@ -106,14 +95,12 @@ export const useWalletBalance = (): WalletBalance => {
         storedNetwork && isValidStellarNetwork(storedNetwork)
           ? storedNetwork
           : "testnet";
-      console.log("Using network:", currentNetwork);
 
       const horizonUrl = HORIZON_URLS[currentNetwork];
       if (!horizonUrl) {
         throw new Error("Invalid network - useWalletBalance hook");
       }
 
-      console.log("Calling Horizon API:", `${horizonUrl}/accounts/${address}`);
 
       let account: {
         balances: Array<{
@@ -130,9 +117,6 @@ export const useWalletBalance = (): WalletBalance => {
           if (response.status === 404) {
             setBalance("0");
             setError(null); // Clear error for new wallets
-            console.log(
-              "Account not found (new wallet) - setting balance to 0",
-            );
             setIsLoading(false);
             globalRequestInFlight = false;
             isRequestInFlightRef.current = false; // Need to reset here since we're in inner try-catch
@@ -142,7 +126,6 @@ export const useWalletBalance = (): WalletBalance => {
         }
 
         account = await response.json();
-        console.log("Account data received:", account);
       } catch (accountError) {
         console.error("Failed to load account:", accountError);
         if (
@@ -154,29 +137,19 @@ export const useWalletBalance = (): WalletBalance => {
         throw new Error("Failed to load account - useWalletBalance hook");
       }
 
-      // Get USDC issuer for current network
-      const currentIssuer = USDC_ISSUERS[currentNetwork];
-      if (!currentIssuer) {
-        throw new Error(
-          "USDC issuer not found for network - useWalletBalance hook",
-        );
-      }
-
       // Validate account structure
       if (!account || !account.balances || !Array.isArray(account.balances)) {
         console.error("Invalid account structure:", account);
         throw new Error("Invalid account structure - useWalletBalance hook");
       }
 
-      // Find USDC asset balance
+      // Find ANY USDC asset balance (regardless of issuer)
       const usdcBalance = account.balances.find(
         (balance) =>
           balance.asset_type === "credit_alphanum4" &&
-          balance.asset_code === "USDC" &&
-          balance.asset_issuer === currentIssuer,
+          balance.asset_code === "USDC"
       );
 
-      console.log("USDC balance found:", usdcBalance);
 
       if (usdcBalance && typeof usdcBalance.balance === "string") {
         // Validate balance value
@@ -187,13 +160,8 @@ export const useWalletBalance = (): WalletBalance => {
         }
 
         setBalance(usdcBalance.balance);
-        console.log(
-          `Real balance fetched: ${usdcBalance.balance} USDC on ${currentNetwork}`,
-        );
       } else {
         setBalance("0");
-        console.log(`No USDC found for ${address} on ${currentNetwork}`);
-        console.log("Available balances:", account.balances);
       }
     } catch (err) {
       console.error("Error fetching wallet balance:", err);
@@ -226,13 +194,6 @@ export const useWalletBalance = (): WalletBalance => {
         setError("Failed to fetch balance");
       }
 
-      // Log the error for debugging
-      console.error("Wallet balance error details:", {
-        error: err,
-        address,
-        network: currentNetwork,
-        timestamp: new Date().toISOString(),
-      });
 
       setBalance("0");
     } finally {
