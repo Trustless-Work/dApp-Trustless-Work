@@ -1,0 +1,135 @@
+import { Button } from "@/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/ui/dialog";
+import useSuccessDialogHook from "../../hooks/dialogs/useSuccessDialog";
+import Link from "next/link";
+import Image from "next/image";
+import { copyToClipboard } from "@/lib/copy";
+import { useGlobalUIBoundedStore } from "@/store/ui";
+import { cn } from "@/lib/utils";
+import { Check, Copy } from "lucide-react";
+import TooltipInfo from "@/shared/utils/Tooltip";
+import ImprovedSuccessReleaseDialog from "./ImprovedSuccessReleaseDialog";
+import ImprovedSuccessResolveDisputeDialog from "./ImprovedSuccessResolveDisputeDialog";
+import { Escrow } from "@/types/escrow.entity";
+import useNetwork from "@/hooks/useNetwork";
+import { formatAddress } from "@/lib/format";
+
+interface SuccessDialogProps {
+  title: string;
+  description: string;
+  recentEscrow?: Escrow;
+  isSuccessDialogOpen: boolean;
+  setIsSuccessDialogOpen: (value: boolean) => void;
+}
+
+const SuccessDialog = ({
+  title,
+  description,
+  recentEscrow,
+  isSuccessDialogOpen,
+  setIsSuccessDialogOpen,
+}: SuccessDialogProps) => {
+  const { handleClose } = useSuccessDialogHook({ setIsSuccessDialogOpen });
+  const copiedKeyId = useGlobalUIBoundedStore((state) => state.copiedKeyId);
+  const { currentNetwork } = useNetwork();
+
+  // Get the appropriate URLs based on network
+  const stellarExplorerUrl =
+    currentNetwork === "testnet"
+      ? `https://stellar.expert/explorer/testnet/contract/${recentEscrow?.contractId}`
+      : `https://stellar.expert/explorer/public/contract/${recentEscrow?.contractId}`;
+
+  const escrowViewerUrl =
+    currentNetwork === "testnet"
+      ? `https://viewer.trustlesswork.com/${recentEscrow?.contractId}`
+      : `https://viewer.trustlesswork.com/${recentEscrow?.contractId}`;
+
+  return (
+    <Dialog open={isSuccessDialogOpen} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="mb-5">
+            {description}{" "}
+            <Link
+              href={stellarExplorerUrl}
+              className="text-primary"
+              target="_blank"
+            >
+              Stellar Explorer
+            </Link>
+            <span className="mx-2">or</span>
+            <Link
+              href={escrowViewerUrl}
+              className="text-primary"
+              target="_blank"
+            >
+              Escrow Viewer
+            </Link>
+          </DialogDescription>
+
+          <div className="flex items-center justify-center">
+            <Image
+              src="/assets/stellar-expert-blue.svg"
+              alt="Stellar Explorer Icon"
+              className="mt-6"
+              width={80}
+              height={80}
+            />
+          </div>
+        </DialogHeader>
+
+        <div className="flex flex-col mt-5">
+          <span className="font-bold mt-3">Escrow ID:</span>
+          <div className="flex gap-3 items-center">
+            <div className="flex flex-col items-center justify-center">
+              <p className="truncate text-xs">
+                {formatAddress(recentEscrow?.contractId)}
+              </p>
+            </div>
+            <button
+              onClick={() =>
+                copyToClipboard(
+                  recentEscrow?.contractId,
+                  recentEscrow?.contractId,
+                )
+              }
+              className="hover:bg-muted rounded-md transition-colors"
+            >
+              <TooltipInfo content="Copy address">
+                {copiedKeyId ? (
+                  <Check size={15} className="text-green-700" />
+                ) : (
+                  <Copy
+                    size={15}
+                    className={cn(
+                      copiedKeyId
+                        ? "text-green-700"
+                        : "dark:text-white text-muted-foreground",
+                    )}
+                  />
+                )}
+              </TooltipInfo>
+            </button>
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default SuccessDialog;
+
+export { ImprovedSuccessReleaseDialog as SuccessReleaseDialog };
+export { ImprovedSuccessResolveDisputeDialog as SuccessResolveDisputeDialog };
