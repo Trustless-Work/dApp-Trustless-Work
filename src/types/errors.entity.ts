@@ -1,4 +1,4 @@
-import { ApiErrorTypes } from "@/errors/enums/error.enum";
+import { ApiErrorTypes } from "@/errors/error.enum";
 
 export type ApiError = Pick<ErrorResponse, "message" | "code">;
 
