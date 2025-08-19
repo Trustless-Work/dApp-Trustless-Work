@@ -1,0 +1,64 @@
+"use client";
+
+import dynamic from "next/dynamic";
+import HeaderWithoutAuth from "@/shared/HeaderWithoutAuth";
+import { useHome } from "../../hooks/useHome";
+import { BackgroundLights } from "../utils/BackgroundLights";
+import { HeroSection } from "../sections/Hero";
+import Footer from "@/shared/Footer";
+
+// Lazy load sections pesadas
+const FeaturesSection = dynamic(() =>
+  import("../sections/Features").then((mod) => ({
+    default: mod.FeaturesSection,
+  })),
+);
+
+const RolesSection = dynamic(() =>
+  import("../sections/RolesSection").then((mod) => ({
+    default: mod.RolesSection,
+  })),
+);
+
+const ApiKeySection = dynamic(() =>
+  import("../sections/ApiKeySection").then((mod) => ({
+    default: mod.ApiKeySection,
+  })),
+);
+
+const IntegrationSetupSection = dynamic(() =>
+  import("../sections/IntegrationSetupSection").then((mod) => ({
+    default: mod.IntegrationSetupSection,
+  })),
+);
+
+const TransactionFlowSection = dynamic(() =>
+  import("../sections/TransactionFlowSection").then((mod) => ({
+    default: mod.TransactionFlowSection,
+  })),
+);
+
+export const Home = () => {
+  const homeHook = useHome();
+  const containerRef = homeHook?.containerRef ?? null;
+
+  return (
+    <>
+      <BackgroundLights />
+
+      <div className="container mx-auto">
+        <HeaderWithoutAuth />
+
+        <main className="overflow-hidden" ref={containerRef}>
+          <HeroSection />
+          <FeaturesSection />
+          <RolesSection />
+          <ApiKeySection />
+          <IntegrationSetupSection />
+          <TransactionFlowSection />
+          <Footer />
+        </main>
+      </div>
+    </>
+  );
+};
