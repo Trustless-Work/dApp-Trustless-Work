@@ -1,4 +1,4 @@
-import { RoleAction } from "@/@types/role-actions";
+import { RoleAction } from "@/types/role-actions.entity";
 import {
   AlertTriangle,
   Briefcase,
