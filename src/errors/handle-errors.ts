@@ -1,8 +1,8 @@
 import axios from "axios";
 import { AxiosError } from "axios";
 import { ApiError } from "next/dist/server/api-utils";
-import { ApiErrorTypes } from "../enums/error.enum";
-import { ErrorResponse, WalletError } from "@/@types/errors.entity";
+import { ApiErrorTypes } from "./error.enum";
+import { ErrorResponse, WalletError } from "@/types/errors.entity";
 
 export const handleError = (error: AxiosError | WalletError): ErrorResponse => {
   if (axios.isAxiosError(error)) {
