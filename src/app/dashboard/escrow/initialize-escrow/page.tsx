@@ -1,8 +1,8 @@
 "use client";
 
-import { EscrowSteps } from "@/components/modules/escrow/ui/steps/EscrowStepper";
-import InitEscrow from "@/components/modules/escrow/ui/pages/InitEscrow";
-import { ChooseEscrowType } from "@/components/modules/escrow/ui/pages/ChooseEscrowType";
+import { EscrowSteps } from "@/modules/escrow/ui/utils/EscrowStepper";
+import { ChooseEscrowType } from "@/modules/escrow/ui/views/ChooseEscrowType";
+import { InitializeEscrow } from "@/modules/escrow/ui/views/InitEscrow";
 
 const InitializeEscrowPage: React.FC = () => {
   const steps = [
@@ -14,7 +14,7 @@ const InitializeEscrowPage: React.FC = () => {
     {
       title: "Initialize Escrow",
       description: "Set up your escrow details",
-      component: <InitEscrow />,
+      component: <InitializeEscrow />,
     },
   ];
   return <EscrowSteps items={steps} />;

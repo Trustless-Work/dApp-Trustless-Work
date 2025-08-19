@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { GlobalProvider } from "@/providers/GlobalProvider";
 import { Toaster } from "sonner";
 import { Space_Grotesk } from "next/font/google";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/ui/sidebar";
 
 const Exo2 = localFont({
   src: "./fonts/Exo2.ttf",

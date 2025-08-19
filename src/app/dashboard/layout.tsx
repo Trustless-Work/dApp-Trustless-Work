@@ -1,12 +1,12 @@
 "use client";
 
-import AppSidebar from "@/components/layout/sidebar/app-sidebar";
-import Footer from "@/components/layout/footer/Footer";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import Header from "@/components/layout/header/Header";
+import AppSidebar from "@/shared/sidebar/AppSidebar";
+import Footer from "@/shared/Footer";
+import { SidebarInset, SidebarProvider } from "@/ui/sidebar";
+import Header from "@/shared/Header";
 import { redirect } from "next/navigation";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { Lights } from "@/components/layout/all/ui/utils/Lights";
+import { useGlobalAuthenticationStore } from "@/store/data";
+import { Lights } from "@/shared/utils/Lights";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();

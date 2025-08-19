@@ -1,7 +1,7 @@
 "use client";
 
-import { Bounded } from "@/components/layout/Bounded";
-import CountdownTimer from "@/components/modules/maintenace/ui/CountdownTimer";
+import { Bounded } from "@/shared/Bounded";
+import { CountdownTimer } from "@/modules/maintenance/ui/CountdownTimer";
 
 const Maintenance: React.FC = () => {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
-import PublicProfile from "@/components/modules/users/ui/pages/PublicProfile";
+import PublicProfile from "@/modules/users/ui/views/PublicProfile";
 
-export default function HomePage() {
+export default function PublicProfilePage() {
   return <PublicProfile />;
 }

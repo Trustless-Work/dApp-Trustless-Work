@@ -1,6 +1,6 @@
 "use client";
 
-import Settings from "@/components/modules/setting/Settings";
+import { Settings } from "@/modules/settings/ui/views/Settings";
 
 const SettingsPage: React.FC = () => {
   return <Settings />;

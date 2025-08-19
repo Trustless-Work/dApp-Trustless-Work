@@ -1,8 +1,7 @@
 "use client";
 
+import { NetworkType } from "@/types/network.entity";
 import { useState, useEffect } from "react";
-
-export type NetworkType = "testnet" | "mainnet";
 
 const useNetwork = () => {
   const [network, setNetwork] = useState<NetworkType>("testnet");

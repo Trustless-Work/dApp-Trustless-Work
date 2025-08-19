@@ -1,6 +1,6 @@
 "use client";
 
-import MyContacts from "@/components/modules/contact/ui/pages/MyContacts";
+import MyContacts from "@/modules/contact/ui/MyContacts";
 
 const ContactsPage: React.FC = () => {
   return <MyContacts />;
