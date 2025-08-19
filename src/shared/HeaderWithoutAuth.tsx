@@ -1,16 +1,16 @@
 "use client";
 
-import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
-import useHeaderWithoutAuth from "./hooks/header-without-auth.hook";
-import useScrollHeader from "./hooks/useScrollHeader.hook";
-import ThemeToggle from "./ThemeToggle";
+import { useWallet } from "@/modules/auth/hooks/useWallet";
 import Image from "next/image";
 import Link from "next/link";
 import { LogIn, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/ui/button";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import useHeaderWithoutAuth from "@/hooks/useHeaderWithoutAuth";
+import useScrollHeader from "@/hooks/useScrollHeader";
+import ThemeToggle from "./utils/ThemeToggle";
 
 const HeaderWithoutAuth: React.FC = () => {
   const { handleDisconnect } = useWallet();

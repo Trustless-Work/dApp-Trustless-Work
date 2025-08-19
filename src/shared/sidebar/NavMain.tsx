@@ -3,7 +3,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from "@/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -13,7 +13,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
+} from "@/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/hooks/useLanguage";

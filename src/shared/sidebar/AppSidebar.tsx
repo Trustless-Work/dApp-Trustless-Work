@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { NavUser } from "@/components/layout/sidebar/nav-user";
-import TeamSwitcher from "@/components/layout/sidebar/team-switcher";
+import { NavUser } from "@/shared/sidebar/NavUser";
+import TeamSwitcher from "@/shared/sidebar/TeamSwitcher";
 import {
   Sidebar,
   SidebarContent,
@@ -10,9 +10,9 @@ import {
   SidebarHeader,
   SidebarRail,
   SidebarSeparator,
-} from "@/components/ui/sidebar";
-import { ItemsSidebar } from "@/components/layout/sidebar/constants/sidebar-items.constant";
-import NavMain from "./nav-main";
+} from "@/ui/sidebar";
+import { ItemsSidebar } from "@/constants/sidebar-items.constant";
+import NavMain from "./NavMain";
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   return (

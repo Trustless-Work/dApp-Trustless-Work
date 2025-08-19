@@ -9,7 +9,7 @@ import {
   Settings,
   User,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,30 +18,30 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { useFormatUtils } from "@/utils/hook/format.hook";
-import { useCopyUtils } from "@/utils/hook/copy.hook";
+} from "@/ui/sidebar";
+import { copyToClipboard } from "@/lib/copy";
+import { useGlobalUIBoundedStore } from "@/store/ui";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useGlobalAuthenticationStore } from "@/core/store/data";
-import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
-import TooltipInfo from "@/components/utils/ui/Tooltip";
+import { useGlobalAuthenticationStore } from "@/store/data";
+import TooltipInfo from "@/shared/utils/Tooltip";
+import { useWallet } from "@/modules/auth/hooks/useWallet";
+import { formatAddress } from "@/lib/format";
 
 export const NavUser = () => {
   const { isMobile } = useSidebar();
   const address = useGlobalAuthenticationStore((state) => state.address);
   const name = useGlobalAuthenticationStore((state) => state.name);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
-  const { formatAddress } = useFormatUtils();
-  const { copyText, copiedKeyId } = useCopyUtils();
+  const copiedKeyId = useGlobalUIBoundedStore((state) => state.copiedKeyId);
   const { handleDisconnect } = useWallet();
   const router = useRouter();
   const pathname = usePathname();
@@ -118,7 +118,7 @@ export const NavUser = () => {
                       </p>
                     </div>
                     <button
-                      onClick={() => copyText(user.adress, user.adress)}
+                      onClick={() => copyToClipboard(user.adress, user.adress)}
                       className="p-1.5 hover:bg-muted rounded-md transition-colors"
                     >
                       <TooltipInfo content="Copy address">

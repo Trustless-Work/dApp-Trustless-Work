@@ -2,14 +2,14 @@
 
 import { useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
-import { useGlobalUIBoundedStore } from "@/core/store/ui";
-import { Button } from "@/components/ui/button";
+import { useGlobalUIBoundedStore } from "@/store/ui";
+import { Button } from "@/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/ui/dropdown-menu";
 
 const ThemeToggle = () => {
   const theme = useGlobalUIBoundedStore((state) => state.theme);

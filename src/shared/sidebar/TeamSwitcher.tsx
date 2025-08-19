@@ -2,15 +2,8 @@
 
 import * as React from "react";
 
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { DropdownMenu, DropdownMenuTrigger } from "@/ui/dropdown-menu";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
 

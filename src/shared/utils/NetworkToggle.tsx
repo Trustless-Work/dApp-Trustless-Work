@@ -1,7 +1,7 @@
 "use client";
 
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { Switch } from "@/ui/switch";
+import { Label } from "@/ui/label";
 import useNetwork from "@/hooks/useNetwork";
 import { cn } from "@/lib/utils";
 import { Loader2, AlertTriangle, AlertCircle, Info } from "lucide-react";
@@ -12,8 +12,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from "@/ui/dialog";
+import { Button } from "@/ui/button";
 import { useState } from "react";
 
 const NetworkToggle = () => {

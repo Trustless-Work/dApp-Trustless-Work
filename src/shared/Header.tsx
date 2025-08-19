@@ -1,17 +1,17 @@
 "use client";
 
-import ThemeToggle from "./ThemeToggle";
-import { Breadcrumb, BreadcrumbList } from "../../ui/breadcrumb";
-import { SidebarTrigger } from "../../ui/sidebar";
-import useIsMobile from "@/hooks/mobile.hook";
+import useIsMobile from "@/hooks/useMobile";
 import { cn } from "@/lib/utils";
-import useHeader from "./hooks/header.hook";
-import useScrollHeader from "./hooks/useScrollHeader.hook";
 import { LogIn, LogOut } from "lucide-react";
-import { useWallet } from "@/components/modules/auth/wallet/hooks/wallet.hook";
-import { Button } from "@/components/ui/button";
-import { NotificationBell } from "@/components/modules/notifications/NotificationBell";
-import NetworkToggle from "./NetworkToggle";
+import { Button } from "@/ui/button";
+import { NotificationBell } from "@/modules/notifications/NotificationBell";
+import NetworkToggle from "./utils/NetworkToggle";
+import { useWallet } from "@/modules/auth/hooks/useWallet";
+import useHeader from "@/hooks/useHeader";
+import useScrollHeader from "@/hooks/useScrollHeader";
+import { SidebarTrigger } from "@/ui/sidebar";
+import { Breadcrumb, BreadcrumbList } from "@/ui/breadcrumb";
+import ThemeToggle from "./utils/ThemeToggle";
 
 const Header = ({ className }: { className?: string }) => {
   const { handleConnect, handleDisconnect } = useWallet();
