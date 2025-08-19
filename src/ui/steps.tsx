@@ -16,7 +16,7 @@ export interface StepsProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
-  ({ items, className, ...props }, ref) => {
+  ({ items, className, ...props }) => {
     const currentStep = useEscrowUIBoundedStore((state) => state.currentStep);
     const setTotalSteps = useEscrowUIBoundedStore(
       (state) => state.setTotalSteps,

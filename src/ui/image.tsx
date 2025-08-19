@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { useShouldReduceMotion } from "@/hooks/mobile.hook";
+import { useShouldReduceMotion } from "@/hooks/useMobile";
 
 interface OptimizedImageProps {
   src: string;

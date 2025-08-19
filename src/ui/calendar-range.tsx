@@ -9,12 +9,8 @@ import { useTranslation } from "react-i18next";
 import { enUS, es } from "date-fns/locale";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Button } from "@/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover";
 import { Calendar } from "./calendar";
 
 export function DatePickerWithRange({
