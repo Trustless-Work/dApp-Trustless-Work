@@ -20,7 +20,11 @@ interface ProfileProps {
 }
 
 export const Profile = ({ onSave }: ProfileProps) => {
-  const { handleProfileImageUpload, handleProfileImageDelete, isUploadingImage } = useProfile({
+  const {
+    handleProfileImageUpload,
+    handleProfileImageDelete,
+    isUploadingImage,
+  } = useProfile({
     onSave,
   });
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);

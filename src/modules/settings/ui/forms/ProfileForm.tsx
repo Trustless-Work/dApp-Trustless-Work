@@ -159,7 +159,12 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
         </div>
 
         <div className="pt-2">
-          <Button type="submit" className="h-9 px-6" disabled={isSubmitting} aria-busy={isSubmitting}>
+          <Button
+            type="submit"
+            className="h-9 px-6"
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
