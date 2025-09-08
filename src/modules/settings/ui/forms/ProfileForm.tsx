@@ -13,6 +13,7 @@ import { Button } from "@/ui/button";
 import TooltipInfo from "@/shared/utils/Tooltip";
 import type { UserPayload } from "@/types/user.entity";
 import useProfile from "../../hooks/useProfileSection";
+import { Loader2, Save } from "lucide-react";
 
 interface ProfileFormProps {
   onSave: (data: UserPayload) => void;
@@ -22,6 +23,8 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
   const { form, onSubmit } = useProfile({
     onSave,
   });
+
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <Form {...form}>
@@ -156,8 +159,18 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
         </div>
 
         <div className="pt-2">
-          <Button type="submit" className="h-9 px-6">
-            Save changes
+          <Button type="submit" className="h-9 px-6" disabled={isSubmitting} aria-busy={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Save changes
+              </>
+            )}
           </Button>
         </div>
       </form>

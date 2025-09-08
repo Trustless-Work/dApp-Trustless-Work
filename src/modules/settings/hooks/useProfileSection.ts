@@ -13,15 +13,17 @@ import formSchema from "../schema/profile.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface useProfileProps {
-  onSave: (data: UserPayload) => void;
+  onSave: (data: UserPayload) => Promise<void> | void;
 }
 
 const useProfile = ({ onSave }: useProfileProps) => {
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const updateUser = useGlobalAuthenticationStore((state) => state.updateUser);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,12 +40,15 @@ const useProfile = ({ onSave }: useProfileProps) => {
     mode: "onChange",
   });
 
-  const onSubmit = (data: UserPayload) => {
-    onSave({ ...data, profileImage: form.getValues("profileImage") });
+  const onSubmit = async (data: UserPayload) => {
+    await Promise.resolve(
+      onSave({ ...data, profileImage: loggedUser?.profileImage || "" }),
+    );
   };
 
   const handleProfileImageUpload = async (file: File) => {
     try {
+      setIsUploadingImage(true);
       const allowedExtensions = ["jpg", "jpeg", "png", "webp", "svg"];
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
@@ -63,6 +68,8 @@ const useProfile = ({ onSave }: useProfileProps) => {
     } catch (error) {
       console.error("Error saving photo:", error);
       toast.error("Failed to save photo. Please try again.");
+    } finally {
+      setIsUploadingImage(false);
     }
   };
 
@@ -85,7 +92,13 @@ const useProfile = ({ onSave }: useProfileProps) => {
     }
   };
 
-  return { form, onSubmit, handleProfileImageUpload, handleProfileImageDelete };
+  return {
+    form,
+    onSubmit,
+    handleProfileImageUpload,
+    handleProfileImageDelete,
+    isUploadingImage,
+  };
 };
 
 export default useProfile;
