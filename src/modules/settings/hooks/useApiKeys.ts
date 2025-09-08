@@ -26,21 +26,22 @@ const useAPIKeys = () => {
   const onSubmit = async () => {
     setIsRequestingAPIKey(true);
 
+    if (!address) {
+      toast.error("Connect your wallet to request an API Key");
+      setIsRequestingAPIKey(false);
+      return;
+    }
+
     if (loggedUser?.useCase === "" || !loggedUser?.useCase) {
       toast.error("Please complete your profile to get an API Key");
 
       setIsRequestingAPIKey(false);
     } else {
       try {
-        const response = await new AuthService().requestApiKey(address);
-
-        if (response?.apiKey) {
-          await refreshUser(address);
-
-          toast.success("Your API key has been generated");
-        } else {
-          toast.error("Error while requesting");
-        }
+        // If the request succeeds, we consider it successful regardless of immediate response payload shape
+        await new AuthService().requestApiKey(address);
+        await refreshUser(address);
+        toast.success("Your API key has been generated");
       } catch (error) {
         console.error("Error requesting API key:", error);
         toast.error("Error while requesting API key");
