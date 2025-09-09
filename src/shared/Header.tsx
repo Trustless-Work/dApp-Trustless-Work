@@ -12,6 +12,7 @@ import useScrollHeader from "@/hooks/useScrollHeader";
 import { SidebarTrigger } from "@/ui/sidebar";
 import { Breadcrumb, BreadcrumbList } from "@/ui/breadcrumb";
 import ThemeToggle from "./utils/ThemeToggle";
+import { ResponsiveWalletBalance } from "@/modules/auth/responsive-balance";
 
 const Header = ({ className }: { className?: string }) => {
   const { handleConnect, handleDisconnect } = useWallet();
@@ -47,6 +48,7 @@ const Header = ({ className }: { className?: string }) => {
             </>
 
             <div className="flex gap-3 ml-auto items-center">
+              {!isMobile && <ResponsiveWalletBalance />}
               <NetworkToggle />
               {/* <LanguageToggle /> */}
               <ThemeToggle />
