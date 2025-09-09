@@ -1,17 +1,22 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import type { Escrow } from "@/types/escrow.entity";
 
-export const useEscrowFilter = () => {
+export const useEscrowFilter = (escrows: Escrow[] = []) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   const { t } = useTranslation();
+
+  // Search (debounced) from URL param "q"
   const [search, setSearch] = useState(searchParams.get("q") || "");
-  const [status] = useState(searchParams.get("status") || "");
-  const [amountRange] = useState(searchParams.get("amount") || "");
-  const [engagement] = useState(searchParams.get("engagement") || "");
-  const active = searchParams.get("active") || "active";
+
+  // Other filters are read directly from current URL params so they always stay in sync
+  const status = searchParams.get("status") || "";
+  const amountRange = searchParams.get("amount") || "";
+  const engagement = searchParams.get("engagement") || "";
+  const active = searchParams.get("active") || "";
 
   const updateQuery = useCallback(
     (key: string, value: string) => {
@@ -35,6 +40,8 @@ export const useEscrowFilter = () => {
     params.delete("dateRange");
     params.delete("active");
     router.replace(`${pathname}?${params.toString()}`);
+    // Reset local state so inputs/selects visually clear as well
+    setSearch("");
   }, [searchParams, pathname, router]);
 
   useEffect(() => {
@@ -44,18 +51,16 @@ export const useEscrowFilter = () => {
     return () => clearTimeout(delayDebounce);
   }, [search, updateQuery]);
 
-  // const uniqueEngagements = useMemo(() => {
-  //   const engagementsSet = new Set<string>();
-  //   escrows.forEach((escrow) => {
-  //     if (escrow.engagementId) {
-  //       engagementsSet.add(escrow.engagementId);
-  //     }
-  //   });
-  //   return Array.from(engagementsSet).map((engagement) => ({
-  //     value: engagement,
-  //     label: engagement,
-  //   }));
-  // }, [escrows]);
+  const uniqueEngagements = useMemo(() => {
+    const engagementsSet = new Set<string>();
+    escrows.forEach((escrow) => {
+      if (escrow.engagementId) {
+        engagementsSet.add(escrow.engagementId);
+      }
+    });
+
+    return Array.from(engagementsSet).map((id) => ({ value: id, label: id }));
+  }, [escrows]);
 
   const mapNameParams = (paramName: string) => {
     if (!paramName) return t("myEscrows.filter.status.all");
@@ -101,7 +106,7 @@ export const useEscrowFilter = () => {
     amountRange,
     engagement,
     active,
-    uniqueEngagements: [], // todo: add all the engagements from the escrows
+    uniqueEngagements,
     searchParams,
     setSearch,
     updateQuery,

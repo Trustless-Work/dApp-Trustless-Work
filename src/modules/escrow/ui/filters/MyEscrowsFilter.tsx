@@ -2,7 +2,15 @@ import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import CreateButton from "@/shared/utils/Create";
 import Divider from "@/shared/utils/Divider";
-import { Search, Trash2, Shield, Database } from "lucide-react";
+import {
+  Search,
+  Trash2,
+  Shield,
+  Database,
+  RefreshCcw,
+  Download,
+  FileSpreadsheet,
+} from "lucide-react";
 import { useEscrowFilter } from "../../hooks/useEscrowFilter";
 import { getRoleActionIcons } from "@/shared/GetRoleActions";
 import { useEscrowUIBoundedStore } from "../../store/ui";
@@ -17,7 +25,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/ui/dialog";
-import { Download, FileSpreadsheet } from "lucide-react";
 import { exportEscrowsToPDF } from "@/lib/pdf-export";
 import type { Escrow } from "@/types/escrow.entity";
 import {
@@ -26,6 +33,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/ui/select";
+import { DatePickerWithRange } from "@/ui/calendar-range";
+import { getActiveOptionsFilters } from "../../constants/filters-options.constant";
+import { useMemo, useState, useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface MyEscrowsFilterProps {
   escrows?: Escrow[];
@@ -37,29 +49,39 @@ const MyEscrowsFilter = ({
 }: MyEscrowsFilterProps) => {
   const { t } = useTranslation();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+  const queryClient = useQueryClient();
+  const [refreshing, setRefreshing] = useState(false);
+
   const handleExportPDF = () => {
     exportEscrowsToPDF(escrows, {
       title: `My Escrows - ${role.toUpperCase()} Role`,
       orientation: "landscape",
     });
   };
+
   const {
     search,
-    // status,
-    // amountRange,
-    // engagement,
-    // active,
-    // uniqueEngagements,
-    // searchParams,
-    // mapNameParams,
-    // updateQuery,
+    engagement,
+    active,
+    uniqueEngagements,
+    searchParams,
+    mapNameParams,
+    updateQuery,
     setSearch,
     deleteParams,
-  } = useEscrowFilter();
+  } = useEscrowFilter(escrows);
 
-  // const amountOptions = getAmountOptionsFilters(t);
-  // const statusOptions = getStatusOptionsFilters(t);
-  // const activeOptions = getActiveOptionsFilters(t);
+  const activeOptions = useMemo(() => getActiveOptionsFilters(t), [t]);
+
+  const handleRefresh = useCallback(async () => {
+    try {
+      setRefreshing(true);
+      await queryClient.invalidateQueries({ queryKey: ["escrows"] });
+    } finally {
+      // slight delay so user can perceive the spin
+      setTimeout(() => setRefreshing(false), 400);
+    }
+  }, [queryClient]);
 
   return (
     <>
@@ -120,6 +142,21 @@ const MyEscrowsFilter = ({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Refresh Button */}
+            <Button
+              variant="outline"
+              onClick={(e) => {
+                e.preventDefault();
+                handleRefresh();
+              }}
+              className="flex items-center gap-2"
+            >
+              <RefreshCcw
+                className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
+              />
+            </Button>
+
             {/* Blockchain Sync Dialog */}
             <Dialog>
               <DialogTrigger asChild>
@@ -177,59 +214,9 @@ const MyEscrowsFilter = ({
 
         <Divider type="horizontal" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Status */}
-          {/* <div className="flex flex-col">
-            <label
-              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
-              htmlFor="status"
-            >
-              {t("myEscrows.filter.status.label")}
-            </label>
-            <Select
-              value={status}
-              onValueChange={(value) => updateQuery("status", value)}
-            >
-              <SelectTrigger className="w-full">
-                {mapNameParams(searchParams.get("status") || "")}
-              </SelectTrigger>
-              <SelectContent>
-                {statusOptions.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div> */}
-
-          {/* Amount */}
-          {/* <div className="flex flex-col">
-            <label
-              className="text-xs text-muted-foreground font-bold mb-2 ml-2"
-              htmlFor="amount"
-            >
-              {t("myEscrows.filter.amount.label")}
-            </label>
-            <Select
-              value={amountRange}
-              onValueChange={(value) => updateQuery("amount", value)}
-            >
-              <SelectTrigger className="w-full">
-                {mapNameParams(searchParams.get("amount") || "")}
-              </SelectTrigger>
-              <SelectContent>
-                {amountOptions.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div> */}
-
+        <div className="grid grid-cols-4 gap-4">
           {/* Engagement */}
-          {/* <div className="flex flex-col">
+          <div className="flex flex-col">
             <label
               className="text-xs text-muted-foreground font-bold mb-2 ml-2"
               htmlFor="engagement"
@@ -252,10 +239,10 @@ const MyEscrowsFilter = ({
                 ))}
               </SelectContent>
             </Select>
-          </div> */}
+          </div>
 
           {/* Visibility */}
-          {/* <div className="flex flex-col">
+          <div className="flex flex-col">
             <label
               className="text-xs text-muted-foreground font-bold mb-2 ml-2"
               htmlFor="active"
@@ -277,10 +264,10 @@ const MyEscrowsFilter = ({
                 ))}
               </SelectContent>
             </Select>
-          </div> */}
+          </div>
 
           {/* Created At */}
-          {/* <div className="flex flex-col">
+          <div className="flex flex-col">
             <label
               className="text-xs text-muted-foreground font-bold mb-2 ml-2"
               htmlFor="dateRange"
@@ -290,7 +277,7 @@ const MyEscrowsFilter = ({
             <div className="w-full">
               <DatePickerWithRange className="w-full" />
             </div>
-          </div> */}
+          </div>
         </div>
       </form>
     </>

@@ -24,8 +24,31 @@ export function DatePickerWithRange({
   const parseInitialRange = (): DateRange | undefined => {
     const raw = searchParams.get("dateRange");
     if (!raw) return;
-    const [start, end] = raw.split("_").map((d) => new Date(d));
-    if (!start || isNaN(start.getTime())) return;
+
+    const parseYMD = (s: string): Date | undefined => {
+      const parts = s.split("-");
+      if (parts.length !== 3) return undefined;
+      const [yy, mm, dd] = parts.map((p) => Number(p));
+      if (!yy || !mm || !dd) return undefined;
+      const d = new Date(yy, mm - 1, dd);
+      return isNaN(d.getTime()) ? undefined : d;
+    };
+
+    const [s1, s2] = raw.split("_");
+    let start = parseYMD(s1);
+    let end = s2 ? parseYMD(s2) : undefined;
+
+    // Fallback: handle legacy ISO strings
+    if (!start) {
+      const d = new Date(s1);
+      if (!isNaN(d.getTime())) start = d;
+    }
+    if (!end && s2) {
+      const d = new Date(s2);
+      if (!isNaN(d.getTime())) end = d;
+    }
+
+    if (!start) return;
     return { from: start, to: end };
   };
 
@@ -33,12 +56,17 @@ export function DatePickerWithRange({
     parseInitialRange,
   );
 
+  // Keep internal state in sync with URL changes (e.g., when clearing filters)
+  React.useEffect(() => {
+    setDate(parseInitialRange());
+  }, [searchParams]);
+
   const updateURL = (range: DateRange | undefined) => {
     if (!range?.from || !range?.to) return;
     const params = new URLSearchParams(searchParams.toString());
     params.set(
       "dateRange",
-      `${range.from.toISOString()}_${range.to.toISOString()}`,
+      `${format(range.from, "yyyy-MM-dd")}_${format(range.to, "yyyy-MM-dd")}`,
     );
     router.replace(`${pathname}?${params.toString()}`);
   };

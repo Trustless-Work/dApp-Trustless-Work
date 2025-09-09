@@ -15,13 +15,13 @@ interface BaseParams {
   page: number;
   orderDirection: "desc";
   orderBy: "updatedAt";
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   maxAmount?: number;
   minAmount?: number;
-  title: string;
-  engagementId: string;
-  status: SingleReleaseEscrowStatus;
+  title?: string;
+  engagementId?: string;
+  status?: SingleReleaseEscrowStatus;
 }
 
 interface FlexibleQueryParams extends BaseParams {
@@ -66,8 +66,6 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
 
   const filters = useMemo(() => {
     const searchQuery = searchParams.get("q")?.toLowerCase() || "";
-    const statusFilter = searchParams.get("status") || "";
-    const amountFilter = searchParams.get("amount") || "";
     const engagementFilter = searchParams.get("engagement") || "";
     const dateRangeFilter = searchParams.get("dateRange") || "";
     const activeParam = searchParams.get("active");
@@ -81,8 +79,6 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
 
     return {
       searchQuery,
-      statusFilter,
-      amountFilter,
       engagementFilter,
       dateRangeFilter,
       isActive,
@@ -90,31 +86,30 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
   }, [searchParams]);
 
   const baseParams = useMemo(() => {
-    const {
-      searchQuery,
-      statusFilter,
-      amountFilter,
-      engagementFilter,
-      dateRangeFilter,
-      isActive,
-    } = filters;
+    const { searchQuery, engagementFilter, dateRangeFilter, isActive } = filters;
+
+    // Parse date range (now stored as YYYY-MM-DD_YYYY-MM-DD)
+    let startDate: string | undefined;
+    let endDate: string | undefined;
+    if (dateRangeFilter) {
+      const [s, e] = dateRangeFilter.split("_");
+      if (s) startDate = s;
+      if (e) endDate = e;
+    }
+
+    // Map engagement: omit when empty
+    const engagementId = engagementFilter || undefined;
 
     return {
       isActive,
       page: currentPage,
       orderDirection: "desc" as const,
       orderBy: "updatedAt" as const,
-      startDate: dateRangeFilter.split("_")[0],
-      endDate: dateRangeFilter.split("_")[1],
-      maxAmount: amountFilter.includes("+")
-        ? parseFloat(amountFilter.replace("+", ""))
-        : undefined,
-      minAmount: amountFilter.includes("-")
-        ? parseFloat(amountFilter.split("-")[0])
-        : undefined,
+      startDate,
+      endDate,
       title: searchQuery,
-      engagementId: engagementFilter,
-      status: statusFilter as SingleReleaseEscrowStatus,
+      engagementId,
+      // Explicitly omit min/max amount and status filters
     };
   }, [currentPage, filters]);
 
@@ -168,41 +163,29 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
   const setItemsPerPageCallback = useCallback(
     (value: number) => {
       // Validate items per page
-      const validValues = itemsPerPageOptions.map((option) => option.value);
-      if (validValues.includes(value)) {
-        setItemsPerPage(value);
-        setCurrentPage(1); // Reset to first page when changing items per page
-      }
-    },
-    [itemsPerPageOptions],
-  );
-
-  const setCurrentPageCallback = useCallback(
-    (value: number) => {
-      // Validate page number
-      if (value < 1) {
-        setCurrentPage(1);
-      } else if (value > totalPages) {
-        setCurrentPage(totalPages);
+      const validOptions = [10, 20, 30, 40, 50];
+      if (!validOptions.includes(value)) {
+        setItemsPerPage(15);
       } else {
-        setCurrentPage(value);
+        setItemsPerPage(value);
       }
+      setCurrentPage(1);
     },
-    [totalPages],
+    [],
   );
 
   return {
     escrows,
     currentPage,
-    itemsPerPage,
-    itemsPerPageOptions,
     totalPages,
     totalItems,
-    expandedRows,
+    itemsPerPage,
     isLoading,
+    expandedRows,
     setItemsPerPage: setItemsPerPageCallback,
-    setCurrentPage: setCurrentPageCallback,
+    setCurrentPage,
     toggleRowExpansion,
+    itemsPerPageOptions,
   };
 };
 
