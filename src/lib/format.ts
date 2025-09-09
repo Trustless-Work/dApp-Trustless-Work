@@ -42,10 +42,13 @@ export const convertFirestoreTimestamps = (
   return data;
 };
 
-export const formatAddress = (address: string | undefined): string => {
+export const formatAddress = (
+  address: string | undefined,
+  length: number = 8,
+): string => {
   if (!address) return "";
-  const start = address.slice(0, 8);
-  const end = address.slice(-8);
+  const start = address.slice(0, length);
+  const end = address.slice(-length);
   return `${start}....${end}`;
 };
 

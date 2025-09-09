@@ -1,7 +1,7 @@
 "use client";
 
 import { useGlobalAuthenticationStore } from "@/store/data";
-import { WalletBalance } from "./wallet-balance";
+import { WalletBalance } from "./WalletBalance";
 
 export const ResponsiveWalletBalance = () => {
   const { address } = useGlobalAuthenticationStore();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useWalletBalance } from "./hooks/useWalletBalance.hook";
+import { useWalletBalance } from "./hooks/useWalletBalance";
 import { cn } from "@/lib/utils";
 import { useGlobalAuthenticationStore } from "@/store/data";
 import { Button } from "@/ui/button";
@@ -23,7 +23,7 @@ export const WalletBalance = () => {
         ) : (
           parseFloat(balance).toLocaleString("en-US", {
             minimumFractionDigits: 2,
-            maximumFractionDigits: 6,
+            maximumFractionDigits: 2,
           })
         )}
       </span>
