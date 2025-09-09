@@ -2,19 +2,16 @@
 
 import useIsMobile from "@/hooks/useMobile";
 import { cn } from "@/lib/utils";
-import { LogIn, LogOut } from "lucide-react";
-import { Button } from "@/ui/button";
 import { NotificationBell } from "@/modules/notifications/NotificationBell";
 import NetworkToggle from "./utils/NetworkToggle";
-import { useWallet } from "@/modules/auth/hooks/useWallet";
 import useHeader from "@/hooks/useHeader";
 import useScrollHeader from "@/hooks/useScrollHeader";
 import { SidebarTrigger } from "@/ui/sidebar";
 import { Breadcrumb, BreadcrumbList } from "@/ui/breadcrumb";
 import ThemeToggle from "./utils/ThemeToggle";
+import { Wallet } from "./Wallet";
 
 const Header = ({ className }: { className?: string }) => {
-  const { handleConnect, handleDisconnect } = useWallet();
   const isMobile = useIsMobile();
   const { pathName, getBreadCrumbs, address } = useHeader();
   const { isScrolled } = useScrollHeader();
@@ -30,7 +27,7 @@ const Header = ({ className }: { className?: string }) => {
         className,
       )}
     >
-      <div className="flex w-full justify-between items-center gap-2 px-4">
+      <div className="flex flex-col sm:flex-row w-full justify-between items-center gap-4 px-4">
         {pathName !== "/" && address ? (
           <>
             <>
@@ -51,9 +48,6 @@ const Header = ({ className }: { className?: string }) => {
               {/* <LanguageToggle /> */}
               <ThemeToggle />
               <NotificationBell />
-              <Button variant="outline" onClick={handleDisconnect}>
-                <LogOut /> <span className="hidden md:block">Disconnect</span>
-              </Button>
             </div>
           </>
         ) : (
@@ -61,11 +55,10 @@ const Header = ({ className }: { className?: string }) => {
             <NetworkToggle />
             {/* <LanguageToggle /> */}
             <ThemeToggle />
-            <Button variant="outline" onClick={handleConnect}>
-              <LogIn /> <span className="hidden md:block">Connect</span>
-            </Button>
           </div>
         )}
+
+        <Wallet />
       </div>
     </header>
   );

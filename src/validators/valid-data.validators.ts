@@ -32,3 +32,9 @@ export const isValidUrl = (
 
   return false;
 };
+
+export const isValidStellarNetwork = (
+  network: string,
+): network is "testnet" | "mainnet" => {
+  return network === "testnet" || network === "mainnet";
+};

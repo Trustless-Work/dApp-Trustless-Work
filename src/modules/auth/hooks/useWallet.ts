@@ -3,7 +3,7 @@ import { useGlobalAuthenticationStore } from "@/store/data";
 import { kit } from "@/lib/stellar-wallet-kit";
 
 export const useWallet = () => {
-  const { connectWalletStore, disconnectWalletStore } =
+  const { connectWalletStore, disconnectWalletStore, address } =
     useGlobalAuthenticationStore();
 
   const connectWallet = async () => {
@@ -48,5 +48,6 @@ export const useWallet = () => {
     disconnectWallet,
     handleConnect,
     handleDisconnect,
+    isConnected: !!address,
   };
 };
