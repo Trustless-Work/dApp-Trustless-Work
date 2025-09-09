@@ -86,7 +86,8 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
   }, [searchParams]);
 
   const baseParams = useMemo(() => {
-    const { searchQuery, engagementFilter, dateRangeFilter, isActive } = filters;
+    const { searchQuery, engagementFilter, dateRangeFilter, isActive } =
+      filters;
 
     // Parse date range (now stored as YYYY-MM-DD_YYYY-MM-DD)
     let startDate: string | undefined;
@@ -160,19 +161,16 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
     [],
   );
 
-  const setItemsPerPageCallback = useCallback(
-    (value: number) => {
-      // Validate items per page
-      const validOptions = [10, 20, 30, 40, 50];
-      if (!validOptions.includes(value)) {
-        setItemsPerPage(15);
-      } else {
-        setItemsPerPage(value);
-      }
-      setCurrentPage(1);
-    },
-    [],
-  );
+  const setItemsPerPageCallback = useCallback((value: number) => {
+    // Validate items per page
+    const validOptions = [10, 20, 30, 40, 50];
+    if (!validOptions.includes(value)) {
+      setItemsPerPage(15);
+    } else {
+      setItemsPerPage(value);
+    }
+    setCurrentPage(1);
+  }, []);
 
   return {
     escrows,
