@@ -205,6 +205,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     hasAmount={true}
                     isNet={true}
                     amount={receiverNet}
+                    currency={escrow?.trustline?.name}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -215,6 +216,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     hasAmount={true}
                     isNet={true}
                     amount={approverNet}
+                    currency={escrow?.trustline?.name}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -225,6 +227,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     percentage={trustlessPercentage}
                     hasAmount={true}
                     amount={trustlessWorkAmount}
+                    currency={escrow?.trustline?.name}
                   />
                 </motion.div>
                 <motion.div variants={itemAnimation}>
@@ -235,6 +238,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     percentage={platformPercentage}
                     hasAmount={true}
                     amount={totalPlatformAmount}
+                    currency={escrow?.trustline?.name}
                   />
                 </motion.div>
               </motion.div>

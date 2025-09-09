@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AuthService } from "@/modules/auth/services/auth.service";
 import { formatAddress, formatCurrency } from "@/lib/format";
+import { useGlobalBoundedStore } from "@/store/data";
 
 interface EntityCardProps {
   entity?: string;
@@ -19,6 +20,7 @@ interface EntityCardProps {
   amount?: number;
   inDispute?: boolean;
   isNet?: boolean;
+  currency?: string;
 }
 
 const EntityCard = ({
@@ -30,8 +32,10 @@ const EntityCard = ({
   amount,
   inDispute,
   isNet,
+  currency,
 }: EntityCardProps) => {
   const [user, setUser] = useState<User | undefined>(undefined);
+  const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -51,8 +55,8 @@ const EntityCard = ({
     <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-md">
       <Link href={`/dashboard/public-profile/${entity}`} target="_blank">
         <CardContent className="p-3">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex w-full items-center justify-between gap-2">
+          <div className="flex w-full items-center justify-between mb-2">
+            <div className="flex items-center justify-between gap-2">
               <span className="text-xs font-medium text-muted-foreground">
                 {type}
               </span>
@@ -74,7 +78,10 @@ const EntityCard = ({
                     {isNet && "Net "}Amount:
                   </span>
                   <span className="font-medium text-emerald-600">
-                    {formatCurrency(amount)}
+                    {formatCurrency(
+                      amount,
+                      selectedEscrow?.trustline?.name || currency,
+                    )}
                   </span>
                 </div>
               )}

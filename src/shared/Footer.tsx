@@ -55,6 +55,17 @@ const Footer: React.FC = () => {
             </Link>
           </p>
           <p>
+            Blocks:{" "}
+            <Link
+              href="https://blocks.trustlesswork.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              blocks.trustlesswork.com
+            </Link>
+          </p>
+          <p>
             GitHub:{" "}
             <Link
               href="https://github.com/Trustless-Work"

@@ -72,8 +72,18 @@ export const ItemsSidebar = {
           isExpandable: true,
           items: [
             {
-              title: "sidebar.apiDocs",
+              title: "Documentation",
               url: "https://docs.trustlesswork.com/trustless-work",
+              isExternal: true,
+            },
+            {
+              title: "Demo",
+              url: "https://demo.trustlesswork.com/",
+              isExternal: true,
+            },
+            {
+              title: "Escrow Blocks",
+              url: "https://blocks.trustlesswork.com/",
               isExternal: true,
             },
             {
