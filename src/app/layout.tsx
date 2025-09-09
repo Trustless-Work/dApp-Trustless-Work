@@ -58,7 +58,7 @@ export default function RootLayout({
       >
         <Analytics />
         <GlobalProvider>
-          <Toaster />
+          <Toaster position="top-right" richColors />
           <SidebarProvider>
             <div className="relative flex min-h-screen w-full">
               <div className="flex-1 flex flex-col w-full">

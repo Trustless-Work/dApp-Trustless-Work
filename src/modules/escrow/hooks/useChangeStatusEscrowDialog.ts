@@ -8,7 +8,7 @@ import {
   useGlobalBoundedStore,
 } from "@/store/data";
 import { useEscrowUIBoundedStore } from "../store/ui";
-import { formSchema } from "../schema/complete-milestone.schema";
+import { formSchema } from "../schema/change-milestone-status.schema";
 import { useEscrowBoundedStore } from "../store/data";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
@@ -16,11 +16,11 @@ import { handleError } from "@/errors/handle-errors";
 import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 
 interface changeMilestoneStatusDialogHook {
-  setIsCompleteMilestoneDialogOpen: (value: boolean) => void;
+  setIsChangeMilestoneStatusDialogOpen: (value: boolean) => void;
 }
 
 const useChangeMilestoneStatusDialogHook = ({
-  setIsCompleteMilestoneDialogOpen,
+  setIsChangeMilestoneStatusDialogOpen,
 }: changeMilestoneStatusDialogHook) => {
   const { address } = useGlobalAuthenticationStore();
   const setIsChangingStatus = useEscrowUIBoundedStore(
@@ -44,11 +44,12 @@ const useChangeMilestoneStatusDialogHook = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       newEvidence: "",
+      newStatus: "",
     },
     mode: "onChange",
   });
 
-  const onSubmit = async (newEvidence: string | undefined) => {
+  const onSubmit = async (payload: z.infer<typeof formSchema>) => {
     setIsChangingStatus(true);
 
     try {
@@ -56,16 +57,16 @@ const useChangeMilestoneStatusDialogHook = ({
         payload: {
           contractId: selectedEscrow?.contractId || "",
           milestoneIndex: milestoneIndex?.toString() || "0",
-          newStatus: "completed",
+          newStatus: payload.newStatus,
           serviceProvider: address,
-          newEvidence: newEvidence || "",
+          newEvidence: payload.newEvidence || "",
         },
         type: selectedEscrow?.type || "single-release",
         address,
       });
 
       setIsChangingStatus(false);
-      setIsCompleteMilestoneDialogOpen(false);
+      setIsChangeMilestoneStatusDialogOpen(false);
 
       if (selectedEscrow && milestoneIndex !== null) {
         const updatedEscrow = {
@@ -74,8 +75,8 @@ const useChangeMilestoneStatusDialogHook = ({
             index === milestoneIndex
               ? {
                   ...milestone,
-                  status: "completed",
-                  evidence: newEvidence || milestone.evidence,
+                  status: payload.newStatus,
+                  evidence: payload.newEvidence || milestone.evidence,
                 }
               : milestone,
           ),
@@ -86,7 +87,7 @@ const useChangeMilestoneStatusDialogHook = ({
       form.reset();
 
       toast.success(
-        `The Milestone ${completingMilestone?.description} has been completed.`,
+        `The Milestone ${completingMilestone?.description} status has been changed.`,
       );
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
@@ -96,7 +97,7 @@ const useChangeMilestoneStatusDialogHook = ({
   };
 
   const handleClose = () => {
-    setIsCompleteMilestoneDialogOpen?.(false);
+    setIsChangeMilestoneStatusDialogOpen?.(false);
   };
 
   return {

@@ -34,16 +34,14 @@ interface GeneralInformationProps {
   selectedEscrow: Escrow;
   userRolesInEscrow: string[];
   dialogStates: DialogStates & StatusStates;
-  areAllMilestonesCompleted: boolean;
-  areAllMilestonesCompletedAndFlag: boolean;
+  areAllMilestonesApproved: boolean;
 }
 
 export const GeneralInformation = ({
   selectedEscrow,
   userRolesInEscrow,
   dialogStates,
-  areAllMilestonesCompleted,
-  areAllMilestonesCompletedAndFlag,
+  areAllMilestonesApproved,
 }: GeneralInformationProps) => {
   const { t } = useTranslation();
   const copiedKeyId = useGlobalUIBoundedStore((state) => state.copiedKeyId);
@@ -142,8 +140,7 @@ export const GeneralInformation = ({
           <Actions
             selectedEscrow={selectedEscrow}
             userRolesInEscrow={userRolesInEscrow}
-            areAllMilestonesCompleted={areAllMilestonesCompleted}
-            areAllMilestonesCompletedAndFlag={areAllMilestonesCompletedAndFlag}
+            areAllMilestonesApproved={areAllMilestonesApproved}
           />
         </div>
       </div>

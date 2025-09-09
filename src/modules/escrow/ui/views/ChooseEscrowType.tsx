@@ -40,7 +40,7 @@ export const ChooseEscrowType = () => {
               <h3 className="text-2xl font-semibold">Single Release</h3>
             </div>
             <p className="text-muted-foreground">
-              Release all funds at once when all milestones are completed. Best
+              Release all funds at once when all milestones are approved. Best
               for straightforward projects with clear deliverables.
             </p>
             <Button variant="outline" className="mt-auto">
@@ -63,7 +63,7 @@ export const ChooseEscrowType = () => {
               <h3 className="text-2xl font-semibold">Multi Release</h3>
             </div>
             <p className="text-muted-foreground">
-              Release funds progressively as each milestone is completed. Ideal
+              Release funds progressively as each milestone is approved. Ideal
               for complex projects with multiple phases.
             </p>
             <Button variant="outline" className="mt-auto">

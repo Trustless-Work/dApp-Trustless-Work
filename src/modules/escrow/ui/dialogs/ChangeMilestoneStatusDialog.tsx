@@ -18,21 +18,23 @@ import {
 import TooltipInfo from "@/shared/utils/Tooltip";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { Loader2, PackageCheck } from "lucide-react";
-import useCompleteMilestoneDialogHook from "../../hooks/useChangeStatusEscrowDialog";
+
 import { useEscrowBoundedStore } from "../../store/data";
 import { Textarea } from "@/ui/textarea";
+import { Input } from "@/ui/input";
+import useChangeMilestoneStatusDialogHook from "../../hooks/useChangeStatusEscrowDialog";
 
-interface CompleteMilestoneDialogProps {
-  isCompleteMilestoneDialogOpen: boolean;
-  setIsCompleteMilestoneDialogOpen: (value: boolean) => void;
+interface ChangeMilestoneStatusDialogProps {
+  isChangeMilestoneStatusDialogOpen: boolean;
+  setIsChangeMilestoneStatusDialogOpen: (value: boolean) => void;
 }
 
-const CompleteMilestoneDialog = ({
-  isCompleteMilestoneDialogOpen,
-  setIsCompleteMilestoneDialogOpen,
-}: CompleteMilestoneDialogProps) => {
-  const { form, onSubmit, handleClose } = useCompleteMilestoneDialogHook({
-    setIsCompleteMilestoneDialogOpen,
+export const ChangeMilestoneStatusDialog = ({
+  isChangeMilestoneStatusDialogOpen,
+  setIsChangeMilestoneStatusDialogOpen,
+}: ChangeMilestoneStatusDialogProps) => {
+  const { form, onSubmit, handleClose } = useChangeMilestoneStatusDialogHook({
+    setIsChangeMilestoneStatusDialogOpen,
   });
 
   const isChangingStatus = useEscrowUIBoundedStore(
@@ -44,25 +46,51 @@ const CompleteMilestoneDialog = ({
 
   return (
     <>
-      <Dialog open={isCompleteMilestoneDialogOpen} onOpenChange={handleClose}>
+      <Dialog
+        open={isChangeMilestoneStatusDialogOpen}
+        onOpenChange={handleClose}
+      >
         <DialogContent className="sm:max-w-[550px]">
           <DialogHeader>
             <DialogTitle className="truncate">
-              Complete Milestone - {completingMilestone?.description}
+              Change Status - {completingMilestone?.description}
             </DialogTitle>
             <DialogDescription>
-              By completing this milestone, you will indicate to your approver
-              that you have finished it. You can also add an evidence that you
-              did it.
+              By changing the status, you will indicate to your approver that
+              you have finished it. You can also add an evidence that you did
+              it.
             </DialogDescription>
           </DialogHeader>
 
           <FormProvider {...form}>
             <form
-              onSubmit={form.handleSubmit((data) => onSubmit(data.newEvidence))}
+              onSubmit={form.handleSubmit((data) => onSubmit(data))}
               className="grid gap-4 py-4"
             >
               <div className="flex flex-col ms-center gap-4">
+                <FormField
+                  control={form.control}
+                  name="newStatus"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex items-center">
+                        New Status{" "}
+                        <TooltipInfo content="The new status of the milestone." />
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="New status"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="newEvidence"
@@ -70,7 +98,7 @@ const CompleteMilestoneDialog = ({
                     <FormItem>
                       <FormLabel className="flex items-center">
                         Evidence (optional){" "}
-                        <TooltipInfo content="The evidence that you've completed the milestone." />
+                        <TooltipInfo content="The evidence that you've changed the milestone status." />
                       </FormLabel>
                       <FormControl>
                         <Textarea
@@ -92,12 +120,12 @@ const CompleteMilestoneDialog = ({
                   {isChangingStatus ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Completing...
+                      Changing Status...
                     </>
                   ) : (
                     <>
                       <PackageCheck className="w-4 h-4" />
-                      Complete
+                      Change Status
                     </>
                   )}
                 </Button>
@@ -109,5 +137,3 @@ const CompleteMilestoneDialog = ({
     </>
   );
 };
-
-export default CompleteMilestoneDialog;

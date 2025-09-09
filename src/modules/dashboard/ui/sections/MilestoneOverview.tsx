@@ -1,4 +1,4 @@
-import { CheckCircle, Clock, AlertTriangle, FileCheck } from "lucide-react";
+import { CheckCircle, AlertTriangle, FileCheck } from "lucide-react";
 import { MetricCard } from "../cards/MetricCard";
 import { MilestoneStatusChart } from "../charts/MilestoneStatusChart";
 import { MilestoneApprovalTrendChart } from "../charts/MilestoneApprovalTrendChart";
@@ -30,13 +30,6 @@ export const MilestonesOverview = ({
           value={hasData ? data.totalMilestones : 0}
           icon={<FileCheck />}
           subValue="Total milestones across all escrows"
-          isLoading={!hasData}
-        />
-        <MetricCard
-          title="Pending Approval"
-          value={hasData ? data.pendingApproval : 0}
-          icon={<Clock />}
-          subValue="Completed milestones awaiting approval"
           isLoading={!hasData}
         />
         <MetricCard

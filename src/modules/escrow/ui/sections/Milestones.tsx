@@ -67,13 +67,13 @@ export const Milestones = ({
     });
   };
 
-  const handleCompleteMilestone = (
+  const handleChangeMilestoneStatus = (
     milestone: SingleReleaseMilestone | MultiReleaseMilestone,
     index: number,
   ) => {
     setCompletingMilestone(milestone);
     setMilestoneIndex(index);
-    dialogStates.completeMilestone.setIsOpen(true);
+    dialogStates.changeMilestoneStatus.setIsOpen(true);
   };
 
   return (
@@ -128,7 +128,7 @@ export const Milestones = ({
               loadingMilestoneStates={loadingMilestoneStates}
               setLoadingMilestoneStates={setLoadingMilestoneStates}
               onViewDetails={handleViewDetails}
-              onCompleteMilestone={handleCompleteMilestone}
+              onChangeMilestoneStatus={handleChangeMilestoneStatus}
             />
           ))}
         </div>

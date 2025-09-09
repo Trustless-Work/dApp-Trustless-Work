@@ -134,10 +134,6 @@ const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
               <TableBody>
                 {escrows.map((escrow: Escrow) => {
                   // todo: use these constants in zusntand
-                  const completedMilestones = escrow.milestones.filter(
-                    (milestone) => milestone.status === "completed",
-                  ).length;
-
                   const approvedMilestones = escrow.milestones.filter(
                     (
                       milestone: SingleReleaseMilestone | MultiReleaseMilestone,
@@ -148,18 +144,12 @@ const MyEscrowsTable = ({ role }: MyEscrowsTableProps) => {
 
                   const totalMilestones = escrow.milestones.length;
 
-                  const progressPercentageCompleted =
-                    totalMilestones > 0
-                      ? (completedMilestones / totalMilestones) * 100
-                      : 0;
-
                   const progressPercentageApproved =
                     totalMilestones > 0
                       ? (approvedMilestones / totalMilestones) * 100
                       : 0;
 
                   const pendingRelease =
-                    progressPercentageCompleted === 100 &&
                     progressPercentageApproved === 100 &&
                     !escrow.flags?.released;
 

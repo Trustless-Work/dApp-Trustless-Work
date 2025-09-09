@@ -303,7 +303,7 @@
     "fundEscrow": "Fund Escrow",
     "approveMilestone": "Approve Milestone",
     "startDispute": "Start Dispute",
-    "completeMilestone": "Complete Milestone",
+    "changeMilestoneStatus": "Change Milestone Status",
     "resolveDispute": "Resolve Dispute",
     "releasePayment": "Release payment",
     "editEscrow": "Edit Escrow"
@@ -313,7 +313,7 @@
       "fundEscrow": "Fund Escrow",
       "approveMilestone": "Approve Milestone",
       "startDispute": "Start Dispute",
-      "completeMilestone": "Complete Milestone",
+      "changeMilestoneStatus": "Change Milestone Status",
       "resolveDispute": "Resolve Dispute",
       "releasePayment": "Release Payment",
       "editEscrow": "Edit Escrow"
@@ -585,7 +585,7 @@
     "editMilestonesTooltip": "Edit Milestones",
     "expand": "Expand",
     "collapse": "Collapse",
-    "completeMilestone": "Complete",
+    "changeMilestoneStatus": "Change Status",
     "showEvidence": "Show Evidence",
     "showDescription": "Show Description",
     "approveMilestone": "Approve",

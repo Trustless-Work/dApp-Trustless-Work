@@ -38,7 +38,7 @@ const EditBasicPropertiesDialog = ({
           <DialogTitle>Editing - {selectedEscrow?.title}</DialogTitle>
           <DialogDescription>
             You can edit the basic properties of the escrow, but not if the
-            milestones are not completed or approved and if there is no balance.
+            milestones are not approved and if there is no balance.
           </DialogDescription>
         </DialogHeader>
 

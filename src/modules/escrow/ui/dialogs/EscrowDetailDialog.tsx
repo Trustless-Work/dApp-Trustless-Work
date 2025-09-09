@@ -21,7 +21,7 @@ import {
 } from "./SuccessDialog";
 import { useEscrowDialogs } from "../../hooks/dialogs/useEscrowDialogs";
 import Link from "next/link";
-import CompleteMilestoneDialog from "./CompleteMilestoneDialog";
+import { ChangeMilestoneStatusDialog } from "./ChangeMilestoneStatusDialog";
 import { Separator } from "@/ui/separator";
 import { Button } from "@/ui/button";
 import EditEntitiesDialog from "./EditEntitiesDialog";
@@ -62,8 +62,7 @@ const EscrowDetailDialog = ({
     handleClose,
     setEvidenceVisibleMap,
     evidenceVisibleMap,
-    areAllMilestonesCompleted,
-    areAllMilestonesCompletedAndFlag,
+    areAllMilestonesApproved,
     userRolesInEscrow,
   } = useEscrowDetailDialog({
     setIsDialogOpen,
@@ -144,10 +143,7 @@ const EscrowDetailDialog = ({
                       selectedEscrow={selectedEscrow}
                       userRolesInEscrow={userRolesInEscrow}
                       dialogStates={dialogStates}
-                      areAllMilestonesCompleted={areAllMilestonesCompleted}
-                      areAllMilestonesCompletedAndFlag={
-                        areAllMilestonesCompletedAndFlag
-                      }
+                      areAllMilestonesApproved={areAllMilestonesApproved}
                     />
                   </TabsContent>
 
@@ -278,10 +274,7 @@ const EscrowDetailDialog = ({
                       selectedEscrow={selectedEscrow}
                       userRolesInEscrow={userRolesInEscrow}
                       dialogStates={dialogStates}
-                      areAllMilestonesCompleted={areAllMilestonesCompleted}
-                      areAllMilestonesCompletedAndFlag={
-                        areAllMilestonesCompletedAndFlag
-                      }
+                      areAllMilestonesApproved={areAllMilestonesApproved}
                     />
                   </TabsContent>
 
@@ -364,10 +357,12 @@ const EscrowDetailDialog = ({
         setIsSecondDialogOpen={dialogStates.second.setIsOpen}
       />
 
-      <CompleteMilestoneDialog
-        isCompleteMilestoneDialogOpen={dialogStates.completeMilestone.isOpen}
-        setIsCompleteMilestoneDialogOpen={
-          dialogStates.completeMilestone.setIsOpen
+      <ChangeMilestoneStatusDialog
+        isChangeMilestoneStatusDialogOpen={
+          dialogStates.changeMilestoneStatus.isOpen
+        }
+        setIsChangeMilestoneStatusDialogOpen={
+          dialogStates.changeMilestoneStatus.setIsOpen
         }
       />
 

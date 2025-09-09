@@ -21,11 +21,6 @@ import { Button } from "@/ui/button";
 import { t } from "i18next";
 
 export const getStatusBadge = (escrow: Escrow) => {
-  const completedMilestones = escrow.milestones.filter(
-    (milestone: MultiReleaseMilestone | SingleReleaseMilestone) =>
-      milestone.status === "completed",
-  ).length;
-
   const approvedMilestones = escrow.milestones.filter(
     (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
       ("flags" in milestone && milestone.flags?.approved === true) ||
@@ -34,17 +29,12 @@ export const getStatusBadge = (escrow: Escrow) => {
 
   const totalMilestones = escrow.milestones.length;
 
-  const progressPercentageCompleted =
-    totalMilestones > 0 ? (completedMilestones / totalMilestones) * 100 : 0;
-
   const progressPercentageApproved =
     totalMilestones > 0 ? (approvedMilestones / totalMilestones) * 100 : 0;
 
   // Check if both are 100% and releaseFlag is false
   const pendingRelease =
-    progressPercentageCompleted === 100 &&
-    progressPercentageApproved === 100 &&
-    !escrow.flags?.released;
+    progressPercentageApproved === 100 && !escrow.flags?.released;
 
   if (escrow.flags?.disputed) {
     return (
@@ -174,7 +164,7 @@ export const getActionButtons = (
   milestoneIndex: number,
   userRolesInEscrow: string[],
   activeTab: string,
-  onCompleteMilestone: (
+  onChangeMilestoneStatus: (
     milestone: SingleReleaseMilestone | MultiReleaseMilestone,
     index: number,
   ) => void,
@@ -213,22 +203,21 @@ export const getActionButtons = (
   if (
     userRolesInEscrow.includes("serviceProvider") &&
     activeTab === "serviceProvider" &&
-    milestone.status !== "completed" &&
     !("flags" in milestone && milestone.flags?.approved)
   ) {
     buttons.push(
       <Button
-        key="complete"
+        key="change-status"
         size="sm"
         variant="default"
         onClick={(e) => {
           e.stopPropagation();
-          onCompleteMilestone(milestone, milestoneIndex);
+          onChangeMilestoneStatus(milestone, milestoneIndex);
         }}
       >
         <PackageCheck className="w-3 h-3 mr-1 flex-shrink-0" />
         <span className="truncate">
-          {t("escrowDetailDialog.completeMilestone")}
+          {t("escrowDetailDialog.changeMilestoneStatus")}
         </span>
       </Button>,
     );
@@ -416,12 +405,11 @@ export const getActionButtons = (
       </Button>,
     );
   }
-  console.log("approved" in milestone);
+
   // Approver - Approve Milestone
   if (
     userRolesInEscrow.includes("approver") &&
     activeTab === "approver" &&
-    milestone.status === "completed" &&
     (("approved" in milestone && !milestone.approved) ||
       ("flags" in milestone &&
         !milestone.flags?.approved &&

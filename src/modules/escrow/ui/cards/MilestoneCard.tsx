@@ -49,7 +49,7 @@ interface MilestoneCardProps {
     milestone: SingleReleaseMilestone | MultiReleaseMilestone,
     index: number,
   ) => void;
-  onCompleteMilestone: (
+  onChangeMilestoneStatus: (
     milestone: SingleReleaseMilestone | MultiReleaseMilestone,
     index: number,
   ) => void;
@@ -64,7 +64,7 @@ export const MilestoneCard = ({
   loadingMilestoneStates,
   setLoadingMilestoneStates,
   onViewDetails,
-  onCompleteMilestone,
+  onChangeMilestoneStatus,
 }: MilestoneCardProps) => {
   const isChangingFlag = useEscrowUIBoundedStore(
     (state) => state.isChangingFlag,
@@ -83,7 +83,7 @@ export const MilestoneCard = ({
     milestoneIndex,
     userRolesInEscrow,
     activeTab,
-    onCompleteMilestone,
+    onChangeMilestoneStatus,
     loadingMilestoneStates,
     setLoadingMilestoneStates,
     selectedEscrow,

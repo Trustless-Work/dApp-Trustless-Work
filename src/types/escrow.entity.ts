@@ -8,7 +8,7 @@ import {
 } from "@trustless-work/escrow";
 import { CreatedAt, UpdatedAt } from "./dates.entity";
 
-export type MilestoneStatus = "completed" | "approved" | "pending";
+export type MilestoneStatus = "approved" | "pending";
 
 export interface Escrow {
   signer?: string;

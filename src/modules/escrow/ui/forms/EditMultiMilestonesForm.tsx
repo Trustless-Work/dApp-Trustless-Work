@@ -132,7 +132,6 @@ export const EditMultiMilestonesForm = ({
                     className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0 self-start lg:self-center"
                     disabled={
                       milestones.length === 1 ||
-                      milestone.status === "completed" ||
                       milestone.flags?.approved ||
                       milestone.flags?.released ||
                       milestone.flags?.resolved ||

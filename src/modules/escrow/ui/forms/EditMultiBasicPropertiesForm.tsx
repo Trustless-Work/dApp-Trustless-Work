@@ -154,7 +154,7 @@ export const EditMultiBasicPropertiesForm = ({
         <DialogFooter>
           <Button
             type="submit"
-            className="bg-green-800 hover:bg-green-700 text-white"
+            variant="success"
             disabled={isEditingBasicProperties}
           >
             {isEditingBasicProperties ? (

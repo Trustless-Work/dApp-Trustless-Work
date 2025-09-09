@@ -18,15 +18,13 @@ import { useReleaseFundsEscrowDialog } from "../../hooks/single-release/useRelea
 interface ActionsProps {
   selectedEscrow: Escrow;
   userRolesInEscrow: string[];
-  areAllMilestonesCompleted: boolean;
-  areAllMilestonesCompletedAndFlag: boolean;
+  areAllMilestonesApproved: boolean;
 }
 
 export const Actions = ({
   selectedEscrow,
   userRolesInEscrow,
-  areAllMilestonesCompleted,
-  areAllMilestonesCompletedAndFlag,
+  areAllMilestonesApproved,
 }: ActionsProps) => {
   const { handleOpen } = useResolveDisputeDialog();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
@@ -66,8 +64,7 @@ export const Actions = ({
 
   const shouldShowReleaseFundsButton =
     selectedEscrow.type === "single-release" &&
-    areAllMilestonesCompleted &&
-    areAllMilestonesCompletedAndFlag &&
+    areAllMilestonesApproved &&
     userRolesInEscrow.includes("releaseSigner") &&
     !selectedEscrow.flags?.released &&
     activeTab === "releaseSigner";

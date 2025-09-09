@@ -27,7 +27,7 @@ export const roleActions: RoleAction[] = [
   },
   {
     role: "serviceProvider",
-    actions: ["fundEscrow", "completeMilestone", "startDispute"],
+    actions: ["fundEscrow", "changeMilestoneStatus", "startDispute"],
     icon: <Briefcase className="h-6 w-6 text-primary" />,
     color: "0",
   },
@@ -60,7 +60,7 @@ export const roleActions: RoleAction[] = [
 export const actionIcons: Record<string, React.ReactNode> = {
   fundEscrow: <DollarSign className="h-6 w-6 text-primary/60" />,
   approveMilestone: <CheckCircle className="h-6 w-6 text-primary/60" />,
-  completeMilestone: <CheckSquare className="h-6 w-6 text-primary/60" />,
+  changeMilestoneStatus: <CheckSquare className="h-6 w-6 text-primary/60" />,
   startDispute: <AlertTriangle className="h-6 w-6 text-primary/60" />,
   resolveDispute: <Scale className="h-6 w-6 text-primary/60" />,
   releasePayment: <Unlock className="h-6 w-6 text-primary/60" />,

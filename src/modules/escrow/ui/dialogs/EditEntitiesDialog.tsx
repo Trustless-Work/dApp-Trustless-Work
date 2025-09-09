@@ -37,7 +37,7 @@ const EditEntitiesDialog = ({
           <DialogTitle>Editing - {selectedEscrow?.title}</DialogTitle>
           <DialogDescription>
             You can edit escrow entities, but not if the milestones are not
-            completed or approved and if there is not balance.
+            approved and if there is not balance.
           </DialogDescription>
         </DialogHeader>
 

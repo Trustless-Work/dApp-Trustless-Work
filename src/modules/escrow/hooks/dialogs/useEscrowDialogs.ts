@@ -25,7 +25,7 @@ export interface DialogStates {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
   };
-  completeMilestone: {
+  changeMilestoneStatus: {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
   };
@@ -80,9 +80,9 @@ export const useEscrowDialogs = (): DialogStates & StatusStates => {
       isOpen: store.isSuccessResolveDisputeDialogOpen,
       setIsOpen: store.setIsSuccessResolveDisputeDialogOpen,
     },
-    completeMilestone: {
-      isOpen: store.isCompleteMilestoneDialogOpen,
-      setIsOpen: store.setIsCompleteMilestoneDialogOpen,
+    changeMilestoneStatus: {
+      isOpen: store.isChangeMilestoneStatusDialogOpen,
+      setIsOpen: store.setIsChangeMilestoneStatusDialogOpen,
     },
     isChangingStatus: store.isChangingStatus,
     isStartingDispute: store.isStartingDispute,

@@ -12,7 +12,7 @@ export type DialogEscrowStore = {
   isSuccessReleaseDialogOpen: boolean;
   isSuccessResolveDisputeDialogOpen: boolean;
   isMoonpayWidgetOpen: boolean;
-  isCompleteMilestoneDialogOpen: boolean;
+  isChangeMilestoneStatusDialogOpen: boolean;
 
   setIsDialogOpen: (value: boolean) => void;
   setIsSecondDialogOpen: (value: boolean) => void;
@@ -25,7 +25,7 @@ export type DialogEscrowStore = {
   setIsSuccessReleaseDialogOpen: (value: boolean) => void;
   setIsSuccessResolveDisputeDialogOpen: (value: boolean) => void;
   setIsMoonpayWidgetOpen: (value: boolean) => void;
-  setIsCompleteMilestoneDialogOpen: (value: boolean) => void;
+  setIsChangeMilestoneStatusDialogOpen: (value: boolean) => void;
 };
 
 export const escrowDialogSlice: StateCreator<
@@ -47,7 +47,7 @@ export const escrowDialogSlice: StateCreator<
     isSuccessReleaseDialogOpen: false,
     isSuccessResolveDisputeDialogOpen: false,
     isMoonpayWidgetOpen: false,
-    isCompleteMilestoneDialogOpen: false,
+    isChangeMilestoneStatusDialogOpen: false,
 
     // Modifiers
     setIsDialogOpen: (value: boolean) => set({ isDialogOpen: value }),
@@ -70,7 +70,7 @@ export const escrowDialogSlice: StateCreator<
       set({ isSuccessResolveDisputeDialogOpen: value }),
     setIsMoonpayWidgetOpen: (value: boolean) =>
       set({ isMoonpayWidgetOpen: value }),
-    setIsCompleteMilestoneDialogOpen: (value: boolean) =>
-      set({ isCompleteMilestoneDialogOpen: value }),
+    setIsChangeMilestoneStatusDialogOpen: (value: boolean) =>
+      set({ isChangeMilestoneStatusDialogOpen: value }),
   };
 };

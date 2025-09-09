@@ -112,7 +112,7 @@ export const InitializeMultiEscrowForm = ({
               <h2 className="text-xl font-semibold">Multi Release Escrow</h2>
             </div>
             <p className="text-muted-foreground mt-1">
-              Payments will be released as each milestone is completed
+              Payments will be released as each milestone is approved
             </p>
           </Link>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">

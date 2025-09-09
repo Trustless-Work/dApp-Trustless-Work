@@ -63,9 +63,6 @@ const ProgressCircle = ({
 
 const ProgressEscrow = ({ escrow, className }: ProgressEscrowProps) => {
   const { t } = useTranslation();
-  const completedMilestones = escrow.milestones.filter(
-    (milestone) => milestone.status === "completed",
-  ).length;
   const approvedMilestones = escrow.milestones.filter(
     (milestone: SingleReleaseMilestone | MultiReleaseMilestone) =>
       ("flags" in milestone && milestone.flags?.approved === true) ||
@@ -86,8 +83,6 @@ const ProgressEscrow = ({ escrow, className }: ProgressEscrowProps) => {
   ).length;
   const totalMilestones = escrow.milestones.length;
 
-  const progressPercentageCompleted =
-    totalMilestones > 0 ? (completedMilestones / totalMilestones) * 100 : 0;
   const progressPercentageApproved =
     totalMilestones > 0 ? (approvedMilestones / totalMilestones) * 100 : 0;
   const progressPercentageDisputed =
@@ -109,20 +104,6 @@ const ProgressEscrow = ({ escrow, className }: ProgressEscrowProps) => {
     <div className={cn("space-y-4 px-10 w-full", className)}>
       {/* Summary circles */}
       <div className="flex flex-wrap items-center justify-center gap-6">
-        {/* Completed */}
-        <div className="flex items-center gap-3">
-          <ProgressCircle
-            percentage={progressPercentageCompleted}
-            color="#006be4"
-          />
-          <div className="text-xs">
-            <div className="font-medium">{t("reusable.completed")}</div>
-            <div className="text-muted-foreground">
-              {completedMilestones}/{totalMilestones}
-            </div>
-          </div>
-        </div>
-
         {/* Approved */}
         <div className="flex items-center gap-3">
           <ProgressCircle

@@ -397,7 +397,7 @@
       "fundEscrow": "Financiar Depósito",
       "approveMilestone": "Aprobar Hito",
       "startDispute": "Iniciar Disputa",
-      "completeMilestone": "Completar Hito",
+      "changeMilestoneStatus": "Cambiar Estado de Hito",
       "resolveDispute": "Resolver Disputa",
       "releasePayment": "Liberar Pago",
       "editEscrow": "Editar Depósito"
@@ -468,7 +468,7 @@
     "editMilestonesTooltip": "Editar Hitos",
     "expand": "Expandir",
     "collapse": "Colapsar",
-    "completeMilestone": "Completar",
+    "changeMilestoneStatus": "Cambiar Estado",
     "showEvidence": "Mostrar Evidencia",
     "showDescription": "Mostrar Descripción",
     "approveMilestone": "Aprobar",

@@ -269,11 +269,7 @@ export const EditEntitiesForm = ({
         </div>
 
         <DialogFooter>
-          <Button
-            type="submit"
-            className="bg-green-800 hover:bg-green-700 text-white"
-            disabled={isEditingEntities}
-          >
+          <Button type="submit" variant="success" disabled={isEditingEntities}>
             {isEditingEntities ? (
               <>
                 <Loader2 className="w-3 h-3 mr-1 animate-spin flex-shrink-0" />

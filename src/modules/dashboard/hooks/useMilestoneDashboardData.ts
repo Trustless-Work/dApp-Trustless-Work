@@ -40,9 +40,6 @@ export const useMilestoneDashboardData = ({
 
       setData({
         totalMilestones: allMilestones.length,
-        pendingApproval: allMilestones.filter(
-          (m) => m.status === "completed" && !m.approved,
-        ).length,
         approvedNotReleased: allMilestones.filter(
           (m) => m.approved && !m.released,
         ).length,
@@ -67,9 +64,7 @@ const getMilestoneStatusCounts = (
   milestones.forEach((milestone) => {
     let status = "Pending";
 
-    if (milestone.status === "completed" && !milestone.approved) {
-      status = "Completed";
-    } else if (milestone.approved) {
+    if (milestone.approved) {
       status = "Approved";
     }
 

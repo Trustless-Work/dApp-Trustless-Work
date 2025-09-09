@@ -41,12 +41,7 @@ const useEscrowDetailDialog = ({
     setSelectedEscrow(undefined);
   }, [setIsDialogOpen, setSelectedEscrow]);
 
-  const areAllMilestonesCompleted =
-    selectedEscrow?.milestones?.every(
-      (milestone) => milestone.status === "completed",
-    ) ?? false;
-
-  const areAllMilestonesCompletedAndFlag =
+  const areAllMilestonesApproved =
     selectedEscrow?.milestones?.every((milestone) => {
       if ("flags" in milestone) {
         return milestone.flags?.approved === true;
@@ -125,8 +120,7 @@ const useEscrowDetailDialog = ({
     handleClose,
     setEvidenceVisibleMap,
     evidenceVisibleMap,
-    areAllMilestonesCompleted,
-    areAllMilestonesCompletedAndFlag,
+    areAllMilestonesApproved,
     userRolesInEscrow,
   };
 };
