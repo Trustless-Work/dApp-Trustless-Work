@@ -156,9 +156,15 @@ const ResolveDisputeEscrowDialog = ({
     const updated: ResolveFormValues["distributions"] = current.map((d, i) =>
       i === index ? { ...d, amount: rawValue } : d,
     );
-    form.setValue("distributions", updated, { shouldValidate: true, shouldTouch: true, shouldDirty: true });
+    form.setValue("distributions", updated, {
+      shouldValidate: true,
+      shouldTouch: true,
+      shouldDirty: true,
+    });
     // Trigger zod validation for this amount field
-    form.trigger(`distributions.${index}.amount` as FieldPath<ResolveFormValues>);
+    form.trigger(
+      `distributions.${index}.amount` as FieldPath<ResolveFormValues>,
+    );
   };
 
   const handleDistributionAddressChange = (
@@ -171,9 +177,15 @@ const ResolveDisputeEscrowDialog = ({
     const updated: ResolveFormValues["distributions"] = current.map((d, i) =>
       i === index ? { ...d, address: e.target.value } : d,
     );
-    form.setValue("distributions", updated, { shouldValidate: true, shouldTouch: true, shouldDirty: true });
+    form.setValue("distributions", updated, {
+      shouldValidate: true,
+      shouldTouch: true,
+      shouldDirty: true,
+    });
     // Trigger zod validation for this address field and also cross-field duplicate check
-    form.trigger(`distributions.${index}.address` as FieldPath<ResolveFormValues>);
+    form.trigger(
+      `distributions.${index}.address` as FieldPath<ResolveFormValues>,
+    );
     form.trigger("distributions" as FieldPath<ResolveFormValues>);
   };
 

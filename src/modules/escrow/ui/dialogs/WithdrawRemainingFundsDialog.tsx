@@ -54,7 +54,9 @@ const WithdrawRemainingFundsDialog = ({
   const [isMissing, setIsMissing] = useState<number>(0);
 
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
-  const milestone = escrow?.milestones[milestoneIndex || 0] as MultiReleaseMilestone;
+  const milestone = escrow?.milestones[
+    milestoneIndex || 0
+  ] as MultiReleaseMilestone;
 
   // Tipos derivados del schema
   type WithdrawFormValues = z.infer<ReturnType<typeof getFormSchema>>;
@@ -109,13 +111,20 @@ const WithdrawRemainingFundsDialog = ({
     }
 
     const current =
-      (form.getValues("distributions") as WithdrawFormValues["distributions"]) ||
-      [];
+      (form.getValues(
+        "distributions",
+      ) as WithdrawFormValues["distributions"]) || [];
     const updated: WithdrawFormValues["distributions"] = current.map((d, i) =>
       i === index ? { ...d, amount: rawValue } : d,
     );
-    form.setValue("distributions", updated, { shouldValidate: true, shouldTouch: true, shouldDirty: true });
-    form.trigger(`distributions.${index}.amount` as FieldPath<WithdrawFormValues>);
+    form.setValue("distributions", updated, {
+      shouldValidate: true,
+      shouldTouch: true,
+      shouldDirty: true,
+    });
+    form.trigger(
+      `distributions.${index}.amount` as FieldPath<WithdrawFormValues>,
+    );
   };
 
   const handleDistributionAddressChange = (
@@ -123,27 +132,36 @@ const WithdrawRemainingFundsDialog = ({
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const current =
-      (form.getValues("distributions") as WithdrawFormValues["distributions"]) ||
-      [];
+      (form.getValues(
+        "distributions",
+      ) as WithdrawFormValues["distributions"]) || [];
     const updated: WithdrawFormValues["distributions"] = current.map((d, i) =>
       i === index ? { ...d, address: e.target.value } : d,
     );
-    form.setValue("distributions", updated, { shouldValidate: true, shouldTouch: true, shouldDirty: true });
-    form.trigger(`distributions.${index}.address` as FieldPath<WithdrawFormValues>);
+    form.setValue("distributions", updated, {
+      shouldValidate: true,
+      shouldTouch: true,
+      shouldDirty: true,
+    });
+    form.trigger(
+      `distributions.${index}.address` as FieldPath<WithdrawFormValues>,
+    );
     form.trigger("distributions" as FieldPath<WithdrawFormValues>);
   };
 
   const handleAddDistribution = () => {
     const current =
-      (form.getValues("distributions") as WithdrawFormValues["distributions"]) ||
-      [];
+      (form.getValues(
+        "distributions",
+      ) as WithdrawFormValues["distributions"]) || [];
     form.setValue("distributions", [...current, { address: "", amount: 0 }]);
   };
 
   const handleRemoveDistribution = (index: number) => {
     const current =
-      (form.getValues("distributions") as WithdrawFormValues["distributions"]) ||
-      [];
+      (form.getValues(
+        "distributions",
+      ) as WithdrawFormValues["distributions"]) || [];
     const updated: WithdrawFormValues["distributions"] = current.filter(
       (_: Distribution, i: number) => i !== index,
     );
@@ -155,7 +173,10 @@ const WithdrawRemainingFundsDialog = ({
   }
 
   return (
-    <Dialog open={isWithdrawRemainingFundsDialogOpen} onOpenChange={handleClose}>
+    <Dialog
+      open={isWithdrawRemainingFundsDialogOpen}
+      onOpenChange={handleClose}
+    >
       <DialogContent className="sm:max-w-[600px] h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle>Withdraw Remaining Funds</DialogTitle>
@@ -286,10 +307,7 @@ const WithdrawRemainingFundsDialog = ({
                   {!isEqualToAmount && (
                     <p className="text-destructive text-xs font-bold text-end">
                       Sum must equal balance (
-                      {formatCurrency(
-                        escrow.balance,
-                        escrow.trustline?.name,
-                      )}
+                      {formatCurrency(escrow.balance, escrow.trustline?.name)}
                       )
                       <br />
                       Difference:{" "}
@@ -306,7 +324,11 @@ const WithdrawRemainingFundsDialog = ({
                 <Button
                   type="submit"
                   variant="success"
-                  disabled={!isEqualToAmount || isWithdrawing || hasEmptyDistributionFields}
+                  disabled={
+                    !isEqualToAmount ||
+                    isWithdrawing ||
+                    hasEmptyDistributionFields
+                  }
                 >
                   {isWithdrawing ? (
                     <>

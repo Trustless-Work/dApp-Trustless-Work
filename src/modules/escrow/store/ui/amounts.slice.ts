@@ -12,7 +12,9 @@ export type AmountEscrowStore = {
   setReceiverResolve: (value: number) => void;
   setApproverResolve: (value: number) => void;
   setAmountMoonpay: (value: number) => void;
-  setResolvedDistributions: (value: { address: string; amount: number }[]) => void;
+  setResolvedDistributions: (
+    value: { address: string; amount: number }[],
+  ) => void;
 };
 
 export const escrowAmountSlice: StateCreator<

@@ -49,7 +49,6 @@ export const ImprovedSuccessResolveDisputeDialog = ({
   );
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
 
-
   const escrow = selectedEscrow || recentEscrow;
 
   const trustlessPercentage = 0.3;
@@ -76,7 +75,6 @@ export const ImprovedSuccessResolveDisputeDialog = ({
 
   const totalPlatformAmount =
     amount && !isNaN(Number(amount)) ? Number(amount) * (platformFee / 100) : 0;
-
 
   // Get the appropriate URLs based on network
   const stellarExplorerUrl =
@@ -153,25 +151,25 @@ export const ImprovedSuccessResolveDisputeDialog = ({
 
             <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-3">
               <TransferAnimation
-                 title="Dispute Resolved"
-                 fromLabel="Contract"
-                 fromAmount={formatCurrency(
-                   amount,
-                   escrow?.trustline?.name,
-                 ).replace("$", "")}
-                 fromCurrency={escrow?.trustline?.name}
-                 toLabel="Resolution"
-                 toAmount={formatCurrency(
-                   Number(distributionsTotal),
-                   escrow?.trustline?.name,
-                 ).replace("$", "")}
-                 toCurrency={escrow?.trustline?.name}
-                 additionalInfo={
-                   escrow?.contractId
-                     ? `Contract ID: ${escrow.contractId.slice(0, 8)}...${escrow.contractId.slice(-6)}`
-                     : "Unknown"
-                 }
-               />
+                title="Dispute Resolved"
+                fromLabel="Contract"
+                fromAmount={formatCurrency(
+                  amount,
+                  escrow?.trustline?.name,
+                ).replace("$", "")}
+                fromCurrency={escrow?.trustline?.name}
+                toLabel="Resolution"
+                toAmount={formatCurrency(
+                  Number(distributionsTotal),
+                  escrow?.trustline?.name,
+                ).replace("$", "")}
+                toCurrency={escrow?.trustline?.name}
+                additionalInfo={
+                  escrow?.contractId
+                    ? `Contract ID: ${escrow.contractId.slice(0, 8)}...${escrow.contractId.slice(-6)}`
+                    : "Unknown"
+                }
+              />
 
               <motion.div
                 className="flex flex-col gap-3 mt-3 lg:mt-0"
@@ -180,7 +178,10 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 animate="visible"
               >
                 {(resolvedDistributions || []).map((d, idx) => (
-                  <motion.div key={`${d.address}-${idx}`} variants={itemAnimation}>
+                  <motion.div
+                    key={`${d.address}-${idx}`}
+                    variants={itemAnimation}
+                  >
                     <EntityCard
                       type="Recipient"
                       entity={d.address}
