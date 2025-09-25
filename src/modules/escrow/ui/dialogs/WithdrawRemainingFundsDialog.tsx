@@ -26,7 +26,6 @@ import { Card } from "@/ui/card";
 import { Escrow } from "@/types/escrow.entity";
 import { useEscrowBoundedStore } from "../../store/data";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
-import { t } from "i18next";
 import { formatCurrency } from "@/lib/format";
 import { z } from "zod";
 import { FieldPath } from "react-hook-form";

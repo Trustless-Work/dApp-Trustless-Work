@@ -411,7 +411,7 @@ export const useEscrowsMutations = () => {
     }) => {
       const result = await withdrawRemainingFunds(payload);
 
-      const maybeUnsigned = (result as any)?.unsignedTransaction;
+      const maybeUnsigned = result?.unsignedTransaction;
       if (maybeUnsigned) {
         const signedTxXdr = await signTransaction({
           unsignedTransaction: maybeUnsigned,

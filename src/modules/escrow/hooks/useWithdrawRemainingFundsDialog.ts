@@ -15,17 +15,13 @@ import { useEscrowUIBoundedStore } from "../store/ui";
 import { useEscrowDialogs } from "./dialogs/useEscrowDialogs";
 import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 import { getFormSchema } from "../schema/resolve-dispute-escrow.schema";
-import { useEscrowBoundedStore } from "../store/data";
+import { WithdrawRemainingFundsPayload } from "@trustless-work/escrow";
 
-// This hook mirrors useResolveDisputeDialog but triggers withdrawRemainingFunds mutation.
 export const useWithdrawRemainingFundsDialog = () => {
   const setIsWithdrawing = useEscrowUIBoundedStore(
     (state) => state.setIsWithdrawingRemainingFunds,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
-  );
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
@@ -37,8 +33,6 @@ export const useWithdrawRemainingFundsDialog = () => {
   const { withdrawRemainingFunds } = useEscrowsMutations();
 
   const formSchema = getFormSchema();
-
-  const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,7 +61,7 @@ export const useWithdrawRemainingFundsDialog = () => {
 
     try {
       // Normalize amounts to numbers
-      const normalized = distributions.map((d) => ({
+      const normalizedDistributions = distributions.map((d) => ({
         address: d.address,
         amount: typeof d.amount === "string" ? Number(d.amount) : d.amount,
       }));
@@ -78,15 +72,13 @@ export const useWithdrawRemainingFundsDialog = () => {
         );
       }
 
-      // Build payload expected by SDK
-      const payload = {
-        escrow: selectedEscrow,
-        milestoneIndex: Number(milestoneIndex || 0),
-        distributions: normalized.map((d) => ({
-          address: d.address,
-          amount: d.amount,
-        })),
-      } as any; // Typed in SDK as WithdrawRemainingFundsPayload
+      const payload: WithdrawRemainingFundsPayload = {
+        contractId: selectedEscrow?.contractId || "",
+        disputeResolver: address || "",
+        distributions: normalizedDistributions as [
+          { address: string; amount: number },
+        ],
+      };
 
       await withdrawRemainingFunds.mutateAsync({
         payload,
