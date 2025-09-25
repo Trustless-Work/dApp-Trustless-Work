@@ -8,7 +8,6 @@ export const useInitializeEscrowSchema = () => {
         address: z.string().min(1, {
           message: "Trustline address is required.",
         }),
-        decimals: z.number().default(10000000),
       }),
       roles: z.object({
         approver: z
