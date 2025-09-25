@@ -10,6 +10,7 @@ import {
   Settings,
   Unlock,
   Wallet,
+  Wallet2,
 } from "lucide-react";
 
 export const roleActions: RoleAction[] = [
@@ -33,7 +34,7 @@ export const roleActions: RoleAction[] = [
   },
   {
     role: "disputeResolver",
-    actions: ["fundEscrow", "resolveDispute"],
+    actions: ["fundEscrow", "resolveDispute", "withdrawRemainingFunds"],
     icon: <Scale className="h-6 w-6 text-primary" />,
     color: "00",
   },
@@ -63,6 +64,7 @@ export const actionIcons: Record<string, React.ReactNode> = {
   changeMilestoneStatus: <CheckSquare className="h-6 w-6 text-primary/60" />,
   startDispute: <AlertTriangle className="h-6 w-6 text-primary/60" />,
   resolveDispute: <Scale className="h-6 w-6 text-primary/60" />,
+  withdrawRemainingFunds: <Wallet2 className="h-6 w-6 text-primary/60" />,
   releasePayment: <Unlock className="h-6 w-6 text-primary/60" />,
   editEscrow: <Edit className="h-6 w-6 text-primary/60" />,
 };

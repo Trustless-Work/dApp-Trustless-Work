@@ -315,6 +315,7 @@
       "startDispute": "Start Dispute",
       "changeMilestoneStatus": "Change Milestone Status",
       "resolveDispute": "Resolve Dispute",
+      "withdrawRemainingFunds": "Withdraw Remaining Funds",
       "releasePayment": "Release Payment",
       "editEscrow": "Edit Escrow"
     },
