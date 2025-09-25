@@ -43,23 +43,12 @@ export const ImprovedSuccessResolveDisputeDialog = ({
 
   const { currentNetwork } = useNetwork();
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const receiverResolveFromStore = useEscrowUIBoundedStore(
-    (state) => state.receiverResolve,
-  );
-  const approverResolveFromStore = useEscrowUIBoundedStore(
-    (state) => state.approverResolve,
+
+  const resolvedDistributions = useEscrowUIBoundedStore(
+    (state) => state.resolvedDistributions,
   );
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
 
-  const receiverResolve =
-    receiverResolveFromStore && receiverResolveFromStore !== 0
-      ? receiverResolveFromStore
-      : selectedEscrow?.receiverFunds;
-
-  const approverResolve =
-    approverResolveFromStore && approverResolveFromStore !== 0
-      ? approverResolveFromStore
-      : selectedEscrow?.approverFunds;
 
   const escrow = selectedEscrow || recentEscrow;
 
@@ -77,24 +66,17 @@ export const ImprovedSuccessResolveDisputeDialog = ({
   const trustlessWorkAmount = Number(amount) * trustlessWorkFee;
   const platformFee = escrow?.platformFee || 0;
 
-  const parsedApproverFunds =
-    parseFloat(approverResolve?.toString() || "0") || 0;
-  const parsedReceiverFunds =
-    parseFloat(receiverResolve?.toString() || "0") || 0;
-
-  const approverDeductions =
-    parsedApproverFunds * (platformFee / 100) +
-    parsedApproverFunds * trustlessWorkFee;
-
-  const receiverDeductions =
-    parsedReceiverFunds * (platformFee / 100) +
-    parsedReceiverFunds * trustlessWorkFee;
-
-  const approverNet = parsedApproverFunds - approverDeductions;
-  const receiverNet = parsedReceiverFunds - receiverDeductions;
+  // Calcular totales y netos para destinatarios dinámicos
+  const distributionsTotal = (resolvedDistributions || []).reduce(
+    (acc, d) => acc + (Number(d.amount) || 0),
+    0,
+  );
+  const calcNet = (amt: number) =>
+    amt - (amt * (platformFee / 100) + amt * trustlessWorkFee);
 
   const totalPlatformAmount =
     amount && !isNaN(Number(amount)) ? Number(amount) * (platformFee / 100) : 0;
+
 
   // Get the appropriate URLs based on network
   const stellarExplorerUrl =
@@ -171,25 +153,25 @@ export const ImprovedSuccessResolveDisputeDialog = ({
 
             <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-3">
               <TransferAnimation
-                title="Dispute Resolved"
-                fromLabel="Contract"
-                fromAmount={formatCurrency(
-                  amount,
-                  escrow?.trustline?.name,
-                ).replace("$", "")}
-                fromCurrency={escrow?.trustline?.name}
-                toLabel="Resolution"
-                toAmount={formatCurrency(
-                  Number(parsedApproverFunds) + Number(parsedReceiverFunds),
-                  escrow?.trustline?.name,
-                ).replace("$", "")}
-                toCurrency={escrow?.trustline?.name}
-                additionalInfo={
-                  escrow?.contractId
-                    ? `Contract ID: ${escrow.contractId.slice(0, 8)}...${escrow.contractId.slice(-6)}`
-                    : "Unknown"
-                }
-              />
+                 title="Dispute Resolved"
+                 fromLabel="Contract"
+                 fromAmount={formatCurrency(
+                   amount,
+                   escrow?.trustline?.name,
+                 ).replace("$", "")}
+                 fromCurrency={escrow?.trustline?.name}
+                 toLabel="Resolution"
+                 toAmount={formatCurrency(
+                   Number(distributionsTotal),
+                   escrow?.trustline?.name,
+                 ).replace("$", "")}
+                 toCurrency={escrow?.trustline?.name}
+                 additionalInfo={
+                   escrow?.contractId
+                     ? `Contract ID: ${escrow.contractId.slice(0, 8)}...${escrow.contractId.slice(-6)}`
+                     : "Unknown"
+                 }
+               />
 
               <motion.div
                 className="flex flex-col gap-3 mt-3 lg:mt-0"
@@ -197,28 +179,19 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                 initial="hidden"
                 animate="visible"
               >
-                <motion.div variants={itemAnimation}>
-                  <EntityCard
-                    type="Receiver"
-                    entity={escrow?.roles?.receiver}
-                    hasPercentage={false}
-                    hasAmount={true}
-                    isNet={false}
-                    amount={receiverNet}
-                    currency={escrow?.trustline?.name}
-                  />
-                </motion.div>
-                <motion.div variants={itemAnimation}>
-                  <EntityCard
-                    type="Approver"
-                    entity={escrow?.roles?.approver}
-                    hasPercentage={false}
-                    hasAmount={true}
-                    isNet={false}
-                    amount={approverNet}
-                    currency={escrow?.trustline?.name}
-                  />
-                </motion.div>
+                {(resolvedDistributions || []).map((d, idx) => (
+                  <motion.div key={`${d.address}-${idx}`} variants={itemAnimation}>
+                    <EntityCard
+                      type="Recipient"
+                      entity={d.address}
+                      hasPercentage={false}
+                      hasAmount={true}
+                      isNet={false}
+                      amount={calcNet(Number(d.amount) || 0)}
+                      currency={escrow?.trustline?.name}
+                    />
+                  </motion.div>
+                ))}
                 <motion.div variants={itemAnimation}>
                   <EntityCard
                     type="Trustless Work"

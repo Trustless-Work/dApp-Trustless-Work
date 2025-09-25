@@ -7,10 +7,12 @@ export type AmountEscrowStore = {
   receiverResolve: number;
   approverResolve: number;
   amountMoonpay: number;
+  resolvedDistributions: { address: string; amount: number }[];
   setAmounts: (totalAmount: number, platformFee: number) => void;
   setReceiverResolve: (value: number) => void;
   setApproverResolve: (value: number) => void;
   setAmountMoonpay: (value: number) => void;
+  setResolvedDistributions: (value: { address: string; amount: number }[]) => void;
 };
 
 export const escrowAmountSlice: StateCreator<
@@ -27,6 +29,7 @@ export const escrowAmountSlice: StateCreator<
     receiverResolve: 0,
     approverResolve: 0,
     amountMoonpay: 0,
+    resolvedDistributions: [],
 
     // Modifiers
     setAmounts: (totalAmount, platformFee) => {
@@ -50,6 +53,10 @@ export const escrowAmountSlice: StateCreator<
 
     setAmountMoonpay: (value) => {
       set({ amountMoonpay: value });
+    },
+
+    setResolvedDistributions: (value) => {
+      set({ resolvedDistributions: value });
     },
   };
 };

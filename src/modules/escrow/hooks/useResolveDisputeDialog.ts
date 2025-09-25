@@ -3,23 +3,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  useGlobalAuthenticationStore,
-  useGlobalBoundedStore,
-} from "@/store/data";
+import { useGlobalBoundedStore } from "@/store/data";
 import { MouseEvent } from "react";
 import { getFormSchema } from "../schema/resolve-dispute-escrow.schema";
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { toast } from "sonner";
-import {
-  MultiReleaseResolveDisputePayload,
-  SingleReleaseResolveDisputePayload,
-} from "@trustless-work/escrow";
 import { useEscrowDialogs } from "./dialogs/useEscrowDialogs";
 import { useEscrowBoundedStore } from "../store/data";
 import { AxiosError } from "axios";
 import { handleError } from "@/errors/handle-errors";
-import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
 import { useResolveDisputeSingle } from "./single-release/useResolveDisputeSingle";
 import { useResolveDisputeMulti } from "./multi-release/useResolveDisputeMulti";
 
@@ -34,7 +26,6 @@ export const useResolveDisputeDialog = () => {
   const setIsDialogOpen = useEscrowUIBoundedStore(
     (state) => state.setIsDialogOpen,
   );
-  const address = useGlobalAuthenticationStore((state) => state.address);
   const setRecentEscrow = useGlobalBoundedStore(
     (state) => state.setRecentEscrow,
   );
@@ -48,11 +39,13 @@ export const useResolveDisputeDialog = () => {
   const setApproverResolve = useEscrowUIBoundedStore(
     (state) => state.setApproverResolve,
   );
+  const setResolvedDistributions = useEscrowUIBoundedStore(
+    (state) => state.setResolvedDistributions,
+  );
 
   const dialogStates = useEscrowDialogs();
   const setIsResolveDisputeDialogOpen = dialogStates.resolveDispute.setIsOpen;
 
-  const { resolveDispute } = useEscrowsMutations();
   const { onSubmitSingle } = useResolveDisputeSingle();
   const { onSubmitMulti } = useResolveDisputeMulti();
 
@@ -113,6 +106,12 @@ export const useResolveDisputeDialog = () => {
 
       setReceiverResolve(receiverSum);
       setApproverResolve(approverSum);
+      setResolvedDistributions(
+        resolvedDists.map((d) => ({
+          address: d.address,
+          amount: Number(d.amount) || 0,
+        })),
+      );
 
       form.reset();
       setIsResolveDisputeDialogOpen(false);

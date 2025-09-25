@@ -34,19 +34,42 @@ export const getFormSchema = () => {
       { message: "Amount can have a maximum of 2 decimal places." },
     );
 
-  return z.object({
-    distributions: z
-      .array(
-        z.object({
-          address: z
-            .string()
-            .min(1, { message: "Address is required." })
-            .refine((addr) => isValidWallet(addr), {
-              message: "Invalid Stellar address.",
-            }),
-          amount: amountSchema,
-        }),
-      )
-      .min(2, { message: "At least two distributions are required." }),
-  });
+  return z
+    .object({
+      distributions: z
+        .array(
+          z.object({
+            address: z
+              .string()
+              .min(1, { message: "Address is required." })
+              .refine((addr) => isValidWallet(addr), {
+                message: "Invalid Stellar address.",
+              }),
+            amount: amountSchema,
+          }),
+        )
+        .min(2, { message: "At least two distributions are required." }),
+    })
+    .superRefine((data, ctx) => {
+      const seen = new Map<string, number>();
+      data.distributions.forEach((item, idx) => {
+        const key = (item.address || "").trim().toUpperCase();
+        if (!key) return;
+        if (seen.has(key)) {
+          const firstIdx = seen.get(key)!;
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["distributions", idx, "address"],
+            message: "Duplicate address. Each recipient must be unique.",
+          });
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["distributions", firstIdx, "address"],
+            message: "Duplicate address. Each recipient must be unique.",
+          });
+        } else {
+          seen.set(key, idx);
+        }
+      });
+    });
 };
