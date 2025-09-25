@@ -72,6 +72,7 @@ export const Actions = ({
 
   const shouldShowWithdrawRemainingFundsButton =
     selectedEscrow.type === "multi-release" &&
+    Number(selectedEscrow.balance) > 0 &&
     Array.isArray(selectedEscrow.milestones) &&
     (selectedEscrow.milestones as MultiReleaseMilestone[]).every(
       (m) => m?.flags?.released || m?.flags?.resolved || m?.flags?.disputed,

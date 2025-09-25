@@ -113,17 +113,21 @@ export const useResolveDisputeDialog = () => {
         })),
       );
 
+      const totalResolvedAmount = resolvedDists.reduce(
+        (acc, d) => acc + (Number(d.amount) || 0),
+        0,
+      );
+      const currentBalance = Number(selectedEscrow.balance || 0);
+      const updatedBalance = Math.max(0, currentBalance - totalResolvedAmount);
+
       form.reset();
       setIsResolveDisputeDialogOpen(false);
       setIsSuccessResolveDisputeDialogOpen(true);
 
-      if (selectedEscrow) {
-        setRecentEscrow(selectedEscrow);
-      }
-
       if (selectedEscrow && milestoneIndex !== null) {
         const updatedEscrow = {
           ...selectedEscrow,
+          balance: updatedBalance,
           milestones: selectedEscrow.milestones.map((milestone, i) =>
             i === milestoneIndex
               ? {
@@ -140,6 +144,15 @@ export const useResolveDisputeDialog = () => {
           ),
         };
         setSelectedEscrow(updatedEscrow);
+        setRecentEscrow(updatedEscrow);
+      } else if (selectedEscrow) {
+        const updatedEscrow = {
+          ...selectedEscrow,
+          balance: updatedBalance,
+        };
+        setRecentEscrow(updatedEscrow);
+        setIsDialogOpen(false);
+        setSelectedEscrow(undefined);
       } else {
         setIsDialogOpen(false);
         setSelectedEscrow(undefined);
