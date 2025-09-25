@@ -203,7 +203,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     entity={escrow?.roles?.receiver}
                     hasPercentage={false}
                     hasAmount={true}
-                    isNet={true}
+                    isNet={false}
                     amount={receiverNet}
                     currency={escrow?.trustline?.name}
                   />
@@ -214,7 +214,7 @@ export const ImprovedSuccessResolveDisputeDialog = ({
                     entity={escrow?.roles?.approver}
                     hasPercentage={false}
                     hasAmount={true}
-                    isNet={true}
+                    isNet={false}
                     amount={approverNet}
                     currency={escrow?.trustline?.name}
                   />

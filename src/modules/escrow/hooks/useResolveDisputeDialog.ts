@@ -20,6 +20,8 @@ import { useEscrowBoundedStore } from "../store/data";
 import { AxiosError } from "axios";
 import { handleError } from "@/errors/handle-errors";
 import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
+import { useResolveDisputeSingle } from "./single-release/useResolveDisputeSingle";
+import { useResolveDisputeMulti } from "./multi-release/useResolveDisputeMulti";
 
 export const useResolveDisputeDialog = () => {
   const setIsResolvingDispute = useEscrowUIBoundedStore(
@@ -51,25 +53,33 @@ export const useResolveDisputeDialog = () => {
   const setIsResolveDisputeDialogOpen = dialogStates.resolveDispute.setIsOpen;
 
   const { resolveDispute } = useEscrowsMutations();
+  const { onSubmitSingle } = useResolveDisputeSingle();
+  const { onSubmitMulti } = useResolveDisputeMulti();
 
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      approverFunds: 0,
-      receiverFunds: 0,
+      distributions: [
+        {
+          address: selectedEscrow?.roles?.approver || "",
+          amount: 0,
+        },
+        {
+          address: selectedEscrow?.roles?.receiver || "",
+          amount: 0,
+        },
+      ],
     },
     mode: "onChange",
   });
 
   const onSubmit = async (
     {
-      approverFunds,
-      receiverFunds,
+      distributions,
     }: {
-      approverFunds: number | string;
-      receiverFunds: number | string;
+      distributions: { address: string; amount: number | string }[];
     },
     onComplete?: () => void,
   ) => {
@@ -78,42 +88,30 @@ export const useResolveDisputeDialog = () => {
     if (!selectedEscrow) return;
 
     try {
-      // Convert string values to numbers
-      const numericApproverFunds =
-        typeof approverFunds === "string"
-          ? Number(approverFunds)
-          : approverFunds;
-      const numericReceiverFunds =
-        typeof receiverFunds === "string"
-          ? Number(receiverFunds)
-          : receiverFunds;
+      // Normalize amounts to numbers
+      const normalizedDistributions = distributions.map((d) => ({
+        address: d.address,
+        amount: typeof d.amount === "string" ? Number(d.amount) : d.amount,
+      }));
 
-      const basePayload = {
-        contractId: selectedEscrow?.contractId || "",
-        disputeResolver: selectedEscrow?.roles?.disputeResolver,
-        approverFunds: numericApproverFunds,
-        receiverFunds: numericReceiverFunds,
-      };
-
-      const finalPayload:
-        | SingleReleaseResolveDisputePayload
-        | MultiReleaseResolveDisputePayload =
+      // Delegate to specific hooks
+      const resolvedDists =
         selectedEscrow.type === "multi-release"
-          ? {
-              ...basePayload,
-              milestoneIndex: milestoneIndex?.toString() || "",
-            }
-          : basePayload;
+          ? await onSubmitMulti(normalizedDistributions, Number(milestoneIndex || 0))
+          : await onSubmitSingle(normalizedDistributions);
 
-      await resolveDispute.mutateAsync({
-        payload: finalPayload,
-        type: selectedEscrow.type || "single-release",
-        address,
-      });
+      // Update success dialog values based on known roles
+      const approverSum = resolvedDists
+        .filter((d) => d.address === selectedEscrow.roles.approver)
+        .reduce((acc, d) => acc + (Number(d.amount) || 0), 0);
+      const receiverSum = resolvedDists
+        .filter((d) => d.address === selectedEscrow.roles.receiver)
+        .reduce((acc, d) => acc + (Number(d.amount) || 0), 0);
+
+      setReceiverResolve(receiverSum);
+      setApproverResolve(approverSum);
 
       form.reset();
-      setReceiverResolve(numericReceiverFunds);
-      setApproverResolve(numericApproverFunds);
       setIsResolveDisputeDialogOpen(false);
       setIsSuccessResolveDisputeDialogOpen(true);
 

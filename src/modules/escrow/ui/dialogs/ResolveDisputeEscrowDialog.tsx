@@ -21,7 +21,7 @@ import TooltipInfo from "@/shared/utils/Tooltip";
 import { useResolveDisputeDialog } from "../../hooks/useResolveDisputeDialog";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/store/data";
-import { DollarSign, Handshake, Loader2 } from "lucide-react";
+import { DollarSign, Handshake, Loader2, Plus, Trash2 } from "lucide-react";
 import { Card } from "@/ui/card";
 import { Escrow } from "@/types/escrow.entity";
 import { useEscrowBoundedStore } from "../../store/data";
@@ -31,6 +31,9 @@ import {
 } from "@trustless-work/escrow";
 import { t } from "i18next";
 import { formatCurrency } from "@/lib/format";
+import { z } from "zod";
+import { FieldPath } from "react-hook-form";
+import { getFormSchema } from "../../schema/resolve-dispute-escrow.schema";
 
 interface ResolveDisputeEscrowDialogProps {
   isResolveDisputeDialogOpen: boolean;
@@ -50,8 +53,6 @@ const ResolveDisputeEscrowDialog = ({
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const escrow = selectedEscrow || recentEscrow;
 
-  const [approverNet, setApproverNet] = useState<number | null>(null);
-  const [receiverNet, setReceiverNet] = useState<number | null>(null);
   const [isEqualToAmount, setIsEqualToAmount] = useState<boolean>(false);
   const [isMissing, setIsMissing] = useState<number>(0);
   const [totalPlatformAmount, setTotalPlatformAmount] = useState<number>(0);
@@ -65,15 +66,24 @@ const ResolveDisputeEscrowDialog = ({
 
   const trustlessWorkFee = 0.003;
 
-  const approverFunds = form.watch("approverFunds");
-  const receiverFunds = form.watch("receiverFunds");
+  // Tipos derivados del schema
+  type ResolveFormValues = z.infer<ReturnType<typeof getFormSchema>>;
+  type Distribution = ResolveFormValues["distributions"][number];
+
+  const distributions =
+    (form.watch("distributions") as ResolveFormValues["distributions"]) || [];
+
+  const hasEmptyDistributionFields = distributions.some((d: Distribution) => {
+    const amt = d.amount;
+    const isAmountEmpty =
+      (typeof amt === "string" && (amt.trim() === "" || amt === ".")) ||
+      (typeof amt === "number" && isNaN(amt));
+    return !d.address || d.address.trim() === "" || isAmountEmpty;
+  });
 
   useEffect(() => {
     const platformFee = (escrow?.platformFee || 0) / 100;
-    const parsedApproverFunds = parseFloat(approverFunds.toString()) || 0;
-    const parsedReceiverFunds = parseFloat(receiverFunds.toString()) || 0;
 
-    // Get the amount based on escrow type
     const amount =
       escrow?.type === "single-release"
         ? selectedEscrow?.amount
@@ -91,28 +101,6 @@ const ResolveDisputeEscrowDialog = ({
       amount && !isNaN(Number(amount)) ? Number(amount) * trustlessWorkFee : 0,
     );
 
-    if (
-      isNaN(parsedApproverFunds) ||
-      isNaN(parsedReceiverFunds) ||
-      isNaN(platformFee)
-    ) {
-      setApproverNet(null);
-      setReceiverNet(null);
-      return;
-    }
-
-    const approverDeductions =
-      parsedApproverFunds * platformFee +
-      parsedApproverFunds * trustlessWorkFee;
-
-    const receiverDeductions =
-      parsedReceiverFunds * platformFee +
-      parsedReceiverFunds * trustlessWorkFee;
-
-    setApproverNet(parsedApproverFunds - approverDeductions);
-    setReceiverNet(parsedReceiverFunds - receiverDeductions);
-
-    // For multi-release, we need to check against the milestone amount
     const balanceToCheck =
       escrow?.type === "single-release"
         ? escrow?.balance
@@ -122,24 +110,30 @@ const ResolveDisputeEscrowDialog = ({
             ] as MultiReleaseMilestone
           )?.amount;
 
-    setIsEqualToAmount(
-      parsedApproverFunds + parsedReceiverFunds ===
-        Number(balanceToCheck || "0"),
+    const sumDistributions = distributions.reduce(
+      (sum: number, d: Distribution) => {
+        const val =
+          typeof d.amount === "string"
+            ? parseFloat(d.amount)
+            : Number(d.amount);
+        return sum + (isNaN(val) ? 0 : val);
+      },
+      0,
     );
 
-    setIsMissing(
-      parsedApproverFunds + parsedReceiverFunds - Number(balanceToCheck || "0"),
-    );
+    setIsEqualToAmount(sumDistributions === Number(balanceToCheck || "0"));
+
+    setIsMissing(sumDistributions - Number(balanceToCheck || "0"));
   }, [
-    approverFunds,
-    receiverFunds,
+    distributions,
     escrow,
     selectedEscrow?.amount,
     selectedEscrow?.milestones,
     milestoneIndex,
   ]);
 
-  const handleApproverFundsChange = (
+  const handleDistributionAmountChange = (
+    index: number,
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     let rawValue = e.target.value;
@@ -149,7 +143,6 @@ const ResolveDisputeEscrowDialog = ({
       rawValue = rawValue.slice(0, -1);
     }
 
-    // Limit to 2 decimal places
     if (rawValue.includes(".")) {
       const parts = rawValue.split(".");
       if (parts[1] && parts[1].length > 2) {
@@ -157,30 +150,43 @@ const ResolveDisputeEscrowDialog = ({
       }
     }
 
-    // Always keep as string to allow partial input like "0." or "0.5"
-    form.setValue("approverFunds", rawValue);
+    const current =
+      (form.getValues("distributions") as ResolveFormValues["distributions"]) ||
+      [];
+    const updated: ResolveFormValues["distributions"] = current.map((d, i) =>
+      i === index ? { ...d, amount: rawValue } : d,
+    );
+    form.setValue("distributions", updated);
   };
 
-  const handleReceiverFundsChange = (
+  const handleDistributionAddressChange = (
+    index: number,
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    let rawValue = e.target.value;
-    rawValue = rawValue.replace(/[^0-9.]/g, "");
+    const current =
+      (form.getValues("distributions") as ResolveFormValues["distributions"]) ||
+      [];
+    const updated: ResolveFormValues["distributions"] = current.map((d, i) =>
+      i === index ? { ...d, address: e.target.value } : d,
+    );
+    form.setValue("distributions", updated);
+  };
 
-    if (rawValue.split(".").length > 2) {
-      rawValue = rawValue.slice(0, -1);
-    }
+  const handleAddDistribution = () => {
+    const current =
+      (form.getValues("distributions") as ResolveFormValues["distributions"]) ||
+      [];
+    form.setValue("distributions", [...current, { address: "", amount: 0 }]);
+  };
 
-    // Limit to 2 decimal places
-    if (rawValue.includes(".")) {
-      const parts = rawValue.split(".");
-      if (parts[1] && parts[1].length > 2) {
-        rawValue = parts[0] + "." + parts[1].slice(0, 2);
-      }
-    }
-
-    // Always keep as string to allow partial input like "0." or "0.5"
-    form.setValue("receiverFunds", rawValue);
+  const handleRemoveDistribution = (index: number) => {
+    const current =
+      (form.getValues("distributions") as ResolveFormValues["distributions"]) ||
+      [];
+    const updated: ResolveFormValues["distributions"] = current.filter(
+      (_: Distribution, i: number) => i !== index,
+    );
+    form.setValue("distributions", updated);
   };
 
   if (!escrow) {
@@ -189,13 +195,13 @@ const ResolveDisputeEscrowDialog = ({
 
   return (
     <Dialog open={isResolveDisputeDialogOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[600px] h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle>Resolve Dispute</DialogTitle>
           <DialogDescription>
             You, as the dispute resolver, will be able to split the proceeds
-            between the two entities. It is important to know that the funds
-            will be shared based on the{" "}
+            between entities. It is important to know that the funds will be
+            shared based on the{" "}
             <strong>
               Platform Fee ({escrow.platformFee}%) and the Trustless Work Fee
               (0.3%).
@@ -220,22 +226,6 @@ const ResolveDisputeEscrowDialog = ({
               )}
 
               <p className="text-sm text-muted-foreground p-0">
-                <span className="font-extrabold">Approver Net:</span>{" "}
-                {formatCurrency(
-                  approverNet?.toString(),
-                  escrow.trustline?.name,
-                )}
-              </p>
-
-              <p className="text-sm text-muted-foreground p-0">
-                <span className="font-extrabold">Receiver Net:</span>{" "}
-                {formatCurrency(
-                  receiverNet?.toString(),
-                  escrow.trustline?.name,
-                )}
-              </p>
-
-              <p className="text-sm text-muted-foreground p-0">
                 <span className="font-extrabold">Platform Net:</span>{" "}
                 {formatCurrency(
                   totalPlatformAmount?.toString(),
@@ -254,112 +244,154 @@ const ResolveDisputeEscrowDialog = ({
           </Card>
         </DialogHeader>
 
-        <FormProvider {...form}>
-          <form
-            onSubmit={form.handleSubmit((data) => onSubmit(data))}
-            className="grid gap-4 py-4"
-          >
-            <div className="flex flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="approverFunds"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      Approver Amount{" "}
-                      <span className="text-destructive ml-1">*</span>
-                      <TooltipInfo content="The amount for the approver." />
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <DollarSign
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                          size={18}
-                        />
-                        <Input
-                          placeholder="Enter approver funds"
-                          className="pl-10"
-                          value={field.value?.toString() || ""}
-                          onChange={handleApproverFundsChange}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="receiverFunds"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center">
-                      Receiver Amount{" "}
-                      <span className="text-destructive ml-1">*</span>
-                      <TooltipInfo content="The amount for the receiver." />
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <DollarSign
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                          size={18}
-                        />
-                        <Input
-                          placeholder="Enter receiver funds"
-                          className="pl-10"
-                          value={field.value?.toString() || ""}
-                          onChange={handleReceiverFundsChange}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+        <div className="flex-1 min-h-0 flex flex-col">
+          <FormProvider {...form}>
+            <form
+              onSubmit={form.handleSubmit((data) => onSubmit(data))}
+              className="flex flex-col h-full"
+            >
+              <div className="flex-1 min-h-0 flex flex-col gap-4 overflow-y-auto px-4">
+                {distributions.map((d: Distribution, index: number) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-12 gap-3 items-end"
+                  >
+                    <div className="col-span-7">
+                      <FormField<ResolveFormValues>
+                        control={form.control}
+                        name={
+                          `distributions.${index}.address` as FieldPath<ResolveFormValues>
+                        }
+                        render={() => (
+                          <FormItem>
+                            <FormLabel className="flex items-center">
+                              Address{" "}
+                              <span className="text-destructive ml-1">*</span>
+                              <TooltipInfo content="The destination address for this share." />
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter Stellar address (G...)"
+                                value={d.address || ""}
+                                onChange={(e) =>
+                                  handleDistributionAddressChange(index, e)
+                                }
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="col-span-4">
+                      <FormField<ResolveFormValues>
+                        control={form.control}
+                        name={
+                          `distributions.${index}.amount` as FieldPath<ResolveFormValues>
+                        }
+                        render={() => (
+                          <FormItem>
+                            <FormLabel className="flex items-center">
+                              Amount{" "}
+                              <span className="text-destructive ml-1">*</span>
+                              <TooltipInfo content="The amount to distribute to this address." />
+                            </FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <DollarSign
+                                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                                  size={18}
+                                />
+                                <Input
+                                  placeholder="0.00"
+                                  className="pl-10"
+                                  value={
+                                    typeof d.amount === "string"
+                                      ? d.amount
+                                      : d.amount?.toString() || ""
+                                  }
+                                  onChange={(e) =>
+                                    handleDistributionAmountChange(index, e)
+                                  }
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="col-span-1 flex justify-end">
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="destructive"
+                        onClick={() => handleRemoveDistribution(index)}
+                        className="mt-1"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
 
-            {!isEqualToAmount && (
-              <p className="text-destructive text-xs font-bold text-end">
-                Both amounts must be equal to the balance (
-                {formatCurrency(
-                  escrow.type === "single-release"
-                    ? escrow.balance
-                    : (milestone as MultiReleaseMilestone)?.amount || 0,
-                  escrow.trustline?.name,
-                )}
-                )
-                <br />
-                Difference:{" "}
-                {formatCurrency(
-                  isMissing.toString(),
-                  escrow.trustline?.name,
-                ).replace("$", "")}
-              </p>
-            )}
+                <div className="flex justify-between">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddDistribution}
+                  >
+                    <Plus className="w-4 h-4 mr-2" /> Add Distribution
+                  </Button>
+                  {!isEqualToAmount && (
+                    <p className="text-destructive text-xs font-bold text-end">
+                      Sum must equal balance (
+                      {formatCurrency(
+                        escrow.type === "single-release"
+                          ? escrow.balance
+                          : (milestone as MultiReleaseMilestone)?.amount || 0,
+                        escrow.trustline?.name,
+                      )}
+                      )
+                      <br />
+                      Difference:{" "}
+                      {formatCurrency(
+                        isMissing.toString(),
+                        escrow.trustline?.name,
+                      ).replace("$", "")}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-            <DialogFooter className="flex flex-col sm:flex-row gap-4 sm:gap-0 justify-end items-center">
-              <Button
-                type="submit"
-                variant="success"
-                disabled={!isEqualToAmount || isResolvingDispute}
-              >
-                {isResolvingDispute ? (
-                  <>
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin flex-shrink-0" />
-                    <span className="truncate">Resolving...</span>
-                  </>
-                ) : (
-                  <>
-                    <Handshake className="w-3 h-3 mr-1 flex-shrink-0" />
-                    <span className="truncate">
-                      {t("actions.resolveDispute")}
-                    </span>
-                  </>
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </FormProvider>
+              <DialogFooter className="flex-shrink-0 flex flex-col sm:flex-row gap-4 sm:gap-0 justify-end items-center">
+                <Button
+                  type="submit"
+                  variant="success"
+                  disabled={
+                    !isEqualToAmount ||
+                    isResolvingDispute ||
+                    hasEmptyDistributionFields
+                  }
+                >
+                  {isResolvingDispute ? (
+                    <>
+                      <Loader2 className="w-3 h-3 mr-1 animate-spin flex-shrink-0" />
+                      <span className="truncate">Resolving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Handshake className="w-3 h-3 mr-1 flex-shrink-0" />
+                      <span className="truncate">
+                        {t("actions.resolveDispute")}
+                      </span>
+                    </>
+                  )}
+                </Button>
+              </DialogFooter>
+            </form>
+          </FormProvider>
+        </div>
       </DialogContent>
     </Dialog>
   );
