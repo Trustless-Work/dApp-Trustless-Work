@@ -76,7 +76,6 @@ export const useInitializeSingleEscrow = () => {
       receiverMemo: "",
       trustline: {
         address: "",
-        decimals: 10000000,
       },
       roles: {
         approver: "",
@@ -116,7 +115,6 @@ export const useInitializeSingleEscrow = () => {
       receiverMemo: "123",
       trustline: {
         address: usdcTrustline.address,
-        decimals: usdcTrustline.decimals || 10000000,
       },
       roles: {
         approver: address || "",
@@ -136,7 +134,6 @@ export const useInitializeSingleEscrow = () => {
 
     // Explicitly set the trustline field
     form.setValue("trustline.address", usdcTrustline.address);
-    form.setValue("trustline.decimals", usdcTrustline.decimals || 10000000);
   };
 
   const milestones = form.watch("milestones");

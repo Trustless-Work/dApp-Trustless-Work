@@ -75,7 +75,6 @@ export const useInitializeMultiEscrow = () => {
       receiverMemo: "",
       trustline: {
         address: "",
-        decimals: 10000000,
       },
       roles: {
         approver: "",
@@ -114,7 +113,6 @@ export const useInitializeMultiEscrow = () => {
       receiverMemo: "123",
       trustline: {
         address: usdcTrustline.address,
-        decimals: usdcTrustline.decimals || 10000000,
       },
       roles: {
         approver: address || "",
@@ -134,7 +132,6 @@ export const useInitializeMultiEscrow = () => {
 
     // Explicitly set the trustline field
     form.setValue("trustline.address", usdcTrustline.address);
-    form.setValue("trustline.decimals", usdcTrustline.decimals || 10000000);
   };
 
   const milestones = form.watch("milestones");
