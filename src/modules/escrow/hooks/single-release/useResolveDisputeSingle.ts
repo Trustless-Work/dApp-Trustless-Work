@@ -1,7 +1,10 @@
 "use client";
 
 import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
-import { useGlobalAuthenticationStore, useGlobalBoundedStore } from "@/store/data";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/store/data";
 import { SingleReleaseResolveDisputePayload } from "@trustless-work/escrow";
 
 export const useResolveDisputeSingle = () => {
@@ -22,7 +25,9 @@ export const useResolveDisputeSingle = () => {
     const payload: SingleReleaseResolveDisputePayload = {
       contractId: selectedEscrow.contractId || "",
       disputeResolver: selectedEscrow.roles?.disputeResolver,
-      distributions: normalizedDistributions as [{ address: string; amount: number }],
+      distributions: normalizedDistributions as [
+        { address: string; amount: number },
+      ],
     };
 
     await resolveDispute.mutateAsync({

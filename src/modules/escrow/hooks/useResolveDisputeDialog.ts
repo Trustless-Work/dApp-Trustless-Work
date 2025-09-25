@@ -97,7 +97,10 @@ export const useResolveDisputeDialog = () => {
       // Delegate to specific hooks
       const resolvedDists =
         selectedEscrow.type === "multi-release"
-          ? await onSubmitMulti(normalizedDistributions, Number(milestoneIndex || 0))
+          ? await onSubmitMulti(
+              normalizedDistributions,
+              Number(milestoneIndex || 0),
+            )
           : await onSubmitSingle(normalizedDistributions);
 
       // Update success dialog values based on known roles

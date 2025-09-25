@@ -116,7 +116,9 @@ const EntityCard = ({
               )}
               {entity && (
                 <span className="text-xs text-muted-foreground">
-                  {type === "Trustless Work" ? "Private" : formatAddress(entity)}
+                  {type === "Trustless Work"
+                    ? "Private"
+                    : formatAddress(entity)}
                 </span>
               )}
             </div>

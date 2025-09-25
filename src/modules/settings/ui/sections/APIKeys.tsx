@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import { Button } from "@/ui/button";
@@ -32,7 +34,6 @@ export const APIKeys = () => {
   const {
     onSubmit,
     apiKeys,
-    isLoadingKeys,
     isDialogOpen,
     createdKey,
     closeDialog,
