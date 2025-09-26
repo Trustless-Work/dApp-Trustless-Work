@@ -58,7 +58,9 @@ const WithdrawRemainingFundsDialog = ({
   ] as MultiReleaseMilestone;
 
   // Tipos derivados del schema
-  type WithdrawFormValues = z.infer<ReturnType<typeof getWithdrawRemainingFundsSchema>>;
+  type WithdrawFormValues = z.infer<
+    ReturnType<typeof getWithdrawRemainingFundsSchema>
+  >;
   type Distribution = WithdrawFormValues["distributions"][number];
 
   const distributions =
