@@ -22,8 +22,8 @@ export const useWithdrawRemainingFundsDialog = () => {
     (state) => state.setIsWithdrawingRemainingFunds,
   );
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-  const setRecentEscrow = useGlobalBoundedStore(
-    (state) => state.setRecentEscrow,
+  const setSelectedEscrow = useGlobalBoundedStore(
+    (state) => state.setSelectedEscrow,
   );
 
   const { address } = useGlobalAuthenticationStore();
@@ -81,13 +81,27 @@ export const useWithdrawRemainingFundsDialog = () => {
         address,
       });
 
+      // Calcular la suma total de las distribuciones
+      const totalWithdrawn = normalizedDistributions.reduce(
+        (sum, distribution) => sum + distribution.amount,
+        0,
+      );
+
+      // Actualizar el balance del escrow
+      if (selectedEscrow) {
+        const currentBalance = Number(selectedEscrow.balance || 0);
+        const updatedBalance = Math.max(0, currentBalance - totalWithdrawn);
+
+        const updatedEscrow = {
+          ...selectedEscrow,
+          balance: updatedBalance,
+        };
+
+        setSelectedEscrow(updatedEscrow);
+      }
+
       form.reset();
       setIsWithdrawDialogOpen(false);
-
-      // Keep detail dialog open to show updated state
-      if (selectedEscrow) {
-        setRecentEscrow(selectedEscrow);
-      }
 
       toast.success("Remaining funds withdrawn successfully");
     } catch (err) {
