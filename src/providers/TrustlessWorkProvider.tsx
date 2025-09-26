@@ -27,7 +27,7 @@ export function TrustlessWorkProvider({
   const baseURL = currentNetwork === "mainnet" ? mainNet : development;
 
   return (
-    <TrustlessWorkConfig baseURL={baseURL} apiKey={apiKey}>
+    <TrustlessWorkConfig baseURL="http://localhost:3000" apiKey={apiKey}>
       {children}
     </TrustlessWorkConfig>
   );

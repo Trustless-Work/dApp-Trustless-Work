@@ -409,29 +409,30 @@ export const useEscrowsMutations = () => {
       payload: WithdrawRemainingFundsPayload;
       address: string;
     }) => {
-      const result = await withdrawRemainingFunds(payload);
+      const { unsignedTransaction } = await withdrawRemainingFunds(payload);
 
-      const maybeUnsigned = result?.unsignedTransaction;
-      if (maybeUnsigned) {
-        const signedTxXdr = await signTransaction({
-          unsignedTransaction: maybeUnsigned,
-          address,
-        });
-
-        if (!signedTxXdr) {
-          throw new Error("Signed transaction is missing.");
-        }
-
-        const response = await sendTransaction(signedTxXdr);
-
-        if (response.status !== "SUCCESS") {
-          throw new Error("Transaction failed to send");
-        }
-
-        return response;
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from withdrawRemainingFunds response.",
+        );
       }
 
-      return result;
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = await sendTransaction(signedTxXdr);
+
+      if (response.status !== "SUCCESS") {
+        throw new Error("Transaction failed to send");
+      }
+
+      return response;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["escrows"] });

@@ -14,7 +14,7 @@ import { handleError } from "@/errors/handle-errors";
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { useEscrowDialogs } from "./dialogs/useEscrowDialogs";
 import { useEscrowsMutations } from "./tanstack/useEscrowsMutations";
-import { getFormSchema } from "../schema/resolve-dispute-escrow.schema";
+import { getWithdrawRemainingFundsSchema } from "../schema/withdraw-remaining-funds.schema";
 import { WithdrawRemainingFundsPayload } from "@trustless-work/escrow";
 
 export const useWithdrawRemainingFundsDialog = () => {
@@ -32,7 +32,7 @@ export const useWithdrawRemainingFundsDialog = () => {
 
   const { withdrawRemainingFunds } = useEscrowsMutations();
 
-  const formSchema = getFormSchema();
+  const formSchema = getWithdrawRemainingFundsSchema();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,14 +47,10 @@ export const useWithdrawRemainingFundsDialog = () => {
     mode: "onChange",
   });
 
-  const onSubmit = async (
-    {
-      distributions,
-    }: {
-      distributions: { address: string; amount: number | string }[];
-    },
-    onComplete?: () => void,
-  ) => {
+  const onSubmit = async (data: {
+    distributions: { address: string; amount: number | string }[];
+  }) => {
+    const { distributions } = data;
     setIsWithdrawing(true);
 
     if (!selectedEscrow) return;
@@ -98,7 +94,6 @@ export const useWithdrawRemainingFundsDialog = () => {
       toast.error(handleError(err as AxiosError).message);
     } finally {
       setIsWithdrawing(false);
-      onComplete?.();
     }
   };
 

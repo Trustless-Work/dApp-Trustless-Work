@@ -29,7 +29,7 @@ import { MultiReleaseMilestone } from "@trustless-work/escrow";
 import { formatCurrency } from "@/lib/format";
 import { z } from "zod";
 import { FieldPath } from "react-hook-form";
-import { getFormSchema } from "../../schema/resolve-dispute-escrow.schema";
+import { getWithdrawRemainingFundsSchema } from "../../schema/withdraw-remaining-funds.schema";
 
 interface WithdrawRemainingFundsDialogProps {
   isWithdrawRemainingFundsDialogOpen: boolean;
@@ -58,7 +58,7 @@ const WithdrawRemainingFundsDialog = ({
   ] as MultiReleaseMilestone;
 
   // Tipos derivados del schema
-  type WithdrawFormValues = z.infer<ReturnType<typeof getFormSchema>>;
+  type WithdrawFormValues = z.infer<ReturnType<typeof getWithdrawRemainingFundsSchema>>;
   type Distribution = WithdrawFormValues["distributions"][number];
 
   const distributions =

@@ -15,6 +15,7 @@ import { useResolveDisputeDialog } from "../../hooks/useResolveDisputeDialog";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useDisputeEscrowDialog } from "../../hooks/single-release/useDisputeEscrowDialog";
 import { useReleaseFundsEscrowDialog } from "../../hooks/single-release/useReleaseFundsEscrowDialog";
+import { useWithdrawRemainingFundsDialog } from "../../hooks/useWithdrawRemainingFundsDialog";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
 
 interface ActionsProps {
@@ -29,6 +30,7 @@ export const Actions = ({
   areAllMilestonesApproved,
 }: ActionsProps) => {
   const { handleOpen } = useResolveDisputeDialog();
+  const { handleOpen: handleWithdrawOpen } = useWithdrawRemainingFundsDialog();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const isStartingDispute = useEscrowUIBoundedStore(
     (state) => state.isStartingDispute,
@@ -175,10 +177,7 @@ export const Actions = ({
 
       {shouldShowWithdrawRemainingFundsButton && (
         <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            dialogStates.withdrawRemainingFunds.setIsOpen(true);
-          }}
+          onClick={handleWithdrawOpen}
           className="w-full"
           variant="outline"
         >
