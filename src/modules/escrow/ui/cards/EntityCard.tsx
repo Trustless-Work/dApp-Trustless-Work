@@ -5,11 +5,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import { Card, CardContent } from "@/ui/card";
 import { Badge } from "@/ui/badge";
 import { Separator } from "@/ui/separator";
-import { useEffect, useState } from "react";
+
 import Link from "next/link";
 import { AuthService } from "@/modules/auth/services/auth.service";
 import { formatAddress, formatCurrency } from "@/lib/format";
 import { useGlobalBoundedStore } from "@/store/data";
+import { useQuery } from "@tanstack/react-query";
 
 interface EntityCardProps {
   entity?: string;
@@ -34,22 +35,18 @@ const EntityCard = ({
   isNet,
   currency,
 }: EntityCardProps) => {
-  const [user, setUser] = useState<User | undefined>(undefined);
+  // Replace local state/effect with TanStack Query to cache by entity key
+  const { data: user } = useQuery<User | null>({
+    queryKey: ["user", entity],
+    queryFn: async () => {
+      if (!entity) return null;
+      const fetchedUser = await new AuthService().getUser(entity);
+      return fetchedUser;
+    },
+    enabled: !!entity,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (entity) {
-        try {
-          const fetchedUser = await new AuthService().getUser(entity);
-          setUser(fetchedUser || undefined);
-        } catch (error) {
-          console.error("Error fetching user:", error);
-        }
-      }
-    };
-    fetchUser();
-  }, [entity]);
 
   return (
     <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-md">

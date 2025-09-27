@@ -23,6 +23,8 @@ import {
   SingleReleaseReleaseFundsPayload,
   MultiReleaseResolveDisputePayload,
   SingleReleaseResolveDisputePayload,
+  useWithdrawRemainingFunds,
+  WithdrawRemainingFundsPayload,
 } from "@trustless-work/escrow";
 import { signTransaction } from "@/lib/stellar-wallet-kit";
 
@@ -37,6 +39,7 @@ export const useEscrowsMutations = () => {
   const { startDispute } = useStartDispute();
   const { releaseFunds } = useReleaseFunds();
   const { resolveDispute } = useResolveDispute();
+  const { withdrawRemainingFunds } = useWithdrawRemainingFunds();
 
   const deployEscrowMutation = useMutation({
     mutationFn: async ({
@@ -398,6 +401,47 @@ export const useEscrowsMutations = () => {
     },
   });
 
+  const withdrawRemainingFundsMutation = useMutation({
+    mutationFn: async ({
+      payload,
+      address,
+    }: {
+      payload: WithdrawRemainingFundsPayload;
+      address: string;
+    }) => {
+      const { unsignedTransaction } = await withdrawRemainingFunds(payload);
+
+      if (!unsignedTransaction) {
+        throw new Error(
+          "Unsigned transaction is missing from withdrawRemainingFunds response.",
+        );
+      }
+
+      const signedTxXdr = await signTransaction({
+        unsignedTransaction,
+        address,
+      });
+
+      if (!signedTxXdr) {
+        throw new Error("Signed transaction is missing.");
+      }
+
+      const response = await sendTransaction(signedTxXdr);
+
+      if (response.status !== "SUCCESS") {
+        throw new Error("Transaction failed to send");
+      }
+
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["escrows"] });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   return {
     deployEscrow: deployEscrowMutation,
     updateEscrow: updateEscrowMutation,
@@ -407,5 +451,7 @@ export const useEscrowsMutations = () => {
     startDispute: startDisputeMutation,
     releaseFunds: releaseFundsMutation,
     resolveDispute: resolveDisputeMutation,
+    // NEW export
+    withdrawRemainingFunds: withdrawRemainingFundsMutation,
   };
 };

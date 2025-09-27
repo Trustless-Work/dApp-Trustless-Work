@@ -4,6 +4,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/ui/dialog";
 import { Button } from "@/ui/button";
 import { useTranslation } from "react-i18next";
@@ -43,8 +44,8 @@ export const RestoreEscrowDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[425px] h-auto max-h-[85vh] overflow-hidden flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle>{t("confirmDialog.restoreTitle")}</DialogTitle>
           <DialogDescription>
             {t("confirmDialog.restoreDescription", {
@@ -52,7 +53,8 @@ export const RestoreEscrowDialog = ({
             })}
           </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-end gap-2">
+        <div className="flex-1 min-h-0 overflow-y-auto" />
+        <DialogFooter className="flex-shrink-0 flex justify-end gap-2">
           <Button variant="outline" onClick={onClose}>
             {t("common.cancel")}
           </Button>
@@ -70,7 +72,7 @@ export const RestoreEscrowDialog = ({
               t("common.restore")
             )}
           </Button>
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

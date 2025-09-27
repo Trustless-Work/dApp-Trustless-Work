@@ -36,6 +36,7 @@ import { GeneralInformation } from "../sections/GeneralInformation";
 import { Entities } from "../sections/Entities";
 import { Milestones } from "../sections/Milestones";
 import { FooterDetails } from "../sections/Footer";
+import WithdrawRemainingFundsDialog from "./WithdrawRemainingFundsDialog";
 
 interface EscrowDetailDialogProps {
   isDialogOpen: boolean;
@@ -410,6 +411,12 @@ const EscrowDetailDialog = ({
         }
         title=""
         description={t("escrowDetailDialog.resolvedDescription")}
+      />
+
+      <WithdrawRemainingFundsDialog
+        isWithdrawRemainingFundsDialogOpen={
+          dialogStates.withdrawRemainingFunds.isOpen
+        }
       />
     </>
   );

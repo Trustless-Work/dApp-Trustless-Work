@@ -5,6 +5,7 @@ import {
   Handshake,
   Loader2,
   Pencil,
+  Wallet2,
 } from "lucide-react";
 import { Button } from "@/ui/button";
 import { toast } from "sonner";
@@ -14,6 +15,8 @@ import { useResolveDisputeDialog } from "../../hooks/useResolveDisputeDialog";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useDisputeEscrowDialog } from "../../hooks/single-release/useDisputeEscrowDialog";
 import { useReleaseFundsEscrowDialog } from "../../hooks/single-release/useReleaseFundsEscrowDialog";
+import { useWithdrawRemainingFundsDialog } from "../../hooks/useWithdrawRemainingFundsDialog";
+import { MultiReleaseMilestone } from "@trustless-work/escrow";
 
 interface ActionsProps {
   selectedEscrow: Escrow;
@@ -27,6 +30,7 @@ export const Actions = ({
   areAllMilestonesApproved,
 }: ActionsProps) => {
   const { handleOpen } = useResolveDisputeDialog();
+  const { handleOpen: handleWithdrawOpen } = useWithdrawRemainingFundsDialog();
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const isStartingDispute = useEscrowUIBoundedStore(
     (state) => state.isStartingDispute,
@@ -39,7 +43,6 @@ export const Actions = ({
     (state) => state.isReleasingFunds,
   );
 
-  // Check if any of the conditional buttons should be displayed
   const shouldShowEditButton =
     userRolesInEscrow.includes("platformAddress") &&
     !selectedEscrow?.flags?.disputed &&
@@ -68,6 +71,14 @@ export const Actions = ({
     userRolesInEscrow.includes("releaseSigner") &&
     !selectedEscrow.flags?.released &&
     activeTab === "releaseSigner";
+
+  const shouldShowWithdrawRemainingFundsButton =
+    selectedEscrow.type === "multi-release" &&
+    Number(selectedEscrow.balance) > 0 &&
+    Array.isArray(selectedEscrow.milestones) &&
+    (selectedEscrow.milestones as MultiReleaseMilestone[]).every(
+      (m) => m?.flags?.released || m?.flags?.resolved || m?.flags?.disputed,
+    );
 
   const hasConditionalButtons =
     shouldShowEditButton ||
@@ -164,16 +175,29 @@ export const Actions = ({
         </div>
       )}
 
-      <Button
-        onClick={(e) => {
-          e.stopPropagation();
-          dialogStates.second.setIsOpen(true);
-        }}
-        className="w-full"
-      >
-        <CircleDollarSign className="mr-2 h-4 w-4" />
-        Fund Escrow
-      </Button>
+      {shouldShowWithdrawRemainingFundsButton && (
+        <Button
+          onClick={handleWithdrawOpen}
+          className="w-full"
+          variant="outline"
+        >
+          <Wallet2 className="mr-2 h-4 w-4" />
+          Withdraw Funds
+        </Button>
+      )}
+
+      <div className="flex flex-col sm:flex-row gap-2 w-full">
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            dialogStates.second.setIsOpen(true);
+          }}
+          className="w-full"
+        >
+          <CircleDollarSign className="mr-2 h-4 w-4" />
+          Fund Escrow
+        </Button>
+      </div>
     </div>
   );
 };

@@ -13,6 +13,10 @@ export interface DialogStates {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
   };
+  withdrawRemainingFunds: {
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void;
+  };
   editMilestone: {
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
@@ -59,6 +63,10 @@ export const useEscrowDialogs = (): DialogStates & StatusStates => {
     resolveDispute: {
       isOpen: store.isResolveDisputeDialogOpen,
       setIsOpen: store.setIsResolveDisputeDialogOpen,
+    },
+    withdrawRemainingFunds: {
+      isOpen: store.isWithdrawRemainingFundsDialogOpen,
+      setIsOpen: store.setIsWithdrawRemainingFundsDialogOpen,
     },
     editMilestone: {
       isOpen: store.isEditMilestoneDialogOpen,

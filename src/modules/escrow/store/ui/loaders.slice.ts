@@ -11,6 +11,7 @@ export type LoadersEscrowStore = {
   isEditingEntities: boolean;
   isEditingBasicProperties: boolean;
   isResolvingDispute: boolean;
+  isWithdrawingRemainingFunds: boolean;
 
   setIsInitializingEscrow: (value: boolean) => void;
   setIsChangingStatus: (value: boolean) => void;
@@ -22,6 +23,7 @@ export type LoadersEscrowStore = {
   setIsEditingEntities: (value: boolean) => void;
   setIsEditingBasicProperties: (value: boolean) => void;
   setIsResolvingDispute: (value: boolean) => void;
+  setIsWithdrawingRemainingFunds: (value: boolean) => void;
 };
 
 export const escrowLoadersSlice: StateCreator<
@@ -42,6 +44,7 @@ export const escrowLoadersSlice: StateCreator<
     isEditingEntities: false,
     isEditingBasicProperties: false,
     isResolvingDispute: false,
+    isWithdrawingRemainingFunds: false,
 
     // Modifiers
     setIsInitializingEscrow: (value: boolean) =>
@@ -58,5 +61,7 @@ export const escrowLoadersSlice: StateCreator<
       set({ isEditingBasicProperties: value }),
     setIsResolvingDispute: (value: boolean) =>
       set({ isResolvingDispute: value }),
+    setIsWithdrawingRemainingFunds: (value: boolean) =>
+      set({ isWithdrawingRemainingFunds: value }),
   };
 };

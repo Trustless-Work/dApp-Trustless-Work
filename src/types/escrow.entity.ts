@@ -27,8 +27,6 @@ export interface Escrow {
   disputeStartedBy?: string;
   fundedBy?: string;
   isActive?: boolean;
-  approverFunds?: string;
-  receiverFunds?: string;
   user: string;
   createdAt: CreatedAt;
   updatedAt: UpdatedAt;

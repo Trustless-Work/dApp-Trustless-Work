@@ -18,36 +18,32 @@ import {
   FormMessage,
 } from "@/ui/form";
 import TooltipInfo from "@/shared/utils/Tooltip";
-import { useResolveDisputeDialog } from "../../hooks/useResolveDisputeDialog";
+import { useWithdrawRemainingFundsDialog } from "../../hooks/useWithdrawRemainingFundsDialog";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { useGlobalBoundedStore } from "@/store/data";
-import { DollarSign, Handshake, Loader2, Plus, Trash2 } from "lucide-react";
+import { DollarSign, Loader2, Wallet2, Plus, Trash2 } from "lucide-react";
 import { Card } from "@/ui/card";
 import { Escrow } from "@/types/escrow.entity";
 import { useEscrowBoundedStore } from "../../store/data";
-import {
-  MultiReleaseMilestone,
-  SingleReleaseMilestone,
-} from "@trustless-work/escrow";
-import { t } from "i18next";
+import { MultiReleaseMilestone } from "@trustless-work/escrow";
 import { formatCurrency } from "@/lib/format";
 import { z } from "zod";
 import { FieldPath } from "react-hook-form";
-import { getFormSchema } from "../../schema/resolve-dispute-escrow.schema";
+import { getWithdrawRemainingFundsSchema } from "../../schema/withdraw-remaining-funds.schema";
 
-interface ResolveDisputeEscrowDialogProps {
-  isResolveDisputeDialogOpen: boolean;
+interface WithdrawRemainingFundsDialogProps {
+  isWithdrawRemainingFundsDialogOpen: boolean;
   recentEscrow?: Escrow;
 }
 
-const ResolveDisputeEscrowDialog = ({
-  isResolveDisputeDialogOpen,
+const WithdrawRemainingFundsDialog = ({
+  isWithdrawRemainingFundsDialogOpen,
   recentEscrow,
-}: ResolveDisputeEscrowDialogProps) => {
-  const { form, onSubmit, handleClose } = useResolveDisputeDialog();
+}: WithdrawRemainingFundsDialogProps) => {
+  const { form, onSubmit, handleClose } = useWithdrawRemainingFundsDialog();
 
-  const isResolvingDispute = useEscrowUIBoundedStore(
-    (state) => state.isResolvingDispute,
+  const isWithdrawing = useEscrowUIBoundedStore(
+    (state) => state.isWithdrawingRemainingFunds,
   );
 
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
@@ -55,23 +51,20 @@ const ResolveDisputeEscrowDialog = ({
 
   const [isEqualToAmount, setIsEqualToAmount] = useState<boolean>(false);
   const [isMissing, setIsMissing] = useState<number>(0);
-  const [totalPlatformAmount, setTotalPlatformAmount] = useState<number>(0);
-  const [totalTrustlessWorkAmount, setTotalTrustlessWorkAmount] =
-    useState<number>(0);
 
   const milestoneIndex = useEscrowBoundedStore((state) => state.milestoneIndex);
-  const milestone = escrow?.milestones[milestoneIndex || 0] as
-    | MultiReleaseMilestone
-    | SingleReleaseMilestone;
-
-  const trustlessWorkFee = 0.003;
+  const milestone = escrow?.milestones[
+    milestoneIndex || 0
+  ] as MultiReleaseMilestone;
 
   // Tipos derivados del schema
-  type ResolveFormValues = z.infer<ReturnType<typeof getFormSchema>>;
-  type Distribution = ResolveFormValues["distributions"][number];
+  type WithdrawFormValues = z.infer<
+    ReturnType<typeof getWithdrawRemainingFundsSchema>
+  >;
+  type Distribution = WithdrawFormValues["distributions"][number];
 
   const distributions =
-    (form.watch("distributions") as ResolveFormValues["distributions"]) || [];
+    (form.watch("distributions") as WithdrawFormValues["distributions"]) || [];
 
   const hasEmptyDistributionFields = distributions.some((d: Distribution) => {
     const amt = d.amount;
@@ -82,33 +75,7 @@ const ResolveDisputeEscrowDialog = ({
   });
 
   useEffect(() => {
-    const platformFee = (escrow?.platformFee || 0) / 100;
-
-    const amount =
-      escrow?.type === "single-release"
-        ? selectedEscrow?.amount
-        : (
-            selectedEscrow?.milestones[
-              milestoneIndex || 0
-            ] as MultiReleaseMilestone
-          )?.amount;
-
-    setTotalPlatformAmount(
-      amount && !isNaN(Number(amount)) ? Number(amount) * platformFee : 0,
-    );
-
-    setTotalTrustlessWorkAmount(
-      amount && !isNaN(Number(amount)) ? Number(amount) * trustlessWorkFee : 0,
-    );
-
-    const balanceToCheck =
-      escrow?.type === "single-release"
-        ? escrow?.balance
-        : (
-            selectedEscrow?.milestones[
-              milestoneIndex || 0
-            ] as MultiReleaseMilestone
-          )?.amount;
+    const balanceToCheck = escrow?.balance;
 
     const sumDistributions = distributions.reduce(
       (sum: number, d: Distribution) => {
@@ -124,13 +91,7 @@ const ResolveDisputeEscrowDialog = ({
     setIsEqualToAmount(sumDistributions === Number(balanceToCheck || "0"));
 
     setIsMissing(sumDistributions - Number(balanceToCheck || "0"));
-  }, [
-    distributions,
-    escrow,
-    selectedEscrow?.amount,
-    selectedEscrow?.milestones,
-    milestoneIndex,
-  ]);
+  }, [distributions, escrow]);
 
   const handleDistributionAmountChange = (
     index: number,
@@ -151,9 +112,10 @@ const ResolveDisputeEscrowDialog = ({
     }
 
     const current =
-      (form.getValues("distributions") as ResolveFormValues["distributions"]) ||
-      [];
-    const updated: ResolveFormValues["distributions"] = current.map((d, i) =>
+      (form.getValues(
+        "distributions",
+      ) as WithdrawFormValues["distributions"]) || [];
+    const updated: WithdrawFormValues["distributions"] = current.map((d, i) =>
       i === index ? { ...d, amount: rawValue } : d,
     );
     form.setValue("distributions", updated, {
@@ -161,9 +123,8 @@ const ResolveDisputeEscrowDialog = ({
       shouldTouch: true,
       shouldDirty: true,
     });
-    // Trigger zod validation for this amount field
     form.trigger(
-      `distributions.${index}.amount` as FieldPath<ResolveFormValues>,
+      `distributions.${index}.amount` as FieldPath<WithdrawFormValues>,
     );
   };
 
@@ -172,9 +133,10 @@ const ResolveDisputeEscrowDialog = ({
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const current =
-      (form.getValues("distributions") as ResolveFormValues["distributions"]) ||
-      [];
-    const updated: ResolveFormValues["distributions"] = current.map((d, i) =>
+      (form.getValues(
+        "distributions",
+      ) as WithdrawFormValues["distributions"]) || [];
+    const updated: WithdrawFormValues["distributions"] = current.map((d, i) =>
       i === index ? { ...d, address: e.target.value } : d,
     );
     form.setValue("distributions", updated, {
@@ -182,25 +144,26 @@ const ResolveDisputeEscrowDialog = ({
       shouldTouch: true,
       shouldDirty: true,
     });
-    // Trigger zod validation for this address field and also cross-field duplicate check
     form.trigger(
-      `distributions.${index}.address` as FieldPath<ResolveFormValues>,
+      `distributions.${index}.address` as FieldPath<WithdrawFormValues>,
     );
-    form.trigger("distributions" as FieldPath<ResolveFormValues>);
+    form.trigger("distributions" as FieldPath<WithdrawFormValues>);
   };
 
   const handleAddDistribution = () => {
     const current =
-      (form.getValues("distributions") as ResolveFormValues["distributions"]) ||
-      [];
+      (form.getValues(
+        "distributions",
+      ) as WithdrawFormValues["distributions"]) || [];
     form.setValue("distributions", [...current, { address: "", amount: 0 }]);
   };
 
   const handleRemoveDistribution = (index: number) => {
     const current =
-      (form.getValues("distributions") as ResolveFormValues["distributions"]) ||
-      [];
-    const updated: ResolveFormValues["distributions"] = current.filter(
+      (form.getValues(
+        "distributions",
+      ) as WithdrawFormValues["distributions"]) || [];
+    const updated: WithdrawFormValues["distributions"] = current.filter(
       (_: Distribution, i: number) => i !== index,
     );
     form.setValue("distributions", updated);
@@ -211,18 +174,16 @@ const ResolveDisputeEscrowDialog = ({
   }
 
   return (
-    <Dialog open={isResolveDisputeDialogOpen} onOpenChange={handleClose}>
+    <Dialog
+      open={isWithdrawRemainingFundsDialogOpen}
+      onOpenChange={handleClose}
+    >
       <DialogContent className="sm:max-w-[600px] h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader className="flex-shrink-0">
-          <DialogTitle>Resolve Dispute</DialogTitle>
+          <DialogTitle>Withdraw Remaining Funds</DialogTitle>
           <DialogDescription>
-            You, as the dispute resolver, will be able to split the proceeds
-            between entities. It is important to know that the funds will be
-            shared based on the{" "}
-            <strong>
-              Platform Fee ({escrow.platformFee}%) and the Trustless Work Fee
-              (0.3%).
-            </strong>
+            Withdraw remaining balance from this escrow by distributing funds to
+            one or more addresses.
           </DialogDescription>
 
           <Card className="grid grid-cols-1 gap-4 !mt-4 p-4">
@@ -241,22 +202,6 @@ const ResolveDisputeEscrowDialog = ({
                   )}
                 </p>
               )}
-
-              <p className="text-sm text-muted-foreground p-0">
-                <span className="font-extrabold">Platform Net:</span>{" "}
-                {formatCurrency(
-                  totalPlatformAmount?.toString(),
-                  escrow.trustline?.name,
-                )}
-              </p>
-
-              <p className="text-sm text-muted-foreground p-0">
-                <span className="font-extrabold">Trustless Work Net:</span>{" "}
-                {formatCurrency(
-                  totalTrustlessWorkAmount?.toString(),
-                  escrow.trustline?.name,
-                )}
-              </p>
             </div>
           </Card>
         </DialogHeader>
@@ -274,10 +219,10 @@ const ResolveDisputeEscrowDialog = ({
                     className="grid grid-cols-12 gap-3 items-end"
                   >
                     <div className="col-span-7">
-                      <FormField<ResolveFormValues>
+                      <FormField<WithdrawFormValues>
                         control={form.control}
                         name={
-                          `distributions.${index}.address` as FieldPath<ResolveFormValues>
+                          `distributions.${index}.address` as FieldPath<WithdrawFormValues>
                         }
                         render={() => (
                           <FormItem>
@@ -301,10 +246,10 @@ const ResolveDisputeEscrowDialog = ({
                       />
                     </div>
                     <div className="col-span-4">
-                      <FormField<ResolveFormValues>
+                      <FormField<WithdrawFormValues>
                         control={form.control}
                         name={
-                          `distributions.${index}.amount` as FieldPath<ResolveFormValues>
+                          `distributions.${index}.amount` as FieldPath<WithdrawFormValues>
                         }
                         render={() => (
                           <FormItem>
@@ -363,12 +308,7 @@ const ResolveDisputeEscrowDialog = ({
                   {!isEqualToAmount && (
                     <p className="text-destructive text-xs font-bold text-end">
                       Sum must equal balance (
-                      {formatCurrency(
-                        escrow.type === "single-release"
-                          ? escrow.balance
-                          : (milestone as MultiReleaseMilestone)?.amount || 0,
-                        escrow.trustline?.name,
-                      )}
+                      {formatCurrency(escrow.balance, escrow.trustline?.name)}
                       )
                       <br />
                       Difference:{" "}
@@ -387,21 +327,19 @@ const ResolveDisputeEscrowDialog = ({
                   variant="success"
                   disabled={
                     !isEqualToAmount ||
-                    isResolvingDispute ||
+                    isWithdrawing ||
                     hasEmptyDistributionFields
                   }
                 >
-                  {isResolvingDispute ? (
+                  {isWithdrawing ? (
                     <>
                       <Loader2 className="w-3 h-3 mr-1 animate-spin flex-shrink-0" />
-                      <span className="truncate">Resolving...</span>
+                      <span className="truncate">Withdrawing...</span>
                     </>
                   ) : (
                     <>
-                      <Handshake className="w-3 h-3 mr-1 flex-shrink-0" />
-                      <span className="truncate">
-                        {t("actions.resolveDispute")}
-                      </span>
+                      <Wallet2 className="w-3 h-3 mr-1 flex-shrink-0" />
+                      <span className="truncate">Withdraw</span>
                     </>
                   )}
                 </Button>
@@ -414,4 +352,4 @@ const ResolveDisputeEscrowDialog = ({
   );
 };
 
-export default ResolveDisputeEscrowDialog;
+export default WithdrawRemainingFundsDialog;

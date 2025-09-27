@@ -1,13 +1,41 @@
 import { useGlobalAuthenticationStore } from "@/store/data";
-import { changeTypeInput } from "@/lib/input-visibility";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useSettingBoundedStore } from "../store/ui";
 import { AuthService } from "../../auth/services/auth.service";
 
+// Local type for API Key records
+type ApiKeyRecord = {
+  id: string;
+  userId: string;
+  roles: string[];
+  createdAt?:
+    | { _seconds: number; _nanoseconds: number }
+    | { seconds: number; nanoseconds: number }
+    | string;
+  lastUsedAt?:
+    | { _seconds: number; _nanoseconds: number }
+    | { seconds: number; nanoseconds: number }
+    | string;
+  lastUsedFromIp?: string;
+  active?: boolean;
+  expiresAt?:
+    | { _seconds: number; _nanoseconds: number }
+    | { seconds: number; nanoseconds: number }
+    | string
+    | null;
+};
+
 const useAPIKeys = () => {
-  const [showApiKey, setShowApiKey] = useState("password");
+  const [apiKeys, setApiKeys] = useState<ApiKeyRecord[]>([]);
+  const [isLoadingKeys, setIsLoadingKeys] = useState(false);
+  const [createdKey, setCreatedKey] = useState<{
+    id: string;
+    apiKey: string;
+  } | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deletingKeys, setDeletingKeys] = useState<Set<string>>(new Set());
+
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const refreshUser = useGlobalAuthenticationStore(
@@ -17,9 +45,26 @@ const useAPIKeys = () => {
     (state) => state.setIsRequestingAPIKey,
   );
 
+  const fetchUserApiKeys = async () => {
+    if (!address) return;
+    setIsLoadingKeys(true);
+
+    try {
+      const response = await new AuthService().getUserApiKeys(address);
+      setApiKeys(response?.data || []);
+    } catch (error) {
+      console.error("Error fetching API keys:", error);
+      toast.error("Error fetching API keys");
+    } finally {
+      setIsLoadingKeys(false);
+    }
+  };
+
   useEffect(() => {
+    // Refresh user and keys when address is available
     if (address) {
       refreshUser(address);
+      fetchUserApiKeys();
     }
   }, [address, refreshUser]);
 
@@ -34,62 +79,66 @@ const useAPIKeys = () => {
 
     if (loggedUser?.useCase === "" || !loggedUser?.useCase) {
       toast.error("Please complete your profile to get an API Key");
-
       setIsRequestingAPIKey(false);
-    } else {
-      try {
-        // If the request succeeds, we consider it successful regardless of immediate response payload shape
-        await new AuthService().requestApiKey(address);
-        await refreshUser(address);
-        toast.success("Your API key has been generated");
-      } catch (error) {
-        console.error("Error requesting API key:", error);
-        toast.error("Error while requesting API key");
-      } finally {
-        setIsRequestingAPIKey(false);
-      }
+      return;
     }
-  };
-
-  const handleRemoveAPiKey = async (apiKey: string) => {
-    setDeletingKeys((prev) => new Set(prev).add(apiKey));
 
     try {
-      const currentApiKeys = loggedUser?.apiKey || [];
-      const updatedApiKeys = currentApiKeys.filter((key) => key !== apiKey);
+      const creation = await new AuthService().requestApiKey(address);
 
-      const response = await new AuthService().updateUser(address, {
-        apiKey: updatedApiKeys,
-      });
-
-      if (response) {
-        await refreshUser(address);
-
-        toast.success("API key removed successfully");
+      if (creation?.success && creation.data?.apiKey) {
+        setCreatedKey({ id: creation.data.id, apiKey: creation.data.apiKey });
+        setIsDialogOpen(true);
+        toast.success("Your API key has been generated");
       } else {
-        toast.error("Error while removing API key");
+        toast.error("Unexpected response when generating API key");
       }
     } catch (error) {
-      console.error("Error removing API key:", error);
-      toast.error("Error while removing API key");
+      console.error("Error requesting API key:", error);
+      toast.error("Error while requesting API key");
+    } finally {
+      setIsRequestingAPIKey(false);
+    }
+  };
+
+  const deleteApiKey = async (keyId: string) => {
+    if (!keyId) return;
+    setDeletingKeys((prev) => new Set(prev).add(keyId));
+    try {
+      await new AuthService().deleteApiKey(keyId);
+      toast.success("API key deleted");
+      await fetchUserApiKeys();
+    } catch (error) {
+      console.error("Error deleting API key:", error);
+      toast.error("Error deleting API key");
     } finally {
       setDeletingKeys((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(apiKey);
-        return newSet;
+        const next = new Set(prev);
+        next.delete(keyId);
+        return next;
       });
     }
   };
 
-  const toggleVisibility = () => {
-    changeTypeInput({ type: showApiKey, setType: setShowApiKey });
+  const closeDialog = async () => {
+    setIsDialogOpen(false);
+    setCreatedKey(null);
+    await fetchUserApiKeys();
   };
 
   return {
+    // Actions
     onSubmit,
-    showApiKey,
-    toggleVisibility,
-    handleRemoveAPiKey,
+    deleteApiKey,
+    closeDialog,
+
+    // Dialog state for one-time API key display
+    isDialogOpen,
+    createdKey,
+
+    // Listing state
+    apiKeys,
+    isLoadingKeys,
     deletingKeys,
   };
 };

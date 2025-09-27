@@ -38,7 +38,6 @@ const useApproveMilestoneDialog = () => {
         payload: {
           contractId: selectedEscrow?.contractId || "",
           milestoneIndex: index.toString(),
-          newFlag: true,
           approver: address,
         },
         type: selectedEscrow.type,
