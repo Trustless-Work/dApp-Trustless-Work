@@ -14,10 +14,7 @@ interface TrustlessWorkProviderProps {
 export function TrustlessWorkProvider({
   children,
 }: TrustlessWorkProviderProps) {
-  /**
-   * Get the API key from the environment variables
-   */
-  const apiKey = process.env.API_KEY || "";
+  const apiKey = process.env.NEXT_PUBLIC_ESCROW_MANAGER_API_KEY || "";
 
   const currentNetwork =
     typeof window !== "undefined"
