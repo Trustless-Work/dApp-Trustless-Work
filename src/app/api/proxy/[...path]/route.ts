@@ -9,10 +9,10 @@ const BASE =
 
 async function proxyHandler(
   req: NextRequest,
-  context: { params: { path: string[] } },
+  context: { params: Promise<{ path: string[] }> },
 ) {
   const apiKey = process.env.API_KEY || "";
-  const { path } = context.params;
+  const { path } = await context.params;
   const targetPath = path.join("/");
 
   const url = new URL(req.url);
@@ -57,13 +57,23 @@ async function proxyHandler(
   }
 }
 
-export const GET = (req: NextRequest, ctx: { params: { path: string[] } }) =>
-  proxyHandler(req, ctx);
-export const POST = (req: NextRequest, ctx: { params: { path: string[] } }) =>
-  proxyHandler(req, ctx);
-export const PUT = (req: NextRequest, ctx: { params: { path: string[] } }) =>
-  proxyHandler(req, ctx);
-export const PATCH = (req: NextRequest, ctx: { params: { path: string[] } }) =>
-  proxyHandler(req, ctx);
-export const DELETE = (req: NextRequest, ctx: { params: { path: string[] } }) =>
-  proxyHandler(req, ctx);
+export const GET = (
+  req: NextRequest,
+  ctx: { params: Promise<{ path: string[] }> },
+) => proxyHandler(req, ctx);
+export const POST = (
+  req: NextRequest,
+  ctx: { params: Promise<{ path: string[] }> },
+) => proxyHandler(req, ctx);
+export const PUT = (
+  req: NextRequest,
+  ctx: { params: Promise<{ path: string[] }> },
+) => proxyHandler(req, ctx);
+export const PATCH = (
+  req: NextRequest,
+  ctx: { params: Promise<{ path: string[] }> },
+) => proxyHandler(req, ctx);
+export const DELETE = (
+  req: NextRequest,
+  ctx: { params: Promise<{ path: string[] }> },
+) => proxyHandler(req, ctx);
