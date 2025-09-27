@@ -7,13 +7,20 @@ const BASE =
       ? process.env.NEXT_PUBLIC_API_URL_DEV
       : process.env.NEXT_PUBLIC_API_URL_LOCAL;
 
-async function proxyHandler(req: NextRequest, context: { params: { path: string[] } }) {
+async function proxyHandler(
+  req: NextRequest,
+  context: { params: { path: string[] } },
+) {
   const apiKey = process.env.API_KEY || "";
   const { path } = context.params;
   const targetPath = path.join("/");
 
   const url = new URL(req.url);
-  const search = url.search ? url.search : url.searchParams.toString() ? `?${url.searchParams.toString()}` : "";
+  const search = url.search
+    ? url.search
+    : url.searchParams.toString()
+      ? `?${url.searchParams.toString()}`
+      : "";
   const targetUrl = `${BASE}/${targetPath}${search}`.replace(/(?<!:)\/+/g, "/");
 
   const init: RequestInit = {
@@ -38,7 +45,10 @@ async function proxyHandler(req: NextRequest, context: { params: { path: string[
       return NextResponse.json(json, { status: upstream.status });
     }
     const buf = await upstream.arrayBuffer();
-    return new NextResponse(buf, { status: upstream.status, headers: { "content-type": contentType } });
+    return new NextResponse(buf, {
+      status: upstream.status,
+      headers: { "content-type": contentType },
+    });
   } catch (e) {
     return NextResponse.json(
       { error: "Proxy request failed", message: (e as Error).message },
@@ -47,8 +57,13 @@ async function proxyHandler(req: NextRequest, context: { params: { path: string[
   }
 }
 
-export const GET = (req: NextRequest, ctx: { params: { path: string[] } }) => proxyHandler(req, ctx);
-export const POST = (req: NextRequest, ctx: { params: { path: string[] } }) => proxyHandler(req, ctx);
-export const PUT = (req: NextRequest, ctx: { params: { path: string[] } }) => proxyHandler(req, ctx);
-export const PATCH = (req: NextRequest, ctx: { params: { path: string[] } }) => proxyHandler(req, ctx);
-export const DELETE = (req: NextRequest, ctx: { params: { path: string[] } }) => proxyHandler(req, ctx);
+export const GET = (req: NextRequest, ctx: { params: { path: string[] } }) =>
+  proxyHandler(req, ctx);
+export const POST = (req: NextRequest, ctx: { params: { path: string[] } }) =>
+  proxyHandler(req, ctx);
+export const PUT = (req: NextRequest, ctx: { params: { path: string[] } }) =>
+  proxyHandler(req, ctx);
+export const PATCH = (req: NextRequest, ctx: { params: { path: string[] } }) =>
+  proxyHandler(req, ctx);
+export const DELETE = (req: NextRequest, ctx: { params: { path: string[] } }) =>
+  proxyHandler(req, ctx);
