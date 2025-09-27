@@ -9,10 +9,7 @@ const MoonPayProvider = dynamic(
 
 const MoonpayClientProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <MoonPayProvider
-      apiKey={process.env.NEXT_PUBLIC_MOONPAY_API_KEY || ""}
-      debug
-    >
+    <MoonPayProvider apiKey={process.env.MOONPAY_API_KEY || ""} debug>
       {children}
     </MoonPayProvider>
   );

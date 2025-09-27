@@ -1,7 +1,7 @@
 // import { useGlobalAuthenticationStore } from "@/core/store/data";
 
 const MOONPAY_CONFIG = {
-  apiKey: process.env.NEXT_PUBLIC_MOONPAY_API_KEY || "",
+  apiKey: process.env.MOONPAY_API_KEY || "",
   baseUrl: "https://buy-staging.moonpay.com",
   currency: "usdc_xlm",
 };

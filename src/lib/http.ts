@@ -12,7 +12,7 @@ const http = axios.create({
   timeout: 60000, // 1 minute
   headers: {
     "Content-Type": "application/json",
-    "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
+    "x-api-key": process.env.API_KEY,
   },
 });
 
