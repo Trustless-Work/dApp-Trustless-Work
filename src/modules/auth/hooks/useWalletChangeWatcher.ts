@@ -54,6 +54,7 @@ export const useWalletChangeWatcher = () => {
           try {
             await kit.disconnect();
           } catch (_) {
+            console.error("Error disconnecting wallet:", _);
             /* silent */
           }
 
@@ -63,10 +64,11 @@ export const useWalletChangeWatcher = () => {
           );
         }
       } catch (err) {
+        console.error("Error checking wallet address:", err);
         // Silent: avoid noise in the console due to polling.
       }
     };
-    
+
     check();
     timerRef.current = setInterval(check, POLL_INTERVAL);
 
