@@ -1,5 +1,6 @@
 import { User, UserPayload } from "@/types/user.entity";
 import http from "@/lib/http";
+import type { NetworkType } from "@/types/network.entity";
 import { Status } from "@trustless-work/escrow";
 
 interface CreateUserResponse {
@@ -55,6 +56,14 @@ interface ApiKeyCreationResponse {
 }
 
 export class AuthService {
+  private buildUrl(path: string, network?: NetworkType): string {
+    if (!network) return path;
+    const prod = process.env.NEXT_PUBLIC_API_URL_PROD || "";
+    const dev = process.env.NEXT_PUBLIC_API_URL_DEV || "";
+    const base = network === "mainnet" ? prod : dev;
+    return `${base}${path}`;
+  }
+
   async createUser(address: string): Promise<CreateUserResponse> {
     try {
       const response = await http.post("/user/create", { address });
@@ -101,9 +110,12 @@ export class AuthService {
     }
   }
 
-  async requestApiKey(userId: string): Promise<ApiKeyCreationResponse> {
+  async requestApiKey(
+    userId: string,
+    network?: NetworkType,
+  ): Promise<ApiKeyCreationResponse> {
     try {
-      const response = await http.post("/admin/api-keys", {
+      const response = await http.post(this.buildUrl("/admin/api-keys", network), {
         userId,
         roles: ["ESCROW_MANAGER"],
         expiresAt: null,
@@ -118,9 +130,12 @@ export class AuthService {
 
   async getUserApiKeys(
     userId: string,
+    network?: NetworkType,
   ): Promise<{ success: boolean; data: ApiKeyRecord[]; userId: string }> {
     try {
-      const response = await http.get(`/admin/api-keys/user/${userId}`);
+      const response = await http.get(
+        this.buildUrl(`/admin/api-keys/user/${userId}`, network),
+      );
       return response.data;
     } catch (error) {
       console.error(error);
@@ -130,9 +145,12 @@ export class AuthService {
 
   async deleteApiKey(
     keyId: string,
+    network?: NetworkType,
   ): Promise<{ success: boolean; message?: string }> {
     try {
-      const response = await http.delete(`/admin/api-keys/${keyId}`);
+      const response = await http.delete(
+        this.buildUrl(`/admin/api-keys/${keyId}`, network),
+      );
       return response.data;
     } catch (error) {
       console.error(error);

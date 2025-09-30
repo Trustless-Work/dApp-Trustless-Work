@@ -29,6 +29,7 @@ import {
 } from "@/ui/dialog";
 import { Input } from "@/ui/input";
 import { Trash2, Loader2 } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger } from "@/ui/tabs";
 
 export const APIKeys = () => {
   const {
@@ -39,6 +40,8 @@ export const APIKeys = () => {
     closeDialog,
     deleteApiKey,
     deletingKeys,
+    selectedNetwork,
+    setSelectedNetwork,
   } = useAPIKeys();
   const copiedKeyId = useGlobalUIBoundedStore((state) => state.copiedKeyId);
   const isRequestingAPIKey = useSettingBoundedStore(
@@ -78,6 +81,21 @@ export const APIKeys = () => {
               </Link>{" "}
               endpoints.
             </p>
+            {process.env.NEXT_PUBLIC_ENV === "PROD" && (
+              <div className="mb-4">
+                <Tabs
+                  value={selectedNetwork}
+                  onValueChange={(val) =>
+                    setSelectedNetwork(val as "mainnet" | "testnet")
+                  }
+                >
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="mainnet">Mainnet</TabsTrigger>
+                    <TabsTrigger value="testnet">Testnet</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row lg:flex-col gap-3 w-full sm:w-auto lg:w-48">
@@ -87,6 +105,11 @@ export const APIKeys = () => {
               onClick={onSubmit}
             >
               Request an API Key
+              {process.env.NEXT_PUBLIC_ENV === "PROD"
+                ? selectedNetwork === "mainnet"
+                  ? " (Mainnet)"
+                  : " (Testnet)"
+                : ""}
             </Button>
           </div>
         </div>

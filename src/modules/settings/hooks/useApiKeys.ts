@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useSettingBoundedStore } from "../store/ui";
 import { AuthService } from "../../auth/services/auth.service";
+import type { NetworkType } from "@/types/network.entity";
 
 // Local type for API Key records
 type ApiKeyRecord = {
@@ -35,6 +36,9 @@ const useAPIKeys = () => {
   } | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deletingKeys, setDeletingKeys] = useState<Set<string>>(new Set());
+  const [selectedNetwork, setSelectedNetwork] =
+    useState<NetworkType>("testnet");
+  const isProd = process.env.NEXT_PUBLIC_ENV === "PROD";
 
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const address = useGlobalAuthenticationStore((state) => state.address);
@@ -45,12 +49,29 @@ const useAPIKeys = () => {
     (state) => state.setIsRequestingAPIKey,
   );
 
+  useEffect(() => {
+    // Initialize selected network from localStorage (if any)
+    const saved =
+      (typeof window !== "undefined"
+        ? (localStorage.getItem("network") as NetworkType)
+        : null) || "testnet";
+    setSelectedNetwork(saved);
+  }, []);
+
   const fetchUserApiKeys = async () => {
     if (!address) return;
+    if (!isProd) {
+      // In DEV, API keys are not available
+      setApiKeys([]);
+      return;
+    }
     setIsLoadingKeys(true);
 
     try {
-      const response = await new AuthService().getUserApiKeys(address);
+      const response = await new AuthService().getUserApiKeys(
+        address,
+        selectedNetwork,
+      );
       setApiKeys(response?.data || []);
     } catch (error) {
       console.error("Error fetching API keys:", error);
@@ -71,6 +92,12 @@ const useAPIKeys = () => {
   const onSubmit = async () => {
     setIsRequestingAPIKey(true);
 
+    if (!isProd) {
+      toast.error("API Keys no están disponibles en este entorno");
+      setIsRequestingAPIKey(false);
+      return;
+    }
+
     if (!address) {
       toast.error("Connect your wallet to request an API Key");
       setIsRequestingAPIKey(false);
@@ -84,7 +111,10 @@ const useAPIKeys = () => {
     }
 
     try {
-      const creation = await new AuthService().requestApiKey(address);
+      const creation = await new AuthService().requestApiKey(
+        address,
+        selectedNetwork,
+      );
 
       if (creation?.success && creation.data?.apiKey) {
         setCreatedKey({ id: creation.data.id, apiKey: creation.data.apiKey });
@@ -103,9 +133,13 @@ const useAPIKeys = () => {
 
   const deleteApiKey = async (keyId: string) => {
     if (!keyId) return;
+    if (!isProd) {
+      toast.error("API Keys no están disponibles en este entorno");
+      return;
+    }
     setDeletingKeys((prev) => new Set(prev).add(keyId));
     try {
-      await new AuthService().deleteApiKey(keyId);
+      await new AuthService().deleteApiKey(keyId, selectedNetwork);
       toast.success("API key deleted");
       await fetchUserApiKeys();
     } catch (error) {
@@ -140,6 +174,10 @@ const useAPIKeys = () => {
     apiKeys,
     isLoadingKeys,
     deletingKeys,
+
+    // Network selection (only used in PROD)
+    selectedNetwork,
+    setSelectedNetwork,
   };
 };
 

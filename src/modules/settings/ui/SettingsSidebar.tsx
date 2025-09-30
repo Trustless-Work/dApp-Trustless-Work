@@ -56,6 +56,12 @@ export const SettingsSidebar = ({
   const { toggleSidebar } = useSidebar();
   const { t } = useTranslation();
 
+  // Only show API Keys in PROD environment
+  const isProd = process.env.NEXT_PUBLIC_ENV === "PROD";
+  const navItems = isProd
+    ? settingsNavItems
+    : settingsNavItems.filter((item) => item.id !== "api-keys");
+
   const handleTabClick = (tabId: string) => {
     if (tabId === "go-back") {
       router.push("/dashboard");
@@ -97,7 +103,7 @@ export const SettingsSidebar = ({
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="gap-2">
-              {settingsNavItems.map((item) => (
+              {navItems.map((item) => (
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
                     onClick={() => handleTabClick(item.id)}

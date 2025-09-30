@@ -12,6 +12,7 @@ export const Settings = () => {
   const { currentTab, setCurrentTab, saveProfile } = useSettings();
   const isMobile = useIsMobile();
   const { t } = useTranslation();
+  const isProd = process.env.NEXT_PUBLIC_ENV === "PROD";
 
   return (
     <SidebarProvider>
@@ -53,7 +54,7 @@ export const Settings = () => {
               {currentTab === "preferences" && (
                 <Preferences onSave={saveProfile} />
               )}
-              {currentTab === "api-keys" && <APIKeys />}
+              {isProd && currentTab === "api-keys" && <APIKeys />}
             </main>
           </div>
         </div>
