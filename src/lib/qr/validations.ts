@@ -66,9 +66,8 @@ export const validateAmount = (
     return { isValid: false, error: "Max 7 decimal places allowed" };
   }
 
-  // Check for reasonable max (prevent overflow)
-  if (parsed > 922337203685.4775807) {
-    // Stellar's max amount
+  const STELLAR_MAX_AMOUNT = 922337203685.4775; // Safe approximation
+  if (parsed > STELLAR_MAX_AMOUNT) {
     return { isValid: false, error: "Amount exceeds maximum" };
   }
 
@@ -158,7 +157,7 @@ export const validateOriginDomain = (
   }
 
   // Basic domain validation
-  const domainRegex = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}$/i;
+  const domainRegex = /^[a-z0-9]+([-.][a-z0-9]+)*\.[a-z]{2,}$/i;
 
   if (!domainRegex.test(origin_domain)) {
     return {

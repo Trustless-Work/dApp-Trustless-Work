@@ -95,7 +95,9 @@ export default function QRDemoPage() {
                   <Label htmlFor="network">Network</Label>
                   <Select
                     value={customNetwork}
-                    onValueChange={(v: any) => setCustomNetwork(v)}
+                    onValueChange={(v) =>
+                      setCustomNetwork(v as "testnet" | "mainnet")
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
