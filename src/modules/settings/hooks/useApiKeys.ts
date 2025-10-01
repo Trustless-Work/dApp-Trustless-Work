@@ -6,28 +6,6 @@ import { AuthService } from "../../auth/services/auth.service";
 import type { NetworkType } from "@/types/network.entity";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-// Local type for API Key records
-type ApiKeyRecord = {
-  id: string;
-  userId: string;
-  roles: string[];
-  createdAt?:
-    | { _seconds: number; _nanoseconds: number }
-    | { seconds: number; nanoseconds: number }
-    | string;
-  lastUsedAt?:
-    | { _seconds: number; _nanoseconds: number }
-    | { seconds: number; nanoseconds: number }
-    | string;
-  lastUsedFromIp?: string;
-  active?: boolean;
-  expiresAt?:
-    | { _seconds: number; _nanoseconds: number }
-    | { seconds: number; nanoseconds: number }
-    | string
-    | null;
-};
-
 const useAPIKeys = () => {
   const queryClient = useQueryClient();
   const [createdKey, setCreatedKey] = useState<{
@@ -65,10 +43,7 @@ const useAPIKeys = () => {
     }
   }, [selectedNetwork]);
 
-  const {
-    data: apiKeysResponse,
-    isFetching: isLoadingKeys,
-  } = useQuery({
+  const { data: apiKeysResponse, isFetching: isLoadingKeys } = useQuery({
     queryKey: ["api-keys", address, selectedNetwork],
     queryFn: async () => {
       if (!address) return { success: true, data: [], userId: "" };

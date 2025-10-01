@@ -90,8 +90,12 @@ export const APIKeys = () => {
                   }
                 >
                   <TabsList className="w-full grid grid-cols-1 sm:grid-cols-2">
-                    <TabsTrigger className="w-full" value="mainnet">Mainnet</TabsTrigger>
-                    <TabsTrigger className="w-full" value="testnet">Testnet</TabsTrigger>
+                    <TabsTrigger className="w-full" value="mainnet">
+                      Mainnet
+                    </TabsTrigger>
+                    <TabsTrigger className="w-full" value="testnet">
+                      Testnet
+                    </TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
