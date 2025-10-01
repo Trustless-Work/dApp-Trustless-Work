@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BASE =
+// Resolve default BASE from app environment (fallback when no network header is provided)
+const DEFAULT_BASE =
   process.env.NEXT_PUBLIC_ENV === "PROD"
     ? process.env.NEXT_PUBLIC_API_URL_PROD
     : process.env.NEXT_PUBLIC_ENV === "DEV"
@@ -11,7 +12,27 @@ async function proxyHandler(
   req: NextRequest,
   context: { params: Promise<{ path: string[] }> },
 ) {
-  const apiKey = process.env.API_KEY || "";
+  // Allow the client to specify target network; this lets us pick
+  // both the upstream base URL and the correct server-side API key.
+  const requestedNetwork = (req.headers.get("x-network") || "").toLowerCase();
+
+  const baseByNetwork =
+    requestedNetwork === "mainnet"
+      ? process.env.NEXT_PUBLIC_API_URL_PROD
+      : requestedNetwork === "testnet"
+        ? process.env.NEXT_PUBLIC_API_URL_DEV
+        : DEFAULT_BASE;
+
+  const apiKeyMainnet =
+    process.env.API_KEY_MAINNET || process.env.API_KEY || "";
+  const apiKeyTestnet =
+    process.env.API_KEY_TESTNET || process.env.API_KEY || "";
+  const apiKey =
+    requestedNetwork === "mainnet"
+      ? apiKeyMainnet
+      : requestedNetwork === "testnet"
+        ? apiKeyTestnet
+        : process.env.API_KEY || "";
   const { path } = await context.params;
   const targetPath = path.join("/");
 
@@ -21,13 +42,17 @@ async function proxyHandler(
     : url.searchParams.toString()
       ? `?${url.searchParams.toString()}`
       : "";
-  const targetUrl = `${BASE}/${targetPath}${search}`.replace(/(?<!:)\/+/g, "/");
+  const targetUrl = `${baseByNetwork}/${targetPath}${search}`.replace(
+    /(?<!:)\/+/g,
+    "/",
+  );
 
   const init: RequestInit = {
     method: req.method,
     headers: new Headers({
       "Content-Type": req.headers.get("content-type") || "application/json",
       "x-api-key": apiKey,
+      ...(requestedNetwork ? { "x-network": requestedNetwork } : {}),
     }),
     redirect: "manual",
   };
