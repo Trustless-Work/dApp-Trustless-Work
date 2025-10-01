@@ -89,9 +89,9 @@ export const APIKeys = () => {
                     setSelectedNetwork(val as "mainnet" | "testnet")
                   }
                 >
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="mainnet">Mainnet</TabsTrigger>
-                    <TabsTrigger value="testnet">Testnet</TabsTrigger>
+                  <TabsList className="w-full grid grid-cols-1 sm:grid-cols-2">
+                    <TabsTrigger className="w-full" value="mainnet">Mainnet</TabsTrigger>
+                    <TabsTrigger className="w-full" value="testnet">Testnet</TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>

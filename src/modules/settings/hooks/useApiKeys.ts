@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { useSettingBoundedStore } from "../store/ui";
 import { AuthService } from "../../auth/services/auth.service";
 import type { NetworkType } from "@/types/network.entity";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Local type for API Key records
 type ApiKeyRecord = {
@@ -28,8 +29,7 @@ type ApiKeyRecord = {
 };
 
 const useAPIKeys = () => {
-  const [apiKeys, setApiKeys] = useState<ApiKeyRecord[]>([]);
-  const [isLoadingKeys, setIsLoadingKeys] = useState(false);
+  const queryClient = useQueryClient();
   const [createdKey, setCreatedKey] = useState<{
     id: string;
     apiKey: string;
@@ -58,34 +58,37 @@ const useAPIKeys = () => {
     setSelectedNetwork(saved);
   }, []);
 
-  const fetchUserApiKeys = async () => {
-    if (!address) return;
-    if (!isProd) {
-      // In DEV, API keys are not available
-      setApiKeys([]);
-      return;
+  useEffect(() => {
+    // Persist selection changes
+    if (typeof window !== "undefined") {
+      localStorage.setItem("network", selectedNetwork);
     }
-    setIsLoadingKeys(true);
+  }, [selectedNetwork]);
 
-    try {
+  const {
+    data: apiKeysResponse,
+    isFetching: isLoadingKeys,
+  } = useQuery({
+    queryKey: ["api-keys", address, selectedNetwork],
+    queryFn: async () => {
+      if (!address) return { success: true, data: [], userId: "" };
       const response = await new AuthService().getUserApiKeys(
         address,
         selectedNetwork,
       );
-      setApiKeys(response?.data || []);
-    } catch (error) {
-      console.error("Error fetching API keys:", error);
-      toast.error("Error fetching API keys");
-    } finally {
-      setIsLoadingKeys(false);
-    }
-  };
+      return response;
+    },
+    enabled: isProd && !!address,
+    staleTime: 60_000, // evita refetch inmediato si vuelves al tab
+    refetchOnWindowFocus: false,
+  });
+
+  const apiKeys = isProd ? apiKeysResponse?.data || [] : [];
 
   useEffect(() => {
     // Refresh user and keys when address is available
     if (address) {
       refreshUser(address);
-      fetchUserApiKeys();
     }
   }, [address, refreshUser]);
 
@@ -120,6 +123,10 @@ const useAPIKeys = () => {
         setCreatedKey({ id: creation.data.id, apiKey: creation.data.apiKey });
         setIsDialogOpen(true);
         toast.success("Your API key has been generated");
+        // Actualiza la lista para la red actual
+        await queryClient.invalidateQueries({
+          queryKey: ["api-keys", address, selectedNetwork],
+        });
       } else {
         toast.error("Unexpected response when generating API key");
       }
@@ -141,7 +148,9 @@ const useAPIKeys = () => {
     try {
       await new AuthService().deleteApiKey(keyId, selectedNetwork);
       toast.success("API key deleted");
-      await fetchUserApiKeys();
+      await queryClient.invalidateQueries({
+        queryKey: ["api-keys", address, selectedNetwork],
+      });
     } catch (error) {
       console.error("Error deleting API key:", error);
       toast.error("Error deleting API key");
@@ -157,7 +166,9 @@ const useAPIKeys = () => {
   const closeDialog = async () => {
     setIsDialogOpen(false);
     setCreatedKey(null);
-    await fetchUserApiKeys();
+    await queryClient.invalidateQueries({
+      queryKey: ["api-keys", address, selectedNetwork],
+    });
   };
 
   return {
