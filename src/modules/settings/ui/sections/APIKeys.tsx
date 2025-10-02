@@ -82,7 +82,7 @@ export const APIKeys = () => {
               endpoints.
             </p>
             {process.env.NEXT_PUBLIC_ENV === "PROD" && (
-              <div className="mb-4">
+              <div className="mb-4 w-1/4">
                 <Tabs
                   value={selectedNetwork}
                   onValueChange={(val) =>
