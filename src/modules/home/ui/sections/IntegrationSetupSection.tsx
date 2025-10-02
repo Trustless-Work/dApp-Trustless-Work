@@ -96,7 +96,7 @@ export const IntegrationSetupSection = () => {
                         {t("home.integration.auth.header")}
                       </p>
                       <code className="text-xs bg-muted px-2 py-1 rounded break-all">
-                        Authorization: Bearer your-api-key-here
+                        "x-api-key": your_api_key,
                       </code>
                     </div>
                   </div>

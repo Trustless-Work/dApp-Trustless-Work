@@ -181,7 +181,7 @@
       },
       "disputeResolver": {
         "title": "Dispute Resolver",
-        "description": "Resolves disputes by adjusting milestone amounts, updating status, or canceling the contract.",
+        "description": "Resolves disputes by distributing the balance between the receivers. Or do the withdraw remaining funds in multi-release escrow.",
         "examples": [
           "Platform acting as arbiter for deposit disputes",
           "Independent third-party arbitrator setting new milestone prices",
@@ -853,7 +853,7 @@
       },
       "request": {
         "title": "Request API Key",
-        "description": "Go to the API Keys option in the sidebar and request your key"
+        "description": "Go to the API Keys option in the sidebar and request your key based on your desired network."
       }
     }
   }

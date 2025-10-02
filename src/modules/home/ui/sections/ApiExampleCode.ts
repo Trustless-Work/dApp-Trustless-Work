@@ -6,7 +6,7 @@ const API_KEY = process.env.NEXT_PUBLIC_API_KEY || "";
 
 const headers = {
   'Content-Type': 'application/json',
-  'Authorization': \`Bearer \${API_KEY}\`
+  "x-api-key": your_api_key,
 };
 
 // Example: Fund Escrow

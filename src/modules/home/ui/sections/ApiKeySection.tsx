@@ -11,15 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/ui/card";
-import {
-  ExternalLink,
-  Key,
-  Play,
-  AlertCircle,
-  Wallet,
-  Settings,
-  User,
-} from "lucide-react";
+import { ExternalLink, Key, Play, Wallet, Settings, User } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -128,49 +120,9 @@ export const ApiKeySection = () => {
                 <CardDescription>{t("apiKey.subtitle")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 border border-primary/20">
-                    <AlertCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-foreground">
-                        {t("apiKey.info.title")}
-                      </p>
-                      <p
-                        className="text-sm text-muted-foreground leading-relaxed"
-                        dangerouslySetInnerHTML={{
-                          __html: t("apiKey.info.testnet"),
-                        }}
-                      />
-                      <p
-                        className="text-sm text-muted-foreground leading-relaxed"
-                        dangerouslySetInnerHTML={{
-                          __html: t("apiKey.info.mainnet"),
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-3">
+                <div className="grid sm:grid-cols-1 gap-3">
                   <Button
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                    asChild
-                  >
-                    <Link
-                      href="https://dapp.dev.trustlesswork.com/settings"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2"
-                    >
-                      <Key className="w-4 h-4" />
-                      {t("apiKey.buttons.testnet")}
-                      <ExternalLink className="w-4 h-4" />
-                    </Link>
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    className="w-full border-primary/20 hover:bg-primary/5"
                     asChild
                   >
                     <Link
@@ -180,7 +132,7 @@ export const ApiKeySection = () => {
                       className="inline-flex items-center gap-2"
                     >
                       <Key className="w-4 h-4" />
-                      {t("apiKey.buttons.mainnet")}
+                      API Key
                       <ExternalLink className="w-4 h-4" />
                     </Link>
                   </Button>
