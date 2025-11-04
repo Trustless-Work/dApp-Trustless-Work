@@ -37,6 +37,7 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
               <FormItem>
                 <FormLabel className="text-sm font-medium">
                   First Name
+                  <span className="text-destructive ml-1">*</span>
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -54,7 +55,9 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Last Name</FormLabel>
+                <FormLabel className="text-sm font-medium">
+                  Last Name<span className="text-destructive ml-1">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter your last name"
@@ -71,7 +74,9 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Email</FormLabel>
+                <FormLabel className="text-sm font-medium">
+                  Email<span className="text-destructive ml-1">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter your email"
@@ -88,7 +93,9 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium">Phone</FormLabel>
+                <FormLabel className="text-sm font-medium">
+                  Phone<span className="text-destructive ml-1">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter your phone"
