@@ -41,10 +41,12 @@ import { useQueryClient } from "@tanstack/react-query";
 
 interface MyEscrowsFilterProps {
   escrows?: Escrow[];
+  allEscrows?: Escrow[];
   role?: string;
 }
 const MyEscrowsFilter = ({
   escrows = [],
+  allEscrows = [],
   role = "signer",
 }: MyEscrowsFilterProps) => {
   const { t } = useTranslation();
@@ -53,7 +55,9 @@ const MyEscrowsFilter = ({
   const [refreshing, setRefreshing] = useState(false);
 
   const handleExportPDF = () => {
-    exportEscrowsToPDF(escrows, {
+    // Use allEscrows (all filtered escrows) instead of paginated escrows
+    const escrowsToExport = allEscrows.length > 0 ? allEscrows : escrows;
+    exportEscrowsToPDF(escrowsToExport, {
       title: `My Escrows - ${role.toUpperCase()} Role`,
       orientation: "landscape",
     });

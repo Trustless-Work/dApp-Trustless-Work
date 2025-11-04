@@ -36,7 +36,7 @@ export const MyEscrows = () => {
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const activeMode = useEscrowUIBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
-  const { escrows } = useMyEscrows({ role: activeTab });
+  const { escrows, allEscrows } = useMyEscrows({ role: activeTab });
 
   const [run, setRun] = useState(false);
   const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
@@ -136,7 +136,7 @@ export const MyEscrows = () => {
       <div className="flex flex-col gap-3">
         <Card className={cn("overflow-hidden")}>
           <CardContent className="p-6">
-            <MyEscrowsFilter escrows={escrows} role={role} />
+            <MyEscrowsFilter escrows={escrows} allEscrows={allEscrows} role={role} />
           </CardContent>
         </Card>
         {activeMode === "table" ? (
@@ -148,7 +148,7 @@ export const MyEscrows = () => {
         )}
       </div>
     ),
-    [activeMode],
+    [activeMode, escrows, allEscrows],
   );
 
   return (

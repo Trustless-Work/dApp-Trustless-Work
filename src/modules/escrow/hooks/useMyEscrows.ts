@@ -114,8 +114,45 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
     };
   }, [currentPage, filters]);
 
+  // Base params for all escrows (without pagination - use page 1 with all results)
+  const allEscrowsBaseParams = useMemo(() => {
+    const { searchQuery, engagementFilter, dateRangeFilter, isActive } =
+      filters;
+
+    // Parse date range (now stored as YYYY-MM-DD_YYYY-MM-DD)
+    let startDate: string | undefined;
+    let endDate: string | undefined;
+    if (dateRangeFilter) {
+      const [s, e] = dateRangeFilter.split("_");
+      if (s) startDate = s;
+      if (e) endDate = e;
+    }
+
+    // Map engagement: omit when empty
+    const engagementId = engagementFilter || undefined;
+
+    return {
+      isActive,
+      page: 1, // Use page 1 to get all results (assuming API returns all when page=1)
+      orderDirection: "desc" as const,
+      orderBy: "updatedAt" as const,
+      startDate,
+      endDate,
+      title: searchQuery,
+      engagementId,
+    };
+  }, [filters]);
+
   const { data: allEscrows = [], isLoading } = useEscrowsFlexibleQuery({
     ...baseParams,
+    role,
+    roleAddress: address,
+    signer: address,
+  });
+
+  // Query to get all escrows without pagination for export
+  const { data: allEscrowsForExport = [] } = useEscrowsFlexibleQuery({
+    ...allEscrowsBaseParams,
     role,
     roleAddress: address,
     signer: address,
@@ -174,6 +211,7 @@ const useMyEscrows = ({ role }: useMyEscrowsProps) => {
 
   return {
     escrows,
+    allEscrows: allEscrowsForExport, // Use the query without pagination for export
     currentPage,
     totalPages,
     totalItems,
