@@ -2669,10 +2669,15 @@
     "@trezor/utils" "9.4.2"
     ws "^8.18.0"
 
-"@trustless-work/escrow@^2.0.9":
-  version "2.0.9"
-  resolved "https://registry.npmjs.org/@trustless-work/escrow/-/escrow-2.0.9.tgz"
-  integrity sha512-fc9zcGK1J28uyc9PXjtAS7ljq4hDu0KJAhwlgI5HKwAQelUcdayGFtJlIxTW7Y63nc3GmT8H/bbDukeq5Xayog==
+"@trustless-work/blocks@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.npmjs.org/@trustless-work/blocks/-/blocks-1.0.8.tgz"
+  integrity sha512-WY2BgtKyBIVVq7bOGu3E8FXFd0z02bUJXi3Tv+SCnt8XuGmC7YGllu1vLQFpQwlPrAEbOleB3uCkLw0fDbjFLg==
+
+"@trustless-work/escrow@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.npmjs.org/@trustless-work/escrow/-/escrow-3.0.2.tgz"
+  integrity sha512-mM28WKeFgG/y6WlHBIqrLotviCyXmVZyAcLYkAMUkppuu01XTAHX39cRkOMY9cl2GuhPn/JO+3Ka2c2o6IkNuw==
   dependencies:
     axios "^1.9.0"
 
