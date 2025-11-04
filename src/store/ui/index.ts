@@ -57,6 +57,11 @@ export const useGlobalUIBoundedStore = create<GlobalUIState>()(
     {
       name: "theme-storage",
       storage: createJSONStorage(() => localStorage),
+      partialize: (state) => {
+        // Exclude copiedKeyId from persistence as it's a temporary UI state
+        const { copiedKeyId, ...rest } = state;
+        return rest;
+      },
     },
   ),
 );
