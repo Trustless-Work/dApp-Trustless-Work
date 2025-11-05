@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { format, subDays } from "date-fns";
 import { DashboardData } from "../types/dashboard.entity";
-import { Escrow } from "@/types/escrow.entity";
-import { useEscrowsBySignerQuery } from "../../escrow/hooks/tanstack/useEscrowsBySignerQuery";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import { useGlobalAuthenticationStore } from "@/store/data";
+import { useEscrowsBySignerQuery } from "@/components/tw-blocks/tanstack/useEscrowsBySignerQuery";
 
 export const useEscrowDashboardData = (): DashboardData | null => {
   const address = useGlobalAuthenticationStore((state) => state.address);
