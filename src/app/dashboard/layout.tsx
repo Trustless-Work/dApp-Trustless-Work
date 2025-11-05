@@ -7,9 +7,9 @@ import Header from "@/shared/Header";
 import { redirect } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/store/data";
 import { Lights } from "@/shared/utils/Lights";
-import { EscrowProvider } from "@/components/tw-blocks/providers/EscrowProvider";
-import { EscrowAmountProvider } from "@/components/tw-blocks/providers/EscrowAmountProvider";
-import { EscrowDialogsProvider } from "@/components/tw-blocks/providers/EscrowDialogsProvider";
+import { EscrowProvider } from "@/providers/EscrowProvider";
+import { EscrowAmountProvider } from "@/providers/EscrowAmountProvider";
+import { EscrowDialogsProvider } from "@/providers/EscrowDialogsProvider";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();
