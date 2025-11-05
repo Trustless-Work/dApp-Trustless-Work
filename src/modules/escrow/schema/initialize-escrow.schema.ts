@@ -50,14 +50,6 @@ export const useInitializeEscrowSchema = () => {
           .refine((value) => isValidWallet(value), {
             message: "Dispute resolver must be a valid wallet.",
           }),
-        receiver: z
-          .string()
-          .min(1, {
-            message: "Receiver address is required.",
-          })
-          .refine((value) => isValidWallet(value), {
-            message: "Receiver address must be a valid wallet.",
-          }),
       }),
       engagementId: z.string().min(1, {
         message: "Engagement is required.",
@@ -105,16 +97,6 @@ export const useInitializeEscrowSchema = () => {
             message: "Platform fee can have a maximum of 2 decimal places.",
           },
         ),
-      receiverMemo: z
-        .string()
-        .optional()
-        .refine((val) => !val || val.length >= 1, {
-          message: "Receiver Memo must be at least 1.",
-        })
-        .refine((val) => !val || /^[1-9][0-9]*$/.test(val), {
-          message:
-            "Receiver Memo must be a whole number greater than 0 (no decimals).",
-        }),
     });
   };
 
@@ -122,6 +104,16 @@ export const useInitializeEscrowSchema = () => {
     const baseSchema = getBaseSchema();
 
     return baseSchema.extend({
+      roles: baseSchema.shape.roles.extend({
+        receiver: z
+          .string()
+          .min(1, {
+            message: "Receiver address is required.",
+          })
+          .refine((value) => isValidWallet(value), {
+            message: "Receiver address must be a valid wallet.",
+          }),
+      }),
       amount: z
         .union([z.string(), z.number()])
         .refine(
@@ -181,6 +173,14 @@ export const useInitializeEscrowSchema = () => {
             description: z.string().min(1, {
               message: "Milestone description is required.",
             }),
+            receiver: z
+              .string()
+              .min(1, {
+                message: "Receiver address is required.",
+              })
+              .refine((value) => isValidWallet(value), {
+                message: "Receiver address must be a valid wallet.",
+              }),
             amount: z
               .union([z.string(), z.number()])
               .refine(
