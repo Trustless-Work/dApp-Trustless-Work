@@ -3,8 +3,8 @@ import {
   GetEscrowsFromIndexerResponse as Escrow,
   MultiReleaseMilestone,
 } from "@trustless-work/escrow/types";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
-import { useEscrowAmountContext } from "@/components/tw-blocks/providers/EscrowAmountProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
+import { useEscrowAmountContext } from "@/providers/EscrowAmountProvider";
 import { useGlobalAuthenticationStore } from "@/store/data";
 
 interface EscrowDetailDialogProps {

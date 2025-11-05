@@ -18,7 +18,7 @@ import {
 } from "@/ui/dialog";
 import { Loader2, Trash2 } from "lucide-react";
 import { useWithdrawRemainingFunds } from "./useWithdrawRemainingFunds";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
 import { formatCurrency } from "../../../../helpers/format.helper";
 
 export const WithdrawRemainingFundsDialog = () => {

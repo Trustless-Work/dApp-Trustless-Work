@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isValidWallet } from "../../../../wallet-kit/validators";
+import { isValidWallet } from "@/validators/valid-data.validators";
 
 export const getFormSchema = () => {
   const amountSchema = z
@@ -15,7 +15,7 @@ export const getFormSchema = () => {
         }
         return val >= 0;
       },
-      { message: "Amount must be 0 or greater." }
+      { message: "Amount must be 0 or greater." },
     )
     .refine(
       (val) => {
@@ -31,7 +31,7 @@ export const getFormSchema = () => {
         const decimalPlaces = (val.toString().split(".")[1] || "").length;
         return decimalPlaces <= 2;
       },
-      { message: "Amount can have a maximum of 2 decimal places." }
+      { message: "Amount can have a maximum of 2 decimal places." },
     );
 
   return z
@@ -46,7 +46,7 @@ export const getFormSchema = () => {
                 message: "Invalid Stellar address.",
               }),
             amount: amountSchema,
-          })
+          }),
         )
         .min(2, { message: "At least two distributions are required." }),
       milestoneIndex: z

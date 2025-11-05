@@ -12,13 +12,13 @@ import useEscrowDetailDialog from "./useDetailsEscrow";
 import Link from "next/link";
 import { Card } from "@/ui/card";
 import { Info, Users, ListChecks } from "lucide-react";
-import { useEscrowDialogs } from "@/components/tw-blocks/providers/EscrowDialogsProvider";
+import { useEscrowDialogs } from "@/providers/EscrowDialogsProvider";
 import type { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs";
 import { Milestones } from "./Milestones";
 import { Entities } from "./Entities";
 import { GeneralInformation } from "./GeneralInformation";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
 import { SuccessReleaseDialog } from "./SuccessReleaseDialog";
 
 /**

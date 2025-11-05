@@ -1,20 +1,20 @@
 import * as React from "react";
 import { Button } from "@/ui/button";
 import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
-import { useWalletContext } from "@/components/tw-blocks/wallet-kit/WalletProvider";
 import { SingleReleaseStartDisputePayload } from "@trustless-work/escrow/types";
 import { toast } from "sonner";
 import {
   ErrorResponse,
   handleError,
 } from "@/components/tw-blocks/handle-errors/handle";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
 import { Loader2 } from "lucide-react";
+import { useGlobalAuthenticationStore } from "@/store/data";
 
 export const DisputeEscrowButton = () => {
   const { startDispute } = useEscrowsMutations();
   const { selectedEscrow, updateEscrow } = useEscrowContext();
-  const { walletAddress } = useWalletContext();
+  const walletAddress = useGlobalAuthenticationStore((state) => state.address);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   async function handleClick() {

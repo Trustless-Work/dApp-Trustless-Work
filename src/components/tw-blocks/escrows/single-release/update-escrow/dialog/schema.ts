@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isValidWallet } from "@/components/tw-blocks/wallet-kit/validators";
+import { isValidWallet } from "@/validators/valid-data.validators";
 
 export const useUpdateEscrowSchema = () => {
   const getBaseSchema = () => {
@@ -63,7 +63,7 @@ export const useUpdateEscrowSchema = () => {
             }
             return val > 0;
           },
-          { message: "Platform fee must be greater than 0." }
+          { message: "Platform fee must be greater than 0." },
         )
         .refine(
           (val) => {
@@ -77,7 +77,7 @@ export const useUpdateEscrowSchema = () => {
             const dp = (val.toString().split(".")[1] || "").length;
             return dp <= 2;
           },
-          { message: "Platform fee can have a maximum of 2 decimal places." }
+          { message: "Platform fee can have a maximum of 2 decimal places." },
         ),
     });
   };
@@ -96,7 +96,7 @@ export const useUpdateEscrowSchema = () => {
             }
             return val > 0;
           },
-          { message: "Amount must be greater than 0." }
+          { message: "Amount must be greater than 0." },
         )
         .refine(
           (val) => {
@@ -110,7 +110,7 @@ export const useUpdateEscrowSchema = () => {
             const dp = (val.toString().split(".")[1] || "").length;
             return dp <= 2;
           },
-          { message: "Amount can have a maximum of 2 decimal places." }
+          { message: "Amount can have a maximum of 2 decimal places." },
         ),
       milestones: z
         .array(
@@ -118,7 +118,7 @@ export const useUpdateEscrowSchema = () => {
             description: z
               .string()
               .min(1, { message: "Milestone description is required." }),
-          })
+          }),
         )
         .min(1, { message: "At least one milestone is required." }),
     });

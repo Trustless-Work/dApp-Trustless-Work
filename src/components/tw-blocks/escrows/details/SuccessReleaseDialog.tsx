@@ -11,8 +11,8 @@ import {
 import { EntityCard } from "./EntityCard";
 import { CircleCheckBig } from "lucide-react";
 import { MultiReleaseMilestone } from "@trustless-work/escrow";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
-import { useEscrowAmountContext } from "@/components/tw-blocks/providers/EscrowAmountProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
+import { useEscrowAmountContext } from "@/providers/EscrowAmountProvider";
 
 interface SuccessReleaseDialogProps {
   isOpen: boolean;

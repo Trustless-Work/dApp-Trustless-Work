@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isValidWallet } from "../../../../wallet-kit/validators";
+import { isValidWallet } from "@/validators/valid-data.validators";
 
 export const useUpdateEscrowSchema = () => {
   const getBaseSchema = () => {
@@ -57,7 +57,7 @@ export const useUpdateEscrowSchema = () => {
             }
             return val > 0;
           },
-          { message: "Platform fee must be greater than 0." }
+          { message: "Platform fee must be greater than 0." },
         )
         .refine(
           (val) => {
@@ -71,7 +71,7 @@ export const useUpdateEscrowSchema = () => {
             const dp = (val.toString().split(".")[1] || "").length;
             return dp <= 2;
           },
-          { message: "Platform fee can have a maximum of 2 decimal places." }
+          { message: "Platform fee can have a maximum of 2 decimal places." },
         ),
     });
   };
@@ -109,7 +109,7 @@ export const useUpdateEscrowSchema = () => {
                 },
                 {
                   message: "Milestone amount must be greater than 0.",
-                }
+                },
               )
               .refine(
                 (val) => {
@@ -131,9 +131,9 @@ export const useUpdateEscrowSchema = () => {
                 {
                   message:
                     "Milestone amount can have a maximum of 2 decimal places.",
-                }
+                },
               ),
-          })
+          }),
         )
         .min(1, { message: "At least one milestone is required." }),
     });

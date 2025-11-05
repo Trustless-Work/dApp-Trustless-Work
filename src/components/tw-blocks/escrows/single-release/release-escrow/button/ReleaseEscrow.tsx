@@ -1,17 +1,17 @@
 import * as React from "react";
 import { Button } from "@/ui/button";
 import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
-import { useWalletContext } from "@/components/tw-blocks/wallet-kit/WalletProvider";
 import { SingleReleaseReleaseFundsPayload } from "@trustless-work/escrow/types";
 import { toast } from "sonner";
 import {
   ErrorResponse,
   handleError,
 } from "@/components/tw-blocks/handle-errors/handle";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
-import { useEscrowDialogs } from "@/components/tw-blocks/providers/EscrowDialogsProvider";
-import { useEscrowAmountContext } from "@/components/tw-blocks/providers/EscrowAmountProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
+import { useEscrowDialogs } from "@/providers/EscrowDialogsProvider";
+import { useEscrowAmountContext } from "@/providers/EscrowAmountProvider";
 import { Loader2 } from "lucide-react";
+import { useGlobalAuthenticationStore } from "@/store/data";
 
 export const ReleaseEscrowButton = () => {
   const { releaseFunds } = useEscrowsMutations();
@@ -19,7 +19,7 @@ export const ReleaseEscrowButton = () => {
   const dialogStates = useEscrowDialogs();
   const { setAmounts, setLastReleasedMilestoneIndex } =
     useEscrowAmountContext();
-  const { walletAddress } = useWalletContext();
+  const walletAddress = useGlobalAuthenticationStore((state) => state.address);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   async function handleClick() {

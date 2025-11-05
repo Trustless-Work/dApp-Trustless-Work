@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button } from "@/ui/button";
 import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
 import {
-  MultiReleaseStartDisputePayload,
+  ApproveMilestonePayload,
   MultiReleaseMilestone,
 } from "@trustless-work/escrow/types";
 import { toast } from "sonner";
@@ -14,14 +14,14 @@ import { useEscrowContext } from "@/providers/EscrowProvider";
 import { Loader2 } from "lucide-react";
 import { useGlobalAuthenticationStore } from "@/store/data";
 
-type DisputeMilestoneButtonProps = {
+type ApproveMilestoneButtonProps = {
   milestoneIndex: number | string;
 };
 
-export const DisputeMilestoneButton = ({
+export const ApproveMilestoneButton = ({
   milestoneIndex,
-}: DisputeMilestoneButtonProps) => {
-  const { startDispute } = useEscrowsMutations();
+}: ApproveMilestoneButtonProps) => {
+  const { approveMilestone } = useEscrowsMutations();
   const { selectedEscrow, updateEscrow } = useEscrowContext();
   const walletAddress = useGlobalAuthenticationStore((state) => state.address);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -31,42 +31,47 @@ export const DisputeMilestoneButton = ({
       setIsSubmitting(true);
 
       /**
-       * Create the payload for the dispute escrow mutation
+       * Create the payload for the approve milestone mutation
        *
-       * @returns The payload for the dispute escrow mutation
+       * @param milestoneIndex - The index of the milestone to approve
+       * @returns The payload for the approve milestone mutation
        */
-      const payload: MultiReleaseStartDisputePayload = {
+      const payload: ApproveMilestonePayload = {
         contractId: selectedEscrow?.contractId || "",
-        signer: walletAddress || "",
         milestoneIndex: String(milestoneIndex),
+        approver: walletAddress || "",
       };
 
       /**
-       * Call the dispute escrow mutation
+       * Call the approve milestone mutation
        *
-       * @param payload - The payload for the dispute escrow mutation
+       * @param payload - The payload for the approve milestone mutation
        * @param type - The type of the escrow
        * @param address - The address of the escrow
        */
-      await startDispute.mutateAsync({
+      await approveMilestone.mutateAsync({
         payload,
-        type: "multi-release",
+        type: selectedEscrow?.type || "multi-release",
         address: walletAddress || "",
       });
 
-      toast.success("Milestone disputed successfully");
+      toast.success("Milestone approved flag updated successfully");
 
       updateEscrow({
         ...selectedEscrow,
         milestones: selectedEscrow?.milestones.map((milestone, index) => {
-          if (index === Number(milestoneIndex)) {
-            return {
-              ...milestone,
-              flags: {
-                ...(milestone as MultiReleaseMilestone).flags,
-                disputed: true,
-              },
-            };
+          if (index === Number(payload.milestoneIndex)) {
+            if (selectedEscrow?.type === "single-release") {
+              return { ...milestone, approved: true };
+            } else {
+              return {
+                ...milestone,
+                flags: {
+                  ...(milestone as MultiReleaseMilestone).flags,
+                  approved: true,
+                },
+              };
+            }
           }
           return milestone;
         }),
@@ -81,17 +86,17 @@ export const DisputeMilestoneButton = ({
   return (
     <Button
       type="button"
-      disabled={isSubmitting || !selectedEscrow?.balance}
+      disabled={isSubmitting}
       onClick={handleClick}
       className="cursor-pointer w-full"
     >
       {isSubmitting ? (
         <div className="flex items-center">
           <Loader2 className="h-5 w-5 animate-spin" />
-          <span className="ml-2">Disputing...</span>
+          <span className="ml-2">Approving...</span>
         </div>
       ) : (
-        "Dispute Milestone"
+        "Approve Milestone"
       )}
     </Button>
   );

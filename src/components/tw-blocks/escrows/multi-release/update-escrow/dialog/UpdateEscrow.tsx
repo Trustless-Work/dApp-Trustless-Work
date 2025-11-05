@@ -17,11 +17,10 @@ import {
   SelectContent,
   SelectItem,
 } from "@/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/ui/textarea";
 import { useUpdateEscrow } from "./useUpdateEscrow";
 import { Trash2, DollarSign, Percent, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
-import { trustlineOptions } from "@/components/tw-blocks/wallet-kit/trustlines";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +28,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/ui/dialog";
+import { trustlines } from "@/constants/trustlines.constant";
 
 export const UpdateEscrowDialog = () => {
   const {
@@ -158,14 +158,14 @@ export const UpdateEscrowDialog = () => {
                           <SelectValue placeholder="Select trustline" />
                         </SelectTrigger>
                         <SelectContent>
-                          {trustlineOptions
-                            .filter((option) => option.value)
+                          {trustlines
+                            .filter((option) => option.address)
                             .map((option, index) => (
                               <SelectItem
-                                key={`${option.value}-${index}`}
-                                value={option.value}
+                                key={`${option.address}-${index}`}
+                                value={option.address}
                               >
-                                {option.label}
+                                {option.name}
                               </SelectItem>
                             ))}
                         </SelectContent>

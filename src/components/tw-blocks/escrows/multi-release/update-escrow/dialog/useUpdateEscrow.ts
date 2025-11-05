@@ -9,14 +9,14 @@ import {
   MultiReleaseMilestone,
 } from "@trustless-work/escrow/types";
 import { toast } from "sonner";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
-import { useWalletContext } from "@/components/tw-blocks/wallet-kit/WalletProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
 import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
 import {
   ErrorResponse,
   handleError,
 } from "@/components/tw-blocks/handle-errors/handle";
 import { GetEscrowsFromIndexerResponse } from "@trustless-work/escrow/types";
+import { useGlobalAuthenticationStore } from "@/store/data";
 
 export function useUpdateEscrow() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -24,13 +24,13 @@ export function useUpdateEscrow() {
   const { getMultiReleaseFormSchema } = useUpdateEscrowSchema();
   const formSchema = getMultiReleaseFormSchema();
 
-  const { walletAddress } = useWalletContext();
+  const walletAddress = useGlobalAuthenticationStore((state) => state.address);
   const { selectedEscrow, setSelectedEscrow } = useEscrowContext();
   const { updateEscrow } = useEscrowsMutations();
 
   const isEscrowLocked = Number(selectedEscrow?.balance || 0) > 0;
   const initialMilestonesCountRef = React.useRef<number>(
-    ((selectedEscrow?.milestones as MultiReleaseMilestone[]) || []).length
+    ((selectedEscrow?.milestones as MultiReleaseMilestone[]) || []).length,
   );
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -141,7 +141,7 @@ export function useUpdateEscrow() {
 
   const handleMilestoneAmountChange = (
     index: number,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     let rawValue = e.target.value;
     rawValue = rawValue.replace(/[^0-9.]/g, "");

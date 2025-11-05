@@ -23,7 +23,7 @@ import {
 } from "@trustless-work/escrow";
 import Link from "next/link";
 import { formatCurrency } from "@/components/tw-blocks/helpers/format.helper";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
 import { EntityCard } from "./EntityCard";
 
 interface MilestoneDetailDialogProps {

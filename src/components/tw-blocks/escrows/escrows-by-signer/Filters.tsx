@@ -24,6 +24,8 @@ import {
   SlidersHorizontal,
   Download,
   FileSpreadsheet,
+  Shield,
+  Database,
 } from "lucide-react";
 import { exportEscrowsToPDF } from "@/lib/pdf-export";
 import type { Escrow } from "@/types/escrow.entity";
@@ -34,6 +36,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/ui/dialog";
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+import CreateButton from "@/shared/utils/Create";
 import {
   Select as OrderSelect,
   SelectTrigger as OrderSelectTrigger,
@@ -139,6 +152,9 @@ export const Filters = ({
       orientation: "landscape",
     });
   }, [escrows]);
+
+  const { t } = useTranslation();
+
   return (
     <div className="w-full bg-card/50 backdrop-blur-sm border border-border/50 rounded-lg p-4 shadow-sm">
       {/* Header Section */}
@@ -171,6 +187,51 @@ export const Filters = ({
             <Trash2 className="w-3 h-3" />
             <span className="hidden xs:inline">Clear</span>
           </Button>
+
+          {/* Blockchain Sync Dialog */}
+          <Dialog>
+            <DialogTrigger asChild>
+              <motion.button
+                type="button"
+                className="flex items-center justify-center gap-2 px-3 py-2 text-xs text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-lg hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors duration-200 whitespace-nowrap"
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="font-medium inline">
+                  {t("myEscrows.blockchainSync.title")}
+                </span>
+              </motion.button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-lg">
+              <DialogHeader>
+                <div className="flex items-center gap-3">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", damping: 15 }}
+                    className="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50"
+                  >
+                    <div className="flex items-center gap-1">
+                      <Shield className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      <Database className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                  </motion.div>
+                  <DialogTitle className="text-emerald-900 dark:text-emerald-100">
+                    {t("myEscrows.blockchainSync.title")}
+                  </DialogTitle>
+                </div>
+              </DialogHeader>
+              <DialogDescription className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                {t("myEscrows.blockchainSync.description")}
+              </DialogDescription>
+            </DialogContent>
+          </Dialog>
+
+          {/* Create Button */}
+          <CreateButton
+            label={t("myEscrows.filter.actions.create")}
+            url={"/dashboard/escrow/initialize-escrow"}
+            id="step-2"
+          />
         </div>
       </div>
 

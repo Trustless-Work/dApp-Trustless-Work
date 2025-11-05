@@ -4,20 +4,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { resolveDisputeSchema, type ResolveDisputeValues } from "./schema";
 import { toast } from "sonner";
 import { SingleReleaseResolveDisputePayload } from "@trustless-work/escrow";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
 import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
 import {
   ErrorResponse,
   handleError,
 } from "@/components/tw-blocks/handle-errors/handle";
-import { useWalletContext } from "@/components/tw-blocks/wallet-kit/WalletProvider";
+import { useGlobalAuthenticationStore } from "@/store/data";
 
 type DistributionInput = { address: string; amount: string | number };
 
 export function useResolveDispute() {
   const { resolveDispute } = useEscrowsMutations();
   const { selectedEscrow, updateEscrow } = useEscrowContext();
-  const { walletAddress } = useWalletContext();
+  const walletAddress = useGlobalAuthenticationStore((state) => state.address);
 
   const form = useForm<ResolveDisputeValues>({
     resolver: zodResolver(resolveDisputeSchema),
@@ -61,7 +61,7 @@ export function useResolveDispute() {
 
   const handleDistributionAmountChange = (
     index: number,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     let rawValue = e.target.value;
     rawValue = rawValue.replace(/[^0-9.]/g, "");

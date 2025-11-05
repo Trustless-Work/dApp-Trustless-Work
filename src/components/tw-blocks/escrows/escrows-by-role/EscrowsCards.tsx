@@ -22,8 +22,8 @@ import {
 } from "lucide-react";
 import { useEscrowsByRole } from "./useEscrowsByRole.shared";
 import { Filters } from "./Filters";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
-import { useEscrowDialogs } from "@/components/tw-blocks/providers/EscrowDialogsProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
+import { useEscrowDialogs } from "@/providers/EscrowDialogsProvider";
 import { formatCurrency, formatTimestamp } from "../../helpers/format.helper";
 import { EscrowDetailDialog } from "../details/EscrowDetailDialog";
 import type { GetEscrowsFromIndexerByRoleParams } from "@trustless-work/escrow";

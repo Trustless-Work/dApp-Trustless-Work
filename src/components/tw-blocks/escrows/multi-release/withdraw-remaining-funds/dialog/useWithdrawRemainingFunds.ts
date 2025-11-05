@@ -7,20 +7,20 @@ import {
 } from "./schema";
 import { toast } from "sonner";
 import { WithdrawRemainingFundsPayload } from "@trustless-work/escrow";
-import { useEscrowContext } from "@/components/tw-blocks/providers/EscrowProvider";
+import { useEscrowContext } from "@/providers/EscrowProvider";
 import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
 import {
   ErrorResponse,
   handleError,
 } from "@/components/tw-blocks/handle-errors/handle";
-import { useWalletContext } from "@/components/tw-blocks/wallet-kit/WalletProvider";
+import { useGlobalAuthenticationStore } from "@/store/data";
 
 type DistributionInput = { address: string; amount: string | number };
 
 export function useWithdrawRemainingFunds() {
   const { withdrawRemainingFunds } = useEscrowsMutations();
   const { selectedEscrow, updateEscrow } = useEscrowContext();
-  const { walletAddress } = useWalletContext();
+  const walletAddress = useGlobalAuthenticationStore((state) => state.address);
 
   const form = useForm<WithdrawRemainingFundsValues>({
     resolver: zodResolver(withdrawRemainingFundsSchema),
@@ -64,7 +64,7 @@ export function useWithdrawRemainingFunds() {
 
   const handleDistributionAmountChange = (
     index: number,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     let rawValue = e.target.value;
     rawValue = rawValue.replace(/[^0-9.]/g, "");
