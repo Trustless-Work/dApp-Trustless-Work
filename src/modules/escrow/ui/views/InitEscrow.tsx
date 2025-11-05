@@ -1,9 +1,9 @@
 "use client";
 
 import Loader from "@/shared/utils/Loader";
-import { InitializeSingleEscrowForm } from "../forms/InitializeSingleEscrowForm";
+import { InitializeSingleEscrowForm } from "../InitializeSingleEscrowForm";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import { InitializeMultiEscrowForm } from "../forms/InitializeMultiEscrowForm";
+import { InitializeMultiEscrowForm } from "../InitializeMultiEscrowForm";
 import { useGlobalAuthenticationStore } from "@/store/data";
 import { FileWarning } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/ui/alert";

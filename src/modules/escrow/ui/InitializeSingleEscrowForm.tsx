@@ -16,12 +16,11 @@ import { Switch } from "@/ui/switch";
 import { Textarea } from "@/ui/textarea";
 import { DollarSign, Percent, Trash2 } from "lucide-react";
 import { useEscrowUIBoundedStore } from "../store/ui";
-import { useInitializeMultiEscrow } from "../hooks/useInitializeMultiEscrow";
+import { useInitializeSingleEscrow } from "../hooks/useInitializeSingleEscrow";
 import { Card } from "@/ui/card";
 import Link from "next/link";
-import { Separator } from "@/ui/separator";
 
-export const InitializeMultiEscrowForm = ({
+export const InitializeSingleEscrowForm = ({
   disabled,
 }: {
   disabled: boolean;
@@ -38,7 +37,7 @@ export const InitializeMultiEscrowForm = ({
     handleAddMilestone,
     handleRemoveMilestone,
     fillTemplateForm,
-  } = useInitializeMultiEscrow();
+  } = useInitializeSingleEscrow();
 
   const setEscrowType = useEscrowUIBoundedStore((state) => state.setEscrowType);
   const toggleStep = useEscrowUIBoundedStore((state) => state.toggleStep);
@@ -46,6 +45,26 @@ export const InitializeMultiEscrowForm = ({
   const handleChangeType = () => {
     setEscrowType(null);
     toggleStep(1);
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    form.setValue("amount", rawValue);
   };
 
   const handlePlatformFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,34 +87,6 @@ export const InitializeMultiEscrowForm = ({
     form.setValue("platformFee", rawValue);
   };
 
-  const handleMilestoneAmountChange = (
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    let rawValue = e.target.value;
-    rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-    if (rawValue.split(".").length > 2) {
-      rawValue = rawValue.slice(0, -1);
-    }
-
-    // Limit to 2 decimal places
-    if (rawValue.includes(".")) {
-      const parts = rawValue.split(".");
-      if (parts[1] && parts[1].length > 2) {
-        rawValue = parts[0] + "." + parts[1].slice(0, 2);
-      }
-    }
-
-    // Always keep as string to allow partial input like "0." or "0.5"
-    const updatedMilestones = [...milestones];
-    updatedMilestones[index] = {
-      ...updatedMilestones[index],
-      amount: rawValue,
-    };
-    form.setValue("milestones", updatedMilestones);
-  };
-
   return (
     <Form {...form}>
       <form
@@ -110,10 +101,11 @@ export const InitializeMultiEscrowForm = ({
           >
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary" />
-              <h2 className="text-xl font-semibold">Multi Release Escrow</h2>
+              <h2 className="text-xl font-semibold">Single Release Escrow</h2>
             </div>
             <p className="text-muted-foreground mt-1">
-              Payments will be released as each milestone is approved
+              A single payment will be released upon completion of all
+              milestones
             </p>
           </Link>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
@@ -137,7 +129,7 @@ export const InitializeMultiEscrowForm = ({
             )}
           </div>
         </Card>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="title"
@@ -194,34 +186,6 @@ export const InitializeMultiEscrowForm = ({
               value: tl.value,
               label: tl.label || "",
             }))}
-          />
-
-          <FormField
-            control={form.control}
-            name="platformFee"
-            render={() => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Platform Fee<span className="text-destructive ml-1">*</span>
-                  <TooltipInfo content="Commission that the platform will receive when the escrow is completed." />
-                </FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Percent
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                      size={18}
-                    />
-                    <Input
-                      placeholder="Enter platform fee"
-                      className="pl-10"
-                      value={form.watch("platformFee")?.toString() || ""}
-                      onChange={handlePlatformFeeChange}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
           />
         </div>
 
@@ -402,7 +366,7 @@ export const InitializeMultiEscrowForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="roles.platformAddress"
@@ -446,6 +410,104 @@ export const InitializeMultiEscrowForm = ({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="roles.receiver"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex items-center justify-between">
+                  <span className="flex items-center">
+                    Receiver<span className="text-destructive ml-1">*</span>
+                    <TooltipInfo content="Final recipient of funds." />
+                  </span>
+                  <Switch
+                    checked={showSelect.receiver}
+                    onCheckedChange={(value) => toggleField("receiver", value)}
+                    title="Show Users List?"
+                  />
+                </FormLabel>
+
+                <FormControl>
+                  {showSelect.receiver ? (
+                    <SelectField
+                      control={form.control}
+                      name="roles.receiver"
+                      label=""
+                      tooltipContent=""
+                      options={userOptions}
+                    />
+                  ) : (
+                    <Input
+                      placeholder="Enter receiver address"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                      }}
+                    />
+                  )}
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="platformFee"
+            render={() => (
+              <FormItem>
+                <FormLabel className="flex items-center">
+                  Platform Fee<span className="text-destructive ml-1">*</span>
+                  <TooltipInfo content="Commission that the platform will receive when the escrow is completed." />
+                </FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Percent
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      size={18}
+                    />
+                    <Input
+                      placeholder="Enter platform fee"
+                      className="pl-10"
+                      value={form.watch("platformFee")?.toString() || ""}
+                      onChange={handlePlatformFeeChange}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="amount"
+            render={() => (
+              <FormItem>
+                <FormLabel className="flex items-center">
+                  Amount<span className="text-destructive ml-1">*</span>
+                  <TooltipInfo content="Amount to be transferred upon completion of escrow milestones." />
+                </FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <DollarSign
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                      size={18}
+                    />
+                    <Input
+                      placeholder="Enter amount"
+                      className="pl-10"
+                      value={form.watch("amount")?.toString() || ""}
+                      onChange={handleAmountChange}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <FormField
@@ -474,70 +536,36 @@ export const InitializeMultiEscrowForm = ({
         <div className="space-y-4">
           <FormLabel className="flex items-center">
             Milestones<span className="text-destructive ml-1">*</span>
+            <TooltipInfo content="Objectives to be completed to define the escrow as completed." />
           </FormLabel>
           {milestones.map((milestone, index) => (
-            <div key={index} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                <div className="md:col-span-4">
-                  <Input
-                    placeholder="Enter receiver address"
-                    value={milestone.receiver}
-                    onChange={(e) => {
-                      const updatedMilestones = [...milestones];
-                      updatedMilestones[index].receiver = e.target.value;
-                      form.setValue("milestones", updatedMilestones);
-                    }}
-                  />
-                </div>
+            <div key={index}>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <Input
+                  placeholder="Milestone Description"
+                  value={milestone.description}
+                  className="w-full sm:flex-1"
+                  onChange={(e) => {
+                    const updatedMilestones = [...milestones];
+                    updatedMilestones[index].description = e.target.value;
+                    form.setValue("milestones", updatedMilestones);
+                  }}
+                />
 
-                <div className="md:col-span-4">
-                  <Input
-                    placeholder="Milestone description"
-                    value={milestone.description}
-                    onChange={(e) => {
-                      const updatedMilestones = [...milestones];
-                      updatedMilestones[index].description = e.target.value;
-                      form.setValue("milestones", updatedMilestones);
-                    }}
-                  />
-                </div>
-
-                <div className="md:col-span-3 relative">
-                  <DollarSign
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                    size={18}
-                  />
-                  <Input
-                    className="pl-10"
-                    placeholder="Enter amount"
-                    value={milestone.amount?.toString() || ""}
-                    onChange={(e) => handleMilestoneAmountChange(index, e)}
-                  />
-                </div>
-
-                <div className="md:col-span-1 flex justify-end">
-                  <Button
-                    onClick={() => handleRemoveMilestone(index)}
-                    className="p-2 bg-transparent text-red-500 hover:text-red-600"
-                    disabled={milestones.length === 1}
-                    type="button"
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </Button>
-                </div>
+                <Button
+                  onClick={() => handleRemoveMilestone(index)}
+                  className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0 self-start sm:self-center"
+                  disabled={milestones.length === 1}
+                >
+                  <Trash2 className="h-5 w-5" />
+                </Button>
               </div>
 
-              {/* Separator */}
-              {index < milestones.length - 1 && (
-                <Separator className="w-full" />
-              )}
-
-              {/* Add button */}
               {index === milestones.length - 1 && (
                 <div className="flex justify-end mt-4">
                   <Button
                     disabled={isAnyMilestoneEmpty}
-                    className="w-full md:w-fit md:min-w-40 cursor-pointer"
+                    className="w-full md:w-1/4"
                     variant="outline"
                     onClick={handleAddMilestone}
                     type="button"

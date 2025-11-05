@@ -72,7 +72,6 @@ export const useInitializeMultiEscrow = () => {
       title: "",
       description: "",
       platformFee: undefined,
-      receiverMemo: "",
       trustline: {
         address: "",
       },
@@ -80,11 +79,10 @@ export const useInitializeMultiEscrow = () => {
         approver: "",
         serviceProvider: "",
         platformAddress: "",
-        receiver: "",
         releaseSigner: "",
         disputeResolver: "",
       },
-      milestones: [{ description: "", amount: undefined }],
+      milestones: [{ description: "", receiver: "", amount: undefined }],
     },
     mode: "onChange",
   });
@@ -110,7 +108,6 @@ export const useInitializeMultiEscrow = () => {
       title: "Design Landing Page",
       description: "Landing for the new product of the company.",
       platformFee: 5,
-      receiverMemo: "123",
       trustline: {
         address: usdcTrustline.address,
       },
@@ -118,11 +115,16 @@ export const useInitializeMultiEscrow = () => {
         approver: address || "",
         serviceProvider: address || "",
         platformAddress: address || "",
-        receiver: address || "",
         releaseSigner: address || "",
         disputeResolver: address || "",
       },
-      milestones: [{ description: "Design the wireframe", amount: 2 }],
+      milestones: [
+        {
+          description: "Design the wireframe",
+          receiver: address || "",
+          amount: 2,
+        },
+      ],
     };
 
     // Set form values
@@ -143,7 +145,7 @@ export const useInitializeMultiEscrow = () => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = [
       ...currentMilestones,
-      { description: "", amount: 0 },
+      { description: "", receiver: "", amount: 0 },
     ];
     form.setValue("milestones", updatedMilestones);
   };
@@ -170,7 +172,6 @@ export const useInitializeMultiEscrow = () => {
           typeof payload.platformFee === "string"
             ? Number(payload.platformFee)
             : payload.platformFee,
-        receiverMemo: Number(payload.receiverMemo) ?? 0,
         signer: address,
         milestones: payload.milestones.map((milestone) => ({
           ...milestone,

@@ -73,7 +73,6 @@ export const useInitializeSingleEscrow = () => {
       description: "",
       platformFee: undefined,
       amount: undefined,
-      receiverMemo: "",
       trustline: {
         address: "",
       },
@@ -112,7 +111,6 @@ export const useInitializeSingleEscrow = () => {
       description: "Landing for the new product of the company.",
       platformFee: 5,
       amount: 5,
-      receiverMemo: "123",
       trustline: {
         address: usdcTrustline.address,
       },
@@ -173,7 +171,6 @@ export const useInitializeSingleEscrow = () => {
           typeof payload.platformFee === "string"
             ? Number(payload.platformFee)
             : payload.platformFee,
-        receiverMemo: Number(payload.receiverMemo) ?? 0,
         signer: address,
         milestones: payload.milestones,
       };
