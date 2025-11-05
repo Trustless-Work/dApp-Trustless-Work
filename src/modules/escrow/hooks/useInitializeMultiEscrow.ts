@@ -17,13 +17,13 @@ import {
   InitializeMultiReleaseEscrowResponse,
 } from "@trustless-work/escrow/types";
 import { Escrow } from "@/types/escrow.entity";
-import { useEscrowUIBoundedStore } from "../../store/ui";
-import { useInitializeEscrowSchema } from "../../schema/initialize-escrow.schema";
+import { useEscrowUIBoundedStore } from "../store/ui";
+import { useInitializeEscrowSchema } from "../schema/initialize-escrow.schema";
 import { AxiosError } from "axios";
-import { handleError } from "@/errors/handle-errors";
-import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
 import { trustlines } from "@/constants/trustlines.constant";
 import useNetwork from "@/hooks/useNetwork";
+import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
+import { handleError } from "@/components/tw-blocks/handle-errors/handle";
 
 export const useInitializeMultiEscrow = () => {
   const [showSelect, setShowSelect] = useState({

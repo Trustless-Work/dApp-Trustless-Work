@@ -15,12 +15,12 @@ import SelectField from "@/shared/utils/SelectSearch";
 import { Switch } from "@/ui/switch";
 import { Textarea } from "@/ui/textarea";
 import { DollarSign, Percent, Trash2 } from "lucide-react";
-import { useEscrowUIBoundedStore } from "../../store/ui";
-import { useInitializeSingleEscrow } from "../../hooks/single-release/useInitializeSingleEscrow";
+import { useEscrowUIBoundedStore } from "../store/ui";
+import { useInitializeMultiEscrow } from "../hooks/useInitializeMultiEscrow";
 import { Card } from "@/ui/card";
 import Link from "next/link";
 
-export const InitializeSingleEscrowForm = ({
+export const InitializeMultiEscrowForm = ({
   disabled,
 }: {
   disabled: boolean;
@@ -37,7 +37,7 @@ export const InitializeSingleEscrowForm = ({
     handleAddMilestone,
     handleRemoveMilestone,
     fillTemplateForm,
-  } = useInitializeSingleEscrow();
+  } = useInitializeMultiEscrow();
 
   const setEscrowType = useEscrowUIBoundedStore((state) => state.setEscrowType);
   const toggleStep = useEscrowUIBoundedStore((state) => state.toggleStep);
@@ -45,26 +45,6 @@ export const InitializeSingleEscrowForm = ({
   const handleChangeType = () => {
     setEscrowType(null);
     toggleStep(1);
-  };
-
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let rawValue = e.target.value;
-    rawValue = rawValue.replace(/[^0-9.]/g, "");
-
-    if (rawValue.split(".").length > 2) {
-      rawValue = rawValue.slice(0, -1);
-    }
-
-    // Limit to 2 decimal places
-    if (rawValue.includes(".")) {
-      const parts = rawValue.split(".");
-      if (parts[1] && parts[1].length > 2) {
-        rawValue = parts[0] + "." + parts[1].slice(0, 2);
-      }
-    }
-
-    // Always keep as string to allow partial input like "0." or "0.5"
-    form.setValue("amount", rawValue);
   };
 
   const handlePlatformFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,6 +67,34 @@ export const InitializeSingleEscrowForm = ({
     form.setValue("platformFee", rawValue);
   };
 
+  const handleMilestoneAmountChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    let rawValue = e.target.value;
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    if (rawValue.split(".").length > 2) {
+      rawValue = rawValue.slice(0, -1);
+    }
+
+    // Limit to 2 decimal places
+    if (rawValue.includes(".")) {
+      const parts = rawValue.split(".");
+      if (parts[1] && parts[1].length > 2) {
+        rawValue = parts[0] + "." + parts[1].slice(0, 2);
+      }
+    }
+
+    // Always keep as string to allow partial input like "0." or "0.5"
+    const updatedMilestones = [...milestones];
+    updatedMilestones[index] = {
+      ...updatedMilestones[index],
+      amount: rawValue,
+    };
+    form.setValue("milestones", updatedMilestones);
+  };
+
   return (
     <Form {...form}>
       <form
@@ -101,11 +109,10 @@ export const InitializeSingleEscrowForm = ({
           >
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-primary" />
-              <h2 className="text-xl font-semibold">Single Release Escrow</h2>
+              <h2 className="text-xl font-semibold">Multi Release Escrow</h2>
             </div>
             <p className="text-muted-foreground mt-1">
-              A single payment will be released upon completion of all
-              milestones
+              Payments will be released as each milestone is approved
             </p>
           </Link>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
@@ -452,7 +459,7 @@ export const InitializeSingleEscrowForm = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <FormField
             control={form.control}
             name="platformFee"
@@ -473,34 +480,6 @@ export const InitializeSingleEscrowForm = ({
                       className="pl-10"
                       value={form.watch("platformFee")?.toString() || ""}
                       onChange={handlePlatformFeeChange}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="amount"
-            render={() => (
-              <FormItem>
-                <FormLabel className="flex items-center">
-                  Amount<span className="text-destructive ml-1">*</span>
-                  <TooltipInfo content="Amount to be transferred upon completion of escrow milestones." />
-                </FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <DollarSign
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                      size={18}
-                    />
-                    <Input
-                      placeholder="Enter amount"
-                      className="pl-10"
-                      value={form.watch("amount")?.toString() || ""}
-                      onChange={handleAmountChange}
                     />
                   </div>
                 </FormControl>
@@ -563,18 +542,31 @@ export const InitializeSingleEscrowForm = ({
             <TooltipInfo content="Objectives to be completed to define the escrow as completed." />
           </FormLabel>
           {milestones.map((milestone, index) => (
-            <div key={index}>
+            <div key={index} className="space-y-4">
               <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                 <Input
                   placeholder="Milestone Description"
                   value={milestone.description}
-                  className="w-full sm:flex-1"
+                  className="w-full sm:w-3/5"
                   onChange={(e) => {
                     const updatedMilestones = [...milestones];
                     updatedMilestones[index].description = e.target.value;
                     form.setValue("milestones", updatedMilestones);
                   }}
                 />
+
+                <div className="relative w-full sm:w-2/5">
+                  <DollarSign
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                    size={18}
+                  />
+                  <Input
+                    className="pl-10"
+                    placeholder="Enter amount"
+                    value={milestone.amount?.toString() || ""}
+                    onChange={(e) => handleMilestoneAmountChange(index, e)}
+                  />
+                </div>
 
                 <Button
                   onClick={() => handleRemoveMilestone(index)}

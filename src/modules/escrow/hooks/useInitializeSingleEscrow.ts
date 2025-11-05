@@ -17,11 +17,11 @@ import {
   InitializeSingleReleaseEscrowResponse,
 } from "@trustless-work/escrow/types";
 import { Escrow } from "@/types/escrow.entity";
-import { useEscrowUIBoundedStore } from "../../store/ui";
-import { useInitializeEscrowSchema } from "../../schema/initialize-escrow.schema";
-import { handleError } from "@/errors/handle-errors";
+import { useEscrowUIBoundedStore } from "../store/ui";
+import { useInitializeEscrowSchema } from "../schema/initialize-escrow.schema";
+import { handleError } from "@/components/tw-blocks/handle-errors/handle";
 import { AxiosError } from "axios";
-import { useEscrowsMutations } from "../tanstack/useEscrowsMutations";
+import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
 import useNetwork from "@/hooks/useNetwork";
 import { trustlines } from "@/constants/trustlines.constant";
 
