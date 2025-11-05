@@ -7,8 +7,9 @@ import Header from "@/shared/Header";
 import { redirect } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/store/data";
 import { Lights } from "@/shared/utils/Lights";
-import { EscrowProvider } from "@/tw-blocks/providers/EscrowProvider";
-import { EscrowAmountProvider } from "@/tw-blocks/providers/EscrowAmountProvider";
+import { EscrowProvider } from "@/components/tw-blocks/providers/EscrowProvider";
+import { EscrowAmountProvider } from "@/components/tw-blocks/providers/EscrowAmountProvider";
+import { EscrowDialogsProvider } from "@/components/tw-blocks/providers/EscrowDialogsProvider";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();
@@ -20,21 +21,23 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <EscrowProvider>
-      <EscrowAmountProvider>
-        <SidebarProvider>
-          <Lights />
-          <AppSidebar />
-          <SidebarInset>
-            <Header />
-            <div className="min-h-screen">
-              <div className="flex-1 space-y-4 p-4 md:px-8 h-full">
-                {children}
+      <EscrowDialogsProvider>
+        <EscrowAmountProvider>
+          <SidebarProvider>
+            <Lights />
+            <AppSidebar />
+            <SidebarInset>
+              <Header />
+              <div className="min-h-screen">
+                <div className="flex-1 space-y-4 p-4 md:px-8 h-full">
+                  {children}
+                </div>
               </div>
-            </div>
-            <Footer />
-          </SidebarInset>
-        </SidebarProvider>
-      </EscrowAmountProvider>
+              <Footer />
+            </SidebarInset>
+          </SidebarProvider>
+        </EscrowAmountProvider>
+      </EscrowDialogsProvider>
     </EscrowProvider>
   );
 };
