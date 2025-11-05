@@ -18,7 +18,7 @@ export const trustlines = [
   },
   {
     name: "EURC",
-    address: "GB3Q6QDZYTHWT7E5PVS3W7FUT5GVAFC5KSZFFLPU25GO7VTC3NM2ZTVO",
+    address: "GDHU6WRG4IEQXM5NZ4BMPKOXHW76MZM4Y2IEMFDVXBSDP6SJY4ITNPP2",
     network: "mainnet",
   },
 ];
