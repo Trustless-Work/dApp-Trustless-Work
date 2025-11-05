@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Card, CardContent } from "@/ui/card";
+import { Card } from "@/ui/card";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tab";
 import {
@@ -20,12 +20,13 @@ import { useTranslation } from "react-i18next";
 import { Role } from "@trustless-work/escrow/types";
 import useIsMobile from "@/hooks/useMobile";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-import useMyEscrows from "../../hooks/useMyEscrows";
-import MyEscrowsFilter from "../filters/MyEscrowsFilter";
-import MyEscrowsTable from "../tables/MyEscrowsTable";
-import MyEscrowsCards from "../cards/MyEscrowsCards";
+
 import { steps } from "@/constants/steps-tutorials.constant";
 import { MoonpayWidget } from "@/widgets/moonpay.widget";
+import { EscrowsByRoleTable } from "@/components/tw-blocks/escrows/escrows-by-role/table/EscrowsTable";
+import { EscrowsByRoleCards } from "@/components/tw-blocks/escrows/escrows-by-role/cards/EscrowsCards";
+import { EscrowsBySignerTable } from "@/components/tw-blocks/escrows/escrows-by-signer/table/EscrowsTable";
+import { EscrowsBySignerCards } from "@/components/tw-blocks/escrows/escrows-by-signer/cards/EscrowsCards";
 
 export const MyEscrows = () => {
   const { t } = useTranslation();
@@ -36,7 +37,6 @@ export const MyEscrows = () => {
   const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const activeMode = useEscrowUIBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
-  const { escrows, allEscrows } = useMyEscrows({ role: activeTab });
 
   const [run, setRun] = useState(false);
   const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
@@ -131,25 +131,81 @@ export const MyEscrows = () => {
     [t],
   );
 
-  const renderTabContent = useCallback(
-    (role: Role) => (
-      <div className="flex flex-col gap-3">
+  // Memoized component renderers to prevent unnecessary re-renders
+  // Only render based on activeMode, components will handle their own data fetching
+  const renderSignerContent = useMemo(() => {
+    if (activeMode === "table") {
+      return <EscrowsBySignerTable />;
+    }
+    return <EscrowsBySignerCards />;
+  }, [activeMode]);
+
+  // Create memoized renderers for each role to avoid recreating functions
+  const renderApproverContent = useMemo(() => {
+    if (activeMode === "table") {
+      return (
         <Card className={cn("overflow-hidden")}>
-          <CardContent className="p-6">
-            <MyEscrowsFilter escrows={escrows} allEscrows={allEscrows} role={role} />
-          </CardContent>
+          <EscrowsByRoleTable role="approver" />
         </Card>
-        {activeMode === "table" ? (
-          <Card className={cn("overflow-hidden")}>
-            <MyEscrowsTable role={role} />
-          </Card>
-        ) : (
-          <MyEscrowsCards role={role} />
-        )}
-      </div>
-    ),
-    [activeMode, escrows, allEscrows],
-  );
+      );
+    }
+    return <EscrowsByRoleCards role="approver" />;
+  }, [activeMode]);
+
+  const renderServiceProviderContent = useMemo(() => {
+    if (activeMode === "table") {
+      return (
+        <Card className={cn("overflow-hidden")}>
+          <EscrowsByRoleTable role="serviceProvider" />
+        </Card>
+      );
+    }
+    return <EscrowsByRoleCards role="serviceProvider" />;
+  }, [activeMode]);
+
+  const renderDisputeResolverContent = useMemo(() => {
+    if (activeMode === "table") {
+      return (
+        <Card className={cn("overflow-hidden")}>
+          <EscrowsByRoleTable role="disputeResolver" />
+        </Card>
+      );
+    }
+    return <EscrowsByRoleCards role="disputeResolver" />;
+  }, [activeMode]);
+
+  const renderReleaseSignerContent = useMemo(() => {
+    if (activeMode === "table") {
+      return (
+        <Card className={cn("overflow-hidden")}>
+          <EscrowsByRoleTable role="releaseSigner" />
+        </Card>
+      );
+    }
+    return <EscrowsByRoleCards role="releaseSigner" />;
+  }, [activeMode]);
+
+  const renderPlatformAddressContent = useMemo(() => {
+    if (activeMode === "table") {
+      return (
+        <Card className={cn("overflow-hidden")}>
+          <EscrowsByRoleTable role="platformAddress" />
+        </Card>
+      );
+    }
+    return <EscrowsByRoleCards role="platformAddress" />;
+  }, [activeMode]);
+
+  const renderReceiverContent = useMemo(() => {
+    if (activeMode === "table") {
+      return (
+        <Card className={cn("overflow-hidden")}>
+          <EscrowsByRoleTable role="receiver" />
+        </Card>
+      );
+    }
+    return <EscrowsByRoleCards role="receiver" />;
+  }, [activeMode]);
 
   return (
     <>
@@ -278,31 +334,27 @@ export const MyEscrows = () => {
             )}
           </div>
 
-          <TabsContent value="signer">{renderTabContent("signer")}</TabsContent>
+          <TabsContent value="signer">{renderSignerContent}</TabsContent>
 
-          <TabsContent value="approver">
-            {renderTabContent("approver")}
-          </TabsContent>
+          <TabsContent value="approver">{renderApproverContent}</TabsContent>
 
           <TabsContent value="serviceProvider">
-            {renderTabContent("serviceProvider")}
+            {renderServiceProviderContent}
           </TabsContent>
 
           <TabsContent value="disputeResolver">
-            {renderTabContent("disputeResolver")}
+            {renderDisputeResolverContent}
           </TabsContent>
 
           <TabsContent value="releaseSigner">
-            {renderTabContent("releaseSigner")}
+            {renderReleaseSignerContent}
           </TabsContent>
 
           <TabsContent value="platformAddress">
-            {renderTabContent("platformAddress")}
+            {renderPlatformAddressContent}
           </TabsContent>
 
-          <TabsContent value="receiver">
-            {renderTabContent("receiver")}
-          </TabsContent>
+          <TabsContent value="receiver">{renderReceiverContent}</TabsContent>
         </Tabs>
       </div>
     </>

@@ -5,9 +5,9 @@ import { InitializeSingleEscrowForm } from "../forms/InitializeSingleEscrowForm"
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { InitializeMultiEscrowForm } from "../forms/InitializeMultiEscrowForm";
 import { useGlobalAuthenticationStore } from "@/store/data";
-import { useEscrowsBySignerQuery } from "../../hooks/tanstack/useEscrowsBySignerQuery";
 import { FileWarning } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/ui/alert";
+import { useEscrowsBySignerQuery } from "@/components/tw-blocks/tanstack/useEscrowsBySignerQuery";
 
 const MAX_ESCROWS = 20;
 

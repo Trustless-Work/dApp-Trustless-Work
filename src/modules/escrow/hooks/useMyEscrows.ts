@@ -2,9 +2,9 @@ import { Role } from "@trustless-work/escrow/types";
 import { useGlobalAuthenticationStore } from "@/store/data";
 import { useSearchParams } from "next/navigation";
 import { useState, useCallback, useMemo, useEffect } from "react";
-import { useEscrowsByRoleQuery } from "./tanstack/useEscrowsByRoleQuery";
-import { useEscrowsBySignerQuery } from "./tanstack/useEscrowsBySignerQuery";
 import { SingleReleaseEscrowStatus } from "@/types/escrow.entity";
+import { useEscrowsBySignerQuery } from "@/components/tw-blocks/tanstack/useEscrowsBySignerQuery";
+import { useEscrowsByRoleQuery } from "@/components/tw-blocks/tanstack/useEscrowsByRoleQuery";
 
 interface useMyEscrowsProps {
   role: Role;
