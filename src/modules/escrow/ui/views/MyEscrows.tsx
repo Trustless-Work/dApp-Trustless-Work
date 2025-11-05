@@ -23,10 +23,10 @@ import { useEscrowUIBoundedStore } from "../../store/ui";
 
 import { steps } from "@/constants/steps-tutorials.constant";
 import { MoonpayWidget } from "@/widgets/moonpay.widget";
-import { EscrowsByRoleTable } from "@/components/tw-blocks/escrows/escrows-by-role/table/EscrowsTable";
-import { EscrowsByRoleCards } from "@/components/tw-blocks/escrows/escrows-by-role/cards/EscrowsCards";
-import { EscrowsBySignerTable } from "@/components/tw-blocks/escrows/escrows-by-signer/table/EscrowsTable";
-import { EscrowsBySignerCards } from "@/components/tw-blocks/escrows/escrows-by-signer/cards/EscrowsCards";
+import { EscrowsByRoleTable } from "@/components/tw-blocks/escrows/escrows-by-role/EscrowsTable";
+import { EscrowsBySignerTable } from "@/components/tw-blocks/escrows/escrows-by-signer/EscrowsTable";
+import { EscrowsBySignerCards } from "@/components/tw-blocks/escrows/escrows-by-signer/EscrowsCards";
+import { EscrowsByRoleCards } from "@/components/tw-blocks/escrows/escrows-by-role/EscrowsCards";
 
 export const MyEscrows = () => {
   const { t } = useTranslation();
