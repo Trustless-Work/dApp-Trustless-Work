@@ -146,7 +146,6 @@ export const Filters = ({
   onRefresh,
   setOrderBy,
   setOrderDirection,
-  validateOnChainDisabled = false,
   escrows = [],
   roleLabel,
 }: FiltersProps) => {

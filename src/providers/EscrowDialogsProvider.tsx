@@ -38,7 +38,7 @@ export function EscrowDialogsProvider({
         setIsOpen: setSuccessReleaseOpen,
       },
     }),
-    [secondOpen, successReleaseOpen]
+    [secondOpen, successReleaseOpen],
   );
 
   return (
@@ -52,7 +52,7 @@ export function useEscrowDialogs() {
   const ctx = useContext(EscrowDialogsContext);
   if (!ctx) {
     throw new Error(
-      "useEscrowDialogs must be used within EscrowDialogsProvider"
+      "useEscrowDialogs must be used within EscrowDialogsProvider",
     );
   }
   return ctx;

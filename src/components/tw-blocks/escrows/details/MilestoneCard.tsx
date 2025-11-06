@@ -43,6 +43,8 @@ const MilestoneCardComponent = ({
   userRolesInEscrow,
   onViewDetails,
 }: MilestoneCardProps) => {
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+
   const getMilestoneStatusBadge = (
     milestone: SingleReleaseMilestone | MultiReleaseMilestone,
   ) => {
@@ -105,7 +107,6 @@ const MilestoneCardComponent = ({
     userRolesInEscrow: string[],
   ) => {
     const buttons = [] as React.ReactNode[];
-    const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
 
     if (
       userRolesInEscrow.includes("serviceProvider") &&

@@ -59,6 +59,7 @@ export const useGlobalUIBoundedStore = create<GlobalUIState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => {
         // Exclude copiedKeyId from persistence as it's a temporary UI state
+        /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
         const { copiedKeyId, ...rest } = state;
         return rest;
       },

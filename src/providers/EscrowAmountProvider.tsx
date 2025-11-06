@@ -26,7 +26,7 @@ export type AmountEscrowStore = {
 };
 
 const EscrowAmountContext = createContext<AmountEscrowStore | undefined>(
-  undefined
+  undefined,
 );
 
 export const EscrowAmountProvider = ({ children }: { children: ReactNode }) => {
@@ -52,7 +52,7 @@ export const EscrowAmountProvider = ({ children }: { children: ReactNode }) => {
       setPlatformFeeAmount((totalAmount * platformFee) / 100);
       setTrustlessWorkAmount((totalAmount * trustlessPercentage) / 100);
     },
-    []
+    [],
   );
 
   const value = useMemo<AmountEscrowStore>(
@@ -78,7 +78,7 @@ export const EscrowAmountProvider = ({ children }: { children: ReactNode }) => {
       approverResolve,
       amountMoonpay,
       lastReleasedMilestoneIndex,
-    ]
+    ],
   );
 
   return (

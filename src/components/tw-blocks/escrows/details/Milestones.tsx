@@ -32,14 +32,14 @@ export const Milestones = ({
   const handleViewDetails = useCallback(
     (
       milestone: SingleReleaseMilestone | MultiReleaseMilestone,
-      index: number
+      index: number,
     ) => {
       setSelectedMilestoneForDetail({
         milestone,
         index,
       });
     },
-    []
+    [],
   );
 
   return (
