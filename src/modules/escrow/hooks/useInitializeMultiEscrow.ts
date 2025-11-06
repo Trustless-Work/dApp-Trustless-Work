@@ -182,7 +182,7 @@ export const useInitializeMultiEscrow = () => {
       const finalPayload: InitializeMultiReleaseEscrowPayload =
         processedPayload;
 
-      const response = (await deployEscrow.mutateAsync({
+      (await deployEscrow.mutateAsync({
         payload: finalPayload,
         type: "multi-release",
         address,

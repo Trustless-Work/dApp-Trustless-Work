@@ -175,7 +175,7 @@ export const useInitializeSingleEscrow = () => {
       const finalPayload: InitializeSingleReleaseEscrowPayload =
         processedPayload;
 
-      const response = (await deployEscrow.mutateAsync({
+      (await deployEscrow.mutateAsync({
         payload: finalPayload,
         type: "single-release",
         address,
