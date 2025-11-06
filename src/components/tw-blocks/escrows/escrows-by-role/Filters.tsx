@@ -178,7 +178,7 @@ export const Filters = ({
           <h3 className="font-semibold text-foreground">Filters</h3>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-center gap-2">
           <Button
             variant="outline"
             size="sm"
