@@ -5,7 +5,7 @@ import { MilestoneApprovalTrendChart } from "../charts/MilestoneApprovalTrendCha
 import { useMilestoneDashboardData } from "../../hooks/useMilestoneDashboardData";
 import { SkeletonMilestoneStatusChart } from "../utils/SkeletonMilestoneOverview";
 import { SkeletonMilestoneApprovalTrendChart } from "../utils/SkeletonMilestoneApprovalChart";
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 
 interface MilestonesOverviewProps {
   address: string;

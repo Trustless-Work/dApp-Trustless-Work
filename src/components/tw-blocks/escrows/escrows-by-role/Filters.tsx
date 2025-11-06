@@ -28,8 +28,7 @@ import {
   Database,
 } from "lucide-react";
 import { exportEscrowsToPDF } from "@/lib/pdf-export";
-import type { Escrow } from "@/types/escrow.entity";
-import type { GetEscrowsFromIndexerResponse } from "@trustless-work/escrow/types";
+import type { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import {
   Select as OrderSelect,
   SelectTrigger as OrderSelectTrigger,
@@ -113,7 +112,7 @@ type FiltersProps = {
   validateOnChainDisabled?: boolean;
 
   // export
-  escrows?: (Escrow | GetEscrowsFromIndexerResponse)[];
+  escrows?: Escrow[];
   roleLabel?: string;
 };
 

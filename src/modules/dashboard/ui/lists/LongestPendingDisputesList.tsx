@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
 import NoData from "@/shared/utils/NoData";
 import { useLongestPendingDisputes } from "@/modules/dashboard/hooks/useLongestPendingDisputes";
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 
 interface LongestPendingDisputesListProps {
   escrows: Escrow[];

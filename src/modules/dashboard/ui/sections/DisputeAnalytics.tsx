@@ -5,7 +5,7 @@ import { SkeletonDisputeAnalytics } from "../utils/SkeletonDisputeAnalytics";
 import { DisputesEngagementChart } from "../charts/DisputesEngagementChart";
 import { LongestPendingDisputesList } from "../lists/LongestPendingDisputesList";
 import { SkeletonPendingDisputes } from "../utils/SkeletonPendingDisputes";
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 
 interface DisputeAnalyticsProps {
   escrows: Escrow[];

@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import { convertFirestoreTimestamps } from "@/lib/format";
 
 const ESCROW_ACTIONS = {

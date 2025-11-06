@@ -20,7 +20,7 @@ import { Button } from "@/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { getStatus } from "../../../../utils/escrow-status.util";
 import NoData from "@/shared/utils/NoData";
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import { useTranslation } from "react-i18next";
 import useNetwork from "@/hooks/useNetwork";
 import { formatCurrency, formatDateFromFirebase } from "@/lib/format";

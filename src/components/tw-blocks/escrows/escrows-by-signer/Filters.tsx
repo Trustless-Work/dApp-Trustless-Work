@@ -28,8 +28,7 @@ import {
   Database,
 } from "lucide-react";
 import { exportEscrowsToPDF } from "@/lib/pdf-export";
-import type { Escrow } from "@/types/escrow.entity";
-import type { GetEscrowsFromIndexerResponse } from "@trustless-work/escrow/types";
+import type { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -105,7 +104,7 @@ type FiltersProps = {
   setOrderDirection: (v: "asc" | "desc") => void;
 
   // export
-  escrows?: (Escrow | GetEscrowsFromIndexerResponse)[];
+  escrows?: Escrow[];
 };
 
 export const Filters = ({

@@ -16,7 +16,7 @@ import {
   InitializeSingleReleaseEscrowPayload,
   InitializeSingleReleaseEscrowResponse,
 } from "@trustless-work/escrow/types";
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import { useEscrowUIBoundedStore } from "../store/ui";
 import { useInitializeEscrowSchema } from "../schema/initialize-escrow.schema";
 import { handleError } from "@/components/tw-blocks/handle-errors/handle";

@@ -9,7 +9,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/ui/chart";
 import { PieChart, Pie, Label } from "recharts";
 import NoData from "@/shared/utils/NoData";
 import { SkeletonDisputeEngagementChart } from "@/modules/dashboard/ui/utils/SkeletonDisputeEngagementChart";
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import { useDisputesEngagement } from "@/modules/dashboard/hooks/useDisputesEngagement";
 
 interface DisputesEngagementChartProps {

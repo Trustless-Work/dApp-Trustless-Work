@@ -52,7 +52,7 @@
     tweetnacl "^1.0.3"
     tweetnacl-util "^0.15.1"
 
-"@date-fns/tz@^1.2.0":
+"@date-fns/tz@^1.4.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@date-fns/tz/-/tz-1.4.1.tgz#2d905f282304630e07bef6d02d2e7dbf3f0cc4e4"
   integrity sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==
@@ -7287,12 +7287,12 @@ randombytes@2.1.0, randombytes@^2.1.0:
   dependencies:
     safe-buffer "^5.1.0"
 
-react-day-picker@9.5.0:
-  version "9.5.0"
-  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-9.5.0.tgz#2ae36e85d6506026d72e350f49b5607d011cfd6f"
-  integrity sha512-WmJnPFVLnKh5Qscm7wavMNg86rqPverSWjx+zgK8/ZmGRSQ8c8OoqW10RI+AzAfT2atIxImpCUU2R9Z7Xb2SUA==
+react-day-picker@^9.11.1:
+  version "9.11.1"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-9.11.1.tgz#00ea070eb2c011b038c3332f37cd87d4db251bba"
+  integrity sha512-l3ub6o8NlchqIjPKrRFUCkTUEq6KwemQlfv3XZzzwpUeGwmDJ+0u0Upmt38hJyd7D/vn2dQoOoLV/qAp0o3uUw==
   dependencies:
-    "@date-fns/tz" "^1.2.0"
+    "@date-fns/tz" "^1.4.1"
     date-fns "^4.1.0"
     date-fns-jalali "^4.1.0-0"
 

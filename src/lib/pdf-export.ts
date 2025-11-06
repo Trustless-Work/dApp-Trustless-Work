@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import type { Escrow } from "@/types/escrow.entity";
+import type { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 
 export interface PDFExportOptions {
   title?: string;
