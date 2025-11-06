@@ -18,26 +18,16 @@ import {
 } from "@/ui/dropdown-menu";
 import { Button } from "@/ui/button";
 import { MoreHorizontal } from "lucide-react";
-import { useGlobalBoundedStore } from "@/store/data";
 import { getStatus } from "../../../../utils/escrow-status.util";
 import NoData from "@/shared/utils/NoData";
 import { Escrow } from "@/types/escrow.entity";
 import { useTranslation } from "react-i18next";
 import useNetwork from "@/hooks/useNetwork";
-import { useEscrowUIBoundedStore } from "@/modules/escrow/store/ui";
 import { formatCurrency, formatDateFromFirebase } from "@/lib/format";
-import EscrowDetailDialog from "@/modules/escrow/ui/dialogs/EscrowDetailDialog";
 
 export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
   const { t } = useTranslation();
   const { currentNetwork } = useNetwork();
-  const isDialogOpen = useEscrowUIBoundedStore((state) => state.isDialogOpen);
-  const setIsDialogOpen = useEscrowUIBoundedStore(
-    (state) => state.setIsDialogOpen,
-  );
-  const setSelectedEscrow = useGlobalBoundedStore(
-    (state) => state.setSelectedEscrow,
-  );
 
   const hasData = escrows && escrows.length > 0;
 
@@ -105,16 +95,6 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
                         className="cursor-pointer"
                         onClick={(e) => {
                           e.stopPropagation();
-                          setIsDialogOpen(true);
-                          setSelectedEscrow(escrow);
-                        }}
-                      >
-                        {t("dashboard.general.table.moreDetails")}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation();
                           const escrowViewerUrl =
                             currentNetwork === "testnet"
                               ? `https://viewer.trustlesswork.com/${escrow.contractId}`
@@ -140,13 +120,6 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
           )}
         </TableBody>
       </Table>
-
-      {/* Dialog */}
-      <EscrowDetailDialog
-        isDialogOpen={isDialogOpen}
-        setIsDialogOpen={setIsDialogOpen}
-        setSelectedEscrow={setSelectedEscrow}
-      />
     </div>
   );
 };
