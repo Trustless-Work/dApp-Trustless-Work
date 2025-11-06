@@ -29,7 +29,7 @@ export const FundEscrowDialog = () => {
           Fund
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Fund Escrow</DialogTitle>
         </DialogHeader>

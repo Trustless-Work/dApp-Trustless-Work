@@ -23,6 +23,7 @@ import { formatCurrency } from "@/components/tw-blocks/helpers/format.helper";
 import { ReleaseMilestoneButton } from "../multi-release/release-milestone/button/ReleaseMilestone";
 import { DisputeMilestoneButton } from "../multi-release/dispute-milestone/button/DisputeMilestone";
 import { ResolveDisputeDialog } from "../multi-release/resolve-dispute/dialog/ResolveDispute";
+import { useEscrowUIBoundedStore } from "@/modules/escrow/store/ui";
 
 interface MilestoneCardProps {
   milestone: SingleReleaseMilestone | MultiReleaseMilestone;
@@ -104,8 +105,11 @@ const MilestoneCardComponent = ({
     userRolesInEscrow: string[],
   ) => {
     const buttons = [] as React.ReactNode[];
+    const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+
     if (
       userRolesInEscrow.includes("serviceProvider") &&
+      activeTab === "serviceProvider" &&
       milestone.status !== "completed" &&
       !("flags" in milestone && milestone.flags?.approved)
     ) {
@@ -119,6 +123,7 @@ const MilestoneCardComponent = ({
 
     if (
       userRolesInEscrow.includes("approver") &&
+      activeTab === "approver" &&
       (("approved" in milestone && !milestone.approved) ||
         ("flags" in milestone &&
           !milestone.flags?.approved &&
@@ -136,6 +141,7 @@ const MilestoneCardComponent = ({
 
     if (
       userRolesInEscrow.includes("releaseSigner") &&
+      activeTab === "releaseSigner" &&
       "flags" in milestone &&
       !milestone.flags?.disputed &&
       milestone.flags?.approved &&
@@ -152,8 +158,9 @@ const MilestoneCardComponent = ({
     }
 
     if (
-      (userRolesInEscrow.includes("serviceProvider") ||
-        userRolesInEscrow.includes("approver")) &&
+      ((activeTab === "approver" && userRolesInEscrow.includes("approver")) ||
+        (activeTab === "serviceProvider" &&
+          userRolesInEscrow.includes("serviceProvider"))) &&
       "flags" in milestone &&
       !milestone.flags?.disputed &&
       !milestone.flags?.released &&

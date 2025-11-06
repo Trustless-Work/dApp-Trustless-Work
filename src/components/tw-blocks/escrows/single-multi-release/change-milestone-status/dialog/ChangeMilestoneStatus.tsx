@@ -55,7 +55,7 @@ export const ChangeMilestoneStatusDialog = ({
           Update Status
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Change Milestone Status</DialogTitle>
         </DialogHeader>

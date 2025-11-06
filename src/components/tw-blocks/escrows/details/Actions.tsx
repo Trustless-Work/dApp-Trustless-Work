@@ -17,6 +17,11 @@ import {
 import { FundEscrowDialog } from "../single-multi-release/fund-escrow/dialog/FundEscrow";
 import { UpdateEscrowDialog } from "../single-release/update-escrow/dialog/UpdateEscrow";
 import { UpdateEscrowDialog as UpdateMultiReleaseEscrowDialog } from "../multi-release/update-escrow/dialog/UpdateEscrow";
+import { useEscrowUIBoundedStore } from "@/modules/escrow/store/ui";
+import { DisputeEscrowButton } from "../single-release/dispute-escrow/button/DisputeEscrow";
+import { ResolveDisputeDialog } from "../single-release/resolve-dispute/dialog/ResolveDispute";
+import { ReleaseEscrowButton } from "../single-release/release-escrow/button/ReleaseEscrow";
+import { WithdrawRemainingFundsDialog } from "../multi-release/withdraw-remaining-funds/dialog/WithdrawRemainingFunds";
 
 interface ActionsProps {
   selectedEscrow: Escrow;
@@ -89,33 +94,40 @@ export const Actions = ({
   userRolesInEscrow,
   areAllMilestonesApproved,
 }: ActionsProps) => {
+  const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
+
   const shouldShowEditButton =
+    activeTab === "platformAddress" &&
     userRolesInEscrow.includes("platformAddress") &&
     !selectedEscrow?.flags?.disputed &&
     !selectedEscrow?.flags?.resolved &&
     !selectedEscrow?.flags?.released;
 
   const shouldShowDisputeButton =
-    selectedEscrow.type === "single-release" &&
-    (userRolesInEscrow.includes("approver") ||
-      userRolesInEscrow.includes("serviceProvider")) &&
+    ((selectedEscrow.type === "single-release" &&
+      activeTab === "approver" &&
+      userRolesInEscrow.includes("approver")) ||
+      (activeTab === "serviceProvider" &&
+        userRolesInEscrow.includes("serviceProvider"))) &&
     !selectedEscrow?.flags?.disputed &&
     !selectedEscrow?.flags?.resolved;
 
   const shouldShowResolveButton =
+    activeTab === "disputeResolver" &&
     selectedEscrow.type === "single-release" &&
     userRolesInEscrow.includes("disputeResolver") &&
     !selectedEscrow?.flags?.resolved &&
     selectedEscrow?.flags?.disputed;
 
   const shouldShowReleaseFundsButton =
+    activeTab === "releaseSigner" &&
     selectedEscrow.type === "single-release" &&
     areAllMilestonesApproved &&
     userRolesInEscrow.includes("releaseSigner") &&
     !selectedEscrow.flags?.released;
 
   const shouldShowWithdrawRemaining = (() => {
-    if (selectedEscrow.type !== "multi-release") return false;
+    if (activeTab !== "disputeResolver") return false;
     if (!userRolesInEscrow.includes("disputeResolver")) return false;
     if ((selectedEscrow.balance ?? 0) === 0) return false;
     const milestones = (selectedEscrow.milestones || []) as Array<{
@@ -152,18 +164,18 @@ export const Actions = ({
 
           {/* Works only with single-release escrows */}
           {/* Only appears if the escrow has balance */}
-          {/* {shouldShowDisputeButton && <DisputeEscrowButton />} */}
+          {shouldShowDisputeButton && <DisputeEscrowButton />}
 
           {/* Works only with single-release escrows */}
           {/* Only appears if the escrow is disputed */}
-          {/* {shouldShowResolveButton && <ResolveDisputeDialog />} */}
+          {shouldShowResolveButton && <ResolveDisputeDialog />}
 
           {/* Works only with single-release escrows */}
           {/* Only appears if all the milestones are approved */}
-          {/* {shouldShowReleaseFundsButton && <ReleaseEscrowButton />} */}
+          {shouldShowReleaseFundsButton && <ReleaseEscrowButton />}
 
           {/* Multi-release: Withdraw Remaining Funds */}
-          {/* {shouldShowWithdrawRemaining && <WithdrawRemainingFundsDialog />} */}
+          {shouldShowWithdrawRemaining && <WithdrawRemainingFundsDialog />}
         </div>
       )}
 
