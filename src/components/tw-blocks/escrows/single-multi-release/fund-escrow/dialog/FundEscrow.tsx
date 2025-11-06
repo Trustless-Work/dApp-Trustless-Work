@@ -20,10 +20,13 @@ import { Loader2 } from "lucide-react";
 import { useFundEscrow } from "./useFundEscrow";
 
 export const FundEscrowDialog = () => {
-  const { form, handleSubmit, isSubmitting } = useFundEscrow();
+  const [open, setOpen] = React.useState(false);
+  const { form, handleSubmit, isSubmitting } = useFundEscrow({
+    onFinally: () => setOpen(false),
+  });
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" className="cursor-pointer w-full">
           Fund

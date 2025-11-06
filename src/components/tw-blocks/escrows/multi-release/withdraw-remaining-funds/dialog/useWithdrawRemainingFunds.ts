@@ -17,7 +17,7 @@ import { useGlobalAuthenticationStore } from "@/store/data";
 
 type DistributionInput = { address: string; amount: string | number };
 
-export function useWithdrawRemainingFunds() {
+export function useWithdrawRemainingFunds(options?: { onFinally?: () => void }) {
   const { withdrawRemainingFunds } = useEscrowsMutations();
   const { selectedEscrow, updateEscrow } = useEscrowContext();
   const walletAddress = useGlobalAuthenticationStore((state) => state.address);
@@ -138,6 +138,7 @@ export function useWithdrawRemainingFunds() {
     } finally {
       setIsSubmitting(false);
       form.reset();
+      options?.onFinally?.();
     }
   });
 

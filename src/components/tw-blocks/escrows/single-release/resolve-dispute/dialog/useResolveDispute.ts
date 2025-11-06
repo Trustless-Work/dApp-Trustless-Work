@@ -14,7 +14,7 @@ import { useGlobalAuthenticationStore } from "@/store/data";
 
 type DistributionInput = { address: string; amount: string | number };
 
-export function useResolveDispute() {
+export function useResolveDispute(options?: { onFinally?: () => void }) {
   const { resolveDispute } = useEscrowsMutations();
   const { selectedEscrow, updateEscrow } = useEscrowContext();
   const walletAddress = useGlobalAuthenticationStore((state) => state.address);
@@ -141,6 +141,7 @@ export function useResolveDispute() {
     } finally {
       setIsSubmitting(false);
       form.reset();
+      options?.onFinally?.();
     }
   });
 

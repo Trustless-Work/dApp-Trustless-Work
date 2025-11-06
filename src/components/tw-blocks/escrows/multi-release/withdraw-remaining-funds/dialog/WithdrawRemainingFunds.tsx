@@ -22,6 +22,7 @@ import { useEscrowContext } from "@/providers/EscrowProvider";
 import { formatCurrency } from "../../../../helpers/format.helper";
 
 export const WithdrawRemainingFundsDialog = () => {
+  const [open, setOpen] = React.useState(false);
   const {
     form,
     handleSubmit,
@@ -36,11 +37,11 @@ export const WithdrawRemainingFundsDialog = () => {
     distributedSum,
     isExactMatch,
     difference,
-  } = useWithdrawRemainingFunds();
+  } = useWithdrawRemainingFunds({ onFinally: () => setOpen(false) });
   const { selectedEscrow } = useEscrowContext();
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" className="cursor-pointer w-full">
           Withdraw Remaining

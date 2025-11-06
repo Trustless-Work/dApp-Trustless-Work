@@ -18,7 +18,7 @@ import {
 import { GetEscrowsFromIndexerResponse } from "@trustless-work/escrow/types";
 import { useGlobalAuthenticationStore } from "@/store/data";
 
-export function useUpdateEscrow() {
+export function useUpdateEscrow(options?: { onFinally?: () => void }) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const { getMultiReleaseFormSchema } = useUpdateEscrowSchema();
@@ -250,6 +250,7 @@ export function useUpdateEscrow() {
       toast.error(handleError(error as ErrorResponse).message);
     } finally {
       setIsSubmitting(false);
+      options?.onFinally?.();
     }
   });
 

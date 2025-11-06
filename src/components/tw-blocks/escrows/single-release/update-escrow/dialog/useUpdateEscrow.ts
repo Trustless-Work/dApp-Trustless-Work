@@ -20,7 +20,7 @@ import {
 } from "@/components/tw-blocks/handle-errors/handle";
 import { useGlobalAuthenticationStore } from "@/store/data";
 
-export function useUpdateEscrow() {
+export function useUpdateEscrow(options?: { onFinally?: () => void }) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const { getSingleReleaseFormSchema } = useUpdateEscrowSchema();
@@ -220,6 +220,7 @@ export function useUpdateEscrow() {
       toast.error(handleError(error as ErrorResponse).message);
     } finally {
       setIsSubmitting(false);
+      options?.onFinally?.();
     }
   });
 
