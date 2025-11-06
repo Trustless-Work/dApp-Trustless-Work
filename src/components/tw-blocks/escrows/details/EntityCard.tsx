@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Avatar, AvatarFallback } from "@/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
+import { useUserByAddress } from "@/modules/auth/hooks/useUserByAddress";
 import { Card, CardContent } from "@/ui/card";
 import { Badge } from "@/ui/badge";
 import { Separator } from "@/ui/separator";
@@ -32,6 +33,8 @@ export const EntityCard = ({
   currency,
   inDispute,
 }: EntityCardProps) => {
+  const { data: profileImage } = useUserByAddress(entity || null);
+
   return (
     <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-md py-2">
       <Link href={`/dashboard/public-profile/${entity}`} target="_blank">
@@ -69,6 +72,13 @@ export const EntityCard = ({
 
           <div className="flex items-center gap-3 py-1">
             <Avatar className="h-9 w-9 rounded-md border">
+              {profileImage ? (
+                <AvatarImage
+                  src={profileImage}
+                  alt="User avatar"
+                  className="rounded-md"
+                />
+              ) : null}
               <AvatarFallback className="rounded-md bg-background text-foreground">
                 {entity?.[0] || "?"}
               </AvatarFallback>

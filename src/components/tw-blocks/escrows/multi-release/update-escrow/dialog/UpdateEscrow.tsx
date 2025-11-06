@@ -31,6 +31,7 @@ import {
 import { trustlines } from "@/constants/trustlines.constant";
 
 export const UpdateEscrowDialog = () => {
+  const [open, setOpen] = React.useState(false);
   const {
     form,
     isSubmitting,
@@ -43,10 +44,10 @@ export const UpdateEscrowDialog = () => {
     handleMilestoneAmountChange,
     isEscrowLocked,
     initialMilestonesCount,
-  } = useUpdateEscrow();
+  } = useUpdateEscrow({ onFinally: () => setOpen(false) });
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" className="cursor-pointer w-full">
           Update

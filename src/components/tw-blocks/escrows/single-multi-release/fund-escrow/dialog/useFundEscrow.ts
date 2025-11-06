@@ -12,7 +12,7 @@ import {
 } from "@/components/tw-blocks/handle-errors/handle";
 import { useGlobalAuthenticationStore } from "@/store/data";
 
-export function useFundEscrow() {
+export function useFundEscrow(options?: { onFinally?: () => void }) {
   const { fundEscrow } = useEscrowsMutations();
   const { selectedEscrow, updateEscrow } = useEscrowContext();
   const walletAddress = useGlobalAuthenticationStore((state) => state.address);
@@ -72,6 +72,7 @@ export function useFundEscrow() {
     } finally {
       setIsSubmitting(false);
       form.reset();
+      options?.onFinally?.();
     }
   });
 
