@@ -46,9 +46,6 @@ export const useInitializeSingleEscrow = () => {
   const setCurrentStep = useEscrowUIBoundedStore(
     (state) => state.setCurrentStep,
   );
-  const setRecentEscrow = useGlobalBoundedStore(
-    (state) => state.setRecentEscrow,
-  );
   const fetchContacts = useGlobalBoundedStore((state) => state.fetchContacts);
   const contacts = useGlobalBoundedStore((state) => state.contacts);
   const address = useGlobalAuthenticationStore((state) => state.address);
@@ -186,10 +183,6 @@ export const useInitializeSingleEscrow = () => {
 
       setIsSuccessDialogOpen(true);
       setCurrentStep(1);
-      setRecentEscrow({
-        ...response.escrow,
-        contractId: response.contractId,
-      });
       resetSteps();
       router.push("/dashboard/escrow/my-escrows");
     } catch (err) {

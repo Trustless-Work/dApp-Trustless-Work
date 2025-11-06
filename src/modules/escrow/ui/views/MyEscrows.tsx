@@ -19,7 +19,6 @@ import { useTranslation } from "react-i18next";
 import { Role } from "@trustless-work/escrow/types";
 import useIsMobile from "@/hooks/useMobile";
 import { useEscrowUIBoundedStore } from "../../store/ui";
-
 import { steps } from "@/constants/steps-tutorials.constant";
 import { EscrowsByRoleTable } from "@/components/tw-blocks/escrows/escrows-by-role/EscrowsTable";
 import { EscrowsBySignerTable } from "@/components/tw-blocks/escrows/escrows-by-signer/EscrowsTable";
@@ -32,7 +31,6 @@ export const MyEscrows = () => {
   const setActiveTab = useEscrowUIBoundedStore((state) => state.setActiveTab);
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const setActiveMode = useEscrowUIBoundedStore((state) => state.setActiveMode);
-  // const selectedEscrow = useGlobalBoundedStore((state) => state.selectedEscrow);
   const activeMode = useEscrowUIBoundedStore((state) => state.activeMode);
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 

@@ -46,9 +46,6 @@ export const useInitializeMultiEscrow = () => {
   const setCurrentStep = useEscrowUIBoundedStore(
     (state) => state.setCurrentStep,
   );
-  const setRecentEscrow = useGlobalBoundedStore(
-    (state) => state.setRecentEscrow,
-  );
   const fetchContacts = useGlobalBoundedStore((state) => state.fetchContacts);
   const contacts = useGlobalBoundedStore((state) => state.contacts);
   const address = useGlobalAuthenticationStore((state) => state.address);
@@ -192,10 +189,6 @@ export const useInitializeMultiEscrow = () => {
       })) as InitializeMultiReleaseEscrowResponse & { escrow: Escrow };
 
       setIsSuccessDialogOpen(true);
-      setRecentEscrow({
-        ...response.escrow,
-        contractId: response.contractId,
-      });
       resetSteps();
       setCurrentStep(1);
       router.push("/dashboard/escrow/my-escrows");

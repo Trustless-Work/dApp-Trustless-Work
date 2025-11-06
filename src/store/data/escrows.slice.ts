@@ -3,21 +3,16 @@ import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/
 import { convertFirestoreTimestamps } from "@/lib/format";
 
 const ESCROW_ACTIONS = {
-  SET_SELECTED_ESCROW: "escrows/setSelectedEscrow",
   SET_USER_ROLES_IN_ESCROW: "escrows/setUserRolesInEscrow",
   SET_RECENT_ESCROW: "escrows/setRecentEscrow",
 } as const;
 
 export type EscrowGlobalStore = {
-  selectedEscrow: Escrow | null;
   userRolesInEscrow: string[];
   recentEscrow: Escrow | undefined;
 
   setUserRolesInEscrow: (roles: string[]) => void;
-  // softDeleteEscrow: (escrowId: string) => Promise<void>;
-  // restoreEscrow: (escrowId: string) => Promise<void>;
   setRecentEscrow: (escrow: Escrow | undefined) => void;
-  setSelectedEscrow: (escrow: Escrow | undefined) => void;
 };
 
 export const escrowsSlice: StateCreator<
@@ -28,20 +23,8 @@ export const escrowsSlice: StateCreator<
 > = (set) => {
   return {
     // Stores
-    selectedEscrow: null,
     userRolesInEscrow: [],
     recentEscrow: undefined,
-
-    setSelectedEscrow: (escrow) =>
-      set(
-        {
-          selectedEscrow: escrow
-            ? (convertFirestoreTimestamps(escrow) as Escrow)
-            : null,
-        },
-        false,
-        ESCROW_ACTIONS.SET_SELECTED_ESCROW,
-      ),
 
     setUserRolesInEscrow: (roles) =>
       set(
@@ -60,56 +43,5 @@ export const escrowsSlice: StateCreator<
         false,
         ESCROW_ACTIONS.SET_RECENT_ESCROW,
       ),
-
-    // softDeleteEscrow: async (escrowId: string) => {
-    //   await get().updateEscrow({ escrowId, payload: { isActive: false } });
-    //   try {
-    //     set(
-    //       (state) => ({
-    //         escrows: state.escrows.filter((e) => e.id !== escrowId),
-    //       }),
-    //       false,
-    //       "escrows/softDeleteFiltered",
-    //     );
-    //     set(
-    //       { loadingEscrows: false },
-    //       false,
-    //       ESCROW_ACTIONS.SET_LOADING_ESCROWS,
-    //     );
-    //   } catch (error) {
-    //     set(
-    //       { loadingEscrows: false },
-    //       false,
-    //       ESCROW_ACTIONS.SET_LOADING_ESCROWS,
-    //     );
-    //     throw error;
-    //   }
-    // },
-
-    // restoreEscrow: async (escrowId: string) => {
-    //   set({ loadingEscrows: true }, false, ESCROW_ACTIONS.SET_LOADING_ESCROWS);
-    //   try {
-    //     await get().updateEscrow({ escrowId, payload: { isActive: true } });
-    //     set(
-    //       (state) => ({
-    //         escrows: state.escrows.filter((e) => e.id !== escrowId),
-    //       }),
-    //       false,
-    //       "escrows/restoreFiltered",
-    //     );
-    //     set(
-    //       { loadingEscrows: false },
-    //       false,
-    //       ESCROW_ACTIONS.SET_LOADING_ESCROWS,
-    //     );
-    //   } catch (error) {
-    //     set(
-    //       { loadingEscrows: false },
-    //       false,
-    //       ESCROW_ACTIONS.SET_LOADING_ESCROWS,
-    //     );
-    //     throw error;
-    //   }
-    // },
   };
 };
