@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/ui/card";
 import type { Contact } from "@/types/contact.entity";
 import { Button } from "@/ui/button";
-import { Pencil, Trash2, ExternalLink } from "lucide-react";
+import { Pencil, Trash2, ExternalLink, Loader2 } from "lucide-react";
 import { EditContactDialog } from "./dialogs/EditContactDialog";
 import { useState } from "react";
 import Link from "next/link";
@@ -12,7 +12,6 @@ import { DeleteContactDialog } from "./dialogs/DeleteContactDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import { Input } from "@/ui/input";
 import { useContact } from "../hooks/useContact";
-import SkeletonCards from "../../escrow/ui/utils/SkeletonCards";
 import { formatAddress } from "@/lib/format";
 import { User } from "@/types/user.entity";
 
@@ -60,7 +59,12 @@ export const MyContactsCards = ({ contacts }: MyContactsCardsProps) => {
   return (
     <>
       {isLoading ? (
-        <SkeletonCards />
+        <div>
+          <div className="p-6 md:p-8 flex flex-col items-center justify-center text-center">
+            <Loader2 className="h-6 w-6 md:h-8 md:w-8 animate-spin text-primary mb-3" />
+            <p className="text-sm text-muted-foreground">Loading contacts…</p>
+          </div>
+        </div>
       ) : contacts.length !== 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

@@ -10,7 +10,7 @@ import {
 } from "@/ui/table";
 import { Contact } from "@/types/contact.entity";
 import { Button } from "@/ui/button";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Loader2, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { EditContactDialog } from "./dialogs/EditContactDialog";
 import { DeleteContactDialog } from "./dialogs/DeleteContactDialog";
 import { useState } from "react";
@@ -25,7 +25,6 @@ import {
 import NoData from "@/shared/utils/NoData";
 import { Input } from "@/ui/input";
 import { useContact } from "../hooks/useContact";
-import SkeletonTable from "../../escrow/ui/utils/SkeletonTable";
 import { formatAddress } from "@/lib/format";
 
 interface MyContactsTableProps {
@@ -60,7 +59,12 @@ export const MyContactsTable = ({ contacts }: MyContactsTableProps) => {
   return (
     <div className="container mx-auto py-3">
       {isLoading ? (
-        <SkeletonTable />
+        <div>
+          <div className="p-6 md:p-8 flex flex-col items-center justify-center text-center">
+            <Loader2 className="h-6 w-6 md:h-8 md:w-8 animate-spin text-primary mb-3" />
+            <p className="text-sm text-muted-foreground">Loading contacts…</p>
+          </div>
+        </div>
       ) : contacts.length !== 0 ? (
         <>
           <div className="rounded-lg p-3">

@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
 import { exportEscrowsToPDF } from "@/lib/pdf-export";
-import type { Escrow } from "@/types/escrow.entity";
+import type { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 
 interface ExportButtonProps {
   escrows: Escrow[];

@@ -3,16 +3,12 @@ import { z } from "zod";
 const formSchema = z.object({
   identification: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().optional(),
-  email: z
-    .union([z.string().email("Invalid email format"), z.literal("")])
-    .optional(),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email format").min(1, "Email is required"),
   phone: z
-    .union([
-      z.string().regex(/^\+?[0-9]{7,15}$/, "Invalid phone number format"),
-      z.literal(""),
-    ])
-    .optional(),
+    .string()
+    .regex(/^\+?[0-9]{7,15}$/, "Invalid phone number format")
+    .min(1, "Phone is required"),
   country: z.string().optional(),
   useCase: z.string().min(1, "Use case is required"),
   profileImage: z

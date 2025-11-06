@@ -1,4 +1,4 @@
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 
 export const useLongestPendingDisputes = (escrows: Escrow[]) => {
   const getTimeInfo = (timestamp?: { _seconds: number }) => {

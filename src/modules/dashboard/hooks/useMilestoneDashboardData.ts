@@ -5,7 +5,7 @@ import {
   MilestoneDashboardData,
   MilestoneWithEscrow,
 } from "../types/dashboard.entity";
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 
 type MilestoneWithInjectedFlags = MilestoneWithEscrow & {
   approved?: boolean;

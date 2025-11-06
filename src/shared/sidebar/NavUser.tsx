@@ -42,9 +42,18 @@ export const NavUser = () => {
   const name = useGlobalAuthenticationStore((state) => state.name);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
   const copiedKeyId = useGlobalUIBoundedStore((state) => state.copiedKeyId);
+  const setCopiedKeyId = useGlobalUIBoundedStore(
+    (state) => state.setCopiedKeyId,
+  );
   const { handleDisconnect } = useWallet();
   const router = useRouter();
   const pathname = usePathname();
+
+  // Reset copiedKeyId on mount to clear any stale values from localStorage
+  useEffect(() => {
+    setCopiedKeyId(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!address) {

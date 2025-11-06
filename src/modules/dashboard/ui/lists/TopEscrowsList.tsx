@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/ui/card";
 import { TopEscrowsTable } from "../tables/TopEscrowsTable";
 import { SkeletonTopEscrowsTable } from "../utils/SkeletonTopEscrowsTable";
-import { Escrow } from "@/types/escrow.entity";
+import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import { useTranslation } from "react-i18next";
 
 type TopEscrowsListProps = {
