@@ -191,6 +191,7 @@ export const useInitializeMultiEscrow = () => {
       setIsSuccessDialogOpen(true);
       resetSteps();
       setCurrentStep(1);
+      toast.success("Escrow initialized successfully");
       router.push("/dashboard/escrow/my-escrows");
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);

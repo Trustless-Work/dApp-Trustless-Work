@@ -184,6 +184,7 @@ export const useInitializeSingleEscrow = () => {
       setIsSuccessDialogOpen(true);
       setCurrentStep(1);
       resetSteps();
+      toast.success("Escrow initialized successfully");
       router.push("/dashboard/escrow/my-escrows");
     } catch (err) {
       toast.error(handleError(err as AxiosError).message);
