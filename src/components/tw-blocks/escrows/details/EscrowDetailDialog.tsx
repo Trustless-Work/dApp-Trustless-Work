@@ -55,7 +55,7 @@ export const EscrowDetailDialog = ({
     selectedEscrow,
   });
 
-  const stellarExplorerUrl = `https://stellar.expert/explorer/testnet/contract/${selectedEscrow?.contractId}`;
+  const viewerUrl = `https://viewer.trustlesswork.com/${selectedEscrow?.contractId}`;
 
   if (!isDialogOpen || !selectedEscrow) return null;
   return (
@@ -65,17 +65,15 @@ export const EscrowDetailDialog = ({
           <DialogHeader className="flex-shrink-0">
             <div className="w-full">
               <div className="flex flex-col gap-2">
-                <div className="w-full">
-                  <Link
-                    href={stellarExplorerUrl}
-                    target="_blank"
-                    className="hover:underline"
-                  >
-                    <DialogTitle className="text-xl">
-                      {selectedEscrow.title}
-                    </DialogTitle>
-                  </Link>
-                </div>
+                <Link
+                  href={viewerUrl}
+                  target="_blank"
+                  className="hover:underline w-fit"
+                >
+                  <DialogTitle className="text-xl">
+                    {selectedEscrow.title}
+                  </DialogTitle>
+                </Link>
 
                 <DialogDescription>
                   {selectedEscrow.description}
