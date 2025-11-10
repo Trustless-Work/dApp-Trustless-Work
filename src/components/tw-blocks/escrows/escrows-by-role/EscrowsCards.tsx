@@ -362,7 +362,9 @@ export const EscrowsByRoleCards = ({ role }: EscrowsByRoleCardsProps) => {
                                     key={`milestone-${milestone.description}-${milestone.status}-${index}`}
                                     className="text-xs flex justify-between"
                                   >
-                                    {milestone.description}
+                                    <p className="truncate mr-4">
+                                      {milestone.description}
+                                    </p>
 
                                     {escrow.type === "multi-release" &&
                                       "amount" in milestone && (
