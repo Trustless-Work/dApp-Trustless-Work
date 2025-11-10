@@ -33,7 +33,7 @@ export const EntityCard = ({
   currency,
   inDispute,
 }: EntityCardProps) => {
-  const { data: profileImage } = useUserByAddress(entity || null);
+  const { data: user } = useUserByAddress(entity || null);
 
   return (
     <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-md py-2">
@@ -72,9 +72,9 @@ export const EntityCard = ({
 
           <div className="flex items-center gap-3 py-1">
             <Avatar className="h-9 w-9 rounded-md border">
-              {profileImage ? (
+              {user?.profileImage ? (
                 <AvatarImage
-                  src={profileImage}
+                  src={user.profileImage}
                   alt="User avatar"
                   className="rounded-md"
                 />
@@ -87,7 +87,9 @@ export const EntityCard = ({
             <div className="flex flex-col">
               {entity && (
                 <span className="text-sm font-medium leading-tight">
-                  {formatAddress(entity)}
+                  {user?.firstName && user?.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : "Without Name"}
                 </span>
               )}
               {entity && (

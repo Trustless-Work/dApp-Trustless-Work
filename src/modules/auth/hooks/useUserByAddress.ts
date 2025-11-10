@@ -3,7 +3,7 @@ import { AuthService } from "@/modules/auth/services/auth.service";
 import type { User } from "@/types/user.entity";
 
 export function useUserByAddress(address?: string | null) {
-  return useQuery<User | null, Error, string | null>({
+  return useQuery<User | null, Error, User | null>({
     queryKey: ["user", address],
     queryFn: async () => {
       if (!address) return null;
@@ -13,7 +13,6 @@ export function useUserByAddress(address?: string | null) {
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 30,
     refetchOnWindowFocus: false,
-    select: (user) => user?.profileImage ?? null,
     placeholderData: (prev) => prev ?? null,
   });
 }
