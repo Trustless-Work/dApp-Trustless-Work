@@ -472,24 +472,29 @@ export const InitializeMultiEscrowForm = ({
         />
 
         <div className="space-y-4">
-          <FormLabel className="flex items-center">
-            Milestones<span className="text-destructive ml-1">*</span>
-          </FormLabel>
+          <FormLabel className="flex items-center">Milestones</FormLabel>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            <div className="md:col-span-4">
+              <FormLabel className="flex items-center">
+                Description<span className="text-destructive ml-1">*</span>
+              </FormLabel>
+            </div>
+            <div className="md:col-span-4">
+              <FormLabel className="flex items-center">
+                Receiver<span className="text-destructive ml-1">*</span>
+              </FormLabel>
+            </div>
+            <div className="md:col-span-3">
+              <FormLabel className="flex items-center">
+                Amount<span className="text-destructive ml-1">*</span>
+              </FormLabel>
+            </div>
+          </div>
+
           {milestones.map((milestone, index) => (
             <div key={index} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                <div className="md:col-span-4">
-                  <Input
-                    placeholder="Enter receiver address"
-                    value={milestone.receiver}
-                    onChange={(e) => {
-                      const updatedMilestones = [...milestones];
-                      updatedMilestones[index].receiver = e.target.value;
-                      form.setValue("milestones", updatedMilestones);
-                    }}
-                  />
-                </div>
-
                 <div className="md:col-span-4">
                   <Input
                     placeholder="Milestone description"
@@ -497,6 +502,18 @@ export const InitializeMultiEscrowForm = ({
                     onChange={(e) => {
                       const updatedMilestones = [...milestones];
                       updatedMilestones[index].description = e.target.value;
+                      form.setValue("milestones", updatedMilestones);
+                    }}
+                  />
+                </div>
+
+                <div className="md:col-span-4">
+                  <Input
+                    placeholder="Enter receiver address"
+                    value={milestone.receiver}
+                    onChange={(e) => {
+                      const updatedMilestones = [...milestones];
+                      updatedMilestones[index].receiver = e.target.value;
                       form.setValue("milestones", updatedMilestones);
                     }}
                   />
