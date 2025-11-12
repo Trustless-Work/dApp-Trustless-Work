@@ -65,6 +65,9 @@ const NavMain = ({
 
     if (itemUrl.startsWith("http")) return false;
 
+    // Normalize itemUrl by stripping query/hash for pathname comparisons
+    const baseItemPath = itemUrl.split("?")[0].split("#")[0];
+
     if (itemUrl === "/dashboard") {
       return pathname === "/dashboard";
     }
@@ -85,12 +88,13 @@ const NavMain = ({
       return pathname.startsWith("/dashboard/help");
     }
 
-    return pathname === itemUrl;
+    return pathname === baseItemPath;
   };
 
   const isSubItemActive = (subItemUrl: string) => {
     if (subItemUrl.startsWith("http")) return false;
-    return pathname === subItemUrl;
+    const baseSubPath = subItemUrl.split("?")[0].split("#")[0];
+    return pathname === baseSubPath;
   };
 
   return (

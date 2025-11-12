@@ -1,6 +1,7 @@
 import {
   BookOpen,
   CircleHelp,
+  Key,
   Layers,
   LayoutDashboard,
   LucideContactRound,
@@ -114,6 +115,13 @@ export const ItemsSidebar = {
           title: "sidebar.help",
           url: "/dashboard/help",
           icon: CircleHelp,
+          isActive: true,
+          isExpandable: false,
+        },
+        {
+          title: "API Keys",
+          url: "/settings?tab=api-keys",
+          icon: Key,
           isActive: true,
           isExpandable: false,
         },

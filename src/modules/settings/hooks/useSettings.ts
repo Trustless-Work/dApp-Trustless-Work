@@ -5,8 +5,8 @@ import { PreferencesForm } from "./usePreferencesSection";
 import { useGlobalUIBoundedStore } from "@/store/ui";
 import { toast } from "sonner";
 
-const useSettings = () => {
-  const [currentTab, setCurrentTab] = useState("profile");
+const useSettings = (initialTab?: string) => {
+  const [currentTab, setCurrentTab] = useState(initialTab ?? "profile");
 
   const theme = useGlobalUIBoundedStore((state) => state.theme);
   const toggleTheme = useGlobalUIBoundedStore((state) => state.toggleTheme);

@@ -7,12 +7,24 @@ import { Profile } from "../sections/Profile";
 import { Preferences } from "../sections/Preferences";
 import { APIKeys } from "../sections/APIKeys";
 import useSettings from "../../hooks/useSettings";
+import { useSearchParams } from "next/navigation";
 
 export const Settings = () => {
-  const { currentTab, setCurrentTab, saveProfile } = useSettings();
+  const searchParams = useSearchParams();
+  const isProd = process.env.NEXT_PUBLIC_ENV === "PROD";
+  const requestedTab = searchParams.get("tab") || undefined;
+  const allowedTabs = [
+    "profile",
+    "preferences",
+    ...(isProd ? ["api-keys"] : []),
+  ];
+  const initialTab = allowedTabs.includes(requestedTab || "")
+    ? requestedTab
+    : undefined;
+
+  const { currentTab, setCurrentTab, saveProfile } = useSettings(initialTab);
   const isMobile = useIsMobile();
   const { t } = useTranslation();
-  const isProd = process.env.NEXT_PUBLIC_ENV === "PROD";
 
   return (
     <SidebarProvider>
