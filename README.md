@@ -2,7 +2,7 @@
 
 # Trustless Work | [API Documentation](https://docs.trustlesswork.com/trustless-work)
 
-POC of a decentralized application (dApp) to enhance trust in agency-client relationships using blockchain. It enables trustless payments via smart contracts, securing funds in escrow until milestones are approved by clients. Stablecoins like USDC are used to ensure stability and ease of use.
+The Trustless Work Backoffice is an internal admin console for fully managing the Trustless Work ecosystem. It allows teams to request and manage API keys, operate and monitor escrow lifecycles, handle milestones, releases, and disputes, and manage contacts and other operational features — all within a secure, auditable environment.
 
 ---
 
@@ -52,110 +52,6 @@ POC of a decentralized application (dApp) to enhance trust in agency-client rela
     </td>
   </tr>
 </table>
-
----
-
-## Getting Started
-
-Follow the steps below to get started with this project:
-
-## Summary
-
-1. Install dependencies.
-2. Format code.
-3. Set enviroment variables.
-4. Firebase
-5. Run the project!
-
-## Steps
-
-1. Fork the repo.
-2. Clone the repo locally.
-3. Execute `npm i`.
-4. Setup .env according to the information below.
-   1. The local API Key has already given.
-   2. TW Local URL has already given.
-   3. Request the Firebase credentials by TG.
-5. Run the project.
-6. Finally, if you need to see the local development database, please send your gmail by TG. Then, you'll find it in your Firebase's projects.
-
-## Installation
-
-1. Install dependencies:
-
-   ```bash
-   npm i
-   ```
-
-2. Format the code using Prettier: (This is for avoid eslint errors)
-
-   ```bash
-   npx prettier --write .
-   ```
-
-3. Start the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-## Environment Variables
-
-Make sure to set up the following environment variable in your `.env` file:
-
-```
-
-# APP
-NEXT_PUBLIC_ENV=LOCAL
-
-# TRUSTLESS WORK -> See API KEY Video
-API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXQiOiJHRE42SUpMUzVCUjNXN1FCM1NBRTNNWU5CRzZINFpXRFVHWURNRVVRWEU2RjJRSFhXSFlNNU1MWCIsImlhdCI6MTc0NTcwMzQzM30.M1gr85EXzUl7JRZ82yOORtVTGmGRL_DxN2C2Cl486lY
-NEXT_PUBLIC_API_URL_LOCAL=https://local.api.trustlesswork.com
-
-# FIREBASE -> Request the credentials by Telegram
-API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
-
-# MOONPAY -> Skip if you wont use Moonpay
-API_KEY=
-MOONPAY_SECRET_KEY=
-
-# MAINTANANCE MODE
-NEXT_PUBLIC_MAINTENANCE_MODE=false
-NEXT_PUBLIC_COUNTDOWN_HOURS=2
-NEXT_PUBLIC_COUNTDOWN_MINUTES=30
-
-```
-
-### API Key Video
-
-**IMPORTANT TO KNOW:** <br />
--> If you're using the DEVELOP enviroment `https://dev.api.trustlesswork.com`, you have to request the API Key in [development dApp](https://dapp.dev.trustlesswork.com) <br />
--> If you're using MAIN enviroment `https://api.trustlesswork.com`, you have to request the API Key in [production dApp](https://dapp.trustlesswork.com)
--> If you're using LOCAL enviroment, you already have it.
-
-https://github.com/user-attachments/assets/33ea60b7-69b3-456a-afa6-56a7e70eb984
-
-## Wallet Requirements
-
-To use this project, you must have one of the following wallets installed:
-
-- **Freighter**
-
-These wallets are required to interact with the platform.
-
-### How to use a Wallet
-
-You should use Chrome, Brave or Firefox browser, please install any of the wallets that were listen before.
-Important Note: If you're having problems to use Freighter, make sure that you have the wallet in "test net", and also if even you couldn't be able to use because it shows you "Not Available". Try going to: Security > Manage Connected Wallet > Remove the "localhost". If the problem persist, please contact us. This mistake happens for the wallet, not our product.
-
-## IMPORTANT NOTE:
-
-_It's important to note that we are using Husky. This means that when you run a `git push`, Husky will automatically execute `npm run format and npm run lint`. If either of these commands throws an error, the push will not be successful, and you will see a Husky error. When this happens, make sure to resolve any format and lint errors before trying the push again._
 
 ---
 
