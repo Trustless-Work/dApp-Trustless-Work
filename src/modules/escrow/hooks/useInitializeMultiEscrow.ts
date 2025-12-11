@@ -71,6 +71,7 @@ export const useInitializeMultiEscrow = () => {
       platformFee: undefined,
       trustline: {
         address: "",
+        symbol: "",
       },
       roles: {
         approver: "",
@@ -107,6 +108,7 @@ export const useInitializeMultiEscrow = () => {
       platformFee: 5,
       trustline: {
         address: usdcTrustline.address,
+        symbol: usdcTrustline.name,
       },
       roles: {
         approver: address || "",
@@ -159,6 +161,15 @@ export const useInitializeMultiEscrow = () => {
       return;
     }
 
+    const trustline = trustlines.find(
+      (tl) => tl.address === payload.trustline.address,
+    );
+
+    if (!trustline) {
+      toast.error("Trustline not found");
+      return;
+    }
+
     setIsInitializingEscrow(true);
 
     try {
@@ -177,6 +188,10 @@ export const useInitializeMultiEscrow = () => {
               ? Number(milestone.amount)
               : milestone.amount,
         })),
+        trustline: {
+          address: trustline.address,
+          symbol: trustline.name,
+        },
       };
 
       const finalPayload: InitializeMultiReleaseEscrowPayload =

@@ -72,6 +72,7 @@ export const useInitializeSingleEscrow = () => {
       amount: undefined,
       trustline: {
         address: "",
+        symbol: "",
       },
       roles: {
         approver: "",
@@ -110,6 +111,7 @@ export const useInitializeSingleEscrow = () => {
       amount: 5,
       trustline: {
         address: usdcTrustline.address,
+        symbol: usdcTrustline.name,
       },
       roles: {
         approver: address || "",
@@ -156,6 +158,15 @@ export const useInitializeSingleEscrow = () => {
 
     setIsInitializingEscrow(true);
 
+    const trustline = trustlines.find(
+      (tl) => tl.address === payload.trustline.address,
+    );
+
+    if (!trustline) {
+      toast.error("Trustline not found");
+      return;
+    }
+
     try {
       // Convert string values to numbers for the payload
       const processedPayload = {
@@ -170,6 +181,10 @@ export const useInitializeSingleEscrow = () => {
             : payload.platformFee,
         signer: address,
         milestones: payload.milestones,
+        trustline: {
+          address: trustline.address,
+          symbol: trustline.name,
+        },
       };
 
       const finalPayload: InitializeSingleReleaseEscrowPayload =
