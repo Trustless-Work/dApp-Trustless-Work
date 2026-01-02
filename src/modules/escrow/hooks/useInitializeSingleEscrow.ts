@@ -183,7 +183,7 @@ export const useInitializeSingleEscrow = () => {
         milestones: payload.milestones,
         trustline: {
           address: trustline.address,
-          symbol: trustline.name,
+          symbol: trustline.symbol,
         },
       };
 
@@ -225,7 +225,7 @@ export const useInitializeSingleEscrow = () => {
 
     const options = networkTrustlines.map((trustline) => ({
       value: trustline.address,
-      label: trustline.name,
+      label: trustline.symbol,
     }));
 
     return [{ value: "", label: "Select a Trustline" }, ...options];

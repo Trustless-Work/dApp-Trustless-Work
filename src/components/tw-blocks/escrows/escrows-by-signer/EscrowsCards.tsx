@@ -279,7 +279,7 @@ export const EscrowsBySignerCards = () => {
                               {escrow.type === "single-release"
                                 ? formatCurrency(
                                     escrow.amount,
-                                    escrow.trustline.name,
+                                    escrow.trustline.symbol,
                                   )
                                 : formatCurrency(
                                     escrow.milestones.reduce(
@@ -289,7 +289,7 @@ export const EscrowsBySignerCards = () => {
                                           .amount,
                                       0,
                                     ),
-                                    escrow.trustline.name,
+                                    escrow.trustline.symbol,
                                   )}
                             </span>
                           </div>
@@ -302,7 +302,7 @@ export const EscrowsBySignerCards = () => {
                               <span className="font-medium text-green-800 dark:text-green-600">
                                 {formatCurrency(
                                   escrow.balance,
-                                  escrow.trustline.name,
+                                  escrow.trustline.symbol,
                                 )}
                               </span>
                             </div>
@@ -348,7 +348,7 @@ export const EscrowsBySignerCards = () => {
                                             <span className="text-muted-foreground">
                                               {formatCurrency(
                                                 milestone.amount,
-                                                escrow.trustline.name,
+                                                escrow.trustline.symbol,
                                               )}
                                             </span>
 

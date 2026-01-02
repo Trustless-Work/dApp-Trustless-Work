@@ -35,7 +35,7 @@ export const SuccessReleaseDialog = ({
   const trustlessPercentage = 0.3;
   const receiverPercentage = 100 - (platformFee + trustlessPercentage);
 
-  const currency = selectedEscrow?.trustline?.name ?? "";
+  const currency = selectedEscrow?.trustline?.symbol ?? "";
 
   const cards = useMemo<
     Array<{

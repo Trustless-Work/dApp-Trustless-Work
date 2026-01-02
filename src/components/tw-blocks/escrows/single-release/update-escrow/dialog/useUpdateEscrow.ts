@@ -177,7 +177,7 @@ export function useUpdateEscrow(options?: { onFinally?: () => void }) {
               : payload.amount,
           trustline: {
             address: payload.trustline.address,
-            symbol: selectedEscrow?.trustline?.name || "",
+            symbol: selectedEscrow?.trustline?.symbol || "",
           },
           roles: payload.roles,
           milestones: payload.milestones.map((milestone, index) => ({
@@ -208,11 +208,11 @@ export function useUpdateEscrow(options?: { onFinally?: () => void }) {
         ...finalPayload.escrow,
         trustline: {
           name:
-            selectedEscrow.trustline?.name ||
+            selectedEscrow.trustline?.symbol ||
             (selectedEscrow.trustline?.address as string) ||
             "",
           address: finalPayload.escrow.trustline.address,
-          symbol: selectedEscrow?.trustline?.name || "",
+          symbol: selectedEscrow?.trustline?.symbol || "",
         },
       };
 

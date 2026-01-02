@@ -173,7 +173,7 @@ export const MilestoneDetailDialog = ({
               <span className="font-bold text-foreground">
                 {formatCurrency(
                   selectedMilestone.milestone.amount,
-                  selectedEscrow?.trustline?.name ?? "USDC",
+                  selectedEscrow?.trustline?.symbol ?? "USDC",
                 )}
               </span>
             </div>
