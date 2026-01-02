@@ -31,7 +31,7 @@ import {
 } from "@/ui/dialog";
 
 export const UpdateEscrowDialog = () => {
-  const [open, setOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
   const {
     form,
     isSubmitting,
@@ -44,10 +44,10 @@ export const UpdateEscrowDialog = () => {
     handlePlatformFeeChange,
     isEscrowLocked,
     initialMilestonesCount,
-  } = useUpdateEscrow({ onFinally: () => setOpen(false) });
+  } = useUpdateEscrow({ onSuccess: () => setIsOpen(false) });
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button type="button" className="cursor-pointer w-full">
           Update
@@ -166,7 +166,7 @@ export const UpdateEscrowDialog = () => {
                                 key={`${option.address}-${index}`}
                                 value={option.address}
                               >
-                                {option.name}
+                                {option.symbol}
                               </SelectItem>
                             ))}
                         </SelectContent>

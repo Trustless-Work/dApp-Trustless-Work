@@ -20,7 +20,9 @@ import {
 } from "@/components/tw-blocks/handle-errors/handle";
 import { useGlobalAuthenticationStore } from "@/store/data";
 
-export function useUpdateEscrow(options?: { onFinally?: () => void }) {
+export function useUpdateEscrow({
+  onSuccess,
+}: { onSuccess?: () => void } = {}) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const { getSingleReleaseFormSchema } = useUpdateEscrowSchema();
@@ -207,22 +209,18 @@ export function useUpdateEscrow(options?: { onFinally?: () => void }) {
         ...selectedEscrow,
         ...finalPayload.escrow,
         trustline: {
-          name:
-            selectedEscrow.trustline?.symbol ||
-            (selectedEscrow.trustline?.address as string) ||
-            "",
+          symbol: selectedEscrow.trustline?.address,
           address: finalPayload.escrow.trustline.address,
-          symbol: selectedEscrow?.trustline?.symbol || "",
         },
       };
 
       setSelectedEscrow(nextSelectedEscrow);
       toast.success("Escrow updated successfully");
+      onSuccess?.();
     } catch (error) {
       toast.error(handleError(error as ErrorResponse).message);
     } finally {
       setIsSubmitting(false);
-      options?.onFinally?.();
     }
   });
 

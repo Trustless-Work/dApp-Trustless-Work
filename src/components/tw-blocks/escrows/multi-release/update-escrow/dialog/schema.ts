@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { isValidWallet } from "@/validators/valid-data.validators";
+import { z } from "zod";
 
 export const useUpdateEscrowSchema = () => {
   const getBaseSchema = () => {
@@ -7,6 +7,9 @@ export const useUpdateEscrowSchema = () => {
       trustline: z.object({
         address: z.string().min(1, {
           message: "Trustline address is required.",
+        }),
+        symbol: z.string().min(1, {
+          message: "Trustline symbol is required.",
         }),
       }),
       roles: z.object({

@@ -93,8 +93,9 @@ export const useInitializeMultiEscrow = () => {
 
     // Find the USDC trustline for current network
     const usdcTrustline =
-      networkTrustlines.find((tl) => tl.name?.toLowerCase().includes("usdc")) ||
-      networkTrustlines[0];
+      networkTrustlines.find((tl) =>
+        tl.symbol?.toLowerCase().includes("usdc"),
+      ) || networkTrustlines[0];
 
     if (!usdcTrustline) {
       toast.error(`No trustline available for ${currentNetwork}`);
@@ -108,7 +109,7 @@ export const useInitializeMultiEscrow = () => {
       platformFee: 5,
       trustline: {
         address: usdcTrustline.address,
-        symbol: usdcTrustline.name,
+        symbol: usdcTrustline.symbol,
       },
       roles: {
         approver: address || "",

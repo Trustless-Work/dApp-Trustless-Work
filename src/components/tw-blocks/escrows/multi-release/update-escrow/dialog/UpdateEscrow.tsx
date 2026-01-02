@@ -21,6 +21,7 @@ import { Textarea } from "@/ui/textarea";
 import { useUpdateEscrow } from "./useUpdateEscrow";
 import { Trash2, DollarSign, Percent, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
+import { trustlines } from "@/constants/trustlines.constant";
 import {
   Dialog,
   DialogContent,
@@ -28,10 +29,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/ui/dialog";
-import { trustlines } from "@/constants/trustlines.constant";
 
 export const UpdateEscrowDialog = () => {
-  const [open, setOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
   const {
     form,
     isSubmitting,
@@ -44,10 +44,10 @@ export const UpdateEscrowDialog = () => {
     handleMilestoneAmountChange,
     isEscrowLocked,
     initialMilestonesCount,
-  } = useUpdateEscrow({ onFinally: () => setOpen(false) });
+  } = useUpdateEscrow({ onSuccess: () => setIsOpen(false) });
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button type="button" className="cursor-pointer w-full">
           Update
@@ -166,7 +166,7 @@ export const UpdateEscrowDialog = () => {
                                 key={`${option.address}-${index}`}
                                 value={option.address}
                               >
-                                {option.name}
+                                {option.symbol}
                               </SelectItem>
                             ))}
                         </SelectContent>
