@@ -10,6 +10,7 @@ import { Lights } from "@/shared/utils/Lights";
 import { EscrowProvider } from "@/providers/EscrowProvider";
 import { EscrowAmountProvider } from "@/providers/EscrowAmountProvider";
 import { EscrowDialogsProvider } from "@/providers/EscrowDialogsProvider";
+import { WalkthroughOnboarding } from "@/shared/WalkthroughOnboarding";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { address } = useGlobalAuthenticationStore();
@@ -25,6 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <EscrowAmountProvider>
           <SidebarProvider>
             <Lights />
+            <WalkthroughOnboarding />
             <AppSidebar />
             <SidebarInset>
               <Header />

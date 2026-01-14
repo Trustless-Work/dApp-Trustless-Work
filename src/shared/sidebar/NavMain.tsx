@@ -18,6 +18,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/hooks/useLanguage";
 import useNetwork from "@/hooks/useNetwork";
+import { useGlobalAuthenticationStore } from "@/store/data";
 
 const NavMain = ({
   groups,
@@ -32,6 +33,7 @@ const NavMain = ({
       isExternal?: boolean;
       isExpandable?: boolean;
       isDynamic?: boolean;
+      isAction?: boolean;
       items?: {
         title: string;
         url: string;
@@ -44,6 +46,9 @@ const NavMain = ({
   const { t } = useLanguage();
   const { currentNetwork } = useNetwork();
   const pathname = usePathname();
+  const showWalkthrough = useGlobalAuthenticationStore(
+    (state) => state.showWalkthrough,
+  );
 
   // Helper function to get dynamic URLs based on network
   const getDynamicUrl = (url: string) => {
@@ -142,16 +147,32 @@ const NavMain = ({
                     </CollapsibleContent>
                   </Collapsible>
                 ) : (
-                  <SidebarMenuButton asChild isActive={isItemActive(item.url)}>
-                    <Link
-                      href={getDynamicUrl(item.url)}
-                      target={item.isExternal ? "_blank" : undefined}
-                      rel={item.isExternal ? "noopener noreferrer" : undefined}
+                  item.isAction ? (
+                    <SidebarMenuButton
+                      onClick={() => {
+                        if (item.url === "#walkthrough") showWalkthrough();
+                      }}
                     >
                       {item.icon && <item.icon />}
                       <span>{t(item.title)}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                    </SidebarMenuButton>
+                  ) : (
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isItemActive(item.url)}
+                    >
+                      <Link
+                        href={getDynamicUrl(item.url)}
+                        target={item.isExternal ? "_blank" : undefined}
+                        rel={
+                          item.isExternal ? "noopener noreferrer" : undefined
+                        }
+                      >
+                        {item.icon && <item.icon />}
+                        <span>{t(item.title)}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  )
                 )}
               </SidebarMenuItem>
             ))}
