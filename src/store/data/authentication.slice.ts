@@ -14,9 +14,12 @@ export type AuthenticationGlobalStore = {
   address: string;
   name: string;
   loggedUser: Omit<User, "id"> | null;
+  shouldShowWalkthrough: boolean;
 
   connectWalletStore: (address: string, name: string) => void;
   disconnectWalletStore: () => void;
+  showWalkthrough: () => void;
+  hideWalkthrough: () => void;
   updateUser: (
     address: string,
     payload: UserPayload | User,
@@ -35,6 +38,7 @@ export const authenticationSlice: StateCreator<
     address: "",
     name: "",
     loggedUser: null,
+    shouldShowWalkthrough: false,
 
     // Modifiers
     connectWalletStore: async (address: string, name: string) => {
@@ -46,14 +50,14 @@ export const authenticationSlice: StateCreator<
 
           if (status === "SUCCESS") {
             set(
-              { address, name, loggedUser: user },
+              { address, name, loggedUser: user, shouldShowWalkthrough: true },
               false,
               AUTHENTICATION_ACTIONS.CONNECT_WALLET,
             );
           }
         } else {
           set(
-            { address, name, loggedUser: data },
+            { address, name, loggedUser: data, shouldShowWalkthrough: false },
             false,
             AUTHENTICATION_ACTIONS.CONNECT_WALLET,
           );
@@ -66,10 +70,21 @@ export const authenticationSlice: StateCreator<
 
     disconnectWalletStore: () =>
       set(
-        { address: "", name: "", loggedUser: null },
+        {
+          address: "",
+          name: "",
+          loggedUser: null,
+          shouldShowWalkthrough: false,
+        },
         false,
         AUTHENTICATION_ACTIONS.DISCONNECT_WALLET,
       ),
+
+    showWalkthrough: () =>
+      set({ shouldShowWalkthrough: true }, false, "walkthrough/show"),
+
+    hideWalkthrough: () =>
+      set({ shouldShowWalkthrough: false }, false, "walkthrough/hide"),
 
     updateUser: async (address: string, payload: UserPayload | User) => {
       try {
