@@ -14,6 +14,14 @@ import TooltipInfo from "@/shared/utils/Tooltip";
 import type { UserPayload } from "@/types/user.entity";
 import useProfile from "../../hooks/useProfileSection";
 import { Loader2, Save } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/ui/select";
+import { COUNTRY_OPTIONS } from "@/constants/countries.enum";
 
 interface ProfileFormProps {
   onSave: (data: UserPayload) => void;
@@ -133,11 +141,21 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
               <FormItem>
                 <FormLabel className="text-sm font-medium">Country</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter your country"
-                    {...field}
-                    className="h-9"
-                  />
+                  <Select
+                    value={field.value || ""}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger className="h-9">
+                      <SelectValue placeholder="Select your country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {COUNTRY_OPTIONS.map((country) => (
+                        <SelectItem key={country} value={country}>
+                          {country}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage className="text-xs" />
               </FormItem>
