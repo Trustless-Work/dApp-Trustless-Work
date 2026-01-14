@@ -119,6 +119,14 @@ export const ItemsSidebar = {
           isExpandable: false,
         },
         {
+          title: "sidebar.tutorial",
+          url: "#walkthrough",
+          icon: BookOpen,
+          isActive: false,
+          isExpandable: false,
+          isAction: true,
+        },
+        {
           title: "API Keys",
           url: "/settings?tab=api-keys",
           icon: Key,
