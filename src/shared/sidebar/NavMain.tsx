@@ -146,33 +146,26 @@ const NavMain = ({
                       </SidebarMenuSub>
                     </CollapsibleContent>
                   </Collapsible>
+                ) : item.isAction ? (
+                  <SidebarMenuButton
+                    onClick={() => {
+                      if (item.url === "#walkthrough") showWalkthrough();
+                    }}
+                  >
+                    {item.icon && <item.icon />}
+                    <span>{t(item.title)}</span>
+                  </SidebarMenuButton>
                 ) : (
-                  item.isAction ? (
-                    <SidebarMenuButton
-                      onClick={() => {
-                        if (item.url === "#walkthrough") showWalkthrough();
-                      }}
+                  <SidebarMenuButton asChild isActive={isItemActive(item.url)}>
+                    <Link
+                      href={getDynamicUrl(item.url)}
+                      target={item.isExternal ? "_blank" : undefined}
+                      rel={item.isExternal ? "noopener noreferrer" : undefined}
                     >
                       {item.icon && <item.icon />}
                       <span>{t(item.title)}</span>
-                    </SidebarMenuButton>
-                  ) : (
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isItemActive(item.url)}
-                    >
-                      <Link
-                        href={getDynamicUrl(item.url)}
-                        target={item.isExternal ? "_blank" : undefined}
-                        rel={
-                          item.isExternal ? "noopener noreferrer" : undefined
-                        }
-                      >
-                        {item.icon && <item.icon />}
-                        <span>{t(item.title)}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  )
+                    </Link>
+                  </SidebarMenuButton>
                 )}
               </SidebarMenuItem>
             ))}
