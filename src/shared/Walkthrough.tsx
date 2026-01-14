@@ -11,6 +11,7 @@ import {
   WalkthroughIcon,
   WalkthroughStep,
 } from "@/constants/walkthrough.constant";
+import Image from "next/image";
 
 function isImageIcon(
   icon: WalkthroughIcon,
@@ -28,11 +29,12 @@ function isImageIcon(
 function renderWalkthroughIcon(icon: WalkthroughIcon): React.ReactNode {
   if (isImageIcon(icon)) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
+      <Image
+        width={40}
+        height={40}
         src={icon.src}
         alt={icon.alt ?? ""}
-        className={cn("h-10 w-10 object-contain", icon.className)}
+        className={cn("object-contain", icon.className)}
       />
     );
   }

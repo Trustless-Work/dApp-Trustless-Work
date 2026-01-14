@@ -10,7 +10,6 @@ import {
   Wrench,
 } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/ui/button";
 
 export type WalkthroughIcon =
   | React.ReactNode
