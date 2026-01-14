@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Country } from "@/constants/countries.enum";
 
 const formSchema = z.object({
   identification: z.string().optional(),
@@ -9,7 +10,8 @@ const formSchema = z.object({
     .string()
     .regex(/^\+?[0-9]{7,15}$/, "Invalid phone number format")
     .min(1, "Phone is required"),
-  country: z.string().optional(),
+  // Stored as a human-readable country name (enum values) or empty.
+  country: z.union([z.nativeEnum(Country), z.literal("")]).optional(),
   useCase: z.string().min(1, "Use case is required"),
   profileImage: z
     .union([z.string().url("Profile image must be a valid URL"), z.literal("")])

@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useState } from "react";
+import { isCountryValue } from "@/constants/countries.enum";
 
 interface useProfileProps {
   onSave: (data: UserPayload) => Promise<void> | void;
@@ -33,7 +34,9 @@ const useProfile = ({ onSave }: useProfileProps) => {
       lastName: loggedUser?.lastName || "",
       email: loggedUser?.email || "",
       phone: loggedUser?.phone || "",
-      country: loggedUser?.country || "",
+      // If the user has a legacy/invalid country stored, keep the form usable by
+      // showing it as empty (so other fields can still be saved).
+      country: isCountryValue(loggedUser?.country) ? loggedUser?.country : "",
       useCase: loggedUser?.useCase || "",
       profileImage: loggedUser?.profileImage || "",
     },
