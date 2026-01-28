@@ -9,12 +9,25 @@ import {
 } from "@/ui/card";
 import HeaderWithoutAuth from "@/shared/HeaderWithoutAuth";
 import Image from "next/image";
-import { Wallet /*, Fingerprint*/ } from "lucide-react";
+import { Wallet, Loader2 /*, Fingerprint*/ } from "lucide-react";
 import { Button } from "@/ui/button";
 import { useWallet } from "../hooks/useWallet";
+import { useState } from "react";
 
 export const Login = () => {
   const { handleConnect } = useWallet();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+    try {
+      await handleConnect();
+    } catch (error) {
+      console.error("Error during login:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="container mx-auto">
@@ -36,16 +49,24 @@ export const Login = () => {
                 type="button"
                 variant="outline"
                 size="lg"
-                onClick={handleConnect}
+                onClick={handleLogin}
+                disabled={isLoading}
                 className="w-full flex items-center justify-center sm:justify-start gap-2 sm:gap-3 rounded-lg shadow-sm px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold"
                 aria-label="Login with Wallet"
               >
-                <Wallet
-                  className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"
-                  aria-hidden="true"
-                />
+                {isLoading ? (
+                  <Loader2
+                    className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 animate-spin"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <Wallet
+                    className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"
+                    aria-hidden="true"
+                  />
+                )}
                 <span className="flex-1 text-center sm:text-left">
-                  Login with Wallet
+                  {isLoading ? "Connecting..." : "Login with Wallet"}
                 </span>
               </Button>
               {/* <Button
