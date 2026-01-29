@@ -12,11 +12,19 @@ import Image from "next/image";
 import { Wallet, Loader2 /*, Fingerprint*/ } from "lucide-react";
 import { Button } from "@/ui/button";
 import { useWallet } from "../hooks/useWallet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useGlobalAuthenticationStore } from "@/store/data";
 
 export const Login = () => {
   const { handleConnect } = useWallet();
   const [isLoading, setIsLoading] = useState(false);
+  const address = useGlobalAuthenticationStore((state) => state.address);
+
+  useEffect(() => {
+    if (address && isLoading) {
+      setIsLoading(false);
+    }
+  }, [address, isLoading]);
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -24,16 +32,15 @@ export const Login = () => {
       await handleConnect();
     } catch (error) {
       console.error("Error during login:", error);
-    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto relative">
       <HeaderWithoutAuth />
       <div className="flex flex-1 items-start my-0 md:my-20 justify-center py-8 sm:py-4 px-4 sm:px-2 md:px-0">
-        <div className="w-full max-w-5xl flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden bg-background/90">
+        <div className="w-full max-w-5xl flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden bg-background/90 relative">
           {/* Left: Welcome + Buttons */}
           <Card className="flex-1 rounded-none md:rounded-l-2xl px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 border-r-0">
             <CardHeader className="px-0 pt-0 pb-6 sm:pb-8">
