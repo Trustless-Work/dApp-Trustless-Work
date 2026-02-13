@@ -7,7 +7,7 @@ export const trustlines = [
   },
   {
     symbol: "EURC",
-    address: "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+    address: "GB3Q6QDZYTHWT7E5PVS3W7FUT5GVAFC5KSZFFLPU25GO7VTC3NM2ZTVO",
     network: "testnet",
   },
   // MAINNET
