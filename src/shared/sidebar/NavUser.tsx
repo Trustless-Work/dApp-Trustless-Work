@@ -7,6 +7,7 @@ import {
   IdCard,
   LogOut,
   Settings,
+  Sparkles,
   User,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
@@ -167,8 +168,8 @@ export const NavUser = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href={`/dashboard/public-profile/${address}`}>
-                <DropdownMenuItem>
+              <Link href={`/dashboard/public-profile/${address}`} >
+                <DropdownMenuItem className="cursor-pointer">
                   <User />
                   Public Profile
                 </DropdownMenuItem>
@@ -176,8 +177,17 @@ export const NavUser = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href="/settings">
-                <DropdownMenuItem>
+              <Link href="/dashboard/coming-soon" >
+                <DropdownMenuItem className="cursor-pointer">
+                  <Sparkles />
+                  Coming Soon
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup >
+              <Link href="/settings" >
+                <DropdownMenuItem className="cursor-pointer">
                   <Settings />
                   Settings
                 </DropdownMenuItem>
@@ -185,7 +195,7 @@ export const NavUser = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <button className="w-full" onClick={handleDisconnect}>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
                 <LogOut />
                 Disconnect
               </DropdownMenuItem>
