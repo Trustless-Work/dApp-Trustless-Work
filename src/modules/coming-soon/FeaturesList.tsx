@@ -1,9 +1,7 @@
 import { Badge } from "@/ui/badge";
 import {
-  Sparkles,
   Zap,
   Shield,
-  BarChart3,
   Globe,
   Layers,
   Wallet,
