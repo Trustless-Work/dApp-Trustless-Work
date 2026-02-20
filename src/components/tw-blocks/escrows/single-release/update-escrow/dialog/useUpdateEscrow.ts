@@ -20,7 +20,9 @@ import {
 } from "@/components/tw-blocks/handle-errors/handle";
 import { useGlobalAuthenticationStore } from "@/store/data";
 
-export function useUpdateEscrow(options?: { onFinally?: () => void }) {
+export function useUpdateEscrow({
+  onSuccess,
+}: { onSuccess?: () => void } = {}) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const { getSingleReleaseFormSchema } = useUpdateEscrowSchema();
@@ -177,7 +179,7 @@ export function useUpdateEscrow(options?: { onFinally?: () => void }) {
               : payload.amount,
           trustline: {
             address: payload.trustline.address,
-            symbol: selectedEscrow?.trustline?.name || "",
+            symbol: selectedEscrow?.trustline?.symbol || "",
           },
           roles: payload.roles,
           milestones: payload.milestones.map((milestone, index) => ({
@@ -207,22 +209,18 @@ export function useUpdateEscrow(options?: { onFinally?: () => void }) {
         ...selectedEscrow,
         ...finalPayload.escrow,
         trustline: {
-          name:
-            selectedEscrow.trustline?.name ||
-            (selectedEscrow.trustline?.address as string) ||
-            "",
+          symbol: selectedEscrow.trustline?.address,
           address: finalPayload.escrow.trustline.address,
-          symbol: selectedEscrow?.trustline?.name || "",
         },
       };
 
       setSelectedEscrow(nextSelectedEscrow);
       toast.success("Escrow updated successfully");
+      onSuccess?.();
     } catch (error) {
       toast.error(handleError(error as ErrorResponse).message);
     } finally {
       setIsSubmitting(false);
-      options?.onFinally?.();
     }
   });
 

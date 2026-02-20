@@ -304,7 +304,7 @@ export const EscrowsByRoleCards = ({ role }: EscrowsByRoleCardsProps) => {
                               {escrow.type === "single-release"
                                 ? formatCurrency(
                                     escrow.amount,
-                                    escrow.trustline.name,
+                                    escrow.trustline.symbol,
                                   )
                                 : formatCurrency(
                                     escrow.milestones.reduce(
@@ -314,7 +314,7 @@ export const EscrowsByRoleCards = ({ role }: EscrowsByRoleCardsProps) => {
                                           .amount,
                                       0,
                                     ),
-                                    escrow.trustline.name,
+                                    escrow.trustline.symbol,
                                   )}
                             </span>
                           </div>
@@ -327,7 +327,7 @@ export const EscrowsByRoleCards = ({ role }: EscrowsByRoleCardsProps) => {
                               <span className="font-medium text-green-800 dark:text-green-600">
                                 {formatCurrency(
                                   escrow.balance,
-                                  escrow.trustline.name,
+                                  escrow.trustline.symbol,
                                 )}
                               </span>
                             </div>
@@ -373,7 +373,7 @@ export const EscrowsByRoleCards = ({ role }: EscrowsByRoleCardsProps) => {
                                             <span className="text-muted-foreground">
                                               {formatCurrency(
                                                 milestone.amount,
-                                                escrow.trustline.name,
+                                                escrow.trustline.symbol,
                                               )}
                                             </span>
 

@@ -60,7 +60,7 @@ export const TopEscrowsTable = ({ escrows }: { escrows: Escrow[] }) => {
               <TableRow key={escrow.contractId}>
                 <TableCell className="font-medium">{escrow.title}</TableCell>
                 <TableCell className="text-center">
-                  {formatCurrency(escrow.amount, escrow.trustline?.name)}
+                  {formatCurrency(escrow.amount, escrow.trustline?.symbol)}
                 </TableCell>
                 <TableCell className="text-center">
                   <Badge variant="outline">{getStatus(escrow)}</Badge>

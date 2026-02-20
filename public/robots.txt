@@ -1,0 +1,22 @@
+# robots.txt for Trustless Work
+User-agent: *
+Allow: /
+
+# Disallow admin and private routes
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /maintenance
+
+# Allow public pages
+Allow: /
+Allow: /login
+Allow: /help
+
+# Sitemap location
+Sitemap: https://www.trustlesswork.com/sitemap.xml
+
+# Crawl-delay (optional, adjust as needed)
+Crawl-delay: 1
+

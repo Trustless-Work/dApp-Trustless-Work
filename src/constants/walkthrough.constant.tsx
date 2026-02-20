@@ -153,7 +153,7 @@ export const steps: WalkthroughStep[] = [
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
         <Link
           className="rounded-lg border bg-muted/30 p-4 hover:bg-muted/50 transition-colors"
-          href="https://docs.trustlesswork.com/trustless-work/api-reference"
+          href="https://docs.trustlesswork.com/trustless-work/api-rest/introduction"
           target="_blank"
           rel="noreferrer"
         >
@@ -165,7 +165,7 @@ export const steps: WalkthroughStep[] = [
 
         <Link
           className="rounded-lg border bg-muted/30 p-4 hover:bg-muted/50 transition-colors"
-          href="https://docs.trustlesswork.com/trustless-work/trustless-work-sdk"
+          href="https://docs.trustlesswork.com/trustless-work/escrow-react-sdk/introduction"
           target="_blank"
           rel="noreferrer"
         >
@@ -177,7 +177,7 @@ export const steps: WalkthroughStep[] = [
 
         <Link
           className="rounded-lg border bg-muted/30 p-4 hover:bg-muted/50 transition-colors"
-          href="https://docs.trustlesswork.com/trustless-work/escrow-blocks"
+          href="https://docs.trustlesswork.com/trustless-work/escrow-blocks-sdk/introduction"
           target="_blank"
           rel="noreferrer"
         >

@@ -95,8 +95,9 @@ export const useInitializeSingleEscrow = () => {
 
     // Find the USDC trustline for current network
     const usdcTrustline =
-      networkTrustlines.find((tl) => tl.name?.toLowerCase().includes("usdc")) ||
-      networkTrustlines[0];
+      networkTrustlines.find((tl) =>
+        tl.symbol?.toLowerCase().includes("usdc"),
+      ) || networkTrustlines[0];
 
     if (!usdcTrustline) {
       toast.error(`No trustline available for ${currentNetwork}`);
@@ -111,7 +112,7 @@ export const useInitializeSingleEscrow = () => {
       amount: 5,
       trustline: {
         address: usdcTrustline.address,
-        symbol: usdcTrustline.name,
+        symbol: usdcTrustline.symbol,
       },
       roles: {
         approver: address || "",
@@ -183,7 +184,7 @@ export const useInitializeSingleEscrow = () => {
         milestones: payload.milestones,
         trustline: {
           address: trustline.address,
-          symbol: trustline.name,
+          symbol: trustline.symbol,
         },
       };
 
@@ -225,7 +226,7 @@ export const useInitializeSingleEscrow = () => {
 
     const options = networkTrustlines.map((trustline) => ({
       value: trustline.address,
-      label: trustline.name,
+      label: trustline.symbol,
     }));
 
     return [{ value: "", label: "Select a Trustline" }, ...options];

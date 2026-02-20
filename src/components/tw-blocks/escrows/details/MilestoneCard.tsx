@@ -213,7 +213,10 @@ const MilestoneCardComponent = ({
         {"amount" in milestone && (
           <div className="flex items-center gap-2 py-2">
             <span className="text-2xl font-bold text-foreground">
-              {formatCurrency(milestone.amount, selectedEscrow.trustline?.name)}
+              {formatCurrency(
+                milestone.amount,
+                selectedEscrow.trustline?.symbol,
+              )}
             </span>
           </div>
         )}

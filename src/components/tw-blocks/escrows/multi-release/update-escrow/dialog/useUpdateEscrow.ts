@@ -9,7 +9,6 @@ import {
   MultiReleaseMilestone,
 } from "@trustless-work/escrow/types";
 import { toast } from "sonner";
-import { useEscrowContext } from "@/providers/EscrowProvider";
 import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
 import {
   ErrorResponse,
@@ -17,8 +16,11 @@ import {
 } from "@/components/tw-blocks/handle-errors/handle";
 import { GetEscrowsFromIndexerResponse } from "@trustless-work/escrow/types";
 import { useGlobalAuthenticationStore } from "@/store/data";
+import { useEscrowContext } from "@/providers/EscrowProvider";
 
-export function useUpdateEscrow(options?: { onFinally?: () => void }) {
+export function useUpdateEscrow({
+  onSuccess,
+}: { onSuccess?: () => void } = {}) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const { getMultiReleaseFormSchema } = useUpdateEscrowSchema();
@@ -203,10 +205,10 @@ export function useUpdateEscrow(options?: { onFinally?: () => void }) {
               : payload.platformFee,
           trustline: {
             address: payload.trustline.address,
-            symbol: selectedEscrow?.trustline?.name || "",
+            symbol: payload.trustline.symbol,
           },
           roles: payload.roles,
-          milestones: payload.milestones.map((milestone, index) => ({
+          milestones: payload.milestones.map((milestone, index: number) => ({
             ...milestone,
             amount:
               typeof milestone.amount === "string"
@@ -237,22 +239,18 @@ export function useUpdateEscrow(options?: { onFinally?: () => void }) {
         ...selectedEscrow,
         ...finalPayload.escrow,
         trustline: {
-          name:
-            selectedEscrow.trustline?.name ||
-            (selectedEscrow.trustline?.address as string) ||
-            "",
+          symbol: selectedEscrow?.trustline?.symbol || "",
           address: finalPayload.escrow.trustline.address,
-          symbol: selectedEscrow?.trustline?.name || "",
         },
       };
 
       setSelectedEscrow(nextSelectedEscrow);
       toast.success("Escrow updated successfully");
+      onSuccess?.();
     } catch (error) {
       toast.error(handleError(error as ErrorResponse).message);
     } finally {
       setIsSubmitting(false);
-      options?.onFinally?.();
     }
   });
 

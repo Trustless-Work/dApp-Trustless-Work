@@ -1,0 +1,27 @@
+{
+  "name": "Trustless Work - Escrow-as-a-Service Platform",
+  "short_name": "Trustless Work",
+  "description": "Secure transactions with transparency, efficiency, and scalability. Integrate blockchain-powered escrows for your platform.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#006BE4",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "business", "productivity"],
+  "lang": "en",
+  "dir": "ltr"
+}
