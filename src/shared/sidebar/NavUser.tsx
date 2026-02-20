@@ -168,7 +168,7 @@ export const NavUser = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href={`/dashboard/public-profile/${address}`} >
+              <Link href={`/dashboard/public-profile/${address}`}>
                 <DropdownMenuItem className="cursor-pointer">
                   <User />
                   Public Profile
@@ -177,7 +177,7 @@ export const NavUser = () => {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Link href="/dashboard/coming-soon" >
+              <Link href="/dashboard/coming-soon">
                 <DropdownMenuItem className="cursor-pointer">
                   <Sparkles />
                   Coming Soon
@@ -185,8 +185,8 @@ export const NavUser = () => {
               </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup >
-              <Link href="/settings" >
+            <DropdownMenuGroup>
+              <Link href="/settings">
                 <DropdownMenuItem className="cursor-pointer">
                   <Settings />
                   Settings
