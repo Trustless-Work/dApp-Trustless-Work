@@ -1,12 +1,5 @@
 import { Badge } from "@/ui/badge";
-import {
-  Zap,
-  Shield,
-  Globe,
-  Layers,
-  Wallet,
-  Clock,
-} from "lucide-react";
+import { Zap, Shield, Globe, Layers, Wallet, Clock } from "lucide-react";
 
 const features = [
   {
