@@ -110,9 +110,7 @@ const MilestoneCardComponent = ({
 
     if (
       userRolesInEscrow.includes("serviceProvider") &&
-      activeTab === "serviceProvider" &&
-      milestone.status !== "completed" &&
-      !("flags" in milestone && milestone.flags?.approved)
+      activeTab === "serviceProvider"
     ) {
       buttons.push(
         <ChangeMilestoneStatusDialog
