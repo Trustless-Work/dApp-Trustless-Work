@@ -1,12 +1,14 @@
 # Frontend with Stellar SDK (Next.js / React)
 
 ## Goals
+
 - Single SDK instance for the app (RPC/Horizon + transaction building)
 - Freighter wallet integration (or multi-wallet via Stellar Wallets Kit)
 - Clean separation of client/server in Next.js
 - Transaction sending with proper confirmation handling
 
 ## Quick Navigation
+
 - SDK setup and env config: [SDK Initialization](#sdk-initialization)
 - Wallet integrations: [Wallet Integration](#wallet-integration)
 - Tx build/send patterns: [Transaction Building](#transaction-building), [Transaction Submission](#transaction-submission)
@@ -29,23 +31,32 @@ npm install @stellar/stellar-sdk @creit.tech/stellar-wallets-kit
 > For the full API reference (RPC methods, Horizon endpoints, migration guide), see [api-rpc-horizon.md](api-rpc-horizon.md).
 
 ### Basic Setup
+
 ```typescript
 import * as StellarSdk from "@stellar/stellar-sdk";
 
 // For Testnet
-const testnetServer = new StellarSdk.Horizon.Server("https://horizon-testnet.stellar.org");
-const testnetRpc = new StellarSdk.rpc.Server("https://soroban-testnet.stellar.org");
+const testnetServer = new StellarSdk.Horizon.Server(
+  "https://horizon-testnet.stellar.org",
+);
+const testnetRpc = new StellarSdk.rpc.Server(
+  "https://soroban-testnet.stellar.org",
+);
 const testnetNetworkPassphrase = StellarSdk.Networks.TESTNET;
 
 // For Mainnet
-const mainnetServer = new StellarSdk.Horizon.Server("https://horizon.stellar.org");
+const mainnetServer = new StellarSdk.Horizon.Server(
+  "https://horizon.stellar.org",
+);
 const mainnetRpcUrl = process.env.NEXT_PUBLIC_STELLAR_MAINNET_RPC_URL;
-if (!mainnetRpcUrl) throw new Error("Missing NEXT_PUBLIC_STELLAR_MAINNET_RPC_URL");
+if (!mainnetRpcUrl)
+  throw new Error("Missing NEXT_PUBLIC_STELLAR_MAINNET_RPC_URL");
 const mainnetRpc = new StellarSdk.rpc.Server(mainnetRpcUrl); // set from your chosen RPC provider
 const mainnetNetworkPassphrase = StellarSdk.Networks.PUBLIC;
 ```
 
 ### Environment Configuration
+
 > Use a provider-specific mainnet RPC URL (see: https://developers.stellar.org/docs/data/apis/rpc/providers).
 
 ```typescript
@@ -82,6 +93,7 @@ export const rpc = new StellarSdk.rpc.Server(config.rpcUrl);
 ## Wallet Integration
 
 ### Freighter (Primary Browser Wallet)
+
 ```typescript
 // hooks/useFreighter.ts
 import { useState, useEffect, useCallback } from "react";
@@ -145,7 +157,7 @@ export function useFreighter() {
       if (!connected) throw new Error("Wallet not connected");
       return signTransaction(xdr, { networkPassphrase });
     },
-    [connected]
+    [connected],
   );
 
   return { connected, address, network, connect, disconnect, sign };
@@ -153,6 +165,7 @@ export function useFreighter() {
 ```
 
 ### Stellar Wallets Kit (Multi-Wallet)
+
 ```typescript
 // hooks/useStellarWallet.ts
 import { useState, useCallback } from "react";
@@ -200,6 +213,7 @@ export function useStellarWallet() {
 ## Transaction Building
 
 ### Basic Payment
+
 ```typescript
 import * as StellarSdk from "@stellar/stellar-sdk";
 import { horizon, config } from "@/lib/stellar";
@@ -208,7 +222,7 @@ export async function buildPaymentTx(
   sourceAddress: string,
   destinationAddress: string,
   amount: string,
-  asset: StellarSdk.Asset = StellarSdk.Asset.native()
+  asset: StellarSdk.Asset = StellarSdk.Asset.native(),
 ) {
   const account = await horizon.loadAccount(sourceAddress);
 
@@ -221,7 +235,7 @@ export async function buildPaymentTx(
         destination: destinationAddress,
         asset: asset,
         amount: amount,
-      })
+      }),
     )
     .setTimeout(180)
     .build();
@@ -231,6 +245,7 @@ export async function buildPaymentTx(
 ```
 
 ### Soroban Contract Invocation
+
 ```typescript
 import * as StellarSdk from "@stellar/stellar-sdk";
 import { rpc, config } from "@/lib/stellar";
@@ -239,7 +254,7 @@ export async function invokeContract(
   sourceAddress: string,
   contractId: string,
   method: string,
-  args: StellarSdk.xdr.ScVal[]
+  args: StellarSdk.xdr.ScVal[],
 ) {
   const account = await rpc.getAccount(sourceAddress);
 
@@ -261,16 +276,16 @@ export async function invokeContract(
   }
 
   // Assemble with proper resources
-  transaction = StellarSdk.rpc.assembleTransaction(
-    transaction,
-    simulation
-  ).build();
+  transaction = StellarSdk.rpc
+    .assembleTransaction(transaction, simulation)
+    .build();
 
   return transaction.toXDR();
 }
 ```
 
 ### Building ScVal Arguments
+
 ```typescript
 import * as StellarSdk from "@stellar/stellar-sdk";
 
@@ -289,7 +304,7 @@ const structVal = StellarSdk.nativeToScVal(
       name: ["symbol", null],
       decimals: ["u32", null],
     },
-  }
+  },
 );
 
 // Vec
@@ -299,6 +314,7 @@ const vecVal = StellarSdk.nativeToScVal([1, 2, 3], { type: "i128" });
 ## Transaction Submission
 
 ### Submit and Wait for Confirmation
+
 ```typescript
 import * as StellarSdk from "@stellar/stellar-sdk";
 import { rpc, horizon, config } from "@/lib/stellar";
@@ -306,11 +322,11 @@ import { rpc, horizon, config } from "@/lib/stellar";
 export async function submitTransaction(signedXdr: string) {
   const transaction = StellarSdk.TransactionBuilder.fromXDR(
     signedXdr,
-    config.networkPassphrase
+    config.networkPassphrase,
   );
 
   // For Soroban transactions, use RPC
-  if (transaction.operations.some(op => op.type === "invokeHostFunction")) {
+  if (transaction.operations.some((op) => op.type === "invokeHostFunction")) {
     return submitSorobanTransaction(signedXdr);
   }
 
@@ -321,7 +337,7 @@ export async function submitTransaction(signedXdr: string) {
 async function submitSorobanTransaction(signedXdr: string) {
   const transaction = StellarSdk.TransactionBuilder.fromXDR(
     signedXdr,
-    config.networkPassphrase
+    config.networkPassphrase,
   ) as StellarSdk.Transaction;
 
   const response = await rpc.sendTransaction(transaction);
@@ -350,7 +366,7 @@ async function submitSorobanTransaction(signedXdr: string) {
 async function submitClassicTransaction(signedXdr: string) {
   const transaction = StellarSdk.TransactionBuilder.fromXDR(
     signedXdr,
-    config.networkPassphrase
+    config.networkPassphrase,
   ) as StellarSdk.Transaction;
 
   const response = await horizon.submitTransaction(transaction);
@@ -364,6 +380,7 @@ async function submitClassicTransaction(signedXdr: string) {
 ## React Components
 
 ### Connect Wallet Button
+
 ```tsx
 // components/ConnectButton.tsx
 "use client";
@@ -401,6 +418,7 @@ export function ConnectButton() {
 ```
 
 ### Send Payment Form
+
 ```tsx
 // components/SendPayment.tsx
 "use client";
@@ -472,6 +490,7 @@ export function SendPayment() {
 ## Next.js App Router Setup
 
 ### Provider Component
+
 ```tsx
 // app/providers.tsx
 "use client";
@@ -485,6 +504,7 @@ export function Providers({ children }: { children: ReactNode }) {
 ```
 
 ### Layout
+
 ```tsx
 // app/layout.tsx
 import { Providers } from "./providers";
@@ -507,6 +527,7 @@ export default function RootLayout({
 ## Data Fetching
 
 ### Account Balance
+
 ```typescript
 import { horizon } from "@/lib/stellar";
 
@@ -514,7 +535,7 @@ export async function getBalance(address: string) {
   try {
     const account = await horizon.loadAccount(address);
     const nativeBalance = account.balances.find(
-      (b) => b.asset_type === "native"
+      (b) => b.asset_type === "native",
     );
     return nativeBalance?.balance || "0";
   } catch (error) {
@@ -527,20 +548,21 @@ export async function getBalance(address: string) {
 ```
 
 ### Contract State
+
 ```typescript
 import * as StellarSdk from "@stellar/stellar-sdk";
 import { rpc } from "@/lib/stellar";
 
 export async function getContractData(
   contractId: string,
-  key: StellarSdk.xdr.ScVal
+  key: StellarSdk.xdr.ScVal,
 ) {
   const ledgerKey = StellarSdk.xdr.LedgerKey.contractData(
     new StellarSdk.xdr.LedgerKeyContractData({
       contract: new StellarSdk.Address(contractId).toScAddress(),
       key: key,
       durability: StellarSdk.xdr.ContractDataDurability.persistent(),
-    })
+    }),
   );
 
   const entries = await rpc.getLedgerEntries(ledgerKey);
@@ -549,9 +571,7 @@ export async function getContractData(
     return null;
   }
 
-  return StellarSdk.scValToNative(
-    entries.entries[0].val.contractData().val()
-  );
+  return StellarSdk.scValToNative(entries.entries[0].val.contractData().val());
 }
 ```
 
@@ -560,19 +580,21 @@ export async function getContractData(
 For passwordless authentication using WebAuthn passkeys, use Smart Account Kit.
 
 ### Installation
+
 ```bash
 npm install smart-account-kit
 ```
 
 ### Quick Start
+
 ```typescript
-import { SmartAccountKit, IndexedDBStorage } from 'smart-account-kit';
+import { SmartAccountKit, IndexedDBStorage } from "smart-account-kit";
 
 const kit = new SmartAccountKit({
-  rpcUrl: 'https://soroban-testnet.stellar.org',
-  networkPassphrase: 'Test SDF Network ; September 2015',
-  accountWasmHash: 'YOUR_ACCOUNT_WASM_HASH',
-  webauthnVerifierAddress: 'CWEBAUTHN_VERIFIER_ADDRESS',
+  rpcUrl: "https://soroban-testnet.stellar.org",
+  networkPassphrase: "Test SDF Network ; September 2015",
+  accountWasmHash: "YOUR_ACCOUNT_WASM_HASH",
+  webauthnVerifierAddress: "CWEBAUTHN_VERIFIER_ADDRESS",
   storage: new IndexedDBStorage(),
 });
 
@@ -584,9 +606,9 @@ if (!result) {
 
 // Create new wallet with passkey
 const { contractId, credentialId } = await kit.createWallet(
-  'My App',
-  'user@example.com',
-  { autoSubmit: true }
+  "My App",
+  "user@example.com",
+  { autoSubmit: true },
 );
 
 // Connect to existing wallet (prompts for passkey)
@@ -600,6 +622,7 @@ await kit.transfer(tokenContract, recipient, amount);
 ```
 
 ### Key Features
+
 - **Session Management**: Automatic credential persistence and silent reconnection
 - **Multiple Signer Types**: Passkeys (secp256r1), Ed25519 keys, policies
 - **Context Rules**: Fine-grained authorization for different operations
@@ -631,6 +654,7 @@ const response = await client.submitSorobanTransaction({
 - **Stellar docs**: https://developers.stellar.org/docs/tools/openzeppelin-relayer
 
 ### Resources
+
 - **GitHub**: https://github.com/kalepail/smart-account-kit
 - **OpenZeppelin Contracts**: https://github.com/OpenZeppelin/stellar-contracts
 - **Legacy SDK**: https://github.com/kalepail/passkey-kit (for simpler use cases)

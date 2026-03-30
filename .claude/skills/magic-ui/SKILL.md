@@ -21,35 +21,43 @@ Apply this skill when users ask to:
 ## Core Workflow
 
 1. Define the UI outcome first.
-  - Identify section type, tone, motion intensity, and responsive behavior.
-  - Keep motion intentional; avoid stacking many high-motion effects in one viewport.
+
+- Identify section type, tone, motion intensity, and responsive behavior.
+- Keep motion intentional; avoid stacking many high-motion effects in one viewport.
 
 2. Confirm project prerequisites.
-  - Project should be React/Next.js with Tailwind CSS.
-  - shadcn must be initialized before adding registry components:
+
+- Project should be React/Next.js with Tailwind CSS.
+- shadcn must be initialized before adding registry components:
+
 ```bash
 npx shadcn@latest init
 ```
 
 3. Install the selected component(s).
+
 ```bash
 npx shadcn@latest add @magicui/<component-slug>
 ```
+
 Example:
+
 ```bash
 npx shadcn@latest add @magicui/magic-card
 ```
 
 4. Integrate into the target section.
-  - Import from the generated path (typically `@/components/ui/<component-slug>`).
-  - Keep component APIs intact; prefer prop/className customization over rewriting internals.
-  - If docs mention extra dependencies or CSS keyframes, add them during integration.
+
+- Import from the generated path (typically `@/components/ui/<component-slug>`).
+- Keep component APIs intact; prefer prop/className customization over rewriting internals.
+- If docs mention extra dependencies or CSS keyframes, add them during integration.
 
 5. Validate quality before finishing.
-  - Accessibility: semantic HTML, keyboard access, meaningful labels/text.
-  - Responsiveness: check mobile layout and overflow behavior.
-  - Performance: avoid unnecessary client-only wrappers and heavy animation stacking.
-  - Maintainability: keep new code modular and consistent with existing project conventions.
+
+- Accessibility: semantic HTML, keyboard access, meaningful labels/text.
+- Responsiveness: check mobile layout and overflow behavior.
+- Performance: avoid unnecessary client-only wrappers and heavy animation stacking.
+- Maintainability: keep new code modular and consistent with existing project conventions.
 
 ## References To Load On Demand
 

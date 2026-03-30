@@ -19,9 +19,11 @@ Create a hero section with strong visual identity and clear CTA hierarchy.
 ### Steps
 
 1. Install components:
+
 ```bash
 npx shadcn@latest add @magicui/warp-background @magicui/blur-fade @magicui/shiny-button
 ```
+
 2. Wrap hero content in the background component.
 3. Animate heading and subheading with subtle stagger.
 4. Keep one primary CTA and one secondary action.
@@ -45,9 +47,11 @@ Show social proof without static blocks.
 ### Steps
 
 1. Install:
+
 ```bash
 npx shadcn@latest add @magicui/marquee @magicui/avatar-circles
 ```
+
 2. Use horizontal marquee for desktop and reduced density on mobile.
 3. If using avatar clusters, add concise labels and accessible alt text.
 
@@ -70,9 +74,11 @@ Present product capabilities in an interactive but readable grid.
 ### Steps
 
 1. Install:
+
 ```bash
 npx shadcn@latest add @magicui/bento-grid @magicui/text-animate
 ```
+
 2. Keep card copy short and scannable.
 3. Use motion for emphasis on only 1-2 cards.
 

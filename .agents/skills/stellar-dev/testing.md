@@ -1,6 +1,7 @@
 # Testing Strategy (Local / Testnet / Unit Tests)
 
 ## Quick Navigation
+
 - Strategy overview: [Testing Pyramid](#testing-pyramid)
 - Core test layers: [Unit Testing with Soroban SDK](#unit-testing-with-soroban-sdk), [Local Testing with Stellar Quickstart](#local-testing-with-stellar-quickstart), [Testnet Testing](#testnet-testing)
 - Integration and CI: [Integration Testing Patterns](#integration-testing-patterns), [Test Configuration](#test-configuration), [CI/CD Configuration](#cicd-configuration)
@@ -334,6 +335,7 @@ stellar contract install \
 ### Testnet Reset Awareness
 
 **Important**: Testnet resets approximately quarterly:
+
 - All accounts and contracts are deleted
 - Plan for re-deployment after resets
 - Don't rely on persistent state for test data
@@ -349,7 +351,8 @@ Check reset schedule: https://stellar.org/developers/blog
 import * as StellarSdk from "@stellar/stellar-sdk";
 
 const RPC_URL = process.env.RPC_URL || "http://localhost:8000/soroban/rpc";
-const NETWORK_PASSPHRASE = process.env.NETWORK_PASSPHRASE || "Standalone Network ; February 2017";
+const NETWORK_PASSPHRASE =
+  process.env.NETWORK_PASSPHRASE || "Standalone Network ; February 2017";
 
 describe("Contract Integration Tests", () => {
   let rpc: StellarSdk.rpc.Server;
@@ -378,8 +381,8 @@ describe("Contract Integration Tests", () => {
       .addOperation(
         contract.call(
           "initialize",
-          StellarSdk.Address.fromString(keypair.publicKey()).toScVal()
-        )
+          StellarSdk.Address.fromString(keypair.publicKey()).toScVal(),
+        ),
       )
       .setTimeout(30)
       .build();
@@ -511,6 +514,7 @@ jobs:
 ## Best Practices
 
 ### Test Organization
+
 ```
 project/
 ├── src/
@@ -567,12 +571,14 @@ cargo fuzz init
 ```
 
 Update `Cargo.toml` to include both crate types:
+
 ```toml
 [lib]
 crate-type = ["lib", "cdylib"]
 ```
 
 Add to `fuzz/Cargo.toml`:
+
 ```toml
 [dependencies]
 soroban-sdk = { version = "25.0.1", features = ["testutils"] }
@@ -618,6 +624,7 @@ cargo +nightly fuzz coverage fuzz_deposit
 ### Soroban Token Fuzzer
 
 Reusable library for fuzzing token contracts:
+
 - **GitHub**: https://github.com/brson/soroban-token-fuzzer
 
 ### Documentation
@@ -734,6 +741,7 @@ cargo mutants
 ```
 
 **Output interpretation**:
+
 - **CAUGHT**: Tests detected the mutation (good coverage)
 - **MISSED**: Tests passed despite mutation (test gap — review `mutants.out/diff/`)
 
@@ -759,9 +767,10 @@ stellar contract invoke \
 ### Stellar Plus Profiler (Cheesecake Labs)
 
 ```typescript
-import { StellarPlus } from 'stellar-plus';
+import { StellarPlus } from "stellar-plus";
 
-const profilerPlugin = new StellarPlus.Utils.Plugins.sorobanTransaction.profiler();
+const profilerPlugin =
+  new StellarPlus.Utils.Plugins.sorobanTransaction.profiler();
 // Collects CPU instructions, RAM, ledger reads/writes
 // Aggregation: sum, average, standard deviation
 // Output: CSV, formatted text tables

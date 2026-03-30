@@ -15,6 +15,7 @@ prisma init --db
 ```
 
 This will:
+
 1. Log you into Prisma Data Platform.
 2. Create a new project and database instance.
 3. Update your `.env` with the connection string.
@@ -47,14 +48,14 @@ generator client {
 In `prisma.config.ts`:
 
 ```typescript
-import { defineConfig, env } from 'prisma/config'
+import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
+  schema: "prisma/schema.prisma",
   datasource: {
-    url: env('DATABASE_URL'),
+    url: env("DATABASE_URL"),
   },
-})
+});
 ```
 
 ## Driver Adapter (Prisma ORM 7 required)
@@ -62,21 +63,23 @@ export default defineConfig({
 Prisma ORM 7 uses the query compiler by default, so you must use a driver adapter. For Prisma Postgres, use the Prisma Postgres serverless driver adapter.
 
 1. Install adapter and driver:
+
    ```bash
    npm install @prisma/adapter-ppg @prisma/ppg
    ```
 
 2. Use a **direct TCP** connection string for the adapter (from the Prisma Console) and instantiate Prisma Client:
+
    ```typescript
-   import 'dotenv/config'
-   import { PrismaClient } from '../generated/client'
-   import { PrismaPostgresAdapter } from '@prisma/adapter-ppg'
+   import "dotenv/config";
+   import { PrismaClient } from "../generated/client";
+   import { PrismaPostgresAdapter } from "@prisma/adapter-ppg";
 
    const prisma = new PrismaClient({
      adapter: new PrismaPostgresAdapter({
        connectionString: process.env.PRISMA_DIRECT_TCP_URL,
      }),
-   })
+   });
    ```
 
 ## Features

@@ -27,6 +27,7 @@ If a code problem is not caused by how Trustless Work is being used, leave it ou
 Trustless Work is **Escrow-as-a-Service (EaaS)** built on **Stellar's Soroban** smart contract platform. It enables non-custodial payment flows with milestones, approvals, and dispute resolution — without writing your own smart contracts.
 
 **Three integration paths:**
+
 - **API** — REST endpoints, usable from any backend or frontend
 - **SDK** (`@trustless-work/escrow`) — React/Next.js hooks that wrap the API
 - **Blocks** (`@trustless-work/blocks`) — Pre-built React UI components (forms, tables, dialogs)
@@ -35,10 +36,10 @@ Trustless Work is **Escrow-as-a-Service (EaaS)** built on **Stellar's Soroban** 
 
 ## Escrow Types
 
-| Type | Milestones | Releases | Best For |
-|------|------------|----------|----------|
-| **Single-Release** | Multiple | One payout for all milestones | Simple jobs, deposits, one-off payments |
-| **Multi-Release** | Multiple | One payout per milestone | Grants, projects, milestone billing |
+| Type               | Milestones | Releases                      | Best For                                |
+| ------------------ | ---------- | ----------------------------- | --------------------------------------- |
+| **Single-Release** | Multiple   | One payout for all milestones | Simple jobs, deposits, one-off payments |
+| **Multi-Release**  | Multiple   | One payout per milestone      | Grants, projects, milestone billing     |
 
 Choose the type at deployment time. It cannot be changed after the escrow is created.
 
@@ -48,17 +49,17 @@ Choose the type at deployment time. It cannot be changed after the escrow is cre
 
 Every escrow has a `roles` object. Each role is a **Stellar public address (G…)**. Signing authority follows the role — not the platform.
 
-| Role | Capabilities | Notes |
-|------|-------------|-------|
-| **Issuer** | Deploys the escrow | Indexed only — no fund control |
-| **Funder** | Deposits funds | Cannot move funds once deposited |
-| **Service Provider** | Updates milestone `status` text; can raise disputes | Cannot approve or release |
-| **Approver** | Sets `approved: true` on milestones; can raise disputes | Required for fund release |
-| **Release Signer** | Executes payout once all milestones approved | Two modes: Payout (platform sends) or Claim (receiver self-signs) |
-| **Receiver** | Receives released funds | In multi-release, each milestone can have its own receiver |
-| **Platform Address** | Updates metadata before funding; collects platform fees automatically | Can optionally serve as Dispute Resolver or Release Signer |
-| **Dispute Resolver** | Arbitrates conflicts; re-routes funds | Decisions are final and on-chain |
-| **Observer** | Read-only; no lifecycle involvement | Coming soon |
+| Role                 | Capabilities                                                          | Notes                                                             |
+| -------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Issuer**           | Deploys the escrow                                                    | Indexed only — no fund control                                    |
+| **Funder**           | Deposits funds                                                        | Cannot move funds once deposited                                  |
+| **Service Provider** | Updates milestone `status` text; can raise disputes                   | Cannot approve or release                                         |
+| **Approver**         | Sets `approved: true` on milestones; can raise disputes               | Required for fund release                                         |
+| **Release Signer**   | Executes payout once all milestones approved                          | Two modes: Payout (platform sends) or Claim (receiver self-signs) |
+| **Receiver**         | Receives released funds                                               | In multi-release, each milestone can have its own receiver        |
+| **Platform Address** | Updates metadata before funding; collects platform fees automatically | Can optionally serve as Dispute Resolver or Release Signer        |
+| **Dispute Resolver** | Arbitrates conflicts; re-routes funds                                 | Decisions are final and on-chain                                  |
+| **Observer**         | Read-only; no lifecycle involvement                                   | Coming soon                                                       |
 
 **Principle of Least Privilege:** No single party controls the full fund flow alone.
 
@@ -108,39 +109,39 @@ Every escrow has a `roles` object. Each role is a **Stellar public address (G…
 
 ```typescript
 {
-  engagementId:  string;   // Your internal ID linking the escrow to your records
-  title:         string;
-  description:   string;
-  amount:        number;   // ✅ 1000   ❌ "1000" — ALWAYS a number
-  platformFee:   number;   // ✅ 2      ❌ "2"    — ALWAYS a number
+  engagementId: string; // Your internal ID linking the escrow to your records
+  title: string;
+  description: string;
+  amount: number; // ✅ 1000   ❌ "1000" — ALWAYS a number
+  platformFee: number; // ✅ 2      ❌ "2"    — ALWAYS a number
 
   roles: {
-    approver:        string;  // G… Stellar address
-    serviceProvider: string;  // G… Stellar address
-    platformAddress: string;  // G… Stellar address
-    releaseSigner:   string;  // G… Stellar address
-    disputeResolver: string;  // G… Stellar address
-    receiver:        string;  // G… Stellar address — only in Single-Release
-  };
+    approver: string; // G… Stellar address
+    serviceProvider: string; // G… Stellar address
+    platformAddress: string; // G… Stellar address
+    releaseSigner: string; // G… Stellar address
+    disputeResolver: string; // G… Stellar address
+    receiver: string; // G… Stellar address — only in Single-Release
+  }
 
   milestones: Array<{
-    title:       string;
+    title: string;
     description: string;
-    status:      string;   // Free-form text set by Service Provider (default: "Pending")
-    approved:    boolean;  // Set to true by Approver. IRREVERSIBLE.
-    evidence?:   string;   // Optional — work documentation link
+    status: string; // Free-form text set by Service Provider (default: "Pending")
+    approved: boolean; // Set to true by Approver. IRREVERSIBLE.
+    evidence?: string; // Optional — work documentation link
   }>;
 
   flags: {
     disputed: boolean;
     released: boolean;
     resolved: boolean;
-  };
+  }
 
   trustline: {
-    address: string;  // G… Stellar ISSUER address of the asset (e.g. USDC issuer)
-    symbol:  string;  // Asset ticker (e.g. "USDC", "EURC")
-  };
+    address: string; // G… Stellar ISSUER address of the asset (e.g. USDC issuer)
+    symbol: string; // Asset ticker (e.g. "USDC", "EURC")
+  }
 }
 ```
 
@@ -148,66 +149,66 @@ Every escrow has a `roles` object. Each role is a **Stellar public address (G…
 
 ```typescript
 {
-  engagementId:  string;
-  title:         string;
-  description:   string;
+  engagementId: string;
+  title: string;
+  description: string;
   // ⚠️ No top-level `amount` — amount is defined per-milestone
-  platformFee:   number;   // ✅ 2  ❌ "2"
+  platformFee: number; // ✅ 2  ❌ "2"
 
   roles: {
-    approver:        string;  // G… Stellar address
-    serviceProvider: string;  // G… Stellar address
-    platformAddress: string;  // G… Stellar address
-    releaseSigner:   string;  // G… Stellar address
-    disputeResolver: string;  // G… Stellar address
+    approver: string; // G… Stellar address
+    serviceProvider: string; // G… Stellar address
+    platformAddress: string; // G… Stellar address
+    releaseSigner: string; // G… Stellar address
+    disputeResolver: string; // G… Stellar address
     // ⚠️ No `receiver` here — each milestone defines its own receiver
-  };
+  }
 
   milestones: Array<{
-    title:       string;
+    title: string;
     description: string;
-    status:      string;
-    amount:      number;  // ✅ 500  ❌ "500" — ALWAYS a number, per milestone
-    receiver:    string;  // G… Stellar address — defined per milestone (not in roles)
-    evidence?:   string;  // Optional
+    status: string;
+    amount: number; // ✅ 500  ❌ "500" — ALWAYS a number, per milestone
+    receiver: string; // G… Stellar address — defined per milestone (not in roles)
+    evidence?: string; // Optional
     flags: {
       disputed: boolean;
       released: boolean;
       resolved: boolean;
-      approved: boolean;  // Per-milestone in Multi-Release (vs top-level flags in Single)
+      approved: boolean; // Per-milestone in Multi-Release (vs top-level flags in Single)
     };
   }>;
 
   trustline: {
-    address: string;  // G… Stellar ISSUER address of the asset
-    symbol:  string;  // "USDC", "EURC", etc.
-  };
+    address: string; // G… Stellar ISSUER address of the asset
+    symbol: string; // "USDC", "EURC", etc.
+  }
 }
 ```
 
 ### Key Schema Differences: Single vs Multi-Release
 
-| Field | Single-Release | Multi-Release |
-|-------|---------------|---------------|
-| `amount` | Top-level, `number` | Per-milestone, `number` |
-| `receiver` | In `roles` object | Per-milestone in `milestones[]` |
-| `flags` | Single top-level object | Per-milestone `flags` object |
-| `approved` | In each milestone object | Inside per-milestone `flags` |
+| Field      | Single-Release           | Multi-Release                   |
+| ---------- | ------------------------ | ------------------------------- |
+| `amount`   | Top-level, `number`      | Per-milestone, `number`         |
+| `receiver` | In `roles` object        | Per-milestone in `milestones[]` |
+| `flags`    | Single top-level object  | Per-milestone `flags` object    |
+| `approved` | In each milestone object | Inside per-milestone `flags`    |
 
 ### Type Rules — Critical for Forms and Payloads
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `amount` (deploy) | `number` | ✅ `1000` ❌ `"1000"` |
-| `amount` (fund-escrow) | `string` | ✅ `"1000"` ❌ `1000` — exception |
-| `platformFee` | `number` | ✅ `2` ❌ `"2"` |
-| Milestone `amount` (multi-release) | `number` | ✅ `500` ❌ `"500"` |
-| `milestoneIndex` | `string` | ✅ `"0"` ❌ `0` (operation params only) |
-| `distributions[].amount` | `number` | Amount per recipient in resolve-dispute |
-| All addresses | `string` | G… (wallets) or C… (contracts) |
-| `engagementId`, `title`, `description` | `string` | — |
-| `trustline.address` | `string` | Must be G… issuer address, NOT C… contract |
-| `trustline.symbol` | `string` | e.g. `"USDC"` |
+| Field                                  | Type     | Notes                                      |
+| -------------------------------------- | -------- | ------------------------------------------ |
+| `amount` (deploy)                      | `number` | ✅ `1000` ❌ `"1000"`                      |
+| `amount` (fund-escrow)                 | `string` | ✅ `"1000"` ❌ `1000` — exception          |
+| `platformFee`                          | `number` | ✅ `2` ❌ `"2"`                            |
+| Milestone `amount` (multi-release)     | `number` | ✅ `500` ❌ `"500"`                        |
+| `milestoneIndex`                       | `string` | ✅ `"0"` ❌ `0` (operation params only)    |
+| `distributions[].amount`               | `number` | Amount per recipient in resolve-dispute    |
+| All addresses                          | `string` | G… (wallets) or C… (contracts)             |
+| `engagementId`, `title`, `description` | `string` | —                                          |
+| `trustline.address`                    | `string` | Must be G… issuer address, NOT C… contract |
+| `trustline.symbol`                     | `string` | e.g. `"USDC"`                              |
 
 > 🔴 **Form validation rule:** `amount` in deploy and `platformFee` use `z.number()`. `milestoneIndex` uses `z.string()`. `amount` in fund-escrow uses `z.string()`. Use the table above as the reference — do not assume all amounts share the same type.
 
@@ -243,6 +244,7 @@ Every escrow has a `roles` object. Each role is a **Stellar public address (G…
 ```
 
 **status** and **approved** are independent fields:
+
 - Service Provider updates `status` to communicate progress
 - Approver sets `approved: true` when satisfied (regardless of status text)
 - Once `approved: true`, there is **no unapprove**
@@ -271,12 +273,14 @@ Setup flow:
 
 > 🔴 **CRITICAL — `trustline` is an object, not a string:**
 > The `trustline` field in the escrow payload is an **object** with two fields:
+>
 > ```json
 > "trustline": {
 >   "address": "G…",   // G… Stellar ISSUER address of the asset — NOT the C… contract address
 >   "symbol": "USDC"   // Asset ticker symbol
 > }
 > ```
+>
 > **Do NOT** pass a plain string. **Do NOT** use the **C… Soroban contract address** in `trustline.address`. Using the C… address there is one of the most common mistakes and will cause escrow failures.
 
 ---
@@ -295,18 +299,19 @@ Step 3: POST /helper/send-transaction { signedXdr }  (or useSendTransaction hook
 
 **Which wallet signs?** The wallet that holds the **role** required for that operation:
 
-| Operation | Must be signed by |
-|-----------|-------------------|
-| Deploy escrow | Issuer |
-| Fund escrow | Funder |
-| Change milestone status | Service Provider |
-| Approve milestone | Approver |
-| Release funds | Release Signer |
-| Raise dispute | Approver or Service Provider |
-| Resolve dispute | Dispute Resolver |
-| Set trustline | The account establishing the trustline (done from the wallet directly — no API endpoint) |
+| Operation               | Must be signed by                                                                        |
+| ----------------------- | ---------------------------------------------------------------------------------------- |
+| Deploy escrow           | Issuer                                                                                   |
+| Fund escrow             | Funder                                                                                   |
+| Change milestone status | Service Provider                                                                         |
+| Approve milestone       | Approver                                                                                 |
+| Release funds           | Release Signer                                                                           |
+| Raise dispute           | Approver or Service Provider                                                             |
+| Resolve dispute         | Dispute Resolver                                                                         |
+| Set trustline           | The account establishing the trustline (done from the wallet directly — no API endpoint) |
 
 **Common XDR mistakes:**
+
 - ❌ Calling a write endpoint and ignoring the returned `unsignedTransaction`
 - ❌ Signing with the wrong role wallet
 - ❌ Signing but never submitting (nothing happens on-chain)
@@ -322,6 +327,7 @@ Step 3: POST /helper/send-transaction { signedXdr }  (or useSendTransaction hook
 - **Rate limit:** 50 requests / 60 seconds per client → 429 if exceeded
 
 **Getting an API key:**
+
 1. Connect Stellar wallet at https://dapp.trustlesswork.com
 2. Sign the authentication message (creates your profile)
 3. Go to Settings (click wallet address, bottom-left)
@@ -347,11 +353,11 @@ TW_API_KEY=your_trustless_work_api_key
 
 ## API Environments
 
-| Environment | Base URL |
-|------------|----------|
-| **Development (Testnet)** | `https://dev.api.trustlesswork.com` |
-| **Production (Mainnet)** | `https://api.trustlesswork.com` |
-| **Swagger UI** | `https://dev.api.trustlesswork.com/docs` |
+| Environment               | Base URL                                 |
+| ------------------------- | ---------------------------------------- |
+| **Development (Testnet)** | `https://dev.api.trustlesswork.com`      |
+| **Production (Mainnet)**  | `https://api.trustlesswork.com`          |
+| **Swagger UI**            | `https://dev.api.trustlesswork.com/docs` |
 
 Always start on testnet. Switch to mainnet for production.
 
@@ -359,14 +365,15 @@ Always start on testnet. Switch to mainnet for production.
 
 ## Error Handling
 
-| HTTP Status | Meaning | Action |
-|-------------|---------|--------|
-| 400 | Bad Request — malformed payload | Check required fields, types, and values |
-| 401 | Unauthorized — missing/invalid API key | Verify `x-api-key` header |
-| 429 | Rate limit exceeded | Implement exponential backoff |
-| 500 | Server error | Retry with backoff; report if persistent |
+| HTTP Status | Meaning                                | Action                                   |
+| ----------- | -------------------------------------- | ---------------------------------------- |
+| 400         | Bad Request — malformed payload        | Check required fields, types, and values |
+| 401         | Unauthorized — missing/invalid API key | Verify `x-api-key` header                |
+| 429         | Rate limit exceeded                    | Implement exponential backoff            |
+| 500         | Server error                           | Retry with backoff; report if persistent |
 
 **Retry pattern:**
+
 ```javascript
 async function withRetry(fn, maxAttempts = 3) {
   for (let i = 0; i < maxAttempts; i++) {
@@ -374,7 +381,7 @@ async function withRetry(fn, maxAttempts = 3) {
       return await fn();
     } catch (err) {
       if (err.status === 429 && i < maxAttempts - 1) {
-        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+        await new Promise((r) => setTimeout(r, 1000 * Math.pow(2, i)));
         continue;
       }
       throw err;
@@ -411,16 +418,16 @@ async function withRetry(fn, maxAttempts = 3) {
 
 ## Troubleshooting
 
-| Symptom | Likely Cause | Fix |
-|---------|-------------|-----|
-| 401 on write calls | Missing or invalid API key | Check `x-api-key` header / env var |
-| Transaction fails on submit | Wrong signer role | Re-check which role must sign the operation |
-| "No trustline" error | Participant missing trustline | Each participant must add the trustline from their own wallet (Add Asset). Use the G… issuer address — NOT the C… contract address |
-| "No QueryClient set" | Wrong provider order | `QueryClientProvider` must wrap `TrustlessWorkConfig` |
-| Hooks return nothing | Missing provider or Server Component | Ensure `TrustlessWorkConfig` is in a client component |
-| 429 Too Many Requests | Rate limit hit | Add exponential backoff; batch reads |
-| XDR signed but nothing happens | Forgot to submit | Call `sendTransaction` after signing |
-| Approval reverted | Trying to un-approve | Approvals are immutable — add UX confirmation first |
+| Symptom                        | Likely Cause                         | Fix                                                                                                                                |
+| ------------------------------ | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 401 on write calls             | Missing or invalid API key           | Check `x-api-key` header / env var                                                                                                 |
+| Transaction fails on submit    | Wrong signer role                    | Re-check which role must sign the operation                                                                                        |
+| "No trustline" error           | Participant missing trustline        | Each participant must add the trustline from their own wallet (Add Asset). Use the G… issuer address — NOT the C… contract address |
+| "No QueryClient set"           | Wrong provider order                 | `QueryClientProvider` must wrap `TrustlessWorkConfig`                                                                              |
+| Hooks return nothing           | Missing provider or Server Component | Ensure `TrustlessWorkConfig` is in a client component                                                                              |
+| 429 Too Many Requests          | Rate limit hit                       | Add exponential backoff; batch reads                                                                                               |
+| XDR signed but nothing happens | Forgot to submit                     | Call `sendTransaction` after signing                                                                                               |
+| Approval reverted              | Trying to un-approve                 | Approvals are immutable — add UX confirmation first                                                                                |
 
 ---
 

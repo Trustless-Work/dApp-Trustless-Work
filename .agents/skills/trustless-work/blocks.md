@@ -26,6 +26,7 @@ npx trustless-work init
 ```
 
 The CLI:
+
 1. Installs shadcn/ui (interactive prompts)
 2. Installs all peer dependencies
 3. Creates `.twblocks.json` config
@@ -181,18 +182,18 @@ NEXT_PUBLIC_USE_MAINNET=false   # true for production
 
 ## Available UI Components
 
-| Component | Description |
-|-----------|-------------|
-| `WalletButton` | Connect/disconnect wallet UI |
-| `EscrowsByRole` | List escrows filtered by role |
-| `EscrowsBySigner` | List escrows for a given signer address |
-| `InitializeEscrowForm` | Form for creating new escrows |
-| `ApproveMilestone` | Dialog for approving milestones |
-| `ChangeMilestoneStatus` | Form for updating milestone status |
-| `ReleaseEscrow` | UI for releasing funds |
-| `UpdateEscrow` | Form for editing escrow metadata |
-| `DisputeEscrow` | UI for raising a dispute |
-| `ResolveDispute` | UI for resolving disputes |
+| Component               | Description                             |
+| ----------------------- | --------------------------------------- |
+| `WalletButton`          | Connect/disconnect wallet UI            |
+| `EscrowsByRole`         | List escrows filtered by role           |
+| `EscrowsBySigner`       | List escrows for a given signer address |
+| `InitializeEscrowForm`  | Form for creating new escrows           |
+| `ApproveMilestone`      | Dialog for approving milestones         |
+| `ChangeMilestoneStatus` | Form for updating milestone status      |
+| `ReleaseEscrow`         | UI for releasing funds                  |
+| `UpdateEscrow`          | Form for editing escrow metadata        |
+| `DisputeEscrow`         | UI for raising a dispute                |
+| `ResolveDispute`        | UI for resolving disputes               |
 
 Explore all at: https://blocks.trustlesswork.com
 
@@ -266,6 +267,7 @@ export function CreateEscrowBlock() {
 ## Common Mistakes (Blocks)
 
 ### ❌ 1. Wrong provider order
+
 ```typescript
 // WRONG — causes "No QueryClient set" or context errors
 <TrustlessWorkConfig>
@@ -276,6 +278,7 @@ export function CreateEscrowBlock() {
 ```
 
 ### ❌ 2. Creating QueryClient inside the component
+
 ```typescript
 // WRONG — new QueryClient on every render, loses cache
 function Layout() {
@@ -287,9 +290,11 @@ function Layout() { ... }
 ```
 
 ### ❌ 3. Missing "use client" on layout with providers (Next.js)
+
 Providers that use React Context (`QueryClientProvider`, `TrustlessWorkConfig`, `WalletProvider`) must be in client components. Create a dedicated `Providers.tsx` file with `"use client"`.
 
 ### ❌ 4. Wrong WalletNetwork for environment
+
 ```typescript
 // WRONG — testnet passphrase on mainnet (signing will fail)
 const kit = new StellarWalletsKit({ network: WalletNetwork.TESTNET });
@@ -299,21 +304,24 @@ const network = isMainnet ? WalletNetwork.PUBLIC : WalletNetwork.TESTNET;
 ```
 
 ### ❌ 5. Not calling setSelectedEscrow before operations
+
 All operation components (Approve, Release, etc.) read from the shared escrow context. If `setSelectedEscrow` was never called, they operate on `null` and fail silently.
 
 ### ❌ 6. Approving without confirmation
+
 ```typescript
 // WRONG — approval is irreversible, no confirmation
 const handleApprove = () => approveMilestone(payload);
 
 // CORRECT — always confirm irreversible actions
 const handleApprove = async () => {
-  if (!confirm('Approve milestone? This cannot be undone.')) return;
+  if (!confirm("Approve milestone? This cannot be undone.")) return;
   await approveMilestone(payload);
 };
 ```
 
 ### ❌ 7. Forgetting trustlines in the onboarding flow
+
 When a new user connects their wallet, check and establish trustlines before they can participate in any escrow. Use `POST /helper/set-trustline` and sign/submit the returned XDR.
 
 ---
@@ -335,8 +343,8 @@ Created by `npx trustless-work init`:
 
 ## Key URLs
 
-| Resource | URL |
-|----------|-----|
-| Blocks showcase | https://blocks.trustlesswork.com |
-| GitHub (blocks) | https://github.com/Trustless-Work/react-library-trustless-work-blocks |
-| Docs | https://docs.trustlesswork.com/trustless-work/escrow-blocks-sdk/getting-started |
+| Resource        | URL                                                                             |
+| --------------- | ------------------------------------------------------------------------------- |
+| Blocks showcase | https://blocks.trustlesswork.com                                                |
+| GitHub (blocks) | https://github.com/Trustless-Work/react-library-trustless-work-blocks           |
+| Docs            | https://docs.trustlesswork.com/trustless-work/escrow-blocks-sdk/getting-started |

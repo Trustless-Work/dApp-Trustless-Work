@@ -1,11 +1,7 @@
 {
   "version": "1.0.0",
   "agent": "claude-code",
-  "modules": [
-    "api",
-    "sdk",
-    "blocks"
-  ],
+  "modules": ["api", "sdk", "blocks"],
   "installedAt": "2026-03-27T06:18:05.441Z",
   "docsUrl": "https://docs.trustlesswork.com/trustless-work/"
 }

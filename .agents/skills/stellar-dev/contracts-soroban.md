@@ -1,7 +1,9 @@
 # Soroban Smart Contract Development
 
 ## When to use Soroban
+
 Use Soroban when you need:
+
 - Custom on-chain logic beyond Stellar's built-in operations
 - Programmable escrow, lending, or DeFi primitives
 - Complex authorization rules
@@ -9,6 +11,7 @@ Use Soroban when you need:
 - Interoperability with Stellar Assets via SAC
 
 ## Quick Navigation
+
 - Initialization and constructors: [Project Setup](#project-setup), [Contract Constructors (Protocol 22+)](#contract-constructors-protocol-22)
 - Core implementation patterns: [Core Contract Structure](#core-contract-structure), [Storage Types](#storage-types), [Authorization](#authorization)
 - Advanced interactions: [Cross-Contract Calls](#cross-contract-calls), [Events](#events), [Error Handling](#error-handling)
@@ -18,18 +21,22 @@ Use Soroban when you need:
 ## Alternative Languages
 
 Rust is the primary and recommended language for Soroban contracts. Community-maintained alternatives exist but are not recommended for production:
+
 - **AssemblyScript**: [`as-soroban-sdk`](https://github.com/Soneso/as-soroban-sdk) by Soneso — allows TypeScript-like syntax, officially listed on Stellar docs, but may lag behind the latest protocol version
 - **Solidity**: [Hyperledger Solang](https://github.com/hyperledger-solang/solang) — SDF-funded, compiles Solidity to Soroban WASM, currently **pre-alpha** ([docs](https://developers.stellar.org/docs/learn/migrate/evm/solidity-support-via-solang))
 
 ## Architecture Overview
 
 ### Host-Guest Model
+
 Soroban uses a WebAssembly sandbox with strict separation:
+
 - **Host Environment**: Provides storage, crypto, cross-contract calls
 - **Guest Contract**: Your Rust code compiled to WASM
 - Contracts reference host objects via handles (not direct memory)
 
 ### Key Constraints
+
 - `#![no_std]` required - no Rust standard library
 - 64KB contract size limit (use release optimizations)
 - Limited heap allocation
@@ -39,12 +46,14 @@ Soroban uses a WebAssembly sandbox with strict separation:
 ## Project Setup
 
 ### Initialize a new contract
+
 ```bash
 stellar contract init my-contract
 cd my-contract
 ```
 
 This creates:
+
 ```
 my-contract/
 ├── Cargo.toml
@@ -58,6 +67,7 @@ my-contract/
 ```
 
 ### Cargo.toml configuration
+
 ```toml
 [package]
 name = "my-contract"
@@ -93,6 +103,7 @@ debug-assertions = true
 Use constructors for atomic initialization when protocol support is available. This avoids a separate `initialize` transaction and reduces front-running risk.
 
 ### Constructor pattern
+
 ```rust
 #![no_std]
 use soroban_sdk::{contract, contractimpl, contracttype, Address, Env};
@@ -118,6 +129,7 @@ impl MyContract {
 ```
 
 ### Deploy with constructor args (CLI)
+
 ```bash
 stellar contract deploy \
   --wasm target/wasm32-unknown-unknown/release/my_contract.wasm \
@@ -129,17 +141,20 @@ stellar contract deploy \
 ```
 
 ### Rules
+
 1. Name must be `__constructor` exactly.
 2. Constructor returns `()` (no return value).
 3. Runs only at creation time and does not run on upgrade.
 4. If constructor fails, deployment fails atomically.
 
 ### Backwards compatibility
+
 If targeting older protocol environments, use guarded `initialize` patterns and prevent re-initialization explicitly.
 
 ## Core Contract Structure
 
 ### Basic Contract
+
 ```rust
 #![no_std]
 use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
@@ -156,6 +171,7 @@ impl HelloContract {
 ```
 
 ### Contract with State
+
 ```rust
 #![no_std]
 use soroban_sdk::{contract, contractimpl, contracttype, Address, Env};
@@ -203,9 +219,11 @@ impl CounterContract {
 Soroban has three storage types with different costs and lifetimes:
 
 ### Instance Storage
+
 - Tied to contract instance lifetime
 - Shared across all users
 - Best for: admin addresses, global config, counters
+
 ```rust
 env.storage().instance().set(&key, &value);
 env.storage().instance().get(&key);
@@ -213,9 +231,11 @@ env.storage().instance().extend_ttl(min_ttl, extend_to);
 ```
 
 ### Persistent Storage
+
 - Survives archival (can be restored)
 - Per-key TTL management
 - Best for: user balances, important state
+
 ```rust
 env.storage().persistent().set(&key, &value);
 env.storage().persistent().get(&key);
@@ -223,9 +243,11 @@ env.storage().persistent().extend_ttl(&key, min_ttl, extend_to);
 ```
 
 ### Temporary Storage
+
 - Cheapest, automatically deleted when TTL expires
 - Cannot be restored after archival
 - Best for: caches, temporary flags, session data
+
 ```rust
 env.storage().temporary().set(&key, &value);
 env.storage().temporary().get(&key);
@@ -233,6 +255,7 @@ env.storage().temporary().extend_ttl(&key, min_ttl, extend_to);
 ```
 
 ### TTL Management
+
 ```rust
 // Check remaining TTL
 let ttl = env.storage().persistent().get_ttl(&key);
@@ -249,6 +272,7 @@ if ttl < MIN_TTL {
 ## Data Types
 
 ### Primitive Types
+
 ```rust
 use soroban_sdk::{Address, Bytes, BytesN, Map, String, Symbol, Vec, I128, U256};
 
@@ -270,6 +294,7 @@ let m: Map<Symbol, u32> = Map::new(&env);
 ```
 
 ### Custom Types
+
 ```rust
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -291,6 +316,7 @@ pub enum DataKey {
 ## Authorization
 
 ### Requiring Authorization
+
 ```rust
 #[contractimpl]
 impl TokenContract {
@@ -307,6 +333,7 @@ impl TokenContract {
 ```
 
 ### Admin Patterns
+
 ```rust
 fn require_admin(env: &Env) {
     let admin: Address = env.storage().instance().get(&DataKey::Admin).unwrap();
@@ -322,6 +349,7 @@ pub fn set_admin(env: Env, new_admin: Address) {
 ## Cross-Contract Calls
 
 ### Calling Another Contract
+
 ```rust
 use soroban_sdk::{contract, contractimpl, Address, Env};
 
@@ -351,6 +379,7 @@ impl VaultContract {
 ```
 
 ### Using Stellar Asset Contract (SAC)
+
 ```rust
 use soroban_sdk::token::Client as TokenClient;
 
@@ -365,6 +394,7 @@ pub fn transfer_asset(env: Env, from: Address, to: Address, asset: Address, amou
 ## Events
 
 ### Emitting Events
+
 ```rust
 use soroban_sdk::{contract, contractevent, contractimpl, Address, Env};
 
@@ -392,6 +422,7 @@ impl TokenContract {
 ## Error Handling
 
 ### Custom Errors
+
 ```rust
 use soroban_sdk::contracterror;
 
@@ -425,6 +456,7 @@ pub fn transfer(env: Env, from: Address, to: Address, amount: i128) -> Result<()
 ## Building and Deploying
 
 ### Build Contract
+
 ```bash
 # Build optimized WASM
 stellar contract build
@@ -433,6 +465,7 @@ stellar contract build
 ```
 
 ### Deploy to Testnet
+
 ```bash
 # Generate and fund a new identity
 stellar keys generate --global alice --network testnet --fund
@@ -447,6 +480,7 @@ stellar contract deploy \
 ```
 
 ### Initialize Contract
+
 ```bash
 stellar contract invoke \
   --id CONTRACT_ID \
@@ -458,6 +492,7 @@ stellar contract invoke \
 ```
 
 ### Invoke Functions
+
 ```bash
 stellar contract invoke \
   --id CONTRACT_ID \
@@ -516,18 +551,21 @@ fn test_transfer_with_auth() {
 ## Best Practices
 
 ### Contract Size Optimization
+
 - Use `symbol_short!()` for symbols under 9 chars (more efficient)
 - Avoid unnecessary string operations
 - Use appropriate storage type for data lifetime
 - Consider splitting large contracts
 
 ### Storage Efficiency
+
 - Use compact data structures
 - Clean up temporary storage
 - Batch storage operations when possible
 - Manage TTLs proactively to avoid archival
 
 ### Security
+
 - Always validate inputs
 - Use `require_auth()` for sensitive operations
 - Check contract ownership in initialization
@@ -535,6 +573,7 @@ fn test_transfer_with_auth() {
 - Validate cross-contract call targets
 
 ### Gas/Resource Optimization
+
 - Minimize storage reads/writes
 - Use events for data that doesn't need on-chain queries
 - Batch operations where possible
@@ -549,16 +588,19 @@ Stellar's ZK cryptography capabilities are evolving. Treat availability as proto
 - [CAP-0075](https://github.com/stellar/stellar-protocol/blob/master/core/cap-0075.md): Poseidon/Poseidon2 host functions (proposed)
 
 Before implementation, always verify:
+
 1. CAP status in the CAP preamble (`Accepted`/`Implemented` vs draft/awaiting decision)
 2. Target network software version and protocol support
 3. `soroban-sdk` release support for the target host functions
 
 ### Practical guidance
+
 - Use BLS12-381 features where supported and documented in your target SDK/network.
 - For BN254/Poseidon plans, design feature flags and graceful fallbacks until support is active.
 - Keep cryptographic assumptions explicit in audits and deployment notes.
 
 ### Example references
+
 - [Groth16 Verifier](https://github.com/stellar/soroban-examples/tree/main/groth16_verifier)
 - [Soroban examples repository](https://github.com/stellar/soroban-examples)
 

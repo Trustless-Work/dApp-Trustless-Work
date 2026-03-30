@@ -4,14 +4,15 @@
 
 Stellar provides two API paradigms:
 
-| API | Status | Use Case |
-|-----|--------|----------|
-| **Stellar RPC** | Preferred | Soroban, real-time state, new projects |
-| **Horizon** | Legacy-focused | Historical data, legacy applications |
+| API             | Status         | Use Case                               |
+| --------------- | -------------- | -------------------------------------- |
+| **Stellar RPC** | Preferred      | Soroban, real-time state, new projects |
+| **Horizon**     | Legacy-focused | Historical data, legacy applications   |
 
 **Recommendation**: Use Stellar RPC for all new projects. Use Horizon mainly for historical queries and legacy compatibility paths.
 
 ## Quick Navigation
+
 - RPC methods and usage: [Stellar RPC](#stellar-rpc)
 - Horizon endpoints and streaming: [Horizon API (Legacy)](#horizon-api-legacy)
 - Migration strategy: [Migration: Horizon to RPC](#migration-horizon-to-rpc)
@@ -24,12 +25,12 @@ Stellar provides two API paradigms:
 
 > Note: SDF directly provides Futurenet public RPC. For Mainnet RPC, select a provider from the [RPC providers directory](https://developers.stellar.org/docs/data/apis/rpc/providers).
 
-| Network | RPC URL |
-|---------|---------|
-| Mainnet | Provider-specific endpoint (see [RPC providers directory](https://developers.stellar.org/docs/data/apis/rpc/providers)) |
-| Testnet | `https://soroban-testnet.stellar.org` |
-| Futurenet | `https://rpc-futurenet.stellar.org` |
-| Local | `http://localhost:8000/soroban/rpc` |
+| Network   | RPC URL                                                                                                                 |
+| --------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Mainnet   | Provider-specific endpoint (see [RPC providers directory](https://developers.stellar.org/docs/data/apis/rpc/providers)) |
+| Testnet   | `https://soroban-testnet.stellar.org`                                                                                   |
+| Futurenet | `https://rpc-futurenet.stellar.org`                                                                                     |
+| Local     | `http://localhost:8000/soroban/rpc`                                                                                     |
 
 ### Setup
 
@@ -71,13 +72,13 @@ const key = StellarSdk.xdr.LedgerKey.contractData(
     contract: new StellarSdk.Address(contractId).toScAddress(),
     key: StellarSdk.xdr.ScVal.scvSymbol("Counter"),
     durability: StellarSdk.xdr.ContractDataDurability.persistent(),
-  })
+  }),
 );
 
 const entries = await rpc.getLedgerEntries(key);
 if (entries.entries.length > 0) {
   const value = StellarSdk.scValToNative(
-    entries.entries[0].val.contractData().val()
+    entries.entries[0].val.contractData().val(),
   );
 }
 ```
@@ -104,7 +105,7 @@ if (response.status === "PENDING") {
   // Poll for result
   let result = await rpc.getTransaction(response.hash);
   while (result.status === "NOT_FOUND") {
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 1000));
     result = await rpc.getTransaction(response.hash);
   }
 
@@ -157,18 +158,20 @@ for (const event of events.events) {
 
 ### Endpoints
 
-| Network | Horizon URL |
-|---------|-------------|
-| Mainnet | `https://horizon.stellar.org` |
+| Network | Horizon URL                           |
+| ------- | ------------------------------------- |
+| Mainnet | `https://horizon.stellar.org`         |
 | Testnet | `https://horizon-testnet.stellar.org` |
-| Local | `http://localhost:8000` |
+| Local   | `http://localhost:8000`               |
 
 ### Setup
 
 ```typescript
 import * as StellarSdk from "@stellar/stellar-sdk";
 
-const server = new StellarSdk.Horizon.Server("https://horizon-testnet.stellar.org");
+const server = new StellarSdk.Horizon.Server(
+  "https://horizon-testnet.stellar.org",
+);
 ```
 
 ### Common Operations
@@ -205,10 +208,7 @@ const transactions = await server
   .call();
 
 // Specific transaction
-const tx = await server
-  .transactions()
-  .transaction(txHash)
-  .call();
+const tx = await server.transactions().transaction(txHash).call();
 ```
 
 #### Get Operations
@@ -238,7 +238,7 @@ const payments = await server
 for (const payment of payments.records) {
   if (payment.type === "payment") {
     console.log(
-      `${payment.from} -> ${payment.to}: ${payment.amount} ${payment.asset_code || "XLM"}`
+      `${payment.from} -> ${payment.to}: ${payment.amount} ${payment.asset_code || "XLM"}`,
     );
   }
 }
@@ -247,11 +247,7 @@ for (const payment of payments.records) {
 #### Get Effects
 
 ```typescript
-const effects = await server
-  .effects()
-  .forAccount(publicKey)
-  .limit(50)
-  .call();
+const effects = await server.effects().forAccount(publicKey).limit(50).call();
 ```
 
 #### Streaming (Server-Sent Events)
@@ -331,10 +327,7 @@ const result = await pollForResult(response.hash);
 
 ```typescript
 // Horizon - full history
-const allTxs = await horizonServer
-  .transactions()
-  .forAccount(publicKey)
-  .call();
+const allTxs = await horizonServer.transactions().forAccount(publicKey).call();
 
 // RPC - most methods limited to 7 days
 // Exception: getLedgers can query back to genesis (Infinite Scroll)
@@ -377,11 +370,13 @@ LIMIT 100
 ### Galexie
 
 Self-hosted data pipeline for processing Stellar ledger data:
+
 - https://github.com/stellar/galexie
 
 ### Data Lake
 
 RPC "Infinite Scroll" is powered by the Stellar data lake — a cloud-based object store (SEP-0054 format):
+
 - **Public access**: `s3://aws-public-blockchain/v1.1/stellar/ledgers/pubnet` (AWS Open Data)
 - **Self-host**: Use Galexie to export to AWS S3 or Google Cloud Storage
 - **Hosted**: [Quasar (Lightsail Network)](https://quasar.lightsail.network) provides hosted Galexie Data Lake + Archive RPC endpoints
@@ -455,12 +450,14 @@ export const horizon = new StellarSdk.Horizon.Server(config.horizonUrl);
 ## Best Practices
 
 ### Use RPC for:
+
 - New application development
 - Soroban contract interactions
 - Transaction simulation and submission
 - Real-time account state
 
 ### Use Horizon for:
+
 - Historical transaction queries
 - Payment streaming
 - Legacy application maintenance
@@ -496,6 +493,7 @@ try {
 ### Rate Limiting
 
 Both RPC and Horizon have rate limits:
+
 - Use exponential backoff for retries
 - Cache responses where appropriate
 - Consider running your own nodes for high-volume applications
@@ -510,7 +508,7 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
       lastError = error;
       if (error.response?.status === 429) {
         // Rate limited - exponential backoff
-        await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
+        await new Promise((r) => setTimeout(r, Math.pow(2, i) * 1000));
       } else {
         throw error;
       }

@@ -19,7 +19,11 @@ npm install @tanstack/react-query @creit.tech/stellar-wallets-kit
 
 ```typescript
 // Provider
-import { TrustlessWorkConfig, development, mainNet } from '@trustless-work/escrow';
+import {
+  TrustlessWorkConfig,
+  development,
+  mainNet,
+} from "@trustless-work/escrow";
 
 // Hooks (write)
 import {
@@ -33,7 +37,7 @@ import {
   useUpdateEscrow,
   useWithdrawRemainingFunds,
   useSendTransaction,
-} from '@trustless-work/escrow/hooks';
+} from "@trustless-work/escrow/hooks";
 
 // Hooks (read — no API key required)
 import {
@@ -41,7 +45,7 @@ import {
   useGetEscrowsFromIndexerByRole,
   useGetEscrowFromIndexerByContractIds,
   useGetMultipleEscrowBalances,
-} from '@trustless-work/escrow/hooks';
+} from "@trustless-work/escrow/hooks";
 
 // Types
 import {
@@ -56,7 +60,7 @@ import {
   MultiReleaseResolveDisputePayload,
   UpdateSingleReleaseEscrowPayload,
   UpdateMultiReleaseEscrowPayload,
-} from '@trustless-work/escrow/types';
+} from "@trustless-work/escrow/types";
 ```
 
 ---
@@ -159,29 +163,29 @@ const { deployEscrow } = useInitializeEscrow();
 const result = await deployEscrow(
   {
     signer: issuerAddress,
-    engagementId: 'order-123',
-    title: 'Website Project',
-    description: 'Full redesign',
-    amount: 1000,                // ✅ number  ❌ "1000"
+    engagementId: "order-123",
+    title: "Website Project",
+    description: "Full redesign",
+    amount: 1000, // ✅ number  ❌ "1000"
     roles: {
       approver: approverAddress,
       serviceProvider: spAddress,
       releaseSigner: releaseSignerAddress,
       disputeResolver: drAddress,
-      receiver: receiverAddress,      // only in single-release roles
+      receiver: receiverAddress, // only in single-release roles
       platformAddress: platformAddress,
     },
-    platformFee: 2,              // ✅ number  ❌ "2"
+    platformFee: 2, // ✅ number  ❌ "2"
     trustline: {
-      address: USDC_ISSUER_ADDRESS,   // G… Stellar issuer address — NOT the C… contract
-      symbol: 'USDC',
+      address: USDC_ISSUER_ADDRESS, // G… Stellar issuer address — NOT the C… contract
+      symbol: "USDC",
     },
     milestones: [
-      { title: 'Mockups', description: 'Deliver Figma files' },
-      { title: 'Dev', description: 'Implement in React' },
+      { title: "Mockups", description: "Deliver Figma files" },
+      { title: "Dev", description: "Implement in React" },
     ],
   } satisfies InitializeSingleReleaseEscrowPayload,
-  'single-release'
+  "single-release",
 );
 // result.unsignedTransaction → sign → submit
 
@@ -191,9 +195,9 @@ const result = await deployEscrow(
 const result = await deployEscrow(
   {
     signer: issuerAddress,
-    engagementId: 'order-123',
-    title: 'Website Project',
-    description: 'Full redesign',
+    engagementId: "order-123",
+    title: "Website Project",
+    description: "Full redesign",
     // ⚠️ No `amount` here for multi-release
     roles: {
       approver: approverAddress,
@@ -205,15 +209,25 @@ const result = await deployEscrow(
     },
     platformFee: 2,
     trustline: {
-      address: USDC_ISSUER_ADDRESS,   // G… Stellar issuer address
-      symbol: 'USDC',
+      address: USDC_ISSUER_ADDRESS, // G… Stellar issuer address
+      symbol: "USDC",
     },
     milestones: [
-      { title: 'Phase 1', description: 'Design', amount: 400, receiver: receiverAddress },
-      { title: 'Phase 2', description: 'Dev',    amount: 600, receiver: receiverAddress },
+      {
+        title: "Phase 1",
+        description: "Design",
+        amount: 400,
+        receiver: receiverAddress,
+      },
+      {
+        title: "Phase 2",
+        description: "Dev",
+        amount: 600,
+        receiver: receiverAddress,
+      },
     ],
   } satisfies InitializeMultiReleaseEscrowPayload,
-  'multi-release'
+  "multi-release",
 );
 // result.unsignedTransaction → sign → submit
 ```
@@ -224,9 +238,9 @@ const result = await deployEscrow(
 const { fundEscrow } = useFundEscrow();
 
 const result = await fundEscrow({
-  contractId: 'CXXXXX...',
-  signer: funderAddress,   // must be the Funder role address
-  amount: '1000',          // string in fund-escrow (unlike deploy where amount is number)
+  contractId: "CXXXXX...",
+  signer: funderAddress, // must be the Funder role address
+  amount: "1000", // string in fund-escrow (unlike deploy where amount is number)
 } satisfies FundEscrowPayload);
 ```
 
@@ -236,11 +250,11 @@ const result = await fundEscrow({
 const { changeMilestoneStatus } = useChangeMilestoneStatus();
 
 const result = await changeMilestoneStatus({
-  contractId: 'CXXXXX...',
-  serviceProvider: serviceProviderAddress,  // field is `serviceProvider`, not `signer`
-  milestoneIndex: '0',                      // string, not number
-  newStatus: 'Under Review',
-  newEvidence: 'https://link-to-evidence.com',
+  contractId: "CXXXXX...",
+  serviceProvider: serviceProviderAddress, // field is `serviceProvider`, not `signer`
+  milestoneIndex: "0", // string, not number
+  newStatus: "Under Review",
+  newEvidence: "https://link-to-evidence.com",
 } satisfies ChangeMilestoneStatusPayload);
 ```
 
@@ -250,13 +264,15 @@ const result = await changeMilestoneStatus({
 const { approveMilestone } = useApproveMilestone();
 
 // ALWAYS show a confirmation dialog first — approval cannot be undone
-const confirmed = confirm('Approve this milestone? This action cannot be reversed.');
+const confirmed = confirm(
+  "Approve this milestone? This action cannot be reversed.",
+);
 if (!confirmed) return;
 
 const result = await approveMilestone({
-  contractId: 'CXXXXX...',
-  approver: approverAddress,   // field is `approver`, not `signer`
-  milestoneIndex: '0',         // string, not number
+  contractId: "CXXXXX...",
+  approver: approverAddress, // field is `approver`, not `signer`
+  milestoneIndex: "0", // string, not number
 } satisfies ApproveMilestonePayload);
 ```
 
@@ -267,15 +283,15 @@ const { releaseFunds } = useReleaseFunds();
 
 // Single-release
 const result = await releaseFunds({
-  contractId: 'CXXXXX...',
-  releaseSigner: releaseSignerAddress,  // field is `releaseSigner`, not `signer`
+  contractId: "CXXXXX...",
+  releaseSigner: releaseSignerAddress, // field is `releaseSigner`, not `signer`
 } satisfies SingleReleaseReleaseFundsPayload);
 
 // Multi-release (adds milestoneIndex)
 const result = await releaseFunds({
-  contractId: 'CXXXXX...',
+  contractId: "CXXXXX...",
   releaseSigner: releaseSignerAddress,
-  milestoneIndex: '0',                  // string, not number
+  milestoneIndex: "0", // string, not number
 } satisfies MultiReleaseReleaseFundsPayload);
 ```
 
@@ -285,10 +301,17 @@ const result = await releaseFunds({
 const { startDispute } = useStartDispute();
 
 // Single-release
-const result = await startDispute({ contractId: 'CXXXXX...', signer: approverOrSpAddress });
+const result = await startDispute({
+  contractId: "CXXXXX...",
+  signer: approverOrSpAddress,
+});
 
 // Multi-release (adds milestoneIndex)
-const result = await startDispute({ contractId: 'CXXXXX...', signer: approverOrSpAddress, milestoneIndex: '0' });
+const result = await startDispute({
+  contractId: "CXXXXX...",
+  signer: approverOrSpAddress,
+  milestoneIndex: "0",
+});
 ```
 
 ### `useResolveDispute` — Resolve a dispute
@@ -298,7 +321,7 @@ const { resolveDispute } = useResolveDispute();
 
 // Single-release
 const result = await resolveDispute({
-  contractId: 'CXXXXX...',
+  contractId: "CXXXXX...",
   disputeResolver: disputeResolverAddress,
   distributions: [
     { address: approverAddress, amount: 300 },
@@ -308,9 +331,9 @@ const result = await resolveDispute({
 
 // Multi-release (adds milestoneIndex)
 const result = await resolveDispute({
-  contractId: 'CXXXXX...',
+  contractId: "CXXXXX...",
   disputeResolver: disputeResolverAddress,
-  milestoneIndex: '0',
+  milestoneIndex: "0",
   distributions: [
     { address: approverAddress, amount: 300 },
     { address: receiverAddress, amount: 700 },
@@ -323,7 +346,11 @@ const result = await resolveDispute({
 ```typescript
 const { updateEscrow } = useUpdateEscrow();
 // Only works before funding. Signed by Platform Address.
-const result = await updateEscrow({ contractId, signer: platformAddress, ...changes });
+const result = await updateEscrow({
+  contractId,
+  signer: platformAddress,
+  ...changes,
+});
 ```
 
 ### `useSendTransaction` — Submit signed XDR (final step)
@@ -378,15 +405,20 @@ function CreateEscrowButton({ kit, issuerAddress }) {
 ```typescript
 // Get escrows by signer address
 const { getEscrowsBySigner } = useGetEscrowsFromIndexerBySigner();
-const escrows = await getEscrowsBySigner({ signer: 'GXXX...' });
+const escrows = await getEscrowsBySigner({ signer: "GXXX..." });
 
 // Get escrows by role
 const { getEscrowsByRole } = useGetEscrowsFromIndexerByRole();
-const escrows = await getEscrowsByRole({ role: 'approver', address: 'GXXX...' });
+const escrows = await getEscrowsByRole({
+  role: "approver",
+  address: "GXXX...",
+});
 
 // Get escrows by contract IDs
 const { getEscrowByContractIds } = useGetEscrowFromIndexerByContractIds();
-const escrows = await getEscrowByContractIds({ contractIds: ['CXXX...', 'CYYY...'] });
+const escrows = await getEscrowByContractIds({
+  contractIds: ["CXXX...", "CYYY..."],
+});
 
 // Get balances for multiple escrows
 const { getMultipleEscrowBalances } = useGetMultipleEscrowBalances();
@@ -397,6 +429,7 @@ const { getMultipleEscrowBalances } = useGetMultipleEscrowBalances();
 ## Common Mistakes (SDK)
 
 ### ❌ 1. Missing "use client" on the provider (Next.js)
+
 ```typescript
 // WRONG — will cause "createContext called on the server" error
 export function TrustlessWorkProvider(...) { ... }
@@ -407,6 +440,7 @@ export function TrustlessWorkProvider(...) { ... }
 ```
 
 ### ❌ 2. Wrong provider order
+
 ```typescript
 // WRONG — TanStack Query won't be available inside TrustlessWorkConfig
 <TrustlessWorkConfig>
@@ -424,24 +458,27 @@ export function TrustlessWorkProvider(...) { ... }
 ```
 
 ### ❌ 3. Forgetting to call `sendTransaction` after signing
+
 ```typescript
 // WRONG — escrow is never created on-chain
-const { unsignedTransaction } = await deployEscrow(payload, 'single-release');
+const { unsignedTransaction } = await deployEscrow(payload, "single-release");
 const { signedTxXdr } = await kit.signTransaction(unsignedTransaction, opts);
 // MISSING: await sendTransaction({ signedXdr: signedTxXdr })
 ```
 
 ### ❌ 4. Single vs Multi-Release payload confusion
+
 ```typescript
 // Multi-release needs milestoneIndex (string) on release and resolve
 const result = await releaseFunds({
   contractId,
-  releaseSigner,           // `releaseSigner`, not `signer`
-  milestoneIndex: '0',     // string, REQUIRED for multi-release, omitted for single-release
+  releaseSigner, // `releaseSigner`, not `signer`
+  milestoneIndex: "0", // string, REQUIRED for multi-release, omitted for single-release
 });
 ```
 
 ### ❌ 5. engagementId omitted
+
 ```typescript
 // Always include to link the escrow to your system's records
 { engagementId: `order-${order.id}`, ... }

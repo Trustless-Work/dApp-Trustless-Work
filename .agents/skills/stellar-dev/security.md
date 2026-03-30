@@ -3,6 +3,7 @@
 ## Core Principle
 
 Assume the attacker controls:
+
 - All arguments passed to contract functions
 - Transaction ordering and timing
 - All accounts except those requiring signatures
@@ -13,12 +14,15 @@ Assume the attacker controls:
 Soroban's architecture prevents certain vulnerability classes by design:
 
 ### No Delegate Call
+
 Unlike Ethereum, Soroban has no `delegatecall` equivalent. Contracts cannot execute arbitrary bytecode in their context, eliminating proxy-based attacks.
 
 ### No Classical Reentrancy
+
 Soroban's synchronous execution model prevents the cross-contract reentrancy that plagues Ethereum. Self-reentrancy is possible but rarely exploitable.
 
 ### Explicit Authorization
+
 Authorization is opt-in via `require_auth()`, making it explicit which operations need signatures.
 
 ---
@@ -32,6 +36,7 @@ Authorization is opt-in via `require_auth()`, making it explicit which operation
 **Attack**: Attacker calls admin-only functions, drains funds, or modifies critical state.
 
 **Vulnerable Code**:
+
 ```rust
 // BAD: No authorization check
 pub fn withdraw(env: Env, to: Address, amount: i128) {
@@ -40,6 +45,7 @@ pub fn withdraw(env: Env, to: Address, amount: i128) {
 ```
 
 **Secure Code**:
+
 ```rust
 // GOOD: Requires authorization from admin
 pub fn withdraw(env: Env, to: Address, amount: i128) {
@@ -60,6 +66,7 @@ pub fn withdraw(env: Env, to: Address, amount: i128) {
 **Attack**: Attacker reinitializes contract to become the admin, then drains assets.
 
 **Vulnerable Code**:
+
 ```rust
 // BAD: Can be called multiple times
 pub fn initialize(env: Env, admin: Address) {
@@ -68,6 +75,7 @@ pub fn initialize(env: Env, admin: Address) {
 ```
 
 **Secure Code**:
+
 ```rust
 // GOOD: Prevents reinitialization
 pub fn initialize(env: Env, admin: Address) {
@@ -96,6 +104,7 @@ pub fn initialize(env: Env, admin: Address) {
 **Attack**: Attacker passes malicious contract that mimics expected interface but behaves differently.
 
 **Vulnerable Code**:
+
 ```rust
 // BAD: Calls any contract passed as parameter
 pub fn swap(env: Env, token: Address, amount: i128) {
@@ -105,6 +114,7 @@ pub fn swap(env: Env, token: Address, amount: i128) {
 ```
 
 **Secure Code**:
+
 ```rust
 // GOOD: Validate against known allowlist
 pub fn swap(env: Env, token: Address, amount: i128) {
@@ -137,6 +147,7 @@ pub fn swap_sac(env: Env, asset: Address, amount: i128) {
 **Attack**: Attacker manipulates amounts to cause overflow, bypassing balance checks.
 
 **Vulnerable Code**:
+
 ```rust
 // BAD: Unchecked arithmetic
 pub fn deposit(env: Env, user: Address, amount: i128) {
@@ -146,6 +157,7 @@ pub fn deposit(env: Env, user: Address, amount: i128) {
 ```
 
 **Secure Code**:
+
 ```rust
 // GOOD: Use checked arithmetic
 pub fn deposit(env: Env, user: Address, amount: i128) {
@@ -173,6 +185,7 @@ pub fn deposit(env: Env, user: Address, amount: i128) {
 **Attack**: Attacker manipulates one type of data to corrupt another.
 
 **Vulnerable Code**:
+
 ```rust
 // BAD: Same prefix for different data
 env.storage().persistent().set(&symbol_short!("data"), &user_balance);
@@ -180,6 +193,7 @@ env.storage().persistent().set(&symbol_short!("data"), &config); // Overwrites!
 ```
 
 **Secure Code**:
+
 ```rust
 // GOOD: Use typed enum for keys
 #[contracttype]
@@ -204,6 +218,7 @@ env.storage().instance().set(&DataKey::Config, &config);
 **Attack**: In multi-transaction scenarios, attacker exploits gap between validation and action.
 
 **Prevention**:
+
 ```rust
 // Use atomic operations where possible
 pub fn swap(env: Env, user: Address, amount_in: i128, min_out: i128) {
@@ -235,6 +250,7 @@ pub fn swap(env: Env, user: Address, amount_in: i128, min_out: i128) {
 **Attack**: Attacker waits for data to be archived, then exploits the missing state.
 
 **Prevention**:
+
 ```rust
 // Extend TTL for critical data
 pub fn critical_operation(env: Env) {
@@ -265,6 +281,7 @@ pub fn critical_operation(env: Env) {
 **Attack**: Malicious contract returns false data, causing incorrect state updates.
 
 **Prevention**:
+
 ```rust
 // Validate all external data
 pub fn process_oracle_price(env: Env, oracle: Address, asset: Address) -> i128 {
@@ -298,6 +315,7 @@ pub fn process_oracle_price(env: Env, oracle: Address, asset: Address) -> i128 {
 **Risk**: Users create trustlines to malicious assets that look legitimate.
 
 **Prevention**:
+
 - Verify asset issuer before creating trustlines
 - Use well-known asset lists (stellar.toml)
 - Display full asset code + issuer in UIs
@@ -307,6 +325,7 @@ pub fn process_oracle_price(env: Env, oracle: Address, asset: Address) -> i128 {
 **Risk**: Assets with clawback enabled can be seized by issuer.
 
 **Prevention**:
+
 ```typescript
 // Check if clawback is enabled
 const issuerAccount = await server.loadAccount(asset.issuer);
@@ -322,6 +341,7 @@ if (clawbackEnabled) {
 **Risk**: Merged accounts can be recreated with different configuration.
 
 **Prevention**:
+
 - Validate account state before critical operations
 - Don't cache account data long-term
 
@@ -330,6 +350,7 @@ if (clawbackEnabled) {
 ## Soroban-Specific Checklist
 
 ### Contract Development
+
 - [ ] All privileged functions require appropriate authorization
 - [ ] Initialization can only happen once
 - [ ] External contract calls are validated against allowlists
@@ -340,6 +361,7 @@ if (clawbackEnabled) {
 - [ ] Events emitted for auditable state changes
 
 ### Storage Security
+
 - [ ] Sensitive data uses appropriate storage type
 - [ ] Instance storage for shared/admin data
 - [ ] Persistent storage for user-specific data
@@ -347,6 +369,7 @@ if (clawbackEnabled) {
 - [ ] TTL management strategy documented
 
 ### Cross-Contract Calls
+
 - [ ] Called contracts are validated or allowlisted
 - [ ] Return values are sanity-checked
 - [ ] Failure cases handled gracefully
@@ -383,6 +406,7 @@ if (clawbackEnabled) {
 ## Bug Bounty Programs
 
 ### Immunefi — Stellar Core (up to $250K)
+
 - **URL**: https://immunefi.com/bug-bounty/stellar/
 - **Scope**: stellar-core, rs-soroban-sdk, rs-soroban-env, soroban-tools (CLI + RPC), js-soroban-client, rs-stellar-xdr, wasmi fork
 - **Rewards**: Critical $50K–$250K, High $10K–$50K, Medium $5K, Low $1K
@@ -390,11 +414,13 @@ if (clawbackEnabled) {
 - **Rules**: PoC required. Test on local forks only (no mainnet/testnet).
 
 ### Immunefi — OpenZeppelin on Stellar (up to $25K)
+
 - **URL**: https://immunefi.com/bug-bounty/openzeppelin-stellar/
 - **Scope**: OpenZeppelin Stellar Contracts library
 - **Max payout**: $25K per bug, $250K total program cap
 
 ### HackerOne — Web Applications
+
 - **URL**: https://stellar.org/grants-and-funding/bug-bounty
 - **Scope**: SDF web applications, production servers, domains
 - **Disclosure**: 90-day remediation window before public disclosure
@@ -412,25 +438,27 @@ SDF's proactive security program with **$3M+ deployed across 43+ audits**.
 
 ### Partner Audit Firms
 
-| Firm | Specialty |
-|------|-----------|
-| **OtterSec** | Smart contract audits |
-| **Veridise** | Tool-assisted audits, [security checklist](https://veridise.com/blog/audit-insights/building-on-stellar-soroban-grab-this-security-checklist-to-avoid-vulnerabilities/) |
+| Firm                     | Specialty                                                                                                                                                                     |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **OtterSec**             | Smart contract audits                                                                                                                                                         |
+| **Veridise**             | Tool-assisted audits, [security checklist](https://veridise.com/blog/audit-insights/building-on-stellar-soroban-grab-this-security-checklist-to-avoid-vulnerabilities/)       |
 | **Runtime Verification** | Formal methods, [Komet tool](https://runtimeverification.com/blog/introducing-komet-smart-contract-testing-and-verification-tool-for-soroban-created-by-runtime-verification) |
-| **CoinFabrik** | Static analysis (Scout), manual audits |
-| **QuarksLab** | Security research |
-| **Coinspect** | Security audits |
-| **Certora** | Formal verification ([Sunbeam Prover](https://docs.certora.com/en/latest/docs/sunbeam/index.html)) |
-| **Halborn** | Security assessments |
-| **Zellic** | Blockchain + cryptography research |
-| **Code4rena** | Competitive audit platform |
+| **CoinFabrik**           | Static analysis (Scout), manual audits                                                                                                                                        |
+| **QuarksLab**            | Security research                                                                                                                                                             |
+| **Coinspect**            | Security audits                                                                                                                                                               |
+| **Certora**              | Formal verification ([Sunbeam Prover](https://docs.certora.com/en/latest/docs/sunbeam/index.html))                                                                            |
+| **Halborn**              | Security assessments                                                                                                                                                          |
+| **Zellic**               | Blockchain + cryptography research                                                                                                                                            |
+| **Code4rena**            | Competitive audit platform                                                                                                                                                    |
 
 ## Security Tooling
 
 ### Static Analysis
 
 #### Scout Soroban (CoinFabrik)
+
 Open-source vulnerability detector with 23 detectors (critical through enhancement severity).
+
 - **GitHub**: https://github.com/CoinFabrik/scout-soroban
 - **Install**: `cargo install cargo-scout-audit` → `cargo scout-audit`
 - **Output formats**: HTML, Markdown, JSON, PDF, SARIF (CI/CD integration)
@@ -438,7 +466,9 @@ Open-source vulnerability detector with 23 detectors (critical through enhanceme
 - **Key detectors**: `overflow-check`, `unprotected-update-current-contract-wasm`, `set-contract-storage`, `unrestricted-transfer-from`, `divide-before-multiply`, `dos-unbounded-operation`, `unsafe-unwrap`
 
 #### OpenZeppelin Security Detectors SDK
+
 Framework for building custom security detectors for Soroban.
+
 - **GitHub**: https://github.com/OpenZeppelin/soroban-security-detectors-sdk
 - **Architecture**: `sdk` (core), `detectors` (pre-built), `soroban-scanner` (CLI)
 - **Pre-built detectors**: `auth_missing`, `unchecked_ft_transfer`, improper TTL extension, contract panics, unsafe temporary storage
@@ -447,7 +477,9 @@ Framework for building custom security detectors for Soroban.
 ### Formal Verification
 
 #### Certora Sunbeam Prover
+
 Purpose-built formal verification for Soroban — first WASM platform supported by Certora.
+
 - **Docs**: https://docs.certora.com/en/latest/docs/sunbeam/index.html
 - **Spec language**: CVLR (Certora Verification Language for Rust) — Rust macros (`cvlr_assert!`, `cvlr_assume!`, `cvlr_satisfy!`)
 - **Operates at**: WASM bytecode level (eliminates compiler trust assumptions)
@@ -455,7 +487,9 @@ Purpose-built formal verification for Soroban — first WASM platform supported 
 - **Example**: [Blend V1 verification report](https://www.certora.com/reports/blend-smart-contract-verification-report)
 
 #### Runtime Verification — Komet
+
 Formal verification and testing tool built specifically for Soroban (SCF-funded).
+
 - **Docs**: https://docs.runtimeverification.com/komet
 - **Repo**: https://github.com/runtimeverification/komet
 - **Spec language**: Rust — property-based tests written in the same language as Soroban contracts
@@ -468,20 +502,25 @@ Formal verification and testing tool built specifically for Soroban (SCF-funded)
 ### Security Knowledge Base
 
 #### Soroban Security Portal
+
 Community security knowledge base by Inferara (SCF-funded).
+
 - **URL**: https://sorobansecurity.com
 - **Features**: Searchable audit reports, vulnerability database, best practices
 
 ### Security Monitoring (Post-Deployment)
 
 #### OpenZeppelin Monitor (Stellar alpha)
+
 Open-source contract monitoring with Stellar support.
+
 - **Features**: Self-hosted via Docker, Prometheus + Grafana observability
 - **Source**: https://www.openzeppelin.com/news/monitor-and-relayers-are-now-open-source
 
 ## OpenZeppelin Partnership Overview
 
 Strategic partnership highlights include:
+
 - **40 Auditor Weeks** of dedicated security audits
 - **Stellar Contracts library** (audited, production-ready)
 - **Relayer** (fee-sponsored transactions, Stellar-native)

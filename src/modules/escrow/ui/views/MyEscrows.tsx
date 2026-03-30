@@ -151,11 +151,31 @@ export const MyEscrows = () => {
   const tabOptions = useMemo(
     () => [
       { value: "signer", label: t("myEscrows.tabs.signer"), icon: PenLine },
-      { value: "approver", label: t("myEscrows.tabs.approver"), icon: ShieldCheck },
-      { value: "serviceProvider", label: t("myEscrows.tabs.serviceProvider"), icon: Briefcase },
-      { value: "disputeResolver", label: t("myEscrows.tabs.disputeResolver"), icon: Scale },
-      { value: "releaseSigner", label: t("myEscrows.tabs.releaseSigner"), icon: Unlock },
-      { value: "platformAddress", label: t("myEscrows.tabs.platformAddress"), icon: Building2 },
+      {
+        value: "approver",
+        label: t("myEscrows.tabs.approver"),
+        icon: ShieldCheck,
+      },
+      {
+        value: "serviceProvider",
+        label: t("myEscrows.tabs.serviceProvider"),
+        icon: Briefcase,
+      },
+      {
+        value: "disputeResolver",
+        label: t("myEscrows.tabs.disputeResolver"),
+        icon: Scale,
+      },
+      {
+        value: "releaseSigner",
+        label: t("myEscrows.tabs.releaseSigner"),
+        icon: Unlock,
+      },
+      {
+        value: "platformAddress",
+        label: t("myEscrows.tabs.platformAddress"),
+        icon: Building2,
+      },
       { value: "receiver", label: t("myEscrows.tabs.receiver"), icon: Inbox },
     ],
     [t],
@@ -306,7 +326,9 @@ export const MyEscrows = () => {
                     autoFocus
                   />
                   <CommandList>
-                    <CommandEmpty>{t("myEscrows.tabs.placeholder")}</CommandEmpty>
+                    <CommandEmpty>
+                      {t("myEscrows.tabs.placeholder")}
+                    </CommandEmpty>
                     <CommandGroup heading={t("myEscrows.tabs.role")}>
                       {tabOptions.map((option) => {
                         const isActive = activeTab === option.value;
@@ -321,15 +343,21 @@ export const MyEscrows = () => {
                             }}
                             className="flex items-center gap-2"
                           >
-                            <Icon className={cn(
-                              "size-4 shrink-0",
-                              isActive ? "text-primary" : "text-muted-foreground",
-                            )} />
+                            <Icon
+                              className={cn(
+                                "size-4 shrink-0",
+                                isActive
+                                  ? "text-primary"
+                                  : "text-muted-foreground",
+                              )}
+                            />
                             <span className="flex-1">{option.label}</span>
                             <Check
                               className={cn(
                                 "size-4 shrink-0",
-                                isActive ? "opacity-100 text-primary" : "opacity-0",
+                                isActive
+                                  ? "opacity-100 text-primary"
+                                  : "opacity-0",
                               )}
                             />
                           </CommandItem>
@@ -370,8 +398,12 @@ export const MyEscrows = () => {
           <div className="w-full">
             {activeTab === "signer" ? renderSignerContent : null}
             {activeTab === "approver" ? renderApproverContent : null}
-            {activeTab === "serviceProvider" ? renderServiceProviderContent : null}
-            {activeTab === "disputeResolver" ? renderDisputeResolverContent : null}
+            {activeTab === "serviceProvider"
+              ? renderServiceProviderContent
+              : null}
+            {activeTab === "disputeResolver"
+              ? renderDisputeResolverContent
+              : null}
             {activeTab === "releaseSigner" ? renderReleaseSignerContent : null}
             {activeTab === "platformAddress"
               ? renderPlatformAddressContent

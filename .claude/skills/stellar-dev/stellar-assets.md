@@ -13,11 +13,11 @@ Stellar has two token mechanisms:
 
 ### Asset Types
 
-| Type | Description |
-|------|-------------|
-| Native (XLM) | Stellar's native currency, no trustline needed |
-| Credit | Issued by an account, requires trustline |
-| Liquidity Pool Shares | Represent LP positions |
+| Type                  | Description                                    |
+| --------------------- | ---------------------------------------------- |
+| Native (XLM)          | Stellar's native currency, no trustline needed |
+| Credit                | Issued by an account, requires trustline       |
+| Liquidity Pool Shares | Represent LP positions                         |
 
 ### Asset Identifiers
 
@@ -30,7 +30,7 @@ const xlm = StellarSdk.Asset.native();
 // Credit asset (code + issuer)
 const usdc = new StellarSdk.Asset(
   "USDC",
-  "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
+  "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
 );
 
 // Asset code rules:
@@ -45,7 +45,9 @@ const usdc = new StellarSdk.Asset(
 ```typescript
 import * as StellarSdk from "@stellar/stellar-sdk";
 
-const server = new StellarSdk.Horizon.Server("https://horizon-testnet.stellar.org");
+const server = new StellarSdk.Horizon.Server(
+  "https://horizon-testnet.stellar.org",
+);
 
 // 1. Create issuing account (should be separate from distribution)
 const issuerKeypair = StellarSdk.Keypair.random();
@@ -53,7 +55,9 @@ const distributorKeypair = StellarSdk.Keypair.random();
 
 // 2. Fund accounts (testnet)
 await fetch(`https://friendbot.stellar.org?addr=${issuerKeypair.publicKey()}`);
-await fetch(`https://friendbot.stellar.org?addr=${distributorKeypair.publicKey()}`);
+await fetch(
+  `https://friendbot.stellar.org?addr=${distributorKeypair.publicKey()}`,
+);
 ```
 
 ### Issue Asset
@@ -62,7 +66,9 @@ await fetch(`https://friendbot.stellar.org?addr=${distributorKeypair.publicKey()
 const asset = new StellarSdk.Asset("MYTOKEN", issuerKeypair.publicKey());
 
 // 1. Distributor creates trustline to issuer
-const distributorAccount = await server.loadAccount(distributorKeypair.publicKey());
+const distributorAccount = await server.loadAccount(
+  distributorKeypair.publicKey(),
+);
 
 const trustlineTx = new StellarSdk.TransactionBuilder(distributorAccount, {
   fee: StellarSdk.BASE_FEE,
@@ -72,7 +78,7 @@ const trustlineTx = new StellarSdk.TransactionBuilder(distributorAccount, {
     StellarSdk.Operation.changeTrust({
       asset: asset,
       limit: "1000000", // Max amount to hold
-    })
+    }),
   )
   .setTimeout(180)
   .build();
@@ -92,7 +98,7 @@ const issueTx = new StellarSdk.TransactionBuilder(issuerAccount, {
       destination: distributorKeypair.publicKey(),
       asset: asset,
       amount: "1000000",
-    })
+    }),
   )
   .setTimeout(180)
   .build();
@@ -113,7 +119,7 @@ const lockTx = new StellarSdk.TransactionBuilder(issuerAccount, {
   .addOperation(
     StellarSdk.Operation.setOptions({
       masterWeight: 0, // Disable master key
-    })
+    }),
   )
   .setTimeout(180)
   .build();
@@ -135,10 +141,10 @@ const setFlagsTx = new StellarSdk.TransactionBuilder(issuerAccount, {
   .addOperation(
     StellarSdk.Operation.setOptions({
       setFlags:
-        StellarSdk.AuthRequiredFlag |    // Trustlines require approval
-        StellarSdk.AuthRevocableFlag |   // Can freeze trustlines
+        StellarSdk.AuthRequiredFlag | // Trustlines require approval
+        StellarSdk.AuthRevocableFlag | // Can freeze trustlines
         StellarSdk.AuthClawbackEnabledFlag, // Can clawback tokens
-    })
+    }),
   )
   .setTimeout(180)
   .build();
@@ -146,12 +152,12 @@ const setFlagsTx = new StellarSdk.TransactionBuilder(issuerAccount, {
 
 ### Flag Descriptions
 
-| Flag | Effect |
-|------|--------|
-| `AUTH_REQUIRED` | Users must get approval before receiving tokens |
-| `AUTH_REVOCABLE` | Issuer can freeze user balances |
-| `AUTH_IMMUTABLE` | Flags cannot be changed (permanent) |
-| `AUTH_CLAWBACK_ENABLED` | Issuer can clawback tokens from accounts |
+| Flag                    | Effect                                          |
+| ----------------------- | ----------------------------------------------- |
+| `AUTH_REQUIRED`         | Users must get approval before receiving tokens |
+| `AUTH_REVOCABLE`        | Issuer can freeze user balances                 |
+| `AUTH_IMMUTABLE`        | Flags cannot be changed (permanent)             |
+| `AUTH_CLAWBACK_ENABLED` | Issuer can clawback tokens from accounts        |
 
 ### Authorize Trustline
 
@@ -169,7 +175,7 @@ const authorizeTx = new StellarSdk.TransactionBuilder(issuerAccount, {
         authorized: true,
         // authorizedToMaintainLiabilities: true, // Partial auth
       },
-    })
+    }),
   )
   .setTimeout(180)
   .build();
@@ -188,7 +194,7 @@ const clawbackTx = new StellarSdk.TransactionBuilder(issuerAccount, {
       asset: asset,
       from: targetAccountId,
       amount: "100",
-    })
+    }),
   )
   .setTimeout(180)
   .build();
@@ -207,7 +213,7 @@ const changeTrustTx = new StellarSdk.TransactionBuilder(userAccount, {
     StellarSdk.Operation.changeTrust({
       asset: asset,
       limit: "10000", // 0 to remove trustline
-    })
+    }),
   )
   .setTimeout(180)
   .build();
@@ -221,7 +227,7 @@ const trustline = account.balances.find(
   (b) =>
     b.asset_type !== "native" &&
     b.asset_code === "USDC" &&
-    b.asset_issuer === usdcIssuer
+    b.asset_issuer === usdcIssuer,
 );
 
 if (trustline) {
@@ -278,6 +284,7 @@ pub fn transfer_asset(
 ### SAC vs Custom Token Interface
 
 SAC implements the standard Soroban token interface:
+
 - `balance(id: Address) -> i128`
 - `transfer(from: Address, to: Address, amount: i128)`
 - `approve(from: Address, spender: Address, amount: i128, expiration_ledger: u32)`
@@ -289,6 +296,7 @@ SAC implements the standard Soroban token interface:
 ## When to Use What
 
 ### Use Stellar Assets When:
+
 - Standard fungible token (currency, stablecoin)
 - Need full ecosystem support (wallets, exchanges)
 - Regulatory compliance features (freeze, clawback)
@@ -296,6 +304,7 @@ SAC implements the standard Soroban token interface:
 - DEX integration via order book
 
 ### Use Soroban Custom Tokens When:
+
 - Complex transfer logic (royalties, fees, restrictions)
 - Custom authorization schemes
 - Non-standard token behaviors
@@ -303,6 +312,7 @@ SAC implements the standard Soroban token interface:
 - NFTs or semi-fungible tokens
 
 ### Use SAC When:
+
 - Need Stellar Asset in Soroban contract
 - Building DeFi protocols with existing assets
 - Bridge between classic and smart contract operations
@@ -327,10 +337,7 @@ for (const balance of account.balances) {
 
 ```typescript
 // Search for assets by code
-const assets = await server
-  .assets()
-  .forCode("USDC")
-  .call();
+const assets = await server.assets().forCode("USDC").call();
 
 // Get specific asset details
 const assetDetails = await server
@@ -401,18 +408,21 @@ Standard contract interface for NFTs on Soroban. Reference implementations avail
 ## Best Practices
 
 ### Asset Issuance
+
 - Use separate issuing and distribution accounts
 - Lock issuer after initial distribution for fixed supply
 - Publish stellar.toml with asset metadata
 - Consider multisig for issuer account
 
 ### Trustline Management
+
 - Check trustline exists before sending payments
 - Handle trustline creation in onboarding flow
 - Respect trustline limits
 - Monitor for frozen/deauthorized status
 
 ### Security
+
 - Validate asset issuer, not just code
 - Be cautious of assets with clawback enabled
 - Verify stellar.toml from authoritative source

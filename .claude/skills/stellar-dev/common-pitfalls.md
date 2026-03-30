@@ -7,6 +7,7 @@
 **Problem**: Contract won't deploy because WASM exceeds size limit.
 
 **Symptoms**:
+
 ```
 Error: contract exceeds maximum size
 ```
@@ -24,6 +25,7 @@ strip = "symbols"         # Remove symbols
 ```
 
 Additional strategies:
+
 - Split large contracts into multiple smaller contracts
 - Use `symbol_short!()` for symbols under 9 chars
 - Avoid large static data in contract
@@ -46,12 +48,14 @@ cargo bloat --release --target wasm32-unknown-unknown
 **Problem**: Compilation fails with std library errors.
 
 **Symptoms**:
+
 ```
 error: cannot find macro `println` in this scope
 error[E0433]: failed to resolve: use of undeclared crate or module `std`
 ```
 
 **Solution**:
+
 ```rust
 // MUST be first line of lib.rs
 #![no_std]
@@ -71,10 +75,12 @@ use soroban_sdk::{contract, contractimpl, Env};
 **Problem**: Contract data gets archived and becomes inaccessible.
 
 **Symptoms**:
+
 - Contract calls fail after period of inactivity
 - Data appears missing but contract still exists
 
 **Solution**:
+
 ```rust
 // Proactively extend TTL in operations that use data
 pub fn use_data(env: Env) {
@@ -104,10 +110,12 @@ pub fn use_data(env: Env) {
 **Problem**: Data unexpectedly deleted or costs too high.
 
 **Symptoms**:
+
 - Temporary data deleted before expected
 - Unexpectedly high fees for storage
 
 **Solution**:
+
 ```rust
 // Instance: Shared config, survives with contract
 env.storage().instance().set(&DataKey::Admin, &admin);
@@ -126,10 +134,12 @@ env.storage().temporary().set(&DataKey::Cache(key), &value);
 **Problem**: `require_auth()` not enforcing signatures in tests.
 
 **Symptoms**:
+
 - Tests pass but transactions fail on network
 - Anyone can call protected functions
 
 **Solution**:
+
 ```rust
 #[test]
 fn test_auth() {
@@ -165,11 +175,13 @@ fn test_auth() {
 **Problem**: Transactions fail with signature errors.
 
 **Symptoms**:
+
 ```
 Error: tx_bad_auth
 ```
 
 **Solution**:
+
 ```typescript
 import * as StellarSdk from "@stellar/stellar-sdk";
 
@@ -198,12 +210,14 @@ const tx = new StellarSdk.TransactionBuilder(account, {
 **Problem**: Operations fail because account doesn't exist.
 
 **Symptoms**:
+
 ```
 Error: Account not found
 Status: 404
 ```
 
 **Solution**:
+
 ```typescript
 // Testnet - use Friendbot
 await fetch(`https://friendbot.stellar.org?addr=${publicKey}`);
@@ -217,7 +231,7 @@ const tx = new StellarSdk.TransactionBuilder(funderAccount, {
     StellarSdk.Operation.createAccount({
       destination: newAccountPublicKey,
       startingBalance: "2", // Minimum ~1 XLM for base reserve
-    })
+    }),
   )
   .setTimeout(180)
   .build();
@@ -230,11 +244,13 @@ const tx = new StellarSdk.TransactionBuilder(funderAccount, {
 **Problem**: Payment fails for non-native assets.
 
 **Symptoms**:
+
 ```
 Error: op_no_trust
 ```
 
 **Solution**:
+
 ```typescript
 // Check if trustline exists
 const account = await server.loadAccount(destination);
@@ -242,7 +258,7 @@ const hasTrustline = account.balances.some(
   (b) =>
     b.asset_type !== "native" &&
     b.asset_code === asset.code &&
-    b.asset_issuer === asset.issuer
+    b.asset_issuer === asset.issuer,
 );
 
 if (!hasTrustline) {
@@ -265,6 +281,7 @@ if (!hasTrustline) {
 **Problem**: Transaction rejected for sequence number.
 
 **Symptoms**:
+
 ```
 Error: tx_bad_seq
 ```
@@ -302,12 +319,14 @@ class SequenceManager {
 **Problem**: Soroban transaction fails with resource errors.
 
 **Symptoms**:
+
 ```
 Error: transaction simulation failed
 Error: insufficient resources
 ```
 
 **Solution**:
+
 ```typescript
 // ALWAYS simulate before submitting Soroban transactions
 const simulation = await rpc.simulateTransaction(transaction);
@@ -317,10 +336,9 @@ if (StellarSdk.rpc.Api.isSimulationError(simulation)) {
 }
 
 // Use assembleTransaction to add correct resources
-const preparedTx = StellarSdk.rpc.assembleTransaction(
-  transaction,
-  simulation
-).build();
+const preparedTx = StellarSdk.rpc
+  .assembleTransaction(transaction, simulation)
+  .build();
 
 // Now sign and submit preparedTx, not original transaction
 ```
@@ -334,10 +352,12 @@ const preparedTx = StellarSdk.rpc.assembleTransaction(
 **Problem**: Wallet connection fails silently.
 
 **Symptoms**:
+
 - `isConnected()` returns false
 - No wallet prompt appears
 
 **Solution**:
+
 ```typescript
 import { isConnected, isAllowed } from "@stellar/freighter-api";
 
@@ -366,10 +386,12 @@ async function checkFreighter() {
 **Problem**: Wallet on different network than app.
 
 **Symptoms**:
+
 - Transactions fail unexpectedly
 - Wrong balances displayed
 
 **Solution**:
+
 ```typescript
 import { getNetwork } from "@stellar/freighter-api";
 
@@ -379,7 +401,7 @@ async function validateNetwork() {
 
   if (walletNetwork !== appNetwork) {
     throw new Error(
-      `Please switch Freighter to ${appNetwork}. Currently on ${walletNetwork}`
+      `Please switch Freighter to ${appNetwork}. Currently on ${walletNetwork}`,
     );
   }
 }
@@ -392,11 +414,13 @@ async function validateNetwork() {
 **Problem**: Transaction expires before confirmation.
 
 **Symptoms**:
+
 ```
 Error: tx_too_late
 ```
 
 **Solution**:
+
 ```typescript
 // Set appropriate timeout based on expected confirmation time
 const tx = new StellarSdk.TransactionBuilder(account, {
@@ -412,7 +436,9 @@ async function submitWithRetry(signedXdr: string) {
   try {
     return await submitTransaction(signedXdr);
   } catch (error) {
-    if (error.response?.data?.extras?.result_codes?.transaction === "tx_too_late") {
+    if (
+      error.response?.data?.extras?.result_codes?.transaction === "tx_too_late"
+    ) {
       // Rebuild with fresh blockhash and retry
       const newTx = await rebuildTransaction(signedXdr);
       return await submitTransaction(newTx);
@@ -431,11 +457,13 @@ async function submitWithRetry(signedXdr: string) {
 **Problem**: Stellar CLI can't find saved identity.
 
 **Symptoms**:
+
 ```
 Error: identity "alice" not found
 ```
 
 **Solution**:
+
 ```bash
 # List existing identities
 stellar keys list
@@ -457,11 +485,13 @@ stellar keys generate alice --config-dir /custom/path
 **Problem**: CLI can't parse function arguments.
 
 **Symptoms**:
+
 ```
 Error: invalid argument format
 ```
 
 **Solution**:
+
 ```bash
 # Use correct argument syntax
 # Addresses: just the G... or C... string
@@ -500,11 +530,11 @@ stellar contract invoke \
 
 ### Error Code Reference
 
-| Code | Meaning | Common Fix |
-|------|---------|------------|
-| `tx_bad_auth` | Signature invalid | Check network passphrase |
-| `tx_bad_seq` | Wrong sequence | Reload account |
-| `tx_too_late` | Transaction expired | Rebuild and resubmit |
-| `op_no_trust` | Missing trustline | Create trustline first |
-| `op_underfunded` | Insufficient balance | Add funds |
-| `op_low_reserve` | Below minimum balance | Maintain reserve |
+| Code             | Meaning               | Common Fix               |
+| ---------------- | --------------------- | ------------------------ |
+| `tx_bad_auth`    | Signature invalid     | Check network passphrase |
+| `tx_bad_seq`     | Wrong sequence        | Reload account           |
+| `tx_too_late`    | Transaction expired   | Rebuild and resubmit     |
+| `op_no_trust`    | Missing trustline     | Create trustline first   |
+| `op_underfunded` | Insufficient balance  | Add funds                |
+| `op_low_reserve` | Below minimum balance | Maintain reserve         |
