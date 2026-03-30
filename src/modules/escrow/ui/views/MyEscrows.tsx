@@ -2,7 +2,16 @@
 
 import { Card } from "@/ui/card";
 import { cn } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tab";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover";
+import { Button } from "@/ui/button";
 import {
   Select,
   SelectContent,
@@ -12,12 +21,22 @@ import {
 } from "@/ui/select";
 import { useGlobalUIBoundedStore } from "@/store/ui";
 import Joyride from "react-joyride";
-import { useState, useCallback, useMemo } from "react";
-import { CircleHelp } from "lucide-react";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import {
+  CircleHelp,
+  ChevronsUpDown,
+  Check,
+  PenLine,
+  ShieldCheck,
+  Briefcase,
+  Scale,
+  Unlock,
+  Building2,
+  Inbox,
+} from "lucide-react";
 import TooltipInfo from "@/shared/utils/Tooltip";
 import { useTranslation } from "react-i18next";
 import { Role } from "@trustless-work/escrow/types";
-import useIsMobile from "@/hooks/useMobile";
 import { useEscrowUIBoundedStore } from "../../store/ui";
 import { steps } from "@/constants/steps-tutorials.constant";
 import { EscrowsByRoleTable } from "@/components/tw-blocks/escrows/escrows-by-role/EscrowsTable";
@@ -27,7 +46,6 @@ import { EscrowsByRoleCards } from "@/components/tw-blocks/escrows/escrows-by-ro
 
 export const MyEscrows = () => {
   const { t } = useTranslation();
-  const isMobile = useIsMobile();
   const setActiveTab = useEscrowUIBoundedStore((state) => state.setActiveTab);
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
   const setActiveMode = useEscrowUIBoundedStore((state) => state.setActiveMode);
@@ -35,6 +53,7 @@ export const MyEscrows = () => {
   const theme = useGlobalUIBoundedStore((state) => state.theme);
 
   const [run, setRun] = useState(false);
+  const [roleCommandOpen, setRoleCommandOpen] = useState(false);
   // const isMoonpayWidgetOpen = useEscrowUIBoundedStore(
   //   (state) => state.isMoonpayWidgetOpen,
   // );
@@ -42,13 +61,6 @@ export const MyEscrows = () => {
   const handleSetActiveTab = useCallback(
     (tab: Role) => {
       setActiveTab(tab);
-    },
-    [setActiveTab],
-  );
-
-  const handleTabValueChange = useCallback(
-    (value: string) => {
-      setActiveTab(value as Role);
     },
     [setActiveTab],
   );
@@ -69,6 +81,28 @@ export const MyEscrows = () => {
 
   const handleStartTutorial = useCallback(() => {
     setRun(true);
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const key = e.key?.toLowerCase();
+      if (key !== "k") return;
+      if (!e.ctrlKey && !e.metaKey) return;
+
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName?.toLowerCase();
+      const isTypingContext =
+        tag === "input" ||
+        tag === "textarea" ||
+        target?.getAttribute("contenteditable") === "true";
+      if (isTypingContext) return;
+
+      e.preventDefault();
+      setRoleCommandOpen(true);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
   const joyrideStyles = useMemo(
@@ -116,16 +150,20 @@ export const MyEscrows = () => {
 
   const tabOptions = useMemo(
     () => [
-      { value: "signer", label: t("myEscrows.tabs.signer") },
-      { value: "approver", label: t("myEscrows.tabs.approver") },
-      { value: "serviceProvider", label: t("myEscrows.tabs.serviceProvider") },
-      { value: "disputeResolver", label: t("myEscrows.tabs.disputeResolver") },
-      { value: "releaseSigner", label: t("myEscrows.tabs.releaseSigner") },
-      { value: "platformAddress", label: "Platform" },
-      { value: "receiver", label: t("myEscrows.tabs.receiver") },
+      { value: "signer", label: t("myEscrows.tabs.signer"), icon: PenLine },
+      { value: "approver", label: t("myEscrows.tabs.approver"), icon: ShieldCheck },
+      { value: "serviceProvider", label: t("myEscrows.tabs.serviceProvider"), icon: Briefcase },
+      { value: "disputeResolver", label: t("myEscrows.tabs.disputeResolver"), icon: Scale },
+      { value: "releaseSigner", label: t("myEscrows.tabs.releaseSigner"), icon: Unlock },
+      { value: "platformAddress", label: t("myEscrows.tabs.platformAddress"), icon: Building2 },
+      { value: "receiver", label: t("myEscrows.tabs.receiver"), icon: Inbox },
     ],
     [t],
   );
+
+  const activeTabLabel = useMemo(() => {
+    return tabOptions.find((opt) => opt.value === activeTab)?.label ?? "";
+  }, [activeTab, tabOptions]);
 
   // Memoized component renderers to prevent unnecessary re-renders
   // Only render based on activeMode, components will handle their own data fetching
@@ -223,135 +261,124 @@ export const MyEscrows = () => {
       />
 
       <div className="flex gap-3 w-full h-full justify-between">
-        <Tabs
-          value={activeTab}
-          onValueChange={handleTabValueChange}
-          className="w-full"
-        >
-          <div className="flex w-full justify-between items-center flex-col 2xl:flex-row gap-2 md:gap-3">
-            {isMobile ? (
-              <Select value={activeTab} onValueChange={handleSetActiveTab}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={t("myEscrows.tabs.placeholder")} />
-                </SelectTrigger>
-                <SelectContent>
-                  {tabOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : (
-              <TabsList
-                className="grid w-full grid-cols-2 sm:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-7 gap-4"
-                id="step-1"
+        <div className="w-full flex flex-col gap-4">
+          {/* Toolbar: role picker + view mode + help */}
+          <div className="flex w-full items-center gap-2 flex-wrap">
+            {/* Role picker */}
+            <Popover open={roleCommandOpen} onOpenChange={setRoleCommandOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={roleCommandOpen}
+                  className="flex-1 min-w-[200px] justify-between font-normal"
+                  id="step-1"
+                >
+                  <span className="flex items-center gap-2 truncate">
+                    {(() => {
+                      const active = tabOptions.find(
+                        (o) => o.value === activeTab,
+                      );
+                      const Icon = active?.icon;
+                      return (
+                        <>
+                          {Icon && (
+                            <Icon className="size-4 shrink-0 text-muted-foreground" />
+                          )}
+                          <span className="truncate">{activeTabLabel}</span>
+                        </>
+                      );
+                    })()}
+                  </span>
+                  <span className="flex items-center gap-1.5 shrink-0 ml-2">
+                    <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded border bg-muted px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
+                      <span>⌘</span>K
+                    </kbd>
+                    <ChevronsUpDown className="size-4 text-muted-foreground" />
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-72 p-0" align="start">
+                <Command>
+                  <CommandInput
+                    placeholder={t("myEscrows.tabs.placeholder")}
+                    autoFocus
+                  />
+                  <CommandList>
+                    <CommandEmpty>{t("myEscrows.tabs.placeholder")}</CommandEmpty>
+                    <CommandGroup heading={t("myEscrows.tabs.role")}>
+                      {tabOptions.map((option) => {
+                        const isActive = activeTab === option.value;
+                        const Icon = option.icon;
+                        return (
+                          <CommandItem
+                            key={option.value}
+                            value={option.value}
+                            onSelect={() => {
+                              handleSetActiveTab(option.value as Role);
+                              setRoleCommandOpen(false);
+                            }}
+                            className="flex items-center gap-2"
+                          >
+                            <Icon className={cn(
+                              "size-4 shrink-0",
+                              isActive ? "text-primary" : "text-muted-foreground",
+                            )} />
+                            <span className="flex-1">{option.label}</span>
+                            <Check
+                              className={cn(
+                                "size-4 shrink-0",
+                                isActive ? "opacity-100 text-primary" : "opacity-0",
+                              )}
+                            />
+                          </CommandItem>
+                        );
+                      })}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+
+            {/* View mode selector */}
+            <Select value={activeMode} onValueChange={handleSetActiveMode}>
+              <SelectTrigger className="w-32 shrink-0">
+                <SelectValue placeholder={t("myEscrows.view.placeholder")} />
+              </SelectTrigger>
+              <SelectContent>
+                {viewOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Help walkthrough */}
+            <TooltipInfo content={t("reusable.tooltips.help")}>
+              <button
+                className="btn-dark shrink-0"
+                type="button"
+                onClick={handleStartTutorial}
               >
-                <TabsTrigger value="signer">
-                  {t("myEscrows.tabs.signer")}
-                </TabsTrigger>
-                <TabsTrigger value="approver">
-                  {t("myEscrows.tabs.approver")}
-                </TabsTrigger>
-                <TabsTrigger value="serviceProvider">
-                  {t("myEscrows.tabs.serviceProvider")}
-                </TabsTrigger>
-                <TabsTrigger value="disputeResolver">
-                  {t("myEscrows.tabs.disputeResolver")}
-                </TabsTrigger>
-                <TabsTrigger value="releaseSigner">
-                  {t("myEscrows.tabs.releaseSigner")}
-                </TabsTrigger>
-                <TabsTrigger value="platformAddress">Platform</TabsTrigger>
-                <TabsTrigger value="receiver">
-                  {t("myEscrows.tabs.receiver")}
-                </TabsTrigger>
-              </TabsList>
-            )}
-
-            {isMobile ? (
-              <div className="flex items-center gap-2 mt-4 2xl:mt-0 justify-evenly w-full">
-                <TooltipInfo content={t("reusable.tooltips.help")}>
-                  <button
-                    className="btn-dark"
-                    type="button"
-                    onClick={handleStartTutorial}
-                  >
-                    <CircleHelp size={29} />
-                  </button>
-                </TooltipInfo>
-                <Select value={activeMode} onValueChange={handleSetActiveMode}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue
-                      placeholder={t("myEscrows.view.placeholder")}
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {viewOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            ) : (
-              <>
-                <div className="flex items-center gap-2 mt-20 sm:mt-10 xl:mt-10 2xl:mt-0">
-                  <Select
-                    value={activeMode}
-                    onValueChange={handleSetActiveMode}
-                  >
-                    <SelectTrigger className="w-32">
-                      <SelectValue
-                        placeholder={t("myEscrows.view.placeholder")}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {viewOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <TooltipInfo content={t("reusable.tooltips.help")}>
-                  <button
-                    className="btn-dark"
-                    type="button"
-                    onClick={handleStartTutorial}
-                  >
-                    <CircleHelp size={29} />
-                  </button>
-                </TooltipInfo>
-              </>
-            )}
+                <CircleHelp size={20} />
+              </button>
+            </TooltipInfo>
           </div>
 
-          <TabsContent value="signer">{renderSignerContent}</TabsContent>
-
-          <TabsContent value="approver">{renderApproverContent}</TabsContent>
-
-          <TabsContent value="serviceProvider">
-            {renderServiceProviderContent}
-          </TabsContent>
-
-          <TabsContent value="disputeResolver">
-            {renderDisputeResolverContent}
-          </TabsContent>
-
-          <TabsContent value="releaseSigner">
-            {renderReleaseSignerContent}
-          </TabsContent>
-
-          <TabsContent value="platformAddress">
-            {renderPlatformAddressContent}
-          </TabsContent>
-
-          <TabsContent value="receiver">{renderReceiverContent}</TabsContent>
-        </Tabs>
+          <div className="w-full">
+            {activeTab === "signer" ? renderSignerContent : null}
+            {activeTab === "approver" ? renderApproverContent : null}
+            {activeTab === "serviceProvider" ? renderServiceProviderContent : null}
+            {activeTab === "disputeResolver" ? renderDisputeResolverContent : null}
+            {activeTab === "releaseSigner" ? renderReleaseSignerContent : null}
+            {activeTab === "platformAddress"
+              ? renderPlatformAddressContent
+              : null}
+            {activeTab === "receiver" ? renderReceiverContent : null}
+          </div>
+        </div>
       </div>
     </>
   );
