@@ -458,6 +458,8 @@
       "close": "Got it!"
     },
     "tabs": {
+      "placeholder": "Search role...",
+      "role": "Role",
       "signer": "Initiated Escrows",
       "approver": "Approver",
       "serviceProvider": "Service Provider",

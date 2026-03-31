@@ -116,17 +116,15 @@ export const InitializeSingleEscrowForm = ({
             >
               Change Escrow Type
             </Button>
-            {(process.env.NEXT_PUBLIC_ENV === "DEV" ||
-              process.env.NEXT_PUBLIC_ENV === "LOCAL") && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={fillTemplateForm}
-                className="shrink-0 w-full sm:w-auto"
-              >
-                Use Template
-              </Button>
-            )}
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={fillTemplateForm}
+              className="shrink-0 w-full sm:w-auto"
+            >
+              Use Template
+            </Button>
           </div>
         </Card>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
