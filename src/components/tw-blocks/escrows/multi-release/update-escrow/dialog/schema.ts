@@ -49,33 +49,20 @@ export const useUpdateEscrowSchema = () => {
       description: z.string().min(10, {
         message: "Description must be at least 10 characters long.",
       }),
-      platformFee: z
-        .union([z.string(), z.number()])
-        .refine(
-          (val) => {
-            if (typeof val === "string") {
-              if (val === "" || val === "." || val.endsWith(".")) return true;
-              const n = Number(val);
-              return !isNaN(n) && n > 0;
-            }
-            return val > 0;
-          },
-          { message: "Platform fee must be greater than 0." },
-        )
-        .refine(
-          (val) => {
-            if (typeof val === "string") {
-              if (val === "" || val === "." || val.endsWith(".")) return true;
-              const n = Number(val);
-              if (isNaN(n)) return false;
-              const dp = (n.toString().split(".")[1] || "").length;
-              return dp <= 2;
-            }
-            const dp = (val.toString().split(".")[1] || "").length;
+      platformFee: z.union([z.string(), z.number()]).refine(
+        (val) => {
+          if (typeof val === "string") {
+            if (val === "" || val === "." || val.endsWith(".")) return true;
+            const n = Number(val);
+            if (isNaN(n)) return false;
+            const dp = (n.toString().split(".")[1] || "").length;
             return dp <= 2;
-          },
-          { message: "Platform fee can have a maximum of 2 decimal places." },
-        ),
+          }
+          const dp = (val.toString().split(".")[1] || "").length;
+          return dp <= 2;
+        },
+        { message: "Platform fee can have a maximum of 2 decimal places." },
+      ),
     });
   };
 

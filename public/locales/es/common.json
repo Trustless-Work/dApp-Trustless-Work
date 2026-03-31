@@ -516,6 +516,8 @@
       "close": "¡Entendido!"
     },
     "tabs": {
+      "placeholder": "Buscar rol...",
+      "role": "Rol",
       "signer": "Escrows Iniciados",
       "approver": "Aprobador",
       "serviceProvider": "Proveedor de Servicio",
