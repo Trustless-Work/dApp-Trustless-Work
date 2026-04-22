@@ -163,11 +163,6 @@ export const useInitializeSingleEscrow = () => {
       (tl) => tl.address === payload.trustline.address,
     );
 
-    if (!trustline) {
-      toast.error("Trustline not found");
-      return;
-    }
-
     try {
       // Convert string values to numbers for the payload
       const processedPayload = {
@@ -183,8 +178,11 @@ export const useInitializeSingleEscrow = () => {
         signer: address,
         milestones: payload.milestones,
         trustline: {
-          address: trustline.address,
-          symbol: trustline.symbol,
+          address: payload.trustline.address,
+          symbol:
+            payload.trustline.symbol ||
+            trustline?.symbol ||
+            "CUSTOM",
         },
       };
 

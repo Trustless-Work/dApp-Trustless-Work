@@ -12,6 +12,7 @@ import {
 import { Input } from "@/ui/input";
 import TooltipInfo from "@/shared/utils/Tooltip";
 import SelectField from "@/shared/utils/SelectSearch";
+import CreatableSelectField from "@/shared/utils/CreatableSelectSearch";
 import { Switch } from "@/ui/switch";
 import { Textarea } from "@/ui/textarea";
 import { DollarSign, Percent, Trash2 } from "lucide-react";
@@ -181,17 +182,71 @@ export const InitializeMultiEscrowForm = ({
             )}
           />
 
-          <SelectField
-            required
-            control={form.control}
-            name="trustline.address"
-            label="Trustline"
-            tooltipContent="Information on the trustline that will manage the movement of funds in escrow."
-            options={trustlineOptions.map((tl) => ({
-              value: tl.value,
-              label: tl.label || "",
-            }))}
-          />
+          {(() => {
+            const presetTrustlineOptions = trustlineOptions
+              .filter((tl) => tl.value !== "")
+              .map((tl) => ({
+                value: tl.value,
+                label: tl.label || "",
+              }));
+            const currentTrustlineAddress = form.watch("trustline.address");
+            const isCustomTrustline =
+              !!currentTrustlineAddress &&
+              !presetTrustlineOptions.some(
+                (opt) => opt.value === currentTrustlineAddress,
+              );
+
+            return (
+              <div className="flex flex-col gap-2">
+                <CreatableSelectField
+                  required
+                  control={form.control}
+                  name="trustline.address"
+                  label="Trustline"
+                  tooltipContent="Information on the trustline that will manage the movement of funds in escrow. You can also paste a custom trustline contract address."
+                  placeholder="Select or paste a trustline address"
+                  searchPlaceholder="Search or paste a trustline address..."
+                  createLabel={(query) => `Use custom trustline: ${query}`}
+                  options={presetTrustlineOptions}
+                  onSelect={(option) => {
+                    if (option.isCustom) {
+                      form.setValue("trustline.symbol", "", {
+                        shouldValidate: true,
+                      });
+                    } else {
+                      form.setValue("trustline.symbol", option.label, {
+                        shouldValidate: true,
+                      });
+                    }
+                  }}
+                />
+
+                {isCustomTrustline && (
+                  <FormField
+                    control={form.control}
+                    name="trustline.symbol"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center">
+                          Asset Name
+                          <span className="text-destructive ml-1">*</span>
+                          <TooltipInfo content="Symbol of the custom trustline (e.g. USDC, EURC)." />
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="e.g. USDC"
+                            {...field}
+                            onChange={(e) => field.onChange(e)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </div>
+            );
+          })()}
 
           <FormField
             control={form.control}

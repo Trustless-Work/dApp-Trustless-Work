@@ -166,11 +166,6 @@ export const useInitializeMultiEscrow = () => {
       (tl) => tl.address === payload.trustline.address,
     );
 
-    if (!trustline) {
-      toast.error("Trustline not found");
-      return;
-    }
-
     setIsInitializingEscrow(true);
 
     try {
@@ -190,8 +185,11 @@ export const useInitializeMultiEscrow = () => {
               : milestone.amount,
         })),
         trustline: {
-          address: trustline.address,
-          symbol: trustline.symbol,
+          address: payload.trustline.address,
+          symbol:
+            payload.trustline.symbol ||
+            trustline?.symbol ||
+            "CUSTOM",
         },
       };
 

@@ -8,8 +8,9 @@ export const useInitializeEscrowSchema = () => {
         address: z.string().min(1, {
           message: "Trustline address is required.",
         }),
-        // Optional in the form; we derive/populate it on submit
-        symbol: z.string().optional(),
+        symbol: z.string().min(1, {
+          message: "Asset name is required.",
+        }),
       }),
       roles: z.object({
         approver: z
