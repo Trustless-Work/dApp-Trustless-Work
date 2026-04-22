@@ -186,10 +186,7 @@ export const useInitializeMultiEscrow = () => {
         })),
         trustline: {
           address: payload.trustline.address,
-          symbol:
-            payload.trustline.symbol ||
-            trustline?.symbol ||
-            "CUSTOM",
+          symbol: payload.trustline.symbol || trustline?.symbol || "CUSTOM",
         },
       };
 

@@ -179,10 +179,7 @@ export const useInitializeSingleEscrow = () => {
         milestones: payload.milestones,
         trustline: {
           address: payload.trustline.address,
-          symbol:
-            payload.trustline.symbol ||
-            trustline?.symbol ||
-            "CUSTOM",
+          symbol: payload.trustline.symbol || trustline?.symbol || "CUSTOM",
         },
       };
 

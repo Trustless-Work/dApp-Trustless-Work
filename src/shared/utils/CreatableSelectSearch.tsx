@@ -65,9 +65,7 @@ const CreatableSelectField: React.FC<CreatableSelectFieldProps> = ({
       control={control}
       name={name}
       render={({ field }) => {
-        const matchingOption = options.find(
-          (opt) => opt.value === field.value,
-        );
+        const matchingOption = options.find((opt) => opt.value === field.value);
         const hasCustomValue = Boolean(field.value) && !matchingOption;
 
         const displayLabel = matchingOption
