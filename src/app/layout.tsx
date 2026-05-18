@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -102,8 +102,6 @@ export const metadata: Metadata = {
   },
   category: "Finance",
   classification: "Business",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
-  themeColor: "#006BE4",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -114,6 +112,13 @@ export const metadata: Metadata = {
     icon: "/logo.png",
     apple: "/logo.png",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#006BE4",
 };
 
 export default function RootLayout({

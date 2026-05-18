@@ -1,38 +1,33 @@
-import {
-  StellarWalletsKit,
-  FREIGHTER_ID,
-  FreighterModule,
-  AlbedoModule,
-  xBullModule,
-  LobstrModule,
-  WalletNetwork,
-} from "@creit.tech/stellar-wallets-kit";
-import { LedgerModule } from "@creit.tech/stellar-wallets-kit/modules/ledger.module";
-import {
-  WalletConnectAllowedMethods,
-  WalletConnectModule,
-} from "@creit.tech/stellar-wallets-kit/modules/walletconnect.module";
+import type { StellarWalletsKit } from "@creit.tech/stellar-wallets-kit";
+import { getStoredNetwork } from "@/lib/client-storage";
 
-export const kit: StellarWalletsKit = new StellarWalletsKit({
-  network: WalletNetwork.TESTNET,
-  selectedWalletId: FREIGHTER_ID,
-  modules: [
-    new FreighterModule(),
-    new AlbedoModule(),
-    new WalletConnectModule({
-      url: "https://dapp.trustlesswork.com",
-      projectId: "fa57d523d12455e4fc2c8c83c94ec7b1",
-      method: WalletConnectAllowedMethods.SIGN,
-      description: "Trustless Work",
-      name: "Trustless Work",
-      icons: ["/favicon.ico"],
-      network: WalletNetwork.TESTNET,
-    }),
-    new xBullModule(),
-    new LedgerModule(),
-    new LobstrModule(),
-  ],
-});
+const NETWORK_PASSPHRASE = {
+  testnet: "Test SDF Network ; September 2015",
+  mainnet: "Public Global Stellar Network ; September 2015",
+} as const;
+
+let kitInstance: StellarWalletsKit | null = null;
+let kitPromise: Promise<StellarWalletsKit> | null = null;
+
+/** Lazily loaded on the client — wallet SDKs require browser APIs. */
+export async function getKit(): Promise<StellarWalletsKit> {
+  if (typeof window === "undefined") {
+    throw new Error("StellarWalletsKit is only available in the browser");
+  }
+
+  if (kitInstance) {
+    return kitInstance;
+  }
+
+  if (!kitPromise) {
+    kitPromise = import("./stellar-wallet-kit.client").then(({ createKit }) => {
+      kitInstance = createKit();
+      return kitInstance;
+    });
+  }
+
+  return kitPromise;
+}
 
 interface signTransactionProps {
   unsignedTransaction: string;
@@ -43,13 +38,11 @@ export const signTransaction = async ({
   unsignedTransaction,
   address,
 }: signTransactionProps): Promise<string> => {
-  // Get current network from localStorage since this is a utility function
-  const currentNetwork =
-    (localStorage.getItem("network") as "testnet" | "mainnet") || "testnet";
+  const currentNetwork = getStoredNetwork();
 
-  const networkPassphrase =
-    currentNetwork === "mainnet" ? WalletNetwork.PUBLIC : WalletNetwork.TESTNET;
+  const networkPassphrase = NETWORK_PASSPHRASE[currentNetwork];
 
+  const kit = await getKit();
   const { signedTxXdr } = await kit.signTransaction(unsignedTransaction, {
     address,
     networkPassphrase,

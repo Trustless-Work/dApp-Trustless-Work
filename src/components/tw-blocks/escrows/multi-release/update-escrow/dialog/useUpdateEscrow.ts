@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useUpdateEscrowSchema } from "./schema";
 import { z } from "zod";
@@ -17,25 +17,54 @@ import {
 import { GetEscrowsFromIndexerResponse } from "@trustless-work/escrow/types";
 import { useGlobalAuthenticationStore } from "@/store/data";
 import { useEscrowContext } from "@/providers/EscrowProvider";
+import { trustlines } from "@/constants/trustlines.constant";
+
+const isEmptyAmount = (amount: string | number | undefined) => {
+  if (amount === "" || amount === undefined || amount === null) return true;
+  if (amount === 0 || amount === "0") return true;
+  return false;
+};
+
+function getFirstErrorMessage(errors: FieldErrors): string | undefined {
+  for (const value of Object.values(errors)) {
+    if (!value) continue;
+    if (typeof value === "object" && "message" in value && value.message) {
+      return String(value.message);
+    }
+    if (typeof value === "object") {
+      const nested = getFirstErrorMessage(value as FieldErrors);
+      if (nested) return nested;
+    }
+  }
+  return undefined;
+}
 
 export function useUpdateEscrow({
   onSuccess,
 }: { onSuccess?: () => void } = {}) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [initialMilestonesCount, setInitialMilestonesCount] = React.useState(0);
 
   const { getMultiReleaseFormSchema } = useUpdateEscrowSchema();
-  const formSchema = getMultiReleaseFormSchema();
 
   const walletAddress = useGlobalAuthenticationStore((state) => state.address);
   const { selectedEscrow, setSelectedEscrow } = useEscrowContext();
   const { updateEscrow } = useEscrowsMutations();
 
   const isEscrowLocked = Number(selectedEscrow?.balance || 0) > 0;
-  const initialMilestonesCountRef = React.useRef<number>(
-    ((selectedEscrow?.milestones as MultiReleaseMilestone[]) || []).length,
+
+  const formSchema = React.useMemo(
+    () =>
+      getMultiReleaseFormSchema({
+        isLocked: isEscrowLocked,
+        existingMilestoneCount: initialMilestonesCount,
+      }),
+    [getMultiReleaseFormSchema, isEscrowLocked, initialMilestonesCount],
   );
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  type FormValues = z.infer<typeof formSchema>;
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       engagementId: selectedEscrow?.engagementId || "",
@@ -47,6 +76,7 @@ export function useUpdateEscrow({
         | undefined,
       trustline: {
         address: selectedEscrow?.trustline?.address || "",
+        symbol: selectedEscrow?.trustline?.symbol || "",
       },
       roles: {
         approver: selectedEscrow?.roles?.approver || "",
@@ -75,6 +105,9 @@ export function useUpdateEscrow({
 
   React.useEffect(() => {
     if (!selectedEscrow) return;
+    const milestones = (selectedEscrow.milestones as MultiReleaseMilestone[]) ?? [];
+    setInitialMilestonesCount(milestones.length);
+
     form.reset({
       engagementId: selectedEscrow?.engagementId || "",
       title: selectedEscrow?.title || "",
@@ -86,6 +119,7 @@ export function useUpdateEscrow({
           | undefined) || "",
       trustline: {
         address: selectedEscrow?.trustline?.address || "",
+        symbol: selectedEscrow?.trustline?.symbol || "",
       },
       roles: {
         approver: selectedEscrow?.roles?.approver || "",
@@ -94,9 +128,7 @@ export function useUpdateEscrow({
         releaseSigner: selectedEscrow?.roles?.releaseSigner || "",
         disputeResolver: selectedEscrow?.roles?.disputeResolver || "",
       },
-      milestones: (
-        (selectedEscrow?.milestones as MultiReleaseMilestone[]) ?? []
-      ).map((m) => ({
+      milestones: milestones.map((m) => ({
         receiver:
           (m as MultiReleaseMilestone & { receiver?: string })?.receiver || "",
         description: m?.description || "",
@@ -109,22 +141,29 @@ export function useUpdateEscrow({
         },
       ],
     });
-    initialMilestonesCountRef.current = (
-      (selectedEscrow?.milestones as MultiReleaseMilestone[]) || []
-    ).length;
   }, [selectedEscrow, form]);
 
   const milestones = form.watch("milestones");
   const isAnyMilestoneEmpty = milestones.some((m, index) => {
     const shouldValidate =
-      !isEscrowLocked || index >= initialMilestonesCountRef.current;
+      !isEscrowLocked || index >= initialMilestonesCount;
     if (!shouldValidate) return false;
     return (
       m.description === "" ||
       (m as { receiver?: string }).receiver === "" ||
-      m.amount === ""
+      isEmptyAmount(m.amount)
     );
   });
+
+  const handleTrustlineAddressChange = (address: string) => {
+    const match = trustlines.find((tl) => tl.address === address);
+    form.setValue("trustline.address", address, { shouldValidate: true });
+    form.setValue(
+      "trustline.symbol",
+      match?.symbol ?? selectedEscrow?.trustline?.symbol ?? "",
+      { shouldValidate: true },
+    );
+  };
 
   const handleAddMilestone = () => {
     const current = form.getValues("milestones");
@@ -133,8 +172,8 @@ export function useUpdateEscrow({
   };
 
   const handleRemoveMilestone = (index: number) => {
-    if (isEscrowLocked && index < initialMilestonesCountRef.current) {
-      return; // cannot remove existing milestones when escrow has balance
+    if (isEscrowLocked && index < initialMilestonesCount) {
+      return;
     }
     const current = form.getValues("milestones");
     const updated = current.filter((_, i) => i !== index);
@@ -152,7 +191,6 @@ export function useUpdateEscrow({
       rawValue = rawValue.slice(0, -1);
     }
 
-    // Limit to 2 decimal places
     if (rawValue.includes(".")) {
       const parts = rawValue.split(".");
       if (parts[1] && parts[1].length > 2) {
@@ -160,13 +198,12 @@ export function useUpdateEscrow({
       }
     }
 
-    // Always keep as string to allow partial input like "0." or "0.5"
     const updatedMilestones = [...milestones];
     updatedMilestones[index] = {
       ...updatedMilestones[index],
       amount: rawValue,
     };
-    form.setValue("milestones", updatedMilestones);
+    form.setValue("milestones", updatedMilestones, { shouldValidate: true });
   };
 
   const handlePlatformFeeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -182,77 +219,85 @@ export function useUpdateEscrow({
     form.setValue("platformFee", rawValue);
   };
 
-  const handleSubmit = form.handleSubmit(async (payload) => {
-    try {
-      setIsSubmitting(true);
+  const getMilestoneError = (
+    index: number,
+    field: "receiver" | "description" | "amount",
+  ) => {
+    const milestoneErrors = form.formState.errors.milestones;
+    if (!milestoneErrors || !Array.isArray(milestoneErrors)) return undefined;
+    const fieldError = milestoneErrors[index]?.[field];
+    return fieldError?.message as string | undefined;
+  };
 
-      /**
-       * Create the final payload for the update escrow mutation
-       *
-       * @param payload - The payload from the form
-       * @returns The final payload for the update escrow mutation
-       */
-      const finalPayload: UpdateMultiReleaseEscrowPayload = {
-        contractId: selectedEscrow?.contractId || "",
-        signer: walletAddress || "",
-        escrow: {
-          engagementId: payload.engagementId,
-          title: payload.title,
-          description: payload.description,
-          platformFee:
-            typeof payload.platformFee === "string"
-              ? Number(payload.platformFee)
-              : payload.platformFee,
-          trustline: {
-            address: payload.trustline.address,
-            symbol: payload.trustline.symbol,
+  const handleSubmit = form.handleSubmit(
+    async (payload) => {
+      try {
+        setIsSubmitting(true);
+
+        const finalPayload: UpdateMultiReleaseEscrowPayload = {
+          contractId: selectedEscrow?.contractId || "",
+          signer: walletAddress || "",
+          escrow: {
+            engagementId: payload.engagementId,
+            title: payload.title,
+            description: payload.description,
+            platformFee:
+              typeof payload.platformFee === "string"
+                ? Number(payload.platformFee)
+                : payload.platformFee,
+            trustline: {
+              address: payload.trustline.address,
+              symbol:
+                payload.trustline.symbol ||
+                selectedEscrow?.trustline?.symbol ||
+                "",
+            },
+            roles: payload.roles,
+            milestones: payload.milestones.map((milestone, index: number) => ({
+              ...milestone,
+              amount:
+                typeof milestone.amount === "string"
+                  ? Number(milestone.amount)
+                  : milestone.amount,
+              evidence: selectedEscrow?.milestones?.[index]?.evidence || "",
+              status: selectedEscrow?.milestones?.[index]?.status || "",
+            })),
           },
-          roles: payload.roles,
-          milestones: payload.milestones.map((milestone, index: number) => ({
-            ...milestone,
-            amount:
-              typeof milestone.amount === "string"
-                ? Number(milestone.amount)
-                : milestone.amount,
-            evidence: selectedEscrow?.milestones?.[index]?.evidence || "",
-            status: selectedEscrow?.milestones?.[index]?.status || "",
-          })),
-        },
-      };
+        };
 
-      /**
-       * Call the update escrow mutation
-       *
-       * @param payload - The final payload for the update escrow mutation
-       * @param type - The type of the escrow
-       * @param address - The address of the escrow
-       */
-      (await updateEscrow.mutateAsync({
-        payload: finalPayload,
-        type: "multi-release",
-        address: walletAddress || "",
-      })) as UpdateMultiReleaseEscrowResponse;
+        (await updateEscrow.mutateAsync({
+          payload: finalPayload,
+          type: "multi-release",
+          address: walletAddress || "",
+        })) as UpdateMultiReleaseEscrowResponse;
 
-      if (!selectedEscrow) return;
+        if (!selectedEscrow) return;
 
-      const nextSelectedEscrow: GetEscrowsFromIndexerResponse = {
-        ...selectedEscrow,
-        ...finalPayload.escrow,
-        trustline: {
-          symbol: selectedEscrow?.trustline?.symbol || "",
-          address: finalPayload.escrow.trustline.address,
-        },
-      };
+        const nextSelectedEscrow: GetEscrowsFromIndexerResponse = {
+          ...selectedEscrow,
+          ...finalPayload.escrow,
+          trustline: {
+            symbol: finalPayload.escrow.trustline.symbol,
+            address: finalPayload.escrow.trustline.address,
+          },
+        };
 
-      setSelectedEscrow(nextSelectedEscrow);
-      toast.success("Escrow updated successfully");
-      onSuccess?.();
-    } catch (error) {
-      toast.error(handleError(error as ErrorResponse).message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  });
+        setSelectedEscrow(nextSelectedEscrow);
+        toast.success("Escrow updated successfully");
+        onSuccess?.();
+      } catch (error) {
+        toast.error(handleError(error as ErrorResponse).message);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    (errors) => {
+      const message = getFirstErrorMessage(errors);
+      toast.error(
+        message || "Please complete all required milestone fields.",
+      );
+    },
+  );
 
   return {
     form,
@@ -264,7 +309,9 @@ export function useUpdateEscrow({
     handleRemoveMilestone,
     handleMilestoneAmountChange,
     handlePlatformFeeChange,
+    handleTrustlineAddressChange,
+    getMilestoneError,
     isEscrowLocked,
-    initialMilestonesCount: initialMilestonesCountRef.current,
+    initialMilestonesCount,
   };
-}
+};

@@ -6,6 +6,7 @@ import {
   mainNet,
   TrustlessWorkConfig,
 } from "@trustless-work/escrow";
+import { getStoredNetwork } from "@/lib/client-storage";
 
 interface TrustlessWorkProviderProps {
   children: React.ReactNode;
@@ -14,10 +15,7 @@ interface TrustlessWorkProviderProps {
 export function TrustlessWorkProvider({
   children,
 }: TrustlessWorkProviderProps) {
-  const currentNetwork =
-    typeof window !== "undefined"
-      ? (localStorage.getItem("network") as "testnet" | "mainnet") || "testnet"
-      : "testnet";
+  const currentNetwork = getStoredNetwork();
 
   const apiKeyTestnet =
     process.env.NEXT_PUBLIC_ESCROW_MANAGER_API_KEY_TESTNET || "";

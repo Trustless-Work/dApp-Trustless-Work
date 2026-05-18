@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getStoredNetwork } from "@/lib/client-storage";
 
 const ENV =
   process.env.NEXT_PUBLIC_ENV === "PROD"
@@ -16,5 +17,12 @@ const http = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+if (!isServer) {
+  http.interceptors.request.use((config) => {
+    config.headers.set("x-network", getStoredNetwork());
+    return config;
+  });
+}
 
 export default http;

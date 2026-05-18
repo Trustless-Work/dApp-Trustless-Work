@@ -27,12 +27,21 @@ async function proxyHandler(
     process.env.API_KEY_MAINNET || process.env.API_KEY || "";
   const apiKeyTestnet =
     process.env.API_KEY_TESTNET || process.env.API_KEY || "";
+  const defaultApiKey =
+    process.env.NEXT_PUBLIC_ENV === "PROD"
+      ? apiKeyMainnet
+      : process.env.NEXT_PUBLIC_ENV === "DEV"
+        ? apiKeyTestnet
+        : process.env.API_KEY || apiKeyTestnet;
   const apiKey =
     requestedNetwork === "mainnet"
       ? apiKeyMainnet
       : requestedNetwork === "testnet"
         ? apiKeyTestnet
-        : process.env.API_KEY || "";
+        : defaultApiKey;
+  const upstreamNetwork =
+    requestedNetwork ||
+    (process.env.NEXT_PUBLIC_ENV === "PROD" ? "mainnet" : "testnet");
   const { path } = await context.params;
   const targetPath = path.join("/");
 
@@ -52,7 +61,7 @@ async function proxyHandler(
     headers: new Headers({
       "Content-Type": req.headers.get("content-type") || "application/json",
       "x-api-key": apiKey,
-      ...(requestedNetwork ? { "x-network": requestedNetwork } : {}),
+      "x-network": upstreamNetwork,
     }),
     redirect: "manual",
   };

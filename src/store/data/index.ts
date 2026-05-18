@@ -1,5 +1,11 @@
-import { devtools, DevtoolsOptions } from "zustand/middleware";
-import { persist, PersistOptions } from "zustand/middleware";
+import {
+  createJSONStorage,
+  devtools,
+  DevtoolsOptions,
+  persist,
+  PersistOptions,
+} from "zustand/middleware";
+import { getClientStorage } from "@/lib/client-storage";
 import { create } from "zustand";
 import { EscrowGlobalStore, escrowsSlice } from "./escrows.slice";
 import { authenticationSlice } from "./authentication.slice";
@@ -42,6 +48,7 @@ const devtoolsOptions: DevtoolsOptions = {
 
 const persistOptions: PersistOptions<AuthState, PersistedAuthState> = {
   name: "auth-storage",
+  storage: createJSONStorage(getClientStorage),
   partialize: (state: AuthState) => ({
     address: state.address,
     name: state.name,

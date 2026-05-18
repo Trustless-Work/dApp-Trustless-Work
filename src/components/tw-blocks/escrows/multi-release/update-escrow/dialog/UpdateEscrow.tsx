@@ -151,9 +151,7 @@ export const UpdateEscrowDialog = () => {
                       <Select
                         value={field.value}
                         disabled={isEscrowLocked}
-                        onValueChange={(e) => {
-                          field.onChange(e);
-                        }}
+                        onValueChange={handleTrustlineAddressChange}
                       >
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select trustline" />

@@ -9,6 +9,7 @@ import { themeSlice, ThemeGlobalUIStore } from "./theme.slice";
 import { stepsSlice, StepsGlobalUIStore } from "./steps.slice";
 import { tutorialSlice, TutorialGlobalUIStore } from "./tutorial.slice";
 import { copySlice, CopyGlobalUIStore } from "./copy.slice";
+import { getClientStorage } from "@/lib/client-storage";
 
 type GlobalUIState = ThemeGlobalUIStore &
   StepsGlobalUIStore &
@@ -56,7 +57,7 @@ export const useGlobalUIBoundedStore = create<GlobalUIState>()(
     ),
     {
       name: "theme-storage",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(getClientStorage),
       partialize: (state) => {
         // Exclude copiedKeyId from persistence as it's a temporary UI state
         /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
