@@ -42,6 +42,8 @@ export const UpdateEscrowDialog = () => {
     handleRemoveMilestone,
     handlePlatformFeeChange,
     handleMilestoneAmountChange,
+    handleTrustlineAddressChange,
+    getMilestoneError,
     isEscrowLocked,
     initialMilestonesCount,
   } = useUpdateEscrow({ onSuccess: () => setIsOpen(false) });
@@ -372,10 +374,20 @@ export const UpdateEscrowDialog = () => {
               <FormLabel className="flex items-center">
                 Milestones<span className="text-destructive ml-1">*</span>
               </FormLabel>
-              {milestones.map((milestone, index) => (
+              {milestones.map((milestone, index) => {
+                const receiverError = getMilestoneError(index, "receiver");
+                const descriptionError = getMilestoneError(
+                  index,
+                  "description",
+                );
+                const amountError = getMilestoneError(index, "amount");
+                const showMilestoneErrors =
+                  !isEscrowLocked || index >= initialMilestonesCount;
+
+                return (
                 <div key={index} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                    <div className="md:col-span-4">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                    <div className="md:col-span-4 space-y-1">
                       <Input
                         placeholder="Enter receiver address"
                         value={
@@ -389,12 +401,19 @@ export const UpdateEscrowDialog = () => {
                           (
                             updatedMilestones[index] as { receiver?: string }
                           ).receiver = e.target.value;
-                          form.setValue("milestones", updatedMilestones);
+                          form.setValue("milestones", updatedMilestones, {
+                            shouldValidate: true,
+                          });
                         }}
                       />
+                      {showMilestoneErrors && receiverError && (
+                        <p className="text-sm text-destructive">
+                          {receiverError}
+                        </p>
+                      )}
                     </div>
 
-                    <div className="md:col-span-4">
+                    <div className="md:col-span-4 space-y-1">
                       <Input
                         placeholder="Milestone description"
                         value={milestone.description}
@@ -404,12 +423,20 @@ export const UpdateEscrowDialog = () => {
                         onChange={(e) => {
                           const updatedMilestones = [...milestones];
                           updatedMilestones[index].description = e.target.value;
-                          form.setValue("milestones", updatedMilestones);
+                          form.setValue("milestones", updatedMilestones, {
+                            shouldValidate: true,
+                          });
                         }}
                       />
+                      {showMilestoneErrors && descriptionError && (
+                        <p className="text-sm text-destructive">
+                          {descriptionError}
+                        </p>
+                      )}
                     </div>
 
-                    <div className="md:col-span-3 relative">
+                    <div className="md:col-span-3 space-y-1">
+                      <div className="relative">
                       <DollarSign
                         className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                         size={18}
@@ -423,6 +450,10 @@ export const UpdateEscrowDialog = () => {
                         }
                         onChange={(e) => handleMilestoneAmountChange(index, e)}
                       />
+                      </div>
+                      {showMilestoneErrors && amountError && (
+                        <p className="text-sm text-destructive">{amountError}</p>
+                      )}
                     </div>
 
                     <div className="md:col-span-1 flex justify-end">
@@ -454,7 +485,8 @@ export const UpdateEscrowDialog = () => {
                     </div>
                   )}
                 </div>
-              ))}
+              );
+              })}
             </div>
 
             <div className="flex justify-start">
