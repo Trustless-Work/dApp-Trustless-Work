@@ -180,8 +180,7 @@ export const useUpdateEscrowSchema = () => {
           return decimalPlaces <= 2;
         },
         {
-          message:
-            "Milestone amount can have a maximum of 2 decimal places.",
+          message: "Milestone amount can have a maximum of 2 decimal places.",
         },
       ),
   });

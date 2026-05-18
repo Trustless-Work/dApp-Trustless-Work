@@ -385,107 +385,113 @@ export const UpdateEscrowDialog = () => {
                   !isEscrowLocked || index >= initialMilestonesCount;
 
                 return (
-                <div key={index} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
-                    <div className="md:col-span-4 space-y-1">
-                      <Input
-                        placeholder="Enter receiver address"
-                        value={
-                          (milestone as { receiver?: string }).receiver || ""
-                        }
-                        disabled={
-                          isEscrowLocked && index < initialMilestonesCount
-                        }
-                        onChange={(e) => {
-                          const updatedMilestones = [...milestones];
-                          (
-                            updatedMilestones[index] as { receiver?: string }
-                          ).receiver = e.target.value;
-                          form.setValue("milestones", updatedMilestones, {
-                            shouldValidate: true,
-                          });
-                        }}
-                      />
-                      {showMilestoneErrors && receiverError && (
-                        <p className="text-sm text-destructive">
-                          {receiverError}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="md:col-span-4 space-y-1">
-                      <Input
-                        placeholder="Milestone description"
-                        value={milestone.description}
-                        disabled={
-                          isEscrowLocked && index < initialMilestonesCount
-                        }
-                        onChange={(e) => {
-                          const updatedMilestones = [...milestones];
-                          updatedMilestones[index].description = e.target.value;
-                          form.setValue("milestones", updatedMilestones, {
-                            shouldValidate: true,
-                          });
-                        }}
-                      />
-                      {showMilestoneErrors && descriptionError && (
-                        <p className="text-sm text-destructive">
-                          {descriptionError}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="md:col-span-3 space-y-1">
-                      <div className="relative">
-                      <DollarSign
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                        size={18}
-                      />
-                      <Input
-                        className="pl-10"
-                        placeholder="Enter amount"
-                        value={milestone.amount?.toString() || ""}
-                        disabled={
-                          isEscrowLocked && index < initialMilestonesCount
-                        }
-                        onChange={(e) => handleMilestoneAmountChange(index, e)}
-                      />
+                  <div key={index} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                      <div className="md:col-span-4 space-y-1">
+                        <Input
+                          placeholder="Enter receiver address"
+                          value={
+                            (milestone as { receiver?: string }).receiver || ""
+                          }
+                          disabled={
+                            isEscrowLocked && index < initialMilestonesCount
+                          }
+                          onChange={(e) => {
+                            const updatedMilestones = [...milestones];
+                            (
+                              updatedMilestones[index] as { receiver?: string }
+                            ).receiver = e.target.value;
+                            form.setValue("milestones", updatedMilestones, {
+                              shouldValidate: true,
+                            });
+                          }}
+                        />
+                        {showMilestoneErrors && receiverError && (
+                          <p className="text-sm text-destructive">
+                            {receiverError}
+                          </p>
+                        )}
                       </div>
-                      {showMilestoneErrors && amountError && (
-                        <p className="text-sm text-destructive">{amountError}</p>
-                      )}
+
+                      <div className="md:col-span-4 space-y-1">
+                        <Input
+                          placeholder="Milestone description"
+                          value={milestone.description}
+                          disabled={
+                            isEscrowLocked && index < initialMilestonesCount
+                          }
+                          onChange={(e) => {
+                            const updatedMilestones = [...milestones];
+                            updatedMilestones[index].description =
+                              e.target.value;
+                            form.setValue("milestones", updatedMilestones, {
+                              shouldValidate: true,
+                            });
+                          }}
+                        />
+                        {showMilestoneErrors && descriptionError && (
+                          <p className="text-sm text-destructive">
+                            {descriptionError}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="md:col-span-3 space-y-1">
+                        <div className="relative">
+                          <DollarSign
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                            size={18}
+                          />
+                          <Input
+                            className="pl-10"
+                            placeholder="Enter amount"
+                            value={milestone.amount?.toString() || ""}
+                            disabled={
+                              isEscrowLocked && index < initialMilestonesCount
+                            }
+                            onChange={(e) =>
+                              handleMilestoneAmountChange(index, e)
+                            }
+                          />
+                        </div>
+                        {showMilestoneErrors && amountError && (
+                          <p className="text-sm text-destructive">
+                            {amountError}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="md:col-span-1 flex justify-end">
+                        <Button
+                          onClick={() => handleRemoveMilestone(index)}
+                          className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0 cursor-pointer"
+                          disabled={
+                            (isEscrowLocked &&
+                              index < initialMilestonesCount) ||
+                            milestones.length === 1
+                          }
+                          type="button"
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </Button>
+                      </div>
                     </div>
 
-                    <div className="md:col-span-1 flex justify-end">
-                      <Button
-                        onClick={() => handleRemoveMilestone(index)}
-                        className="p-2 bg-transparent text-red-500 rounded-md border-none shadow-none hover:bg-transparent hover:shadow-none hover:text-red-500 focus:ring-0 active:ring-0 cursor-pointer"
-                        disabled={
-                          (isEscrowLocked && index < initialMilestonesCount) ||
-                          milestones.length === 1
-                        }
-                        type="button"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </Button>
-                    </div>
+                    {index === milestones.length - 1 && (
+                      <div className="flex justify-end mt-4">
+                        <Button
+                          disabled={isAnyMilestoneEmpty}
+                          className="w-full md:w-1/4 cursor-pointer"
+                          variant="outline"
+                          onClick={handleAddMilestone}
+                          type="button"
+                        >
+                          Add Item
+                        </Button>
+                      </div>
+                    )}
                   </div>
-
-                  {index === milestones.length - 1 && (
-                    <div className="flex justify-end mt-4">
-                      <Button
-                        disabled={isAnyMilestoneEmpty}
-                        className="w-full md:w-1/4 cursor-pointer"
-                        variant="outline"
-                        onClick={handleAddMilestone}
-                        type="button"
-                      >
-                        Add Item
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              );
+                );
               })}
             </div>
 

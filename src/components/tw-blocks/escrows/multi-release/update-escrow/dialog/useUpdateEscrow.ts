@@ -105,7 +105,8 @@ export function useUpdateEscrow({
 
   React.useEffect(() => {
     if (!selectedEscrow) return;
-    const milestones = (selectedEscrow.milestones as MultiReleaseMilestone[]) ?? [];
+    const milestones =
+      (selectedEscrow.milestones as MultiReleaseMilestone[]) ?? [];
     setInitialMilestonesCount(milestones.length);
 
     form.reset({
@@ -145,8 +146,7 @@ export function useUpdateEscrow({
 
   const milestones = form.watch("milestones");
   const isAnyMilestoneEmpty = milestones.some((m, index) => {
-    const shouldValidate =
-      !isEscrowLocked || index >= initialMilestonesCount;
+    const shouldValidate = !isEscrowLocked || index >= initialMilestonesCount;
     if (!shouldValidate) return false;
     return (
       m.description === "" ||
@@ -293,9 +293,7 @@ export function useUpdateEscrow({
     },
     (errors) => {
       const message = getFirstErrorMessage(errors);
-      toast.error(
-        message || "Please complete all required milestone fields.",
-      );
+      toast.error(message || "Please complete all required milestone fields.");
     },
   );
 
@@ -314,4 +312,4 @@ export function useUpdateEscrow({
     isEscrowLocked,
     initialMilestonesCount,
   };
-};
+}
