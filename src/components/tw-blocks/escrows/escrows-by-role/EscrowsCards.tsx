@@ -74,7 +74,6 @@ export const EscrowsByRoleCards = ({ role }: EscrowsByRoleCardsProps) => {
     handleSortingChange,
   } = useEscrowsByRole({
     role,
-    validateOnChainAlwaysTrue: true,
   });
 
   // Use role from props if provided, otherwise use from hook
@@ -171,7 +170,6 @@ export const EscrowsByRoleCards = ({ role }: EscrowsByRoleCardsProps) => {
           orderDirection={orderDirection}
           setOrderBy={setOrderBy}
           setOrderDirection={setOrderDirection}
-          validateOnChainDisabled={true}
           escrows={escrows}
           roleLabel={effectiveRole}
         />

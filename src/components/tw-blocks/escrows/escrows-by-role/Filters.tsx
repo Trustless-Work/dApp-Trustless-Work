@@ -108,9 +108,6 @@ type FiltersProps = {
   setOrderBy: (v: "createdAt" | "updatedAt" | "amount") => void;
   setOrderDirection: (v: "asc" | "desc") => void;
 
-  // options
-  validateOnChainDisabled?: boolean;
-
   // export
   escrows?: Escrow[];
   roleLabel?: string;
@@ -148,13 +145,6 @@ export const Filters = ({
   escrows = [],
   roleLabel,
 }: FiltersProps) => {
-  // Ensure validateOnChain is always true
-  React.useEffect(() => {
-    if (!validateOnChain) {
-      setValidateOnChain(true);
-    }
-  }, [validateOnChain, setValidateOnChain]);
-
   const handleExportPDF = React.useCallback(() => {
     if (escrows.length === 0) return;
     const title = roleLabel
@@ -456,18 +446,26 @@ export const Filters = ({
 
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-muted-foreground">
-              Active / Export
+              {t("myEscrows.filter.activeOnChain.label")}
             </label>
             <div className="w-full lg:w-auto lg:min-w-fit">
-              <div className="grid grid-cols-2 gap-2 w-full lg:w-auto">
-                <div className="flex items-center justify-center lg:justify-start gap-2 h-9 px-3 rounded-md border border-border/60 bg-background/80 w-full lg:w-auto">
+              <div className="grid grid-cols-[auto_auto_1fr] gap-2 w-full lg:w-auto">
+                <div className="flex items-center justify-center h-9 px-3 rounded-md border border-border/60 bg-background/80">
                   <Checkbox
                     checked={Boolean(isActive)}
                     onCheckedChange={(checked) => setIsActive(Boolean(checked))}
+                    aria-label={t("myEscrows.filter.active.active")}
                   />
-                  <span className="text-sm text-foreground font-medium whitespace-nowrap">
-                    Active
-                  </span>
+                </div>
+
+                <div className="flex items-center justify-center h-9 px-3 rounded-md border border-border/60 bg-background/80">
+                  <Checkbox
+                    checked={Boolean(validateOnChain)}
+                    onCheckedChange={(checked) =>
+                      setValidateOnChain(Boolean(checked))
+                    }
+                    aria-label={t("myEscrows.filter.validateOnChain.label")}
+                  />
                 </div>
 
                 <DropdownMenu>

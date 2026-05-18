@@ -568,6 +568,12 @@
       "active": {
         "active": "Activo",
         "trashed": "Papelera"
+      },
+      "activeOnChain": {
+        "label": "Active / OnChain"
+      },
+      "validateOnChain": {
+        "label": "Validar en blockchain"
       }
     },
     "table": {

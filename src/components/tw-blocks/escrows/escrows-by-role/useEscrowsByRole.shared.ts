@@ -24,7 +24,6 @@ export type DateRange = DayPickerDateRange;
 
 type UseEscrowsByRoleOptions = {
   role?: GetEscrowsFromIndexerByRoleParams["role"];
-  validateOnChainAlwaysTrue?: boolean;
 };
 
 export function useEscrowsByRole(options?: UseEscrowsByRoleOptions) {
@@ -116,18 +115,6 @@ export function useEscrowsByRole(options?: UseEscrowsByRoleOptions) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Force validateOnChain to true if the option is enabled
-  const effectiveValidateOnChain = options?.validateOnChainAlwaysTrue
-    ? true
-    : validateOnChain;
-
-  // Force validateOnChain to true if the option is enabled
-  React.useEffect(() => {
-    if (options?.validateOnChainAlwaysTrue && !validateOnChain) {
-      setValidateOnChain(true);
-    }
-  }, [options?.validateOnChainAlwaysTrue, validateOnChain]);
-
   const stableSearchParams = React.useMemo(
     () => ({
       page,
@@ -136,7 +123,7 @@ export function useEscrowsByRole(options?: UseEscrowsByRoleOptions) {
       title: debouncedTitle,
       engagementId: debouncedEngagementId,
       isActive,
-      validateOnChain: effectiveValidateOnChain,
+      validateOnChain,
       type,
       status,
       minAmount: debouncedMinAmount,
@@ -154,7 +141,7 @@ export function useEscrowsByRole(options?: UseEscrowsByRoleOptions) {
       debouncedTitle,
       debouncedEngagementId,
       isActive,
-      effectiveValidateOnChain,
+      validateOnChain,
       type,
       status,
       debouncedMinAmount,
@@ -225,7 +212,7 @@ export function useEscrowsByRole(options?: UseEscrowsByRoleOptions) {
       title: debouncedTitle || undefined,
       engagementId: debouncedEngagementId || undefined,
       isActive,
-      validateOnChain: effectiveValidateOnChain,
+      validateOnChain,
       type: (type === "all" ? undefined : type) as
         | undefined
         | "single-release"
@@ -254,7 +241,7 @@ export function useEscrowsByRole(options?: UseEscrowsByRoleOptions) {
     debouncedTitle,
     debouncedEngagementId,
     isActive,
-    effectiveValidateOnChain,
+    validateOnChain,
     type,
     status,
     debouncedMinAmount,

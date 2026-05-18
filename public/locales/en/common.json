@@ -510,6 +510,12 @@
       "active": {
         "active": "Active",
         "trashed": "Trash"
+      },
+      "activeOnChain": {
+        "label": "Active / OnChain"
+      },
+      "validateOnChain": {
+        "label": "Validate on chain"
       }
     },
     "table": {
