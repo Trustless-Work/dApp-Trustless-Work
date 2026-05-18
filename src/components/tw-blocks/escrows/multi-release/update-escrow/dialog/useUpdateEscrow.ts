@@ -25,6 +25,33 @@ const isEmptyAmount = (amount: string | number | undefined) => {
   return false;
 };
 
+function toMultiReleaseMilestone(
+  milestone: {
+    receiver?: string;
+    description?: string;
+    amount?: string | number;
+  },
+  existing?: MultiReleaseMilestone,
+): MultiReleaseMilestone {
+  const amount =
+    typeof milestone.amount === "string"
+      ? Number(milestone.amount)
+      : (milestone.amount ?? existing?.amount ?? 0);
+
+  const existingReceiver = (
+    existing as (MultiReleaseMilestone & { receiver?: string }) | undefined
+  )?.receiver;
+
+  return {
+    ...existing,
+    receiver: milestone.receiver ?? existingReceiver ?? "",
+    description: milestone.description ?? existing?.description ?? "",
+    amount,
+    evidence: existing?.evidence ?? "",
+    status: existing?.status ?? "",
+  };
+}
+
 function getFirstErrorMessage(errors: FieldErrors): string | undefined {
   for (const value of Object.values(errors)) {
     if (!value) continue;
@@ -253,15 +280,14 @@ export function useUpdateEscrow({
                 "",
             },
             roles: payload.roles,
-            milestones: payload.milestones.map((milestone, index: number) => ({
-              ...milestone,
-              amount:
-                typeof milestone.amount === "string"
-                  ? Number(milestone.amount)
-                  : milestone.amount,
-              evidence: selectedEscrow?.milestones?.[index]?.evidence || "",
-              status: selectedEscrow?.milestones?.[index]?.status || "",
-            })),
+            milestones: payload.milestones.map((milestone, index) =>
+              toMultiReleaseMilestone(
+                milestone,
+                selectedEscrow?.milestones?.[index] as
+                  | MultiReleaseMilestone
+                  | undefined,
+              ),
+            ),
           },
         };
 
