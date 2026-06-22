@@ -21,7 +21,7 @@ export function DatePickerWithRange({
   const router = useRouter();
   const pathname = usePathname();
 
-  const parseInitialRange = (): DateRange | undefined => {
+  const parseInitialRange = React.useCallback((): DateRange | undefined => {
     const raw = searchParams.get("dateRange");
     if (!raw) return;
 
@@ -50,7 +50,7 @@ export function DatePickerWithRange({
 
     if (!start) return;
     return { from: start, to: end };
-  };
+  }, [searchParams]);
 
   const [date, setDate] = React.useState<DateRange | undefined>(
     parseInitialRange,
@@ -59,7 +59,7 @@ export function DatePickerWithRange({
   // Keep internal state in sync with URL changes (e.g., when clearing filters)
   React.useEffect(() => {
     setDate(parseInitialRange());
-  }, [searchParams]);
+  }, [parseInitialRange]);
 
   const updateURL = (range: DateRange | undefined) => {
     if (!range?.from || !range?.to) return;

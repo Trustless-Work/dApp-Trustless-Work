@@ -208,7 +208,7 @@ export const EscrowsByRoleTable = ({ role }: EscrowsByRoleTableProps) => {
         ),
       },
     ],
-    [dialogStates.second.setIsOpen, setSelectedEscrow],
+    [dialogStates.second, setSelectedEscrow],
   );
 
   const table = useReactTable({

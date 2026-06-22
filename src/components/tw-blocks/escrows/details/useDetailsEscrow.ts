@@ -81,7 +81,7 @@ const useEscrowDetailDialog = ({
       .map((role) => role.name);
 
     return userRoles;
-  }, [selectedEscrow?.contractId, walletAddress]);
+  }, [selectedEscrow, walletAddress]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | undefined = undefined;

@@ -193,7 +193,7 @@ export const useWalletBalance = (): WalletBalance => {
       globalRequestInFlight = false;
       isRequestInFlightRef.current = false;
     }
-  }, [address, isConnected]);
+  }, [address, isConnected, clearRetryTimeout]);
 
   const refresh = useCallback(() => {
     fetchBalance();

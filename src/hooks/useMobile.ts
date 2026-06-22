@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -52,27 +52,30 @@ export const useThrottledScroll = (
     return window.innerWidth < 768;
   });
 
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
+  const lastScrollYRef = useRef(0);
+  const callbackRef = useRef(callback);
+
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
+
   const throttledCallback = useCallback(
-    (() => {
-      let timeoutId: NodeJS.Timeout | null = null;
-      let lastScrollY = 0;
+    (scrollY: number) => {
+      if (timeoutIdRef.current) return;
 
-      return (scrollY: number) => {
-        if (timeoutId) return;
-
-        timeoutId = setTimeout(
-          () => {
-            if (Math.abs(scrollY - lastScrollY) > 5) {
-              callback(scrollY);
-              lastScrollY = scrollY;
-            }
-            timeoutId = null;
-          },
-          isMobile ? delay * 2 : delay,
-        );
-      };
-    })(),
-    [callback, delay, isMobile],
+      timeoutIdRef.current = setTimeout(
+        () => {
+          if (Math.abs(scrollY - lastScrollYRef.current) > 5) {
+            callbackRef.current(scrollY);
+            lastScrollYRef.current = scrollY;
+          }
+          timeoutIdRef.current = null;
+        },
+        isMobile ? delay * 2 : delay,
+      );
+    },
+    [delay, isMobile],
   );
 
   useEffect(() => {

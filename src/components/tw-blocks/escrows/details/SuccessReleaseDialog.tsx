@@ -108,7 +108,6 @@ export const SuccessReleaseDialog = ({
     platformFeeAmount,
     trustlessWorkAmount,
     receiverAmount,
-    selectedEscrow?.roles?.platformAddress,
     selectedEscrow?.type,
     selectedEscrow?.milestones,
     selectedEscrow?.roles,

@@ -17,7 +17,9 @@ interface MilestoneStatusBadgeProps {
   milestone: SingleReleaseMilestone | MultiReleaseMilestone;
 }
 
-export const MilestoneStatusBadge = ({ milestone }: MilestoneStatusBadgeProps) => {
+export const MilestoneStatusBadge = ({
+  milestone,
+}: MilestoneStatusBadgeProps) => {
   if ("flags" in milestone && milestone.flags?.disputed) {
     return (
       <Badge variant="destructive">

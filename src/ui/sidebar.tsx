@@ -375,8 +375,7 @@ const SidebarInset = React.forwardRef<
   React.ComponentProps<"main">
 >(({ className, children, ...props }, ref) => {
   const { isHovered, isMobile, expandLockCount } = useSidebar();
-  const showMainOverlay =
-    !isMobile && (isHovered || expandLockCount > 0);
+  const showMainOverlay = !isMobile && (isHovered || expandLockCount > 0);
 
   return (
     <main

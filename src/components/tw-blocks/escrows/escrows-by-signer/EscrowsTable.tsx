@@ -187,7 +187,7 @@ export const EscrowsBySignerTable = () => {
         ),
       },
     ],
-    [dialogStates.second.setIsOpen, setSelectedEscrow],
+    [dialogStates.second, setSelectedEscrow],
   );
 
   const table = useReactTable({

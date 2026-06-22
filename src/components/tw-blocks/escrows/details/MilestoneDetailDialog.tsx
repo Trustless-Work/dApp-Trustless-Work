@@ -3,13 +3,7 @@
 import { Button } from "@/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
-import {
-  FileCheck2,
-  User,
-  Calendar,
-  Hash,
-  ExternalLink,
-} from "lucide-react";
+import { FileCheck2, User, Calendar, Hash, ExternalLink } from "lucide-react";
 import {
   GetEscrowsFromIndexerResponse,
   MultiReleaseMilestone,

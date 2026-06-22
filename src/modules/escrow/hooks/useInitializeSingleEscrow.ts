@@ -249,7 +249,7 @@ export const useInitializeSingleEscrow = () => {
     }));
 
     return [{ value: "", label: "Select a Trustline" }, ...options];
-  }, [trustlines, currentNetwork]);
+  }, [currentNetwork]);
 
   const toggleField = (field: string, value: boolean) => {
     setShowSelect((prev) => ({ ...prev, [field]: value }));
