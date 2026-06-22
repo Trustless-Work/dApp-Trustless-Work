@@ -8,7 +8,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
   SidebarSeparator,
 } from "@/ui/sidebar";
 import { ItemsSidebar } from "@/constants/sidebar-items.constant";
@@ -27,7 +26,6 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
         <SidebarSeparator />
         <NavUser />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 };

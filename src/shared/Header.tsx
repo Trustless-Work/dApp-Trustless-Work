@@ -1,18 +1,16 @@
 "use client";
 
-import useIsMobile from "@/hooks/useMobile";
 import { cn } from "@/lib/utils";
 import { NotificationBell } from "@/modules/notifications/NotificationBell";
 import NetworkToggle from "./utils/NetworkToggle";
 import useHeader from "@/hooks/useHeader";
 import useScrollHeader from "@/hooks/useScrollHeader";
-import { SidebarTrigger } from "@/ui/sidebar";
 import { Breadcrumb, BreadcrumbList } from "@/ui/breadcrumb";
 import ThemeToggle from "./utils/ThemeToggle";
 import { Wallet } from "./Wallet";
+import { SidebarTrigger } from "@/ui/sidebar";
 
 const Header = ({ className }: { className?: string }) => {
-  const isMobile = useIsMobile();
   const { pathName, getBreadCrumbs, address } = useHeader();
   const { isScrolled } = useScrollHeader();
 
@@ -30,18 +28,12 @@ const Header = ({ className }: { className?: string }) => {
       <div className="flex flex-col sm:flex-row w-full justify-between items-center gap-4 px-4">
         {pathName !== "/" && address ? (
           <>
-            <>
-              <SidebarTrigger
-                className={cn(
-                  "h-10 w-10 z-0",
-                  isMobile ? "absolute left-0" : "relative",
-                )}
-              />
-
+            <div className="flex w-full items-center justify-between md:w-auto">
+              <SidebarTrigger className="h-10 w-10 md:hidden" />
               <Breadcrumb className="hidden md:block">
                 <BreadcrumbList>{getBreadCrumbs()}</BreadcrumbList>
               </Breadcrumb>
-            </>
+            </div>
 
             <div className="flex gap-3 ml-auto items-center">
               <NetworkToggle />

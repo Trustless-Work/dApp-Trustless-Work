@@ -2,22 +2,14 @@
 import React from "react";
 import { Button } from "@/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
-import {
-  FileCheck2,
-  Eye,
-  CircleAlert,
-  CircleCheckBig,
-  Handshake,
-  CheckCheck,
-  Layers,
-} from "lucide-react";
+import { FileCheck2, Eye } from "lucide-react";
 import { GetEscrowsFromIndexerResponse as Escrow } from "@trustless-work/escrow/types";
 import {
   MultiReleaseMilestone,
   SingleReleaseMilestone,
 } from "@trustless-work/escrow";
-import { Badge } from "@/ui/badge";
 import { ChangeMilestoneStatusDialog } from "../single-multi-release/change-milestone-status/dialog/ChangeMilestoneStatus";
+import { MilestoneStatusBadge } from "./MilestoneStatusBadge";
 import { ApproveMilestoneButton } from "../single-multi-release/approve-milestone/button/ApproveMilestone";
 import { formatCurrency } from "@/components/tw-blocks/helpers/format.helper";
 import { ReleaseMilestoneButton } from "../multi-release/release-milestone/button/ReleaseMilestone";
@@ -44,62 +36,6 @@ const MilestoneCardComponent = ({
   onViewDetails,
 }: MilestoneCardProps) => {
   const activeTab = useEscrowUIBoundedStore((state) => state.activeTab);
-
-  const getMilestoneStatusBadge = (
-    milestone: SingleReleaseMilestone | MultiReleaseMilestone,
-  ) => {
-    if ("flags" in milestone && milestone.flags?.disputed) {
-      return (
-        <Badge variant="destructive">
-          <CircleAlert className="h-3.5 w-3.5" />
-          <span>Disputed</span>
-        </Badge>
-      );
-    }
-    if ("flags" in milestone && milestone.flags?.released) {
-      return (
-        <Badge variant="default">
-          <CircleCheckBig className="h-3.5 w-3.5" />
-          <span>Released</span>
-        </Badge>
-      );
-    }
-    if (
-      "flags" in milestone &&
-      milestone.flags?.resolved &&
-      !milestone.flags?.disputed
-    ) {
-      return (
-        <Badge variant="default">
-          <Handshake className="h-3.5 w-3.5" />
-          <span>Resolved</span>
-        </Badge>
-      );
-    }
-    if (
-      ("flags" in milestone && milestone.flags?.approved) ||
-      ("approved" in milestone && milestone.approved)
-    ) {
-      return (
-        <Badge variant="default">
-          <CheckCheck className="h-3.5 w-3.5" />
-          <span>Approved</span>
-        </Badge>
-      );
-    }
-    return (
-      <Badge variant="outline">
-        <Layers className="h-3.5 w-3.5" />
-        <span className="uppercase">
-          {milestone.status
-            ? milestone.status.match(/[a-z][A-Z]/)
-              ? milestone.status.replace(/([A-Z])/g, " $1").toLowerCase()
-              : milestone.status.toLowerCase()
-            : ""}
-        </span>
-      </Badge>
-    );
-  };
 
   const getActionButtons = (
     milestone: SingleReleaseMilestone | MultiReleaseMilestone,
@@ -203,7 +139,7 @@ const MilestoneCardComponent = ({
           <CardTitle className="text-base font-semibold text-foreground truncate">
             {milestone.description}
           </CardTitle>
-          {getMilestoneStatusBadge(milestone)}
+          <MilestoneStatusBadge milestone={milestone} />
         </div>
       </CardHeader>
 

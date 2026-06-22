@@ -24,7 +24,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <EscrowProvider>
       <EscrowDialogsProvider>
         <EscrowAmountProvider>
-          <SidebarProvider>
+          <SidebarProvider defaultOpen={false}>
             <Lights />
             <WalkthroughOnboarding />
             <AppSidebar />

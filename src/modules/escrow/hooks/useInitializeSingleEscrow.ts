@@ -2,7 +2,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, type DefaultValues } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ import { AxiosError } from "axios";
 import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
 import useNetwork from "@/hooks/useNetwork";
 import { trustlines } from "@/constants/trustlines.constant";
+import { InitializeSingleEscrowDraft } from "../store/ui/initialize-draft.slice";
 
 export const useInitializeSingleEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -50,6 +51,16 @@ export const useInitializeSingleEscrow = () => {
   const contacts = useGlobalBoundedStore((state) => state.contacts);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const escrowType = useEscrowUIBoundedStore((state) => state.escrowType);
+  const setEscrowType = useEscrowUIBoundedStore((state) => state.setEscrowType);
+  const initializeSingleEscrowDraft = useEscrowUIBoundedStore(
+    (state) => state.initializeSingleEscrowDraft,
+  );
+  const setInitializeSingleEscrowDraft = useEscrowUIBoundedStore(
+    (state) => state.setInitializeSingleEscrowDraft,
+  );
+  const clearInitializeEscrowDrafts = useEscrowUIBoundedStore(
+    (state) => state.clearInitializeEscrowDrafts,
+  );
   const { getSingleReleaseFormSchema } = useInitializeEscrowSchema();
   const formSchema = getSingleReleaseFormSchema();
   const { currentNetwork } = useNetwork();
@@ -62,9 +73,8 @@ export const useInitializeSingleEscrow = () => {
     }
   }, [fetchContacts, address]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
+  const defaultValues: DefaultValues<z.infer<typeof formSchema>> =
+    initializeSingleEscrowDraft ?? {
       engagementId: "",
       title: "",
       description: "",
@@ -83,9 +93,21 @@ export const useInitializeSingleEscrow = () => {
         disputeResolver: "",
       },
       milestones: [{ description: "" }],
-    },
+    };
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues,
     mode: "onChange",
   });
+
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      setInitializeSingleEscrowDraft(values as InitializeSingleEscrowDraft);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form, setInitializeSingleEscrowDraft]);
 
   const fillTemplateForm = () => {
     // Filter trustlines by current network
@@ -195,6 +217,8 @@ export const useInitializeSingleEscrow = () => {
       setIsSuccessDialogOpen(true);
       setCurrentStep(1);
       resetSteps();
+      clearInitializeEscrowDrafts();
+      setEscrowType(null);
       toast.success("Escrow initialized successfully");
       router.push("/dashboard/escrow/my-escrows");
     } catch (err) {

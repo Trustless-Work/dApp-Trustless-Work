@@ -15,7 +15,10 @@ import {
   handleError,
 } from "@/components/tw-blocks/handle-errors/handle";
 import { GetEscrowsFromIndexerResponse } from "@trustless-work/escrow/types";
-import { useGlobalAuthenticationStore } from "@/store/data";
+import {
+  useGlobalAuthenticationStore,
+  useGlobalBoundedStore,
+} from "@/store/data";
 import { useEscrowContext } from "@/providers/EscrowProvider";
 import { trustlines } from "@/constants/trustlines.constant";
 
@@ -71,6 +74,10 @@ export function useUpdateEscrow({
 }: { onSuccess?: () => void } = {}) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [initialMilestonesCount, setInitialMilestonesCount] = React.useState(0);
+  const [showReceiverSelect, setShowReceiverSelect] = React.useState(false);
+
+  const fetchContacts = useGlobalBoundedStore((state) => state.fetchContacts);
+  const contacts = useGlobalBoundedStore((state) => state.contacts);
 
   const { getMultiReleaseFormSchema } = useUpdateEscrowSchema();
 
@@ -129,6 +136,21 @@ export function useUpdateEscrow({
     },
     mode: "onChange",
   });
+
+  React.useEffect(() => {
+    if (walletAddress) {
+      fetchContacts(walletAddress);
+    }
+  }, [fetchContacts, walletAddress]);
+
+  const userOptions = React.useMemo(() => {
+    const options = contacts.map((contact) => ({
+      value: contact.address,
+      label: contact.name,
+    }));
+
+    return [{ value: "", label: "Select a Contact" }, ...options];
+  }, [contacts]);
 
   React.useEffect(() => {
     if (!selectedEscrow) return;
@@ -337,5 +359,8 @@ export function useUpdateEscrow({
     getMilestoneError,
     isEscrowLocked,
     initialMilestonesCount,
+    userOptions,
+    showReceiverSelect,
+    setShowReceiverSelect,
   };
 }

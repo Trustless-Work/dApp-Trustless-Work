@@ -243,7 +243,7 @@ export const EscrowsBySignerCards = () => {
                 </div>
               </div>
             ) : (
-              <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2">
+              <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-2">
                 {escrows.map((escrow) => (
                   <React.Fragment key={escrow.contractId}>
                     <Card

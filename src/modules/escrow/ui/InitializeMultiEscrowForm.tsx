@@ -533,8 +533,15 @@ export const InitializeMultiEscrowForm = ({
               </FormLabel>
             </div>
             <div className="md:col-span-4">
-              <FormLabel className="flex items-center">
-                Receiver<span className="text-destructive ml-1">*</span>
+              <FormLabel className="flex items-center justify-between">
+                <span className="flex items-center">
+                  Receiver<span className="text-destructive ml-1">*</span>
+                </span>
+                <Switch
+                  checked={showSelect.receiver}
+                  onCheckedChange={(value) => toggleField("receiver", value)}
+                  title="Show Users List?"
+                />
               </FormLabel>
             </div>
             <div className="md:col-span-3">
@@ -560,15 +567,25 @@ export const InitializeMultiEscrowForm = ({
                 </div>
 
                 <div className="md:col-span-4">
-                  <Input
-                    placeholder="Enter receiver address"
-                    value={milestone.receiver}
-                    onChange={(e) => {
-                      const updatedMilestones = [...milestones];
-                      updatedMilestones[index].receiver = e.target.value;
-                      form.setValue("milestones", updatedMilestones);
-                    }}
-                  />
+                  {showSelect.receiver ? (
+                    <SelectField
+                      control={form.control}
+                      name={`milestones.${index}.receiver`}
+                      label=""
+                      tooltipContent=""
+                      options={userOptions}
+                    />
+                  ) : (
+                    <Input
+                      placeholder="Enter receiver address"
+                      value={milestone.receiver}
+                      onChange={(e) => {
+                        const updatedMilestones = [...milestones];
+                        updatedMilestones[index].receiver = e.target.value;
+                        form.setValue("milestones", updatedMilestones);
+                      }}
+                    />
+                  )}
                 </div>
 
                 <div className="md:col-span-3 relative">
@@ -579,7 +596,11 @@ export const InitializeMultiEscrowForm = ({
                   <Input
                     className="pl-10"
                     placeholder="Enter amount"
-                    value={milestone.amount?.toString() || ""}
+                    value={
+                      milestone.amount === 0
+                        ? ""
+                        : (milestone.amount?.toString() ?? "")
+                    }
                     onChange={(e) => handleMilestoneAmountChange(index, e)}
                   />
                 </div>

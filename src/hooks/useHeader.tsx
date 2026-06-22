@@ -6,12 +6,29 @@ import {
 } from "@/ui/breadcrumb";
 import { useGlobalAuthenticationStore } from "@/store/data";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useDisplayNameByAddress } from "@/hooks/useDisplayNameByAddress";
 
 const useHeader = () => {
-  const { address, loggedUser } = useGlobalAuthenticationStore();
+  const { address } = useGlobalAuthenticationStore();
   const pathName = usePathname();
   const router = useRouter();
+
+  const publicProfileWallet = useMemo(() => {
+    const crumbs = pathName.split("/").filter(Boolean);
+    const publicProfileIndex = crumbs.indexOf("public-profile");
+
+    if (publicProfileIndex >= 0 && crumbs[publicProfileIndex + 1]) {
+      return crumbs[publicProfileIndex + 1];
+    }
+
+    return null;
+  }, [pathName]);
+
+  const { displayName: publicProfileDisplayName } = useDisplayNameByAddress(
+    publicProfileWallet,
+    { fallback: "Unknown User" },
+  );
 
   useEffect(() => {
     if (!address) {
@@ -33,10 +50,8 @@ const useHeader = () => {
         .replace(/-/g, " ")
         .replace(/\b\w/g, (char) => char.toUpperCase());
 
-      if (isPublicProfile && index === crumbs.length - 1 && loggedUser) {
-        label =
-          `${loggedUser.firstName || ""} ${loggedUser.lastName || ""}`.trim() ||
-          "Unknown User";
+      if (isPublicProfile && index === crumbs.length - 1) {
+        label = publicProfileDisplayName;
       }
 
       return (

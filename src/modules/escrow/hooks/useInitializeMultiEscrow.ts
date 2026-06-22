@@ -2,7 +2,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, type DefaultValues } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ import { trustlines } from "@/constants/trustlines.constant";
 import useNetwork from "@/hooks/useNetwork";
 import { useEscrowsMutations } from "@/components/tw-blocks/tanstack/useEscrowsMutations";
 import { handleError } from "@/components/tw-blocks/handle-errors/handle";
+import { InitializeMultiEscrowDraft } from "../store/ui/initialize-draft.slice";
 
 export const useInitializeMultiEscrow = () => {
   const [showSelect, setShowSelect] = useState({
@@ -50,6 +51,16 @@ export const useInitializeMultiEscrow = () => {
   const contacts = useGlobalBoundedStore((state) => state.contacts);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const escrowType = useEscrowUIBoundedStore((state) => state.escrowType);
+  const setEscrowType = useEscrowUIBoundedStore((state) => state.setEscrowType);
+  const initializeMultiEscrowDraft = useEscrowUIBoundedStore(
+    (state) => state.initializeMultiEscrowDraft,
+  );
+  const setInitializeMultiEscrowDraft = useEscrowUIBoundedStore(
+    (state) => state.setInitializeMultiEscrowDraft,
+  );
+  const clearInitializeEscrowDrafts = useEscrowUIBoundedStore(
+    (state) => state.clearInitializeEscrowDrafts,
+  );
   const { getMultiReleaseFormSchema } = useInitializeEscrowSchema();
   const formSchema = getMultiReleaseFormSchema();
   const { currentNetwork } = useNetwork();
@@ -62,9 +73,8 @@ export const useInitializeMultiEscrow = () => {
     }
   }, [fetchContacts, address]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
+  const defaultValues: DefaultValues<z.infer<typeof formSchema>> =
+    initializeMultiEscrowDraft ?? {
       engagementId: "",
       title: "",
       description: "",
@@ -81,9 +91,21 @@ export const useInitializeMultiEscrow = () => {
         disputeResolver: "",
       },
       milestones: [{ description: "", receiver: "", amount: undefined }],
-    },
+    };
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues,
     mode: "onChange",
   });
+
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      setInitializeMultiEscrowDraft(values as InitializeMultiEscrowDraft);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form, setInitializeMultiEscrowDraft]);
 
   const fillTemplateForm = () => {
     // Filter trustlines by current network
@@ -145,9 +167,12 @@ export const useInitializeMultiEscrow = () => {
     const currentMilestones = form.getValues("milestones");
     const updatedMilestones = [
       ...currentMilestones,
-      { description: "", receiver: "", amount: 0 },
+      { description: "", receiver: "", amount: undefined },
     ];
-    form.setValue("milestones", updatedMilestones);
+    form.setValue(
+      "milestones",
+      updatedMilestones as z.infer<typeof formSchema>["milestones"],
+    );
   };
 
   const handleRemoveMilestone = (index: number) => {
@@ -202,6 +227,8 @@ export const useInitializeMultiEscrow = () => {
       setIsSuccessDialogOpen(true);
       resetSteps();
       setCurrentStep(1);
+      clearInitializeEscrowDrafts();
+      setEscrowType(null);
       toast.success("Escrow initialized successfully");
       router.push("/dashboard/escrow/my-escrows");
     } catch (err) {

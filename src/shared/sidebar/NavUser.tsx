@@ -30,7 +30,7 @@ import { copyToClipboard } from "@/lib/copy";
 import { useGlobalUIBoundedStore } from "@/store/ui";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useGlobalAuthenticationStore } from "@/store/data";
 import TooltipInfo from "@/shared/utils/Tooltip";
@@ -38,7 +38,9 @@ import { useWallet } from "@/modules/auth/hooks/useWallet";
 import { formatAddress } from "@/lib/format";
 
 export const NavUser = () => {
-  const { isMobile } = useSidebar();
+  const { isMobile, setSidebarExpandedLock } = useSidebar();
+  const unlockTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isSidebarLockedRef = useRef(false);
   const address = useGlobalAuthenticationStore((state) => state.address);
   const name = useGlobalAuthenticationStore((state) => state.name);
   const loggedUser = useGlobalAuthenticationStore((state) => state.loggedUser);
@@ -55,6 +57,18 @@ export const NavUser = () => {
     setCopiedKeyId(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (unlockTimeoutRef.current) {
+        clearTimeout(unlockTimeoutRef.current);
+      }
+
+      if (isSidebarLockedRef.current) {
+        setSidebarExpandedLock(false);
+      }
+    };
+  }, [setSidebarExpandedLock]);
 
   useEffect(() => {
     if (!address) {
@@ -76,7 +90,32 @@ export const NavUser = () => {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
+        <DropdownMenu
+          onOpenChange={(open) => {
+            if (isMobile) return;
+
+            if (unlockTimeoutRef.current) {
+              clearTimeout(unlockTimeoutRef.current);
+              unlockTimeoutRef.current = null;
+            }
+
+            if (open) {
+              if (!isSidebarLockedRef.current) {
+                setSidebarExpandedLock(true);
+                isSidebarLockedRef.current = true;
+              }
+              return;
+            }
+
+            unlockTimeoutRef.current = setTimeout(() => {
+              if (isSidebarLockedRef.current) {
+                setSidebarExpandedLock(false);
+                isSidebarLockedRef.current = false;
+              }
+              unlockTimeoutRef.current = null;
+            }, 200);
+          }}
+        >
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"

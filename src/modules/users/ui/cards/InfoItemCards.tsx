@@ -34,17 +34,17 @@ export const InfoItem = ({ icon, label, value }: InfoItemProps) => {
               variant="ghost"
               size="icon"
               className="h-6 w-6 rounded-full"
-              onClick={() => copyToClipboard(value, label)}
+              onClick={() => copyToClipboard(value, value)}
               title="Copy to clipboard"
             >
               <TooltipInfo content="Copy address">
-                {copiedKeyId ? (
+                {copiedKeyId === value ? (
                   <Check size={15} className="text-green-700" />
                 ) : (
                   <Copy
                     size={15}
                     className={cn(
-                      copiedKeyId
+                      copiedKeyId === value
                         ? "text-green-700"
                         : "dark:text-white text-muted-foreground",
                     )}

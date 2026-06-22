@@ -1,15 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { User } from "@/types/user.entity";
 import { AuthService } from "../../auth/services/auth.service";
+import { useContactsQuery } from "@/modules/contact/hooks/tanstack/useContactsQuery";
+import {
+  findContactByAddress,
+  getDisplayInitials,
+  resolveDisplayName,
+} from "@/lib/resolve-display-name";
 
 interface UsePublicProfileResult {
   user: User | null;
+  contact: ReturnType<typeof findContactByAddress>;
   loading: boolean;
   error: string | null;
   fullName: string;
   initials: string;
+  isContactOnly: boolean;
 }
 
 export function usePublicProfile(
@@ -18,6 +26,8 @@ export function usePublicProfile(
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { data: contacts = [], isLoading: isContactsLoading } =
+    useContactsQuery();
 
   useEffect(() => {
     async function fetchUser() {
@@ -46,14 +56,39 @@ export function usePublicProfile(
     }
   }, [walletAddress]);
 
-  const fullName =
-    user?.firstName || user?.lastName
-      ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
-      : "Anonymous User";
+  const contact = useMemo(
+    () => findContactByAddress(contacts, walletAddress),
+    [contacts, walletAddress],
+  );
 
-  const initials =
-    `${user?.firstName?.charAt(0) || ""}${user?.lastName?.charAt(0) || ""}` ||
-    "?";
+  const isContactOnly = !user && Boolean(contact);
 
-  return { user, loading, error, fullName, initials };
+  const fullName = useMemo(
+    () =>
+      resolveDisplayName({
+        address: walletAddress,
+        user,
+        contacts,
+        fallback: "Anonymous User",
+      }),
+    [walletAddress, user, contacts],
+  );
+
+  const initials = useMemo(() => {
+    if (fullName === "Anonymous User") {
+      return walletAddress?.slice(0, 2).toUpperCase() || "?";
+    }
+
+    return getDisplayInitials(fullName);
+  }, [fullName, walletAddress]);
+
+  return {
+    user,
+    contact,
+    loading: loading || isContactsLoading,
+    error,
+    fullName,
+    initials,
+    isContactOnly,
+  };
 }

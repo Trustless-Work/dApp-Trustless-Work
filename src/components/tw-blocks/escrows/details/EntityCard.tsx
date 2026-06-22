@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
-import { useUserByAddress } from "@/modules/auth/hooks/useUserByAddress";
+import { useDisplayNameByAddress } from "@/hooks/useDisplayNameByAddress";
 import { Card, CardContent } from "@/ui/card";
 import { Badge } from "@/ui/badge";
 import { Separator } from "@/ui/separator";
@@ -33,7 +32,11 @@ export const EntityCard = ({
   currency,
   inDispute,
 }: EntityCardProps) => {
-  const { data: user } = useUserByAddress(entity || null);
+  const isTrustlessWork = type === "Trustless Work";
+  const { displayName, user } = useDisplayNameByAddress(entity, {
+    enabled: Boolean(entity) && !isTrustlessWork,
+    fixedLabel: isTrustlessWork ? "Trustless Work" : undefined,
+  });
 
   return (
     <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-md py-2">
@@ -87,16 +90,12 @@ export const EntityCard = ({
             <div className="flex flex-col">
               {entity && (
                 <span className="text-sm font-medium leading-tight">
-                  {user?.firstName && user?.lastName
-                    ? `${user.firstName} ${user.lastName}`
-                    : "Without Name"}
+                  {displayName}
                 </span>
               )}
               {entity && (
                 <span className="text-xs text-muted-foreground">
-                  {type === "Trustless Work"
-                    ? "Private"
-                    : formatAddress(entity)}
+                  {isTrustlessWork ? "Private" : formatAddress(entity)}
                 </span>
               )}
             </div>

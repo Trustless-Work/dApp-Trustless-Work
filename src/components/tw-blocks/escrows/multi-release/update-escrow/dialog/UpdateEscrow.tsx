@@ -18,6 +18,8 @@ import {
   SelectItem,
 } from "@/ui/select";
 import { Textarea } from "@/ui/textarea";
+import SelectField from "@/shared/utils/SelectSearch";
+import { Switch } from "@/ui/switch";
 import { useUpdateEscrow } from "./useUpdateEscrow";
 import { Trash2, DollarSign, Percent, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
@@ -46,6 +48,9 @@ export const UpdateEscrowDialog = () => {
     getMilestoneError,
     isEscrowLocked,
     initialMilestonesCount,
+    userOptions,
+    showReceiverSelect,
+    setShowReceiverSelect,
   } = useUpdateEscrow({ onSuccess: () => setIsOpen(false) });
 
   return (
@@ -371,8 +376,15 @@ export const UpdateEscrowDialog = () => {
             />
 
             <div className="space-y-4">
-              <FormLabel className="flex items-center">
-                Milestones<span className="text-destructive ml-1">*</span>
+              <FormLabel className="flex items-center justify-between">
+                <span className="flex items-center">
+                  Milestones<span className="text-destructive ml-1">*</span>
+                </span>
+                <Switch
+                  checked={showReceiverSelect}
+                  onCheckedChange={setShowReceiverSelect}
+                  title="Show Users List?"
+                />
               </FormLabel>
               {milestones.map((milestone, index) => {
                 const receiverError = getMilestoneError(index, "receiver");
@@ -388,24 +400,38 @@ export const UpdateEscrowDialog = () => {
                   <div key={index} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
                       <div className="md:col-span-4 space-y-1">
-                        <Input
-                          placeholder="Enter receiver address"
-                          value={
-                            (milestone as { receiver?: string }).receiver || ""
-                          }
-                          disabled={
-                            isEscrowLocked && index < initialMilestonesCount
-                          }
-                          onChange={(e) => {
-                            const updatedMilestones = [...milestones];
-                            (
-                              updatedMilestones[index] as { receiver?: string }
-                            ).receiver = e.target.value;
-                            form.setValue("milestones", updatedMilestones, {
-                              shouldValidate: true,
-                            });
-                          }}
-                        />
+                        {showReceiverSelect &&
+                        !(isEscrowLocked && index < initialMilestonesCount) ? (
+                          <SelectField
+                            control={form.control}
+                            name={`milestones.${index}.receiver`}
+                            label=""
+                            tooltipContent=""
+                            options={userOptions}
+                          />
+                        ) : (
+                          <Input
+                            placeholder="Enter receiver address"
+                            value={
+                              (milestone as { receiver?: string }).receiver ||
+                              ""
+                            }
+                            disabled={
+                              isEscrowLocked && index < initialMilestonesCount
+                            }
+                            onChange={(e) => {
+                              const updatedMilestones = [...milestones];
+                              (
+                                updatedMilestones[index] as {
+                                  receiver?: string;
+                                }
+                              ).receiver = e.target.value;
+                              form.setValue("milestones", updatedMilestones, {
+                                shouldValidate: true,
+                              });
+                            }}
+                          />
+                        )}
                         {showMilestoneErrors && receiverError && (
                           <p className="text-sm text-destructive">
                             {receiverError}

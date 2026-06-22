@@ -552,7 +552,11 @@ export const InitializeSingleEscrowForm = ({
                     <Input
                       placeholder="Enter amount"
                       className="pl-10"
-                      value={form.watch("amount")?.toString() || ""}
+                      value={
+                        form.watch("amount") === 0
+                          ? ""
+                          : (form.watch("amount")?.toString() ?? "")
+                      }
                       onChange={handleAmountChange}
                     />
                   </div>
