@@ -147,21 +147,19 @@ export const contentType = "image/png";
 
 export default function Image() {
   return new ImageResponse(
-    (
-      <div
-        style={{
-          fontSize: 128,
-          background: "white",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        Hello World
-      </div>
-    ),
+    <div
+      style={{
+        fontSize: 128,
+        background: "white",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      Hello World
+    </div>,
     { ...size },
   );
 }
@@ -184,25 +182,23 @@ export default async function Image({ params }: Props) {
   const post = await getPost(slug);
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          fontSize: 48,
-          background: "linear-gradient(to bottom, #1a1a1a, #333)",
-          color: "white",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 48,
-        }}
-      >
-        <div style={{ fontSize: 64, fontWeight: "bold" }}>{post.title}</div>
-        <div style={{ marginTop: 24, opacity: 0.8 }}>{post.description}</div>
-      </div>
-    ),
+    <div
+      style={{
+        fontSize: 48,
+        background: "linear-gradient(to bottom, #1a1a1a, #333)",
+        color: "white",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 48,
+      }}
+    >
+      <div style={{ fontSize: 64, fontWeight: "bold" }}>{post.title}</div>
+      <div style={{ marginTop: 24, opacity: 0.8 }}>{post.description}</div>
+    </div>,
     { ...size },
   );
 }
