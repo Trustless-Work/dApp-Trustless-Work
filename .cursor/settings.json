@@ -1,0 +1,10 @@
+{
+  "plugins": {
+    "prisma": {
+      "enabled": true
+    },
+    "supabase": {
+      "enabled": true
+    }
+  }
+}

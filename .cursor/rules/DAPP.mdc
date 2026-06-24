@@ -1,0 +1,209 @@
+---
+description: dApp
+alwaysApply: true
+---
+
+# Global Development Context (Next.js Monorepo)
+
+You are acting as a **Senior Fullstack Developer** working on a **Next.js**.
+
+The main goal is to ensure **high code quality, consistency, scalability, and reusability** across the entire ecosystem.
+
+---
+
+## 🧠 General Principles
+
+- **Strict TypeScript** (`strict: true`)
+- **No usage of `any`**
+- Everything must be **explicitly typed**:
+  - Models
+  - Entities
+  - Payloads
+  - Responses
+  - Hooks
+  - Functions
+  - State
+- **Never leave unused variables, imports, or functions**
+- Always apply **Prettier formatting**
+- Carefully analyze and respect all **existing ESLint rules**
+- **Strictly follow existing code patterns**
+- Maintain a **minimalist approach** aligned with the current UI design system
+- Do not use unnecesary comments
+
+---
+
+## 🧩 Architecture & Componentization
+
+- Highly **componentized codebase**
+- ❌ Never create large, monolithic, or heavy components
+- ✅ Prefer small, focused, and reusable components
+- **UI components** must:
+  - Focus only on **rendering UI**
+  - Contain **minimal interaction logic**
+- **Reusable or complex logic** (state + effects):
+  - Must be moved to **custom hooks**
+- Before creating:
+  - A **component**
+  - A **hook**
+  - A **type**
+
+  👉 Always **verify that it does not already exist**
+  - If it exists → reuse it
+  - If it does not exist → create it following existing patterns
+
+---
+
+## ⚛️ Components & Functions
+
+- **UI Components**
+  - Must always use **arrow functions**
+  - Use **named exports**
+    ```ts
+    export const Component = () => {};
+    ```
+- **Non-UI functions** (formatting, helpers, utils, etc.)
+  - Must use the `function` keyword
+  - Use **named exports**
+    ```ts
+    export function formatX() {}
+    ```
+- Always use **Shadcn UI components**
+  - ❌ Do not create custom components if an equivalent already exists
+
+---
+
+## 🌐 Data Fetching & Rendering
+
+- Use **TanStack Query** for data fetching
+- Properly apply:
+  - **Server-Side Rendering (SSR)**
+  - **Client-Side Rendering (CSR)**
+- Choose the rendering strategy based on:
+  - SEO
+  - Performance
+  - UX
+- Avoid over-fetching and unnecessary re-renders
+
+---
+
+## 📝 Forms Structure & Patterns
+
+- **Core Libraries:**
+  - `react-hook-form` - Form state management
+  - `zod` - Schema validation
+  - `@hookform/resolvers/zod` - Integration between zod and react-hook-form
+
+- **Base Components** (from `/form.tsx`):
+  - `Form` - Wrapper around `FormProvider` from react-hook-form
+  - `FormField` - Wrapper around `Controller` for field management
+  - `FormItem` - Field container
+  - `FormLabel` - Field label
+  - `FormControl` - Input control wrapper
+  - `FormDescription` - Optional field description
+  - `FormMessage` - Error message display
+
+- **File Structure Pattern:**
+
+  ```
+  features/[feature]/
+    ├── schemas/
+    │   └── [feature].schema.ts      # Zod schema definition
+    ├── hooks/
+    │   └── use[Feature].ts          # Custom hook with useForm
+    ├── components/
+    │   └── [Feature]Form.tsx         # Form component
+    └── services/
+        └── [feature].service.ts      # API calls
+  ```
+
+- **Code Patterns:**
+  - **Schema Definition:**
+    ```ts
+    export const featureSchema = z.object({
+      field: z.string().min(1, "Field is required"),
+      // ...
+    });
+    export type FeatureFormData = z.infer<typeof featureSchema>;
+    ```
+  - **Custom Hook:**
+    ```ts
+    const form = useForm<z.infer<typeof schema>>({
+      resolver: zodResolver(schema),
+      defaultValues: {
+        /* ... */
+      },
+      mode: "onChange", // Real-time validation
+    });
+    const onSubmit = async (values) => {
+      /* ... */
+    };
+    ```
+  - **Form Component:**
+    ```ts
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="fieldName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Label</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+    ```
+
+- **Common Features:**
+  - Real-time validation (`mode: "onChange"`)
+  - Separation of concerns: schema → hook → component
+  - Full TypeScript support with `z.infer<typeof schema>`
+  - Error handling with `FormMessage`
+  - Loading states and toast notifications with `sonner`
+
+---
+
+## 🎨 UI / UX Standards
+
+- Everything must be:
+  - **100% responsive**
+    - Using **all Tailwind breakpoints**
+  - **100% compatible with Light / Dark mode**
+- Maintain:
+  - Clean design
+  - Minimalism
+  - Visual consistency
+- Respect existing UI patterns
+- Do not introduce new styles unless strictly necessary
+
+### Responsive data tables (lists)
+
+When building or refactoring a **data table** (TanStack Table, HTML `Table`, or similar) that shows **multiple columns of text, badges, amounts, and actions**:
+
+- **Mobile & small viewports** (`default` through `md` breakpoint): render a **card list**, not a horizontal scroll-only table. Use `@components/ui` `Card` (and related primitives) so each row is a scannable block: title or primary field in the header area, secondary fields in a **2-column label grid** (same pattern as contributor **My applications** and maintainer **UX bounties** lists).
+- **Tablet and desktop** (`md` and up): keep the **table** as the primary layout (`overflow-x-auto` on the wrapper when needed).
+- **Implementation pattern:**
+  - Two sibling blocks: cards `className="md:hidden"` and table `className="hidden md:block"` (or equivalent), fed from the **same row data** (same query / same array).
+  - **Loading:** show a **card skeleton list** on small screens and the **table skeleton** on `md+`, not only one or the other.
+  - **Empty and error states** stay a single block unless a design requires otherwise.
+- **DRY:** extract shared cell content (e.g. actions, status badge) into small components reused by both the table row and the card footer/content—avoid duplicating mutation handlers or button trees.
+- Do **not** ship a wide multi-column table as the only representation on narrow screens without a card (or equally usable) alternative.
+
+---
+
+## 🧠 Senior Engineering Mindset
+
+- Always think about:
+  - Scalability
+  - Maintainability
+  - Reusability
+  - Readability
+- Prefer **clear code over clever code**
+- Every technical decision must be justifiable
+- Avoid logic and style duplication
+- Ensure consistency across the entire monorepo
