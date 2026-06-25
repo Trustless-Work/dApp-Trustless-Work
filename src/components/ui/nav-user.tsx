@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useSidebarDropdownLock } from "@/hooks/use-sidebar-dropdown-lock";
+import { useSidebarDropdownLock } from "@/hooks/useSidebarDropdownLock";
 import {
   BadgeCheckIcon,
   BellIcon,
