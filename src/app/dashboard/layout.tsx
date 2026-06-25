@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <Navbar />
 
         <DashboardPageHeaderProvider>
-          <div className="flex min-h-[calc(100svh-7rem)] flex-1 flex-col gap-6 p-4 md:min-h-[calc(100svh-4rem)] md:px-8">
+          <div className="flex min-h-[calc(100svh-7rem)] flex-1 flex-col gap-2 p-4 md:min-h-[calc(100svh-4rem)] md:px-8">
             <DashboardPageHeader />
             {children}
           </div>
