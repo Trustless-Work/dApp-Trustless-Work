@@ -3,6 +3,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ToggleTheme } from "./ToggleTheme";
 import { NetworkToggle } from "./NetworkToggle";
 import { Breadcrumb } from "./Breadcrumb";
+import { WalletButton } from "../tw-blocks/wallet-kit/WalletButtons";
 
 export const Navbar = () => {
   return (
@@ -18,6 +19,7 @@ export const Navbar = () => {
 
         <div className="ml-auto flex items-center gap-2">
           <NetworkToggle />
+          <WalletButton />
           <ToggleTheme />
         </div>
       </div>

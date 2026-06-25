@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Check, Copy, LogOut, ChevronDown, Wallet } from "lucide-react";
+import useNetwork from "@/hooks/useNetwork";
 
 /**
  * Wallet connection/disconnection button component
@@ -19,6 +20,7 @@ export const WalletButton = () => {
   const { handleConnect, handleDisconnect } = useWallet();
   const { walletAddress, walletName } = useWalletContext();
   const [copied, setCopied] = React.useState(false);
+  const { currentNetwork } = useNetwork();
 
   const shortAddress = React.useMemo(() => {
     if (!walletAddress) return "";
@@ -61,7 +63,7 @@ export const WalletButton = () => {
                 <span className="font-medium">{walletName}</span>
               </div>
               <span className="text-xs px-2 py-1 rounded-md bg-muted text-muted-foreground">
-                Testnet
+                {currentNetwork}
               </span>
             </div>
 

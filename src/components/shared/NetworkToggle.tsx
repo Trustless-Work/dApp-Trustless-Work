@@ -19,13 +19,15 @@ import useNetwork from "@/hooks/useNetwork";
 import type { NetworkType } from "@/types/network.entity";
 
 const TOGGLE_CLASSNAME =
-  "flex h-9 shrink-0 items-center gap-1.5 rounded-md border border-border bg-background px-3";
+  "flex h-10 shrink-0 items-center gap-1.5 rounded-4xl border border-border bg-background px-3";
 
 export const NetworkToggle = () => {
   const { currentNetwork, changeNetwork, isReseting } = useNetwork();
   const [mounted, setMounted] = useState(false);
   const [showMainnetDialog, setShowMainnetDialog] = useState(false);
-  const [pendingNetwork, setPendingNetwork] = useState<NetworkType | null>(null);
+  const [pendingNetwork, setPendingNetwork] = useState<NetworkType | null>(
+    null,
+  );
 
   useEffect(() => setMounted(true), []);
 
@@ -78,6 +80,7 @@ export const NetworkToggle = () => {
           onCheckedChange={handleSwitchChange}
           disabled={isReseting}
           aria-label="Toggle Stellar network"
+          className="cursor-pointer"
         />
         <span
           className={cn(
@@ -89,7 +92,10 @@ export const NetworkToggle = () => {
         </span>
       </div>
 
-      <AlertDialog open={showMainnetDialog} onOpenChange={handleDialogOpenChange}>
+      <AlertDialog
+        open={showMainnetDialog}
+        onOpenChange={handleDialogOpenChange}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogMedia>
