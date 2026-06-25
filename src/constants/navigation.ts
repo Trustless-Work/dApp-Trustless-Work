@@ -47,29 +47,6 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
     ],
   },
   {
-    label: "Resources",
-    items: [
-      {
-        title: "Documentation",
-        url: "https://docs.trustless.work",
-        icon: BookOpenIcon,
-        external: true,
-      },
-      {
-        title: "Laboratory",
-        url: "https://demo.trustlesswork.com",
-        icon: FlaskConicalIcon,
-        external: true,
-      },
-      {
-        title: "Website",
-        url: "https://trustless.work",
-        icon: GlobeIcon,
-        external: true,
-      },
-    ],
-  },
-  {
     label: "Integrations",
     items: [
       {

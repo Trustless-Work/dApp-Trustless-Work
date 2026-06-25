@@ -4,6 +4,7 @@ import { Lights } from "@/components/shared/Lights";
 import { Navbar } from "@/components/shared/Navbar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardPageHeader } from "@/components/shared/DashboardPageHeader";
+import { DashboardPageHeaderProvider } from "@/components/shared/DashboardPageHeaderContext";
 
 type DashboardLayoutProps = {
   children: React.ReactNode;
@@ -17,10 +18,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <SidebarInset className="min-h-svh">
         <Navbar />
 
-        <div className="flex min-h-[calc(100svh-3.5rem)] flex-1 flex-col gap-6 p-4 md:min-h-[calc(100svh-4rem)] md:px-8">
-          <DashboardPageHeader />
-          {children}
-        </div>
+        <DashboardPageHeaderProvider>
+          <div className="flex min-h-[calc(100svh-7rem)] flex-1 flex-col gap-6 p-4 md:min-h-[calc(100svh-4rem)] md:px-8">
+            <DashboardPageHeader />
+            {children}
+          </div>
+        </DashboardPageHeaderProvider>
 
         <Footer containedDividers />
       </SidebarInset>

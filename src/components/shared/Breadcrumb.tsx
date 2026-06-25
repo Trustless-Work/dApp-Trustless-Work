@@ -45,7 +45,7 @@ export const Breadcrumb = () => {
 
   return (
     <BreadcrumbUI>
-      <BreadcrumbList>
+      <BreadcrumbList className="flex-nowrap">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
 
@@ -54,11 +54,13 @@ export const Breadcrumb = () => {
               {index > 0 && (
                 <BreadcrumbSeparator className="hidden md:block" />
               )}
-              <BreadcrumbItem className={cn(!isLast && "hidden md:block")}>
+              <BreadcrumbItem
+                className={cn("min-w-0", !isLast && "hidden md:block")}
+              >
                 {isLast ? (
-                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                  <BreadcrumbPage className="truncate">{item.label}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink asChild>
+                  <BreadcrumbLink asChild className="truncate">
                     <Link href={item.href}>{item.label}</Link>
                   </BreadcrumbLink>
                 )}

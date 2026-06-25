@@ -11,12 +11,21 @@ import {
 } from "@/components/ui/popover";
 import { Check, Copy, LogOut, ChevronDown, Wallet } from "lucide-react";
 import useNetwork from "@/hooks/useNetwork";
+import { cn } from "@/lib/utils";
+
+type WalletButtonProps = {
+  className?: string;
+  mobileBar?: boolean;
+};
 
 /**
  * Wallet connection/disconnection button component
  * Shows different states based on wallet connection status
  */
-export const WalletButton = () => {
+export const WalletButton = ({
+  className,
+  mobileBar = false,
+}: WalletButtonProps) => {
   const { handleConnect, handleDisconnect } = useWallet();
   const { walletAddress, walletName } = useWalletContext();
   const [copied, setCopied] = React.useState(false);
@@ -45,14 +54,22 @@ export const WalletButton = () => {
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="h-10 px-4 gap-2 font-medium bg-transparent cursor-pointer"
+            className={cn(
+              "h-10 min-w-0 gap-2 bg-transparent font-medium cursor-pointer",
+              mobileBar
+                ? "w-full justify-center px-2"
+                : "px-4",
+              className,
+            )}
           >
-            <Wallet className="h-4 w-4" />
-            <span className="hidden sm:inline">{walletName}</span>
-            <span className="font-mono text-sm text-muted-foreground">
+            <Wallet className="size-4 shrink-0" />
+            {!mobileBar ? (
+              <span className="font-medium">{walletName}</span>
+            ) : null}
+            <span className="truncate font-mono text-sm text-muted-foreground">
               {shortAddress}
             </span>
-            <ChevronDown className="h-4 w-4 ml-1" />
+            <ChevronDown className="size-4 shrink-0" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-80 p-0" align="end">
@@ -112,11 +129,15 @@ export const WalletButton = () => {
 
   return (
     <Button
-      className="h-10 px-6 gap-2 font-medium cursor-pointer"
+      className={cn(
+        "h-10 gap-2 font-medium cursor-pointer",
+        mobileBar ? "w-full justify-center px-3" : "px-6",
+        className,
+      )}
       onClick={handleConnect}
     >
-      <Wallet className="h-4 w-4" />
-      Connect Wallet
+      <Wallet className="size-4 shrink-0" />
+      {mobileBar ? "Connect" : "Connect Wallet"}
     </Button>
   );
 };

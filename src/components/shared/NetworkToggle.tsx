@@ -21,7 +21,11 @@ import type { NetworkType } from "@/types/network.entity";
 const TOGGLE_CLASSNAME =
   "flex h-10 shrink-0 items-center gap-1.5 rounded-4xl border border-border bg-background px-3";
 
-export const NetworkToggle = () => {
+type NetworkToggleProps = {
+  className?: string;
+};
+
+export const NetworkToggle = ({ className }: NetworkToggleProps) => {
   const { currentNetwork, changeNetwork, isReseting } = useNetwork();
   const [mounted, setMounted] = useState(false);
   const [showMainnetDialog, setShowMainnetDialog] = useState(false);
@@ -60,19 +64,22 @@ export const NetworkToggle = () => {
   };
 
   if (!mounted) {
-    return <div className={cn(TOGGLE_CLASSNAME, "opacity-0")} aria-hidden />;
+    return (
+      <div className={cn(TOGGLE_CLASSNAME, "opacity-0", className)} aria-hidden />
+    );
   }
 
   return (
     <>
-      <div className={TOGGLE_CLASSNAME}>
+      <div className={cn(TOGGLE_CLASSNAME, className)}>
         <span
           className={cn(
-            "text-sm font-medium leading-none",
+            "text-xs font-medium leading-none sm:text-sm",
             !switchChecked ? "text-foreground" : "text-muted-foreground",
           )}
         >
-          Testnet
+          <span className="sm:hidden">Test</span>
+          <span className="hidden sm:inline">Testnet</span>
         </span>
         <Switch
           size="sm"
@@ -84,11 +91,12 @@ export const NetworkToggle = () => {
         />
         <span
           className={cn(
-            "text-sm font-medium leading-none",
+            "text-xs font-medium leading-none sm:text-sm",
             switchChecked ? "text-foreground" : "text-muted-foreground",
           )}
         >
-          Mainnet
+          <span className="sm:hidden">Main</span>
+          <span className="hidden sm:inline">Mainnet</span>
         </span>
       </div>
 
