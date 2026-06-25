@@ -19,17 +19,17 @@ type SocialLink = {
 };
 
 type FooterProps = {
-	containedDividers?: boolean;
+  containedDividers?: boolean;
 };
 
 export const Footer = ({ containedDividers = false }: FooterProps) => {
-	return (
-		<div className="relative w-full overflow-x-clip">
-			<FullWidthDivider contained position="top" />
+  return (
+    <div className="relative w-full overflow-x-clip">
+      <FullWidthDivider contained position="top" />
 
       <footer
         className={cn(
-          "relative mx-auto w-full max-w-5xl lg:border-x",
+          "relative mx-auto w-full max-w-5xl lg:border-x px-20",
           "dark:bg-[radial-gradient(35%_80%_at_15%_0%,--theme(--color-foreground/.1),transparent)]",
         )}
       >
@@ -93,7 +93,7 @@ export const Footer = ({ containedDividers = false }: FooterProps) => {
           </div>
         </div>
 
-				<FullWidthDivider contained={containedDividers} />
+        <FullWidthDivider contained={containedDividers} />
 
         <div className="flex items-center justify-center gap-2 py-4">
           <p className="text-center font-light text-muted-foreground text-sm">

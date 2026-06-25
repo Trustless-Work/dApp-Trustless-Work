@@ -3,25 +3,27 @@ import { Footer } from "@/components/shared/Footer";
 import { Lights } from "@/components/shared/Lights";
 import { Navbar } from "@/components/shared/Navbar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { DashboardPageHeader } from "@/components/shared/DashboardPageHeader";
 
 type DashboardLayoutProps = {
-	children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-	return (
-		<SidebarProvider defaultOpen={false} className="block min-h-svh md:flex">
-			<Lights />
-			<AppSidebar />
-			<SidebarInset className="min-h-svh">
-				<Navbar />
+  return (
+    <SidebarProvider defaultOpen={false} className="block min-h-svh md:flex">
+      <Lights />
+      <AppSidebar />
+      <SidebarInset className="min-h-svh">
+        <Navbar />
 
-				<div className="flex min-h-[calc(100svh-3.5rem)] flex-1 flex-col gap-4 p-4 md:min-h-[calc(100svh-4rem)] md:px-8">
-					{children}
-				</div>
+        <div className="flex min-h-[calc(100svh-3.5rem)] flex-1 flex-col gap-6 p-4 md:min-h-[calc(100svh-4rem)] md:px-8">
+          <DashboardPageHeader />
+          {children}
+        </div>
 
-				<Footer containedDividers />
-			</SidebarInset>
-		</SidebarProvider>
-	);
+        <Footer containedDividers />
+      </SidebarInset>
+    </SidebarProvider>
+  );
 }
