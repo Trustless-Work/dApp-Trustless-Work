@@ -1,0 +1,76 @@
+"use client";
+
+export const ComparisonCard = () => {
+  return (
+    <div className="relative">
+      <div className="absolute -top-20 -left-20 w-60 h-60 bg-primary/20 dark:bg-primary/10 rounded-full blur-[80px] z-0"></div>
+      <div className="relative z-10 bg-background/80 dark:bg-background/40 backdrop-blur-md rounded-2xl p-8 border border-border shadow-lg">
+        <h3 className="text-2xl font-bold mb-4">Why Escrows?</h3>
+
+        <div className="space-y-6">
+          <ComparisonItem
+            isNegative={true}
+            title="Costly Intermediaries"
+            description="Escrows eliminate the need for intermediaries, reducing costs and increasing efficiency."
+          />
+
+          <ComparisonItem
+            isNegative={true}
+            title="Complex Processes"
+            description="Escrows simplify complex processes, making them easier to understand and manage."
+          />
+
+          <ComparisonItem
+            isNegative={true}
+            title="Limited Transparency"
+            description="Escrows provide full transparency, allowing you to see exactly what is happening at every step."
+          />
+
+          <div className="h-px bg-border my-4"></div>
+
+          <ComparisonItem
+            isNegative={false}
+            title="Our Solution"
+            description="Escrows provide a secure and transparent way to manage transactions, reducing costs and increasing efficiency."
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface ComparisonItemProps {
+  isNegative: boolean;
+  title: string;
+  description: string;
+}
+
+const ComparisonItem = ({
+  isNegative,
+  title,
+  description,
+}: ComparisonItemProps) => {
+  const bgColor = isNegative
+    ? "bg-red-100 dark:bg-red-900/30"
+    : "bg-green-100 dark:bg-green-900/30";
+
+  const textColor = isNegative
+    ? "text-red-600 dark:text-red-400"
+    : "text-green-600 dark:text-green-400";
+
+  const symbol = isNegative ? "✕" : "✓";
+
+  return (
+    <div className="flex items-start gap-4">
+      <div
+        className={`min-w-10 h-10 rounded-full ${bgColor} flex items-center justify-center ${textColor}`}
+      >
+        {symbol}
+      </div>
+      <div>
+        <h4 className="font-bold">{title}</h4>
+        <p className="text-foreground/80">{description}</p>
+      </div>
+    </div>
+  );
+};
