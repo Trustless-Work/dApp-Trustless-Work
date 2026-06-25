@@ -1,9 +1,9 @@
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/ui/app-sidebar";
 import { Lights } from "@/components/shared/Lights";
 import { Navbar } from "@/components/shared/Navbar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-export default function Page() {
+export default function DashboardPage() {
   return (
     <SidebarProvider defaultOpen={false} className="block min-h-svh md:flex">
       <Lights />
