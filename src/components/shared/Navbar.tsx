@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ToggleTheme } from "./ToggleTheme";
+import { NetworkToggle } from "./NetworkToggle";
 import { Breadcrumb } from "./Breadcrumb";
 
 export const Navbar = () => {
@@ -15,7 +16,8 @@ export const Navbar = () => {
 
         <Breadcrumb />
 
-        <div className="ml-auto flex items-center">
+        <div className="ml-auto flex items-center gap-2">
+          <NetworkToggle />
           <ToggleTheme />
         </div>
       </div>

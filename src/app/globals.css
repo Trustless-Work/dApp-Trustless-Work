@@ -184,10 +184,16 @@ html[data-magicui-theme-vt="active"]::view-transition-group(root) {
   transform: rotateY(180deg);
 }
 
-/* Scrollbar  */
+/* Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--muted-foreground) 28%, transparent)
+    transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -195,12 +201,12 @@ html[data-magicui-theme-vt="active"]::view-transition-group(root) {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-500);
-  border-radius: 5px;
+  background: color-mix(in oklch, var(--muted-foreground) 28%, transparent);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-600);
+  background: color-mix(in oklch, var(--muted-foreground) 45%, transparent);
 }
 
 /* Hide scrollbar for tabs */

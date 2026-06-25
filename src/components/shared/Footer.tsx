@@ -18,10 +18,14 @@ type SocialLink = {
   icon: ReactNode;
 };
 
-export const Footer = () => {
-  return (
-    <div className="relative w-full overflow-x-clip">
-      <FullWidthDivider contained position="top" />
+type FooterProps = {
+	containedDividers?: boolean;
+};
+
+export const Footer = ({ containedDividers = false }: FooterProps) => {
+	return (
+		<div className="relative w-full overflow-x-clip">
+			<FullWidthDivider contained position="top" />
 
       <footer
         className={cn(
@@ -89,7 +93,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <FullWidthDivider />
+				<FullWidthDivider contained={containedDividers} />
 
         <div className="flex items-center justify-center gap-2 py-4">
           <p className="text-center font-light text-muted-foreground text-sm">

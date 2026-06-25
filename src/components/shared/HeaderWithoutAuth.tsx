@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import useScrollHeader from "@/hooks/useScrollHeader";
 import { ToggleTheme } from "./ToggleTheme";
-import { NetworkToggle } from "./NetworkToggle";
 import { useWalletContext } from "@/providers/WalletProvider";
 import { useWallet } from "../tw-blocks/wallet-kit/useWallet";
 
@@ -36,7 +35,6 @@ const HeaderWithoutAuth: React.FC = () => {
       </Link>
 
       <div className="flex items-center gap-3 sm:gap-5 ml-auto">
-        <NetworkToggle />
         <ToggleTheme />
 
         {!isLoginPage && (
