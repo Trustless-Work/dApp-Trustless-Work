@@ -12,7 +12,7 @@ export const Lights = ({ className }: BackgroundLightsProps) => {
     <div className={cn("fixed inset-0 z-[-2] pointer-events-none", className)}>
       {/* Light that spans across sidebar and content */}
       <motion.div
-        style={{ backgroundColor: "rgba(59, 130, 246, 0.02)" }} // primary: blue-500 aprox
+        style={{ backgroundColor: "rgba(0, 107, 228, 0.02)" }}
         className="absolute top-[5%] left-[-10%] w-[800px] h-[800px] rounded-full blur-[200px]"
         animate={{
           x: [0, 30, 0],
@@ -28,7 +28,7 @@ export const Lights = ({ className }: BackgroundLightsProps) => {
 
       {/* Secondary light */}
       <motion.div
-        style={{ backgroundColor: "rgba(96, 165, 250, 0.02)" }} // blue-400
+        style={{ backgroundColor: "rgba(0, 107, 228, 0.02)" }}
         className="absolute bottom-[10%] left-[5%] w-[700px] h-[700px] rounded-full blur-[180px]"
         animate={{
           x: [0, 25, 0],
