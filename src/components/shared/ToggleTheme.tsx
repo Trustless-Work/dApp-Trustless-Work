@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import { AnimatedThemeToggler } from "../ui/animated-theme-toggler";
 
 const TOGGLE_CLASSNAME =
-  "absolute top-4 right-4 flex size-9 items-center justify-center rounded-md border border-border bg-background text-foreground transition-colors hover:bg-accent";
+  "flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-foreground transition-colors hover:bg-accent";
 
 export const ToggleTheme = () => {
   const { resolvedTheme, setTheme } = useTheme();
