@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { NavMain } from "@/components/ui/nav-main";
 import { NavProjects } from "@/components/ui/nav-projects";
+import { NavSettings } from "@/components/ui/nav-settings";
 import { NavUser } from "@/components/ui/nav-user";
 import { TeamSwitcher } from "@/components/ui/team-switcher";
 import {
@@ -167,6 +168,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
+        <NavSettings />
         <SidebarSeparator />
         <NavUser user={data.user} />
       </SidebarFooter>
