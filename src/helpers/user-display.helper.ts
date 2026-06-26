@@ -27,3 +27,26 @@ export function getUserEmailLabel(user: UserResponse): string {
   const email = user.email?.trim();
   return email || "No email on file";
 }
+
+type UserWithOptionalAvatarFields = UserResponse & {
+  avatarUrl?: string | null;
+  profileImage?: string | null;
+};
+
+export function getUserAvatarUrl(user: UserResponse): string | undefined {
+  const extended = user as UserWithOptionalAvatarFields;
+  const candidates = [
+    extended.profileImageUrl,
+    extended.avatarUrl,
+    extended.profileImage,
+  ];
+
+  for (const value of candidates) {
+    const trimmed = value?.trim();
+    if (trimmed) {
+      return trimmed;
+    }
+  }
+
+  return undefined;
+}

@@ -56,3 +56,19 @@ export function formatRole(role: string) {
 export function formatText(text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
+
+/**
+ * Format an ISO date-time string for display.
+ */
+export function formatIsoDateTime(value?: string): string {
+  if (!value) {
+    return "-";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "-";
+  }
+
+  return date.toLocaleString();
+}
