@@ -129,7 +129,7 @@ The main goal is to ensure **high code quality, consistency, scalability, and re
     │   └── [feature].schema.ts      # Zod schema definition
     ├── hooks/
     │   └── use[Feature].ts          # Custom hook with useForm
-    ├── components/
+    ├── ui/
     │   └── [Feature]Form.tsx         # Form component
     └── services/
         └── [feature].service.ts      # API calls
