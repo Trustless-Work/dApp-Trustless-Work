@@ -4,7 +4,7 @@ import { DEFAULT_CHART_ENTER_TRANSITION } from "./animation";
 export function transitionWithDelay(
   transition: Transition | undefined,
   delaySeconds: number,
-  fallback: Transition = DEFAULT_CHART_ENTER_TRANSITION
+  fallback: Transition = DEFAULT_CHART_ENTER_TRANSITION,
 ): Transition {
   const base = transition ?? fallback;
   return { ...base, delay: delaySeconds };
@@ -18,7 +18,7 @@ export interface SpringOptions {
 
 export function springOptionsFromTransition(
   transition?: Transition,
-  fallback: SpringOptions = { stiffness: 60, damping: 20 }
+  fallback: SpringOptions = { stiffness: 60, damping: 20 },
 ): SpringOptions {
   if (!transition) {
     return fallback;

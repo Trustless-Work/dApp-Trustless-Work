@@ -207,22 +207,22 @@ export function AreaChart({
   const containerRef = useRef<HTMLDivElement>(null);
   const margin = { ...DEFAULT_MARGIN, ...marginProp };
   const [chartPhase, setChartPhase] = useState<ChartPhase>(() =>
-    resolveRestingChartPhase(status)
+    resolveRestingChartPhase(status),
   );
   const handlePhaseChange = useCallback(
     (phase: ChartPhase) => {
       setChartPhase(phase);
       onPhaseChange?.(phase);
     },
-    [onPhaseChange]
+    [onPhaseChange],
   );
 
   const showLoadingLabel = Boolean(
     loadingLabel?.trim() &&
-      (chartPhase === "loading" ||
-        chartPhase === "exiting" ||
-        chartPhase === "gridTweenReady" ||
-        chartPhase === "revealingLoading")
+    (chartPhase === "loading" ||
+      chartPhase === "exiting" ||
+      chartPhase === "gridTweenReady" ||
+      chartPhase === "revealingLoading"),
   );
 
   return (

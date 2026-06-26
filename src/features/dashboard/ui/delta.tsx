@@ -118,7 +118,12 @@ function DeltaIcon({
 
   if (!resolvedValue || resolvedValue === 0) {
     return shell(
-      <Minus strokeWidth={2} {...slotProps} className={mergedClassName} {...props} />,
+      <Minus
+        strokeWidth={2}
+        {...slotProps}
+        className={mergedClassName}
+        {...props}
+      />,
     );
   }
 

@@ -33,7 +33,7 @@ function isReferenceAreaElement(child: ReactElement): boolean {
 
 /** Collect {@link ReferenceArea} props from chart children for axis label styling. */
 export function extractReferenceAreaConfigs(
-  children: ReactNode
+  children: ReactNode,
 ): ReferenceAreaConfig[] {
   const configs: ReferenceAreaConfig[] = [];
 

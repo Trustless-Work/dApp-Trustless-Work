@@ -40,7 +40,7 @@ export function computeSegmentBounds(
   selection:
     | Pick<ChartSelection, "active" | "startX" | "endX">
     | null
-    | undefined
+    | undefined,
 ): SegmentBounds {
   if (data.length === 0) {
     return INACTIVE_SEGMENT;

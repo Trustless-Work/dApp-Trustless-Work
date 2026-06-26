@@ -39,7 +39,7 @@ export function useHighlightSegment({
       enabled
         ? computeSegmentBounds(data, xScale, xAccessor, tooltipData, selection)
         : INACTIVE_SEGMENT,
-    [enabled, data, xScale, xAccessor, tooltipData, selection]
+    [enabled, data, xScale, xAccessor, tooltipData, selection],
   );
 
   const xSpring = useSpring(0, highlightSpring);

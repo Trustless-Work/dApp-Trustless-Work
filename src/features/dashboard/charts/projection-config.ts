@@ -35,7 +35,7 @@ function isProjectionLineElement(child: ReactElement): boolean {
 }
 
 function normalizeProjectionData(
-  data: ProjectionPoint[] | undefined
+  data: ProjectionPoint[] | undefined,
 ): ProjectionPoint[] {
   if (!data?.length) {
     return [];
@@ -48,7 +48,7 @@ function normalizeProjectionData(
 
 /** Collect {@link ProjectionLine} props from chart children for domain extension. */
 export function extractProjectionLineConfigs(
-  children: ReactNode
+  children: ReactNode,
 ): ProjectionLineConfig[] {
   const configs: ProjectionLineConfig[] = [];
 
@@ -94,7 +94,7 @@ export function extractProjectionLineConfigs(
 export function mergeProjectionYDomain(
   domain: [number, number],
   configs: ProjectionLineConfig[],
-  yAxisId: string
+  yAxisId: string,
 ): [number, number] {
   const paths = configs
     .filter((config) => config.yAxisId === yAxisId)
@@ -118,7 +118,7 @@ export function mergeProjectionYDomain(
 
 export function mergeProjectionXDomainMax(
   maxTime: number,
-  configs: ProjectionLineConfig[]
+  configs: ProjectionLineConfig[],
 ): number {
   const paths = configs.map((config) => config.data);
   const extents = projectionDateExtents(paths);

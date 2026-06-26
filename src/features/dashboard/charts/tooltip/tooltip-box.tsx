@@ -98,7 +98,7 @@ function TooltipBoxInner({
   const targetX = shouldFlipX ? x - offset - tw : x + offset;
   const targetY = Math.max(
     offset,
-    Math.min(y - th / 2, containerHeight - th - offset)
+    Math.min(y - th / 2, containerHeight - th - offset),
   );
 
   const animatedLeft = useSpring(targetX, effectiveSpring);
@@ -130,7 +130,7 @@ function TooltipBoxInner({
     const tx = flip ? x - offset - w2 : x + offset;
     const ty = Math.max(
       offset,
-      Math.min(y - h2 / 2, containerHeight - h2 - offset)
+      Math.min(y - h2 / 2, containerHeight - h2 - offset),
     );
     if (!animate) {
       setStaticPosition({ left: tx, top: ty });
@@ -189,7 +189,7 @@ function TooltipBoxInner({
           panelStyle?.backgroundColor === undefined &&
             backgroundColor === chartCssVars.tooltipBackground &&
             "bg-chart-tooltip-background",
-          panelStyle?.backdropFilter === undefined && "backdrop-blur-md"
+          panelStyle?.backdropFilter === undefined && "backdrop-blur-md",
         )}
         initial={{ scale: 0.85, opacity: 0, x: isFlipped ? 20 : -20 }}
         key={flipKey}
@@ -205,7 +205,7 @@ function TooltipBoxInner({
         {children}
       </motion.div>
     </motion.div>,
-    container
+    container,
   );
 }
 

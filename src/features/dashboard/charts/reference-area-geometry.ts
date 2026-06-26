@@ -26,7 +26,7 @@ function toDate(value: Date | number): Date {
 function resolveXPixel(
   xScale: (value: Date) => number,
   value: Date | number | undefined,
-  fallback: number
+  fallback: number,
 ): number {
   if (value == null) {
     return fallback;
@@ -37,7 +37,7 @@ function resolveXPixel(
 function resolveYPixel(
   yScale: (value: number) => number,
   value: number | undefined,
-  fallback: number
+  fallback: number,
 ): number {
   if (value == null) {
     return fallback;
@@ -48,7 +48,7 @@ function resolveYPixel(
 function clampRectToPlot(
   rect: ReferenceAreaRect,
   innerWidth: number,
-  innerHeight: number
+  innerHeight: number,
 ): ReferenceAreaRect | null {
   const x1 = Math.max(0, rect.x);
   const y1 = Math.max(0, rect.y);
@@ -65,7 +65,7 @@ function clampRectToPlot(
 function isFullyInsidePlot(
   rect: ReferenceAreaRect,
   innerWidth: number,
-  innerHeight: number
+  innerHeight: number,
 ): boolean {
   return (
     rect.x >= 0 &&
@@ -77,7 +77,7 @@ function isFullyInsidePlot(
 
 /** Map data bounds to plot pixels for a reference rectangle. */
 export function computeReferenceAreaRect(
-  options: ComputeReferenceAreaRectOptions
+  options: ComputeReferenceAreaRectOptions,
 ): ReferenceAreaRect | null {
   const {
     innerWidth,
@@ -126,7 +126,7 @@ export function computeReferenceAreaRect(
 export function resolveReferenceDataRange(
   y1: number | undefined,
   y2: number | undefined,
-  domain: [number, number]
+  domain: [number, number],
 ): [number, number] {
   const dMin = Math.min(domain[0], domain[1]);
   const dMax = Math.max(domain[0], domain[1]);

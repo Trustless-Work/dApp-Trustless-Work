@@ -5,7 +5,9 @@ export async function parseJsonBody<T>(request: NextRequest): Promise<T> {
   return request.json() as Promise<T>;
 }
 
-export async function proxyCoreResponse(response: Response): Promise<NextResponse> {
+export async function proxyCoreResponse(
+  response: Response,
+): Promise<NextResponse> {
   const text = await response.text();
   const contentType =
     response.headers.get("content-type") ?? "application/json";

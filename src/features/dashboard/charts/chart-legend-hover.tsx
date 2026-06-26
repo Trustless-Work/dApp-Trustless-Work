@@ -21,7 +21,7 @@ export function ChartLegendHoverProvider({
 }) {
   const value = useMemo(
     () => ({ hoveredIndex, setHoveredIndex: onHoverChange }),
-    [hoveredIndex, onHoverChange]
+    [hoveredIndex, onHoverChange],
   );
 
   return (

@@ -20,7 +20,7 @@ export function shouldTweenYDomain(from: YDomain, to: YDomain): boolean {
   const span = Math.max(
     Math.abs(to[1] - to[0]),
     Math.abs(from[1] - from[0]),
-    1
+    1,
   );
   const deltaMin = Math.abs(to[0] - from[0]) / span;
   const deltaMax = Math.abs(to[1] - from[1]) / span;
@@ -57,7 +57,7 @@ export function isReferenceAreaVisiblePhase(phase: ChartPhase): boolean {
 export function resolveAnimatedYDestinationDomains(
   chartPhase: ChartPhase,
   skeletonByAxis: Record<string, YDomain>,
-  targetByAxis: Record<string, YDomain>
+  targetByAxis: Record<string, YDomain>,
 ): Record<string, YDomain> {
   switch (chartPhase) {
     case "loading":
@@ -111,7 +111,7 @@ export function mergeYDomainRecords(
 
 export function domainsEqual(
   left: Record<string, YDomain>,
-  right: Record<string, YDomain>
+  right: Record<string, YDomain>,
 ): boolean {
   const leftKeys = Object.keys(left);
   const rightKeys = Object.keys(right);

@@ -59,7 +59,7 @@ export function ShimmeringText({
         },
       },
     }),
-    [duration, text.length]
+    [duration, text.length],
   );
 
   return (
@@ -67,7 +67,7 @@ export function ShimmeringText({
       className={cn(
         "inline-flex select-none items-center leading-none",
         "[--color:var(--muted-foreground)] [--shimmering-color:var(--foreground)]",
-        className
+        className,
       )}
       {...props}
     >

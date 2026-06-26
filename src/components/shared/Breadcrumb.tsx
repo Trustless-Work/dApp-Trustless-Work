@@ -51,14 +51,14 @@ export const Breadcrumb = () => {
 
           return (
             <Fragment key={item.href}>
-              {index > 0 && (
-                <BreadcrumbSeparator className="hidden md:block" />
-              )}
+              {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
               <BreadcrumbItem
                 className={cn("min-w-0", !isLast && "hidden md:block")}
               >
                 {isLast ? (
-                  <BreadcrumbPage className="truncate">{item.label}</BreadcrumbPage>
+                  <BreadcrumbPage className="truncate">
+                    {item.label}
+                  </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild className="truncate">
                     <Link href={item.href}>{item.label}</Link>

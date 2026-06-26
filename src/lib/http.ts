@@ -1,6 +1,10 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { getStoredNetwork } from "@/lib/client-storage";
-import { parseApiError, type ApiError, type ProblemDetails } from "@/lib/api-error";
+import {
+  parseApiError,
+  type ApiError,
+  type ProblemDetails,
+} from "@/lib/api-error";
 
 const http = axios.create({
   baseURL: "/api",

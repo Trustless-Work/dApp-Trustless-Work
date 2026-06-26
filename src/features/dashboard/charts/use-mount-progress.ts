@@ -8,7 +8,7 @@ import { DEFAULT_CHART_ENTER_TRANSITION } from "./animation";
 export function useMountProgress(
   enterTransition: Transition | undefined,
   delaySeconds: number,
-  replayKey: number | string
+  replayKey: number | string,
 ) {
   const progress = useMotionValue(0);
   const transitionRef = useRef(enterTransition);

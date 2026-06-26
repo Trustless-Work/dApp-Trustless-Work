@@ -1,6 +1,6 @@
 allowBuilds:
-  '@reown/appkit': true
-  '@stellar/stellar-sdk': true
+  "@reown/appkit": true
+  "@stellar/stellar-sdk": true
   blake-hash: true
   bufferutil: true
   protobufjs: true

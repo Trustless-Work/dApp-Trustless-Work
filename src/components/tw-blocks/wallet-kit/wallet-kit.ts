@@ -143,8 +143,7 @@ export const signTransaction = async ({
   const { StellarWalletsKit, Networks } = await loadWalletKit();
 
   const resolvedPassphrase =
-    networkPassphrase ??
-    resolveKitNetwork(Networks, getStoredNetwork());
+    networkPassphrase ?? resolveKitNetwork(Networks, getStoredNetwork());
 
   const { signedTxXdr } = await StellarWalletsKit.signTransaction(
     unsignedTransaction,

@@ -65,7 +65,10 @@ export const NetworkToggle = ({ className }: NetworkToggleProps) => {
 
   if (!mounted) {
     return (
-      <div className={cn(TOGGLE_CLASSNAME, "opacity-0", className)} aria-hidden />
+      <div
+        className={cn(TOGGLE_CLASSNAME, "opacity-0", className)}
+        aria-hidden
+      />
     );
   }
 

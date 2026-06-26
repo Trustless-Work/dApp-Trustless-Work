@@ -29,7 +29,7 @@ interface UseChartInteractionParams {
   bisectDate: (
     data: Record<string, unknown>[],
     date: Date,
-    lo: number
+    lo: number,
   ) => number;
   canInteract: boolean;
 }
@@ -113,7 +113,7 @@ export function useChartInteraction({
         yPositions,
       };
     },
-    [xScale, yScale, yScales, data, lines, xAccessor, bisectDate]
+    [xScale, yScale, yScales, data, lines, xAccessor, bisectDate],
   );
 
   const resolveIndexFromX = useCallback(
@@ -134,13 +134,13 @@ export function useChartInteraction({
       }
       return index - 1;
     },
-    [xScale, data, xAccessor, bisectDate]
+    [xScale, data, xAccessor, bisectDate],
   );
 
   const getChartX = useCallback(
     (
       event: React.MouseEvent<SVGGElement> | React.TouchEvent<SVGGElement>,
-      touchIndex = 0
+      touchIndex = 0,
     ): number | null => {
       let point: { x: number; y: number } | null = null;
 
@@ -163,7 +163,7 @@ export function useChartInteraction({
       }
       return point.x - margin.left;
     },
-    [margin.left]
+    [margin.left],
   );
 
   const handleMouseMove = useCallback(
@@ -192,7 +192,7 @@ export function useChartInteraction({
         scheduleTooltip(tooltip);
       }
     },
-    [getChartX, resolveTooltipFromX, resolveIndexFromX, scheduleTooltip]
+    [getChartX, resolveTooltipFromX, resolveIndexFromX, scheduleTooltip],
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -215,7 +215,7 @@ export function useChartInteraction({
       clearTooltip();
       setSelection(null);
     },
-    [getChartX, clearTooltip]
+    [getChartX, clearTooltip],
   );
 
   const handleMouseUp = useCallback(() => {
@@ -265,7 +265,7 @@ export function useChartInteraction({
       scheduleTooltip,
       resetTooltipDedupe,
       clearTooltip,
-    ]
+    ],
   );
 
   const handleTouchMove = useCallback(
@@ -299,7 +299,7 @@ export function useChartInteraction({
         });
       }
     },
-    [getChartX, resolveTooltipFromX, resolveIndexFromX, scheduleTooltip]
+    [getChartX, resolveTooltipFromX, resolveIndexFromX, scheduleTooltip],
   );
 
   const handleTouchEnd = useCallback(() => {

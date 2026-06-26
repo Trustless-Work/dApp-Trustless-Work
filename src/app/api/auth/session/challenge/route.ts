@@ -46,9 +46,9 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const errorBody = (await response.json().catch(() => null)) as
-    | ProblemDetails
-    | null;
+  const errorBody = (await response
+    .json()
+    .catch(() => null)) as ProblemDetails | null;
 
   if (isWalletNotRegistered(response.status, errorBody?.code)) {
     return NextResponse.json({

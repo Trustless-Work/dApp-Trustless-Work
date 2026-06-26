@@ -14,7 +14,7 @@ export function normalizeYAxisId(id?: string | number): string {
 }
 
 export function groupLinesByYAxisId(
-  lines: LineConfig[]
+  lines: LineConfig[],
 ): Map<string, LineConfig[]> {
   const groups = new Map<string, LineConfig[]>();
   for (const line of lines) {
@@ -30,7 +30,7 @@ type YScale = ReturnType<typeof scaleLinear<number>>;
 
 export function getPrimaryYScale(
   yScales: Record<string, YScale>,
-  fallback: YScale
+  fallback: YScale,
 ): YScale {
   const primary = yScales[DEFAULT_Y_AXIS_ID];
   if (primary) {

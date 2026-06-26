@@ -46,7 +46,7 @@ function readDate(row: Record<string, unknown>, xDataKey: string): Date | null {
 
 function readValue(
   row: Record<string, unknown>,
-  seriesKey: string
+  seriesKey: string,
 ): number | null {
   const raw = row[seriesKey];
   return typeof raw === "number" && Number.isFinite(raw) ? raw : null;
@@ -54,7 +54,7 @@ function readValue(
 
 function resolveStartIndex(
   sourceData: Record<string, unknown>[],
-  startIndex: number | undefined
+  startIndex: number | undefined,
 ): number {
   if (startIndex == null || !Number.isFinite(startIndex)) {
     return Math.max(0, sourceData.length - 1);
@@ -65,7 +65,7 @@ function resolveStartIndex(
 function intervalFromAdjacentRows(
   sourceData: Record<string, unknown>[],
   xDataKey: string,
-  startIndex: number
+  startIndex: number,
 ): number | null {
   if (startIndex < 1) {
     return null;
@@ -83,7 +83,7 @@ function intervalFromAdjacentRows(
 
 function intervalFromSeriesSpan(
   sourceData: Record<string, unknown>[],
-  xDataKey: string
+  xDataKey: string,
 ): number | null {
   if (sourceData.length < 2) {
     return null;
@@ -102,7 +102,7 @@ function intervalFromSeriesSpan(
 function resolveIntervalMs(
   sourceData: Record<string, unknown>[],
   xDataKey: string,
-  startIndex: number
+  startIndex: number,
 ): number {
   return (
     intervalFromAdjacentRows(sourceData, xDataKey, startIndex) ??
@@ -192,7 +192,7 @@ export function computeProjectionAnchorTangentSlope(
   sourceData: Record<string, unknown>[],
   seriesKey: string,
   xDataKey = "date",
-  startIndexProp?: number
+  startIndexProp?: number,
 ): number {
   if (sourceData.length < 2) {
     return 0;
@@ -229,7 +229,7 @@ export function buildHorizontalTangentBezierPath(
   x1: number,
   y1: number,
   /** How far control points sit along the x span (0–0.5). Default: 0.45 */
-  tension = 0.45
+  tension = 0.45,
 ): string {
   const dx = x1 - x0;
   if (Math.abs(dx) < 1e-6) {
@@ -259,7 +259,7 @@ function buildTargetPath(options: {
 
 /** Build a projection path from historical chart data or explicit points. */
 export function buildProjectionPath(
-  options: BuildProjectionPathOptions
+  options: BuildProjectionPathOptions,
 ): ProjectionPoint[] {
   const {
     sourceData,
@@ -336,7 +336,7 @@ export function buildProjectionPath(
 
 /** Collect numeric Y extents from projection point arrays. */
 export function projectionValueExtents(
-  paths: ProjectionPoint[][]
+  paths: ProjectionPoint[][],
 ): { minValue: number; maxValue: number } | null {
   let minValue = Number.POSITIVE_INFINITY;
   let maxValue = Number.NEGATIVE_INFINITY;
@@ -361,7 +361,7 @@ export function projectionValueExtents(
 
 /** Collect date extents from projection point arrays. */
 export function projectionDateExtents(
-  paths: ProjectionPoint[][]
+  paths: ProjectionPoint[][],
 ): { minTime: number; maxTime: number } | null {
   let minTime = Number.POSITIVE_INFINITY;
   let maxTime = Number.NEGATIVE_INFINITY;

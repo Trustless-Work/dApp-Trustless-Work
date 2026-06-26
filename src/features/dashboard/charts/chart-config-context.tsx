@@ -38,7 +38,7 @@ export function ChartConfigProvider({
       ...DEFAULT_CHART_CONFIG,
       ...value,
     }),
-    [value]
+    [value],
   );
 
   return (

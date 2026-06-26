@@ -6,45 +6,27 @@ type RouteContext = {
   params: Promise<{ path: string[] }>;
 };
 
-export async function GET(
-  request: NextRequest,
-  context: RouteContext,
-) {
+export async function GET(request: NextRequest, context: RouteContext) {
   return handleCoreProxy(request, context);
 }
 
-export async function POST(
-  request: NextRequest,
-  context: RouteContext,
-) {
+export async function POST(request: NextRequest, context: RouteContext) {
   return handleCoreProxy(request, context);
 }
 
-export async function PUT(
-  request: NextRequest,
-  context: RouteContext,
-) {
+export async function PUT(request: NextRequest, context: RouteContext) {
   return handleCoreProxy(request, context);
 }
 
-export async function PATCH(
-  request: NextRequest,
-  context: RouteContext,
-) {
+export async function PATCH(request: NextRequest, context: RouteContext) {
   return handleCoreProxy(request, context);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  context: RouteContext,
-) {
+export async function DELETE(request: NextRequest, context: RouteContext) {
   return handleCoreProxy(request, context);
 }
 
-async function handleCoreProxy(
-  request: NextRequest,
-  context: RouteContext,
-) {
+async function handleCoreProxy(request: NextRequest, context: RouteContext) {
   const csrfError = validateSameOrigin(request);
   if (csrfError) {
     return csrfError;

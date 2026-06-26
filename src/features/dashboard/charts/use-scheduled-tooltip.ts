@@ -69,7 +69,7 @@ export function useScheduledTooltip<T>(): ScheduledTooltipControls<T> {
         }
       });
     },
-    [commitTooltip]
+    [commitTooltip],
   );
 
   const clearTooltip = useCallback(() => {

@@ -34,7 +34,7 @@ export interface YAxisProps {
 function formatLabel(
   value: number,
   formatLargeNumbers: boolean,
-  formatValue?: (value: number) => string
+  formatValue?: (value: number) => string,
 ): string {
   if (formatValue) {
     return formatValue(value);
@@ -49,7 +49,7 @@ function resolveTickLabelColor(
   tickY: number,
   axisId: string,
   yScale: ReturnType<typeof useYScale>,
-  referenceAreas: ReturnType<typeof useChartStable>["referenceAreas"]
+  referenceAreas: ReturnType<typeof useChartStable>["referenceAreas"],
 ): string | undefined {
   for (const area of referenceAreas) {
     if (!area.axisLabelColor) {
@@ -61,7 +61,7 @@ function resolveTickLabelColor(
     const [low, high] = resolveReferenceDataRange(
       area.y1,
       area.y2,
-      yScale.domain() as [number, number]
+      yScale.domain() as [number, number],
     );
     const topPixel = yScale(high) ?? 0;
     const bottomPixel = yScale(low) ?? 0;
@@ -115,7 +115,7 @@ const YAxisInner = memo(function YAxisInner({
           y - margin.top,
           axisId,
           yScale,
-          referenceAreas
+          referenceAreas,
         ),
       };
     });
@@ -162,7 +162,7 @@ const YAxisInner = memo(function YAxisInner({
         ))}
       </div>
     </div>,
-    container
+    container,
   );
 });
 

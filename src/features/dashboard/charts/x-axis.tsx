@@ -134,7 +134,7 @@ function indicesForTickCount(length: number, tickCount: number): number[] {
   }
 
   const rawIndices = Array.from({ length: tickCount }, (_, index) =>
-    Math.round((index / (tickCount - 1)) * span)
+    Math.round((index / (tickCount - 1)) * span),
   );
 
   const indices = [...new Set(rawIndices)].sort((a, b) => a - b);
@@ -171,7 +171,7 @@ function dedupeIndicesByLabel(
   indices: number[],
   data: Record<string, unknown>[],
   dateLabels: string[],
-  xAccessor: (d: Record<string, unknown>) => Date
+  xAccessor: (d: Record<string, unknown>) => Date,
 ): number[] {
   const seenLabels = new Set<string>();
   const deduped: number[] = [];
@@ -229,7 +229,7 @@ function smallestGapEdgePreference(indices: number[]): number {
 function scoreTickLayout(
   indices: number[],
   resolveXPx: (index: number) => number,
-  targetCount: number
+  targetCount: number,
 ): TickLayoutScore {
   if (indices.length < 2) {
     return {
@@ -285,7 +285,7 @@ function isBetterTickLayout(
   next: TickLayoutScore,
   best: TickLayoutScore,
   nextCountDistance: number,
-  bestCountDistance: number
+  bestCountDistance: number,
 ): boolean {
   if (next.score < best.score - 1e-6) {
     return true;
@@ -320,7 +320,7 @@ export function selectEvenlySpacedIndices(
     dateLabels?: string[];
     xAccessor?: (d: Record<string, unknown>) => Date;
     resolveXPx?: (index: number) => number;
-  }
+  },
 ): number[] {
   if (length <= 0) {
     return [];
@@ -349,7 +349,7 @@ export function selectEvenlySpacedIndices(
               rawIndices,
               options.data,
               options.dateLabels,
-              options.xAccessor
+              options.xAccessor,
             )
           : rawIndices;
 
@@ -365,7 +365,7 @@ export function selectEvenlySpacedIndices(
           layoutScore,
           bestScore,
           countDistance,
-          bestCountDistance
+          bestCountDistance,
         )
       ) {
         bestIndices = indices;
@@ -478,7 +478,7 @@ function buildDomainTicks({
 function domainExtendsPastData(
   data: Record<string, unknown>[],
   xAccessor: (d: Record<string, unknown>) => Date,
-  xScale: { domain: () => Date[] }
+  xScale: { domain: () => Date[] },
 ): boolean {
   if (data.length === 0) {
     return false;
@@ -501,7 +501,7 @@ function appendProjectionTailTicks(
     (date: Date): number | undefined;
   },
   marginLeft: number,
-  maxExtraTicks: number
+  maxExtraTicks: number,
 ): AxisTick[] {
   if (data.length === 0 || maxExtraTicks <= 0) {
     return ticks;
@@ -526,7 +526,7 @@ function appendProjectionTailTicks(
 
   for (let i = 1; i <= extraCount; i++) {
     const date = new Date(
-      startTime + (i / (extraCount + 1)) * (endTime - startTime)
+      startTime + (i / (extraCount + 1)) * (endTime - startTime),
     );
     const label = shortDateFmt.format(date);
     if (seenLabels.has(label)) {
@@ -619,7 +619,7 @@ const XAxisInner = memo(function XAxisInner({
         xAccessor,
         xScale,
         margin.left,
-        Math.max(1, numTicks - dataTicks.length + 1)
+        Math.max(1, numTicks - dataTicks.length + 1),
       );
     }
 
@@ -658,7 +658,7 @@ const XAxisInner = memo(function XAxisInner({
         />
       ))}
     </div>,
-    container
+    container,
   );
 });
 

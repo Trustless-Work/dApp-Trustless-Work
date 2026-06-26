@@ -29,10 +29,7 @@ export const DashboardPageHeaderProvider = ({
     setActionsState(node);
   }, []);
 
-  const value = useMemo(
-    () => ({ actions, setActions }),
-    [actions, setActions],
-  );
+  const value = useMemo(() => ({ actions, setActions }), [actions, setActions]);
 
   return (
     <DashboardPageHeaderContext.Provider value={value}>

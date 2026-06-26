@@ -99,7 +99,7 @@ function useAreaLoadingPulseState(
   chartPhase: ChartPhase,
   loading: boolean | undefined,
   loadingPulseMode: LineLoadingPulseMode | undefined,
-  notifyLoadingPulseComplete?: () => void
+  notifyLoadingPulseComplete?: () => void,
 ) {
   const phasePulseMode = resolveLineLoadingPulseMode(chartPhase);
   const pulseMode =
@@ -185,7 +185,7 @@ export function Area({
     chartPhase,
     loading,
     loadingPulseMode,
-    notifyLoadingPulseComplete
+    notifyLoadingPulseComplete,
   );
 
   const seriesIndex = useMemo(() => {
@@ -223,7 +223,7 @@ export function Area({
       const value = d[dataKey];
       return typeof value === "number" ? (yScale(value) ?? 0) : 0;
     },
-    [dataKey, yScale]
+    [dataKey, yScale],
   );
 
   const hasDashTail = resolveDashTailBounds(dashFromIndex, data.length);

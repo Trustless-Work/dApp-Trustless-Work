@@ -12,7 +12,7 @@ export interface GenerateChartSkeletonDataOptions {
 
 /** Placeholder series used while `status="loading"` and data is empty. */
 export function generateChartSkeletonData(
-  options: GenerateChartSkeletonDataOptions = {}
+  options: GenerateChartSkeletonDataOptions = {},
 ): Record<string, unknown>[] {
   const dataKey = options.dataKey ?? DEFAULT_SKELETON_DATA_KEY;
   const pointCount = options.pointCount ?? DEFAULT_SKELETON_POINT_COUNT;
@@ -31,7 +31,7 @@ export function generateChartSkeletonData(
 /** Skeleton rows that mirror target dates/count with lower magnitudes for Y tween. */
 export function generateChartSkeletonFromTarget(
   targetData: Record<string, unknown>[],
-  dataKey: string
+  dataKey: string,
 ): Record<string, unknown>[] {
   return targetData.map((row, index) => ({
     ...row,

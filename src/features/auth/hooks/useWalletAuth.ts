@@ -5,7 +5,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useWallet } from "@/components/tw-blocks/wallet-kit/useWallet";
-import { signTransaction, resetWalletKitLoader } from "@/components/tw-blocks/wallet-kit/wallet-kit";
+import {
+  signTransaction,
+  resetWalletKitLoader,
+} from "@/components/tw-blocks/wallet-kit/wallet-kit";
 import { useWalletContext } from "@/providers/WalletProvider";
 import { authService } from "@/features/auth/services/auth.service";
 import type { RegisterProfileInput } from "@/features/auth/types/auth.types";
@@ -42,7 +45,8 @@ export function useWalletAuth() {
 
   const performSessionLogin = useCallback(
     async (address: string): Promise<"authenticated" | "needs_register"> => {
-      const challengeResult = await authService.requestSessionChallenge(address);
+      const challengeResult =
+        await authService.requestSessionChallenge(address);
 
       if (!isRegisteredSessionChallenge(challengeResult)) {
         return "needs_register";
@@ -92,9 +96,12 @@ export function useWalletAuth() {
       queryClient.setQueryData(["session", "me"], user);
 
       const firstName = user.firstName?.trim();
-      toast.success(firstName ? `Welcome back, ${firstName}!` : "Welcome back!", {
-        description: "You're back to build the future.",
-      });
+      toast.success(
+        firstName ? `Welcome back, ${firstName}!` : "Welcome back!",
+        {
+          description: "You're back to build the future.",
+        },
+      );
       setPhase("idle");
       router.push(redirectPath);
     } catch (error) {
@@ -151,9 +158,12 @@ export function useWalletAuth() {
         try {
           await authService.saveRegisterProfile(registerResult.userId, profile);
         } catch (profileError) {
-          toast.warning("Account created, but profile details could not be saved.", {
-            description: parseApiError(profileError).detail,
-          });
+          toast.warning(
+            "Account created, but profile details could not be saved.",
+            {
+              description: parseApiError(profileError).detail,
+            },
+          );
         }
 
         await queryClient.invalidateQueries({ queryKey: ["session", "me"] });
@@ -162,7 +172,9 @@ export function useWalletAuth() {
 
         const welcomeName = user.firstName?.trim() || profile.firstName.trim();
         toast.success(
-          welcomeName ? `Welcome, ${welcomeName}!` : "Welcome to Trustless Work!",
+          welcomeName
+            ? `Welcome, ${welcomeName}!`
+            : "Welcome to Trustless Work!",
           {
             description: "Now you can start building the future.",
           },

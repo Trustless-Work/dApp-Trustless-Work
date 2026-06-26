@@ -51,8 +51,7 @@ const features: Feature[] = [
   {
     id: "3",
     title: "Complete Milestone",
-    description:
-      "Mark a milestone as completed by the service provider.",
+    description: "Mark a milestone as completed by the service provider.",
     videoUrl: {
       dark: "/videos/complete-dark.mp4",
       light: "/videos/complete-light.mp4",

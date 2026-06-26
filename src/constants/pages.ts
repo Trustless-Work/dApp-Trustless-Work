@@ -53,7 +53,9 @@ export function getDashboardPage(pathname: string): DashboardPageConfig | null {
   }
 
   const nestedMatch = Object.entries(DASHBOARD_PAGES)
-    .filter(([path]) => path !== "/dashboard" && pathname.startsWith(`${path}/`))
+    .filter(
+      ([path]) => path !== "/dashboard" && pathname.startsWith(`${path}/`),
+    )
     .sort(([pathA], [pathB]) => pathB.length - pathA.length)[0];
 
   return nestedMatch?.[1] ?? null;

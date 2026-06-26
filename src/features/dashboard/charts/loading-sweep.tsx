@@ -68,19 +68,19 @@ export function getSkeletonHeights(
   count: number,
   seed = 0,
   min = HEIGHT_MIN_PCT,
-  max = HEIGHT_MAX_PCT
+  max = HEIGHT_MAX_PCT,
 ): number[] {
   const range = max - min;
   return Array.from(
     { length: count },
-    (_, i) => min + Math.floor(hashFract((i + 1) * 12.9898 + seed) * range)
+    (_, i) => min + Math.floor(hashFract((i + 1) * 12.9898 + seed) * range),
   );
 }
 
 /** Deterministic up/down (±1) per bar for the "center" baseline. */
 function getSkeletonSigns(count: number, seed = 0): number[] {
   return Array.from({ length: count }, (_, i) =>
-    hashFract((i + 1) * 78.233 + seed) < 0.5 ? -1 : 1
+    hashFract((i + 1) * 78.233 + seed) < 0.5 ? -1 : 1,
   );
 }
 
@@ -88,7 +88,7 @@ function getSkeletonSigns(count: number, seed = 0): number[] {
 function generateEasedGradientStops(
   steps = 17,
   minOpacity = 0.05,
-  maxOpacity = 0.9
+  maxOpacity = 0.9,
 ) {
   return Array.from({ length: steps }, (_, i) => {
     const t = i / (steps - 1);
@@ -129,7 +129,7 @@ function LoadingSweepMask({
       }
       lastXRef.current = xValue;
     },
-    [onSweepComplete]
+    [onSweepComplete],
   );
 
   return (
@@ -230,7 +230,7 @@ export function LineLoadingSweep({
   }, [isLoop]);
   const heights = useMemo(
     () => getSkeletonHeights(pointCount, tick),
-    [pointCount, tick]
+    [pointCount, tick],
   );
 
   // With reduced motion there is no fade to await, so signal the handoff
@@ -441,11 +441,11 @@ export function BarLoadingSkeleton({
   const onSweepComplete = useCallback(() => setTick((prev) => prev + 1), []);
   const heights = useMemo(
     () => getSkeletonHeights(barCount, tick),
-    [barCount, tick]
+    [barCount, tick],
   );
   const signs = useMemo(
     () => getSkeletonSigns(barCount, tick),
-    [barCount, tick]
+    [barCount, tick],
   );
 
   if (innerWidth <= 0 || innerHeight <= 0) {

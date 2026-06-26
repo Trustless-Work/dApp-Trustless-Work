@@ -95,7 +95,7 @@ export function SeriesMarkers({
         outlineWidth,
         showActiveHighlight,
       }),
-    [radius, strokeWidth, ringGap, outlineWidth, showActiveHighlight]
+    [radius, strokeWidth, ringGap, outlineWidth, showActiveHighlight],
   );
 
   const revealDurationSec =
@@ -108,7 +108,7 @@ export function SeriesMarkers({
       const value = d[dataKey];
       return typeof value === "number" ? (yScale(value) ?? 0) : null;
     },
-    [dataKey, yScale]
+    [dataKey, yScale],
   );
 
   const points = useMemo<PointAt[]>(
@@ -136,7 +136,7 @@ export function SeriesMarkers({
       isRevealing,
       revealDurationSec,
       visualExtent,
-    ]
+    ],
   );
 
   // Memo so the inner <SeriesMarkersActiveHighlight> sees a stable prop and
@@ -159,7 +159,7 @@ export function SeriesMarkers({
       outlineWidth,
       outlineColor,
       radius,
-    ]
+    ],
   );
 
   if (isRevealing) {

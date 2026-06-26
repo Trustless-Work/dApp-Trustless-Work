@@ -67,9 +67,7 @@ export const WalletButton = ({
             variant="outline"
             className={cn(
               "h-10 min-w-0 gap-2 bg-transparent font-medium cursor-pointer",
-              mobileBar
-                ? "w-full justify-center px-2"
-                : "px-4",
+              mobileBar ? "w-full justify-center px-2" : "px-4",
               className,
             )}
           >

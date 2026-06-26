@@ -10,9 +10,7 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
     <NextThemesProvider
       {...props}
       scriptProps={
-        typeof window === "undefined"
-          ? undefined
-          : { type: "application/json" }
+        typeof window === "undefined" ? undefined : { type: "application/json" }
       }
     >
       {children}

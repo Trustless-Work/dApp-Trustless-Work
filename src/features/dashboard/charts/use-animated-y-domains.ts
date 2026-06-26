@@ -22,7 +22,7 @@ function lerpDomain(from: YDomain, to: YDomain, progress: number): YDomain {
 function snapDomains(
   domains: Record<string, YDomain>,
   setAnimatedByAxis: (domains: Record<string, YDomain>) => void,
-  animatedRef: { current: Record<string, YDomain> }
+  animatedRef: { current: Record<string, YDomain> },
 ) {
   if (domainsEqual(animatedRef.current, domains)) {
     return;
@@ -134,7 +134,7 @@ export function useAnimatedYDomains({
   const destinationByAxis = resolveAnimatedYDestinationDomains(
     chartPhase,
     skeletonByAxis,
-    targetByAxis
+    targetByAxis,
   );
   const destinationRef = useRef(destinationByAxis);
   destinationRef.current = destinationByAxis;
