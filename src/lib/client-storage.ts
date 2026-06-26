@@ -21,3 +21,17 @@ export function getStoredNetwork(): NetworkType {
   const stored = getClientStorage().getItem("network");
   return stored === "mainnet" ? "mainnet" : "testnet";
 }
+
+export const ACTIVE_ORGANIZATION_STORAGE_KEY = "activeOrganizationId";
+
+export function getStoredActiveOrganizationId(): string | null {
+  return getClientStorage().getItem(ACTIVE_ORGANIZATION_STORAGE_KEY);
+}
+
+export function setStoredActiveOrganizationId(organizationId: string): void {
+  getClientStorage().setItem(ACTIVE_ORGANIZATION_STORAGE_KEY, organizationId);
+}
+
+export function clearStoredActiveOrganizationId(): void {
+  getClientStorage().removeItem(ACTIVE_ORGANIZATION_STORAGE_KEY);
+}
