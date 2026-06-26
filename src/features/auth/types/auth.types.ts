@@ -120,6 +120,7 @@ export interface UserResponse extends WithAccountRoles, WithEntityTimestamps {
   email?: NullableField<string>;
   firstName?: NullableField<string>;
   lastName?: NullableField<string>;
+  profileImageUrl?: NullableField<string>;
   isActive: boolean;
   emailVerified?: boolean;
 }
