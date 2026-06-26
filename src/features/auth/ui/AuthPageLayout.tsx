@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FloatingPaths } from "@/components/floating-paths";
+import { FloatingPaths } from "@/components/ui/floating-paths";
 
 type AuthPageLayoutProps = {
   children: React.ReactNode;

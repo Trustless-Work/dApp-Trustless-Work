@@ -19,15 +19,11 @@ export const useWallet = () => {
    * Opens a modal for wallet selection and handles the connection process
    * Automatically sets wallet information in the context upon successful connection
    */
-  const connectWallet = async () => {
-    // Open the auth modal and wait for the user to connect
+  const connectWallet = async (): Promise<string> => {
     const { address } = await openAuthModal();
-
-    // Get the selected wallet details (name)
     const { productName } = await getSelectedWallet();
-
-    // Store wallet information in the context and localStorage
     setWalletInfo(address, productName);
+    return address;
   };
 
   /**

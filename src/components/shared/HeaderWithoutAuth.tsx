@@ -8,16 +8,15 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import useScrollHeader from "@/hooks/useScrollHeader";
 import { ToggleTheme } from "./ToggleTheme";
-import { useWalletContext } from "@/providers/WalletProvider";
-import { useWallet } from "../tw-blocks/wallet-kit/useWallet";
+import { useAuth } from "@/providers/AuthProvider";
+import { useSignOut } from "@/features/auth/hooks/useSignOut";
 
 const HeaderWithoutAuth: React.FC = () => {
-  const { handleDisconnect } = useWallet();
-  const { walletAddress } = useWalletContext();
+  const { signOut, isSigningOut } = useSignOut({ redirectTo: "/" });
+  const { isAuthenticated } = useAuth();
   const { isScrolled } = useScrollHeader();
   const pathname = usePathname();
 
-  // Don't show login/logout buttons on login page
   const isLoginPage = pathname === "/login";
 
   return (
@@ -39,9 +38,15 @@ const HeaderWithoutAuth: React.FC = () => {
 
         {!isLoginPage && (
           <>
-            {walletAddress ? (
-              <Button variant="outline" onClick={handleDisconnect}>
-                <LogOut /> Disconnect
+            {isAuthenticated ? (
+              <Button
+                variant="outline"
+                disabled={isSigningOut}
+                onClick={() => {
+                  void signOut();
+                }}
+              >
+                <LogOut /> Sign out
               </Button>
             ) : (
               <Link href="/login">

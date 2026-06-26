@@ -20,7 +20,7 @@ import {
 import { useRegisterForm } from "@/features/auth/hooks/useRegisterForm";
 import type { RegisterProfileInput } from "@/features/auth/types/auth.types";
 import { formatAddress } from "@/helpers/format.helper";
-import { AuthDivider } from "@/components/auth-divider";
+import { AuthDivider } from "@/components/ui/auth-divider";
 
 type RegisterFormProps = {
   walletAddress: string;

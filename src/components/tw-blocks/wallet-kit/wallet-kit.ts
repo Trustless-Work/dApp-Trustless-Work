@@ -40,6 +40,10 @@ let walletKitPromise: Promise<{
   Networks: NetworksEnum;
 }> | null = null;
 
+export function resetWalletKitLoader(): void {
+  walletKitPromise = null;
+}
+
 const loadWalletKit = async () => {
   if (typeof window === "undefined") {
     throw new Error("StellarWalletsKit is only available in the browser");
@@ -101,6 +105,7 @@ const loadWalletKit = async () => {
 interface SignTransactionParams {
   unsignedTransaction: string;
   address: string;
+  networkPassphrase?: string;
 }
 
 /**
@@ -133,19 +138,19 @@ export const disconnectWalletKit = async (): Promise<void> => {
 export const signTransaction = async ({
   unsignedTransaction,
   address,
+  networkPassphrase,
 }: SignTransactionParams): Promise<string> => {
   const { StellarWalletsKit, Networks } = await loadWalletKit();
 
-  const networkPassphrase = resolveKitNetwork(
-    Networks,
-    getStoredNetwork(),
-  );
+  const resolvedPassphrase =
+    networkPassphrase ??
+    resolveKitNetwork(Networks, getStoredNetwork());
 
   const { signedTxXdr } = await StellarWalletsKit.signTransaction(
     unsignedTransaction,
     {
       address,
-      networkPassphrase,
+      networkPassphrase: resolvedPassphrase,
     },
   );
 

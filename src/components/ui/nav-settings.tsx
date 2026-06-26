@@ -139,7 +139,7 @@ export const NavSettings = () => {
     <SidebarMenu>
       <ResourceLinks />
 
-      <SidebarMenuItem>
+      <SidebarMenuItem className="my-2">
         <SidebarMenuButton asChild isActive={isActive} tooltip="Settings">
           <Link href={SETTINGS_PATH}>
             <Settings2Icon />

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { AuthDivider } from "@/components/auth-divider";
+import { AuthDivider } from "@/components/ui/auth-divider";
 import { AuthPageLayout } from "@/features/auth/ui/AuthPageLayout";
 import { WalletLoginButton } from "@/features/auth/ui/WalletLoginButton";
 import { RegisterForm } from "@/features/auth/ui/RegisterForm";

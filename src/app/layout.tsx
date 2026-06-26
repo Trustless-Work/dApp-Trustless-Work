@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { WalletProvider } from "@/providers/WalletProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -55,11 +57,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <WalletProvider>
-            <Toaster position="top-center" richColors closeButton />
+          <QueryProvider>
+            <AuthProvider>
+              <WalletProvider>
+                <Toaster position="top-center" richColors closeButton />
 
-            {children}
-          </WalletProvider>
+                {children}
+              </WalletProvider>
+            </AuthProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

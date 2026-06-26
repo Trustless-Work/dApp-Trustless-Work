@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useWallet } from "./useWallet";
 import { useWalletContext } from "@/providers/WalletProvider";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -27,6 +28,7 @@ export const WalletButton = ({
   mobileBar = false,
 }: WalletButtonProps) => {
   const { handleConnect, handleDisconnect } = useWallet();
+  const logoutMutation = useLogout();
   const { walletAddress, walletName } = useWalletContext();
   const [copied, setCopied] = React.useState(false);
   const { currentNetwork } = useNetwork();
@@ -46,6 +48,15 @@ export const WalletButton = ({
     } catch (_) {
       console.error("Error copying address to clipboard", _);
     }
+  };
+
+  const handleDisconnectWallet = async () => {
+    try {
+      await logoutMutation.mutateAsync();
+    } catch {
+      // Session may already be cleared locally.
+    }
+    await handleDisconnect();
   };
 
   if (walletAddress) {
@@ -112,7 +123,9 @@ export const WalletButton = ({
                 )}
               </Button>
               <Button
-                onClick={handleDisconnect}
+                onClick={() => {
+                  void handleDisconnectWallet();
+                }}
                 variant="outline"
                 size="sm"
                 className="flex-1 text-destructive hover:text-destructive bg-transparent cursor-pointer"
