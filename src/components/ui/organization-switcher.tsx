@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +34,7 @@ function getOrganizationInitials(name: string): string {
 
 export const OrganizationSwitcher = () => {
   const { isMobile } = useSidebar();
-  const handleOpenChange = useSidebarDropdownLock();
+  const { handleOpenChange, releaseLock } = useSidebarDropdownLock();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const {
     organizations,
@@ -42,6 +42,11 @@ export const OrganizationSwitcher = () => {
     setActiveOrganization,
     isLoading,
   } = useActiveOrganization();
+
+  const openCreateDialog = useCallback(() => {
+    releaseLock();
+    setCreateDialogOpen(true);
+  }, [releaseLock]);
 
   if (isLoading) {
     return (
@@ -58,10 +63,7 @@ export const OrganizationSwitcher = () => {
       <>
         <SidebarMenu className="mt-2">
           <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              onClick={() => setCreateDialogOpen(true)}
-            >
+            <SidebarMenuButton size="lg" onClick={openCreateDialog}>
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground group-data-[collapsible=icon]:size-8">
                 <PlusIcon className="size-4" />
               </div>
@@ -121,7 +123,7 @@ export const OrganizationSwitcher = () => {
                 <DropdownMenuItem
                   key={organization.id}
                   onClick={() => setActiveOrganization(organization.id)}
-                  className="gap-2 p-2"
+                  className="gap-2 p-2 cursor-pointer"
                 >
                   <div className="flex size-6 items-center justify-center rounded-md border text-xs font-medium">
                     {getOrganizationInitials(organization.name)}
@@ -131,14 +133,14 @@ export const OrganizationSwitcher = () => {
               ))}
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                className="gap-2 p-2"
-                onClick={() => setCreateDialogOpen(true)}
+                className="gap-2 p-2 cursor-pointer"
+                onSelect={openCreateDialog}
               >
                 <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                   <PlusIcon className="size-4" />
                 </div>
                 <span className="font-medium text-muted-foreground">
-                  Add organization
+                  Add Organization
                 </span>
               </DropdownMenuItem>
             </DropdownMenuContent>

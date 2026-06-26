@@ -10,6 +10,19 @@ export function useSidebarDropdownLock() {
     typeof setTimeout
   > | null>(null);
 
+  const releaseLock = React.useCallback(() => {
+    if (isMobile) {
+      return;
+    }
+
+    if (lockReleaseTimeoutRef.current) {
+      clearTimeout(lockReleaseTimeoutRef.current);
+      lockReleaseTimeoutRef.current = null;
+    }
+
+    setSidebarExpandedLock(false);
+  }, [isMobile, setSidebarExpandedLock]);
+
   const handleOpenChange = React.useCallback(
     (open: boolean) => {
       if (isMobile) {
@@ -42,5 +55,5 @@ export function useSidebarDropdownLock() {
     };
   }, []);
 
-  return handleOpenChange;
+  return { handleOpenChange, releaseLock };
 }

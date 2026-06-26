@@ -29,7 +29,7 @@ import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react";
 export const NavUser = () => {
   const { user, isLoading } = useAuth();
   const { isMobile } = useSidebar();
-  const handleOpenChange = useSidebarDropdownLock();
+  const { handleOpenChange } = useSidebarDropdownLock();
   const { signOut, isSigningOut } = useSignOut();
 
   if (isLoading || !user) {

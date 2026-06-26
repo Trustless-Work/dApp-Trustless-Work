@@ -21,6 +21,21 @@ export function useCreateOrganization(options?: UseCreateOrganizationOptions) {
     mutationFn: (payload: CreateOrganizationInput) =>
       organizationService.create(payload),
     onSuccess: (organization) => {
+      queryClient.setQueryData<OrganizationResponse[]>(
+        ORGANIZATIONS_QUERY_KEY,
+        (previous) => {
+          if (!previous) {
+            return [organization];
+          }
+
+          const alreadyListed = previous.some((org) => org.id === organization.id);
+          if (alreadyListed) {
+            return previous;
+          }
+
+          return [...previous, organization];
+        },
+      );
       void queryClient.invalidateQueries({ queryKey: ORGANIZATIONS_QUERY_KEY });
       toast.success("Organization created", {
         description: `"${organization.name}" is ready to use.`,

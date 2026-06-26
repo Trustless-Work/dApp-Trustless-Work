@@ -43,6 +43,7 @@ type SidebarContextProps = {
   isHovered: boolean;
   setIsHovered: (hovered: boolean) => void;
   setSidebarExpandedLock: (locked: boolean) => void;
+  dismissHoverExpandedSidebar: () => void;
   showInsetOverlay: boolean;
 };
 
@@ -97,6 +98,11 @@ function SidebarProvider({
     );
   }, []);
 
+  const dismissHoverExpandedSidebar = React.useCallback(() => {
+    setIsHovered(false);
+    setExpandLockCount(0);
+  }, []);
+
   const toggleSidebar = React.useCallback(() => {
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
   }, [isMobile, setOpen, setOpenMobile]);
@@ -140,6 +146,7 @@ function SidebarProvider({
       isHovered,
       setIsHovered,
       setSidebarExpandedLock,
+      dismissHoverExpandedSidebar,
       showInsetOverlay,
     }),
     [
@@ -153,6 +160,7 @@ function SidebarProvider({
       toggleSidebar,
       isHovered,
       setSidebarExpandedLock,
+      dismissHoverExpandedSidebar,
       showInsetOverlay,
     ],
   );
@@ -348,7 +356,7 @@ function SidebarInset({
   children,
   ...props
 }: React.ComponentProps<"main">) {
-  const { showInsetOverlay } = useSidebar();
+  const { showInsetOverlay, dismissHoverExpandedSidebar } = useSidebar();
 
   return (
     <main
@@ -362,7 +370,8 @@ function SidebarInset({
       {showInsetOverlay && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 z-20 bg-background/50 backdrop-blur-[2px] transition-all duration-200"
+          className="absolute inset-0 z-20 cursor-default bg-background/50 backdrop-blur-[2px] transition-all duration-200"
+          onClick={dismissHoverExpandedSidebar}
         />
       )}
       {children}
