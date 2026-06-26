@@ -14,7 +14,7 @@ The main goal is to ensure **high code quality, consistency, scalability, and re
 ## 🧠 General Principles
 
 - **Strict TypeScript** (`strict: true`)
-- **No usage of `any`**
+- **No usage of `any`** — full rules in `TYPESCRIPT.mdc` (advanced types, guards, discriminated unions)
 - Everything must be **explicitly typed**:
   - Models
   - Entities
