@@ -99,7 +99,7 @@ export function useWalletAuth() {
       toast.success(
         firstName ? `Welcome back, ${firstName}!` : "Welcome back!",
         {
-          description: "You're back to build the future.",
+          description: "Enjoy your time on Trustless Work.",
         },
       );
       setPhase("idle");
