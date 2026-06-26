@@ -8,13 +8,13 @@ function getCoreApiUrl(): string {
   return url.replace(/\/$/, "");
 }
 
-function getPlatformApiKey(): string | undefined {
+function getAdminApiKey(): string | undefined {
   return (
     process.env.BACKOFFICE_ADMIN_API_KEY ?? process.env.NEXT_PUBLIC_API_KEY
   );
 }
 
-export function createPlatformCredentialMissingResponse(): Response {
+export function createAdminCredentialMissingResponse(): Response {
   const body: ProblemDetails = {
     status: 503,
     code: "PLATFORM_CREDENTIAL_MISSING",
@@ -24,13 +24,13 @@ export function createPlatformCredentialMissingResponse(): Response {
   return Response.json(body, { status: 503 });
 }
 
-export async function platformFetch(
+export async function adminFetch(
   path: string,
   init?: RequestInit,
 ): Promise<Response> {
-  const apiKey = getPlatformApiKey();
+  const apiKey = getAdminApiKey();
   if (!apiKey) {
-    return createPlatformCredentialMissingResponse();
+    return createAdminCredentialMissingResponse();
   }
 
   const url = `${getCoreApiUrl()}${path.startsWith("/") ? path : `/${path}`}`;

@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { platformFetch } from "@/lib/platform-fetch";
+import { adminFetch } from "@/lib/admin-fetch";
 import { parseJsonBody, proxyCoreResponse } from "@/lib/bff-utils";
 import type { RegisterProfileInput } from "@/features/auth/types/auth.types";
 
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     profilePayload.email = email;
   }
 
-  const profileResponse = await platformFetch(
+  const profileResponse = await adminFetch(
     `/admin/users/${body.userId.trim()}`,
     {
       method: "PATCH",

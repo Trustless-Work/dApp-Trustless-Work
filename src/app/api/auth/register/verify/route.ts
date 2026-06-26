@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { platformFetch } from "@/lib/platform-fetch";
+import { adminFetch } from "@/lib/admin-fetch";
 import { parseJsonBody, proxyCoreResponse } from "@/lib/bff-utils";
 import type {
   GeneratedApiKeyResponse,
@@ -9,7 +9,7 @@ import type {
 export async function POST(request: NextRequest) {
   const body = await parseJsonBody<RegisterVerifyRequest>(request);
 
-  const response = await platformFetch("/auth/register/verify", {
+  const response = await adminFetch("/auth/register/verify", {
     method: "POST",
     body: JSON.stringify({
       address: body.address,

@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { platformFetch } from "@/lib/platform-fetch";
+import { adminFetch } from "@/lib/admin-fetch";
 import { setSessionToken } from "@/lib/session";
 import { parseJsonBody, proxyCoreResponse } from "@/lib/bff-utils";
 import type {
@@ -9,7 +9,7 @@ import type {
 
 export async function POST(request: NextRequest) {
   const body = await parseJsonBody<AuthVerifyRequest>(request);
-  const response = await platformFetch("/auth/session/verify", {
+  const response = await adminFetch("/auth/session/verify", {
     method: "POST",
     body: JSON.stringify(body),
   });

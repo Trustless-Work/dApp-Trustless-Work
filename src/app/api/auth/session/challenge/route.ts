@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { platformFetch } from "@/lib/platform-fetch";
+import { adminFetch } from "@/lib/admin-fetch";
 import { parseJsonBody } from "@/lib/bff-utils";
 import type { ProblemDetails } from "@/lib/api-error";
 import type {
@@ -30,7 +30,7 @@ function isWalletNotRegistered(
 
 export async function POST(request: NextRequest) {
   const body = await parseJsonBody<AuthChallengeRequest>(request);
-  const response = await platformFetch("/auth/session/challenge", {
+  const response = await adminFetch("/auth/session/challenge", {
     method: "POST",
     body: JSON.stringify(body),
   });
