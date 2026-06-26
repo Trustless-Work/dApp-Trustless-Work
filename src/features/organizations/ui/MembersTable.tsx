@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -15,8 +16,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { isMemberLinkedToUser } from "@/features/organizations/helpers/member-from-user.helper";
 import type { MemberResponse } from "@/features/organizations/types/organization.types";
 import { getMemberWallet } from "@/features/organizations/helpers/member-display.helper";
+import { useAuth } from "@/providers/AuthProvider";
+import { useWalletContext } from "@/providers/WalletProvider";
 
 type MembersTableProps = {
   members: MemberResponse[];
@@ -35,14 +39,35 @@ const MemberField = ({
   </div>
 );
 
-const MemberCard = ({ member }: { member: MemberResponse }) => {
+const MemberName = ({ member }: { member: MemberResponse }) => {
+  const { user } = useAuth();
+  const { walletAddress } = useWalletContext();
   const name = member.label?.trim() || "-";
+  const isMe = user
+    ? isMemberLinkedToUser(member, user, walletAddress)
+    : false;
+
+  return (
+    <span className="flex flex-wrap items-center gap-2">
+      <span>{name}</span>
+      {isMe ? (
+        <Badge variant="secondary" className="h-5 px-1.5 text-xs font-normal">
+          Me
+        </Badge>
+      ) : null}
+    </span>
+  );
+};
+
+const MemberCard = ({ member }: { member: MemberResponse }) => {
   const wallet = getMemberWallet(member);
 
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base">{name}</CardTitle>
+        <CardTitle className="text-base">
+          <MemberName member={member} />
+        </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-3">
         <MemberField label="Wallet" value={wallet} />
@@ -112,7 +137,9 @@ export const MembersTable = ({ members }: MembersTableProps) => {
           <TableBody>
             {members.map((member) => (
               <TableRow key={member.id}>
-                <TableCell>{member.label?.trim() || "-"}</TableCell>
+                <TableCell>
+                  <MemberName member={member} />
+                </TableCell>
                 <TableCell>{getMemberWallet(member)}</TableCell>
               </TableRow>
             ))}

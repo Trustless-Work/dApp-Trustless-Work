@@ -16,7 +16,7 @@ import {
   MembersTable,
   MembersTableSkeleton,
 } from "@/features/organizations/ui/MembersTable";
-import { useOrganizationMembers } from "@/features/organizations/hooks/useOrganizationMembers";
+import { useOrganizationMembersDisplay } from "@/features/organizations/hooks/useOrganizationMembers";
 import { parseApiError } from "@/lib/api-error";
 
 type MembersSectionProps = {
@@ -25,9 +25,8 @@ type MembersSectionProps = {
 
 export const MembersSection = ({ organizationId }: MembersSectionProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { data, isLoading, isError, error, refetch } =
-    useOrganizationMembers(organizationId);
-  const members = data ?? [];
+  const { members, isLoading, isError, error, refetch } =
+    useOrganizationMembersDisplay(organizationId);
   const errorDetail = isError ? parseApiError(error).detail : null;
 
   return (

@@ -22,6 +22,7 @@ import {
   mapUserToMemberInput,
 } from "@/features/organizations/helpers/member-from-user.helper";
 import { parseApiError } from "@/lib/api-error";
+import { useAuth } from "@/providers/AuthProvider";
 
 type AddMemberDialogProps = {
   organizationId: string;
@@ -43,6 +44,7 @@ export const AddMemberDialog = ({
   open,
   onOpenChange,
 }: AddMemberDialogProps) => {
+  const { user: currentUser } = useAuth();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const {
     data: users,
@@ -61,10 +63,14 @@ export const AddMemberDialog = ({
 
   const availableUsers = useMemo(() => {
     const allUsers = users ?? [];
-    return allUsers.filter(
-      (user) => !isUserAlreadyMember(user, existingMembers),
-    );
-  }, [existingMembers, users]);
+    return allUsers.filter((user) => {
+      if (currentUser?.id === user.id) {
+        return false;
+      }
+
+      return !isUserAlreadyMember(user, existingMembers);
+    });
+  }, [currentUser, existingMembers, users]);
 
   const usersErrorDetail = isUsersError
     ? parseApiError(usersError).detail
