@@ -46,10 +46,28 @@ The main goal is to ensure **high code quality, consistency, scalability, and re
   - A **component**
   - A **hook**
   - A **type**
+  - A **helper / util function** (format, parse, validate, etc.)
 
   👉 Always **verify that it does not already exist**
   - If it exists → reuse it
   - If it does not exist → create it following existing patterns
+
+---
+
+## 🔧 Helpers & Utils (`src/helpers`)
+
+**Single source of truth** for pure, reusable functions (formatting, parsing, validation, display labels, etc.) that are not tied to a single feature.
+
+- **Before creating any helper** (`formatX`, `parseY`, `getZLabel`, etc.):
+  1. **Search `src/helpers/`** — check existing files and exports
+  2. **If it exists** → import and reuse; do **not** redefine it locally
+  3. **If it does not exist** → add it to `src/helpers/`:
+     - Extend an existing file when the function fits the same domain (e.g. `format.helper.ts`, `validators.helper.ts`)
+     - Create a new `*.helper.ts` file when the domain is distinct or the file would grow too large
+- ❌ **Never** define inline helpers or duplicate the same logic in components, hooks, services, or feature `utils/` folders when the function is (or could be) shared
+- ✅ Feature-scoped `utils/` is only for logic **exclusive to that feature** and unlikely to be reused elsewhere
+- File naming: `{domain}.helper.ts` (e.g. `format.helper.ts`, `user-display.helper.ts`)
+- Import from `@/helpers/...` — one export per function, **named exports**
 
 ---
 
@@ -64,6 +82,7 @@ The main goal is to ensure **high code quality, consistency, scalability, and re
 - **Non-UI functions** (formatting, helpers, utils, etc.)
   - Must use the `function` keyword
   - Use **named exports**
+  - Must live in **`src/helpers/`** unless strictly feature-specific (see **Helpers & Utils** above)
     ```ts
     export function formatX() {}
     ```
