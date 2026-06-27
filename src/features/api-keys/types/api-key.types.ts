@@ -1,0 +1,41 @@
+import type {
+  EntityId,
+  IsoDateTimeString,
+  WithAccountRoles,
+  WithEntityTimestamps,
+} from "@/features/auth/types/auth.types";
+
+export type { EntityId, IsoDateTimeString };
+
+export interface ApiKeyResponse
+  extends WithAccountRoles, WithEntityTimestamps {
+  id: EntityId;
+  userId: EntityId;
+  description?: string | null;
+  platformId?: EntityId | null;
+  expiresAt?: IsoDateTimeString | null;
+  lastUsedAt?: IsoDateTimeString | null;
+  revokedAt?: IsoDateTimeString | null;
+}
+
+export interface CreateApiKeyInput {
+  description?: string;
+  platformId?: string;
+}
+
+export function isApiKeyRevoked(apiKey: ApiKeyResponse): boolean {
+  return Boolean(apiKey.revokedAt);
+}
+
+export function isApiKeyExpired(apiKey: ApiKeyResponse): boolean {
+  if (!apiKey.expiresAt) {
+    return false;
+  }
+
+  const expiresAt = new Date(apiKey.expiresAt);
+  return !Number.isNaN(expiresAt.getTime()) && expiresAt.getTime() <= Date.now();
+}
+
+export function isApiKeyActive(apiKey: ApiKeyResponse): boolean {
+  return !isApiKeyRevoked(apiKey) && !isApiKeyExpired(apiKey);
+}

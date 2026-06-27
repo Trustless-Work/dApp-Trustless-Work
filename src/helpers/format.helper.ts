@@ -58,6 +58,28 @@ export function formatText(text: string) {
 }
 
 /**
+ * Compact ISO date-time for narrow layouts (e.g. mobile cards).
+ */
+export function formatIsoDateTimeCompact(value?: string): string {
+  if (!value) {
+    return "-";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "-";
+  }
+
+  return date.toLocaleString(undefined, {
+    month: "numeric",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+/**
  * Format an ISO date-time string for display.
  */
 export function formatIsoDateTime(value?: string): string {
