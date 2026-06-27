@@ -7,7 +7,9 @@ import http from "@/lib/http";
 
 export class ApiKeyService {
   async listApiKeys(): Promise<ApiKeyResponse[]> {
-    const { data } = await http.get<ApiKeyResponse[]>("/core/users/me/api-keys");
+    const { data } = await http.get<ApiKeyResponse[]>(
+      "/core/users/me/api-keys",
+    );
     return data;
   }
 

@@ -1,7 +1,11 @@
 import { NextRequest } from "next/server";
 import { adminFetch } from "@/lib/admin-fetch";
 import { coreFetch } from "@/lib/core-fetch";
-import { parseJsonBody, proxyCoreResponse, validateSameOrigin } from "@/lib/bff-utils";
+import {
+  parseJsonBody,
+  proxyCoreResponse,
+  validateSameOrigin,
+} from "@/lib/bff-utils";
 import type { UpdateProfileInput } from "@/features/settings/schemas/profile.schema";
 import type { UserResponse } from "@/features/auth/types/auth.types";
 

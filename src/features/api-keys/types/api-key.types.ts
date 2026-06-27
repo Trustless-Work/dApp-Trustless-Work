@@ -7,8 +7,7 @@ import type {
 
 export type { EntityId, IsoDateTimeString };
 
-export interface ApiKeyResponse
-  extends WithAccountRoles, WithEntityTimestamps {
+export interface ApiKeyResponse extends WithAccountRoles, WithEntityTimestamps {
   id: EntityId;
   userId: EntityId;
   description?: string | null;
@@ -33,7 +32,9 @@ export function isApiKeyExpired(apiKey: ApiKeyResponse): boolean {
   }
 
   const expiresAt = new Date(apiKey.expiresAt);
-  return !Number.isNaN(expiresAt.getTime()) && expiresAt.getTime() <= Date.now();
+  return (
+    !Number.isNaN(expiresAt.getTime()) && expiresAt.getTime() <= Date.now()
+  );
 }
 
 export function isApiKeyActive(apiKey: ApiKeyResponse): boolean {

@@ -14,7 +14,9 @@ export class OrganizationService {
     return data;
   }
 
-  async create(payload: CreateOrganizationInput): Promise<OrganizationResponse> {
+  async create(
+    payload: CreateOrganizationInput,
+  ): Promise<OrganizationResponse> {
     const { data } = await http.post<OrganizationResponse>(
       "/core/platforms",
       payload,

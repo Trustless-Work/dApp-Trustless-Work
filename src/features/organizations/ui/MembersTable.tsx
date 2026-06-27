@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -26,13 +21,7 @@ type MembersTableProps = {
   members: MemberResponse[];
 };
 
-const MemberField = ({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) => (
+const MemberField = ({ label, value }: { label: string; value: string }) => (
   <div className="flex flex-col gap-1">
     <span className="text-xs text-muted-foreground">{label}</span>
     <span className="text-sm font-medium">{value}</span>
@@ -43,9 +32,7 @@ const MemberName = ({ member }: { member: MemberResponse }) => {
   const { user } = useAuth();
   const { walletAddress } = useWalletContext();
   const name = member.label?.trim() || "-";
-  const isMe = user
-    ? isMemberLinkedToUser(member, user, walletAddress)
-    : false;
+  const isMe = user ? isMemberLinkedToUser(member, user, walletAddress) : false;
 
   return (
     <span className="flex flex-wrap items-center gap-2">

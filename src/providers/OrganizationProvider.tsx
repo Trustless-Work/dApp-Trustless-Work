@@ -87,8 +87,7 @@ export const OrganizationProvider = ({
   }, []);
 
   const activeOrganization = useMemo(
-    () =>
-      organizations.find((org) => org.id === activeOrganizationId) ?? null,
+    () => organizations.find((org) => org.id === activeOrganizationId) ?? null,
     [activeOrganizationId, organizations],
   );
 

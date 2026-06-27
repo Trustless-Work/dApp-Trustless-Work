@@ -57,17 +57,12 @@ export function withCurrentUserMember(
   }
 
   if (
-    members.some((member) =>
-      isMemberLinkedToUser(member, user, walletAddress),
-    )
+    members.some((member) => isMemberLinkedToUser(member, user, walletAddress))
   ) {
     return members;
   }
 
-  return [
-    buildMemberFromUser(user, organizationId, walletAddress),
-    ...members,
-  ];
+  return [buildMemberFromUser(user, organizationId, walletAddress), ...members];
 }
 
 function getMemberMetadataEmail(member: MemberResponse): string | null {

@@ -59,10 +59,7 @@ export function useOrganizationMembersDisplay(organizationId: string | null) {
     ensuredOrganizationRef.current = organizationId;
 
     void organizationService
-      .upsertMember(
-        organizationId,
-        mapUserToMemberInput(user, walletAddress),
-      )
+      .upsertMember(organizationId, mapUserToMemberInput(user, walletAddress))
       .then(() =>
         queryClient.invalidateQueries({
           queryKey: organizationMembersQueryKey(organizationId),

@@ -120,8 +120,7 @@ export function RoundedTabLinks({
   const pathname = usePathname();
   const active =
     items.find(
-      (item) =>
-        pathname === item.href || pathname.startsWith(`${item.href}/`),
+      (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
     )?.href ?? items[0]?.href;
   const { listRef, indicator } = useSlidingIndicator(active, items.length);
 

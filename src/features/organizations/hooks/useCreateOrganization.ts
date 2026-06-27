@@ -51,7 +51,9 @@ export function useCreateOrganization(options?: UseCreateOrganizationOptions) {
             return [organization];
           }
 
-          const alreadyListed = previous.some((org) => org.id === organization.id);
+          const alreadyListed = previous.some(
+            (org) => org.id === organization.id,
+          );
           if (alreadyListed) {
             return previous;
           }

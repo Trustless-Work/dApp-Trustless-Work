@@ -62,7 +62,10 @@ export function OrdersChart() {
           </div>
         </div>
       </div>
-      <ChartContainer className={cn("aspect-16/5 w-full")} config={ordersChartConfig}>
+      <ChartContainer
+        className={cn("aspect-16/5 w-full")}
+        config={ordersChartConfig}
+      >
         <BarChart
           accessibilityLayer
           data={chartRowsStatic}

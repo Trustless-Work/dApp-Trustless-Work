@@ -29,10 +29,16 @@ export const ApiKeysSection = ({
   onSecretRevealed,
 }: ApiKeysSectionProps) => {
   const { apiKeys, isLoading, isError, error, refetch } = useApiKeys();
-  const { mutate: rotateApiKey, isPending: isRotating, variables: rotatingKeyId } =
-    useRotateApiKey({ onRotated: onSecretRevealed });
-  const { mutate: deleteApiKey, isPending: isDeleting, variables: deletingKeyId } =
-    useDeleteApiKey();
+  const {
+    mutate: rotateApiKey,
+    isPending: isRotating,
+    variables: rotatingKeyId,
+  } = useRotateApiKey({ onRotated: onSecretRevealed });
+  const {
+    mutate: deleteApiKey,
+    isPending: isDeleting,
+    variables: deletingKeyId,
+  } = useDeleteApiKey();
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   const errorDetail = isError ? parseApiError(error).detail : null;

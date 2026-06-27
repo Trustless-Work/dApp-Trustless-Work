@@ -121,7 +121,9 @@ export const AddMemberDialog = ({
             </div>
           ) : null}
 
-          {!isLoadingUsers && !usersErrorDetail && availableUsers.length === 0 ? (
+          {!isLoadingUsers &&
+          !usersErrorDetail &&
+          availableUsers.length === 0 ? (
             <NoData
               icon={UsersIcon}
               title="No users available to add"
@@ -129,9 +131,7 @@ export const AddMemberDialog = ({
             />
           ) : null}
 
-          {!isLoadingUsers &&
-          !usersErrorDetail &&
-          availableUsers.length > 0 ? (
+          {!isLoadingUsers && !usersErrorDetail && availableUsers.length > 0 ? (
             <UserSearchCombobox
               users={availableUsers}
               value={selectedUserId}
