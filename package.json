@@ -54,6 +54,22 @@
     "vaul": "^1.1.2",
     "zod": "^3.25.76"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@reown/appkit",
+      "@stellar/stellar-sdk",
+      "blake-hash",
+      "bufferutil",
+      "protobufjs",
+      "secp256k1",
+      "sharp",
+      "tiny-secp256k1",
+      "unrs-resolver",
+      "usb",
+      "utf-8-validate"
+    ],
+    "ignoredBuiltDependencies": ["sharp", "unrs-resolver"]
+  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/d3-array": "^3.2.2",
