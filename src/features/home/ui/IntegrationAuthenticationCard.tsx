@@ -52,7 +52,7 @@ export const IntegrationAuthenticationCard = () => (
           <div className="space-y-2 min-w-0 flex-1">
             <p className="text-sm font-medium text-foreground">Header</p>
             <code className="text-xs bg-muted px-2 py-1 rounded break-all">
-              "x-api-key": your_api_key,
+              &quot;x-api-key&quot;: your_api_key,
             </code>
           </div>
         </div>

@@ -1,8 +1,5 @@
 import type { LucideIcon } from "lucide-react";
 import {
-  BookOpenIcon,
-  FlaskConicalIcon,
-  GlobeIcon,
   KeyRoundIcon,
   Layers2Icon,
   LayoutDashboardIcon,

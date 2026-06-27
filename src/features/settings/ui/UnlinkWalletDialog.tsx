@@ -12,7 +12,6 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { formatAddress } from "@/helpers/format.helper";
-import { cn } from "@/lib/utils";
 
 type UnlinkWalletDialogProps = {
   unlinkTarget: string | null;

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useMounted } from "@/hooks/useMounted";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -27,13 +28,11 @@ type NetworkToggleProps = {
 
 export const NetworkToggle = ({ className }: NetworkToggleProps) => {
   const { currentNetwork, changeNetwork, isReseting } = useNetwork();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   const [showMainnetDialog, setShowMainnetDialog] = useState(false);
   const [pendingNetwork, setPendingNetwork] = useState<NetworkType | null>(
     null,
   );
-
-  useEffect(() => setMounted(true), []);
 
   const switchChecked =
     pendingNetwork === "mainnet" || currentNetwork === "mainnet";

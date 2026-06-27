@@ -7,9 +7,11 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
 } from "react";
 import { useOrganizations } from "@/features/organizations/hooks/useOrganizations";
 import type { OrganizationResponse } from "@/features/organizations/types/organization.types";
+import { useMounted } from "@/hooks/useMounted";
 import {
   getStoredActiveOrganizationId,
   setStoredActiveOrganizationId,
@@ -33,6 +35,10 @@ type OrganizationProviderProps = {
   children: React.ReactNode;
 };
 
+function subscribeToStorage() {
+  return () => {};
+}
+
 function resolveActiveOrganizationId(
   organizations: OrganizationResponse[],
   storedId: string | null,
@@ -52,37 +58,39 @@ export const OrganizationProvider = ({
   children,
 }: OrganizationProviderProps) => {
   const { data, isLoading, isError, refetch } = useOrganizations();
-  const organizations = data ?? [];
-  const [activeOrganizationId, setActiveOrganizationIdState] = useState<
+  const organizations = useMemo(() => data ?? [], [data]);
+  const hasHydrated = useMounted();
+  const storedOrganizationId = useSyncExternalStore(
+    subscribeToStorage,
+    getStoredActiveOrganizationId,
+    () => null,
+  );
+  const [selectedOrganizationId, setSelectedOrganizationId] = useState<
     string | null
   >(null);
-  const [hasHydrated, setHasHydrated] = useState(false);
 
-  useEffect(() => {
-    setHasHydrated(true);
-    setActiveOrganizationIdState(getStoredActiveOrganizationId());
-  }, []);
-
-  useEffect(() => {
-    if (!hasHydrated || isLoading) {
-      return;
+  const activeOrganizationId = useMemo(() => {
+    if (!hasHydrated) {
+      return null;
     }
 
-    const resolvedId = resolveActiveOrganizationId(
-      organizations,
-      activeOrganizationId,
-    );
+    const preferredId = selectedOrganizationId ?? storedOrganizationId;
+    return resolveActiveOrganizationId(organizations, preferredId);
+  }, [
+    hasHydrated,
+    selectedOrganizationId,
+    storedOrganizationId,
+    organizations,
+  ]);
 
-    if (resolvedId !== activeOrganizationId) {
-      setActiveOrganizationIdState(resolvedId);
-      if (resolvedId) {
-        setStoredActiveOrganizationId(resolvedId);
-      }
+  useEffect(() => {
+    if (activeOrganizationId) {
+      setStoredActiveOrganizationId(activeOrganizationId);
     }
-  }, [activeOrganizationId, hasHydrated, isLoading, organizations]);
+  }, [activeOrganizationId]);
 
   const setActiveOrganization = useCallback((organizationId: string) => {
-    setActiveOrganizationIdState(organizationId);
+    setSelectedOrganizationId(organizationId);
     setStoredActiveOrganizationId(organizationId);
   }, []);
 

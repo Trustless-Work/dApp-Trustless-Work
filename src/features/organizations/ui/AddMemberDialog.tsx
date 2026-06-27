@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2, UsersIcon } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { NoData } from "@/components/shared/NoData";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,11 +55,12 @@ export const AddMemberDialog = ({
   } = useAdminUsers(open);
   const { mutateAsync, isPending } = useUpsertMember();
 
-  useEffect(() => {
-    if (!open) {
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
       setSelectedUserId(null);
     }
-  }, [open]);
+    onOpenChange(nextOpen);
+  };
 
   const availableUsers = useMemo(() => {
     const allUsers = users ?? [];
@@ -92,7 +93,7 @@ export const AddMemberDialog = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add member</DialogTitle>

@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ExternalLink, Key, Play, Wallet, Settings, User } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { ApiKeyVideoFallback } from "./ApiKeyVideoFallback";
@@ -20,10 +20,7 @@ export const ApiKeySection = () => {
   const mounted = useMounted();
   const isDark = mounted && resolvedTheme === "dark";
   const [hasVideoError, setHasVideoError] = useState(false);
-
-  useEffect(() => {
-    setHasVideoError(false);
-  }, [isDark]);
+  const videoThemeKey = isDark ? "dark" : "light";
 
   const steps = [
     {
@@ -96,6 +93,7 @@ export const ApiKeySection = () => {
                     <ApiKeyVideoFallback />
                   ) : (
                     <video
+                      key={videoThemeKey}
                       className="w-full h-full object-cover"
                       controls
                       onError={() => setHasVideoError(true)}

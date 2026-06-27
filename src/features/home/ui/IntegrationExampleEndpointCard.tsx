@@ -18,7 +18,7 @@ export const IntegrationExampleEndpointCard = () => (
         ExampleEndpoint
       </CardTitle>
       <CardDescription className="text-sm sm:text-base">
-        Here's an example of how to fund an escrow using our API.
+        Here&apos;s an example of how to fund an escrow using our API.
       </CardDescription>
     </CardHeader>
     <CardContent>

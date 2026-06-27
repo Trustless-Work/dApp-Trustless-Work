@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   CheckCircle,
@@ -85,7 +85,13 @@ const features: Feature[] = [
 
 export default function FeatureShowcase() {
   const [activeTab, setActiveTab] = useState(features[0].id);
-  const [progress, setProgress] = useState<Record<string, number>>({});
+  const [progress, setProgress] = useState<Record<string, number>>(() => {
+    const initialProgress: Record<string, number> = {};
+    features.forEach((feature) => {
+      initialProgress[feature.id] = 0;
+    });
+    return initialProgress;
+  });
   const [videoErrors, setVideoErrors] = useState<Record<string, boolean>>({});
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
   const { resolvedTheme } = useTheme();
@@ -100,14 +106,44 @@ export default function FeatureShowcase() {
     return feature.videoUrl[variant];
   };
 
-  // Initialize progress for all tabs
-  useEffect(() => {
-    const initialProgress: Record<string, number> = {};
-    features.forEach((feature) => {
-      initialProgress[feature.id] = 0;
+  const handleTabChange = useCallback((value: string) => {
+    setActiveTab(value);
+
+    Object.values(videoRefs.current).forEach((video) => {
+      if (video) {
+        video.pause();
+      }
     });
-    setProgress(initialProgress);
-  }, []);
+
+    setTimeout(() => {
+      const selectedVideo = videoRefs.current[value];
+      if (selectedVideo && !videoErrors[value]) {
+        selectedVideo.muted = true;
+        selectedVideo.play().catch((e) => {
+          console.error("Error playing video:", e);
+          selectedVideo.addEventListener(
+            "click",
+            () => {
+              selectedVideo.play();
+            },
+            { once: true },
+          );
+        });
+      }
+    }, 100);
+  }, [videoErrors]);
+
+  const handleVideoEnd = useCallback((currentId: string) => {
+    const currentIndex = features.findIndex((f) => f.id === currentId);
+    const nextIndex = (currentIndex + 1) % features.length;
+    const nextId = features[nextIndex].id;
+
+    setProgress((prev) => ({ ...prev, [currentId]: 100 }));
+
+    setTimeout(() => {
+      handleTabChange(nextId);
+    }, 500);
+  }, [handleTabChange]);
 
   // Auto-play the first video when component mounts
   useEffect(() => {
@@ -150,53 +186,7 @@ export default function FeatureShowcase() {
     }, 100);
 
     return () => window.clearInterval(interval);
-  }, [activeTab, videoErrors]);
-
-  // Handle tab change
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-
-    // Pause all videos
-    Object.values(videoRefs.current).forEach((video) => {
-      if (video) {
-        video.pause();
-      }
-    });
-
-    // Play the selected video from where it left off
-    setTimeout(() => {
-      const selectedVideo = videoRefs.current[value];
-      if (selectedVideo && !videoErrors[value]) {
-        selectedVideo.muted = true; // Ensure it's muted
-        selectedVideo.play().catch((e) => {
-          console.error("Error playing video:", e);
-          // If autoplay fails, try again after user interaction
-          selectedVideo.addEventListener(
-            "click",
-            () => {
-              selectedVideo.play();
-            },
-            { once: true },
-          );
-        });
-      }
-    }, 100);
-  };
-
-  // Move to the next tab when video ends
-  const handleVideoEnd = (currentId: string) => {
-    const currentIndex = features.findIndex((f) => f.id === currentId);
-    const nextIndex = (currentIndex + 1) % features.length;
-    const nextId = features[nextIndex].id;
-
-    // Set progress to 100% for the completed video
-    setProgress((prev) => ({ ...prev, [currentId]: 100 }));
-
-    // Change to the next tab after a short delay
-    setTimeout(() => {
-      handleTabChange(nextId);
-    }, 500);
-  };
+  }, [activeTab, videoErrors, handleVideoEnd]);
 
   // Update progress for the active video
   const updateProgress = (id: string, video: HTMLVideoElement) => {

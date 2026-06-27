@@ -23,15 +23,11 @@ export const useWalletBalance = (): WalletBalance => {
   const { isConnected } = useWallet();
   const { walletAddress } = useWalletContext();
 
-  // Clear error state on mount
-  useEffect(() => {
-    setError(null);
-  }, []);
-
   // Refs for tracking timers and in-flight requests
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isRequestInFlightRef = useRef(false);
+  const fetchBalanceRef = useRef<() => Promise<void>>(async () => {});
 
   // Helper function to clear retry timeout
   const clearRetryTimeout = useCallback(() => {
@@ -176,7 +172,7 @@ export const useWalletBalance = (): WalletBalance => {
           // Auto-retry network errors after 5 seconds
           retryTimeoutRef.current = setTimeout(() => {
             if (walletAddress && isConnected) {
-              fetchBalance();
+              void fetchBalanceRef.current();
             }
           }, 5000);
         } else if (err.message.includes("Invalid")) {
@@ -198,15 +194,16 @@ export const useWalletBalance = (): WalletBalance => {
     }
   }, [walletAddress, isConnected, clearRetryTimeout]);
 
+  useEffect(() => {
+    fetchBalanceRef.current = fetchBalance;
+  }, [fetchBalance]);
+
   const refresh = useCallback(() => {
-    fetchBalance();
+    void fetchBalance();
   }, [fetchBalance]);
 
   useEffect(() => {
-    // Clear any previous error state when dependencies change
-    setError(null);
-
-    fetchBalance();
+    void fetchBalance();
 
     // Set up periodic refresh every 30 seconds when connected
     if (walletAddress && isConnected) {

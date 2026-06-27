@@ -41,11 +41,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     const storedAddress = localStorage.getItem("walletAddress");
     const storedName = localStorage.getItem("walletName");
 
-    // This effect initializes state from localStorage once on mount.
-    // It is a controlled sync from an external store, so we allow setState here.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedAddress) setWalletAddress(storedAddress);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (storedName) setWalletName(storedName);
   }, []);
 

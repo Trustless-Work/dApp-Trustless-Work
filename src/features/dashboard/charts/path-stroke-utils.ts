@@ -58,6 +58,7 @@ export function usePathStrokeMetrics(
         ? prev
         : { pathD: d, pathLength: len },
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- caller supplies geometry deps
   }, deps);
 
   return metrics;

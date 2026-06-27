@@ -2,7 +2,6 @@ import { NextRequest } from "next/server";
 import { adminFetch } from "@/lib/admin-fetch";
 import { parseJsonBody, proxyCoreResponse } from "@/lib/bff-utils";
 import type {
-  GeneratedApiKeyResponse,
   RegisterVerifyRequest,
 } from "@/features/auth/types/auth.types";
 

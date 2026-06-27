@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { useMounted } from "@/hooks/useMounted";
 import { AnimatedThemeToggler } from "../ui/animated-theme-toggler";
 
 const TOGGLE_CLASSNAME =
@@ -9,9 +9,7 @@ const TOGGLE_CLASSNAME =
 
 export const ToggleTheme = () => {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useMounted();
 
   if (!mounted || !resolvedTheme) {
     return <div className={TOGGLE_CLASSNAME} aria-hidden />;
