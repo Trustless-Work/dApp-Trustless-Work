@@ -56,7 +56,11 @@ export const ProfileEditForm = ({
         <Form {...form}>
           <form onSubmit={onSubmit} className="flex flex-col gap-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <UserAvatar user={user} size="lg" className="size-16 rounded-xl" />
+              <UserAvatar
+                user={user}
+                size="lg"
+                className="size-16 rounded-xl"
+              />
               <div className="flex flex-1 flex-col gap-2">
                 <Button
                   type="button"
@@ -68,9 +72,6 @@ export const ProfileEditForm = ({
                   <ImageIcon />
                   Change photo
                 </Button>
-                <p className="text-sm text-muted-foreground">
-                  Profile photo upload coming soon.
-                </p>
               </div>
             </div>
 

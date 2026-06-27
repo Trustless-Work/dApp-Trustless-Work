@@ -17,6 +17,7 @@ import {
   organizationMembersQueryKey,
 } from "@/features/organizations/hooks/useOrganizations";
 import { parseApiError } from "@/lib/api-error";
+import { playSound } from "@/lib/sounds";
 import { useAuth } from "@/providers/AuthProvider";
 import { useWalletContext } from "@/providers/WalletProvider";
 
@@ -70,6 +71,7 @@ export function useCreateOrganization(options?: UseCreateOrganizationOptions) {
       void queryClient.invalidateQueries({
         queryKey: organizationMembersQueryKey(organization.id),
       });
+      playSound("accept");
       toast.success("Organization created", {
         description: `"${organization.name}" is ready to use.`,
       });

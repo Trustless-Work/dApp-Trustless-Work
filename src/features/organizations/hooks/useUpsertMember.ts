@@ -6,6 +6,7 @@ import { organizationService } from "@/features/organizations/services/organizat
 import type { UpsertMemberInput } from "@/features/organizations/types/organization.types";
 import { organizationMembersQueryKey } from "@/features/organizations/hooks/useOrganizations";
 import { parseApiError } from "@/lib/api-error";
+import { playSound } from "@/lib/sounds";
 
 type UpsertMemberVariables = {
   organizationId: string;
@@ -22,6 +23,7 @@ export function useUpsertMember() {
       void queryClient.invalidateQueries({
         queryKey: organizationMembersQueryKey(variables.organizationId),
       });
+      playSound("accept");
       toast.success("Member saved", {
         description: "The member record was updated successfully.",
       });

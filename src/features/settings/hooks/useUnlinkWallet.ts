@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { walletService } from "@/features/settings/services/wallet.service";
 import { USER_WALLETS_QUERY_KEY } from "@/features/settings/hooks/useUserWallets";
 import { parseApiError } from "@/lib/api-error";
+import { playSound } from "@/lib/sounds";
 import { formatAddress } from "@/helpers/format.helper";
 
 export function useUnlinkWallet() {
@@ -14,6 +15,7 @@ export function useUnlinkWallet() {
     mutationFn: (address: string) => walletService.unlinkWallet(address),
     onSuccess: (_data, address) => {
       void queryClient.invalidateQueries({ queryKey: USER_WALLETS_QUERY_KEY });
+      playSound("delete");
       toast.success("Wallet unlinked", {
         description: `${formatAddress(address, 6)} was removed from your account.`,
       });

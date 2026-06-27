@@ -8,6 +8,7 @@ import { signTransaction } from "@/components/tw-blocks/wallet-kit/wallet-kit";
 import { walletService } from "@/features/settings/services/wallet.service";
 import { USER_WALLETS_QUERY_KEY } from "@/features/settings/hooks/useUserWallets";
 import { parseApiError } from "@/lib/api-error";
+import { playSound } from "@/lib/sounds";
 import { formatAddress } from "@/helpers/format.helper";
 
 function isWalletModalDismissed(error: unknown): boolean {
@@ -45,6 +46,7 @@ export function useLinkWallet() {
     },
     onSuccess: (result) => {
       void queryClient.invalidateQueries({ queryKey: USER_WALLETS_QUERY_KEY });
+      playSound("accept");
       toast.success("Wallet linked", {
         description: `${formatAddress(result.address, 6)} is now verified on your account.`,
       });

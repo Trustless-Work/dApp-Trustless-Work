@@ -1,14 +1,9 @@
 "use client";
 
-import { CheckIcon, CopyIcon, Trash2Icon } from "lucide-react";
+import { CheckIcon, CopyIcon, Star, Trash2Icon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -20,6 +15,11 @@ import {
 import type { UserWalletResponse } from "@/features/settings/types/wallet.types";
 import { formatAddress } from "@/helpers/format.helper";
 import { useCopy } from "@/hooks/useCopy";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type WalletRowProps = {
   wallet: UserWalletResponse;
@@ -73,11 +73,14 @@ const WalletActions = ({
 };
 
 const ConnectedBadge = ({ isConnected }: { isConnected: boolean }) =>
-  isConnected ? (
-    <Badge variant="default" className="font-normal">
-      Connected
-    </Badge>
-  ) : null;
+  isConnected && (
+    <Tooltip>
+      <TooltipTrigger>
+        <Star className="text-yellow-500 size-4 cursor-pointer" />
+      </TooltipTrigger>
+      <TooltipContent>Connected</TooltipContent>
+    </Tooltip>
+  );
 
 const WalletCard = ({
   wallet,
