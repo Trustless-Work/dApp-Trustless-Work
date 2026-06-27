@@ -30,7 +30,7 @@ export const UnlinkWalletDialog = ({
   <AlertDialog open={unlinkTarget !== null} onOpenChange={onOpenChange}>
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Unlink wallet?</AlertDialogTitle>
+        <AlertDialogTitle>Unlink Wallet?</AlertDialogTitle>
         <AlertDialogDescription>
           {unlinkTarget
             ? `This will remove ${formatAddress(unlinkTarget, 8)} from your account. You can link it again later with a new verification.`
@@ -40,9 +40,7 @@ export const UnlinkWalletDialog = ({
       <AlertDialogFooter>
         <AlertDialogCancel disabled={isUnlinking}>Cancel</AlertDialogCancel>
         <AlertDialogAction
-          className={cn(
-            "bg-destructive text-white hover:bg-destructive/90",
-          )}
+          variant="destructive"
           disabled={isUnlinking}
           onClick={(event) => {
             event.preventDefault();
@@ -55,7 +53,7 @@ export const UnlinkWalletDialog = ({
               Unlinking...
             </>
           ) : (
-            "Unlink wallet"
+            "Unlink Wallet"
           )}
         </AlertDialogAction>
       </AlertDialogFooter>

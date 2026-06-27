@@ -12,7 +12,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -69,9 +68,9 @@ export const ProfileEditForm = ({
                   <ImageIcon />
                   Change photo
                 </Button>
-                <FormDescription>
+                <p className="text-sm text-muted-foreground">
                   Profile photo upload coming soon.
-                </FormDescription>
+                </p>
               </div>
             </div>
 

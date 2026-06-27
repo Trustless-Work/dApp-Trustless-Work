@@ -21,8 +21,7 @@ const WalletsListSkeleton = () => (
           <CardHeader className="pb-3">
             <Skeleton className="h-5 w-40" />
           </CardHeader>
-          <CardContent className="flex items-center justify-between gap-3">
-            <Skeleton className="h-4 w-32" />
+          <CardContent className="flex justify-end">
             <Skeleton className="size-8 rounded-md" />
           </CardContent>
         </Card>
@@ -33,7 +32,6 @@ const WalletsListSkeleton = () => (
         <TableHeader>
           <TableRow>
             <TableHead>Wallet</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead className="w-[100px] text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -42,9 +40,6 @@ const WalletsListSkeleton = () => (
             <TableRow key={index}>
               <TableCell>
                 <Skeleton className="h-4 w-48" />
-              </TableCell>
-              <TableCell>
-                <Skeleton className="h-5 w-20" />
               </TableCell>
               <TableCell className="text-right">
                 <Skeleton className="ml-auto h-8 w-16" />

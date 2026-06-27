@@ -72,30 +72,12 @@ const WalletActions = ({
   );
 };
 
-const WalletStatusBadges = ({
-  isConnected,
-  isPending,
-}: {
-  isConnected: boolean;
-  isPending: boolean;
-}) => (
-  <div className="flex flex-wrap items-center gap-1.5">
-    {isPending ? (
-      <Badge variant="outline" className="font-normal">
-        Pending verification
-      </Badge>
-    ) : (
-      <Badge variant="secondary" className="font-normal">
-        Verified
-      </Badge>
-    )}
-    {isConnected ? (
-      <Badge variant="default" className="font-normal">
-        Connected
-      </Badge>
-    ) : null}
-  </div>
-);
+const ConnectedBadge = ({ isConnected }: { isConnected: boolean }) =>
+  isConnected ? (
+    <Badge variant="default" className="font-normal">
+      Connected
+    </Badge>
+  ) : null;
 
 const WalletCard = ({
   wallet,
@@ -105,16 +87,13 @@ const WalletCard = ({
   isUnlinking,
 }: WalletRowProps) => (
   <Card>
-    <CardHeader className="pb-3">
+    <CardHeader className="flex flex-row items-center justify-between gap-2 pb-3">
       <CardTitle className="font-mono text-sm font-medium">
         {formatAddress(wallet.address, 8)}
       </CardTitle>
+      <ConnectedBadge isConnected={isConnected} />
     </CardHeader>
-    <CardContent className="flex items-center justify-between gap-3">
-      <WalletStatusBadges
-        isConnected={isConnected}
-        isPending={!wallet.verified}
-      />
+    <CardContent className="flex justify-end">
       <WalletActions
         address={wallet.address}
         canUnlink={canUnlink && wallet.verified}
@@ -133,14 +112,11 @@ const WalletTableRow = ({
   isUnlinking,
 }: WalletRowProps) => (
   <TableRow>
-    <TableCell className="font-mono text-sm">
-      {formatAddress(wallet.address, 10)}
-    </TableCell>
     <TableCell>
-      <WalletStatusBadges
-        isConnected={isConnected}
-        isPending={!wallet.verified}
-      />
+      <div className="flex items-center gap-2 font-mono text-sm">
+        <span>{formatAddress(wallet.address, 10)}</span>
+        <ConnectedBadge isConnected={isConnected} />
+      </div>
     </TableCell>
     <TableCell className="text-right">
       <WalletActions
@@ -189,7 +165,6 @@ export const WalletsList = ({
           <TableHeader>
             <TableRow>
               <TableHead>Wallet</TableHead>
-              <TableHead>Status</TableHead>
               <TableHead className="w-[100px] text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
