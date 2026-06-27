@@ -24,17 +24,17 @@ This is independent of **single app**: you can have `src/features`.
 
 Slices vary by team; treat this as a **menu of patterns**, not a required checklist.
 
-| Subfolder                            | Purpose                                                                                                                                                                                         |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Subfolder                            | Purpose                                                                                                                                                                                                |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **`ui/`**                            | UI building blocks **specific to this feature**—forms, tables, panels, wizards. Use global `src/components/ui/` (or a design system package) only for truly generic primitives (button, layout shell). |
-| **`views/`** (or **`screens/`**)     | **Large compositions**: full pages or route segments that assemble feature UI and wire data. Routing files stay thin and import from here.                                                        |
-| **`hooks/`** (or **`composables/`**) | Stateful logic tied to the UI framework: queries/mutations, form state, subscriptions, browser APIs. **No** raw HTTP client usage scattered everywhere—call into **`services/`** from here.     |
-| **`services/`**                      | **Side-effectful I/O**: HTTP clients, SDK wrappers, WebSocket setup. Exposes functions or a small class per use case. **No** framework-specific render API (no JSX in React, etc.).             |
-| **`schemas/`**                       | Validation and types for inputs/API payloads (Zod, Yup, Valibot, io-ts, …) when you co-locate rules with the feature.                                                                           |
-| **`utils/`**                         | Pure helpers used only in this slice (formatting, sorting, feature-specific guards).                                                                                                            |
-| **`state/`** (optional)              | Feature-scoped global state if your architecture uses stores (Redux slice, Zustand, Pinia, …).                                                                                                  |
-| **`constants/`** (optional)          | Magic strings, config keys, route fragments for this domain only.                                                                                                                               |
-| **`extensions/`** (optional)         | Plugins or adapters (rich text, analytics bridges) that belong to this slice.                                                                                                                   |
+| **`views/`** (or **`screens/`**)     | **Large compositions**: full pages or route segments that assemble feature UI and wire data. Routing files stay thin and import from here.                                                             |
+| **`hooks/`** (or **`composables/`**) | Stateful logic tied to the UI framework: queries/mutations, form state, subscriptions, browser APIs. **No** raw HTTP client usage scattered everywhere—call into **`services/`** from here.            |
+| **`services/`**                      | **Side-effectful I/O**: HTTP clients, SDK wrappers, WebSocket setup. Exposes functions or a small class per use case. **No** framework-specific render API (no JSX in React, etc.).                    |
+| **`schemas/`**                       | Validation and types for inputs/API payloads (Zod, Yup, Valibot, io-ts, …) when you co-locate rules with the feature.                                                                                  |
+| **`utils/`**                         | Pure helpers used only in this slice (formatting, sorting, feature-specific guards).                                                                                                                   |
+| **`state/`** (optional)              | Feature-scoped global state if your architecture uses stores (Redux slice, Zustand, Pinia, …).                                                                                                         |
+| **`constants/`** (optional)          | Magic strings, config keys, route fragments for this domain only.                                                                                                                                      |
+| **`extensions/`** (optional)         | Plugins or adapters (rich text, analytics bridges) that belong to this slice.                                                                                                                          |
 
 ---
 

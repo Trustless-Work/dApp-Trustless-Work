@@ -10,7 +10,7 @@ export const Container = ({
   return (
     <div
       className={cn(
-        "w-full rounded-2xl border border-border bg-card p-6 shadow-sm",
+        "w-full rounded-2xl border border-border bg-card/40 p-6 shadow-sm",
         className,
       )}
     >

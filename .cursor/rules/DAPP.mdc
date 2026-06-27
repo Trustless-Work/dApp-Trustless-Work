@@ -52,6 +52,26 @@ The main goal is to ensure **high code quality, consistency, scalability, and re
   - If it exists → reuse it
   - If it does not exist → create it following existing patterns
 
+### React UI file size (`*.tsx` in `ui/`, `components/`)
+
+React UI component files must stay **small and scannable**. Line count includes co-located skeletons and private subcomponents in the **same file**.
+
+| Limit | Lines | Action |
+| --- | --- | --- |
+| **Target** | ≤ **200** | Default — new and refactored components should land here |
+| **Hard max** | **300** | Must not exceed — split before merging or continuing work |
+
+**When a file approaches ~200 lines or exceeds 300**, extract in this order:
+
+1. **Presentational chunks** → sibling components in the same feature `ui/` folder (e.g. `MembersTable.tsx` + `MembersTableRow.tsx`, `VerifiedWalletsList.tsx`)
+2. **State, effects, mutations, form wiring** → `hooks/` (see **Forms Structure** and `FORMS.mdc`)
+3. **Pure helpers** (format, parse, validate, labels) → `src/helpers/` or feature `utils/` when feature-only
+4. **Large skeletons** → `*Skeleton.tsx` in the same folder when they push the main file over the limit
+
+**Does not apply** to non-UI files (`hooks/`, `services/`, `schemas/`, route handlers) — those follow single-responsibility by domain, not this JSX line cap.
+
+**Refactoring existing oversized files** (e.g. >300 lines) is required when you touch them for a meaningful change — do not grow them further; extract as part of the same PR.
+
 ---
 
 ## 🔧 Helpers & Utils (`src/helpers`)
@@ -246,7 +266,9 @@ const MembersTableSkeleton = () => (
         <TableBody>
           {Array.from({ length: 5 }).map((_, index) => (
             <TableRow key={index}>
-              <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-24" />
+              </TableCell>
               {/* one Skeleton per cell, matching MembersTable */}
             </TableRow>
           ))}
@@ -258,7 +280,11 @@ const MembersTableSkeleton = () => (
 
 export const MembersSection = () => {
   // ...
-  return isLoading ? <MembersTableSkeleton /> : <MembersTable members={members} />;
+  return isLoading ? (
+    <MembersTableSkeleton />
+  ) : (
+    <MembersTable members={members} />
+  );
 };
 ```
 
@@ -277,15 +303,17 @@ When a query, list, table, or section has **finished loading** and the result se
 import { UsersIcon } from "lucide-react";
 import { NoData } from "@/components/shared/NoData";
 
-{!isLoading && !error && items.length === 0 ? (
-  <NoData
-    icon={UsersIcon}
-    title="No members yet"
-    description="Add a user from the directory to get started."
-    actionLabel="Add member"
-    onAction={() => setDialogOpen(true)}
-  />
-) : null}
+{
+  !isLoading && !error && items.length === 0 ? (
+    <NoData
+      icon={UsersIcon}
+      title="No members yet"
+      description="Add a user from the directory to get started."
+      actionLabel="Add member"
+      onAction={() => setDialogOpen(true)}
+    />
+  ) : null;
+}
 ```
 
 ---
