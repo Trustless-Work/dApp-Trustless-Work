@@ -1,0 +1,97 @@
+---
+description: Strict TypeScript — never `any`, advanced types, compile-time safety
+globs: "**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+# TypeScript — Strict & Advanced Types
+
+Follow `.agents/skills/typescript-advanced-types` (and `references/details.md` for advanced patterns) when designing or refactoring types.
+
+---
+
+## ⛔ Never use `any`
+
+**Forbidden everywhere** — types, generics, casts, catch blocks, API responses, event handlers, third-party shims.
+
+| Instead of | Use |
+| --- | --- |
+| `any` | `unknown` + narrowing (type guards, `zod`, `typeof`, `in`) |
+| `as any` | Fix the type, generic constraint, or overload |
+| `Record<string, any>` | `Record<string, unknown>` or a typed interface |
+| `(...args: any[])` | Generic `<TArgs extends unknown[]>` or explicit tuple |
+| `@ts-ignore` / `@ts-expect-error` | Resolve the root type error (last resort only, with comment) |
+
+```typescript
+// ❌ BAD
+function parsePayload(data: any) {
+  return data.id;
+}
+
+// ✅ GOOD
+function parsePayload(data: unknown): string {
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    "id" in data &&
+    typeof (data as { id: unknown }).id === "string"
+  ) {
+    return (data as { id: string }).id;
+  }
+  throw new Error("Invalid payload");
+}
+```
+
+---
+
+## Required practices
+
+1. **`strict: true`** — no implicit `any`, strict null checks, no unchecked indexed access shortcuts
+2. **Explicit types** for public API surfaces: payloads, responses, hooks return values, service methods, route handlers
+3. **Prefer inference** for locals when the initializer already defines the type; annotate when it improves clarity at boundaries
+4. **`interface`** for object shapes; **`type`** for unions, intersections, mapped/conditional types
+5. **`as const`** for literal unions (roles, status codes, query keys)
+6. **Type guards** over assertions — `function isX(value: unknown): value is X`
+7. **Discriminated unions** for variant API/state shapes (`readonly registered: true | false`, etc.)
+8. **Composition** — shared bases (`WithTimestamps`, `WithRoles`), `Pick` / `Omit` / `Partial` / `Required` / `Extract` / `NonNullable`
+9. **Generics with constraints** — `T extends HasId`, not unconstrained escape hatches
+10. **Compile-time checks** for critical type contracts — `AssertEqual`, `ExpectTrue` (zero runtime cost)
+
+---
+
+## Where types live
+
+- **Feature domain types** → `src/features/[feature]/types/*.types.ts`
+- **Shared primitives** (IDs, branded strings, role unions) → feature types or a shared types module — not duplicated inline
+- **Before adding a type** → search existing `*.types.ts` and reuse/extend
+
+---
+
+## Patterns to apply (from advanced-types skill)
+
+- **API variants** → discriminated union + exported variant types + type guards
+- **Request hierarchy** → `interface Child extends Parent { … }`
+- **Derived inputs** → `Required<Pick<…>> & Partial<Pick<…>>` from a single source shape
+- **Literal unions** → `const ROLES = ["A", "B"] as const; type Role = (typeof ROLES)[number]`
+- **Unknown external JSON** → parse/narrow at the boundary; typed domain model inside the app
+
+```typescript
+// ✅ Discriminated union + guard
+export type Result =
+  | { readonly ok: true; data: User }
+  | { readonly ok: false; error: string };
+
+export function isOk(result: Result): result is Extract<Result, { ok: true }> {
+  return result.ok;
+}
+```
+
+---
+
+## Review checklist
+
+- [ ] No `any`, `as any`, or untyped `catch (e)` without narrowing
+- [ ] Unions narrowed with guards or discriminant checks — not blind casts
+- [ ] Nullable API fields modeled (`T | null | undefined`) and handled
+- [ ] Reused types instead of copy-pasted inline object shapes
+- [ ] Complex type logic justified; skill consulted for non-trivial cases

@@ -1,27 +1,19 @@
-/* eslint-disable prettier/prettier */
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { SESSION_COOKIE_NAME } from "@/lib/session";
 
 export function middleware(request: NextRequest) {
-  const maintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+  const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME);
 
-  // Maintenance mode activated
-  if (
-    maintenanceMode &&
-    request.nextUrl.pathname !== "/maintenance" &&
-    !request.nextUrl.pathname.startsWith("/_next") &&
-    !request.nextUrl.pathname.startsWith("/static")
-  ) {
-    return NextResponse.redirect(new URL("/maintenance", request.url));
-  }
-
-  // Maintenance mode deactivated
-  if (!maintenanceMode && request.nextUrl.pathname === "/maintenance") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  if (!sessionCookie?.value) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/:path*"],
+  matcher: ["/dashboard/:path*"],
 };

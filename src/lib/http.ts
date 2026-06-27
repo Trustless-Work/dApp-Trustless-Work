@@ -1,28 +1,35 @@
-import axios from "axios";
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { getStoredNetwork } from "@/lib/client-storage";
-
-const ENV =
-  process.env.NEXT_PUBLIC_ENV === "PROD"
-    ? process.env.NEXT_PUBLIC_API_URL_PROD
-    : process.env.NEXT_PUBLIC_ENV === "DEV"
-      ? process.env.NEXT_PUBLIC_API_URL_DEV
-      : process.env.NEXT_PUBLIC_API_URL_LOCAL;
-
-const isServer = typeof window === "undefined";
+import {
+  parseApiError,
+  type ApiError,
+  type ProblemDetails,
+} from "@/lib/api-error";
 
 const http = axios.create({
-  baseURL: isServer ? ENV : "/api/proxy",
-  timeout: 60000,
+  baseURL: "/api",
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
+    Accept: "application/json",
   },
+  timeout: 30_000,
 });
 
-if (!isServer) {
-  http.interceptors.request.use((config) => {
+http.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  if (typeof window !== "undefined") {
     config.headers.set("x-network", getStoredNetwork());
-    return config;
-  });
-}
+  }
+  return config;
+});
+
+http.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError<ProblemDetails>) => {
+    const apiError: ApiError = parseApiError(error);
+    return Promise.reject(apiError);
+  },
+);
 
 export default http;
+export type { ApiError };

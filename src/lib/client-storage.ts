@@ -1,29 +1,37 @@
+import type { NetworkType } from "@/types/network.entity";
+
 const noopStorage: Storage = {
   getItem: () => null,
   setItem: () => {},
   removeItem: () => {},
   clear: () => {},
   key: () => null,
-  get length() {
-    return 0;
-  },
+  length: 0,
 };
 
-/** Browser localStorage, or a no-op stub during SSR / broken Node polyfills. */
 export function getClientStorage(): Storage {
   if (typeof window === "undefined") {
     return noopStorage;
   }
 
-  const { localStorage } = window;
-  if (typeof localStorage?.getItem !== "function") {
-    return noopStorage;
-  }
-
-  return localStorage;
+  return window.localStorage;
 }
 
-export function getStoredNetwork(): "testnet" | "mainnet" {
+export function getStoredNetwork(): NetworkType {
   const stored = getClientStorage().getItem("network");
   return stored === "mainnet" ? "mainnet" : "testnet";
+}
+
+export const ACTIVE_ORGANIZATION_STORAGE_KEY = "activeOrganizationId";
+
+export function getStoredActiveOrganizationId(): string | null {
+  return getClientStorage().getItem(ACTIVE_ORGANIZATION_STORAGE_KEY);
+}
+
+export function setStoredActiveOrganizationId(organizationId: string): void {
+  getClientStorage().setItem(ACTIVE_ORGANIZATION_STORAGE_KEY, organizationId);
+}
+
+export function clearStoredActiveOrganizationId(): void {
+  getClientStorage().removeItem(ACTIVE_ORGANIZATION_STORAGE_KEY);
 }

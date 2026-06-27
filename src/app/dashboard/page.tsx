@@ -1,7 +1,5 @@
-import { Dashboard } from "@/modules/dashboard/ui/views/Dashboard";
+import { DashboardView } from "@/features/dashboard/ui/DashboardView";
 
-const DashboardPage = () => {
-  return <Dashboard />;
-};
-
-export default DashboardPage;
+export default function DashboardPage() {
+  return <DashboardView />;
+}

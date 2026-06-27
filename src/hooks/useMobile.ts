@@ -1,56 +1,66 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useSyncExternalStore } from "react";
 
 const MOBILE_BREAKPOINT = 768;
 
+function subscribeToMobile(callback: () => void) {
+  const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+  mql.addEventListener("change", callback);
+  return () => mql.removeEventListener("change", callback);
+}
+
+function getMobileSnapshot() {
+  return window.innerWidth < MOBILE_BREAKPOINT;
+}
+
+function getMobileServerSnapshot() {
+  return false;
+}
+
 const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-    const onChange = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
-    };
-    mql.addEventListener("change", onChange);
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
-
-  return !!isMobile;
+  return useSyncExternalStore(
+    subscribeToMobile,
+    getMobileSnapshot,
+    getMobileServerSnapshot,
+  );
 };
 
+function subscribeToReduceMotion(callback: () => void) {
+  const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mql.addEventListener("change", callback);
+  window.addEventListener("resize", callback);
+  return () => {
+    mql.removeEventListener("change", callback);
+    window.removeEventListener("resize", callback);
+  };
+}
+
+function getReduceMotionSnapshot() {
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+  const isLowEndDevice = navigator.hardwareConcurrency <= 4;
+
+  return prefersReducedMotion || isMobile || isLowEndDevice;
+}
+
+function getReduceMotionServerSnapshot() {
+  return false;
+}
+
 export const useShouldReduceMotion = () => {
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    // Detectar preferencias de usuario
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    // Detectar si es mobile
-    const isMobile = window.innerWidth < 768;
-
-    // Detectar si es dispositivo de gama baja
-    const isLowEndDevice = navigator.hardwareConcurrency <= 4;
-
-    setShouldReduceMotion(prefersReducedMotion || isMobile || isLowEndDevice);
-  }, []);
-
-  return shouldReduceMotion;
+  return useSyncExternalStore(
+    subscribeToReduceMotion,
+    getReduceMotionSnapshot,
+    getReduceMotionServerSnapshot,
+  );
 };
 
 export const useThrottledScroll = (
   callback: (scrollY: number) => void,
   delay: number = 16,
 ) => {
-  const [isMobile] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.innerWidth < 768;
-  });
+  const isMobile = useIsMobile();
 
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
   const lastScrollYRef = useRef(0);

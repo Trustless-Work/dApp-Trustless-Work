@@ -1,37 +1,29 @@
 "use client";
 
-import { NetworkType } from "@/types/network.entity";
-import { useState, useEffect } from "react";
+import { useCallback, useState } from "react";
+import { getClientStorage, getStoredNetwork } from "@/lib/client-storage";
+import type { NetworkType } from "@/types/network.entity";
 
 const useNetwork = () => {
-  const [network, setNetwork] = useState<NetworkType>("testnet");
+  const [network, setNetwork] = useState<NetworkType>(() => getStoredNetwork());
   const [isReseting, setIsReseting] = useState(false);
 
-  useEffect(() => {
-    const savedNetwork = localStorage.getItem("network") as NetworkType;
-    if (savedNetwork) {
-      setNetwork(savedNetwork);
+  const changeNetwork = useCallback((newNetwork: NetworkType) => {
+    if (newNetwork === getStoredNetwork()) {
+      return;
     }
-  }, []);
-
-  const changeNetwork = (newNetwork: NetworkType) => {
-    if (newNetwork === network) return;
 
     setIsReseting(true);
     setNetwork(newNetwork);
-    localStorage.setItem("network", newNetwork);
+    getClientStorage().setItem("network", newNetwork);
 
     setTimeout(() => {
       setIsReseting(false);
       window.location.reload();
     }, 500);
-  };
+  }, []);
 
-  return {
-    currentNetwork: network,
-    changeNetwork,
-    isReseting,
-  };
+  return { currentNetwork: network, changeNetwork, isReseting };
 };
 
 export default useNetwork;

@@ -1,0 +1,331 @@
+---
+description: dApp
+alwaysApply: true
+---
+
+# Global Development Context (Next.js Monorepo)
+
+You are acting as a **Senior Fullstack Developer** working on a **Next.js**.
+
+The main goal is to ensure **high code quality, consistency, scalability, and reusability** across the entire ecosystem.
+
+---
+
+## 🧠 General Principles
+
+- **Strict TypeScript** (`strict: true`)
+- **No usage of `any`** — full rules in `TYPESCRIPT.mdc` (advanced types, guards, discriminated unions)
+- Everything must be **explicitly typed**:
+  - Models
+  - Entities
+  - Payloads
+  - Responses
+  - Hooks
+  - Functions
+  - State
+- **Never leave unused variables, imports, or functions**
+- Always apply **Prettier formatting**
+- Carefully analyze and respect all **existing ESLint rules**
+- **Strictly follow existing code patterns**
+- Maintain a **minimalist approach** aligned with the current UI design system
+- Do not use unnecesary comments
+
+---
+
+## 🧩 Architecture & Componentization
+
+- Highly **componentized codebase**
+- ❌ Never create large, monolithic, or heavy components
+- ✅ Prefer small, focused, and reusable components
+- **UI components** must:
+  - Focus only on **rendering UI**
+  - Contain **minimal interaction logic**
+- **Reusable or complex logic** (state + effects):
+  - Must be moved to **custom hooks**
+- Before creating:
+  - A **component**
+  - A **hook**
+  - A **type**
+  - A **helper / util function** (format, parse, validate, etc.)
+
+  👉 Always **verify that it does not already exist**
+  - If it exists → reuse it
+  - If it does not exist → create it following existing patterns
+
+### React UI file size (`*.tsx` in `ui/`, `components/`)
+
+React UI component files must stay **small and scannable**. Line count includes co-located skeletons and private subcomponents in the **same file**.
+
+| Limit | Lines | Action |
+| --- | --- | --- |
+| **Target** | ≤ **200** | Default — new and refactored components should land here |
+| **Hard max** | **300** | Must not exceed — split before merging or continuing work |
+
+**When a file approaches ~200 lines or exceeds 300**, extract in this order:
+
+1. **Presentational chunks** → sibling components in the same feature `ui/` folder (e.g. `MembersTable.tsx` + `MembersTableRow.tsx`, `VerifiedWalletsList.tsx`)
+2. **State, effects, mutations, form wiring** → `hooks/` (see **Forms Structure** and `FORMS.mdc`)
+3. **Pure helpers** (format, parse, validate, labels) → `src/helpers/` or feature `utils/` when feature-only
+4. **Large skeletons** → `*Skeleton.tsx` in the same folder when they push the main file over the limit
+
+**Does not apply** to non-UI files (`hooks/`, `services/`, `schemas/`, route handlers) — those follow single-responsibility by domain, not this JSX line cap.
+
+**Refactoring existing oversized files** (e.g. >300 lines) is required when you touch them for a meaningful change — do not grow them further; extract as part of the same PR.
+
+---
+
+## 🔧 Helpers & Utils (`src/helpers`)
+
+**Single source of truth** for pure, reusable functions (formatting, parsing, validation, display labels, etc.) that are not tied to a single feature.
+
+- **Before creating any helper** (`formatX`, `parseY`, `getZLabel`, etc.):
+  1. **Search `src/helpers/`** — check existing files and exports
+  2. **If it exists** → import and reuse; do **not** redefine it locally
+  3. **If it does not exist** → add it to `src/helpers/`:
+     - Extend an existing file when the function fits the same domain (e.g. `format.helper.ts`, `validators.helper.ts`)
+     - Create a new `*.helper.ts` file when the domain is distinct or the file would grow too large
+- ❌ **Never** define inline helpers or duplicate the same logic in components, hooks, services, or feature `utils/` folders when the function is (or could be) shared
+- ✅ Feature-scoped `utils/` is only for logic **exclusive to that feature** and unlikely to be reused elsewhere
+- File naming: `{domain}.helper.ts` (e.g. `format.helper.ts`, `user-display.helper.ts`)
+- Import from `@/helpers/...` — one export per function, **named exports**
+
+---
+
+## ⚛️ Components & Functions
+
+- **UI Components**
+  - Must always use **arrow functions**
+  - Use **named exports**
+    ```ts
+    export const Component = () => {};
+    ```
+- **Non-UI functions** (formatting, helpers, utils, etc.)
+  - Must use the `function` keyword
+  - Use **named exports**
+  - Must live in **`src/helpers/`** unless strictly feature-specific (see **Helpers & Utils** above)
+    ```ts
+    export function formatX() {}
+    ```
+- Always use **Shadcn UI components**
+  - ❌ Do not create custom components if an equivalent already exists
+
+---
+
+## 🌐 Data Fetching & Rendering
+
+- Use **TanStack Query** for data fetching
+- Properly apply:
+  - **Server-Side Rendering (SSR)**
+  - **Client-Side Rendering (CSR)**
+- Choose the rendering strategy based on:
+  - SEO
+  - Performance
+  - UX
+- Avoid over-fetching and unnecessary re-renders
+
+---
+
+## 📝 Forms Structure & Patterns
+
+- **Core Libraries:**
+  - `react-hook-form` - Form state management
+  - `zod` - Schema validation
+  - `@hookform/resolvers/zod` - Integration between zod and react-hook-form
+
+- **Base Components** (from `/form.tsx`):
+  - `Form` - Wrapper around `FormProvider` from react-hook-form
+  - `FormField` - Wrapper around `Controller` for field management
+  - `FormItem` - Field container
+  - `FormLabel` - Field label
+  - `FormControl` - Input control wrapper
+  - `FormDescription` - Optional field description
+  - `FormMessage` - Error message display
+
+- **File Structure Pattern:**
+
+  ```
+  features/[feature]/
+    ├── schemas/
+    │   └── [feature].schema.ts      # Zod schema definition
+    ├── hooks/
+    │   └── use[Feature].ts          # Custom hook with useForm
+    ├── ui/
+    │   └── [Feature]Form.tsx         # Form component
+    └── services/
+        └── [feature].service.ts      # API calls
+  ```
+
+- **Code Patterns:**
+  - **Schema Definition:**
+    ```ts
+    export const featureSchema = z.object({
+      field: z.string().min(1, "Field is required"),
+      // ...
+    });
+    export type FeatureFormData = z.infer<typeof featureSchema>;
+    ```
+  - **Custom Hook:**
+    ```ts
+    const form = useForm<z.infer<typeof schema>>({
+      resolver: zodResolver(schema),
+      defaultValues: {
+        /* ... */
+      },
+      mode: "onChange", // Real-time validation
+    });
+    const onSubmit = async (values) => {
+      /* ... */
+    };
+    ```
+  - **Form Component:**
+    ```ts
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="fieldName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Label</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+    ```
+
+- **Common Features:**
+  - Real-time validation (`mode: "onChange"`)
+  - Separation of concerns: schema → hook → component
+  - Full TypeScript support with `z.infer<typeof schema>`
+  - Error handling with `FormMessage`
+  - Loading states and toast notifications with `sonner`
+
+---
+
+## 🎨 UI / UX Standards
+
+- Everything must be:
+  - **100% responsive**
+    - Using **all Tailwind breakpoints**
+  - **100% compatible with Light / Dark mode**
+- Maintain:
+  - Clean design
+  - Minimalism
+  - Visual consistency
+- Respect existing UI patterns
+- Do not introduce new styles unless strictly necessary
+
+### Responsive data tables (lists)
+
+When building or refactoring a **data table** (TanStack Table, HTML `Table`, or similar) that shows **multiple columns of text, badges, amounts, and actions**:
+
+- **Mobile & small viewports** (`default` through `md` breakpoint): render a **card list**, not a horizontal scroll-only table. Use `@components/ui` `Card` (and related primitives) so each row is a scannable block: title or primary field in the header area, secondary fields in a **2-column label grid** (same pattern as contributor **My applications** and maintainer **UX bounties** lists).
+- **Tablet and desktop** (`md` and up): keep the **table** as the primary layout (`overflow-x-auto` on the wrapper when needed).
+- **Implementation pattern:**
+  - Two sibling blocks: cards `className="md:hidden"` and table `className="hidden md:block"` (or equivalent), fed from the **same row data** (same query / same array).
+  - **Loading:** show loading skeletons defined **in the same component file, above** the main export — see **Loading skeletons** below.
+  - **Empty and error states** stay a single block unless a design requires otherwise. **Empty (no data)** must use `NoData` — see below.
+- **DRY:** extract shared cell content (e.g. actions, status badge) into small components reused by both the table row and the card footer/content—avoid duplicating mutation handlers or button trees.
+- Do **not** ship a wide multi-column table as the only representation on narrow screens without a card (or equally usable) alternative.
+
+### Loading skeletons
+
+While data is loading, use `@/components/ui/skeleton` — never a generic full-width block if the loaded UI is more structured.
+
+- **Co-location:** define the skeleton **in the same component file**, **above** the exported component (e.g. `MembersTableSkeleton`, `MembersSectionSkeleton`). Do not scatter skeleton markup in parent views or duplicate it across siblings.
+- **Structural fidelity:** the skeleton **must mirror exactly** the layout it replaces — same wrappers, breakpoints, grid/flex, spacing, column count, card vs table regions, avatar sizes, and approximate element dimensions. If the loaded UI is table + mobile cards, the skeleton shows **both** with the same `md:hidden` / `hidden md:block` split.
+- **Do not** use a single `Skeleton className="h-48 w-full"` when the real UI has rows, cells, avatars, or a card grid — match each visible region with a placeholder of the same shape.
+- **Reuse:** when the same list/table appears in multiple states, extract a small `*Skeleton` subcomponent in that file (or a sibling `*Skeleton.tsx` in the same feature folder) that shares structure with the real `*Table` / `*CardList` component.
+- **Count:** repeat skeleton rows/cards enough to suggest a list (typically 3–5), using the same gap and padding as loaded content.
+
+```tsx
+const MembersTableSkeleton = () => (
+  <>
+    <div className="flex flex-col gap-3 md:hidden">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <Card key={index}>
+          <CardHeader className="flex flex-row items-center gap-3">
+            <Skeleton className="size-8 rounded-lg" />
+            <Skeleton className="h-5 w-32" />
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-3">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+    <div className="hidden md:block">
+      <Table>
+        <TableHeader>{/* same columns as MembersTable */}</TableHeader>
+        <TableBody>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <TableRow key={index}>
+              <TableCell>
+                <Skeleton className="h-4 w-24" />
+              </TableCell>
+              {/* one Skeleton per cell, matching MembersTable */}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  </>
+);
+
+export const MembersSection = () => {
+  // ...
+  return isLoading ? (
+    <MembersTableSkeleton />
+  ) : (
+    <MembersTable members={members} />
+  );
+};
+```
+
+### Empty states (no data)
+
+When a query, list, table, or section has **finished loading** and the result set is **empty** (zero items), always render [`NoData`](src/components/shared/NoData.tsx) from `@/components/shared/NoData`.
+
+- **Do not** invent one-off empty UIs: no inline `border-dashed` divs, plain `<p>` placeholders, or duplicated empty-state markup in feature components.
+- **Before adding empty UI**, check whether `NoData` already fits; extend it only if the product need is genuinely shared across many screens.
+- **Required:** `title` — short, user-facing headline (e.g. "No members yet").
+- **Optional:** `description` (helper text), `icon` (Lucide icon; defaults to `Inbox`), `actionLabel` + `onAction` when the empty state should offer a primary action (e.g. "Add member").
+- **Loading** and **error** states are separate: co-located skeletons (see **Loading skeletons**) while loading; error banners or retry UI on failure — do not use `NoData` for those.
+- **Dual layouts** (table + mobile cards): one shared `NoData` block for both breakpoints, not two different empty messages.
+
+```tsx
+import { UsersIcon } from "lucide-react";
+import { NoData } from "@/components/shared/NoData";
+
+{
+  !isLoading && !error && items.length === 0 ? (
+    <NoData
+      icon={UsersIcon}
+      title="No members yet"
+      description="Add a user from the directory to get started."
+      actionLabel="Add member"
+      onAction={() => setDialogOpen(true)}
+    />
+  ) : null;
+}
+```
+
+---
+
+## 🧠 Senior Engineering Mindset
+
+- Always think about:
+  - Scalability
+  - Maintainability
+  - Reusability
+  - Readability
+- Prefer **clear code over clever code**
+- Every technical decision must be justifiable
+- Avoid logic and style duplication
+- Ensure consistency across the entire monorepo

@@ -1,7 +1,5 @@
-"use client";
-
-import { Home } from "@/modules/home/ui/views/Home";
+import { HomeView } from "@/features/home/ui/HomeView";
 
 export default function HomePage() {
-  return <Home />;
+  return <HomeView />;
 }

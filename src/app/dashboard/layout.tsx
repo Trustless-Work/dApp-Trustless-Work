@@ -1,47 +1,35 @@
-"use client";
+import { AppSidebar } from "@/components/ui/app-sidebar";
+import { Footer } from "@/components/shared/Footer";
+import { Lights } from "@/components/shared/Lights";
+import { Navbar } from "@/components/shared/Navbar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { DashboardPageHeader } from "@/components/shared/DashboardPageHeader";
+import { DashboardPageHeaderProvider } from "@/components/shared/DashboardPageHeaderContext";
+import { OrganizationProvider } from "@/providers/OrganizationProvider";
 
-import AppSidebar from "@/shared/sidebar/AppSidebar";
-import Footer from "@/shared/Footer";
-import { SidebarInset, SidebarProvider } from "@/ui/sidebar";
-import Header from "@/shared/Header";
-import { redirect } from "next/navigation";
-import { useGlobalAuthenticationStore } from "@/store/data";
-import { Lights } from "@/shared/utils/Lights";
-import { EscrowProvider } from "@/providers/EscrowProvider";
-import { EscrowAmountProvider } from "@/providers/EscrowAmountProvider";
-import { EscrowDialogsProvider } from "@/providers/EscrowDialogsProvider";
-import { WalkthroughOnboarding } from "@/shared/WalkthroughOnboarding";
-
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { address } = useGlobalAuthenticationStore();
-
-  // Authentication check
-  if (address === "") {
-    redirect("/");
-  }
-
-  return (
-    <EscrowProvider>
-      <EscrowDialogsProvider>
-        <EscrowAmountProvider>
-          <SidebarProvider defaultOpen={false}>
-            <Lights />
-            <WalkthroughOnboarding />
-            <AppSidebar />
-            <SidebarInset>
-              <Header />
-              <div className="min-h-screen">
-                <div className="flex-1 space-y-4 p-4 md:px-8 h-full">
-                  {children}
-                </div>
-              </div>
-              <Footer />
-            </SidebarInset>
-          </SidebarProvider>
-        </EscrowAmountProvider>
-      </EscrowDialogsProvider>
-    </EscrowProvider>
-  );
+type DashboardLayoutProps = {
+  children: React.ReactNode;
 };
 
-export default Layout;
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  return (
+    <OrganizationProvider>
+      <SidebarProvider defaultOpen={false} className="block min-h-svh md:flex">
+        <Lights />
+        <AppSidebar />
+        <SidebarInset className="min-h-svh">
+          <Navbar />
+
+          <DashboardPageHeaderProvider>
+            <div className="flex min-h-[calc(100svh-7rem)] flex-1 flex-col gap-2 p-4 md:min-h-[calc(100svh-4rem)] md:px-8">
+              <DashboardPageHeader />
+              {children}
+            </div>
+          </DashboardPageHeaderProvider>
+
+          <Footer containedDividers />
+        </SidebarInset>
+      </SidebarProvider>
+    </OrganizationProvider>
+  );
+}

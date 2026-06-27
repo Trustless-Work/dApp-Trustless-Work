@@ -1,0 +1,81 @@
+---
+description: folder layout
+alwaysApply: true
+---
+
+# Feature folders — vertical slice layout (`src/features`)
+
+A portable convention for organizing application code by **product domain** instead of only by technical layer (all components here, all API code there). This doc is **framework-agnostic** in intent: it applies most directly to **component-based frontends** (React, Vue, Svelte, etc.); adapt names like `hooks/` to your ecosystem (`composables/`, `stores/`, …).
+
+---
+
+## What `features/` is for
+
+**`features/`** (sometimes `modules/` or `domains/`) groups code into **vertical slices**:
+
+- One **top-level folder per domain**—e.g. billing, profile, checkout, admin reports—not per file type at the repository root.
+- Everything that usually changes **together** for that part of the product stays **under the same slice** (UI, data loading, API clients for that area), so imports are local and ownership is obvious.
+
+This is independent of **single app**: you can have `src/features`.
+
+---
+
+## Typical subfolders inside a feature
+
+Slices vary by team; treat this as a **menu of patterns**, not a required checklist.
+
+| Subfolder                            | Purpose                                                                                                                                                                                                |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`ui/`**                            | UI building blocks **specific to this feature**—forms, tables, panels, wizards. Use global `src/components/ui/` (or a design system package) only for truly generic primitives (button, layout shell). |
+| **`views/`** (or **`screens/`**)     | **Large compositions**: full pages or route segments that assemble feature UI and wire data. Routing files stay thin and import from here.                                                             |
+| **`hooks/`** (or **`composables/`**) | Stateful logic tied to the UI framework: queries/mutations, form state, subscriptions, browser APIs. **No** raw HTTP client usage scattered everywhere—call into **`services/`** from here.            |
+| **`services/`**                      | **Side-effectful I/O**: HTTP clients, SDK wrappers, WebSocket setup. Exposes functions or a small class per use case. **No** framework-specific render API (no JSX in React, etc.).                    |
+| **`schemas/`**                       | Validation and types for inputs/API payloads (Zod, Yup, Valibot, io-ts, …) when you co-locate rules with the feature.                                                                                  |
+| **`utils/`**                         | Pure helpers used only in this slice (formatting, sorting, feature-specific guards).                                                                                                                   |
+| **`state/`** (optional)              | Feature-scoped global state if your architecture uses stores (Redux slice, Zustand, Pinia, …).                                                                                                         |
+| **`constants/`** (optional)          | Magic strings, config keys, route fragments for this domain only.                                                                                                                                      |
+| **`extensions/`** (optional)         | Plugins or adapters (rich text, analytics bridges) that belong to this slice.                                                                                                                          |
+
+---
+
+## Files at the feature root
+
+It is normal to have **entry screens or layout chunks** directly under `features/<name>/` (not nested):
+
+- **`SomethingView.tsx` / `SomethingScreen.vue`** — main surface for the slice when the team prefers a flat layout.
+- **Section shells** — sidebars, split layouts, headers that anchor a subsection.
+
+Prefer consistency inside a repo: either favor **`views/`** for all pages or root-level `*View` files—mixing both is fine if documented.
+
+---
+
+## How slices talk to the rest of the repo
+
+- **Routing** — route modules (`app/`, `pages/`, `routes/`) should mostly **compose** feature `views/` and pass params; avoid duplicating domain logic there.
+- **Dependency rule (recommended)** — **`features/A`** should not import **`features/B`** implementation; shared needs go through **shared** modules or the **router** layer. Adjust strictness to your team.
+
+Path aliases (e.g. `@/features/...`) are a tooling choice, not part of the pattern itself.
+
+---
+
+## Rules of thumb when adding code
+
+1. **New user-facing area** → new top-level folder under `features/` (or extend the slice that already owns that journey).
+2. **New screen** → `views/` or root `*View*`, composed from `ui/` + `hooks/`.
+3. **New backend or third-party integration** → `services/` first; consume from `hooks/` or server handlers.
+4. **New multi-field form** → validation in `schemas/` (if used), orchestration in a hook, markup in `ui/` (see also layered form docs in your project if you maintain one).
+5. **Uncertainty** → mirror the **closest existing slice** so the repo stays predictable.
+
+---
+
+## Naming and legacy folders
+
+Folder names on disk are the **source of truth** for imports. Legacy or misspelled names often persist for stability; document them in onboarding rather than “fixing” names in a drive-by change.
+
+---
+
+## Summary
+
+**`features/` = one folder per domain**, with common inner folders **`ui`**, **`views`** (or **`screens`**), **`hooks`** (or **`composables`**), **`services`**, and optionally **`schemas`**, **`utils`**, **`state`**. Routing and shared libraries stay **outside** the slice; **shared types and UI** live in neutral packages so features do not entangle.
+
+You can copy this file into another repository as-is and only adjust examples (e.g. `hooks/` → `composables/`) to match that codebase.
