@@ -7,13 +7,6 @@ import { BackgroundLights } from "./BackgroundLights";
 import { HeroSection } from "./Hero";
 import { Footer } from "@/components/shared/Footer";
 
-// Lazy load sections pesadas
-const FeaturesSection = dynamic(() =>
-  import("./Features").then((mod) => ({
-    default: mod.FeaturesSection,
-  })),
-);
-
 const RolesSection = dynamic(() =>
   import("./RolesSection").then((mod) => ({
     default: mod.RolesSection,
@@ -54,9 +47,8 @@ export const HomeView = () => {
           ref={containerRef}
         >
           <HeroSection />
-          <FeaturesSection />
-          <RolesSection />
           <ApiKeySection />
+          <RolesSection />
           <IntegrationSetupSection />
           <TransactionFlowSection />
         </main>
