@@ -1,3 +1,6 @@
+packages:
+  - "."
+
 allowBuilds:
   '@reown/appkit': true
   '@stellar/stellar-sdk': true
