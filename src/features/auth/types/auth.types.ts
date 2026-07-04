@@ -111,9 +111,9 @@ export interface UserProfileFields {
 }
 
 export type RegisterProfileInput = Required<
-  Pick<UserProfileFields, "firstName">
+  Pick<UserProfileFields, "firstName" | "email">
 > &
-  Partial<Pick<UserProfileFields, "lastName" | "email">>;
+  Partial<Pick<UserProfileFields, "lastName">>;
 
 export interface UserResponse extends WithAccountRoles, WithEntityTimestamps {
   id: EntityId;
@@ -161,7 +161,7 @@ type _SessionChallengeVariants = ExpectTrue<
 type _RegisterProfileShape = ExpectTrue<
   AssertEqual<
     RegisterProfileInput,
-    Required<Pick<UserProfileFields, "firstName">> &
-      Partial<Pick<UserProfileFields, "lastName" | "email">>
+    Required<Pick<UserProfileFields, "firstName" | "email">> &
+      Partial<Pick<UserProfileFields, "lastName">>
   >
 >;

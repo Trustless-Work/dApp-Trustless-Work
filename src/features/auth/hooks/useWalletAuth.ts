@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -13,6 +13,7 @@ import { useWalletContext } from "@/providers/WalletProvider";
 import { authService } from "@/features/auth/services/auth.service";
 import type { RegisterProfileInput } from "@/features/auth/types/auth.types";
 import { isRegisteredSessionChallenge } from "@/features/auth/types/auth.types";
+import { clearClientAuthState } from "@/features/auth/lib/logout-client";
 import { parseApiError } from "@/lib/api-error";
 
 export type WalletAuthPhase =
@@ -35,13 +36,26 @@ export function useWalletAuth() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
-  const { walletAddress } = useWalletContext();
+  const { walletAddress, clearWalletInfo } = useWalletContext();
   const { connectWallet, disconnectWallet } = useWallet();
   const [phase, setPhase] = useState<WalletAuthPhase>("idle");
   const [needsRegister, setNeedsRegister] = useState(false);
   const [pendingAddress, setPendingAddress] = useState<string | null>(null);
 
   const redirectPath = searchParams.get("redirect") ?? "/dashboard";
+  const sessionExpiredReason = searchParams.get("reason") === "session_expired";
+
+  useEffect(() => {
+    if (!sessionExpiredReason) {
+      return;
+    }
+
+    void clearClientAuthState({
+      reason: "session_expired",
+      redirect: false,
+    });
+    clearWalletInfo();
+  }, [clearWalletInfo, sessionExpiredReason]);
 
   const performSessionLogin = useCallback(
     async (address: string): Promise<"authenticated" | "needs_register"> => {
@@ -73,10 +87,15 @@ export function useWalletAuth() {
   }, []);
 
   const handleLogin = useCallback(async () => {
-    let address: string | null = walletAddress;
+    let address: string | null = sessionExpiredReason ? null : walletAddress;
 
     try {
       setNeedsRegister(false);
+
+      if (sessionExpiredReason && walletAddress) {
+        await disconnectWallet();
+        address = null;
+      }
 
       if (!address) {
         setPhase("connecting");
@@ -115,10 +134,12 @@ export function useWalletAuth() {
     }
   }, [
     connectWallet,
+    disconnectWallet,
     performSessionLogin,
     queryClient,
     redirectPath,
     router,
+    sessionExpiredReason,
     showRegistrationFlow,
     walletAddress,
   ]);
@@ -142,10 +163,7 @@ export function useWalletAuth() {
 
         setPhase("registering");
 
-        const registerResult = await authService.verifyRegister(
-          address,
-          signedXdr,
-        );
+        await authService.verifyRegister(address, signedXdr, profile);
 
         setNeedsRegister(false);
 
@@ -153,17 +171,6 @@ export function useWalletAuth() {
         const loginResult = await performSessionLogin(address);
         if (loginResult === "needs_register") {
           throw new Error("Account was created but sign-in failed. Try again.");
-        }
-
-        try {
-          await authService.saveRegisterProfile(registerResult.userId, profile);
-        } catch (profileError) {
-          toast.warning(
-            "Account created, but profile details could not be saved.",
-            {
-              description: parseApiError(profileError).detail,
-            },
-          );
         }
 
         await queryClient.invalidateQueries({ queryKey: ["session", "me"] });
@@ -220,5 +227,6 @@ export function useWalletAuth() {
     registerWithWallet,
     resetAuthFlow,
     isLoading,
+    sessionExpiredReason,
   };
 }

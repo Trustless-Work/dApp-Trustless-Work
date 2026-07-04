@@ -132,6 +132,14 @@ export const disconnectWalletKit = async (): Promise<void> => {
   return StellarWalletsKit.disconnect();
 };
 
+export const disconnectWalletKitSafe = async (): Promise<void> => {
+  try {
+    await disconnectWalletKit();
+  } catch {
+    // Wallet kit may not be initialized or already disconnected.
+  }
+};
+
 /**
  * Helper to sign a transaction XDR with the active wallet.
  */

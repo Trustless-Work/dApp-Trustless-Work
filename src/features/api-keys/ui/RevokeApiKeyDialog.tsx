@@ -12,45 +12,45 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-type DeleteApiKeyDialogProps = {
-  deleteTarget: string | null;
-  isDeleting: boolean;
+type RevokeApiKeyDialogProps = {
+  revokeTarget: string | null;
+  isRevoking: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
 };
 
-export const DeleteApiKeyDialog = ({
-  deleteTarget,
-  isDeleting,
+export const RevokeApiKeyDialog = ({
+  revokeTarget,
+  isRevoking,
   onOpenChange,
   onConfirm,
-}: DeleteApiKeyDialogProps) => (
-  <AlertDialog open={deleteTarget !== null} onOpenChange={onOpenChange}>
+}: RevokeApiKeyDialogProps) => (
+  <AlertDialog open={revokeTarget !== null} onOpenChange={onOpenChange}>
     <AlertDialogContent>
       <AlertDialogHeader>
-        <AlertDialogTitle>Delete API key?</AlertDialogTitle>
+        <AlertDialogTitle>Revoke API key?</AlertDialogTitle>
         <AlertDialogDescription>
-          This key will be permanently removed. Any integrations using it will
-          stop working immediately.
+          This key will be revoked immediately. Any integrations using it will
+          stop working.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+        <AlertDialogCancel disabled={isRevoking}>Cancel</AlertDialogCancel>
         <AlertDialogAction
           variant="destructive"
-          disabled={isDeleting}
+          disabled={isRevoking}
           onClick={(event) => {
             event.preventDefault();
             onConfirm();
           }}
         >
-          {isDeleting ? (
+          {isRevoking ? (
             <>
               <Loader2 className="animate-spin" />
-              Deleting...
+              Revoking...
             </>
           ) : (
-            "Delete key"
+            "Revoke key"
           )}
         </AlertDialogAction>
       </AlertDialogFooter>

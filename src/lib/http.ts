@@ -1,4 +1,5 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
+import { clearClientAuthState } from "@/features/auth/lib/logout-client";
 import { getStoredNetwork } from "@/lib/client-storage";
 import {
   parseApiError,
@@ -27,6 +28,15 @@ http.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ProblemDetails>) => {
     const apiError: ApiError = parseApiError(error);
+
+    if (
+      typeof window !== "undefined" &&
+      apiError.status === 401 &&
+      !window.location.pathname.startsWith("/login")
+    ) {
+      void clearClientAuthState({ reason: "unauthorized" });
+    }
+
     return Promise.reject(apiError);
   },
 );

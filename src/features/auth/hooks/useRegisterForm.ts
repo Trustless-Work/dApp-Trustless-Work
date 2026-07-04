@@ -31,8 +31,8 @@ export function useRegisterForm({
   const onSubmit = form.handleSubmit(async (values) => {
     const profile: RegisterProfileInput = {
       firstName: values.firstName.trim(),
+      email: values.email.trim(),
       lastName: values.lastName.trim() || undefined,
-      email: values.email.trim() || undefined,
     };
 
     await onRegister(profile);

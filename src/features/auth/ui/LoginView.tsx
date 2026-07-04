@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
 import { AuthDivider } from "@/components/ui/auth-divider";
 import { AuthPageLayout } from "@/features/auth/ui/AuthPageLayout";
 import { WalletLoginButton } from "@/features/auth/ui/WalletLoginButton";
@@ -16,7 +18,19 @@ export const LoginView = () => {
     registerWithWallet,
     resetAuthFlow,
     isLoading,
+    sessionExpiredReason,
   } = useWalletAuth();
+
+  useEffect(() => {
+    if (!sessionExpiredReason) {
+      return;
+    }
+
+    toast.info("Session expired", {
+      description:
+        "Your session ended for security. Connect your wallet again to sign in.",
+    });
+  }, [sessionExpiredReason]);
 
   return (
     <AuthPageLayout>
@@ -27,7 +41,9 @@ export const LoginView = () => {
         <p className="text-base text-muted-foreground">
           {needsRegister
             ? "Your wallet is connected. Finish registration to access the dashboard."
-            : "Connect your Stellar wallet to sign in or register."}
+            : sessionExpiredReason
+              ? "Your previous session expired. Connect your wallet to sign in again."
+              : "Connect your Stellar wallet to sign in or register."}
         </p>
       </div>
 

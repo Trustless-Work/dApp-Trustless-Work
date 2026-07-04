@@ -1,9 +1,5 @@
 import { z } from "zod/v3";
 
-function isValidEmail(value: string): boolean {
-  return z.string().email().safeParse(value).success;
-}
-
 export const registerSchema = z.object({
   firstName: z
     .string()
@@ -14,28 +10,11 @@ export const registerSchema = z.object({
     .string()
     .trim()
     .max(100, "Last name must be 100 characters or less"),
-  email: z.string().superRefine((value, ctx) => {
-    const trimmed = value.trim();
-
-    if (trimmed === "") {
-      return;
-    }
-
-    if (!trimmed.includes("@")) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Include @ in your email (e.g. name@example.com)",
-      });
-      return;
-    }
-
-    if (!isValidEmail(trimmed)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Enter a valid email address (e.g. name@example.com)",
-      });
-    }
-  }),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Email is required")
+    .email("Enter a valid email address (e.g. name@example.com)"),
 });
 
 export type RegisterFormData = z.infer<typeof registerSchema>;

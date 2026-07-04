@@ -11,10 +11,10 @@ export interface ApiKeyResponse extends WithAccountRoles, WithEntityTimestamps {
   id: EntityId;
   userId: EntityId;
   description?: string | null;
-  platformId?: EntityId | null;
+  active: boolean;
   expiresAt?: IsoDateTimeString | null;
   lastUsedAt?: IsoDateTimeString | null;
-  revokedAt?: IsoDateTimeString | null;
+  lastUsedIp?: string | null;
 }
 
 export interface CreateApiKeyInput {
@@ -23,7 +23,7 @@ export interface CreateApiKeyInput {
 }
 
 export function isApiKeyRevoked(apiKey: ApiKeyResponse): boolean {
-  return Boolean(apiKey.revokedAt);
+  return apiKey.active === false;
 }
 
 export function isApiKeyExpired(apiKey: ApiKeyResponse): boolean {
@@ -38,5 +38,5 @@ export function isApiKeyExpired(apiKey: ApiKeyResponse): boolean {
 }
 
 export function isApiKeyActive(apiKey: ApiKeyResponse): boolean {
-  return !isApiKeyRevoked(apiKey) && !isApiKeyExpired(apiKey);
+  return apiKey.active !== false && !isApiKeyExpired(apiKey);
 }

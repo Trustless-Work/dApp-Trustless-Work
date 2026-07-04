@@ -4,13 +4,25 @@ import type {
   CreateApiKeyInput,
 } from "@/features/api-keys/types/api-key.types";
 import http from "@/lib/http";
+import {
+  buildKeysetQuery,
+  fetchAllKeysetPages,
+  parseKeysetPage,
+} from "@/lib/pagination";
+import type { KeysetListParams, KeysetPage } from "@/types/pagination.entity";
 
 export class ApiKeyService {
-  async listApiKeys(): Promise<ApiKeyResponse[]> {
-    const { data } = await http.get<ApiKeyResponse[]>(
-      "/core/users/me/api-keys",
+  async listApiKeysPage(
+    params: KeysetListParams = {},
+  ): Promise<KeysetPage<ApiKeyResponse>> {
+    const { data } = await http.get<unknown>(
+      `/core/users/me/api-keys${buildKeysetQuery(params)}`,
     );
-    return data;
+    return parseKeysetPage<ApiKeyResponse>(data);
+  }
+
+  async listApiKeys(): Promise<ApiKeyResponse[]> {
+    return fetchAllKeysetPages((params) => this.listApiKeysPage(params));
   }
 
   async createApiKey(
@@ -25,13 +37,15 @@ export class ApiKeyService {
 
   async rotateApiKey(keyId: string): Promise<GeneratedApiKeyResponse> {
     const { data } = await http.post<GeneratedApiKeyResponse>(
-      `/users/me/api-keys/${encodeURIComponent(keyId)}/rotate`,
+      `/core/users/me/api-keys/${encodeURIComponent(keyId)}/rotate`,
     );
     return data;
   }
 
-  async deleteApiKey(keyId: string): Promise<void> {
-    await http.delete(`/users/me/api-keys/${encodeURIComponent(keyId)}`);
+  async revokeApiKey(keyId: string): Promise<void> {
+    await http.put(
+      `/core/users/me/api-keys/${encodeURIComponent(keyId)}/revoke`,
+    );
   }
 }
 

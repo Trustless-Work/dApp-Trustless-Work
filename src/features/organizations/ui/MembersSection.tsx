@@ -12,11 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { AddMemberDialog } from "@/features/organizations/ui/AddMemberDialog";
+import { EditMemberDialog } from "@/features/organizations/ui/EditMemberDialog";
+import { RemoveMemberDialog } from "@/features/organizations/ui/RemoveMemberDialog";
 import {
   MembersTable,
   MembersTableSkeleton,
 } from "@/features/organizations/ui/MembersTable";
 import { useOrganizationMembersDisplay } from "@/features/organizations/hooks/useOrganizationMembers";
+import type { MemberResponse } from "@/features/organizations/types/organization.types";
 import { parseApiError } from "@/lib/api-error";
 
 type MembersSectionProps = {
@@ -25,8 +28,18 @@ type MembersSectionProps = {
 
 export const MembersSection = ({ organizationId }: MembersSectionProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const { members, isLoading, isError, error, refetch } =
-    useOrganizationMembersDisplay(organizationId);
+  const [editTarget, setEditTarget] = useState<MemberResponse | null>(null);
+  const [removeTarget, setRemoveTarget] = useState<MemberResponse | null>(null);
+  const {
+    members,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useOrganizationMembersDisplay(organizationId);
   const errorDetail = isError ? parseApiError(error).detail : null;
 
   return (
@@ -81,7 +94,27 @@ export const MembersSection = ({ organizationId }: MembersSectionProps) => {
           ) : null}
 
           {!isLoading && !errorDetail && members.length > 0 ? (
-            <MembersTable members={members} />
+            <div className="flex flex-col gap-4">
+              <MembersTable
+                members={members}
+                onEdit={setEditTarget}
+                onRemove={setRemoveTarget}
+              />
+              {hasNextPage ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="w-fit"
+                  disabled={isFetchingNextPage}
+                  onClick={() => {
+                    void fetchNextPage();
+                  }}
+                >
+                  {isFetchingNextPage ? "Loading..." : "Load more"}
+                </Button>
+              ) : null}
+            </div>
           ) : null}
         </CardContent>
       </Card>
@@ -91,6 +124,26 @@ export const MembersSection = ({ organizationId }: MembersSectionProps) => {
         existingMembers={members}
         open={dialogOpen}
         onOpenChange={setDialogOpen}
+      />
+      <EditMemberDialog
+        organizationId={organizationId}
+        member={editTarget}
+        open={editTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditTarget(null);
+          }
+        }}
+      />
+      <RemoveMemberDialog
+        organizationId={organizationId}
+        member={removeTarget}
+        open={removeTarget !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setRemoveTarget(null);
+          }
+        }}
       />
     </>
   );

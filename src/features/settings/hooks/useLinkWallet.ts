@@ -7,7 +7,7 @@ import { useWallet } from "@/components/tw-blocks/wallet-kit/useWallet";
 import { signTransaction } from "@/components/tw-blocks/wallet-kit/wallet-kit";
 import { walletService } from "@/features/settings/services/wallet.service";
 import { USER_WALLETS_QUERY_KEY } from "@/features/settings/hooks/useUserWallets";
-import { parseApiError } from "@/lib/api-error";
+import { isApiError, parseApiError } from "@/lib/api-error";
 import { playSound } from "@/lib/sounds";
 import { formatAddress } from "@/helpers/format.helper";
 
@@ -18,6 +18,18 @@ function isWalletModalDismissed(error: unknown): boolean {
     "code" in error &&
     (error as { code: number }).code === -1
   );
+}
+
+function getLinkWalletErrorMessage(error: unknown): string {
+  if (error instanceof Error && error.message.includes("already linked")) {
+    return error.message;
+  }
+
+  if (isApiError(error) && (error.status === 422 || error.status === 409)) {
+    return "This wallet belongs to another account. Use a different wallet or contact support.";
+  }
+
+  return parseApiError(error).detail;
 }
 
 export function useLinkWallet() {
@@ -58,12 +70,7 @@ export function useLinkWallet() {
         return;
       }
 
-      const message =
-        error instanceof Error && error.message.includes("already linked")
-          ? error.message
-          : parseApiError(error).detail;
-
-      toast.error(message);
+      toast.error(getLinkWalletErrorMessage(error));
       setPhase("idle");
     },
   });

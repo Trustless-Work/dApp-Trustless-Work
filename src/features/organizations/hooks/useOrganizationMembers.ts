@@ -1,31 +1,67 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { organizationService } from "@/features/organizations/services/organization.service";
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   isMemberLinkedToUser,
   mapUserToMemberInput,
   withCurrentUserMember,
 } from "@/features/organizations/helpers/member-from-user.helper";
-import type { MemberResponse } from "@/features/organizations/types/organization.types";
-import { organizationMembersQueryKey } from "@/features/organizations/hooks/useOrganizations";
+import { organizationService } from "@/features/organizations/services/organization.service";
+import type { OrganizationResponse } from "@/features/organizations/types/organization.types";
+import { flattenKeysetPages } from "@/lib/pagination";
+import { DEFAULT_KEYSET_LIMIT } from "@/types/pagination.entity";
 import { useAuth } from "@/providers/AuthProvider";
 import { useWalletContext } from "@/providers/WalletProvider";
 
+export const ORGANIZATIONS_QUERY_KEY = ["organizations", "mine"] as const;
+
+export function useOrganizations() {
+  return useQuery<OrganizationResponse[]>({
+    queryKey: ORGANIZATIONS_QUERY_KEY,
+    queryFn: () => organizationService.listMine(),
+  });
+}
+
+export function organizationMembersQueryKey(organizationId: string) {
+  return ["organizations", organizationId, "members"] as const;
+}
+
 export function useOrganizationMembers(organizationId: string | null) {
-  return useQuery<MemberResponse[]>({
+  const query = useInfiniteQuery({
     queryKey: organizationId
       ? organizationMembersQueryKey(organizationId)
       : ["organizations", "members", "none"],
-    queryFn: () => {
+    queryFn: ({ pageParam }) => {
       if (!organizationId) {
-        return Promise.resolve([]);
+        return Promise.resolve({
+          data: [],
+          hasMore: false,
+          nextCursor: null,
+        });
       }
-      return organizationService.listMembers(organizationId);
+
+      return organizationService.listMembersPage(organizationId, {
+        limit: DEFAULT_KEYSET_LIMIT,
+        cursor: pageParam,
+      });
     },
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? (lastPage.nextCursor ?? undefined) : undefined,
     enabled: Boolean(organizationId),
   });
+
+  const members = useMemo(() => flattenKeysetPages(query.data), [query.data]);
+
+  return {
+    ...query,
+    members,
+  };
 }
 
 export function useOrganizationMembersDisplay(organizationId: string | null) {
@@ -46,7 +82,7 @@ export function useOrganizationMembersDisplay(organizationId: string | null) {
       return;
     }
 
-    const apiMembers = query.data ?? [];
+    const apiMembers = query.members;
     if (
       apiMembers.some((member) =>
         isMemberLinkedToUser(member, user, walletAddress),
@@ -70,9 +106,9 @@ export function useOrganizationMembersDisplay(organizationId: string | null) {
       });
   }, [
     organizationId,
-    query.data,
     query.isFetching,
     query.isSuccess,
+    query.members,
     queryClient,
     user,
     walletAddress,
@@ -82,13 +118,13 @@ export function useOrganizationMembersDisplay(organizationId: string | null) {
     () =>
       organizationId
         ? withCurrentUserMember(
-            query.data ?? [],
+            query.members,
             user,
             organizationId,
             walletAddress,
           )
         : [],
-    [organizationId, query.data, user, walletAddress],
+    [organizationId, query.members, user, walletAddress],
   );
 
   return {

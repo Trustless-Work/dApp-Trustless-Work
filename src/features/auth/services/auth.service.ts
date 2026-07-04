@@ -42,12 +42,16 @@ export class AuthService {
   async verifyRegister(
     address: string,
     signedXdr: string,
+    profile: RegisterProfileInput,
   ): Promise<GeneratedApiKeyResponse> {
     const { data: registerResult } = await http.post<GeneratedApiKeyResponse>(
       "/auth/register/verify",
       {
         address,
         signedXdr,
+        email: profile.email,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
       },
     );
 

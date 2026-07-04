@@ -4,13 +4,25 @@ import type {
   UserWalletResponse,
   WalletLinkVerifyResponse,
 } from "@/features/settings/types/wallet.types";
+import {
+  buildKeysetQuery,
+  fetchAllKeysetPages,
+  parseKeysetPage,
+} from "@/lib/pagination";
+import type { KeysetListParams, KeysetPage } from "@/types/pagination.entity";
 
 export class WalletService {
-  async listWallets(): Promise<UserWalletResponse[]> {
-    const { data } = await http.get<UserWalletResponse[]>(
-      "/core/users/me/wallets",
+  async listWalletsPage(
+    params: KeysetListParams = {},
+  ): Promise<KeysetPage<UserWalletResponse>> {
+    const { data } = await http.get<unknown>(
+      `/core/users/me/wallets${buildKeysetQuery(params)}`,
     );
-    return data;
+    return parseKeysetPage<UserWalletResponse>(data);
+  }
+
+  async listWallets(): Promise<UserWalletResponse[]> {
+    return fetchAllKeysetPages((params) => this.listWalletsPage(params));
   }
 
   async requestLinkChallenge(address: string): Promise<Sep10Challenge> {

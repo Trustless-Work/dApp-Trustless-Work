@@ -1,9 +1,9 @@
 import { NextRequest } from "next/server";
 import { adminFetch } from "@/lib/admin-fetch";
 import { parseJsonBody, proxyCoreResponse } from "@/lib/bff-utils";
-import type { RegisterProfileInput } from "@/features/auth/types/auth.types";
+import type { UserProfileFields } from "@/features/auth/types/auth.types";
 
-type RegisterProfileRequest = RegisterProfileInput & {
+type RegisterProfileRequest = Partial<UserProfileFields> & {
   userId: string;
 };
 
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const profilePayload: RegisterProfileInput = { firstName };
+  const profilePayload: Partial<UserProfileFields> = { firstName };
 
   const lastName = body.lastName?.trim();
   if (lastName) {

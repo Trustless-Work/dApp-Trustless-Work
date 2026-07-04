@@ -25,7 +25,18 @@ export interface CreateOrganizationInput {
   name: string;
 }
 
+export interface UpdateOrganizationInput {
+  name: string;
+}
+
 export interface UpsertMemberInput {
+  externalId?: string;
+  walletAddress?: StellarAddress;
+  label?: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface UpdateMemberInput {
   externalId?: string;
   walletAddress?: StellarAddress;
   label?: string;

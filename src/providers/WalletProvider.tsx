@@ -7,11 +7,8 @@ import {
   useEffect,
   ReactNode,
 } from "react";
+import { AUTH_EXPIRED_EVENT } from "@/features/auth/lib/logout-client";
 
-/**
- * Type definition for the wallet context
- * Contains wallet address, name, and functions to manage wallet state
- */
 type WalletContextType = {
   walletAddress: string | null;
   walletName: string | null;
@@ -19,24 +16,12 @@ type WalletContextType = {
   clearWalletInfo: () => void;
 };
 
-/**
- * Create the React context for wallet state management
- */
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
-/**
- * Wallet Provider component that wraps the application
- * Manages wallet state and provides wallet information to child components
- * Automatically loads saved wallet information from localStorage on initialization
- */
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [walletName, setWalletName] = useState<string | null>(null);
 
-  /**
-   * Load saved wallet information from localStorage when the component mounts
-   * This ensures the wallet state persists across browser sessions
-   */
   useEffect(() => {
     const storedAddress = localStorage.getItem("walletAddress");
     const storedName = localStorage.getItem("walletName");
@@ -45,13 +30,18 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     if (storedName) setWalletName(storedName);
   }, []);
 
-  /**
-   * Set wallet information and save it to localStorage
-   * This function is called when a wallet is successfully connected
-   *
-   * @param address - The wallet's public address
-   * @param name - The name/identifier of the wallet (e.g., "Freighter", "Albedo")
-   */
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      setWalletAddress(null);
+      setWalletName(null);
+    };
+
+    window.addEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+    return () => {
+      window.removeEventListener(AUTH_EXPIRED_EVENT, handleAuthExpired);
+    };
+  }, []);
+
   const setWalletInfo = (address: string, name: string) => {
     setWalletAddress(address);
     setWalletName(name);
@@ -59,10 +49,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("walletName", name);
   };
 
-  /**
-   * Clear wallet information and remove it from localStorage
-   * This function is called when disconnecting a wallet
-   */
   const clearWalletInfo = () => {
     setWalletAddress(null);
     setWalletName(null);
@@ -79,11 +65,6 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-/**
- * Custom hook to access the wallet context
- * Provides wallet state and functions to components
- * Throws an error if used outside of WalletProvider
- */
 export const useWalletContext = () => {
   const context = useContext(WalletContext);
   if (!context) {

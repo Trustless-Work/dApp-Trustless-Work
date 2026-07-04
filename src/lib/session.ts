@@ -16,6 +16,15 @@ function getSessionPassword(): string {
   return secret;
 }
 
+function computeCookieMaxAge(expiresAt: string): number {
+  const expiresMs = new Date(expiresAt).getTime();
+  if (Number.isNaN(expiresMs)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.floor((expiresMs - Date.now()) / 1000));
+}
+
 let cachedSessionOptions: SessionOptions | null = null;
 
 export function getSessionOptions(): SessionOptions {
@@ -39,7 +48,17 @@ export async function getSession() {
 }
 
 export async function setSessionToken(token: string, expiresAt: string) {
-  const session = await getSession();
+  const maxAge = computeCookieMaxAge(expiresAt);
+  const session = await getIronSession<SessionData>(
+    await cookies(),
+    {
+      ...getSessionOptions(),
+      cookieOptions: {
+        ...getSessionOptions().cookieOptions,
+        maxAge: maxAge > 0 ? maxAge : undefined,
+      },
+    },
+  );
   session.token = token;
   session.expiresAt = expiresAt;
   await session.save();
@@ -53,4 +72,21 @@ export async function clearSession() {
 export async function getSessionToken(): Promise<string | undefined> {
   const session = await getSession();
   return session.token;
+}
+
+export function isSessionExpired(expiresAt: string | undefined): boolean {
+  if (!expiresAt) {
+    return false;
+  }
+
+  const expiresMs = new Date(expiresAt).getTime();
+  if (Number.isNaN(expiresMs)) {
+    return false;
+  }
+
+  return expiresMs <= Date.now();
+}
+
+export function getSessionPasswordForEdge(): string {
+  return getSessionPassword();
 }

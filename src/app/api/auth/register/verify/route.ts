@@ -1,9 +1,7 @@
 import { NextRequest } from "next/server";
 import { adminFetch } from "@/lib/admin-fetch";
 import { parseJsonBody, proxyCoreResponse } from "@/lib/bff-utils";
-import type {
-  RegisterVerifyRequest,
-} from "@/features/auth/types/auth.types";
+import type { RegisterVerifyRequest } from "@/features/auth/types/auth.types";
 
 export async function POST(request: NextRequest) {
   const body = await parseJsonBody<RegisterVerifyRequest>(request);
@@ -13,6 +11,9 @@ export async function POST(request: NextRequest) {
     body: JSON.stringify({
       address: body.address,
       signedXdr: body.signedXdr,
+      email: body.email,
+      firstName: body.firstName,
+      lastName: body.lastName,
     }),
   });
 

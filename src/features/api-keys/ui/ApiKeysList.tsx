@@ -41,9 +41,9 @@ const ApiKeyDetailRow = ({ label, children }: ApiKeyDetailRowProps) => (
 type ApiKeyRowProps = {
   apiKey: ApiKeyResponse;
   onRotate: (keyId: string) => void;
-  onDelete: (keyId: string) => void;
+  onRevoke: (keyId: string) => void;
   isRotating: boolean;
-  isDeleting: boolean;
+  isRevoking: boolean;
 };
 
 function getApiKeyStatus(apiKey: ApiKeyResponse): {
@@ -64,12 +64,12 @@ function getApiKeyStatus(apiKey: ApiKeyResponse): {
 const ApiKeyActions = ({
   apiKey,
   onRotate,
-  onDelete,
+  onRevoke,
   isRotating,
-  isDeleting,
+  isRevoking,
 }: ApiKeyRowProps) => {
   const isActive = isApiKeyActive(apiKey);
-  const isBusy = isRotating || isDeleting;
+  const isBusy = isRotating || isRevoking;
 
   if (!isActive) {
     return null;
@@ -92,11 +92,11 @@ const ApiKeyActions = ({
         variant="ghost"
         size="icon-sm"
         className="text-destructive hover:text-destructive"
-        aria-label="Delete API key"
+        aria-label="Revoke API key"
         disabled={isBusy}
-        onClick={() => onDelete(apiKey.id)}
+        onClick={() => onRevoke(apiKey.id)}
       >
-        {isDeleting ? <Loader2 className="animate-spin" /> : <Trash2Icon />}
+        {isRevoking ? <Loader2 className="animate-spin" /> : <Trash2Icon />}
       </Button>
     </div>
   );
@@ -105,9 +105,9 @@ const ApiKeyActions = ({
 const ApiKeyCard = ({
   apiKey,
   onRotate,
-  onDelete,
+  onRevoke,
   isRotating,
-  isDeleting,
+  isRevoking,
 }: ApiKeyRowProps) => {
   const status = getApiKeyStatus(apiKey);
   const description = apiKey.description?.trim() || "Untitled key";
@@ -123,9 +123,9 @@ const ApiKeyCard = ({
           <ApiKeyActions
             apiKey={apiKey}
             onRotate={onRotate}
-            onDelete={onDelete}
+            onRevoke={onRevoke}
             isRotating={isRotating}
-            isDeleting={isDeleting}
+            isRevoking={isRevoking}
           />
         </div>
       </CardHeader>
@@ -158,9 +158,9 @@ const ApiKeyCard = ({
 const ApiKeyTableRow = ({
   apiKey,
   onRotate,
-  onDelete,
+  onRevoke,
   isRotating,
-  isDeleting,
+  isRevoking,
 }: ApiKeyRowProps) => {
   const status = getApiKeyStatus(apiKey);
   const description = apiKey.description?.trim() || "Untitled key";
@@ -187,9 +187,9 @@ const ApiKeyTableRow = ({
         <ApiKeyActions
           apiKey={apiKey}
           onRotate={onRotate}
-          onDelete={onDelete}
+          onRevoke={onRevoke}
           isRotating={isRotating}
-          isDeleting={isDeleting}
+          isRevoking={isRevoking}
         />
       </TableCell>
     </TableRow>
@@ -199,17 +199,17 @@ const ApiKeyTableRow = ({
 type ApiKeysListProps = {
   apiKeys: ApiKeyResponse[];
   onRotate: (keyId: string) => void;
-  onDelete: (keyId: string) => void;
+  onRevoke: (keyId: string) => void;
   rotatingKeyId: string | null;
-  deletingKeyId: string | null;
+  revokingKeyId: string | null;
 };
 
 export const ApiKeysList = ({
   apiKeys,
   onRotate,
-  onDelete,
+  onRevoke,
   rotatingKeyId,
-  deletingKeyId,
+  revokingKeyId,
 }: ApiKeysListProps) => (
   <>
     <div className="flex flex-col gap-3 md:hidden">
@@ -218,9 +218,9 @@ export const ApiKeysList = ({
           key={apiKey.id}
           apiKey={apiKey}
           onRotate={onRotate}
-          onDelete={onDelete}
+          onRevoke={onRevoke}
           isRotating={rotatingKeyId === apiKey.id}
-          isDeleting={deletingKeyId === apiKey.id}
+          isRevoking={revokingKeyId === apiKey.id}
         />
       ))}
     </div>
@@ -243,9 +243,9 @@ export const ApiKeysList = ({
               key={apiKey.id}
               apiKey={apiKey}
               onRotate={onRotate}
-              onDelete={onDelete}
+              onRevoke={onRevoke}
               isRotating={rotatingKeyId === apiKey.id}
-              isDeleting={deletingKeyId === apiKey.id}
+              isRevoking={revokingKeyId === apiKey.id}
             />
           ))}
         </TableBody>

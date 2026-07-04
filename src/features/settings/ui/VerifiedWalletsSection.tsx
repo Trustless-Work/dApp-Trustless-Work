@@ -33,6 +33,9 @@ export const VerifiedWalletsSection = () => {
     isError,
     error,
     refetch,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useUserWallets();
   const { linkWallet, isLinking } = useLinkWallet();
   const { mutate: unlinkWallet, isPending: isUnlinking } = useUnlinkWallet();
@@ -113,13 +116,29 @@ export const VerifiedWalletsSection = () => {
           ) : null}
 
           {!isLoading && !errorDetail && displayWallets.length > 0 ? (
-            <WalletsList
-              wallets={displayWallets}
-              verifiedCount={verifiedCount}
-              walletAddress={walletAddress}
-              onUnlinkRequest={setUnlinkTarget}
-              isUnlinking={isUnlinking}
-            />
+            <div className="flex flex-col gap-4">
+              <WalletsList
+                wallets={displayWallets}
+                verifiedCount={verifiedCount}
+                walletAddress={walletAddress}
+                onUnlinkRequest={setUnlinkTarget}
+                isUnlinking={isUnlinking}
+              />
+              {hasNextPage ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="w-fit"
+                  disabled={isFetchingNextPage}
+                  onClick={() => {
+                    void fetchNextPage();
+                  }}
+                >
+                  {isFetchingNextPage ? "Loading..." : "Load more"}
+                </Button>
+              ) : null}
+            </div>
           ) : null}
         </CardContent>
       </Card>
