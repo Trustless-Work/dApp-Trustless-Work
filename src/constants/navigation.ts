@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  DiscIcon,
   KeyRoundIcon,
-  Layers2Icon,
   LayoutDashboardIcon,
   WebhookIcon,
 } from "lucide-react";
@@ -39,7 +39,7 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
       {
         title: "Manage Escrows",
         url: "/dashboard/escrows",
-        icon: Layers2Icon,
+        icon: DiscIcon,
       },
     ],
   },

@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  DiscIcon,
   KeyRoundIcon,
-  Layers2Icon,
   LayoutDashboardIcon,
   Settings2Icon,
   WebhookIcon,
@@ -24,7 +24,7 @@ export const DASHBOARD_PAGES: Record<string, DashboardPageConfig> = {
     title: "Manage Escrows",
     description:
       "Browse, filter, and manage escrow contracts on the Stellar network.",
-    icon: Layers2Icon,
+    icon: DiscIcon,
   },
   "/dashboard/api-keys": {
     title: "API Keys",
