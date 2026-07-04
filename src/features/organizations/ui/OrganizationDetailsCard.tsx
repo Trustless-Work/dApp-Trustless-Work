@@ -34,11 +34,11 @@ export const OrganizationDetailsCard = ({
             <div className="space-y-1">
               <CardTitle>{organization.name}</CardTitle>
               <CardDescription>
-                Manage this organization&apos;s name or archive it when it is
-                no longer needed.
+                Manage this organization&apos;s name or archive it when it is no
+                longer needed.
               </CardDescription>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -46,7 +46,6 @@ export const OrganizationDetailsCard = ({
                 onClick={() => setRenameOpen(true)}
               >
                 <PencilIcon />
-                Rename
               </Button>
               <Button
                 type="button"
@@ -56,7 +55,6 @@ export const OrganizationDetailsCard = ({
                 onClick={() => setArchiveOpen(true)}
               >
                 <ArchiveIcon />
-                Archive
               </Button>
             </div>
           </div>
