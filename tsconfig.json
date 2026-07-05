@@ -19,7 +19,13 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@trustless-work/escrow": [
+        "../react-library-trustless-work/src/index.ts"
+      ],
+      "@trustless-work/escrow/*": [
+        "../react-library-trustless-work/src/*"
+      ]
     }
   },
   "include": [
