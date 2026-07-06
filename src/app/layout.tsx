@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { WalletProvider } from "@/providers/WalletProvider";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
+import { TrustlessWorkProvider } from "@/providers/TrustlessWorkProvider";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -58,13 +59,15 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            <AuthProvider>
-              <WalletProvider>
-                <Toaster position="top-center" richColors closeButton />
+            <TrustlessWorkProvider>
+              <AuthProvider>
+                <WalletProvider>
+                  <Toaster position="top-center" richColors closeButton />
 
-                {children}
-              </WalletProvider>
-            </AuthProvider>
+                  {children}
+                </WalletProvider>
+              </AuthProvider>
+            </TrustlessWorkProvider>
           </QueryProvider>
         </ThemeProvider>
       </body>

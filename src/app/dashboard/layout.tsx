@@ -1,5 +1,4 @@
 import { AppSidebar } from "@/components/ui/app-sidebar";
-import { Footer } from "@/components/shared/Footer";
 import { Lights } from "@/components/shared/Lights";
 import { Navbar } from "@/components/shared/Navbar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -26,8 +25,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               {children}
             </div>
           </DashboardPageHeaderProvider>
-
-          <Footer containedDividers />
         </SidebarInset>
       </SidebarProvider>
     </OrganizationProvider>
