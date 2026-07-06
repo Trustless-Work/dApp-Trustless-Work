@@ -27,12 +27,7 @@ export const Footer = ({ containedDividers = false }: FooterProps) => {
     <div className="relative w-full overflow-x-clip">
       <FullWidthDivider contained position="top" />
 
-      <footer
-        className={cn(
-          "relative mx-auto w-full max-w-5xl lg:border-x px-20",
-          "dark:bg-[radial-gradient(35%_80%_at_15%_0%,--theme(--color-foreground/.1),transparent)]",
-        )}
-      >
+      <footer className="relative mx-auto w-full max-w-5xl lg:border-x px-20">
         <div className="grid max-w-5xl grid-cols-6 gap-6 p-4">
           <div className="col-span-6 flex flex-col gap-4 pt-5 md:col-span-4">
             <Link className="w-max" href="#">
