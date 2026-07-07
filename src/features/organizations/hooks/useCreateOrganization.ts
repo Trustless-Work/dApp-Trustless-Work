@@ -17,6 +17,7 @@ import {
   organizationMembersQueryKey,
 } from "@/features/organizations/hooks/useOrganizations";
 import { parseApiError } from "@/lib/api-error";
+import { extractListItems } from "@/lib/pagination";
 import { playSound } from "@/lib/sounds";
 import { useAuth } from "@/providers/AuthProvider";
 import { useWalletContext } from "@/providers/WalletProvider";
@@ -47,18 +48,15 @@ export function useCreateOrganization(options?: UseCreateOrganizationOptions) {
       queryClient.setQueryData<OrganizationResponse[]>(
         ORGANIZATIONS_QUERY_KEY,
         (previous) => {
-          if (!previous) {
-            return [organization];
+          const organizations = extractListItems<OrganizationResponse>(previous);
+
+          if (
+            organizations.some((org) => org.id === organization.id)
+          ) {
+            return organizations;
           }
 
-          const alreadyListed = previous.some(
-            (org) => org.id === organization.id,
-          );
-          if (alreadyListed) {
-            return previous;
-          }
-
-          return [...previous, organization];
+          return [...organizations, organization];
         },
       );
 

@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import {
   useInfiniteQuery,
-  useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 import {
@@ -12,20 +11,10 @@ import {
   withCurrentUserMember,
 } from "@/features/organizations/helpers/member-from-user.helper";
 import { organizationService } from "@/features/organizations/services/organization.service";
-import type { OrganizationResponse } from "@/features/organizations/types/organization.types";
 import { flattenKeysetPages } from "@/lib/pagination";
 import { DEFAULT_KEYSET_LIMIT } from "@/types/pagination.entity";
 import { useAuth } from "@/providers/AuthProvider";
 import { useWalletContext } from "@/providers/WalletProvider";
-
-export const ORGANIZATIONS_QUERY_KEY = ["organizations", "mine"] as const;
-
-export function useOrganizations() {
-  return useQuery<OrganizationResponse[]>({
-    queryKey: ORGANIZATIONS_QUERY_KEY,
-    queryFn: () => organizationService.listMine(),
-  });
-}
 
 export function organizationMembersQueryKey(organizationId: string) {
   return ["organizations", organizationId, "members"] as const;
