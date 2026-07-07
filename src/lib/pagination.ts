@@ -1,15 +1,25 @@
 import type { InfiniteData } from "@tanstack/react-query";
 import type { KeysetListParams, KeysetPage } from "@/types/pagination.entity";
 
-function isKeysetEnvelope<T>(value: unknown): value is KeysetPage<T> {
+function hasArrayData(value: unknown): value is { data: unknown[] } {
   return (
     typeof value === "object" &&
     value !== null &&
     "data" in value &&
-    Array.isArray((value as KeysetPage<T>).data) &&
-    "hasMore" in value &&
-    typeof (value as KeysetPage<T>).hasMore === "boolean"
+    Array.isArray((value as { data: unknown }).data)
   );
+}
+
+export function extractListItems<T>(value: unknown): T[] {
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  if (hasArrayData(value)) {
+    return (value as { data: T[] }).data;
+  }
+
+  return [];
 }
 
 export function parseKeysetPage<T>(data: unknown): KeysetPage<T> {
@@ -21,11 +31,18 @@ export function parseKeysetPage<T>(data: unknown): KeysetPage<T> {
     };
   }
 
-  if (isKeysetEnvelope<T>(data)) {
+  if (hasArrayData(data)) {
+    const envelope = data as {
+      data: T[];
+      hasMore?: boolean;
+      nextCursor?: string | null;
+    };
+
     return {
-      data: data.data,
-      hasMore: data.hasMore,
-      nextCursor: data.nextCursor ?? null,
+      data: envelope.data,
+      hasMore:
+        typeof envelope.hasMore === "boolean" ? envelope.hasMore : false,
+      nextCursor: envelope.nextCursor ?? null,
     };
   }
 

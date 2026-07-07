@@ -2,6 +2,7 @@ const SOUND_SOURCES = {
   accept: "/sounds/accept.mp3",
   delete: "/sounds/delete.mp3",
   deploy: "/sounds/deploy.mp3",
+  error: "/sounds/error.mp3",
 } as const;
 
 export type SoundType = keyof typeof SOUND_SOURCES;

@@ -6,6 +6,7 @@ import {
   type ApiError,
   type ProblemDetails,
 } from "@/lib/api-error";
+import { playSound } from "@/lib/sounds";
 
 const http = axios.create({
   baseURL: "/api",
@@ -28,6 +29,7 @@ http.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ProblemDetails>) => {
     const apiError: ApiError = parseApiError(error);
+    playSound("error");
 
     if (
       typeof window !== "undefined" &&
