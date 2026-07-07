@@ -12,6 +12,7 @@ import { AUTH_EXPIRED_EVENT } from "@/features/auth/lib/logout-client";
 type WalletContextType = {
   walletAddress: string | null;
   walletName: string | null;
+  hasWalletHydrated: boolean;
   setWalletInfo: (address: string, name: string) => void;
   clearWalletInfo: () => void;
 };
@@ -21,6 +22,7 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined);
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [walletName, setWalletName] = useState<string | null>(null);
+  const [hasWalletHydrated, setHasWalletHydrated] = useState(false);
 
   useEffect(() => {
     const storedAddress = localStorage.getItem("walletAddress");
@@ -28,6 +30,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
     if (storedAddress) setWalletAddress(storedAddress);
     if (storedName) setWalletName(storedName);
+    setHasWalletHydrated(true);
   }, []);
 
   useEffect(() => {
@@ -58,7 +61,13 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <WalletContext.Provider
-      value={{ walletAddress, walletName, setWalletInfo, clearWalletInfo }}
+      value={{
+        walletAddress,
+        walletName,
+        hasWalletHydrated,
+        setWalletInfo,
+        clearWalletInfo,
+      }}
     >
       {children}
     </WalletContext.Provider>
