@@ -1,10 +1,7 @@
 import type { EscrowRoleId } from "@/constants/escrow-roles.constants";
 import { ESCROW_ROLE_LABELS } from "@/constants/escrow-roles.constants";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
-import {
-  isStoredMultiReleaseEscrow,
-  isStoredSingleReleaseEscrow,
-} from "@/features/escrows/types/escrow.types";
+import { isStoredSingleReleaseEscrow } from "@/features/escrows/types/escrow.types";
 
 type EscrowMilestone = StoredEscrow["milestones"][number];
 
