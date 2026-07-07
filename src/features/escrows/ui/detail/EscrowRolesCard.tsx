@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo } from "react";
+import { EscrowRoleIcon } from "@/components/shared/EscrowRoleIcon";
 import { Badge } from "@/components/ui/badge";
+import { getEscrowRoleHelpHref } from "@/constants/escrow-roles.constants";
 import { useLinkedAddressHighlight } from "@/features/escrows/hooks/useLinkedAddressHighlight";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import { EscrowCopyField } from "@/features/escrows/ui/detail/EscrowCopyField";
@@ -30,31 +33,49 @@ export const EscrowRolesCard = ({ escrow }: EscrowRolesCardProps) => {
       <ul className="mt-6 grid min-w-0 gap-3 sm:gap-4 md:grid-cols-2">
         {roles.map((role) => (
           <li
-            key={role.label}
+            key={role.id}
             className="min-w-0 rounded-2xl border border-border bg-muted/30 p-3 sm:p-4"
           >
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold tracking-tight">
-                {role.label}
-              </h3>
-              <Badge variant="secondary" className="shrink-0 uppercase">
-                {role.addresses.length}{" "}
-                {role.addresses.length === 1 ? "wallet" : "wallets"}
-              </Badge>
+            <div className="flex items-start gap-3">
+              <EscrowRoleIcon roleId={role.id} />
+
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="text-sm font-semibold tracking-tight">
+                    <Link
+                      href={getEscrowRoleHelpHref(role.id)}
+                      className="underline-offset-4 transition-colors hover:text-primary hover:underline"
+                    >
+                      {role.label}
+                    </Link>
+                  </h3>
+                  <Badge variant="secondary" className="shrink-0 uppercase">
+                    {role.addresses.length}{" "}
+                    {role.addresses.length === 1 ? "wallet" : "wallets"}
+                  </Badge>
+                </div>
+
+                <ul className="mt-3 flex min-w-0 flex-col gap-2">
+                  {role.addresses.map((address) => {
+                    const isShared = isSharedEscrowAddress(
+                      addressCounts,
+                      address,
+                    );
+                    const linkProps = getLinkedAddressProps(address, isShared);
+
+                    return (
+                      <li key={`${role.id}-${address}`} className="min-w-0">
+                        <EscrowCopyField
+                          value={address}
+                          compact
+                          {...linkProps}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
-
-            <ul className="mt-3 flex min-w-0 flex-col gap-2">
-              {role.addresses.map((address) => {
-                const isShared = isSharedEscrowAddress(addressCounts, address);
-                const linkProps = getLinkedAddressProps(address, isShared);
-
-                return (
-                  <li key={`${role.label}-${address}`} className="min-w-0">
-                    <EscrowCopyField value={address} compact {...linkProps} />
-                  </li>
-                );
-              })}
-            </ul>
           </li>
         ))}
       </ul>

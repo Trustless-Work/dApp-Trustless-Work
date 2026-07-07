@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  CircleHelpIcon,
   DiscIcon,
   KeyRoundIcon,
   LayoutDashboardIcon,
@@ -43,6 +44,12 @@ export const DASHBOARD_PAGES: Record<string, DashboardPageConfig> = {
     description:
       "Update your profile, preferences, and workspace configuration.",
     icon: Settings2Icon,
+  },
+  "/dashboard/help": {
+    title: "Help",
+    description:
+      "Learn how escrow roles work and which actions each wallet can perform.",
+    icon: CircleHelpIcon,
   },
 };
 

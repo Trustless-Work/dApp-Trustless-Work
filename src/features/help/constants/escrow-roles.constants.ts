@@ -1,6 +1,14 @@
+import type { LucideIcon } from "lucide-react";
+import type { EscrowRoleId } from "@/constants/escrow-roles.constants";
+import {
+  ESCROW_ROLE_ICONS,
+  ESCROW_ROLE_LABELS,
+} from "@/constants/escrow-roles.constants";
+
 export type EscrowRoleGuide = {
-  readonly id: string;
+  readonly id: EscrowRoleId;
   readonly title: string;
+  readonly icon: LucideIcon;
   readonly description: string;
   readonly cardinality: string;
   readonly actions: readonly string[];
@@ -10,7 +18,8 @@ export type EscrowRoleGuide = {
 export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
   {
     id: "approvers",
-    title: "Approvers",
+    title: ESCROW_ROLE_LABELS.approvers,
+    icon: ESCROW_ROLE_ICONS.approvers,
     description:
       "Review milestone deliverables and confirm that work meets the agreed scope before funds can move forward.",
     cardinality: "1–5 wallets",
@@ -21,7 +30,8 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
   },
   {
     id: "service-providers",
-    title: "Service providers",
+    title: ESCROW_ROLE_LABELS["service-providers"],
+    icon: ESCROW_ROLE_ICONS["service-providers"],
     description:
       "Perform the work tracked by milestones and keep delivery status up to date on-chain.",
     cardinality: "1–5 wallets",
@@ -32,7 +42,8 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
   },
   {
     id: "release-signers",
-    title: "Release signers",
+    title: ESCROW_ROLE_LABELS["release-signers"],
+    icon: ESCROW_ROLE_ICONS["release-signers"],
     description:
       "Authorize payment once milestones are approved and the escrow is ready to settle.",
     cardinality: "1–5 wallets",
@@ -44,7 +55,8 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
   },
   {
     id: "dispute-resolvers",
-    title: "Dispute resolvers",
+    title: ESCROW_ROLE_LABELS["dispute-resolvers"],
+    icon: ESCROW_ROLE_ICONS["dispute-resolvers"],
     description:
       "Settle conflicts by distributing escrow balances when a dispute is open.",
     cardinality: "1–5 wallets",
@@ -59,7 +71,8 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
   },
   {
     id: "admin",
-    title: "Admin",
+    title: ESCROW_ROLE_LABELS.admin,
+    icon: ESCROW_ROLE_ICONS.admin,
     description:
       "Maintains escrow configuration and milestone structure after deployment.",
     cardinality: "1 wallet",
@@ -68,45 +81,38 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
       "Add milestones or edit milestone descriptions via manage milestones",
       "Extend contract storage TTL on multi-release escrows",
     ],
-    constraints: [
-      "Must be distinct from every other role address",
-    ],
+    constraints: ["Must be distinct from every other role address"],
   },
   {
     id: "platform",
-    title: "Platform",
+    title: ESCROW_ROLE_LABELS.platform,
+    icon: ESCROW_ROLE_ICONS.platform,
     description:
       "Trustless Work platform wallet attached to the escrow. Receives the configured platform fee on release.",
     cardinality: "1 wallet",
-    actions: [
-      "Extend contract storage TTL on single-release escrows",
-    ],
+    actions: ["Extend contract storage TTL on single-release escrows"],
   },
   {
     id: "receiver",
-    title: "Receiver",
+    title: ESCROW_ROLE_LABELS.receiver,
+    icon: ESCROW_ROLE_ICONS.receiver,
     description:
       "Final beneficiary of released funds on single-release escrows.",
     cardinality: "1 wallet",
-    actions: [
-      "Receives funds when a release signer executes release",
-    ],
+    actions: ["Receives funds when a release signer executes release"],
     constraints: [
       "Defined at the escrow level in single release; in multi release each milestone has its own receiver",
     ],
   },
   {
     id: "observers",
-    title: "Observers",
+    title: ESCROW_ROLE_LABELS.observers,
+    icon: ESCROW_ROLE_ICONS.observers,
     description:
       "Read-only wallets attached for visibility. They cannot sign escrow transactions.",
     cardinality: "Optional list",
-    actions: [
-      "View escrow state and role assignments",
-    ],
-    constraints: [
-      "No on-chain signing authority",
-    ],
+    actions: ["View escrow state and role assignments"],
+    constraints: ["No on-chain signing authority"],
   },
 ] as const;
 

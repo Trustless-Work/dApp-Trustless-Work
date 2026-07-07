@@ -1,3 +1,5 @@
+import type { EscrowRoleId } from "@/constants/escrow-roles.constants";
+import { ESCROW_ROLE_LABELS } from "@/constants/escrow-roles.constants";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import {
   isStoredMultiReleaseEscrow,
@@ -5,6 +7,12 @@ import {
 } from "@/features/escrows/types/escrow.types";
 
 type EscrowMilestone = StoredEscrow["milestones"][number];
+
+export type EscrowRoleEntry = {
+  readonly id: EscrowRoleId;
+  readonly label: string;
+  readonly addresses: readonly string[];
+};
 
 export type MilestoneDisplayStatus =
   | "pending"
@@ -143,39 +151,44 @@ export function formatMilestoneApprovals(milestone: EscrowMilestone): string {
   return `${count}/${target}`;
 }
 
-export function getEscrowRoleEntries(
-  escrow: StoredEscrow,
-): { label: string; addresses: readonly string[] }[] {
-  const entries: { label: string; addresses: readonly string[] }[] = [
+export function getEscrowRoleEntries(escrow: StoredEscrow): EscrowRoleEntry[] {
+  const entries: EscrowRoleEntry[] = [
     {
-      label: "Approvers",
+      id: "approvers",
+      label: ESCROW_ROLE_LABELS.approvers,
       addresses: escrow.roles.approvers,
     },
     {
-      label: "Service providers",
+      id: "service-providers",
+      label: ESCROW_ROLE_LABELS["service-providers"],
       addresses: escrow.roles.serviceProviders,
     },
     {
-      label: "Platform",
+      id: "platform",
+      label: ESCROW_ROLE_LABELS.platform,
       addresses: [escrow.roles.platform],
     },
     {
-      label: "Release signers",
+      id: "release-signers",
+      label: ESCROW_ROLE_LABELS["release-signers"],
       addresses: escrow.roles.releaseSigners,
     },
     {
-      label: "Dispute resolvers",
+      id: "dispute-resolvers",
+      label: ESCROW_ROLE_LABELS["dispute-resolvers"],
       addresses: escrow.roles.disputeResolvers,
     },
     {
-      label: "Admin",
+      id: "admin",
+      label: ESCROW_ROLE_LABELS.admin,
       addresses: [escrow.roles.admin],
     },
   ];
 
   if (isStoredSingleReleaseEscrow(escrow)) {
     entries.push({
-      label: "Receiver",
+      id: "receiver",
+      label: ESCROW_ROLE_LABELS.receiver,
       addresses: [escrow.roles.receiver],
     });
   }

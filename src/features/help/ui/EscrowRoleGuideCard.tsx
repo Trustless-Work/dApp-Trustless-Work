@@ -1,3 +1,4 @@
+import { EscrowRoleIcon } from "@/components/shared/EscrowRoleIcon";
 import { Badge } from "@/components/ui/badge";
 import type { EscrowRoleGuide } from "@/features/help/constants/escrow-roles.constants";
 
@@ -7,17 +8,28 @@ type EscrowRoleGuideCardProps = {
 
 export const EscrowRoleGuideCard = ({ role }: EscrowRoleGuideCardProps) => {
   return (
-    <li className="min-w-0 rounded-2xl border border-border bg-muted/30 p-4 sm:p-5">
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <h3 className="text-sm font-semibold tracking-tight">{role.title}</h3>
-        <Badge variant="secondary" className="shrink-0 uppercase">
-          {role.cardinality}
-        </Badge>
-      </div>
+    <li
+      id={role.id}
+      className="scroll-mt-28 min-w-0 rounded-2xl border border-border bg-muted/30 p-4 sm:p-5"
+    >
+      <div className="flex items-start gap-3">
+        <EscrowRoleIcon roleId={role.id} />
 
-      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        {role.description}
-      </p>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <h3 className="text-sm font-semibold tracking-tight">
+              {role.title}
+            </h3>
+            <Badge variant="secondary" className="shrink-0 uppercase">
+              {role.cardinality}
+            </Badge>
+          </div>
+
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {role.description}
+          </p>
+        </div>
+      </div>
 
       <div className="mt-4 space-y-2">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 import {
   BookOpenIcon,
+  CircleHelpIcon,
   FlaskConicalIcon,
   GlobeIcon,
   Settings2Icon,
@@ -19,6 +20,7 @@ import type { LucideIcon } from "lucide-react";
 import { Button } from "./button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
+const HELP_PATH = "/dashboard/help";
 const SETTINGS_PATH = "/dashboard/settings";
 
 const RESOURCE_BUTTON_CLASS = "rounded-md";
@@ -133,14 +135,28 @@ const ResourceLinks = () => {
 
 export const NavSettings = () => {
   const pathname = usePathname();
-  const isActive = pathname.startsWith(SETTINGS_PATH);
+  const isHelpActive = pathname.startsWith(HELP_PATH);
+  const isSettingsActive = pathname.startsWith(SETTINGS_PATH);
 
   return (
     <SidebarMenu>
       <ResourceLinks />
 
       <SidebarMenuItem className="my-2">
-        <SidebarMenuButton asChild isActive={isActive} tooltip="Settings">
+        <SidebarMenuButton asChild isActive={isHelpActive} tooltip="Help">
+          <Link href={HELP_PATH}>
+            <CircleHelpIcon />
+            <span>Help</span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+
+      <SidebarMenuItem>
+        <SidebarMenuButton
+          asChild
+          isActive={isSettingsActive}
+          tooltip="Settings"
+        >
           <Link href={SETTINGS_PATH}>
             <Settings2Icon />
             <span>Settings</span>
