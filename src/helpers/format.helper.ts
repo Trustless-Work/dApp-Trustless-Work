@@ -10,6 +10,27 @@ export const formatCurrency = (value: number, currency: string) => {
 };
 
 /**
+ * Format a numeric asset amount for display (no symbol).
+ */
+export function formatAssetAmount(amount: number): string {
+  return amount.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+/**
+ * @deprecated Use formatAssetAmount
+ */
+export function formatUsdcAmount(amount: number): string {
+  return formatAssetAmount(amount);
+}
+
+export function isUsdcSymbol(symbol: string): boolean {
+  return symbol.trim().toUpperCase() === "USDC";
+}
+
+/**
  * Format the timestamp
  *
  * @param ts - The timestamp
