@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HORIZON_URLS } from "../../../lib/stellar-networks";
+import { playSound } from "@/lib/sounds";
 import { useWalletContext } from "@/providers/WalletProvider";
 import { useWallet } from "@/components/tw-blocks/wallet-kit/useWallet";
 import { isValidStellarNetwork } from "@/helpers/validators.helper";
@@ -157,6 +158,7 @@ export const useWalletBalance = (): WalletBalance => {
       }
     } catch (err) {
       console.error("Error fetching wallet balance:", err);
+      playSound("error");
 
       // Handle different types of errors
       if (err instanceof Error) {
