@@ -1,0 +1,72 @@
+"use client";
+
+import { ScanEye, Telescope } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import useNetwork from "@/hooks/useNetwork";
+import {
+  getStellarExpertContractUrl,
+  getTrustlessWorkViewerUrl,
+} from "@/helpers/escrow-explorer.helper";
+import { cn } from "@/lib/utils";
+
+type EscrowExplorerLinksProps = {
+  contractId: string;
+  className?: string;
+};
+
+const iconLinkClassName =
+  "inline-flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-muted";
+
+export const EscrowExplorerLinks = ({
+  contractId,
+  className,
+}: EscrowExplorerLinksProps) => {
+  const { currentNetwork } = useNetwork();
+
+  const stellarExpertUrl = getStellarExpertContractUrl(
+    currentNetwork,
+    contractId,
+  );
+  const trustlessWorkViewerUrl = getTrustlessWorkViewerUrl(
+    currentNetwork,
+    contractId,
+  );
+
+  return (
+    <div className={cn("flex shrink-0 items-center gap-2", className)}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <a
+            href={stellarExpertUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={iconLinkClassName}
+            aria-label="View on Stellar Expert"
+          >
+            <Telescope className="size-4" aria-hidden="true" />
+          </a>
+        </TooltipTrigger>
+        <TooltipContent>Stellar Expert</TooltipContent>
+      </Tooltip>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <a
+            href={trustlessWorkViewerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={iconLinkClassName}
+            aria-label="View on Trustless Work Viewer"
+          >
+            <ScanEye className="size-4" aria-hidden="true" />
+          </a>
+        </TooltipTrigger>
+        <TooltipContent>Trustless Work Viewer</TooltipContent>
+      </Tooltip>
+    </div>
+  );
+};

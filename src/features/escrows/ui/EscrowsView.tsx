@@ -17,7 +17,7 @@ export const EscrowsView = () => {
     useState<EscrowType>("single-release");
 
   return (
-    <>
+    <div className="flex min-h-0 flex-1 flex-col">
       <DashboardPageHeaderActions>
         <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between lg:w-auto lg:gap-4">
           <Button
@@ -46,7 +46,7 @@ export const EscrowsView = () => {
         </div>
       </DashboardPageHeaderActions>
 
-      <Container>
+      <Container className="flex min-h-0 flex-1 flex-col">
         <EscrowsSection
           escrowType={activeEscrowType}
           onCreateRequest={() => setCreateDialogOpen(true)}
@@ -56,7 +56,8 @@ export const EscrowsView = () => {
       <CreateEscrowDialog
         open={createDialogOpen}
         onOpenChange={setCreateDialogOpen}
+        initialType={activeEscrowType}
       />
-    </>
+    </div>
   );
 };
