@@ -12,14 +12,25 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { cn } from "@/lib/utils";
+import { truncateStellarAddress } from "@/helpers/stellar.helper";
 
 type BreadcrumbItemData = {
   href: string;
   label: string;
+  title?: string;
 };
 
-function formatBreadcrumbLabel(segment: string): string {
-  return decodeURIComponent(segment)
+function formatBreadcrumbLabel(
+  segment: string,
+  parentSegment?: string,
+): string {
+  const decoded = decodeURIComponent(segment);
+
+  if (parentSegment === "escrows" && decoded.length > 6) {
+    return truncateStellarAddress(decoded, 3, 3);
+  }
+
+  return decoded
     .split("-")
     .filter(Boolean)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -35,7 +46,11 @@ function getBreadcrumbItems(pathname: string): BreadcrumbItemData[] {
 
   return segments.map((segment, index) => ({
     href: `/${segments.slice(0, index + 1).join("/")}`,
-    label: formatBreadcrumbLabel(segment),
+    label: formatBreadcrumbLabel(segment, segments[index - 1]),
+    title:
+      segments[index - 1] === "escrows" && segment.length > 6
+        ? decodeURIComponent(segment)
+        : undefined,
   }));
 }
 
@@ -56,12 +71,14 @@ export const Breadcrumb = () => {
                 className={cn("min-w-0", !isLast && "hidden md:block")}
               >
                 {isLast ? (
-                  <BreadcrumbPage className="truncate">
+                  <BreadcrumbPage className="truncate" title={item.title}>
                     {item.label}
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild className="truncate">
-                    <Link href={item.href}>{item.label}</Link>
+                    <Link href={item.href} title={item.title}>
+                      {item.label}
+                    </Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
