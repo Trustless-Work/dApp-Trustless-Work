@@ -2,6 +2,13 @@
   "mcpServers": {
     "vercel": {
       "url": "https://mcp.vercel.com"
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
     }
   }
 }
