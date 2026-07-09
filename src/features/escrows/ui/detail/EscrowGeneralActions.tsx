@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useId, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Banknote,
   ChevronDown,
@@ -23,6 +24,8 @@ import { StartDisputeAction } from "@/features/escrows/ui/actions/StartDisputeAc
 import { UpdateEscrowAction } from "@/features/escrows/ui/actions/UpdateEscrowAction";
 import { WithdrawFundsAction } from "@/features/escrows/ui/actions/WithdrawFundsAction";
 import { cn } from "@/lib/utils";
+
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 type EscrowGeneralActionsProps = {
   escrow: StoredEscrow;
@@ -46,17 +49,19 @@ const ActionGroup = ({
   onToggle,
 }: ActionGroupProps) => {
   const contentId = useId();
+  const reduceMotion = useReducedMotion();
 
   return (
-    <div className="relative rounded-2xl border">
+    <div className="overflow-hidden rounded-2xl border">
       <button
         type="button"
         aria-expanded={open}
         aria-controls={contentId}
         onClick={() => onToggle(id)}
         className={cn(
-          "flex w-full cursor-pointer items-start justify-between gap-3 rounded-2xl p-4 text-left",
+          "flex w-full cursor-pointer items-start justify-between gap-3 p-4 text-left",
           "transition-colors duration-200 ease-out hover:bg-muted/40",
+          open && "bg-muted/25",
         )}
       >
         <div className="min-w-0">
@@ -65,28 +70,79 @@ const ActionGroup = ({
             {description}
           </p>
         </div>
-        <ChevronDown
-          className={cn(
-            "mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out",
-            open && "rotate-180",
-          )}
+        <motion.span
           aria-hidden="true"
-        />
+          className="mt-0.5 inline-flex size-4 shrink-0 text-muted-foreground"
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : { duration: 0.35, ease: EASE_OUT }
+          }
+        >
+          <ChevronDown className="size-4" />
+        </motion.span>
       </button>
 
-      <div
-        id={contentId}
-        aria-hidden={!open}
-        className={cn(
-          "absolute left-0 right-0 top-full z-30 mt-2 rounded-2xl border border-border bg-card p-3 shadow-xl shadow-background/30",
-          "origin-top transition-[opacity,transform,visibility] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform]",
-          open
-            ? "visible pointer-events-auto translate-y-0 scale-100 opacity-100"
-            : "invisible pointer-events-none -translate-y-2 scale-[0.98] opacity-0",
-        )}
-      >
-        <div className="flex flex-col gap-2">{children}</div>
-      </div>
+      <AnimatePresence initial={false}>
+        {open ? (
+          <motion.div
+            id={contentId}
+            key={`${id}-content`}
+            initial={
+              reduceMotion
+                ? false
+                : { height: 0, opacity: 0 }
+            }
+            animate={{
+              height: "auto",
+              opacity: 1,
+              transition: reduceMotion
+                ? { duration: 0 }
+                : {
+                    height: { duration: 0.38, ease: EASE_OUT },
+                    opacity: { duration: 0.28, ease: EASE_OUT, delay: 0.04 },
+                  },
+            }}
+            exit={
+              reduceMotion
+                ? undefined
+                : {
+                    height: 0,
+                    opacity: 0,
+                    transition: {
+                      height: { duration: 0.28, ease: "easeIn" },
+                      opacity: { duration: 0.18, ease: "easeIn" },
+                    },
+                  }
+            }
+            className="overflow-hidden"
+          >
+            <motion.div
+              className="flex flex-col gap-2 border-t px-3 py-3"
+              initial={reduceMotion ? false : { y: -6, opacity: 0 }}
+              animate={{
+                y: 0,
+                opacity: 1,
+                transition: reduceMotion
+                  ? { duration: 0 }
+                  : { duration: 0.3, ease: EASE_OUT, delay: 0.06 },
+              }}
+              exit={
+                reduceMotion
+                  ? undefined
+                  : {
+                      y: -4,
+                      opacity: 0,
+                      transition: { duration: 0.14, ease: "easeIn" },
+                    }
+              }
+            >
+              {children}
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 };

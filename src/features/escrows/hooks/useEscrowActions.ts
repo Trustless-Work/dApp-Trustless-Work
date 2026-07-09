@@ -93,7 +93,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
   const runAction = useCallback(
     async (
       action: () => Promise<SendTransactionResponse>,
-      successMessage: string,
+      messages: {
+        loading: string;
+        success: string;
+      },
     ) => {
       if (!walletAddress) {
         toast.error("Connect your wallet to continue.");
@@ -104,22 +107,26 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
         contractId,
         walletAddress,
       );
+      const toastId = toast.loading(messages.loading);
 
       try {
         const response = await action();
         const stored = persistEscrowResponse(walletAddress, response, existing);
 
         if (!stored) {
-          toast.error("Transaction submitted but escrow data was not returned.");
+          toast.error(
+            "Transaction submitted but escrow data was not returned.",
+            { id: toastId },
+          );
           return null;
         }
 
         await invalidate();
-        toast.success(successMessage);
+        toast.success(messages.success, { id: toastId });
         return stored;
       } catch (error) {
         playSound("error");
-        toast.error(getEscrowErrorMessage(error));
+        toast.error(getEscrowErrorMessage(error), { id: toastId });
         return null;
       }
     },
@@ -130,7 +137,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     (payload: FundEscrowPayload) =>
       runAction(
         () => signAndSend(() => fundEscrow(payload, escrowType)),
-        "Escrow funded successfully",
+        {
+          loading: "Funding escrow...",
+          success: "Escrow funded successfully",
+        },
       ),
     [escrowType, fundEscrow, runAction, signAndSend],
   );
@@ -139,7 +149,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     (payload: ChangeMilestoneStatusPayload) =>
       runAction(
         () => signAndSend(() => changeMilestoneStatus(payload, escrowType)),
-        "Milestone status updated",
+        {
+          loading: "Updating milestone status...",
+          success: "Milestone status updated",
+        },
       ),
     [changeMilestoneStatus, escrowType, runAction, signAndSend],
   );
@@ -148,7 +161,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     (payload: ApproveMilestonesPayload) =>
       runAction(
         () => signAndSend(() => approveMilestones(payload, escrowType)),
-        "Milestone approved",
+        {
+          loading: "Approving milestone...",
+          success: "Milestone approved",
+        },
       ),
     [approveMilestones, escrowType, runAction, signAndSend],
   );
@@ -157,7 +173,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     (payload: ApproveAndReleaseMilestonesPayload) =>
       runAction(
         () => signAndSend(() => approveAndReleaseMilestones(payload)),
-        "Milestones approved and released",
+        {
+          loading: "Approving and releasing milestones...",
+          success: "Milestones approved and released",
+        },
       ),
     [approveAndReleaseMilestones, runAction, signAndSend],
   );
@@ -170,7 +189,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     ) =>
       runAction(
         () => signAndSend(() => releaseFunds(payload, escrowType)),
-        "Funds released successfully",
+        {
+          loading: "Releasing funds...",
+          success: "Funds released successfully",
+        },
       ),
     [escrowType, releaseFunds, runAction, signAndSend],
   );
@@ -179,7 +201,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     (payload: MultiReleaseReleaseFundsPayload) =>
       runAction(
         () => signAndSend(() => releaseMilestones(payload)),
-        "Milestones released successfully",
+        {
+          loading: "Releasing milestones...",
+          success: "Milestones released successfully",
+        },
       ),
     [releaseMilestones, runAction, signAndSend],
   );
@@ -192,7 +217,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     ) =>
       runAction(
         () => signAndSend(() => startDispute(payload, escrowType)),
-        "Dispute started",
+        {
+          loading: "Starting dispute...",
+          success: "Dispute started",
+        },
       ),
     [escrowType, runAction, signAndSend, startDispute],
   );
@@ -201,7 +229,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     (payload: MultiReleaseStartDisputePayload) =>
       runAction(
         () => signAndSend(() => disputeMilestones(payload)),
-        "Milestones disputed",
+        {
+          loading: "Disputing milestones...",
+          success: "Milestones disputed",
+        },
       ),
     [disputeMilestones, runAction, signAndSend],
   );
@@ -214,7 +245,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     ) =>
       runAction(
         () => signAndSend(() => resolveDispute(payload, escrowType)),
-        "Dispute resolved",
+        {
+          loading: "Resolving dispute...",
+          success: "Dispute resolved",
+        },
       ),
     [escrowType, resolveDispute, runAction, signAndSend],
   );
@@ -227,7 +261,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     ) =>
       runAction(
         () => signAndSend(() => withdrawRemainingFunds(payload, escrowType)),
-        "Remaining funds withdrawn",
+        {
+          loading: "Withdrawing remaining funds...",
+          success: "Remaining funds withdrawn",
+        },
       ),
     [escrowType, runAction, signAndSend, withdrawRemainingFunds],
   );
@@ -240,7 +277,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     ) =>
       runAction(
         () => signAndSend(() => updateEscrow(payload, escrowType)),
-        "Escrow updated successfully",
+        {
+          loading: "Updating escrow...",
+          success: "Escrow updated successfully",
+        },
       ),
     [escrowType, runAction, signAndSend, updateEscrow],
   );
@@ -254,7 +294,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
       runAction(
         () =>
           signAndSend(() => manageMilestonesRequest(payload, escrowType)),
-        "Milestones updated",
+        {
+          loading: "Updating milestones...",
+          success: "Milestones updated",
+        },
       ),
     [escrowType, manageMilestonesRequest, runAction, signAndSend],
   );
