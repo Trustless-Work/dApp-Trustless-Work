@@ -8,13 +8,15 @@ import {
   CircleDollarSign,
   Coins,
   Gavel,
+  ListTree,
   ShieldAlert,
   Wallet,
   Wrench,
 } from "lucide-react";
+import { useEscrowActionPolicy } from "@/features/escrows/hooks/useEscrowActionPolicy";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
-import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
 import { FundEscrowAction } from "@/features/escrows/ui/actions/FundEscrowAction";
+import { ManageMilestonesAction } from "@/features/escrows/ui/actions/ManageMilestonesAction";
 import { ReleaseFundsAction } from "@/features/escrows/ui/actions/ReleaseFundsAction";
 import { ResolveDisputeAction } from "@/features/escrows/ui/actions/ResolveDisputeAction";
 import { StartDisputeAction } from "@/features/escrows/ui/actions/StartDisputeAction";
@@ -90,12 +92,24 @@ const ActionGroup = ({
 };
 
 export const EscrowGeneralActions = ({ escrow }: EscrowGeneralActionsProps) => {
-  const isMulti = isStoredMultiReleaseEscrow(escrow);
+  const policy = useEscrowActionPolicy(escrow);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   const handleToggleGroup = (groupId: string) => {
     setOpenGroup((current) => (current === groupId ? null : groupId));
   };
+
+  const showFund = policy.canFund();
+  const showWithdraw = policy.canWithdrawRemainingFunds();
+  const showUpdate = policy.canUpdate();
+  const showManageMilestones = policy.canManageMilestones();
+  const showRelease = policy.canReleaseEscrow();
+  const showDispute = policy.canDisputeEscrow();
+  const showResolve = policy.canResolveEscrowDispute();
+
+  const hasFundingGroup =
+    showFund || showWithdraw || showUpdate || showManageMilestones;
+  const hasReleasesGroup = showRelease || showDispute || showResolve;
 
   return (
     <aside className="flex flex-col gap-4">
@@ -111,19 +125,30 @@ export const EscrowGeneralActions = ({ escrow }: EscrowGeneralActionsProps) => {
         </div>
       </div>
 
-      <ActionGroup
-        id="funding"
-        title="Funding"
-        description="Add or recover funds held in the escrow."
-        open={openGroup === "funding"}
-        onToggle={handleToggleGroup}
-      >
-        <FundEscrowAction escrow={escrow} icon={Wallet} />
-        <WithdrawFundsAction escrow={escrow} icon={Banknote} />
-        <UpdateEscrowAction escrow={escrow} icon={Wrench} />
-      </ActionGroup>
+      {hasFundingGroup ? (
+        <ActionGroup
+          id="funding"
+          title="Funding"
+          description="Add or recover funds held in the escrow."
+          open={openGroup === "funding"}
+          onToggle={handleToggleGroup}
+        >
+          {showFund ? (
+            <FundEscrowAction escrow={escrow} icon={Wallet} />
+          ) : null}
+          {showWithdraw ? (
+            <WithdrawFundsAction escrow={escrow} icon={Banknote} />
+          ) : null}
+          {showUpdate ? (
+            <UpdateEscrowAction escrow={escrow} icon={Wrench} />
+          ) : null}
+          {showManageMilestones ? (
+            <ManageMilestonesAction escrow={escrow} icon={ListTree} />
+          ) : null}
+        </ActionGroup>
+      ) : null}
 
-      {!isMulti ? (
+      {hasReleasesGroup ? (
         <ActionGroup
           id="releases-disputes"
           title="Releases & Disputes"
@@ -131,17 +156,23 @@ export const EscrowGeneralActions = ({ escrow }: EscrowGeneralActionsProps) => {
           open={openGroup === "releases-disputes"}
           onToggle={handleToggleGroup}
         >
-          <ReleaseFundsAction
-            escrow={escrow}
-            triggerVariant="primary"
-            icon={CircleDollarSign}
-          />
-          <StartDisputeAction
-            escrow={escrow}
-            triggerVariant="danger"
-            icon={ShieldAlert}
-          />
-          <ResolveDisputeAction escrow={escrow} icon={Gavel} />
+          {showRelease ? (
+            <ReleaseFundsAction
+              escrow={escrow}
+              triggerVariant="primary"
+              icon={CircleDollarSign}
+            />
+          ) : null}
+          {showDispute ? (
+            <StartDisputeAction
+              escrow={escrow}
+              triggerVariant="danger"
+              icon={ShieldAlert}
+            />
+          ) : null}
+          {showResolve ? (
+            <ResolveDisputeAction escrow={escrow} icon={Gavel} />
+          ) : null}
         </ActionGroup>
       ) : null}
     </aside>

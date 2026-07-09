@@ -6,9 +6,12 @@ import type {
   ChangeMilestoneStatusPayload,
   EscrowType,
   FundEscrowPayload,
+  ManageMultiReleaseMilestonesPayload,
+  ManageSingleReleaseMilestonesPayload,
   MultiReleaseReleaseFundsPayload,
   MultiReleaseResolveDisputePayload,
   MultiReleaseStartDisputePayload,
+  MultiReleaseWithdrawRemainingFundsPayload,
   SendTransactionResponse,
   SingleReleaseReleaseFundsPayload,
   SingleReleaseResolveDisputePayload,
@@ -22,6 +25,7 @@ import {
   useApproveMilestones,
   useChangeMilestoneStatus,
   useFundEscrow,
+  useManageMilestones,
   useReleaseFunds,
   useResolveDispute,
   useStartDispute,
@@ -75,6 +79,7 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
   const { resolveDispute } = useResolveDispute();
   const { withdrawRemainingFunds } = useWithdrawRemainingFunds();
   const { updateEscrow } = useUpdateEscrow();
+  const { manageMilestones: manageMilestonesRequest } = useManageMilestones();
 
   const invalidate = useCallback(async () => {
     await queryClient.invalidateQueries({
@@ -215,7 +220,11 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
   );
 
   const withdraw = useCallback(
-    (payload: SingleReleaseWithdrawRemainingFundsPayload) =>
+    (
+      payload:
+        | SingleReleaseWithdrawRemainingFundsPayload
+        | MultiReleaseWithdrawRemainingFundsPayload,
+    ) =>
       runAction(
         () => signAndSend(() => withdrawRemainingFunds(payload, escrowType)),
         "Remaining funds withdrawn",
@@ -236,6 +245,20 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     [escrowType, runAction, signAndSend, updateEscrow],
   );
 
+  const manageMilestones = useCallback(
+    (
+      payload:
+        | ManageSingleReleaseMilestonesPayload
+        | ManageMultiReleaseMilestonesPayload,
+    ) =>
+      runAction(
+        () =>
+          signAndSend(() => manageMilestonesRequest(payload, escrowType)),
+        "Milestones updated",
+      ),
+    [escrowType, manageMilestonesRequest, runAction, signAndSend],
+  );
+
   return {
     fund,
     changeStatus,
@@ -248,6 +271,7 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
     resolve,
     withdraw,
     update,
+    manageMilestones,
     loading: signing,
     walletAddress,
   };

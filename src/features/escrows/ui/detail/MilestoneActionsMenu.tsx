@@ -17,8 +17,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEscrowActionPolicy } from "@/features/escrows/hooks/useEscrowActionPolicy";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
-import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
 import { ApproveAndReleaseAction } from "@/features/escrows/ui/actions/ApproveAndReleaseAction";
 import { ApproveMilestoneAction } from "@/features/escrows/ui/actions/ApproveMilestoneAction";
 import { ChangeMilestoneStatusAction } from "@/features/escrows/ui/actions/ChangeMilestoneStatusAction";
@@ -35,12 +35,26 @@ export const MilestoneActionsMenu = ({
   escrow,
   milestoneIndex,
 }: MilestoneActionsMenuProps) => {
-  const isMulti = isStoredMultiReleaseEscrow(escrow);
+  const policy = useEscrowActionPolicy(escrow);
   const milestoneProps = {
     escrow,
     milestoneIndex,
     triggerMode: "menu-item" as const,
   };
+
+  const showApprove = policy.canApproveMilestone(milestoneIndex);
+  const showChangeStatus = policy.canChangeMilestoneStatus(milestoneIndex);
+  const showApproveAndRelease =
+    policy.canApproveAndReleaseMilestone(milestoneIndex);
+  const showRelease = policy.canReleaseMilestone(milestoneIndex);
+  const showDispute = policy.canDisputeMilestone(milestoneIndex);
+  const showResolve = policy.canResolveMilestoneDispute(milestoneIndex);
+
+  const hasPrimaryActions = showApprove || showChangeStatus;
+  const hasReleaseActions = showApproveAndRelease || showRelease;
+  const hasDisputeActions = showDispute || showResolve;
+  const hasAnyActions =
+    hasPrimaryActions || hasReleaseActions || hasDisputeActions;
 
   return (
     <DropdownMenu>
@@ -51,41 +65,66 @@ export const MilestoneActionsMenu = ({
           size="icon-sm"
           className="shrink-0 cursor-pointer rounded-full"
           aria-label={`Milestone ${milestoneIndex + 1} actions`}
+          disabled={!hasAnyActions}
         >
           <MoreHorizontal className="size-4" aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-60 p-1.5">
-        <DropdownMenuLabel>Milestone {milestoneIndex + 1}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
+      {hasAnyActions ? (
+        <DropdownMenuContent align="end" className="w-60 p-1.5">
+          <DropdownMenuLabel>Milestone {milestoneIndex + 1}</DropdownMenuLabel>
+          <DropdownMenuSeparator />
 
-        <ApproveMilestoneAction {...milestoneProps} icon={BadgeCheck} />
-        <ChangeMilestoneStatusAction {...milestoneProps} icon={ListChecks} />
+          {showApprove ? (
+            <ApproveMilestoneAction {...milestoneProps} icon={BadgeCheck} />
+          ) : null}
+          {showChangeStatus ? (
+            <ChangeMilestoneStatusAction
+              {...milestoneProps}
+              icon={ListChecks}
+            />
+          ) : null}
 
-        {isMulti ? (
-          <>
-            <DropdownMenuSeparator />
-            <ApproveAndReleaseAction
-              {...milestoneProps}
-              triggerVariant="primary"
-              icon={Zap}
-            />
-            <ReleaseFundsAction
-              {...milestoneProps}
-              triggerVariant="primary"
-              icon={CircleDollarSign}
-            />
-            <DropdownMenuSeparator />
-            <StartDisputeAction
-              {...milestoneProps}
-              triggerVariant="danger"
-              icon={ShieldAlert}
-            />
-            <ResolveDisputeAction {...milestoneProps} icon={Gavel} />
-          </>
-        ) : null}
-      </DropdownMenuContent>
+          {hasReleaseActions ? (
+            <>
+              {hasPrimaryActions ? <DropdownMenuSeparator /> : null}
+              {showApproveAndRelease ? (
+                <ApproveAndReleaseAction
+                  {...milestoneProps}
+                  triggerVariant="primary"
+                  icon={Zap}
+                />
+              ) : null}
+              {showRelease ? (
+                <ReleaseFundsAction
+                  {...milestoneProps}
+                  triggerVariant="primary"
+                  icon={CircleDollarSign}
+                />
+              ) : null}
+            </>
+          ) : null}
+
+          {hasDisputeActions ? (
+            <>
+              {hasPrimaryActions || hasReleaseActions ? (
+                <DropdownMenuSeparator />
+              ) : null}
+              {showDispute ? (
+                <StartDisputeAction
+                  {...milestoneProps}
+                  triggerVariant="danger"
+                  icon={ShieldAlert}
+                />
+              ) : null}
+              {showResolve ? (
+                <ResolveDisputeAction {...milestoneProps} icon={Gavel} />
+              ) : null}
+            </>
+          ) : null}
+        </DropdownMenuContent>
+      ) : null}
     </DropdownMenu>
   );
 };

@@ -2,8 +2,13 @@ import type { EscrowRoleId } from "@/constants/escrow-roles.constants";
 import { ESCROW_ROLE_LABELS } from "@/constants/escrow-roles.constants";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import { isStoredSingleReleaseEscrow } from "@/features/escrows/types/escrow.types";
-
-type EscrowMilestone = StoredEscrow["milestones"][number];
+import {
+  getMilestoneApprovalsTarget,
+  isMilestoneApproved,
+  isMilestoneDisputed,
+  isMilestoneReleased,
+  type EscrowMilestone,
+} from "@/features/escrows/utils/escrow-milestone.helper";
 
 export type EscrowRoleEntry = {
   readonly id: EscrowRoleId;
@@ -127,15 +132,15 @@ export function getEscrowStatusLabel(escrow: StoredEscrow): string {
 export function getMilestoneDisplayStatus(
   milestone: EscrowMilestone,
 ): MilestoneDisplayStatus {
-  if ("dispute" in milestone && milestone.dispute?.isDisputed) {
+  if (isMilestoneDisputed(milestone)) {
     return "disputed";
   }
 
-  if ("released" in milestone && milestone.released === true) {
+  if (isMilestoneReleased(milestone)) {
     return "released";
   }
 
-  if ("approved" in milestone && milestone.approved === true) {
+  if (isMilestoneApproved(milestone)) {
     return "approved";
   }
 
@@ -144,7 +149,7 @@ export function getMilestoneDisplayStatus(
 
 export function formatMilestoneApprovals(milestone: EscrowMilestone): string {
   const count = milestone.approvals?.approvalCount ?? 0;
-  const target = milestone.approvalsTarget ?? 1;
+  const target = getMilestoneApprovalsTarget(milestone) || 1;
   return `${count}/${target}`;
 }
 
