@@ -30,6 +30,7 @@ import {
   migrateFormValues,
 } from "@/features/escrows/utils/create-escrow-form.helper";
 import { toInitializePayload } from "@/features/escrows/utils/create-escrow-payload.helper";
+import { showEscrowTransactionSuccessToast } from "@/features/escrows/utils/escrow-transaction-toast.helper";
 import { useWalletContext } from "@/providers/WalletProvider";
 
 type UseCreateEscrowFormOptions = {
@@ -137,7 +138,10 @@ export function useCreateEscrowForm(options?: UseCreateEscrowFormOptions) {
         queryKey: escrowsQueryKey(walletAddress),
       });
 
-      toast.success("Escrow created successfully");
+      showEscrowTransactionSuccessToast({
+        title: "Escrow created successfully",
+        txHash: response.txHash,
+      });
       playSound("deploy");
       options?.onSuccess?.();
       router.push(`/dashboard/escrows/${contractId}`);

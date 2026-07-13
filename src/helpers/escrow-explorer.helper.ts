@@ -1,12 +1,27 @@
 import type { NetworkType } from "@/types/network.entity";
 
+export function toStellarExpertNetwork(
+  network: NetworkType,
+): "public" | "testnet" {
+  return network === "mainnet" ? "public" : "testnet";
+}
+
 export function getStellarExpertContractUrl(
   network: NetworkType,
   contractId: string,
 ): string {
-  const explorerNetwork = network === "mainnet" ? "public" : "testnet";
+  const explorerNetwork = toStellarExpertNetwork(network);
 
   return `https://stellar.expert/explorer/${explorerNetwork}/contract/${contractId.trim()}`;
+}
+
+export function getStellarExpertTransactionUrl(
+  network: NetworkType,
+  txHash: string,
+): string {
+  const explorerNetwork = toStellarExpertNetwork(network);
+
+  return `https://stellar.expert/explorer/${explorerNetwork}/tx/${txHash.trim()}`;
 }
 
 export function getTrustlessWorkViewerUrl(

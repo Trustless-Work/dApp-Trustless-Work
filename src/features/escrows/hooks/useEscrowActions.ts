@@ -45,6 +45,7 @@ import {
 } from "@/features/escrows/services/escrow-repository";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import { getEscrowErrorMessage } from "@/features/escrows/utils/escrow-error.helper";
+import { showEscrowTransactionSuccessToast } from "@/features/escrows/utils/escrow-transaction-toast.helper";
 import { playSound } from "@/lib/sounds";
 import { useSignAndSend } from "@/features/escrows/hooks/useSignAndSend";
 import { useWalletContext } from "@/providers/WalletProvider";
@@ -122,7 +123,11 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
         }
 
         await invalidate();
-        toast.success(messages.success, { id: toastId });
+        showEscrowTransactionSuccessToast({
+          title: messages.success,
+          txHash: response.txHash,
+          toastId,
+        });
         return stored;
       } catch (error) {
         playSound("error");
