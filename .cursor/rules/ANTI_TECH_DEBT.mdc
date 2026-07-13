@@ -1,0 +1,32 @@
+---
+description: Guardrails anti tech debt crítico — checklist antes de merge
+alwaysApply: true
+---
+
+# Anti tech-debt guardrails
+
+Antes de mergear cambios en auth, API, escrows, orgs o providers, verificar:
+
+## Crítico / peligroso (bloquear)
+
+1. **Ruta API** mutadora o `adminFetch` sin sesión / ownership / same-origin → ver BFF_SECURITY
+2. **Secretos** o `process.env` fuera de `src/lib/env/` → ver ENV
+3. **`any` / `@ts-ignore`** en `src/` → ver TYPESCRIPT
+4. **`useEscrowActions` por cada action button** → EscrowActionsProvider
+5. **`TrustlessWorkProvider` en root layout**
+6. **`fetchAllKeysetPages` en mount de layout dashboard** (orgs/admin directory)
+7. **Cache infinita escrita como `T[]`**
+8. **Toast/redirect session_expired en logout intencional**
+
+## Alto (no reintroducir)
+
+- Tipos compartidos en `auth.types` en vez de `@/types`
+- Settings (u otro feature) importando UI interna de organizations
+- Forms multi-campo sin Zod + hook (FORMS + ESCROWS)
+- `http.get` list sin `parseKeysetPageWithSchema`
+- Cambios en `lib/` / `helpers/` / `schemas/` **sin** test co-localizado (TESTS)
+- Navbar/wallet sin skeleton mientras sesión/wallet hidratan
+
+## Referencias
+
+SHARED_TYPES · FEATURE_BOUNDARIES · BFF_SECURITY · DATA_FETCHING · ESCROWS · AUTH_SESSION_UX · TESTS · FORMS · ENV · TYPESCRIPT

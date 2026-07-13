@@ -1,0 +1,45 @@
+---
+description: Límites entre features — sin imports de implementación cruzada
+alwaysApply: true
+---
+
+# Feature boundaries
+
+`features/A` **no** importa UI/hooks/services de `features/B`.
+
+## Permitido
+
+- Types compartidos vía `@/types`
+- Composición en **router / layout / settings shell**: importar **una** vista pública de otro feature (p. ej. `OrganizationSettingsView`)
+- Providers en `src/providers/` que orquestan features
+
+## Prohibido
+
+```typescript
+// ❌ BAD — settings importa piezas internas de organizations
+import { MembersSection } from "@/features/organizations/ui/MembersSection";
+import { OrganizationDetailsCard } from "@/features/organizations/ui/OrganizationDetailsCard";
+
+// ✅ GOOD — una vista owned por organizations
+import { OrganizationSettingsView } from "@/features/organizations/ui/OrganizationSettingsView";
+```
+
+```typescript
+// ❌ BAD — shared UI importa hooks de feature
+import { useSignOut } from "@/features/auth/hooks/useSignOut"; // en components/ui/*
+
+// Preferir: callback props, o mover el componente al feature / a un shell del dashboard
+```
+
+```typescript
+// ❌ BAD — lib de infra importa feature
+import { clearClientAuthState } from "@/features/auth/lib/logout-client"; // en lib/http.ts
+
+// Si hace falta: extraer a src/lib/auth-client.ts o inyectar callback
+```
+
+## Checklist
+
+- [ ] ¿Este import cruza features? → extraer shared o vista pública
+- [ ] ¿`components/` depende de `features/`? → invertir dependencia
+- [ ] ¿Nuevo tipo usado por 2+ features? → `src/types/`

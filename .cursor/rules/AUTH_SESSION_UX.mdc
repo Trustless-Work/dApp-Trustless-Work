@@ -1,0 +1,36 @@
+---
+description: Auth/session UX — skeleton mientras carga; sin toast en logout
+globs: "src/features/auth/**/*.{ts,tsx},src/components/tw-blocks/wallet-kit/**/*.{ts,tsx},src/components/shared/Navbar.tsx,src/components/ui/nav-user.tsx,src/providers/AuthProvider.tsx,src/providers/WalletProvider.tsx"
+alwaysApply: false
+---
+
+# Auth & session UX
+
+## Wallet / navbar loading
+
+Mientras `!hasWalletHydrated` **o** `useAuth().isLoading`:
+
+- Mostrar **skeleton** del control (misma huella visual que conectado)
+- **No** flash de "Connect Wallet" si el usuario ya tiene sesión/wallet
+
+```tsx
+// ❌ BAD
+if (!walletAddress) return <ConnectButton />;
+
+// ✅ GOOD
+if (!hasWalletHydrated || isSessionLoading) return <WalletButtonSkeleton />;
+if (walletAddress) return <ConnectedWallet />;
+return <ConnectButton />;
+```
+
+## Logout
+
+- Sin toast "Session expired"
+- Sin `?reason=session_expired` en redirect de logout
+- `beginIntentionalLogout()` al inicio de `signOut`
+- Login toast/copy de sesión expirada **solo** si `searchParams.reason === "session_expired"` (expiración real / middleware)
+
+## Session query
+
+- Un endpoint que resuelve user autenticado
+- Si `data === null` + wallet en storage + **no** logout intencional → entonces sí `session_expired`

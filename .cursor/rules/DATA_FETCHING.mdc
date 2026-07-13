@@ -1,0 +1,49 @@
+---
+description: TanStack Query, providers y boundaries Zod — anti over-fetch y cache corruptos
+globs: "src/features/**/hooks/**/*.ts,src/features/**/services/**/*.ts,src/providers/**/*.tsx,src/lib/pagination.ts,src/lib/schemas/**/*.ts,src/app/layout.tsx,src/app/dashboard/**/layout.tsx"
+alwaysApply: false
+---
+
+# Data fetching & cache
+
+## Providers / bundle
+
+- `@trustless-work/escrow` / `TrustlessWorkProvider`: **solo** en layouts que lo necesitan (p. ej. `dashboard/escrows`), **nunca** en root `app/layout.tsx`
+- No montar SDKs pesados en home/login
+
+## Queries
+
+| Patrón | Usar |
+| --- | --- |
+| Listas paginadas | `useInfiniteQuery` + `DEFAULT_KEYSET_LIMIT` |
+| Directorios grandes | Búsqueda/paginación — **no** `fetchAllKeysetPages` en mount de dashboard |
+| Session user | **Un** request BFF (`getSessionUser` / `/auth/me` con user) — no waterfall `checkSession` → `getMe` |
+
+```typescript
+// ❌ BAD — carga todas las páginas en cada visita al dashboard
+queryFn: () => organizationService.listMine(); // fetchAllKeysetPages
+
+// ✅ GOOD
+useInfiniteQuery({ queryFn: ({ pageParam }) => service.listMinePage({ cursor: pageParam, limit: DEFAULT_KEYSET_LIMIT }) });
+```
+
+## Cache shapes
+
+- `useInfiniteQuery` → cache es `InfiniteData<KeysetPage<T>>`
+- `setQueryData` debe respetar esa forma (helpers tipo `organizations-cache.helper.ts` / `api-keys-cache.helper.ts`)
+- **No** escribir `T[]` plano en una query infinita
+- Evitar `setQueryData` optimista + `invalidateQueries` inmediato (anula el beneficio)
+
+## Zod en boundary HTTP
+
+List endpoints: `http.get<unknown>` → `parseKeysetPageWithSchema(itemSchema, data)`.
+
+Schemas en `src/lib/schemas/api-response.schemas.ts`. Al añadir entidad API: schema Zod + usarlo en el service.
+
+```typescript
+// ❌ BAD
+return parseKeysetPage<OrganizationResponse>(data); // cast ciego
+
+// ✅ GOOD
+return parseKeysetPageWithSchema(organizationResponseSchema, data);
+```

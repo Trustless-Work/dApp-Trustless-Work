@@ -1,0 +1,41 @@
+---
+description: Seguridad BFF — auth, ownership, CSRF, sin admin sin sesión
+globs: "src/app/api/**/*.ts,src/lib/http.ts,src/features/auth/lib/**/*.ts,src/middleware.ts"
+alwaysApply: false
+---
+
+# BFF & auth security
+
+## Route handlers (`src/app/api/**`)
+
+Toda ruta que mute estado o use `adminFetch` / datos de usuario **debe**:
+
+1. Exigir sesión (`getSession` / `coreFetch` con token) **o** ser un flujo público explícito (challenge/verify register) documentado
+2. Usar `validateSameOrigin` en POST/PATCH/DELETE mutadores (como `users/me/profile`)
+3. **Nunca** aceptar `userId` del body para `adminFetch` PATCH sin probar ownership (`userId === session user`)
+
+```typescript
+// ❌ BAD — admin write sin sesión / ownership
+await adminFetch(`/admin/users/${body.userId}`, { method: "PATCH", ... });
+
+// ✅ GOOD — identidad desde sesión
+const me = await coreFetch("/users/me");
+await adminFetch(`/admin/users/${me.id}`, { method: "PATCH", ... });
+```
+
+## Logout vs session expired
+
+- Logout intencional: `beginIntentionalLogout()` **antes** de mutar; `clearClientAuthState({ reason: "logout" })`
+- **No** redirigir a `/login?reason=session_expired` ni toast "Session expired" en logout
+- `useSession` / interceptor 401: respetar `isIntentionalLogout()`
+
+## Interceptor HTTP
+
+- 401 durante logout intencional: **no** `clearClientAuthState` ni `playSound("error")`
+- Secrets solo vía `serverEnv` (ver ENV.mdc)
+
+## Checklist al añadir ruta API
+
+- [ ] ¿Quién puede llamarla? (público / sesión / admin)
+- [ ] ¿CSRF / same-origin en mutaciones?
+- [ ] ¿Hay test o smoke mental de abuse (userId ajeno, sin cookie)?

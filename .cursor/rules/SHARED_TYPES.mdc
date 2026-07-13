@@ -1,0 +1,35 @@
+---
+description: Tipos compartidos viven en src/types — no usar features/auth como hub
+alwaysApply: true
+---
+
+# Shared types hub
+
+Primitivos y entidades compartidas **no** viven en `features/auth/types`.
+
+## Dónde va cada tipo
+
+| Tipo | Ubicación |
+| --- | --- |
+| `EntityId`, `IsoDateTimeString`, `StellarAddress` | `src/types/primitives.ts` |
+| `AccountRole`, `WithAccountRoles`, `WithEntityTimestamps` | `src/types/roles.ts` |
+| `UserResponse`, `UserProfileFields` | `src/types/user.entity.ts` |
+| `Sep10Challenge`, session challenge unions | `src/types/sep10.entity.ts` |
+| Session/register/request auth-only | `features/auth/types/auth.types.ts` |
+| Dominio de feature (org, api-key, wallet) | `features/[feature]/types/` |
+
+Barrel: importar desde `@/types` (ver [`src/types/index.ts`](src/types/index.ts)).
+
+## Prohibido
+
+```typescript
+// ❌ BAD — hub oculto en auth
+import type { UserResponse, EntityId } from "@/features/auth/types/auth.types";
+
+// ✅ GOOD
+import type { UserResponse, EntityId } from "@/types";
+```
+
+- **No** añadir tipos cross-feature a `auth.types.ts`
+- `auth.types.ts` solo re-exporta lo compartido por compatibilidad interna de auth; **nuevos** consumidores usan `@/types`
+- Antes de crear un tipo: buscar en `src/types/` y `features/*/types/`

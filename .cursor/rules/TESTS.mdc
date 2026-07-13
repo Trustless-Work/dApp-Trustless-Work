@@ -1,12 +1,12 @@
 ---
-description: Testing con Vitest — ubicación, qué probar y patrones del proyecto
-globs: "**/*.test.ts,**/*.test.tsx,src/lib/**/*.ts,src/helpers/**/*.ts,**/schemas/**/*.ts"
+description: Testing con Vitest — obligatorio al tocar lib/helpers/schemas; CI con pnpm test
+globs: "**/*.test.ts,**/*.test.tsx,src/lib/**/*.ts,src/helpers/**/*.ts,**/schemas/**/*.ts,src/features/**/hooks/**/*.ts,src/features/**/services/**/*.ts"
 alwaysApply: false
 ---
 
 # Testing — Vitest
 
-Stack: **Vitest** (`pnpm test`, `pnpm test:watch`). CI ejecuta `pnpm test` antes del build.
+Stack: **Vitest** (`pnpm test`, `pnpm test:watch`). CI ejecuta `pnpm test` **antes** del build — no mergear si falla.
 
 ---
 
