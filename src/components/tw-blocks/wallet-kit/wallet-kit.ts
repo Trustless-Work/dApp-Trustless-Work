@@ -5,14 +5,21 @@ import type { NetworkType } from "@/types/network.entity";
 
 type SdkModule = typeof import("@creit-tech/stellar-wallets-kit/sdk");
 type TypesModule = typeof import("@creit-tech/stellar-wallets-kit/types");
-type ModulesUtilsModule =
-  typeof import("@creit-tech/stellar-wallets-kit/modules/utils");
+type FreighterModuleType =
+  typeof import("@creit-tech/stellar-wallets-kit/modules/freighter");
+type AlbedoModuleType =
+  typeof import("@creit-tech/stellar-wallets-kit/modules/albedo");
 type WalletConnectModuleType =
   typeof import("@creit-tech/stellar-wallets-kit/modules/wallet-connect");
 type StellarWalletsKitStatic = SdkModule["StellarWalletsKit"];
 type NetworksEnum = TypesModule["Networks"];
+type WalletConnectModuleInstance =
+  InstanceType<WalletConnectModuleType["WalletConnectModule"]>;
 type WalletConnectTargetChainEnum =
   WalletConnectModuleType["WalletConnectTargetChain"];
+
+const WALLET_CONNECT_WARMUP_MS = 15_000;
+const WALLET_CONNECT_POLL_MS = 100;
 
 function resolveKitNetwork(
   Networks: NetworksEnum,
@@ -30,6 +37,16 @@ function resolveWalletConnectChain(
     : WalletConnectTargetChain.TESTNET;
 }
 
+async function waitForWalletConnect(
+  module: WalletConnectModuleInstance,
+): Promise<void> {
+  const deadline = Date.now() + WALLET_CONNECT_WARMUP_MS;
+  while (Date.now() < deadline) {
+    if (await module.isAvailable()) return;
+    await new Promise((resolve) => setTimeout(resolve, WALLET_CONNECT_POLL_MS));
+  }
+}
+
 /**
  * Stellar Wallet Kit helpers
  *
@@ -39,6 +56,7 @@ function resolveWalletConnectChain(
 let walletKitPromise: Promise<{
   StellarWalletsKit: StellarWalletsKitStatic;
   Networks: NetworksEnum;
+  walletConnectModule: WalletConnectModuleInstance | null;
 }> | null = null;
 
 export function resetWalletKitLoader(): void {
@@ -52,16 +70,22 @@ const loadWalletKit = async () => {
 
   if (!walletKitPromise) {
     walletKitPromise = (async () => {
-      const [sdk, types, modules, walletConnect] = await Promise.all([
+      const [sdk, types, freighter, albedo, walletConnect] = await Promise.all([
         import("@creit-tech/stellar-wallets-kit/sdk") as Promise<SdkModule>,
         import("@creit-tech/stellar-wallets-kit/types") as Promise<TypesModule>,
-        import("@creit-tech/stellar-wallets-kit/modules/utils") as Promise<ModulesUtilsModule>,
-        import("@creit-tech/stellar-wallets-kit/modules/wallet-connect") as Promise<WalletConnectModuleType>,
+        import(
+          "@creit-tech/stellar-wallets-kit/modules/freighter"
+        ) as Promise<FreighterModuleType>,
+        import(
+          "@creit-tech/stellar-wallets-kit/modules/albedo"
+        ) as Promise<AlbedoModuleType>,
+        import(
+          "@creit-tech/stellar-wallets-kit/modules/wallet-connect"
+        ) as Promise<WalletConnectModuleType>,
       ]);
 
       const { StellarWalletsKit } = sdk;
       const { Networks } = types;
-      const { defaultModules } = modules;
       const { WalletConnectModule, WalletConnectTargetChain } = walletConnect;
 
       const projectId = clientEnv.integrations.walletConnectProjectId;
@@ -73,30 +97,39 @@ const loadWalletKit = async () => {
         storedNetwork,
       );
 
-      const kitModules = [...defaultModules()];
+      /**
+       * We intentionally restrict the connectable wallets to WalletConnect, Freighter
+       * and Albedo instead of using `defaultModules()` (which exposes every supported
+       * wallet).
+       */
+      const walletModules: ModuleInterface[] = [
+        new freighter.FreighterModule(),
+        new albedo.AlbedoModule(),
+      ];
+
+      let walletConnectModule: WalletConnectModuleInstance | null = null;
 
       if (projectId) {
-        kitModules.push(
-          new WalletConnectModule({
-            projectId,
-            metadata: {
-              name: "Trustless Work",
-              description:
-                "Create escrows on the Stellar blockchain with Trustless Work.",
-              icons: [`${appOrigin}/e.png`],
-              url: appOrigin,
-            },
-            allowedChains: [walletConnectChain],
-          }),
-        );
+        walletConnectModule = new WalletConnectModule({
+          projectId,
+          metadata: {
+            name: "Trustless Work",
+            description:
+              "Create escrows on the Stellar blockchain with Trustless Work.",
+            icons: [`${appOrigin}/e.png`],
+            url: appOrigin,
+          },
+          allowedChains: [walletConnectChain],
+        });
+        walletModules.push(walletConnectModule);
       }
 
       StellarWalletsKit.init({
         network: kitNetwork,
-        modules: kitModules,
+        modules: walletModules,
       });
 
-      return { StellarWalletsKit, Networks };
+      return { StellarWalletsKit, Networks, walletConnectModule };
     })();
   }
 
@@ -113,7 +146,10 @@ interface SignTransactionParams {
  * Open the authentication modal and request the user's address.
  */
 export const openAuthModal = async (): Promise<{ address: string }> => {
-  const { StellarWalletsKit } = await loadWalletKit();
+  const { StellarWalletsKit, walletConnectModule } = await loadWalletKit();
+  if (walletConnectModule) {
+    await waitForWalletConnect(walletConnectModule);
+  }
   return StellarWalletsKit.authModal();
 };
 
