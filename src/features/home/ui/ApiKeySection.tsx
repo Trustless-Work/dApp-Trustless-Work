@@ -8,12 +8,47 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ExternalLink, Key, Play, Wallet, Settings, User } from "lucide-react";
+import {
+  Building2,
+  Key,
+  Play,
+  Wallet,
+  Copy,
+} from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { ApiKeyVideoFallback } from "./ApiKeyVideoFallback";
 import { useMounted } from "@/hooks/useMounted";
+
+const STEP_COLOR = "bg-blue-500/10 border-blue-500/20 text-blue-600";
+
+const steps = [
+  {
+    icon: Wallet,
+    title: "Connect your wallet",
+    description:
+      "Sign in to the dApp with your Stellar wallet (SEP-10). New wallets register with name and email.",
+  },
+  {
+    icon: Building2,
+    title: "Select an organization",
+    description:
+      "Choose or create an organization in the team switcher. API keys are scoped to the active organization.",
+  },
+  {
+    icon: Key,
+    title: "Open API Keys",
+    description:
+      "Go to Integrations → API Keys in the sidebar and create a key for your backend.",
+  },
+  {
+    icon: Copy,
+    title: "Copy and store securely",
+    description:
+      "The secret is shown once. Use it server-side as the x-api-key header against mainnet or testnet API URLs.",
+  },
+] as const;
 
 export const ApiKeySection = () => {
   const { resolvedTheme } = useTheme();
@@ -22,41 +57,11 @@ export const ApiKeySection = () => {
   const [hasVideoError, setHasVideoError] = useState(false);
   const videoThemeKey = isDark ? "dark" : "light";
 
-  const steps = [
-    {
-      icon: <Wallet className="w-5 h-5" />,
-      title: "Connect your wallet",
-      description: "Enter our backoffice using your wallet.",
-      color: "bg-blue-500/10 border-blue-500/20 text-blue-600",
-    },
-    {
-      icon: <Settings className="w-5 h-5" />,
-      title: "Go to Settings",
-      description: "Navigate to the Settings section in the sidebar",
-      color: "bg-blue-500/10 border-blue-500/20 text-blue-600",
-    },
-    {
-      icon: <User className="w-5 h-5" />,
-      title: "Configure Your Profile",
-      description:
-        "Set up your profile - the use case field is mandatory for requesting your API key",
-      color: "bg-blue-500/10 border-blue-500/20 text-blue-600",
-    },
-    {
-      icon: <Key className="w-5 h-5" />,
-      title: "Request API Key",
-      description:
-        "Go to the API Keys option in the sidebar and request your key based on your desired network.",
-      color: "bg-blue-500/10 border-blue-500/20 text-blue-600",
-    },
-  ];
-
   return (
     <section className="py-20 relative w-full">
       <div className="absolute inset-0 z-0"></div>
 
       <div className="w-full mx-auto relative z-10">
-        {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="p-3 rounded-full bg-primary/10 border border-primary/20">
@@ -68,23 +73,23 @@ export const ApiKeySection = () => {
           </div>
 
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Get access to the Trustless Work API to integrate escrow
-            functionality into your application
+            Generate organization-scoped API keys in the dApp and authenticate
+            your backend with Trustless Work using the{" "}
+            <code className="text-sm">x-api-key</code> header.
           </p>
         </div>
 
-        {/* Content Grid */}
         <div className="grid lg:grid-cols-10 gap-8 lg:gap-12 items-start">
-          {/* Video Section */}
           <div className="relative lg:col-span-7">
             <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <Play className="w-5 h-5 text-primary" />
-                  How to Request API Key in the backoffice
+                  How to create an API key in the dApp
                 </CardTitle>
                 <CardDescription>
-                  See how to request your API Key step by step in the backoffice
+                  Walk through wallet sign-in, organization selection, and key
+                  generation
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -110,9 +115,7 @@ export const ApiKeySection = () => {
             </Card>
           </div>
 
-          {/* API Key Information */}
           <div className="space-y-6 lg:col-span-3">
-            {/* Main API Key Card */}
             <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -120,8 +123,8 @@ export const ApiKeySection = () => {
                   API Key for Authentication
                 </CardTitle>
                 <CardDescription>
-                  Get access to the Trustless Work API to integrate escrow
-                  functionality into your application
+                  Self-serve keys for your organization. Store them in your
+                  backend — never in the browser.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -131,64 +134,61 @@ export const ApiKeySection = () => {
                     asChild
                   >
                     <Link
-                      href="https://dapp.trustlesswork.com/settings"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="/dashboard/api-keys"
                       className="inline-flex items-center gap-2"
                     >
                       <Key className="w-4 h-4" />
-                      API Key
-                      <ExternalLink className="w-4 h-4" />
+                      Open API Keys
                     </Link>
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Steps Diagram */}
             <Card className="border-2 border-border/50 bg-background/10 backdrop-blur-md shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg">
-                  How to Request Your API Key
+                  How to Create Your API Key
                 </CardTitle>
                 <CardDescription>
-                  Follow these simple steps to get your API key
+                  Follow these steps to generate a key for your integration
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {steps.map((step, index) => (
-                    <div key={index} className="relative">
-                      <div className="flex items-start gap-4">
-                        {/* Step Number */}
-                        <div
-                          className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold ${step.color}`}
-                        >
-                          {index + 1}
-                        </div>
+                  {steps.map((step, index) => {
+                    const Icon = step.icon;
 
-                        {/* Step Content */}
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className={`p-2 rounded-lg ${step.color}`}>
-                              {step.icon}
-                            </div>
-                            <h4 className="font-semibold text-foreground">
-                              {step.title}
-                            </h4>
+                    return (
+                      <div key={step.title} className="relative">
+                        <div className="flex items-start gap-4">
+                          <div
+                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold ${STEP_COLOR}`}
+                          >
+                            {index + 1}
                           </div>
-                          <p className="text-sm text-muted-foreground leading-relaxed">
-                            {step.description}
-                          </p>
-                        </div>
-                      </div>
 
-                      {/* Arrow connector (except for last step) */}
-                      {index < steps.length - 1 && (
-                        <div className="absolute left-4 top-8 w-0.5 h-8 bg-gradient-to-b from-primary/30 to-transparent" />
-                      )}
-                    </div>
-                  ))}
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className={`p-2 rounded-lg ${STEP_COLOR}`}>
+                                <Icon className="w-5 h-5" />
+                              </div>
+                              <h4 className="font-semibold text-foreground">
+                                {step.title}
+                              </h4>
+                            </div>
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                              {step.description}
+                            </p>
+                          </div>
+                        </div>
+
+                        {index < steps.length - 1 && (
+                          <div className="absolute left-4 top-8 w-0.5 h-8 bg-gradient-to-b from-primary/30 to-transparent" />
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>

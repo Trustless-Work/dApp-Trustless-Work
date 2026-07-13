@@ -16,8 +16,9 @@ export const IntegrationAuthenticationCard = () => (
         Authentication
       </CardTitle>
       <CardDescription className="text-sm sm:text-base">
-        All API requests require authentication using your API key as a Bearer
-        token.
+        All API requests require authentication using your API key in the{" "}
+        <code className="text-xs">x-api-key</code> header. Keep the key on your
+        server — never in the browser.
       </CardDescription>
     </CardHeader>
     <CardContent className="space-y-4">

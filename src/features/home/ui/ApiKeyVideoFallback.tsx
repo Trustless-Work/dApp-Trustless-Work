@@ -1,35 +1,35 @@
 "use client";
 
-import { Key, Settings, User, Wallet } from "lucide-react";
+import { Building2, Copy, Key, Wallet } from "lucide-react";
 
 const steps = [
   {
     icon: Wallet,
     title: "Connect your wallet",
-    description: "Link your Stellar wallet to access the platform.",
+    description: "Sign in with your Stellar wallet to access the dApp.",
   },
   {
-    icon: Settings,
-    title: "Open Settings",
-    description: "Navigate to your account settings from the dashboard.",
-  },
-  {
-    icon: User,
-    title: "Go to Profile",
-    description: "Open your profile section to manage API access.",
+    icon: Building2,
+    title: "Select an organization",
+    description: "API keys are scoped to the active organization.",
   },
   {
     icon: Key,
-    title: "Request API Key",
-    description: "Generate your API key to integrate Trustless Work.",
+    title: "Open API Keys",
+    description: "Go to Integrations → API Keys and create a key.",
   },
-];
+  {
+    icon: Copy,
+    title: "Copy once",
+    description: "Store the secret server-side and send it as x-api-key.",
+  },
+] as const;
 
 export const ApiKeyVideoFallback = () => {
   return (
     <div className="flex h-full min-h-[240px] w-full flex-col justify-center gap-4 bg-gradient-to-br from-primary/10 via-background to-primary/5 p-6 sm:min-h-[320px] sm:p-8">
       <p className="text-center text-sm font-medium text-muted-foreground">
-        How to get your API key
+        How to create your API key
       </p>
 
       <div className="grid gap-3 sm:grid-cols-2">
