@@ -1,6 +1,7 @@
 import { EscrowActionPolicy } from "@/features/escrows/domain/escrow-action-policy";
 import type { EscrowRoleContext } from "@/features/escrows/domain/escrow-role-context";
 import type { StoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
+import type { MultiReleaseMilestone } from "@trustless-work/escrow";
 import {
   hasMilestonePassedThroughDispute,
   isMilestoneApproved,
@@ -106,7 +107,7 @@ export class MultiReleaseActionPolicy extends EscrowActionPolicy {
       return false;
     }
 
-    const milestone = this.getMilestone(milestoneIndex);
+    const milestone = this.multiEscrow.milestones[milestoneIndex];
     if (!milestone) {
       return false;
     }
@@ -116,6 +117,10 @@ export class MultiReleaseActionPolicy extends EscrowActionPolicy {
       isMilestoneDisputeResolved(milestone) ||
       isMilestoneReleased(milestone)
     ) {
+      return false;
+    }
+
+    if (!this.hasSufficientBalanceForMilestone(milestone)) {
       return false;
     }
 
@@ -179,5 +184,11 @@ export class MultiReleaseActionPolicy extends EscrowActionPolicy {
     return this.multiEscrow.milestones.every((milestone) =>
       isMilestoneReleased(milestone),
     );
+  }
+
+  private hasSufficientBalanceForMilestone(
+    milestone: MultiReleaseMilestone,
+  ): boolean {
+    return this.multiEscrow.balance >= milestone.amount;
   }
 }
