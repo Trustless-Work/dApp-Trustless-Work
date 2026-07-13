@@ -2,6 +2,7 @@ import { clientEnv } from "@/lib/env";
 import type { ModuleInterface } from "@creit-tech/stellar-wallets-kit/types";
 import { getStoredNetwork } from "@/lib/client-storage";
 import type { NetworkType } from "@/types/network.entity";
+import { resolveWalletKitTheme } from "./wallet-kit-theme";
 
 type SdkModule = typeof import("@creit-tech/stellar-wallets-kit/sdk");
 type TypesModule = typeof import("@creit-tech/stellar-wallets-kit/types");
@@ -127,6 +128,7 @@ const loadWalletKit = async () => {
       StellarWalletsKit.init({
         network: kitNetwork,
         modules: walletModules,
+        theme: resolveWalletKitTheme(),
       });
 
       return { StellarWalletsKit, Networks, walletConnectModule };
@@ -147,6 +149,7 @@ interface SignTransactionParams {
  */
 export const openAuthModal = async (): Promise<{ address: string }> => {
   const { StellarWalletsKit, walletConnectModule } = await loadWalletKit();
+  StellarWalletsKit.setTheme(resolveWalletKitTheme());
   if (walletConnectModule) {
     await waitForWalletConnect(walletConnectModule);
   }
