@@ -103,3 +103,6 @@ jobs:
         run: pnpm build
         env:
           NEXT_TELEMETRY_DISABLED: "1"
+          SESSION_SECRET: "ci-build-placeholder-secret-32chars-min"
+          CORE_API_URL: "https://api.dev.trustlesswork.com"
+          NEXT_PUBLIC_TW_API_KEY: "ci-placeholder"

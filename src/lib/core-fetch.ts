@@ -1,13 +1,6 @@
 import { getSessionToken } from "@/lib/session";
+import { serverEnv } from "@/lib/env";
 import type { ProblemDetails } from "@/lib/api-error";
-
-function getCoreApiUrl(): string {
-  const url = process.env.CORE_API_URL ?? process.env.NEXT_PUBLIC_API_URL;
-  if (!url) {
-    throw new Error("CORE_API_URL is not configured");
-  }
-  return url.replace(/\/$/, "");
-}
 
 export function createUnauthorizedResponse(): Response {
   const body: ProblemDetails = {
@@ -29,7 +22,7 @@ export async function coreFetch(
     return createUnauthorizedResponse();
   }
 
-  const url = `${getCoreApiUrl()}${path.startsWith("/") ? path : `/${path}`}`;
+  const url = `${serverEnv.api.coreApiUrl}${path.startsWith("/") ? path : `/${path}`}`;
 
   const headers = new Headers(init?.headers);
   headers.set("Content-Type", "application/json");

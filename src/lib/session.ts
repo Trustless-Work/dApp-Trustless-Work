@@ -1,3 +1,4 @@
+import { serverEnv } from "@/lib/env";
 import { getIronSession, type SessionOptions } from "iron-session";
 import { cookies } from "next/headers";
 
@@ -9,11 +10,7 @@ export interface SessionData {
 export const SESSION_COOKIE_NAME = "tw_session";
 
 function getSessionPassword(): string {
-  const secret = process.env.SESSION_SECRET;
-  if (!secret || secret.length < 32) {
-    throw new Error("SESSION_SECRET must be at least 32 characters");
-  }
-  return secret;
+  return serverEnv.auth.sessionSecret;
 }
 
 function computeCookieMaxAge(expiresAt: string): number {
@@ -34,7 +31,7 @@ export function getSessionOptions(): SessionOptions {
       cookieName: SESSION_COOKIE_NAME,
       cookieOptions: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: serverEnv.runtime.isProduction,
         sameSite: "lax",
         path: "/",
       },

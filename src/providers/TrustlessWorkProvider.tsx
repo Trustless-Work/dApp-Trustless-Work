@@ -1,5 +1,6 @@
 "use client";
 
+import { clientEnv } from "@/lib/env";
 import {
   TrustlessWorkConfig,
   development,
@@ -17,7 +18,7 @@ type TrustlessWorkChildren = ComponentProps<
 export const TrustlessWorkProvider = ({
   children,
 }: TrustlessWorkProviderProps) => {
-  const apiKey = process.env.NEXT_PUBLIC_TW_API_KEY ?? "";
+  const apiKey = clientEnv.integrations.twApiKey;
 
   return (
     <TrustlessWorkConfig baseURL={development} apiKey={apiKey}>

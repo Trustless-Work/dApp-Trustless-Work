@@ -1,3 +1,4 @@
+import { clientEnv } from "@/lib/env";
 import type { ModuleInterface } from "@creit-tech/stellar-wallets-kit/types";
 import { getStoredNetwork } from "@/lib/client-storage";
 import type { NetworkType } from "@/types/network.entity";
@@ -63,7 +64,7 @@ const loadWalletKit = async () => {
       const { defaultModules } = modules;
       const { WalletConnectModule, WalletConnectTargetChain } = walletConnect;
 
-      const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+      const projectId = clientEnv.integrations.walletConnectProjectId;
       const appOrigin = window.location.origin;
       const storedNetwork = getStoredNetwork();
       const kitNetwork = resolveKitNetwork(Networks, storedNetwork);

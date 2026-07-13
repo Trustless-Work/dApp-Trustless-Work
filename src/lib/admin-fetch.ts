@@ -1,18 +1,5 @@
+import { serverEnv } from "@/lib/env";
 import type { ProblemDetails } from "@/lib/api-error";
-
-function getCoreApiUrl(): string {
-  const url = process.env.CORE_API_URL ?? process.env.NEXT_PUBLIC_API_URL;
-  if (!url) {
-    throw new Error("CORE_API_URL is not configured");
-  }
-  return url.replace(/\/$/, "");
-}
-
-function getAdminApiKey(): string | undefined {
-  return (
-    process.env.BACKOFFICE_ADMIN_API_KEY ?? process.env.NEXT_PUBLIC_API_KEY
-  );
-}
 
 export function createAdminCredentialMissingResponse(): Response {
   const body: ProblemDetails = {
@@ -28,12 +15,12 @@ export async function adminFetch(
   path: string,
   init?: RequestInit,
 ): Promise<Response> {
-  const apiKey = getAdminApiKey();
+  const apiKey = serverEnv.api.adminApiKey;
   if (!apiKey) {
     return createAdminCredentialMissingResponse();
   }
 
-  const url = `${getCoreApiUrl()}${path.startsWith("/") ? path : `/${path}`}`;
+  const url = `${serverEnv.api.coreApiUrl}${path.startsWith("/") ? path : `/${path}`}`;
 
   const headers = new Headers(init?.headers);
   headers.set("Content-Type", "application/json");
