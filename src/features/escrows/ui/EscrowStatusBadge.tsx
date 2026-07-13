@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { LiveStatusDot, type LiveStatusTone } from "@/components/shared/LiveStatusDot";
+import { getEscrowTabConfig } from "@/features/escrows/constants/escrow-tabs";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import {
   getEscrowCardStatusBadgeVariant,
@@ -97,8 +98,13 @@ type EscrowTypeBadgeProps = {
   className?: string;
 };
 
-export const EscrowTypeBadge = ({ escrow, className }: EscrowTypeBadgeProps) => (
-  <Badge variant="outline" className={cn("uppercase", className)}>
-    {getEscrowTypeLabel(escrow.type)}
-  </Badge>
-);
+export const EscrowTypeBadge = ({ escrow, className }: EscrowTypeBadgeProps) => {
+  const { icon: TypeIcon } = getEscrowTabConfig(escrow.type);
+
+  return (
+    <Badge variant="outline" className={cn("gap-1.5 uppercase", className)}>
+      <TypeIcon className="size-4 shrink-0" aria-hidden="true" />
+      {getEscrowTypeLabel(escrow.type)}
+    </Badge>
+  );
+};

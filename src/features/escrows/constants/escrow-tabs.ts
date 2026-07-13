@@ -20,3 +20,13 @@ export const ESCROW_TABS: EscrowTabConfig[] = [
     icon: LayersIcon,
   },
 ];
+
+export function getEscrowTabConfig(type: EscrowType): EscrowTabConfig {
+  const tab = ESCROW_TABS.find((item) => item.value === type);
+
+  if (!tab) {
+    throw new Error(`Unknown escrow type: ${type}`);
+  }
+
+  return tab;
+}

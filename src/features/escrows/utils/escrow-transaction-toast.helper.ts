@@ -26,14 +26,18 @@ export function showEscrowTransactionSuccessToast({
     return;
   }
 
+  const activeToastId = toastId ?? `escrow-tx-${Date.now()}`;
+
   toast.success(title, {
-    id: toastId,
-    duration: ESCROW_TX_TOAST_DURATION_MS,
+    id: activeToastId,
+    duration: Number.POSITIVE_INFINITY,
     closeButton: true,
+    dismissible: true,
     description: createElement(TransactionSuccessToastDescription, {
       txHash: trimmedTxHash,
       network,
       durationMs: ESCROW_TX_TOAST_DURATION_MS,
+      toastId: activeToastId,
     }),
   });
 }

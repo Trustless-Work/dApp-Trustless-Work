@@ -1,8 +1,5 @@
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
-import {
-  OverviewStat,
-  UsdcAmountStat,
-} from "@/components/shared/UsdcAmount";
+import { OverviewStat, UsdcAmountStat } from "@/components/shared/UsdcAmount";
 import { EscrowCopyField } from "@/features/escrows/ui/detail/EscrowCopyField";
 import { EscrowExplorerLinks } from "@/features/escrows/ui/detail/EscrowExplorerLinks";
 import { EscrowGeneralActions } from "@/features/escrows/ui/detail/EscrowGeneralActions";
@@ -15,7 +12,9 @@ type EscrowOverviewSectionProps = {
   escrow: StoredEscrow;
 };
 
-export const EscrowOverviewSection = ({ escrow }: EscrowOverviewSectionProps) => {
+export const EscrowOverviewSection = ({
+  escrow,
+}: EscrowOverviewSectionProps) => {
   const amount = getEscrowDisplayAmount(escrow);
   const symbol = getEscrowAssetSymbol(escrow);
 
@@ -41,12 +40,14 @@ export const EscrowOverviewSection = ({ escrow }: EscrowOverviewSectionProps) =>
               label="Amount"
               amount={amount}
               symbol={symbol}
+              size="2xl"
               emphasis
             />
             <UsdcAmountStat
               label="Balance"
               amount={escrow.balance}
               symbol={symbol}
+              size="2xl"
               emphasis
             />
             <OverviewStat

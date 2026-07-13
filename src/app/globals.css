@@ -220,3 +220,19 @@ html[data-magicui-theme-vt="active"]::view-transition-group(root) {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+
+[data-sonner-toast] [data-icon] {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+[data-sonner-toast] [data-close-button] {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 9999px;
+}
+
+[data-sonner-toast] [data-close-button] svg {
+  width: 1rem;
+  height: 1rem;
+}

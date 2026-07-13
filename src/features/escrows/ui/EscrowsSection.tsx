@@ -62,18 +62,6 @@ export const EscrowsSection = ({
 
   const copy = EMPTY_STATE_COPY[escrowType];
 
-  if (!walletAddress) {
-    return (
-      <div className="flex min-h-0 flex-1 items-center justify-center">
-        <NoData
-          icon={DiscIcon}
-          title="Connect your wallet"
-          description="Connect a Stellar wallet to create and manage escrows locally."
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-4">
       <EscrowFiltersBar filters={filters} onChange={setFilters} />
@@ -82,13 +70,21 @@ export const EscrowsSection = ({
         <div className="min-h-0 flex-1 overflow-y-auto">
           <EscrowsGridSkeleton />
         </div>
+      ) : !walletAddress ? (
+        <div className="flex min-h-0 flex-1 items-center justify-center">
+          <NoData
+            icon={DiscIcon}
+            title="Connect your wallet"
+            description="Connect a Stellar wallet to create and manage escrows locally."
+          />
+        </div>
       ) : escrows.length === 0 ? (
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <NoData
             icon={DiscIcon}
             title={copy.title}
             description={copy.description}
-            actionLabel="Create escrow"
+            actionLabel="Create Escrow"
             onAction={onCreateRequest}
           />
         </div>

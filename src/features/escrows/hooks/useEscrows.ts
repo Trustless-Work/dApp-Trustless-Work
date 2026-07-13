@@ -16,13 +16,13 @@ import { matchesEscrowFilterStatus } from "@/features/escrows/utils/escrow-displ
 import { useWalletContext } from "@/providers/WalletProvider";
 
 export function useEscrowsList() {
-  const { walletAddress } = useWalletContext();
+  const { walletAddress, hasWalletHydrated } = useWalletContext();
 
   return useQuery({
     queryKey: escrowsQueryKey(walletAddress),
     queryFn: () =>
       walletAddress ? localEscrowRepository.list(walletAddress) : [],
-    enabled: Boolean(walletAddress),
+    enabled: Boolean(hasWalletHydrated && walletAddress),
   });
 }
 
@@ -56,7 +56,12 @@ type UseEscrowsParams = {
 };
 
 export function useEscrows({ escrowType, filters, page }: UseEscrowsParams) {
-  const { data = [], isLoading, isFetching } = useEscrowsList();
+  const { walletAddress, hasWalletHydrated } = useWalletContext();
+  const { data = [], isPending, isFetching } = useEscrowsList();
+
+  const isResolving =
+    !hasWalletHydrated ||
+    (Boolean(walletAddress) && (isPending || isFetching));
 
   const filtered = useMemo(() => {
     const search = filters.search.trim().toLowerCase();
@@ -88,7 +93,7 @@ export function useEscrows({ escrowType, filters, page }: UseEscrowsParams) {
     total: filtered.length,
     totalPages,
     currentPage,
-    isLoading,
+    isLoading: isResolving,
     isFetching,
   };
 }

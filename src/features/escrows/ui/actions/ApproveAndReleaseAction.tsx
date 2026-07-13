@@ -15,7 +15,8 @@ export const ApproveAndReleaseAction = ({
   triggerMode = "button",
 }: EscrowMilestoneActionProps) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const { approveAndRelease, loading, walletAddress } = useEscrowActionsContext();
+  const { approveAndRelease, loading, walletAddress } =
+    useEscrowActionsContext();
 
   if (!isStoredMultiReleaseEscrow(escrow)) {
     return null;
@@ -50,9 +51,9 @@ export const ApproveAndReleaseAction = ({
       <ConfirmActionDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        title="Approve And Release?"
+        title="Approve and Release?"
         description="This atomically approves and releases the selected milestone. The action is irreversible."
-        confirmLabel="Approve And Release"
+        confirmLabel="Approve and Release"
         loading={loading}
         onConfirm={handleConfirm}
       />

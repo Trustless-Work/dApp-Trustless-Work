@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { formatAssetAmount, isUsdcSymbol } from "@/helpers/format.helper";
 import { cn } from "@/lib/utils";
 
-type UsdcAmountSize = "sm" | "md" | "lg";
+type UsdcAmountSize = "sm" | "md" | "lg" | "xl" | "2xl";
 
 type UsdcAmountProps = {
   amount: number;
@@ -18,13 +18,24 @@ const iconSizes: Record<UsdcAmountSize, number> = {
   sm: 16,
   md: 20,
   lg: 24,
+  xl: 28,
+  "2xl": 32,
 };
 
-const textSizes: Record<UsdcAmountSize, string> = {
-  sm: "text-sm",
-  md: "text-base",
-  lg: "text-lg",
-};
+function getAmountTextSizeClass(size: UsdcAmountSize): string {
+  switch (size) {
+    case "sm":
+      return "text-sm";
+    case "md":
+      return "text-base";
+    case "lg":
+      return "text-lg";
+    case "xl":
+      return "text-xl";
+    case "2xl":
+      return "text-2xl";
+  }
+}
 
 export const UsdcAmount = ({
   amount,
@@ -57,7 +68,7 @@ export const UsdcAmount = ({
       <span
         className={cn(
           "truncate font-medium",
-          textSizes[size],
+          getAmountTextSizeClass(size),
           emphasis && "font-semibold",
         )}
       >
@@ -72,6 +83,7 @@ type UsdcAmountStatProps = {
   amount: number;
   symbol: string;
   emphasis?: boolean;
+  size?: UsdcAmountSize;
 };
 
 export const UsdcAmountStat = ({
@@ -79,6 +91,7 @@ export const UsdcAmountStat = ({
   amount,
   symbol,
   emphasis = false,
+  size,
 }: UsdcAmountStatProps) => {
   return (
     <div>
@@ -87,7 +100,7 @@ export const UsdcAmountStat = ({
         <UsdcAmount
           amount={amount}
           symbol={symbol}
-          size={emphasis ? "lg" : "md"}
+          size={size ?? (emphasis ? "lg" : "md")}
           emphasis={emphasis}
         />
       </dd>

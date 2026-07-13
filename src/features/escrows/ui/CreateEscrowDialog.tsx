@@ -102,7 +102,7 @@ export const CreateEscrowDialog = ({
       <DialogContent className="flex max-h-[92vh] flex-col gap-0 overflow-hidden sm:max-w-4xl lg:max-w-5xl">
         <DialogHeader className="gap-4 border-b border-border pb-4">
           <div className="space-y-1">
-            <DialogTitle>Create escrow</DialogTitle>
+            <DialogTitle>Create Escrow</DialogTitle>
             <DialogDescription>
               Configure your escrow in three steps, then sign the deploy
               transaction with your wallet.
@@ -184,7 +184,7 @@ export const CreateEscrowDialog = ({
                     onClick={handleCreateEscrow}
                   >
                     {loading ? <Loader2Icon className="animate-spin" /> : null}
-                    Create escrow
+                    Create Escrow
                   </Button>
                 ) : (
                   <Button type="button" disabled={loading} onClick={handleNext}>

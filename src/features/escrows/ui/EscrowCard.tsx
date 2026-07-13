@@ -137,7 +137,7 @@ export const EscrowCard = ({ escrow }: EscrowCardProps) => {
             <UsdcAmount
               amount={amount}
               symbol={currency}
-              size="sm"
+              size="lg"
               emphasis
               className="mt-0.5"
             />
@@ -147,7 +147,7 @@ export const EscrowCard = ({ escrow }: EscrowCardProps) => {
             <UsdcAmount
               amount={escrow.balance}
               symbol={currency}
-              size="sm"
+              size="lg"
               emphasis
               className="mt-0.5"
             />
