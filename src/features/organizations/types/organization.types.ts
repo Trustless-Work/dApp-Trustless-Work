@@ -3,7 +3,7 @@ import type {
   IsoDateTimeString,
   StellarAddress,
   WithEntityTimestamps,
-} from "@/features/auth/types/auth.types";
+} from "@/types";
 
 export type { EntityId, IsoDateTimeString, StellarAddress };
 

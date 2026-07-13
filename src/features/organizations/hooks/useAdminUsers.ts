@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { adminUserService } from "@/features/organizations/services/admin-user.service";
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 
 export const ADMIN_USERS_QUERY_KEY = ["admin", "users"] as const;
 

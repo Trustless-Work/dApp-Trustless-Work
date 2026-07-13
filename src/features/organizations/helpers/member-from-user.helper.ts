@@ -1,4 +1,4 @@
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 import type {
   MemberResponse,
   UpsertMemberInput,

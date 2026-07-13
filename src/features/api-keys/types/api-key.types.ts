@@ -3,7 +3,7 @@ import type {
   IsoDateTimeString,
   WithAccountRoles,
   WithEntityTimestamps,
-} from "@/features/auth/types/auth.types";
+} from "@/types";
 
 export type { EntityId, IsoDateTimeString };
 

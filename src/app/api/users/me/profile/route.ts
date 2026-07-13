@@ -7,7 +7,7 @@ import {
   validateSameOrigin,
 } from "@/lib/bff-utils";
 import type { UpdateProfileInput } from "@/features/settings/schemas/profile.schema";
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 
 export async function PATCH(request: NextRequest) {
   const csrfError = validateSameOrigin(request);

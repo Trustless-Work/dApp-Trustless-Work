@@ -1,5 +1,5 @@
 import http from "@/lib/http";
-import type { Sep10Challenge } from "@/features/auth/types/auth.types";
+import type { Sep10Challenge } from "@/types";
 import type {
   UserWalletResponse,
   WalletLinkVerifyResponse,
@@ -7,8 +7,9 @@ import type {
 import {
   buildKeysetQuery,
   fetchAllKeysetPages,
-  parseKeysetPage,
 } from "@/lib/pagination";
+import { userWalletResponseSchema } from "@/lib/schemas/api-response.schemas";
+import { parseKeysetPageWithSchema } from "@/lib/schemas/keyset-page.schema";
 import type { KeysetListParams, KeysetPage } from "@/types/pagination.entity";
 
 export class WalletService {
@@ -18,7 +19,7 @@ export class WalletService {
     const { data } = await http.get<unknown>(
       `/core/users/me/wallets${buildKeysetQuery(params)}`,
     );
-    return parseKeysetPage<UserWalletResponse>(data);
+    return parseKeysetPageWithSchema(userWalletResponseSchema, data);
   }
 
   async listWallets(): Promise<UserWalletResponse[]> {

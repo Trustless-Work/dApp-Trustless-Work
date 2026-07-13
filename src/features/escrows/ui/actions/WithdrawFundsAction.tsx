@@ -11,7 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useWithdrawFundsForm } from "@/features/escrows/hooks/useEscrowActionForms";
 import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
+import type { WithdrawFundsFormData } from "@/features/escrows/schemas/escrow-action.schemas";
 import type { EscrowActionProps } from "@/features/escrows/types/escrow-action.types";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
 
@@ -22,37 +24,32 @@ export const WithdrawFundsAction = ({
   triggerMode = "button",
 }: EscrowActionProps) => {
   const [open, setOpen] = useState(false);
-  const [address, setAddress] = useState("");
-  const [amount, setAmount] = useState("");
+  const form = useWithdrawFundsForm();
   const { withdraw, loading, walletAddress } = useEscrowActionsContext();
 
-  const handleSubmit = async () => {
-    if (!walletAddress) {
-      return;
-    }
+  const handleSubmit = form.handleSubmit(
+    async (values: WithdrawFundsFormData) => {
+      if (!walletAddress) {
+        return;
+      }
 
-    const parsedAmount = Number(amount);
-    if (!address.trim() || !Number.isFinite(parsedAmount)) {
-      return;
-    }
+      const result = await withdraw({
+        contractId: escrow.contractId,
+        disputeResolver: walletAddress,
+        distributions: [
+          {
+            address: values.address,
+            amount: values.amount,
+          },
+        ],
+      });
 
-    const result = await withdraw({
-      contractId: escrow.contractId,
-      disputeResolver: walletAddress,
-      distributions: [
-        {
-          address: address.trim(),
-          amount: parsedAmount,
-        },
-      ],
-    });
-
-    if (result) {
-      setOpen(false);
-      setAddress("");
-      setAmount("");
-    }
-  };
+      if (result) {
+        setOpen(false);
+        form.reset({ address: "", amount: "" });
+      }
+    },
+  );
 
   return (
     <>
@@ -64,47 +61,65 @@ export const WithdrawFundsAction = ({
         onActivate={() => setOpen(true)}
       />
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen);
+          if (!nextOpen) {
+            form.reset({ address: "", amount: "" });
+          }
+        }}
+      >
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Withdraw Remaining Funds</DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="withdraw-address">Recipient</Label>
-              <Input
-                id="withdraw-address"
-                value={address}
-                onChange={(event) => setAddress(event.target.value)}
-                placeholder="G…"
-              />
+          <form onSubmit={handleSubmit}>
+            <DialogHeader>
+              <DialogTitle>Withdraw Remaining Funds</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-3 py-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="withdraw-address">Recipient</Label>
+                <Input
+                  id="withdraw-address"
+                  placeholder="G…"
+                  {...form.register("address")}
+                />
+                {form.formState.errors.address ? (
+                  <p className="text-sm text-destructive">
+                    {form.formState.errors.address.message}
+                  </p>
+                ) : null}
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="withdraw-amount">Amount</Label>
+                <Input
+                  id="withdraw-amount"
+                  type="number"
+                  min={0}
+                  step="any"
+                  placeholder="e.g. 250"
+                  {...form.register("amount")}
+                />
+                {form.formState.errors.amount ? (
+                  <p className="text-sm text-destructive">
+                    {form.formState.errors.amount.message}
+                  </p>
+                ) : null}
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="withdraw-amount">Amount</Label>
-              <Input
-                id="withdraw-amount"
-                type="number"
-                min={0}
-                step="any"
-                value={amount}
-                onChange={(event) => setAmount(event.target.value)}
-                placeholder="e.g. 250"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={loading}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="button" disabled={loading} onClick={handleSubmit}>
-              Withdraw
-            </Button>
-          </DialogFooter>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={loading}
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={loading}>
+                Withdraw
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </>

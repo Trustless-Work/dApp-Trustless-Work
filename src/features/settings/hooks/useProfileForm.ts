@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 import {
   profileSchema,
   type ProfileFormData,

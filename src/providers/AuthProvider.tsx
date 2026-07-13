@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from "react";
 import { useSession } from "@/features/auth/hooks/useSession";
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 
 type AuthContextValue = {
   user: UserResponse | null;

@@ -16,7 +16,7 @@ import { MembersSection } from "@/features/organizations/ui/MembersSection";
 import { MembersTableSkeleton } from "@/features/organizations/ui/MembersTable";
 import { useActiveOrganization } from "@/providers/OrganizationProvider";
 
-const OrganizationContentSkeleton = () => (
+const OrganizationSettingsSkeleton = () => (
   <div className="flex flex-col gap-6 md:flex-row">
     <Card className="flex w-full flex-col md:w-1/2">
       <CardHeader className="gap-4">
@@ -54,7 +54,7 @@ const OrganizationContentSkeleton = () => (
   </div>
 );
 
-export const OrganizationContent = () => {
+export const OrganizationSettingsView = () => {
   const {
     activeOrganization,
     activeOrganizationId,
@@ -64,7 +64,7 @@ export const OrganizationContent = () => {
   } = useActiveOrganization();
 
   if (isLoading) {
-    return <OrganizationContentSkeleton />;
+    return <OrganizationSettingsSkeleton />;
   }
 
   if (isError) {

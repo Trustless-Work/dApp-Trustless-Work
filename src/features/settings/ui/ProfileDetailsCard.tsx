@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 import {
   getUserDisplayName,
   getUserEmailLabel,

@@ -1,5 +1,5 @@
 import http from "@/lib/http";
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 import type { UpdateProfileInput } from "@/features/settings/schemas/profile.schema";
 
 export class ProfileService {

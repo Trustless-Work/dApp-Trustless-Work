@@ -65,6 +65,16 @@ export function toStoredEscrow(
   return stored;
 }
 
+/**
+ * Escrow persistence boundary.
+ *
+ * MVP: `localEscrowRepository` stores escrows in browser localStorage
+ * (`tw-escrows:{wallet}`). It is the current source of truth for list/detail
+ * in the dApp — not a backend/indexer API.
+ *
+ * Swap implementations behind `EscrowRepository` when core/indexer read models
+ * are wired (HTTP service can implement the same interface).
+ */
 export interface EscrowRepository {
   list(walletAddress: string): StoredEscrow[];
   getByContractId(

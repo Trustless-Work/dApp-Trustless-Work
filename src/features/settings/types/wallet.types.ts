@@ -1,7 +1,4 @@
-import type {
-  IsoDateTimeString,
-  StellarAddress,
-} from "@/features/auth/types/auth.types";
+import type { IsoDateTimeString, StellarAddress } from "@/types";
 
 export interface UserWalletResponse {
   address: StellarAddress;

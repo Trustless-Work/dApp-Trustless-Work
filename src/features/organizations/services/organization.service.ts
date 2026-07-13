@@ -2,8 +2,12 @@ import http from "@/lib/http";
 import {
   buildKeysetQuery,
   fetchAllKeysetPages,
-  parseKeysetPage,
 } from "@/lib/pagination";
+import {
+  memberResponseSchema,
+  organizationResponseSchema,
+} from "@/lib/schemas/api-response.schemas";
+import { parseKeysetPageWithSchema } from "@/lib/schemas/keyset-page.schema";
 import type { KeysetListParams, KeysetPage } from "@/types/pagination.entity";
 import type {
   CreateOrganizationInput,
@@ -21,7 +25,7 @@ export class OrganizationService {
     const { data } = await http.get<unknown>(
       `/core/users/me/platforms${buildKeysetQuery(params)}`,
     );
-    return parseKeysetPage<OrganizationResponse>(data);
+    return parseKeysetPageWithSchema(organizationResponseSchema, data);
   }
 
   async create(
@@ -56,7 +60,7 @@ export class OrganizationService {
     const { data } = await http.get<unknown>(
       `/core/platforms/${encodeURIComponent(organizationId)}/subjects${buildKeysetQuery(params)}`,
     );
-    return parseKeysetPage<MemberResponse>(data);
+    return parseKeysetPageWithSchema(memberResponseSchema, data);
   }
 
   async listMembers(organizationId: string): Promise<MemberResponse[]> {

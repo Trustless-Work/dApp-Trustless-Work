@@ -17,7 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 import {
   getUserCommandValue,
   getUserSecondaryLabel,

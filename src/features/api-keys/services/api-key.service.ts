@@ -7,8 +7,9 @@ import http from "@/lib/http";
 import {
   buildKeysetQuery,
   fetchAllKeysetPages,
-  parseKeysetPage,
 } from "@/lib/pagination";
+import { apiKeyResponseSchema } from "@/lib/schemas/api-response.schemas";
+import { parseKeysetPageWithSchema } from "@/lib/schemas/keyset-page.schema";
 import type { KeysetListParams, KeysetPage } from "@/types/pagination.entity";
 
 export class ApiKeyService {
@@ -18,7 +19,7 @@ export class ApiKeyService {
     const { data } = await http.get<unknown>(
       `/core/users/me/api-keys${buildKeysetQuery(params)}`,
     );
-    return parseKeysetPage<ApiKeyResponse>(data);
+    return parseKeysetPageWithSchema(apiKeyResponseSchema, data);
   }
 
   async listApiKeys(): Promise<ApiKeyResponse[]> {

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { RoundedTabs, type TabItem } from "@/components/ui/custom-tab";
 import { Container } from "@/components/shared/Container";
 import { DashboardPageHeaderActions } from "@/components/shared/DashboardPageHeaderContext";
-import { OrganizationContent } from "./OrganizationContent";
+import { OrganizationSettingsView } from "@/features/organizations/ui/OrganizationSettingsView";
 import { ProfileContent } from "./ProfileContent";
 
 const tabs: TabItem[] = [
@@ -15,7 +15,7 @@ const tabs: TabItem[] = [
 
 const content: Record<string, React.ReactNode> = {
   profile: <ProfileContent />,
-  organization: <OrganizationContent />,
+  organization: <OrganizationSettingsView />,
 };
 
 export const SettingsView = () => {

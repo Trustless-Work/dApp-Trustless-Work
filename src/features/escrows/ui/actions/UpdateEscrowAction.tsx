@@ -12,7 +12,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useUpdateEscrowForm } from "@/features/escrows/hooks/useEscrowActionForms";
 import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
+import type { UpdateEscrowFormData } from "@/features/escrows/schemas/escrow-action.schemas";
 import type { EscrowActionProps } from "@/features/escrows/types/escrow-action.types";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
 import {
@@ -27,59 +29,35 @@ export const UpdateEscrowAction = ({
   triggerMode = "button",
 }: EscrowActionProps) => {
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState(escrow.title);
-  const [description, setDescription] = useState(escrow.description);
+  const form = useUpdateEscrowForm({
+    title: escrow.title,
+    description: escrow.description,
+  });
   const { update, loading, walletAddress } = useEscrowActionsContext();
 
-  const handleSubmit = async () => {
-    if (!walletAddress) {
-      return;
-    }
+  const handleSubmit = form.handleSubmit(
+    async (values: UpdateEscrowFormData) => {
+      if (!walletAddress) {
+        return;
+      }
 
-    const admin = escrow.roles.admin;
+      const admin = escrow.roles.admin;
 
-    const result = isStoredSingleReleaseEscrow(escrow)
-      ? await update({
-          contractId: escrow.contractId,
-          admin,
-          escrow: {
-            engagementId: escrow.engagementId,
-            title: title.trim(),
-            description: description.trim(),
-            amount: escrow.amount,
-            platformFee: escrow.platformFee,
-            roles: escrow.roles,
-            milestones: escrow.milestones.map((milestone) => ({
-              description: milestone.description,
-              status: milestone.status,
-              approvalsTarget: milestone.approvalsTarget ?? 1,
-            })),
-            trustline: {
-              address: escrow.trustline.address,
-              symbol: escrow.trustline.symbol,
-              contractId:
-                "contractId" in escrow.trustline
-                  ? escrow.trustline.contractId
-                  : escrow.trustline.address,
-            },
-          },
-        })
-      : isStoredMultiReleaseEscrow(escrow)
+      const result = isStoredSingleReleaseEscrow(escrow)
         ? await update({
             contractId: escrow.contractId,
             admin,
             escrow: {
               engagementId: escrow.engagementId,
-              title: title.trim(),
-              description: description.trim(),
+              title: values.title,
+              description: values.description,
+              amount: escrow.amount,
               platformFee: escrow.platformFee,
               roles: escrow.roles,
               milestones: escrow.milestones.map((milestone) => ({
                 description: milestone.description,
                 status: milestone.status,
                 approvalsTarget: milestone.approvalsTarget ?? 1,
-                amount: milestone.amount,
-                receiver: milestone.receiver,
               })),
               trustline: {
                 address: escrow.trustline.address,
@@ -91,12 +69,40 @@ export const UpdateEscrowAction = ({
               },
             },
           })
-        : null;
+        : isStoredMultiReleaseEscrow(escrow)
+          ? await update({
+              contractId: escrow.contractId,
+              admin,
+              escrow: {
+                engagementId: escrow.engagementId,
+                title: values.title,
+                description: values.description,
+                platformFee: escrow.platformFee,
+                roles: escrow.roles,
+                milestones: escrow.milestones.map((milestone) => ({
+                  description: milestone.description,
+                  status: milestone.status,
+                  approvalsTarget: milestone.approvalsTarget ?? 1,
+                  amount: milestone.amount,
+                  receiver: milestone.receiver,
+                })),
+                trustline: {
+                  address: escrow.trustline.address,
+                  symbol: escrow.trustline.symbol,
+                  contractId:
+                    "contractId" in escrow.trustline
+                      ? escrow.trustline.contractId
+                      : escrow.trustline.address,
+                },
+              },
+            })
+          : null;
 
-    if (result) {
-      setOpen(false);
-    }
-  };
+      if (result) {
+        setOpen(false);
+      }
+    },
+  );
 
   return (
     <>
@@ -105,48 +111,64 @@ export const UpdateEscrowAction = ({
         triggerMode={triggerMode}
         triggerVariant={triggerVariant}
         icon={icon}
-        onActivate={() => setOpen(true)}
+        onActivate={() => {
+          form.reset({
+            title: escrow.title,
+            description: escrow.description,
+          });
+          setOpen(true);
+        }}
       />
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Update Escrow Metadata</DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="update-title">Title</Label>
-              <Input
-                id="update-title"
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-                placeholder="Escrow title"
-              />
+          <form onSubmit={handleSubmit}>
+            <DialogHeader>
+              <DialogTitle>Update Escrow Metadata</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-3 py-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="update-title">Title</Label>
+                <Input
+                  id="update-title"
+                  placeholder="Escrow title"
+                  {...form.register("title")}
+                />
+                {form.formState.errors.title ? (
+                  <p className="text-sm text-destructive">
+                    {form.formState.errors.title.message}
+                  </p>
+                ) : null}
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="update-description">Description</Label>
+                <Textarea
+                  id="update-description"
+                  rows={3}
+                  placeholder="Describe the escrow scope and deliverables"
+                  {...form.register("description")}
+                />
+                {form.formState.errors.description ? (
+                  <p className="text-sm text-destructive">
+                    {form.formState.errors.description.message}
+                  </p>
+                ) : null}
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="update-description">Description</Label>
-              <Textarea
-                id="update-description"
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
-                rows={3}
-                placeholder="Describe the escrow scope and deliverables"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={loading}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="button" disabled={loading} onClick={handleSubmit}>
-              Save Changes
-            </Button>
-          </DialogFooter>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={loading}
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={loading}>
+                Save Changes
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </>

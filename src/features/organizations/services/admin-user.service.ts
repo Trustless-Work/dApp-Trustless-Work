@@ -2,10 +2,11 @@ import http from "@/lib/http";
 import {
   buildKeysetQuery,
   fetchAllKeysetPages,
-  parseKeysetPage,
 } from "@/lib/pagination";
+import { userResponseSchema } from "@/lib/schemas/api-response.schemas";
+import { parseKeysetPageWithSchema } from "@/lib/schemas/keyset-page.schema";
 import type { KeysetListParams, KeysetPage } from "@/types/pagination.entity";
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 
 export class AdminUserService {
   async listPage(
@@ -14,7 +15,7 @@ export class AdminUserService {
     const { data } = await http.get<unknown>(
       `/admin/users${buildKeysetQuery(params)}`,
     );
-    return parseKeysetPage<UserResponse>(data);
+    return parseKeysetPageWithSchema(userResponseSchema, data);
   }
 
   async listAll(): Promise<UserResponse[]> {

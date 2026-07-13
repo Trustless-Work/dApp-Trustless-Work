@@ -24,7 +24,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 import { useProfileForm } from "@/features/settings/hooks/useProfileForm";
 
 type ProfileEditFormProps = {

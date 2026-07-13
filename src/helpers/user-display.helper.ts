@@ -1,4 +1,4 @@
-import type { UserResponse } from "@/features/auth/types/auth.types";
+import type { UserResponse } from "@/types";
 
 export function getUserDisplayName(user: UserResponse): string {
   const parts = [user.firstName, user.lastName].filter(

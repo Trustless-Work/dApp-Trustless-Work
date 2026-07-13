@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
+import { useChangeMilestoneStatusForm } from "@/features/escrows/hooks/useEscrowActionForms";
 import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
+import type { ChangeMilestoneStatusFormData } from "@/features/escrows/schemas/escrow-action.schemas";
 import type { EscrowMilestoneActionProps } from "@/features/escrows/types/escrow-action.types";
+import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
 
 export const ChangeMilestoneStatusAction = ({
   escrow,
@@ -23,30 +25,32 @@ export const ChangeMilestoneStatusAction = ({
   triggerMode = "button",
 }: EscrowMilestoneActionProps) => {
   const [open, setOpen] = useState(false);
-  const [newStatus, setNewStatus] = useState("");
+  const form = useChangeMilestoneStatusForm();
   const { changeStatus, loading, walletAddress } = useEscrowActionsContext();
 
-  const handleSubmit = async () => {
-    if (!walletAddress || !newStatus.trim()) {
-      return;
-    }
+  const handleSubmit = form.handleSubmit(
+    async (values: ChangeMilestoneStatusFormData) => {
+      if (!walletAddress) {
+        return;
+      }
 
-    const result = await changeStatus({
-      contractId: escrow.contractId,
-      serviceProvider: walletAddress,
-      updates: [
-        {
-          index: milestoneIndex,
-          newStatus: newStatus.trim(),
-        },
-      ],
-    });
+      const result = await changeStatus({
+        contractId: escrow.contractId,
+        serviceProvider: walletAddress,
+        updates: [
+          {
+            index: milestoneIndex,
+            newStatus: values.newStatus,
+          },
+        ],
+      });
 
-    if (result) {
-      setOpen(false);
-      setNewStatus("");
-    }
-  };
+      if (result) {
+        setOpen(false);
+        form.reset({ newStatus: "" });
+      }
+    },
+  );
 
   return (
     <>
@@ -58,35 +62,49 @@ export const ChangeMilestoneStatusAction = ({
         onActivate={() => setOpen(true)}
       />
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen);
+          if (!nextOpen) {
+            form.reset({ newStatus: "" });
+          }
+        }}
+      >
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Change Milestone Status</DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor={`milestone-status-${milestoneIndex}`}>
-              New status
-            </Label>
-            <Input
-              id={`milestone-status-${milestoneIndex}`}
-              value={newStatus}
-              onChange={(event) => setNewStatus(event.target.value)}
-              placeholder="In progress"
-            />
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={loading}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="button" disabled={loading} onClick={handleSubmit}>
-              Update Status
-            </Button>
-          </DialogFooter>
+          <form onSubmit={handleSubmit}>
+            <DialogHeader>
+              <DialogTitle>Change Milestone Status</DialogTitle>
+            </DialogHeader>
+            <div className="flex flex-col gap-2 py-4">
+              <Label htmlFor={`milestone-status-${milestoneIndex}`}>
+                New status
+              </Label>
+              <Input
+                id={`milestone-status-${milestoneIndex}`}
+                placeholder="In progress"
+                {...form.register("newStatus")}
+              />
+              {form.formState.errors.newStatus ? (
+                <p className="text-sm text-destructive">
+                  {form.formState.errors.newStatus.message}
+                </p>
+              ) : null}
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={loading}
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={loading}>
+                Update Status
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </>

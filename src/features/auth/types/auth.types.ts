@@ -1,70 +1,34 @@
-// ─── Primitives ─────────────────────────────────────────────────────────────
+export type {
+  EntityId,
+  IsoDateTimeString,
+  StellarAddress,
+  AccountRole,
+  WithAccountRoles,
+  WithEntityTimestamps,
+  UserProfileFields,
+  UserResponse,
+  Sep10Challenge,
+  RegisteredSessionChallenge,
+  UnregisteredSessionChallenge,
+  SessionChallengeResponse,
+} from "@/types";
 
-export type IsoDateTimeString = string;
-export type EntityId = string;
-export type StellarAddress = string;
+export {
+  ACCOUNT_ROLES,
+  isAccountRole,
+  isRegisteredSessionChallenge,
+  isUnregisteredSessionChallenge,
+} from "@/types";
 
-type NullableField<T> = T | null | undefined;
-
-// ─── Account roles ──────────────────────────────────────────────────────────
-
-export const ACCOUNT_ROLES = [
-  "ADMIN",
-  "BACKOFFICE_ADMIN",
-  "ESCROW_MANAGER",
-] as const;
-
-export type AccountRole = (typeof ACCOUNT_ROLES)[number];
-
-export function isAccountRole(value: string): value is AccountRole {
-  return (ACCOUNT_ROLES as readonly string[]).includes(value);
-}
-
-// ─── Shared composition ─────────────────────────────────────────────────────
-
-export interface WithAccountRoles {
-  roles: readonly AccountRole[];
-}
-
-export interface WithEntityTimestamps {
-  createdAt?: IsoDateTimeString;
-  updatedAt?: IsoDateTimeString;
-}
-
-// ─── SEP-10 challenge ───────────────────────────────────────────────────────
-
-export interface Sep10Challenge {
-  xdr: string;
-  networkPassphrase: string;
-  expiresAt: IsoDateTimeString;
-}
-
-// ─── Session challenge (discriminated union) ────────────────────────────────
-
-export type RegisteredSessionChallenge = Sep10Challenge & {
-  readonly registered: true;
-};
-
-export type UnregisteredSessionChallenge = {
-  readonly registered: false;
-  address: StellarAddress;
-};
-
-export type SessionChallengeResponse =
-  | RegisteredSessionChallenge
-  | UnregisteredSessionChallenge;
-
-export function isRegisteredSessionChallenge(
-  response: SessionChallengeResponse,
-): response is RegisteredSessionChallenge {
-  return response.registered;
-}
-
-export function isUnregisteredSessionChallenge(
-  response: SessionChallengeResponse,
-): response is UnregisteredSessionChallenge {
-  return !response.registered;
-}
+import type {
+  EntityId,
+  IsoDateTimeString,
+  StellarAddress,
+  WithAccountRoles,
+  WithEntityTimestamps,
+  UserProfileFields,
+  UserResponse,
+} from "@/types";
 
 // ─── Session auth ───────────────────────────────────────────────────────────
 
@@ -106,7 +70,7 @@ export function isSessionMeResponse(value: unknown): value is SessionMeResponse 
   );
 }
 
-// ─── API key ────────────────────────────────────────────────────────────────
+// ─── API key (registration response) ────────────────────────────────────────
 
 export interface GeneratedApiKeyResponse
   extends WithAccountRoles, Pick<WithEntityTimestamps, "createdAt"> {
@@ -115,28 +79,12 @@ export interface GeneratedApiKeyResponse
   userId: EntityId;
 }
 
-// ─── User ───────────────────────────────────────────────────────────────────
-
-export interface UserProfileFields {
-  firstName: string;
-  lastName?: string;
-  email?: string;
-}
+// ─── Register profile ───────────────────────────────────────────────────────
 
 export type RegisterProfileInput = Required<
   Pick<UserProfileFields, "firstName" | "email">
 > &
   Partial<Pick<UserProfileFields, "lastName">>;
-
-export interface UserResponse extends WithAccountRoles, WithEntityTimestamps {
-  id: EntityId;
-  email?: NullableField<string>;
-  firstName?: NullableField<string>;
-  lastName?: NullableField<string>;
-  profileImageUrl?: NullableField<string>;
-  isActive: boolean;
-  emailVerified?: boolean;
-}
 
 // ─── Auth requests (hierarchy) ──────────────────────────────────────────────
 
@@ -163,13 +111,6 @@ type AssertEqual<A, B> = [A] extends [B]
   : false;
 
 type ExpectTrue<T extends true> = T;
-
-type _SessionChallengeVariants = ExpectTrue<
-  AssertEqual<
-    SessionChallengeResponse,
-    RegisteredSessionChallenge | UnregisteredSessionChallenge
-  >
->;
 
 type _RegisterProfileShape = ExpectTrue<
   AssertEqual<

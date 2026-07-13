@@ -11,14 +11,16 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ConfirmActionDialog } from "@/features/escrows/ui/actions/ConfirmActionDialog";
-import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
+import { useStartDisputeForm } from "@/features/escrows/hooks/useEscrowActionForms";
 import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
+import type { StartDisputeFormData } from "@/features/escrows/schemas/escrow-action.schemas";
 import type {
   EscrowActionProps,
   EscrowMilestoneActionProps,
 } from "@/features/escrows/types/escrow-action.types";
 import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
+import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
+import { ConfirmActionDialog } from "@/features/escrows/ui/actions/ConfirmActionDialog";
 
 type StartDisputeActionProps = EscrowActionProps | EscrowMilestoneActionProps;
 
@@ -29,47 +31,46 @@ function hasMilestoneIndex(
 }
 
 export const StartDisputeAction = (props: StartDisputeActionProps) => {
-  const {
-    escrow,
-    triggerVariant,
-    icon,
-    triggerMode = "button",
-  } = props;
+  const { escrow, triggerVariant, icon, triggerMode = "button" } = props;
   const milestoneIndex = hasMilestoneIndex(props)
     ? props.milestoneIndex
     : undefined;
   const isMulti = isStoredMultiReleaseEscrow(escrow);
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [reason, setReason] = useState("");
-  const { dispute, disputeBatch, loading, walletAddress } = useEscrowActionsContext();
+  const form = useStartDisputeForm();
+  const { dispute, disputeBatch, loading, walletAddress } =
+    useEscrowActionsContext();
 
   if (isMulti && milestoneIndex === undefined) {
     return null;
   }
 
   const handleConfirm = async () => {
-    if (!walletAddress || !reason.trim()) {
+    const isValid = await form.trigger();
+    if (!isValid || !walletAddress) {
       return;
     }
+
+    const values = form.getValues() as StartDisputeFormData;
 
     const result = isMulti
       ? await disputeBatch({
           contractId: escrow.contractId,
           signer: walletAddress,
-          reason: reason.trim(),
+          reason: values.reason,
           milestoneIndexes: [milestoneIndex ?? 0],
         })
       : await dispute({
           contractId: escrow.contractId,
           signer: walletAddress,
-          reason: reason.trim(),
+          reason: values.reason,
         });
 
     if (result) {
       setConfirmOpen(false);
       setOpen(false);
-      setReason("");
+      form.reset({ reason: "" });
     }
   };
 
@@ -84,20 +85,32 @@ export const StartDisputeAction = (props: StartDisputeActionProps) => {
         onActivate={() => setOpen(true)}
       />
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen);
+          if (!nextOpen) {
+            form.reset({ reason: "" });
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Start Dispute</DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 py-4">
             <Label htmlFor="dispute-reason">Reason</Label>
             <Textarea
               id="dispute-reason"
-              value={reason}
-              onChange={(event) => setReason(event.target.value)}
               rows={3}
               placeholder="Explain why this dispute is being opened"
+              {...form.register("reason")}
             />
+            {form.formState.errors.reason ? (
+              <p className="text-sm text-destructive">
+                {form.formState.errors.reason.message}
+              </p>
+            ) : null}
           </div>
           <DialogFooter>
             <Button
@@ -111,7 +124,13 @@ export const StartDisputeAction = (props: StartDisputeActionProps) => {
             <Button
               type="button"
               disabled={loading}
-              onClick={() => setConfirmOpen(true)}
+              onClick={() => {
+                void form.trigger().then((valid) => {
+                  if (valid) {
+                    setConfirmOpen(true);
+                  }
+                });
+              }}
             >
               Continue
             </Button>
