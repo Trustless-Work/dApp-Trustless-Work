@@ -1,0 +1,104 @@
+---
+description: Testing con Vitest — ubicación, qué probar y patrones del proyecto
+globs: "**/*.test.ts,**/*.test.tsx,src/lib/**/*.ts,src/helpers/**/*.ts,**/schemas/**/*.ts"
+alwaysApply: false
+---
+
+# Testing — Vitest
+
+Stack: **Vitest** (`pnpm test`, `pnpm test:watch`). CI ejecuta `pnpm test` antes del build.
+
+---
+
+## Dónde viven los tests
+
+- **Co-localizados** junto al código bajo prueba: `foo.ts` → `foo.test.ts`
+- **Patrón de nombre:** `*.test.ts` (o `*.test.tsx` si hay JSX)
+- **Incluidos por Vitest:** `src/**/*.test.ts` (ver [`vitest.config.ts`](vitest.config.ts))
+
+```
+src/lib/api-error.ts          → src/lib/api-error.test.ts
+src/features/auth/schemas/register.schema.ts
+                              → register.schema.test.ts
+```
+
+No crear carpeta `__tests__/` ni `tests/` separada salvo e2e futuro.
+
+---
+
+## Qué probar (prioridad)
+
+| Capa | Qué cubrir | Evitar |
+| --- | --- | --- |
+| **`src/lib/`** | Parsers, paginación, errores, guards, utilidades puras | Mocks innecesarios |
+| **`src/helpers/`** | Format, parse, validate, labels | Re-testear la stdlib |
+| **`schemas/`** | `safeParse` válido/inválido, trim, límites, mensajes | Un test por cada campo si es redundante |
+| **`hooks/`** | Lógica de submit, mapeo payload, cache (con mocks) | Render completo sin necesidad |
+| **`services/`** | Mapeo request/response con `vi.mock` de `http` | Llamadas HTTP reales |
+| **`ui/`** | Solo interacción crítica (Testing Library, si se añade) | Snapshots frágiles, “renderiza sin crash” |
+
+**Regla:** al tocar lógica en `lib/`, `helpers/` o `schemas/`, **añadir o actualizar** el test co-localizado en el mismo PR.
+
+---
+
+## Convenciones de código
+
+- Imports de Vitest explícitos: `import { describe, expect, it, vi } from "vitest"`
+- **`describe`** por función/módulo; **`it`** por comportamiento observable
+- **Sin `any`** — mismas reglas que [`TYPESCRIPT.mdc`](TYPESCRIPT.mdc)
+- **Sin `process.env` en tests** — usar `env` de [`vitest.config.ts`](vitest.config.ts) o `SKIP_ENV_VALIDATION`
+- Preferir **funciones puras** y **type guards** sobre casts ciegos
+- **`vi.useFakeTimers()`** + `afterEach(() => vi.useRealTimers())` para tiempo (ej. `isSessionExpired`)
+
+```typescript
+// ❌ BAD — test trivial o acoplado a implementación
+it("calls parseApiError", () => {
+  expect(parseApiError).toBeDefined();
+});
+
+// ✅ GOOD — comportamiento y bordes
+it("returns a generic 500 error for unknown input", () => {
+  const result = parseApiError("unexpected");
+  expect(result.status).toBe(500);
+  expect(result.detail).toBe("Unknown error");
+});
+```
+
+```typescript
+// ✅ Schema — casos válido, inválido y normalización
+const result = registerSchema.safeParse({
+  firstName: "  Ada  ",
+  email: "  ada@example.com  ",
+});
+expect(result.success).toBe(true);
+```
+
+---
+
+## Mocks
+
+- **`vi.fn()`** para dependencias inyectadas (paginación, fetchers)
+- **`vi.mock("@/lib/http")`** en tests de services — no axios real
+- No mockear el módulo bajo prueba; mockear **límites** (HTTP, `next/headers`, wallet SDK)
+- Módulos con side effects de Next (`session`, `cookies`) — testear solo exports puros o extraer lógica a helper testeable
+
+---
+
+## Comandos y CI
+
+```bash
+pnpm test          # run once (CI)
+pnpm test:watch    # desarrollo
+```
+
+El job **Test (Vitest)** en [`.github/workflows/ci.yml`](.github/workflows/ci.yml) usa las mismas env de placeholder que `vitest.config.ts`.
+
+---
+
+## Checklist al agregar tests
+
+- [ ] Archivo `*.test.ts` co-localizado con el source
+- [ ] Casos happy path + al menos un borde/error
+- [ ] Sin `any`, sin `process.env` directo
+- [ ] `pnpm test` pasa localmente
+- [ ] Tests aportan confianza real (no assert del obvio)

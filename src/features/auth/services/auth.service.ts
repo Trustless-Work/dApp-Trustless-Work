@@ -58,16 +58,6 @@ export class AuthService {
     return registerResult;
   }
 
-  async saveRegisterProfile(
-    userId: string,
-    profile: RegisterProfileInput,
-  ): Promise<void> {
-    await http.post("/auth/register/profile", {
-      userId,
-      ...profile,
-    });
-  }
-
   async logout(): Promise<void> {
     await http.post("/auth/session/logout");
   }
