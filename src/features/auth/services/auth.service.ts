@@ -4,6 +4,7 @@ import type {
   RegisterProfileInput,
   Sep10Challenge,
   SessionChallengeResponse,
+  SessionMeResponse,
   SessionStatusResponse,
   SessionVerifyResponse,
   UserResponse,
@@ -60,6 +61,16 @@ export class AuthService {
 
   async logout(): Promise<void> {
     await http.post("/auth/session/logout");
+  }
+
+  async getSessionUser(): Promise<UserResponse | null> {
+    const { data } = await http.get<SessionMeResponse>("/auth/me");
+
+    if (!data.authenticated) {
+      return null;
+    }
+
+    return data.user;
   }
 
   async checkSession(): Promise<SessionStatusResponse> {

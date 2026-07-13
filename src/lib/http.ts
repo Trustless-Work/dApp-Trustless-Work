@@ -1,5 +1,8 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
-import { clearClientAuthState } from "@/features/auth/lib/logout-client";
+import {
+  clearClientAuthState,
+  isIntentionalLogout,
+} from "@/features/auth/lib/logout-client";
 import { getStoredNetwork } from "@/lib/client-storage";
 import {
   parseApiError,
@@ -29,12 +32,18 @@ http.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ProblemDetails>) => {
     const apiError: ApiError = parseApiError(error);
-    playSound("error");
+    const suppressAuthSideEffects =
+      isIntentionalLogout() && apiError.status === 401;
+
+    if (!suppressAuthSideEffects) {
+      playSound("error");
+    }
 
     if (
       typeof window !== "undefined" &&
       apiError.status === 401 &&
-      !window.location.pathname.startsWith("/login")
+      !window.location.pathname.startsWith("/login") &&
+      !isIntentionalLogout()
     ) {
       void clearClientAuthState({ reason: "unauthorized" });
     }

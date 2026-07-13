@@ -1,10 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useWallet } from "./useWallet";
-import { useWalletContext } from "@/providers/WalletProvider";
-import { Button } from "@/components/ui/button";
 import { Wallet } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useWallet } from "./useWallet";
+import { useAuth } from "@/providers/AuthProvider";
+import { useWalletContext } from "@/providers/WalletProvider";
 import { cn } from "@/lib/utils";
 
 type WalletButtonProps = {
@@ -12,22 +14,41 @@ type WalletButtonProps = {
   mobileBar?: boolean;
 };
 
-/**
- * Wallet connection/disconnection button component
- * Shows different states based on wallet connection status
- */
+const WalletButtonSkeleton = ({
+  className,
+  mobileBar = false,
+}: WalletButtonProps) => (
+  <div
+    aria-hidden="true"
+    className={cn(
+      "flex h-10 min-w-0 items-center gap-2 rounded-md border border-input bg-transparent",
+      mobileBar ? "w-full justify-center px-2" : "px-4",
+      className,
+    )}
+  >
+    <Skeleton className="size-4 shrink-0 rounded" />
+    {!mobileBar ? <Skeleton className="h-4 w-14 shrink-0" /> : null}
+    <Skeleton className="h-4 w-24 shrink-0" />
+  </div>
+);
+
 export const WalletButton = ({
   className,
   mobileBar = false,
 }: WalletButtonProps) => {
   const { handleConnect } = useWallet();
-  const { walletAddress, walletName } = useWalletContext();
+  const { walletAddress, walletName, hasWalletHydrated } = useWalletContext();
+  const { isLoading: isSessionLoading } = useAuth();
 
   const shortAddress = React.useMemo(() => {
     if (!walletAddress) return "";
     if (walletAddress.length <= 10) return walletAddress;
     return `${walletAddress.slice(0, 6)}…${walletAddress.slice(-4)}`;
   }, [walletAddress]);
+
+  if (!hasWalletHydrated || isSessionLoading) {
+    return <WalletButtonSkeleton className={className} mobileBar={mobileBar} />;
+  }
 
   if (walletAddress) {
     return (

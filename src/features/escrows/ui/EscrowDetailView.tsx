@@ -2,6 +2,7 @@
 
 import { Container } from "@/components/shared/Container";
 import { NoData } from "@/components/shared/NoData";
+import { EscrowActionsProvider } from "@/features/escrows/providers/EscrowActionsProvider";
 import { useEscrowDetail } from "@/features/escrows/hooks/useEscrows";
 import { EscrowDetailHeader } from "@/features/escrows/ui/detail/EscrowDetailHeader";
 import { EscrowDetailSkeleton } from "@/features/escrows/ui/detail/EscrowDetailSkeleton";
@@ -40,14 +41,19 @@ export const EscrowDetailView = ({ contractId }: EscrowDetailViewProps) => {
   }
 
   return (
-    <Container className="border-none bg-transparent p-0 shadow-none">
-      <div className="flex flex-col gap-6">
-        <EscrowDetailHeader escrow={escrow} />
+    <EscrowActionsProvider
+      contractId={escrow.contractId}
+      escrowType={escrow.type}
+    >
+      <Container className="border-none bg-transparent p-0 shadow-none">
+        <div className="flex flex-col gap-6">
+          <EscrowDetailHeader escrow={escrow} />
 
-        <EscrowOverviewSection escrow={escrow} />
-        <EscrowRolesCard escrow={escrow} />
-        <EscrowMilestonesTable escrow={escrow} />
-      </div>
-    </Container>
+          <EscrowOverviewSection escrow={escrow} />
+          <EscrowRolesCard escrow={escrow} />
+          <EscrowMilestonesTable escrow={escrow} />
+        </div>
+      </Container>
+    </EscrowActionsProvider>
   );
 };

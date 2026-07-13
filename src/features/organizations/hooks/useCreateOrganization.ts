@@ -2,22 +2,17 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import {
-  buildMemberFromUser,
-  mapUserToMemberInput,
-} from "@/features/organizations/helpers/member-from-user.helper";
+import { buildMemberFromUser, mapUserToMemberInput } from "@/features/organizations/helpers/member-from-user.helper";
 import { organizationService } from "@/features/organizations/services/organization.service";
 import type {
   CreateOrganizationInput,
-  MemberResponse,
   OrganizationResponse,
 } from "@/features/organizations/types/organization.types";
 import {
-  ORGANIZATIONS_QUERY_KEY,
-  organizationMembersQueryKey,
-} from "@/features/organizations/hooks/useOrganizations";
+  prependOrganizationToCache,
+  setInitialMembersCache,
+} from "@/features/organizations/utils/organizations-cache.helper";
 import { parseApiError } from "@/lib/api-error";
-import { extractListItems } from "@/lib/pagination";
 import { playSound } from "@/lib/sounds";
 import { useAuth } from "@/providers/AuthProvider";
 import { useWalletContext } from "@/providers/WalletProvider";
@@ -45,32 +40,16 @@ export function useCreateOrganization(options?: UseCreateOrganizationOptions) {
       return organization;
     },
     onSuccess: (organization) => {
-      queryClient.setQueryData<OrganizationResponse[]>(
-        ORGANIZATIONS_QUERY_KEY,
-        (previous) => {
-          const organizations = extractListItems<OrganizationResponse>(previous);
-
-          if (
-            organizations.some((org) => org.id === organization.id)
-          ) {
-            return organizations;
-          }
-
-          return [...organizations, organization];
-        },
-      );
+      prependOrganizationToCache(queryClient, organization);
 
       if (user) {
-        queryClient.setQueryData<MemberResponse[]>(
-          organizationMembersQueryKey(organization.id),
-          [buildMemberFromUser(user, organization.id, walletAddress)],
+        setInitialMembersCache(
+          queryClient,
+          organization.id,
+          buildMemberFromUser(user, organization.id, walletAddress),
         );
       }
 
-      void queryClient.invalidateQueries({ queryKey: ORGANIZATIONS_QUERY_KEY });
-      void queryClient.invalidateQueries({
-        queryKey: organizationMembersQueryKey(organization.id),
-      });
       playSound("accept");
       toast.success("Organization created", {
         description: `"${organization.name}" is ready to use.`,

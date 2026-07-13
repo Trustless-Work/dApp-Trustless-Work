@@ -16,6 +16,20 @@ type ClearClientAuthStateOptions = {
   redirectTo?: string;
 };
 
+let intentionalLogout = false;
+
+export function beginIntentionalLogout(): void {
+  intentionalLogout = true;
+}
+
+export function endIntentionalLogout(): void {
+  intentionalLogout = false;
+}
+
+export function isIntentionalLogout(): boolean {
+  return intentionalLogout;
+}
+
 function buildLoginRedirect(reason: AuthExpiredReason): string {
   const params = new URLSearchParams();
   if (reason === "session_expired") {
@@ -38,6 +52,14 @@ export async function clearClientAuthState(
     redirect = true,
     redirectTo = buildLoginRedirect(reason),
   } = options;
+
+  if (reason === "logout") {
+    beginIntentionalLogout();
+  }
+
+  if (reason === "session_expired" && intentionalLogout) {
+    return;
+  }
 
   const queryClient = getRegisteredQueryClient();
   queryClient?.setQueryData(["session", "me"], null);

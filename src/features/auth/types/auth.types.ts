@@ -93,6 +93,19 @@ export function isAuthenticatedSession(
   return status.authenticated;
 }
 
+export type SessionMeResponse =
+  | (AuthenticatedSessionStatus & { user: UserResponse })
+  | UnauthenticatedSessionStatus;
+
+export function isSessionMeResponse(value: unknown): value is SessionMeResponse {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "authenticated" in value &&
+    typeof (value as SessionMeResponse).authenticated === "boolean"
+  );
+}
+
 // ─── API key ────────────────────────────────────────────────────────────────
 
 export interface GeneratedApiKeyResponse

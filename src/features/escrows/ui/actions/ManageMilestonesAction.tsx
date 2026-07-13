@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useEscrowActionPolicy } from "@/features/escrows/hooks/useEscrowActionPolicy";
-import { useEscrowActions } from "@/features/escrows/hooks/useEscrowActions";
+import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type { EscrowActionProps } from "@/features/escrows/types/escrow-action.types";
 import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
@@ -38,10 +38,7 @@ export const ManageMilestonesAction = ({
     buildExistingMilestoneRows(escrow),
   );
   const [newRows, setNewRows] = useState<NewMilestoneRow[]>([]);
-  const { manageMilestones, loading, walletAddress } = useEscrowActions(
-    escrow.contractId,
-    escrow.type,
-  );
+  const { manageMilestones, loading, walletAddress } = useEscrowActionsContext();
 
   const resetForm = () => {
     setExistingRows(buildExistingMilestoneRows(escrow));

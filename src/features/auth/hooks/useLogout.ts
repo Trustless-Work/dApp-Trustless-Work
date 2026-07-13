@@ -9,7 +9,7 @@ export function useLogout() {
   return useMutation({
     mutationFn: () => authService.logout(),
     onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["session", "me"] });
+      await queryClient.cancelQueries({ queryKey: ["session"] });
       queryClient.setQueryData(["session", "me"], null);
     },
   });

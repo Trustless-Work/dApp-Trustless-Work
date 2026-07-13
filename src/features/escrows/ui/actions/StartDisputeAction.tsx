@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ConfirmActionDialog } from "@/features/escrows/ui/actions/ConfirmActionDialog";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
-import { useEscrowActions } from "@/features/escrows/hooks/useEscrowActions";
+import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type {
   EscrowActionProps,
   EscrowMilestoneActionProps,
@@ -42,10 +42,7 @@ export const StartDisputeAction = (props: StartDisputeActionProps) => {
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [reason, setReason] = useState("");
-  const { dispute, disputeBatch, loading, walletAddress } = useEscrowActions(
-    escrow.contractId,
-    escrow.type,
-  );
+  const { dispute, disputeBatch, loading, walletAddress } = useEscrowActionsContext();
 
   if (isMulti && milestoneIndex === undefined) {
     return null;

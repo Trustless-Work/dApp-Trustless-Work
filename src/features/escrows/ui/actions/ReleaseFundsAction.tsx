@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { ConfirmActionDialog } from "@/features/escrows/ui/actions/ConfirmActionDialog";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
-import { useEscrowActions } from "@/features/escrows/hooks/useEscrowActions";
+import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type {
   EscrowActionProps,
   EscrowMilestoneActionProps,
@@ -38,10 +38,7 @@ export const ReleaseFundsAction = (props: ReleaseFundsActionProps) => {
     : undefined;
   const isMulti = isStoredMultiReleaseEscrow(escrow);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const { release, releaseBatch, loading, walletAddress } = useEscrowActions(
-    escrow.contractId,
-    escrow.type,
-  );
+  const { release, releaseBatch, loading, walletAddress } = useEscrowActionsContext();
 
   if (isMulti && milestoneIndex === undefined) {
     return null;

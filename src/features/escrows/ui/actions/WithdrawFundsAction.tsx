@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEscrowActions } from "@/features/escrows/hooks/useEscrowActions";
+import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type { EscrowActionProps } from "@/features/escrows/types/escrow-action.types";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
 
@@ -24,10 +24,7 @@ export const WithdrawFundsAction = ({
   const [open, setOpen] = useState(false);
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
-  const { withdraw, loading, walletAddress } = useEscrowActions(
-    escrow.contractId,
-    escrow.type,
-  );
+  const { withdraw, loading, walletAddress } = useEscrowActionsContext();
 
   const handleSubmit = async () => {
     if (!walletAddress) {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ConfirmActionDialog } from "@/features/escrows/ui/actions/ConfirmActionDialog";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
-import { useEscrowActions } from "@/features/escrows/hooks/useEscrowActions";
+import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type { EscrowMilestoneActionProps } from "@/features/escrows/types/escrow-action.types";
 
 export const ApproveMilestoneAction = ({
@@ -14,10 +14,7 @@ export const ApproveMilestoneAction = ({
   triggerMode = "button",
 }: EscrowMilestoneActionProps) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const { approve, loading, walletAddress } = useEscrowActions(
-    escrow.contractId,
-    escrow.type,
-  );
+  const { approve, loading, walletAddress } = useEscrowActionsContext();
 
   const handleConfirm = async () => {
     if (!walletAddress) {

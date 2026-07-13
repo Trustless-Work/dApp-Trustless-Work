@@ -12,7 +12,6 @@ import {
 import { useOrganizations } from "@/features/organizations/hooks/useOrganizations";
 import type { OrganizationResponse } from "@/features/organizations/types/organization.types";
 import { useMounted } from "@/hooks/useMounted";
-import { extractListItems } from "@/lib/pagination";
 import {
   getStoredActiveOrganizationId,
   setStoredActiveOrganizationId,
@@ -58,11 +57,7 @@ function resolveActiveOrganizationId(
 export const OrganizationProvider = ({
   children,
 }: OrganizationProviderProps) => {
-  const { data, isLoading, isError, refetch } = useOrganizations();
-  const organizations = useMemo(
-    () => extractListItems<OrganizationResponse>(data),
-    [data],
-  );
+  const { organizations, isLoading, isError, refetch } = useOrganizations();
   const hasHydrated = useMounted();
   const storedOrganizationId = useSyncExternalStore(
     subscribeToStorage,

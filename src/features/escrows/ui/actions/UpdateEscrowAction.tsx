@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useEscrowActions } from "@/features/escrows/hooks/useEscrowActions";
+import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type { EscrowActionProps } from "@/features/escrows/types/escrow-action.types";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
 import {
@@ -29,10 +29,7 @@ export const UpdateEscrowAction = ({
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(escrow.title);
   const [description, setDescription] = useState(escrow.description);
-  const { update, loading, walletAddress } = useEscrowActions(
-    escrow.contractId,
-    escrow.type,
-  );
+  const { update, loading, walletAddress } = useEscrowActionsContext();
 
   const handleSubmit = async () => {
     if (!walletAddress) {

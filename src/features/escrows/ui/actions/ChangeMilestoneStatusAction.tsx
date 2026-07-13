@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
-import { useEscrowActions } from "@/features/escrows/hooks/useEscrowActions";
+import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type { EscrowMilestoneActionProps } from "@/features/escrows/types/escrow-action.types";
 
 export const ChangeMilestoneStatusAction = ({
@@ -24,10 +24,7 @@ export const ChangeMilestoneStatusAction = ({
 }: EscrowMilestoneActionProps) => {
   const [open, setOpen] = useState(false);
   const [newStatus, setNewStatus] = useState("");
-  const { changeStatus, loading, walletAddress } = useEscrowActions(
-    escrow.contractId,
-    escrow.type,
-  );
+  const { changeStatus, loading, walletAddress } = useEscrowActionsContext();
 
   const handleSubmit = async () => {
     if (!walletAddress || !newStatus.trim()) {

@@ -24,10 +24,6 @@ export class OrganizationService {
     return parseKeysetPage<OrganizationResponse>(data);
   }
 
-  async listMine(): Promise<OrganizationResponse[]> {
-    return fetchAllKeysetPages((params) => this.listMinePage(params));
-  }
-
   async create(
     payload: CreateOrganizationInput,
   ): Promise<OrganizationResponse> {

@@ -3,7 +3,10 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useWallet } from "@/components/tw-blocks/wallet-kit/useWallet";
-import { clearClientAuthState } from "@/features/auth/lib/logout-client";
+import {
+  beginIntentionalLogout,
+  clearClientAuthState,
+} from "@/features/auth/lib/logout-client";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 
 type UseSignOutOptions = {
@@ -16,6 +19,8 @@ export function useSignOut({ redirectTo = "/login" }: UseSignOutOptions = {}) {
   const { handleDisconnect } = useWallet();
 
   const signOut = useCallback(async () => {
+    beginIntentionalLogout();
+
     try {
       await logoutMutation.mutateAsync();
     } catch {

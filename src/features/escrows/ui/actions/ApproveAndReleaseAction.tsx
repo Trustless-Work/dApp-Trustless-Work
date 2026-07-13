@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ConfirmActionDialog } from "@/features/escrows/ui/actions/ConfirmActionDialog";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
-import { useEscrowActions } from "@/features/escrows/hooks/useEscrowActions";
+import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type { EscrowMilestoneActionProps } from "@/features/escrows/types/escrow-action.types";
 import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
 
@@ -15,10 +15,7 @@ export const ApproveAndReleaseAction = ({
   triggerMode = "button",
 }: EscrowMilestoneActionProps) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const { approveAndRelease, loading, walletAddress } = useEscrowActions(
-    escrow.contractId,
-    escrow.type,
-  );
+  const { approveAndRelease, loading, walletAddress } = useEscrowActionsContext();
 
   if (!isStoredMultiReleaseEscrow(escrow)) {
     return null;
