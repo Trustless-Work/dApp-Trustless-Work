@@ -19,7 +19,7 @@ export const EscrowOverviewSection = ({
   const symbol = getEscrowAssetSymbol(escrow);
 
   return (
-    <section className="relative z-10 rounded-3xl border border-border bg-card p-6 sm:p-8">
+    <section className="rounded-3xl border border-border bg-card p-6 sm:p-8">
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(260px,300px)]">
         <div className="min-w-0">
           <div className="flex items-center justify-between gap-4">

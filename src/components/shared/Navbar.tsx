@@ -7,7 +7,7 @@ import { WalletButton } from "../tw-blocks/wallet-kit/WalletButtons";
 
 export const Navbar = () => {
   return (
-    <header className="sticky top-0 z-10 shrink-0 border-b bg-background/60 backdrop-blur-md">
+    <header className="sticky top-0 z-20 shrink-0 border-b bg-background/80 backdrop-blur-md">
       <div className="flex h-14 items-center gap-2 px-3 md:h-16 md:gap-2 md:px-8">
         <SidebarTrigger className="-ml-1 size-9 shrink-0 md:hidden" />
         <Separator
