@@ -27,6 +27,7 @@ export function getDefaultValues(
 ): CreateEscrowFormData {
   const roles = buildDefaultRoles(walletAddress);
   const trustline = {
+    isCustom: false,
     address: defaultTrustline?.value ?? "",
     symbol: defaultTrustline?.label ?? "USDC",
   };
@@ -77,6 +78,7 @@ export function buildTemplateValues(
 ): CreateEscrowFormData {
   const roles = buildDefaultRoles(walletAddress);
   const trustline = {
+    isCustom: false,
     address: defaultTrustline?.value ?? "",
     symbol: defaultTrustline?.label ?? "USDC",
   };

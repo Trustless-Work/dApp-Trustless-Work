@@ -99,6 +99,7 @@ export function getBasicsStepFields(type: EscrowType): CreateEscrowFieldPath[] {
     "title",
     "description",
     "platformFee",
+    "trustline.isCustom",
     "trustline.address",
     "trustline.symbol",
   ];
@@ -130,6 +131,7 @@ export const CREATE_ESCROW_PLACEHOLDERS = {
   platformFee: "2",
   stellarAddress: "G…",
   trustlineSymbol: "USDC",
+  trustlineCustomAddress: "G… or C…",
   milestoneDescription: "Describe this deliverable",
   approvalsTarget: "1",
   milestoneAmount: "250",

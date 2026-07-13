@@ -51,7 +51,7 @@ export const EscrowOverviewSection = ({
               emphasis
             />
             <OverviewStat
-              label="Platform fee"
+              label="Platform Fee"
               value={`${escrow.platformFee}%`}
             />
             <OverviewStat

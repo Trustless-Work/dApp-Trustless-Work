@@ -76,7 +76,7 @@ const SingleReleaseMilestoneFields = ({
           <div className="flex items-center justify-between gap-4 rounded-lg border border-border/60 bg-muted/20 px-3 py-2.5">
             <div className="min-w-0 space-y-0.5">
               <FormLabel className="text-sm font-medium">
-                Approvals required
+                Approvals Required
               </FormLabel>
               <FormDescription className="text-xs">
                 {getApprovalsTargetHint(approversCount)}
@@ -141,7 +141,7 @@ const MultiReleaseMilestoneFields = ({
       name={`milestones.${index}.approvalsTarget`}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Approvals required</FormLabel>
+          <FormLabel>Approvals Required</FormLabel>
           <FormControl>
             <Input
               {...field}
@@ -152,7 +152,9 @@ const MultiReleaseMilestoneFields = ({
               placeholder={CREATE_ESCROW_PLACEHOLDERS.approvalsTarget}
             />
           </FormControl>
-          <FormDescription>{getApprovalsTargetHint(approversCount)}</FormDescription>
+          <FormDescription>
+            {getApprovalsTargetHint(approversCount)}
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )}

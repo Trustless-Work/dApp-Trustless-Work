@@ -30,6 +30,7 @@ export function showEscrowTransactionSuccessToast({
 
   toast.success(title, {
     id: activeToastId,
+    className: "escrow-tx-toast",
     duration: Number.POSITIVE_INFINITY,
     closeButton: true,
     dismissible: true,

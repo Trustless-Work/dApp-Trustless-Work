@@ -4,7 +4,10 @@ import {
   getAdminOverlapMessage,
   getApprovalsTargetExceedsApproversMessage,
 } from "@/features/escrows/utils/create-escrow.helper";
-import { STELLAR_PUBLIC_KEY_PATTERN } from "@/helpers/stellar.helper";
+import {
+  isStellarTrustlineAddress,
+  STELLAR_PUBLIC_KEY_PATTERN,
+} from "@/helpers/stellar.helper";
 
 const stellarAddressSchema = z
   .string()
@@ -169,8 +172,17 @@ const multiReleaseMilestoneSchema = singleReleaseMilestoneSchema.extend({
   receiver: stellarAddressSchema,
 });
 
+const trustlineAddressSchema = z
+  .string()
+  .trim()
+  .refine(
+    isStellarTrustlineAddress,
+    "Invalid Stellar issuer (G…) or contract (C…) address",
+  );
+
 const trustlineSchema = z.object({
-  address: stellarAddressSchema,
+  isCustom: z.boolean(),
+  address: trustlineAddressSchema,
   symbol: z.string().trim().min(1, "Asset symbol is required"),
 });
 

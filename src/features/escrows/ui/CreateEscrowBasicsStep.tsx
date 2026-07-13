@@ -12,7 +12,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { CreateEscrowFormData } from "@/features/escrows/schemas/create-escrow.schema";
 import { CREATE_ESCROW_PLACEHOLDERS } from "@/features/escrows/constants/create-escrow.constants";
-import { EscrowTrustlineField } from "@/features/escrows/ui/EscrowTrustlineField";
+import {
+  EscrowTrustlineAddressField,
+  EscrowTrustlineCustomSwitch,
+  EscrowTrustlineField,
+  EscrowTrustlineSymbolField,
+} from "@/features/escrows/ui/EscrowTrustlineField";
 import { EscrowTypeTabs } from "@/features/escrows/ui/EscrowTypeTabs";
 import type { EscrowType } from "@/features/escrows/types/escrow.types";
 
@@ -124,33 +129,66 @@ export const CreateEscrowBasicsStep = ({
           />
         ) : null}
 
-        <FormField
-          control={form.control}
-          name="platformFee"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Platform fee (%)</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type="number"
-                  min={0}
-                  max={100}
-                  step="any"
-                  disabled={disabled}
-                  placeholder={CREATE_ESCROW_PLACEHOLDERS.platformFee}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {escrowType === "single-release" ? (
+          <FormField
+            control={form.control}
+            name="platformFee"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Platform Fee (%)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    min={0}
+                    max={100}
+                    step="any"
+                    disabled={disabled}
+                    placeholder={CREATE_ESCROW_PLACEHOLDERS.platformFee}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : null}
       </div>
 
-      <div className="flex flex-col gap-2">
-        <p className="text-sm font-medium">Trustline</p>
+      {escrowType === "multi-release" ? (
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-medium">Fees & asset</p>
+            <EscrowTrustlineCustomSwitch form={form} disabled={disabled} />
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <FormField
+              control={form.control}
+              name="platformFee"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Platform Fee (%)</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="number"
+                      min={0}
+                      max={100}
+                      step="any"
+                      disabled={disabled}
+                      placeholder={CREATE_ESCROW_PLACEHOLDERS.platformFee}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <EscrowTrustlineAddressField form={form} disabled={disabled} />
+            <EscrowTrustlineSymbolField form={form} disabled={disabled} />
+          </div>
+        </div>
+      ) : (
         <EscrowTrustlineField form={form} disabled={disabled} />
-      </div>
+      )}
     </div>
   );
 };

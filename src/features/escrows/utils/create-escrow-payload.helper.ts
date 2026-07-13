@@ -39,7 +39,10 @@ export function toInitializePayload(
         amount: milestone.amount,
         receiver: milestone.receiver,
       })),
-      trustline: multiValues.trustline,
+      trustline: {
+        address: multiValues.trustline.address,
+        symbol: multiValues.trustline.symbol,
+      },
     };
   }
 
@@ -60,6 +63,9 @@ export function toInitializePayload(
       description: milestone.description,
       approvalsTarget: milestone.approvalsTarget,
     })),
-    trustline: singleValues.trustline,
+    trustline: {
+      address: singleValues.trustline.address,
+      symbol: singleValues.trustline.symbol,
+    },
   };
 }

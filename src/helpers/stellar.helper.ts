@@ -1,7 +1,16 @@
 export const STELLAR_PUBLIC_KEY_PATTERN = /^G[A-Z2-7]{55}$/;
+export const STELLAR_CONTRACT_ID_PATTERN = /^C[A-Z0-9]{55}$/;
 
 export function isStellarPublicKey(value: string): boolean {
   return STELLAR_PUBLIC_KEY_PATTERN.test(value);
+}
+
+export function isStellarContractId(value: string): boolean {
+  return STELLAR_CONTRACT_ID_PATTERN.test(value);
+}
+
+export function isStellarTrustlineAddress(value: string): boolean {
+  return isStellarPublicKey(value) || isStellarContractId(value);
 }
 
 export function truncateStellarAddress(

@@ -78,7 +78,7 @@ export const TransactionSuccessToastDescription = ({
   }, [durationMs, toastId]);
 
   return (
-    <div ref={containerRef} className="flex w-full flex-col gap-2">
+    <div ref={containerRef} className="flex w-full min-w-0 flex-col gap-2.5">
       <p className="text-[13px] leading-snug font-normal opacity-90">
         <a
           href={stellarExpertUrl}
