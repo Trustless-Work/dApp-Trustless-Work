@@ -23,11 +23,20 @@ const EscrowCardSkeleton = () => (
       <Skeleton className="h-14 w-full rounded-2xl" />
     </div>
 
-    <div className="mt-4 flex min-h-0 flex-1 flex-col gap-2">
-      <Skeleton className="h-3 w-20" />
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-4/5" />
+    <div className="mt-4 flex min-h-0 flex-1 flex-col gap-1.5">
+      <Skeleton className="mb-0.5 h-3 w-20" />
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div
+          key={index}
+          className="flex items-center justify-between gap-2"
+        >
+          <Skeleton className="h-4 min-w-0 flex-1" />
+          <div className="flex shrink-0 items-center gap-2">
+            <Skeleton className="h-5 w-14 rounded-full" />
+            <Skeleton className="h-4 w-12" />
+          </div>
+        </div>
+      ))}
     </div>
   </article>
 );

@@ -45,14 +45,18 @@ export interface AreaChartLoadingProps {
   loadingStyle?: LoadingStyle;
   /** Centered shimmer label text. Default: "Loading" */
   label?: string;
-  /** Aspect ratio as "width / height". Default: "2 / 1" */
+  /** Aspect ratio as "width / height". Prefer `className` height for MOR-style charts. */
   aspectRatio?: string;
-  /** Additional class name for the container */
+  /**
+   * Additional class name for the container.
+   * Align with loaded charts when used as a drop-in (e.g. `aspect-auto h-60 w-full md:h-72`
+   * and `margin={{ top: 0, right: 28, bottom: 42, left: 32 }}` for MorChart).
+   */
   className?: string;
 }
 
 export function AreaChartLoading({
-  margin,
+  margin = { top: 0, right: 28, bottom: 42, left: 32 },
   stroke = DEFAULT_LOADING_STROKE,
   strokeOpacity = DEFAULT_LOADING_STROKE_OPACITY,
   gridStroke = DEFAULT_LOADING_GRID_STROKE,
@@ -63,8 +67,8 @@ export function AreaChartLoading({
   gridShimmerSync = false,
   loadingStyle = "pulse",
   label = "Loading",
-  aspectRatio = "2 / 1",
-  className = "",
+  aspectRatio,
+  className = "aspect-auto h-60 w-full md:h-72",
 }: AreaChartLoadingProps) {
   const data = useMemo(
     () =>

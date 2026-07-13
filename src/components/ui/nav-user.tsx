@@ -36,7 +36,7 @@ export const NavUser = () => {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuSkeleton showIcon />
+          <SidebarMenuSkeleton showIcon size="lg" />
         </SidebarMenuItem>
       </SidebarMenu>
     );

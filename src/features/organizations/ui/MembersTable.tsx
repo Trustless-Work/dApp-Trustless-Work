@@ -133,8 +133,12 @@ export const MembersTableSkeleton = () => (
     <div className="flex flex-col gap-3 md:hidden">
       {Array.from({ length: 3 }).map((_, index) => (
         <Card key={index}>
-          <CardHeader className="pb-3">
+          <CardHeader className="flex flex-row items-start justify-between gap-3 pb-3">
             <Skeleton className="h-5 w-32" />
+            <div className="flex items-center gap-1">
+              <Skeleton className="size-8 rounded-md" />
+              <Skeleton className="size-8 rounded-md" />
+            </div>
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1">

@@ -14,10 +14,12 @@ const WalletsListSkeleton = () => (
     <div className="flex flex-col gap-3 md:hidden">
       {Array.from({ length: 2 }).map((_, index) => (
         <Card key={index}>
-          <CardHeader className="pb-3">
+          <CardHeader className="flex flex-row items-center justify-between gap-2 pb-3">
             <Skeleton className="h-5 w-40" />
+            <Skeleton className="size-4 rounded-full" />
           </CardHeader>
-          <CardContent className="flex justify-end">
+          <CardContent className="flex justify-end gap-1">
+            <Skeleton className="size-8 rounded-md" />
             <Skeleton className="size-8 rounded-md" />
           </CardContent>
         </Card>
@@ -35,7 +37,10 @@ const WalletsListSkeleton = () => (
           {Array.from({ length: 2 }).map((_, index) => (
             <TableRow key={index}>
               <TableCell>
-                <Skeleton className="h-4 w-48" />
+                <div className="flex items-center gap-2">
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="size-4 rounded-full" />
+                </div>
               </TableCell>
               <TableCell className="text-right">
                 <Skeleton className="ml-auto h-8 w-16" />

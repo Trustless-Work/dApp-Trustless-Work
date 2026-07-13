@@ -85,14 +85,3 @@ const ApiKeysListSkeleton = () => (
 
 export { ApiKeysListSkeleton };
 
-export const ApiKeysSectionSkeleton = () => (
-  <Card className="w-full">
-    <CardHeader className="space-y-2">
-      <Skeleton className="h-6 w-28" />
-      <Skeleton className="h-4 w-full max-w-lg" />
-    </CardHeader>
-    <CardContent>
-      <ApiKeysListSkeleton />
-    </CardContent>
-  </Card>
-);

@@ -648,9 +648,11 @@ function SidebarMenuBadge({
 function SidebarMenuSkeleton({
   className,
   showIcon = false,
+  size = "default",
   ...props
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean;
+  size?: "default" | "lg";
 }) {
   const skeletonId = React.useId();
   const width = React.useMemo(() => {
@@ -661,28 +663,56 @@ function SidebarMenuSkeleton({
     return `${50 + hash}%`;
   }, [skeletonId]);
 
+  const isLarge = size === "lg";
+
   return (
     <div
       data-slot="sidebar-menu-skeleton"
       data-sidebar="menu-skeleton"
-      className={cn("flex h-8 items-center gap-2 rounded-md px-2", className)}
+      data-size={size}
+      className={cn(
+        "flex items-center gap-2 rounded-md px-2",
+        isLarge ? "h-12" : "h-8",
+        className,
+      )}
       {...props}
     >
-      {showIcon && (
+      {showIcon ? (
         <Skeleton
-          className="size-4 rounded-md"
+          className={cn("rounded-md", isLarge ? "size-8" : "size-4")}
           data-sidebar="menu-skeleton-icon"
         />
+      ) : null}
+      {isLarge ? (
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5 group-data-[collapsible=icon]:hidden">
+          <Skeleton
+            className="h-4 max-w-(--skeleton-width)"
+            data-sidebar="menu-skeleton-text"
+            style={
+              {
+                "--skeleton-width": width,
+              } as React.CSSProperties
+            }
+          />
+          <Skeleton className="h-3 w-3/4" data-sidebar="menu-skeleton-subtext" />
+        </div>
+      ) : (
+        <Skeleton
+          className="h-4 max-w-(--skeleton-width) flex-1"
+          data-sidebar="menu-skeleton-text"
+          style={
+            {
+              "--skeleton-width": width,
+            } as React.CSSProperties
+          }
+        />
       )}
-      <Skeleton
-        className="h-4 max-w-(--skeleton-width) flex-1"
-        data-sidebar="menu-skeleton-text"
-        style={
-          {
-            "--skeleton-width": width,
-          } as React.CSSProperties
-        }
-      />
+      {isLarge ? (
+        <Skeleton
+          className="ml-auto size-4 shrink-0 group-data-[collapsible=icon]:hidden"
+          data-sidebar="menu-skeleton-chevron"
+        />
+      ) : null}
     </div>
   );
 }

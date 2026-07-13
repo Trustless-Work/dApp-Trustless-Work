@@ -52,7 +52,7 @@ export const OrganizationSwitcher = () => {
     return (
       <SidebarMenu className="mt-2">
         <SidebarMenuItem>
-          <SidebarMenuSkeleton showIcon />
+          <SidebarMenuSkeleton showIcon size="lg" />
         </SidebarMenuItem>
       </SidebarMenu>
     );

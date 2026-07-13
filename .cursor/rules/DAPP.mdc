@@ -228,65 +228,14 @@ When building or refactoring a **data table** (TanStack Table, HTML `Table`, or 
 - **Tablet and desktop** (`md` and up): keep the **table** as the primary layout (`overflow-x-auto` on the wrapper when needed).
 - **Implementation pattern:**
   - Two sibling blocks: cards `className="md:hidden"` and table `className="hidden md:block"` (or equivalent), fed from the **same row data** (same query / same array).
-  - **Loading:** show loading skeletons defined **in the same component file, above** the main export — see **Loading skeletons** below.
+  - **Loading:** show loading skeletons defined **in the same component file, above** the main export — see [`SKELETONS.mdc`](SKELETONS.mdc).
   - **Empty and error states** stay a single block unless a design requires otherwise. **Empty (no data)** must use `NoData` — see below.
 - **DRY:** extract shared cell content (e.g. actions, status badge) into small components reused by both the table row and the card footer/content—avoid duplicating mutation handlers or button trees.
 - Do **not** ship a wide multi-column table as the only representation on narrow screens without a card (or equally usable) alternative.
 
 ### Loading skeletons
 
-While data is loading, use `@/components/ui/skeleton` — never a generic full-width block if the loaded UI is more structured.
-
-- **Co-location:** define the skeleton **in the same component file**, **above** the exported component (e.g. `MembersTableSkeleton`, `MembersSectionSkeleton`). Do not scatter skeleton markup in parent views or duplicate it across siblings.
-- **Structural fidelity:** the skeleton **must mirror exactly** the layout it replaces — same wrappers, breakpoints, grid/flex, spacing, column count, card vs table regions, avatar sizes, and approximate element dimensions. If the loaded UI is table + mobile cards, the skeleton shows **both** with the same `md:hidden` / `hidden md:block` split.
-- **Do not** use a single `Skeleton className="h-48 w-full"` when the real UI has rows, cells, avatars, or a card grid — match each visible region with a placeholder of the same shape.
-- **Reuse:** when the same list/table appears in multiple states, extract a small `*Skeleton` subcomponent in that file (or a sibling `*Skeleton.tsx` in the same feature folder) that shares structure with the real `*Table` / `*CardList` component.
-- **Count:** repeat skeleton rows/cards enough to suggest a list (typically 3–5), using the same gap and padding as loaded content.
-
-```tsx
-const MembersTableSkeleton = () => (
-  <>
-    <div className="flex flex-col gap-3 md:hidden">
-      {Array.from({ length: 3 }).map((_, index) => (
-        <Card key={index}>
-          <CardHeader className="flex flex-row items-center gap-3">
-            <Skeleton className="size-8 rounded-lg" />
-            <Skeleton className="h-5 w-32" />
-          </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-3">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-    <div className="hidden md:block">
-      <Table>
-        <TableHeader>{/* same columns as MembersTable */}</TableHeader>
-        <TableBody>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <TableRow key={index}>
-              <TableCell>
-                <Skeleton className="h-4 w-24" />
-              </TableCell>
-              {/* one Skeleton per cell, matching MembersTable */}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  </>
-);
-
-export const MembersSection = () => {
-  // ...
-  return isLoading ? (
-    <MembersTableSkeleton />
-  ) : (
-    <MembersTable members={members} />
-  );
-};
-```
+Structural fidelity, co-location, dual layouts, variants, and the review checklist live in [`SKELETONS.mdc`](SKELETONS.mdc). Always use `@/components/ui/skeleton` and mirror the loaded UI 1:1 — never generic muted blocks for structured screens.
 
 ### Empty states (no data)
 
@@ -296,7 +245,7 @@ When a query, list, table, or section has **finished loading** and the result se
 - **Before adding empty UI**, check whether `NoData` already fits; extend it only if the product need is genuinely shared across many screens.
 - **Required:** `title` — short, user-facing headline (e.g. "No members yet").
 - **Optional:** `description` (helper text), `icon` (Lucide icon; defaults to `Inbox`), `actionLabel` + `onAction` when the empty state should offer a primary action (e.g. "Add member").
-- **Loading** and **error** states are separate: co-located skeletons (see **Loading skeletons**) while loading; error banners or retry UI on failure — do not use `NoData` for those.
+- **Loading** and **error** states are separate: co-located skeletons (see [`SKELETONS.mdc`](SKELETONS.mdc)) while loading; error banners or retry UI on failure — do not use `NoData` for those.
 - **Dual layouts** (table + mobile cards): one shared `NoData` block for both breakpoints, not two different empty messages.
 
 ```tsx

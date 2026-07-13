@@ -20,7 +20,7 @@ import { useAuth } from "@/providers/AuthProvider";
 
 const ProfileContentSkeleton = () => (
   <div className="flex flex-col gap-6 md:flex-row">
-    <Card className="w-full md:w-1/2">
+    <Card className="flex w-full flex-col md:w-1/2">
       <CardHeader className="flex flex-row items-start justify-between gap-4">
         <div className="space-y-2">
           <Skeleton className="h-6 w-24" />
@@ -28,19 +28,20 @@ const ProfileContentSkeleton = () => (
         </div>
         <Skeleton className="h-8 w-16" />
       </CardHeader>
-      <CardContent className="flex flex-col gap-6">
+      <CardContent>
         <div className="flex items-center gap-4">
           <Skeleton className="size-16 rounded-xl" />
-          <div className="space-y-2">
+          <div className="min-w-0 space-y-2">
             <Skeleton className="h-5 w-40" />
             <Skeleton className="h-4 w-32" />
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
+      </CardContent>
+      <CardContent className="mt-auto flex justify-end pt-0">
+        <div className="flex items-center gap-1.5">
+          <Skeleton className="size-3.5 shrink-0 rounded-sm" />
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-3 w-28" />
         </div>
       </CardContent>
     </Card>

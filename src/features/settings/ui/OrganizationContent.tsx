@@ -18,13 +18,25 @@ import { useActiveOrganization } from "@/providers/OrganizationProvider";
 
 const OrganizationContentSkeleton = () => (
   <div className="flex flex-col gap-6 md:flex-row">
-    <Card className="w-full md:w-1/2">
-      <CardHeader>
-        <Skeleton className="h-6 w-48" />
-        <Skeleton className="h-4 w-full max-w-md" />
+    <Card className="flex w-full flex-col md:w-1/2">
+      <CardHeader className="gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-2">
+            <Skeleton className="h-6 w-48" />
+            <Skeleton className="h-4 w-full max-w-md" />
+          </div>
+          <div className="flex gap-2">
+            <Skeleton className="size-8 rounded-md" />
+            <Skeleton className="size-8 rounded-md" />
+          </div>
+        </div>
       </CardHeader>
-      <CardContent>
-        <Skeleton className="h-4 w-40" />
+      <CardContent className="mt-auto flex justify-end pt-0">
+        <div className="flex items-center gap-1.5">
+          <Skeleton className="size-3.5 shrink-0 rounded-sm" />
+          <Skeleton className="h-3 w-16" />
+          <Skeleton className="h-3 w-28" />
+        </div>
       </CardContent>
     </Card>
     <Card className="w-full md:w-1/2">
