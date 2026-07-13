@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   AlertTriangle,
   ChevronRight,
@@ -59,7 +60,7 @@ export function NeedsAttention() {
       <ItemGroup className="gap-0">
         {items.map((row) => (
           <Item asChild key={row.title} size="sm">
-            <a href={row.href}>
+            <Link href={row.href}>
               <ItemMedia variant="icon">{row.icon}</ItemMedia>
               <ItemContent className="font-normal text-muted-foreground text-xs">
                 <ItemTitle>{row.title}</ItemTitle>
@@ -77,7 +78,7 @@ export function NeedsAttention() {
                   strokeWidth={2}
                 />
               </ItemActions>
-            </a>
+            </Link>
           </Item>
         ))}
       </ItemGroup>

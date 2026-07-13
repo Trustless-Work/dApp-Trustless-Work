@@ -26,7 +26,8 @@ Antes de mergear cambios en auth, API, escrows, orgs o providers, verificar:
 - `http.get` list sin `parseKeysetPageWithSchema`
 - Cambios en `lib/` / `helpers/` / `schemas/` **sin** test co-localizado (TESTS)
 - Navbar/wallet sin skeleton mientras sesión/wallet hidratan
+- `<a>` / `<img>` nativos en TSX en vez de `Link` / `Image` → ver NEXT_JS
 
 ## Referencias
 
-SHARED_TYPES · FEATURE_BOUNDARIES · BFF_SECURITY · DATA_FETCHING · ESCROWS · AUTH_SESSION_UX · TESTS · FORMS · ENV · TYPESCRIPT
+SHARED_TYPES · FEATURE_BOUNDARIES · BFF_SECURITY · DATA_FETCHING · ESCROWS · AUTH_SESSION_UX · TESTS · FORMS · ENV · TYPESCRIPT · NEXT_JS

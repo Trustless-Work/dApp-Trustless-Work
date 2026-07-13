@@ -50,10 +50,10 @@ function NavSubMenuItem({ item }: { item: DashboardNavSubItem }) {
     return (
       <SidebarMenuSubItem>
         <SidebarMenuSubButton asChild size="sm">
-          <a href={item.url} target="_blank" rel="noopener noreferrer">
+          <Link href={item.url} target="_blank" rel="noopener noreferrer">
             <Icon />
             <span>{item.title}</span>
-          </a>
+          </Link>
         </SidebarMenuSubButton>
       </SidebarMenuSubItem>
     );
@@ -117,11 +117,11 @@ function NavLinkItem({
     return (
       <SidebarMenuItem>
         <SidebarMenuButton asChild tooltip={item.title}>
-          <a href={item.url} target="_blank" rel="noopener noreferrer">
+          <Link href={item.url} target="_blank" rel="noopener noreferrer">
             <Icon />
             <span>{item.title}</span>
             <ArrowUpRightIcon className="ml-auto size-3.5 text-muted-foreground" />
-          </a>
+          </Link>
         </SidebarMenuButton>
       </SidebarMenuItem>
     );

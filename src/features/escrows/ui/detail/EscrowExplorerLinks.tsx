@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ScanEye, Telescope } from "lucide-react";
 import {
   Tooltip,
@@ -40,7 +41,7 @@ export const EscrowExplorerLinks = ({
     <div className={cn("flex shrink-0 items-center gap-2", className)}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <a
+          <Link
             href={stellarExpertUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -48,14 +49,14 @@ export const EscrowExplorerLinks = ({
             aria-label="View on Stellar Expert"
           >
             <Telescope className="size-4" aria-hidden="true" />
-          </a>
+          </Link>
         </TooltipTrigger>
         <TooltipContent>Stellar Expert</TooltipContent>
       </Tooltip>
 
       <Tooltip>
         <TooltipTrigger asChild>
-          <a
+          <Link
             href={trustlessWorkViewerUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -63,7 +64,7 @@ export const EscrowExplorerLinks = ({
             aria-label="View on Trustless Work Viewer"
           >
             <ScanEye className="size-4" aria-hidden="true" />
-          </a>
+          </Link>
         </TooltipTrigger>
         <TooltipContent>Trustless Work Viewer</TooltipContent>
       </Tooltip>

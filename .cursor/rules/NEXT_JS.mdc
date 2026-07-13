@@ -1,0 +1,74 @@
+---
+description: Primitivos de Next.js — Link, Image, Script, navegación
+globs: **/*.{tsx,jsx}
+alwaysApply: true
+---
+
+# Next.js primitives
+
+En componentes de la app (`src/`), **nunca** usar el HTML nativo cuando Next.js ofrece un equivalente optimizado.
+
+---
+
+## Enlaces
+
+| ❌ Prohibido | ✅ Usar |
+| --- | --- |
+| `<a href="...">` | `import Link from "next/link"` → `<Link href="...">` |
+
+- Rutas internas y externas: siempre `Link`.
+- Enlaces externos: `target="_blank"` + `rel="noopener noreferrer"` en `Link`.
+- Con Radix/shadcn `asChild`: pasar `Link` como hijo, no `<a>`.
+
+```tsx
+// ❌ BAD
+<a href="/dashboard">Dashboard</a>
+<a href="https://stellar.expert/..." target="_blank" rel="noopener noreferrer">View</a>
+
+// ✅ GOOD
+<Link href="/dashboard">Dashboard</Link>
+<Link href={url} target="_blank" rel="noopener noreferrer">View</Link>
+
+// ✅ GOOD — asChild
+<Button asChild>
+  <Link href={href}>Open</Link>
+</Button>
+```
+
+**Navegación programática:** `useRouter` / `redirect` / `permanentRedirect` — no `<a>` ni `window.location` salvo logout o URLs fuera de la app.
+
+---
+
+## Imágenes
+
+| ❌ Prohibido | ✅ Usar |
+| --- | --- |
+| `<img src="..." />` | `import Image from "next/image"` → `<Image src="..." alt="..." width={} height={} />` |
+
+- Siempre `alt` descriptivo.
+- Assets locales: import estático o ruta en `public/`.
+- Dominios remotos: registrar en `next.config` (`images.remotePatterns`).
+
+---
+
+## Scripts
+
+| ❌ Prohibido | ✅ Usar |
+| --- | --- |
+| `<script src="...">` en JSX | `import Script from "next/script"` |
+
+---
+
+## Metadata y fuentes
+
+- **App Router:** `metadata` / `generateMetadata` en layouts y pages — no `next/head`.
+- **Fuentes:** `next/font` — no `@font-face` suelto en CSS para fuentes de la app.
+
+---
+
+## Checklist
+
+- [ ] Sin `<a>` en TSX (interno o externo)
+- [ ] Sin `<img>` en TSX
+- [ ] Sin `<script>` inline para assets de terceros
+- [ ] Navegación interna vía `Link` o APIs de `next/navigation`
