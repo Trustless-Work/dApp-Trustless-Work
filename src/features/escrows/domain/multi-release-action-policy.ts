@@ -32,19 +32,7 @@ export class MultiReleaseActionPolicy extends EscrowActionPolicy {
       return false;
     }
 
-    if (this.hasAnyDisputedMilestone()) {
-      return false;
-    }
-
-    if (this.hasAnyResolvedDispute()) {
-      return false;
-    }
-
-    if (this.areAllMilestonesReleased()) {
-      return false;
-    }
-
-    return true;
+    return !this.areAllMilestonesReleased();
   }
 
   canWithdrawRemainingFunds(): boolean {
@@ -167,12 +155,6 @@ export class MultiReleaseActionPolicy extends EscrowActionPolicy {
   private hasAnyDisputedMilestone(): boolean {
     return this.multiEscrow.milestones.some((milestone) =>
       isMilestoneDisputed(milestone),
-    );
-  }
-
-  private hasAnyResolvedDispute(): boolean {
-    return this.multiEscrow.milestones.some((milestone) =>
-      isMilestoneDisputeResolved(milestone),
     );
   }
 

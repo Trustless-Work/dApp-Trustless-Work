@@ -25,6 +25,7 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
     cardinality: "1–5 wallets",
     actions: [
       "Approve one or many milestones in a single transaction",
+      "Open a dispute when delivery or payment is contested",
       "Approve and release in one step when the wallet is also a release signer",
     ],
   },
@@ -38,6 +39,7 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
     actions: [
       "Change milestone status (for example pending → in progress → completed)",
       "Attach or update milestone evidence references",
+      "Open a dispute when delivery or payment is contested",
     ],
   },
   {
@@ -50,6 +52,7 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
     actions: [
       "Release funds to the receiver when every milestone is approved (single release)",
       "Release individual milestones after approval (multi release)",
+      "Open a dispute when delivery or payment is contested",
       "Approve and release atomically when the wallet is also an approver",
     ],
   },
@@ -61,12 +64,12 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
       "Settle conflicts by distributing escrow balances when a dispute is open.",
     cardinality: "1–5 wallets",
     actions: [
-      "Resolve an open dispute with a full-balance distribution",
-      "Withdraw any remaining balance after a release or resolution",
+      "Resolve an open dispute (single: distributions must equal the contract balance; multi: sum at most the selected milestones' amounts)",
+      "Withdraw any remaining balance after the escrow reaches a terminal state (multi: every milestone must be released or dispute-resolved)",
     ],
     constraints: [
       "Cannot open disputes — only resolve them",
-      "Must not overlap with approvers, service providers, release signers, platform, or receiver",
+      "Must not overlap with approvers, service providers, release signers, or receiver",
     ],
   },
   {
@@ -77,31 +80,43 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
       "Maintains escrow configuration and milestone structure after deployment.",
     cardinality: "1 wallet",
     actions: [
-      "Update escrow properties (roles, amount, fees, trustline, and metadata)",
+      "Update escrow properties (roles, amount, fees, trustline, and metadata) while unfunded",
       "Add milestones or edit milestone descriptions via manage milestones",
-      "Extend contract storage TTL on multi-release escrows",
+      "Extend contract storage TTL",
     ],
-    constraints: ["Must be distinct from every other role address"],
+    constraints: [
+      "Cannot also be an approver, service provider, release signer, or dispute resolver",
+      "Cannot be the same address as receiver on single-release escrows",
+      "Immutable after the escrow is initialized",
+    ],
   },
   {
     id: "platform",
     title: ESCROW_ROLE_LABELS.platform,
     icon: ESCROW_ROLE_ICONS.platform,
     description:
-      "Trustless Work platform wallet attached to the escrow. Receives the configured platform fee on release.",
+      "Trustless Work platform wallet attached to the escrow. Receives the configured platform fee on release or dispute resolution.",
     cardinality: "1 wallet",
-    actions: ["Extend contract storage TTL on single-release escrows"],
+    actions: [
+      "Receive the platform fee on every release or dispute resolution",
+      "Open a dispute when delivery or payment is contested",
+    ],
+    constraints: ["Cannot change itself once the escrow is initialized"],
   },
   {
     id: "receiver",
     title: ESCROW_ROLE_LABELS.receiver,
     icon: ESCROW_ROLE_ICONS.receiver,
     description:
-      "Final beneficiary of released funds on single-release escrows.",
-    cardinality: "1 wallet",
-    actions: ["Receives funds when a release signer executes release"],
+      "Final beneficiary of released funds. Passive on payout; can open a dispute for their escrow or milestones.",
+    cardinality: "1 wallet (single) · 1 per milestone (multi)",
+    actions: [
+      "Receive funds when a release signer executes release",
+      "Open a dispute (escrow-level in single release; only their milestones in multi release)",
+    ],
     constraints: [
       "Defined at the escrow level in single release; in multi release each milestone has its own receiver",
+      "Cannot be the same address as admin on single-release escrows",
     ],
   },
   {
@@ -110,7 +125,7 @@ export const ESCROW_ROLE_GUIDES: readonly EscrowRoleGuide[] = [
     icon: ESCROW_ROLE_ICONS.observers,
     description:
       "Read-only wallets attached for visibility. They cannot sign escrow transactions.",
-    cardinality: "Optional list",
+    cardinality: "Optional list, 0–5 wallets",
     actions: ["View escrow state and role assignments"],
     constraints: ["No on-chain signing authority"],
   },
@@ -151,44 +166,46 @@ export const ESCROW_LIFECYCLE_ACTIONS: readonly EscrowLifecycleAction[] = [
     title: "Start dispute",
     description:
       "Open a dispute with an on-chain reason when parties disagree on delivery or payment.",
-    signer: "Any escrow role except dispute resolvers",
+    signer:
+      "Approver, service provider, release signer, receiver, or platform (not dispute resolvers)",
   },
   {
     title: "Resolve dispute",
     description:
-      "Distribute the full escrow balance across recipient wallets to close an open dispute.",
+      "Close an open dispute by redistributing funds. Single release requires distributions to equal the contract balance; multi release allows a sum at most the selected milestones' amounts.",
     signer: "Dispute resolver",
   },
   {
     title: "Withdraw remaining funds",
     description:
-      "Sweep leftover balance after a release or resolution once the escrow is fully processed.",
+      "Sweep leftover balance after a release or resolution once the escrow is fully processed. Multi release requires every milestone to be released or dispute-resolved.",
     signer: "Dispute resolver",
   },
   {
     title: "Update escrow",
     description:
-      "Replace platform-controlled fields while preserving milestone runtime state. Blocked when the escrow already holds funds.",
+      "Replace configurable fields while preserving milestone runtime state. Blocked when the escrow already holds funds or a dispute is open.",
     signer: "Admin",
   },
   {
     title: "Manage milestones",
     description:
-      "Add new milestones or edit descriptions atomically. Description-only edits are forbidden while funds are held.",
+      "Add new milestones or edit descriptions atomically. Description/amount edits of existing milestones are forbidden while funds are held. Single release blocks manage after release; multi release blocks only when all milestones are released.",
     signer: "Admin",
   },
   {
     title: "Extend storage TTL",
     description:
       "Renew Soroban contract storage so escrow state does not expire.",
-    signer: "Platform on single release · Admin on multi release",
+    signer: "Admin",
   },
 ] as const;
 
 export const ESCROW_ROLE_RULES: readonly string[] = [
-  "Role lists (approvers, service providers, release signers, dispute resolvers) accept up to 5 unique Stellar addresses each.",
-  "Admin must not share an address with any other role.",
-  "Dispute resolvers must not overlap with approvers, service providers, release signers, platform, or receiver.",
+  "Role lists (approvers, service providers, release signers, dispute resolvers, observers) accept up to 5 unique Stellar addresses each.",
+  "Admin must not share an address with approvers, service providers, release signers, or dispute resolvers, and must not be the receiver on single-release escrows.",
+  "Dispute resolvers must not overlap with approvers, service providers, release signers, or receiver.",
+  "The same wallet may be an approver, service provider, release signer, and receiver at once when those overlaps are allowed.",
   "A wallet in both approvers and release signers can use approve-and-release to complete both steps in one transaction.",
   "Multi-release escrows store the receiver inside each milestone instead of at the escrow role level.",
 ] as const;

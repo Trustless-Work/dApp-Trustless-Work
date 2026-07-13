@@ -36,9 +36,9 @@ export const ESCROW_ROLE_ICONS: Record<EscrowRoleId, LucideIcon> = {
 
 export const ESCROW_ROLE_LABELS: Record<EscrowRoleId, string> = {
   approvers: "Approvers",
-  "service-providers": "Service providers",
-  "release-signers": "Release signers",
-  "dispute-resolvers": "Dispute resolvers",
+  "service-providers": "Service Providers",
+  "release-signers": "Release Signers",
+  "dispute-resolvers": "Dispute Resolvers",
   admin: "Admin",
   platform: "Platform",
   receiver: "Receiver",

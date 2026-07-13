@@ -1,5 +1,6 @@
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import { OverviewStat, UsdcAmountStat } from "@/components/shared/UsdcAmount";
+import { EscrowConnectedRoleBadges } from "@/features/escrows/ui/detail/EscrowConnectedRoleBadges";
 import { EscrowCopyField } from "@/features/escrows/ui/detail/EscrowCopyField";
 import { EscrowExplorerLinks } from "@/features/escrows/ui/detail/EscrowExplorerLinks";
 import { EscrowGeneralActions } from "@/features/escrows/ui/detail/EscrowGeneralActions";
@@ -61,8 +62,11 @@ export const EscrowOverviewSection = ({
             />
           </dl>
 
-          <div className="mt-6 min-w-0 border-t border-border pt-6">
-            <EscrowCopyField label="Contract ID" value={escrow.contractId} />
+          <div className="mt-6 flex min-w-0 flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-end sm:justify-between">
+            <div className="min-w-0 flex-1">
+              <EscrowCopyField label="Contract ID" value={escrow.contractId} />
+            </div>
+            <EscrowConnectedRoleBadges escrow={escrow} />
           </div>
         </div>
 

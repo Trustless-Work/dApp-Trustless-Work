@@ -55,7 +55,7 @@ export const CREATE_ESCROW_ROLE_FIELDS: RoleFieldConfig[] = [
   },
   {
     key: "serviceProviders",
-    label: "Service providers",
+    label: "Service Providers",
     description: "1-5 distinct addresses that update milestone status.",
     multiple: true,
   },
@@ -67,13 +67,13 @@ export const CREATE_ESCROW_ROLE_FIELDS: RoleFieldConfig[] = [
   },
   {
     key: "releaseSigners",
-    label: "Release signers",
+    label: "Release Signers",
     description: "1-5 distinct addresses authorized to release funds.",
     multiple: true,
   },
   {
     key: "disputeResolvers",
-    label: "Dispute resolvers",
+    label: "Dispute Resolvers",
     description: "1-5 distinct addresses that resolve disputes.",
     multiple: true,
   },

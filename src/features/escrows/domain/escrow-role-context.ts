@@ -1,3 +1,4 @@
+import type { EscrowRoleId } from "@/constants/escrow-roles.constants";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import {
   isStoredMultiReleaseEscrow,
@@ -47,6 +48,10 @@ export class EscrowRoleContext {
     return this.matches(this.escrow.roles.platform);
   }
 
+  isObserver(): boolean {
+    return this.inList(this.escrow.roles.observers ?? []);
+  }
+
   isEscrowReceiver(): boolean {
     if (!isStoredSingleReleaseEscrow(this.escrow)) {
       return false;
@@ -66,6 +71,51 @@ export class EscrowRoleContext {
     }
 
     return this.matches(milestone.receiver);
+  }
+
+  isAnyMilestoneReceiver(): boolean {
+    if (!isStoredMultiReleaseEscrow(this.escrow) || !this.normalizedAddress) {
+      return false;
+    }
+
+    return this.escrow.milestones.some((milestone) =>
+      this.matches(milestone.receiver),
+    );
+  }
+
+  getConnectedRoleIds(): EscrowRoleId[] {
+    if (!this.normalizedAddress) {
+      return [];
+    }
+
+    const roleIds: EscrowRoleId[] = [];
+
+    if (this.isAdmin()) {
+      roleIds.push("admin");
+    }
+    if (this.isApprover()) {
+      roleIds.push("approvers");
+    }
+    if (this.isServiceProvider()) {
+      roleIds.push("service-providers");
+    }
+    if (this.isReleaseSigner()) {
+      roleIds.push("release-signers");
+    }
+    if (this.isDisputeResolver()) {
+      roleIds.push("dispute-resolvers");
+    }
+    if (this.isPlatform()) {
+      roleIds.push("platform");
+    }
+    if (this.isEscrowReceiver() || this.isAnyMilestoneReceiver()) {
+      roleIds.push("receiver");
+    }
+    if (this.isObserver()) {
+      roleIds.push("observers");
+    }
+
+    return roleIds;
   }
 
   canOpenDispute(milestoneIndex?: number): boolean {
