@@ -27,7 +27,8 @@ Antes de mergear cambios en auth, API, escrows, orgs o providers, verificar:
 - Cambios en `lib/` / `helpers/` / `schemas/` **sin** test co-localizado (TESTS)
 - Navbar/wallet sin skeleton mientras sesión/wallet hidratan
 - `<a>` / `<img>` nativos en TSX en vez de `Link` / `Image` → ver NEXT_JS
+- UI de producto fuera del design system (colores crudos, radius incorrecto, empty custom, marketing aesthetics en dashboard) → ver DESIGN_SYSTEM
 
 ## Referencias
 
-SHARED_TYPES · FEATURE_BOUNDARIES · BFF_SECURITY · DATA_FETCHING · ESCROWS · AUTH_SESSION_UX · TESTS · FORMS · ENV · TYPESCRIPT · NEXT_JS
+SHARED_TYPES · FEATURE_BOUNDARIES · BFF_SECURITY · DATA_FETCHING · ESCROWS · AUTH_SESSION_UX · TESTS · FORMS · ENV · TYPESCRIPT · NEXT_JS · DESIGN_SYSTEM

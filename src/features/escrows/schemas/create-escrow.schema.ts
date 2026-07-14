@@ -5,7 +5,7 @@ import {
   getApprovalsTargetExceedsApproversMessage,
 } from "@/features/escrows/utils/create-escrow.helper";
 import {
-  isStellarTrustlineAddress,
+  isStellarContractId,
   STELLAR_PUBLIC_KEY_PATTERN,
 } from "@/helpers/stellar.helper";
 
@@ -176,8 +176,8 @@ const trustlineAddressSchema = z
   .string()
   .trim()
   .refine(
-    isStellarTrustlineAddress,
-    "Invalid Stellar issuer (G…) or contract (C…) address",
+    isStellarContractId,
+    "Trustline must be a Soroban contract address (C…, 56 chars)",
   );
 
 const trustlineSchema = z.object({

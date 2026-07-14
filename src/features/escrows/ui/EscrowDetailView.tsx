@@ -1,11 +1,15 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Container } from "@/components/shared/Container";
 import { NoData } from "@/components/shared/NoData";
 import { EscrowActionsProvider } from "@/features/escrows/providers/EscrowActionsProvider";
 import { useEscrowDetail } from "@/features/escrows/hooks/useEscrows";
 import { EscrowDetailHeader } from "@/features/escrows/ui/detail/EscrowDetailHeader";
 import { EscrowDetailSkeleton } from "@/features/escrows/ui/detail/EscrowDetailSkeleton";
+import { EscrowDepositsCard } from "@/features/escrows/ui/detail/EscrowDepositsCard";
+import { EscrowDisputePanel } from "@/features/escrows/ui/detail/EscrowDisputePanel";
+import { EscrowEventsCard } from "@/features/escrows/ui/detail/EscrowEventsCard";
 import { EscrowMilestonesTable } from "@/features/escrows/ui/detail/EscrowMilestonesTable";
 import { EscrowOverviewSection } from "@/features/escrows/ui/detail/EscrowOverviewSection";
 import { EscrowRolesCard } from "@/features/escrows/ui/detail/EscrowRolesCard";
@@ -15,7 +19,9 @@ type EscrowDetailViewProps = {
 };
 
 export const EscrowDetailView = ({ contractId }: EscrowDetailViewProps) => {
-  const { data: escrow, isResolving } = useEscrowDetail(contractId);
+  const router = useRouter();
+  const { detail, escrow, isResolving, isError, refetch } =
+    useEscrowDetail(contractId);
 
   if (isResolving) {
     return (
@@ -25,15 +31,30 @@ export const EscrowDetailView = ({ contractId }: EscrowDetailViewProps) => {
     );
   }
 
-  if (!escrow) {
+  if (isError) {
+    return (
+      <Container>
+        <NoData
+          title="Could not load escrow"
+          description="Something went wrong while fetching this escrow from the indexer."
+          actionLabel="Retry"
+          onAction={() => {
+            void refetch();
+          }}
+        />
+      </Container>
+    );
+  }
+
+  if (!escrow || !detail) {
     return (
       <Container>
         <NoData
           title="Escrow not found"
-          description="This escrow is not stored locally for the connected wallet."
+          description="This escrow is not available yet. It may still be indexing after deploy."
           actionLabel="Back to escrows"
           onAction={() => {
-            window.location.href = "/dashboard/escrows";
+            router.push("/dashboard/escrows");
           }}
         />
       </Container>
@@ -50,8 +71,14 @@ export const EscrowDetailView = ({ contractId }: EscrowDetailViewProps) => {
           <EscrowDetailHeader escrow={escrow} />
 
           <EscrowOverviewSection escrow={escrow} />
+          <EscrowDisputePanel escrow={escrow} />
           <EscrowRolesCard escrow={escrow} />
           <EscrowMilestonesTable escrow={escrow} />
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <EscrowEventsCard events={detail.events} />
+            <EscrowDepositsCard deposits={detail.deposits} />
+          </div>
         </div>
       </Container>
     </EscrowActionsProvider>

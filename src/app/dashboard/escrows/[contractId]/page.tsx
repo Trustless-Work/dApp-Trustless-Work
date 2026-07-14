@@ -7,7 +7,8 @@ type EscrowDetailPageProps = {
 export default async function EscrowDetailPage({
   params,
 }: EscrowDetailPageProps) {
-  const { contractId } = await params;
+  const { contractId: rawContractId } = await params;
+  const contractId = decodeURIComponent(rawContractId).trim();
 
   return <EscrowDetailView contractId={contractId} />;
 }

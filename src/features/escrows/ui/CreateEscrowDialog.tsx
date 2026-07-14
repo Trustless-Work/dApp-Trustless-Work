@@ -153,7 +153,7 @@ export const CreateEscrowDialog = ({
                 className="w-full sm:w-auto"
               >
                 <FileStackIcon />
-                Use template
+                Use Template
               </Button>
 
               <div className="flex w-full flex-col-reverse gap-2 sm:w-auto sm:flex-row">

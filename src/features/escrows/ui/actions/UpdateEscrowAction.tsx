@@ -61,7 +61,10 @@ export const UpdateEscrowAction = ({
               })),
               trustline: {
                 address: escrow.trustline.address,
-                symbol: escrow.trustline.symbol,
+                symbol:
+                  "symbol" in escrow.trustline
+                    ? escrow.trustline.symbol
+                    : undefined,
                 contractId:
                   "contractId" in escrow.trustline
                     ? escrow.trustline.contractId
@@ -88,7 +91,10 @@ export const UpdateEscrowAction = ({
                 })),
                 trustline: {
                   address: escrow.trustline.address,
-                  symbol: escrow.trustline.symbol,
+                  symbol:
+                    "symbol" in escrow.trustline
+                      ? escrow.trustline.symbol
+                      : undefined,
                   contractId:
                     "contractId" in escrow.trustline
                       ? escrow.trustline.contractId

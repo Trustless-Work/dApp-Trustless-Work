@@ -1,99 +1,101 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useEscrowRest } from "@trustless-work/escrow";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+} from "@tanstack/react-query";
 import { useMemo } from "react";
 import {
-  ESCROWS_PAGE_SIZE,
   escrowDetailQueryKey,
-  escrowsQueryKey,
+  escrowsListQueryKey,
 } from "@/features/escrows/constants/escrow.constants";
-import { localEscrowRepository } from "@/features/escrows/services/escrow-repository";
-import type {
-  EscrowFilters,
-  EscrowType,
-} from "@/features/escrows/types/escrow.types";
-import { matchesEscrowFilterStatus } from "@/features/escrows/utils/escrow-display.helper";
+import { useEscrowListSearchParams } from "@/features/escrows/hooks/useEscrowListSearchParams";
+import { createEscrowReadService } from "@/features/escrows/services/escrow-read.service";
+import type { EscrowListFilters } from "@/features/escrows/types/escrow.types";
+import { flattenKeysetPages } from "@/lib/pagination";
+import { DEFAULT_KEYSET_LIMIT } from "@/types/pagination.entity";
 import { useWalletContext } from "@/providers/WalletProvider";
 
-export function useEscrowsList() {
-  const { walletAddress, hasWalletHydrated } = useWalletContext();
+function useEscrowReadService() {
+  const rest = useEscrowRest();
 
-  return useQuery({
-    queryKey: escrowsQueryKey(walletAddress),
-    queryFn: () =>
-      walletAddress ? localEscrowRepository.list(walletAddress) : [],
-    enabled: Boolean(hasWalletHydrated && walletAddress),
+  return useMemo(() => createEscrowReadService({ rest }), [rest]);
+}
+
+export function useEscrowsInfinite(filters?: EscrowListFilters) {
+  const { filters: urlFilters } = useEscrowListSearchParams();
+  const resolvedFilters = filters ?? urlFilters;
+  const { hasWalletHydrated } = useWalletContext();
+  const service = useEscrowReadService();
+
+  const query = useInfiniteQuery({
+    queryKey: escrowsListQueryKey(resolvedFilters),
+    queryFn: ({ pageParam }) =>
+      service.listPage(resolvedFilters, {
+        cursor: pageParam,
+        limit: DEFAULT_KEYSET_LIMIT,
+      }),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? (lastPage.nextCursor ?? undefined) : undefined,
+    enabled: hasWalletHydrated,
+    staleTime: 1000 * 30,
+    placeholderData: keepPreviousData,
   });
+
+  const escrows = useMemo(
+    () => flattenKeysetPages(query.data),
+    [query.data],
+  );
+
+  return {
+    ...query,
+    escrows,
+    filters: resolvedFilters,
+    isLoading: !hasWalletHydrated || query.isPending,
+  };
 }
 
 export function useEscrowDetail(contractId: string) {
-  const { walletAddress, hasWalletHydrated } = useWalletContext();
+  const { hasWalletHydrated } = useWalletContext();
+  const service = useEscrowReadService();
+  const resolvedContractId = contractId.trim();
+  const canFetch = hasWalletHydrated && resolvedContractId.length > 0;
 
   const query = useQuery({
-    queryKey: escrowDetailQueryKey(contractId, walletAddress),
-    queryFn: () =>
-      walletAddress
-        ? localEscrowRepository.getByContractId(contractId, walletAddress)
-        : null,
-    enabled: Boolean(hasWalletHydrated && walletAddress && contractId),
+    queryKey: escrowDetailQueryKey(resolvedContractId),
+    queryFn: () => service.getByContractId(resolvedContractId),
+    enabled: canFetch,
+    staleTime: 1000 * 30,
+    refetchInterval: (current) => {
+      if (current.state.data === null && current.state.dataUpdatedAt > 0) {
+        return 2000;
+      }
+      return false;
+    },
+    refetchIntervalInBackground: false,
   });
 
   const isResolving =
     !hasWalletHydrated ||
-    (Boolean(walletAddress && contractId) &&
-      (query.isPending || query.isFetching));
+    (canFetch && (query.isPending || query.isFetching));
 
   return {
     ...query,
+    detail: query.data ?? null,
+    escrow: query.data?.escrow ?? null,
     isResolving,
   };
 }
 
-type UseEscrowsParams = {
-  escrowType: EscrowType;
-  filters: EscrowFilters;
-  page: number;
-};
+/** @deprecated Prefer useEscrowsInfinite */
+export function useEscrowsList() {
+  return useEscrowsInfinite();
+}
 
-export function useEscrows({ escrowType, filters, page }: UseEscrowsParams) {
-  const { walletAddress, hasWalletHydrated } = useWalletContext();
-  const { data = [], isPending, isFetching } = useEscrowsList();
-
-  const isResolving =
-    !hasWalletHydrated ||
-    (Boolean(walletAddress) && (isPending || isFetching));
-
-  const filtered = useMemo(() => {
-    const search = filters.search.trim().toLowerCase();
-
-    return data
-      .filter((escrow) => escrow.type === escrowType)
-      .filter((escrow) => matchesEscrowFilterStatus(escrow, filters.status))
-      .filter((escrow) => {
-        if (!search) {
-          return true;
-        }
-
-        return (
-          escrow.title.toLowerCase().includes(search) ||
-          escrow.engagementId.toLowerCase().includes(search)
-        );
-      });
-  }, [data, escrowType, filters.search, filters.status]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / ESCROWS_PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const paginated = filtered.slice(
-    (currentPage - 1) * ESCROWS_PAGE_SIZE,
-    currentPage * ESCROWS_PAGE_SIZE,
-  );
-
-  return {
-    escrows: paginated,
-    total: filtered.length,
-    totalPages,
-    currentPage,
-    isLoading: isResolving,
-    isFetching,
-  };
+/** @deprecated Prefer useEscrowsInfinite */
+export function useEscrows() {
+  return useEscrowsInfinite();
 }

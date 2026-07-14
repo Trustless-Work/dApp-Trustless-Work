@@ -1,45 +1,39 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
-import type {
-  MilestoneCardDisplayStatus,
-  MilestoneDisplayStatus,
-} from "@/features/escrows/utils/escrow-display.helper";
 import {
-  getMilestoneCardStatusBadgeVariant,
-  getMilestoneCardStatusLabel,
-  getMilestoneStatusBadgeVariant,
-} from "@/features/escrows/utils/escrow-display.helper";
+  getMilestoneStatusText,
+  type EscrowMilestone,
+} from "@/features/escrows/utils/escrow-milestone.helper";
 import { cn } from "@/lib/utils";
 
 type MilestoneStatusBadgeProps = {
-  status: MilestoneDisplayStatus;
+  milestone: EscrowMilestone;
   className?: string;
 };
 
 export const MilestoneStatusBadge = ({
-  status,
+  milestone,
   className,
-}: MilestoneStatusBadgeProps) => (
-  <Badge
-    variant={getMilestoneStatusBadgeVariant(status)}
-    className={cn("uppercase", className)}
-  >
-    {status}
-  </Badge>
-);
+}: MilestoneStatusBadgeProps) => {
+  const status = getMilestoneStatusText(milestone);
 
-type MilestoneCardStatusBadgeProps = {
-  status: MilestoneCardDisplayStatus;
-  className?: string;
+  if (!status) {
+    return (
+      <span className="text-sm text-muted-foreground" aria-label="No status">
+        —
+      </span>
+    );
+  }
+
+  return (
+    <Badge
+      variant="secondary"
+      className={cn("max-w-40 truncate font-normal normal-case", className)}
+      title={status}
+    >
+      {status}
+    </Badge>
+  );
 };
 
-export const MilestoneCardStatusBadge = ({
-  status,
-  className,
-}: MilestoneCardStatusBadgeProps) => (
-  <Badge
-    variant={getMilestoneCardStatusBadgeVariant(status)}
-    className={cn("shrink-0 uppercase", className)}
-  >
-    {getMilestoneCardStatusLabel(status)}
-  </Badge>
-);

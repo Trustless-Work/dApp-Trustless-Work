@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useInitializeEscrow } from "@trustless-work/escrow";
+import { useDeployEscrow } from "@trustless-work/escrow";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -12,16 +12,12 @@ import {
   getBasicsStepFields,
   getRolesStepFields,
 } from "@/features/escrows/constants/create-escrow.constants";
-import { escrowsQueryKey } from "@/features/escrows/constants/escrow.constants";
+import { ESCROWS_LIST_QUERY_ROOT } from "@/features/escrows/constants/escrow.constants";
 import { useSignAndSend } from "@/features/escrows/hooks/useSignAndSend";
 import {
   createEscrowSchema,
   type CreateEscrowFormData,
 } from "@/features/escrows/schemas/create-escrow.schema";
-import {
-  localEscrowRepository,
-  toStoredEscrow,
-} from "@/features/escrows/services/escrow-repository";
 import type { EscrowType } from "@/features/escrows/types/escrow.types";
 import { getEscrowErrorMessage } from "@/features/escrows/utils/escrow-error.helper";
 import {
@@ -29,7 +25,7 @@ import {
   getDefaultValues,
   migrateFormValues,
 } from "@/features/escrows/utils/create-escrow-form.helper";
-import { toInitializePayload } from "@/features/escrows/utils/create-escrow-payload.helper";
+import { toDeployPayload } from "@/features/escrows/utils/create-escrow-payload.helper";
 import { showEscrowTransactionSuccessToast } from "@/features/escrows/utils/escrow-transaction-toast.helper";
 import { useWalletContext } from "@/providers/WalletProvider";
 
@@ -42,7 +38,7 @@ export function useCreateEscrowForm(options?: UseCreateEscrowFormOptions) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { walletAddress } = useWalletContext();
-  const { deployEscrow } = useInitializeEscrow();
+  const { deployEscrow } = useDeployEscrow();
   const { signAndSend, loading } = useSignAndSend();
   const initialType = options?.initialType ?? "single-release";
 
@@ -116,26 +112,24 @@ export function useCreateEscrowForm(options?: UseCreateEscrowFormOptions) {
       return;
     }
 
-    const payload = toInitializePayload(values, walletAddress);
+    const payload = toDeployPayload(values, walletAddress);
 
     try {
+      // Attribution (`X-TW-Platform`) is optional and must be a Core platform id,
+      // not the dApp organization id. The API key already scopes the platform.
       const response = await signAndSend(() =>
         deployEscrow(payload, values.type),
       );
 
       const contractId = response.contractId;
-      const escrow = response.escrow;
 
-      if (!contractId || !escrow) {
-        toast.error("Escrow deployed but contract details were not returned.");
+      if (!contractId) {
+        toast.error("Escrow deployed but contract id was not returned.");
         return;
       }
 
-      const stored = toStoredEscrow(escrow, contractId);
-      localEscrowRepository.upsert(walletAddress, stored);
-
       await queryClient.invalidateQueries({
-        queryKey: escrowsQueryKey(walletAddress),
+        queryKey: ESCROWS_LIST_QUERY_ROOT,
       });
 
       showEscrowTransactionSuccessToast({

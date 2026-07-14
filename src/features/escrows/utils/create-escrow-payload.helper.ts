@@ -1,6 +1,6 @@
 import type {
-  InitializeMultiReleaseEscrowPayload,
-  InitializeSingleReleaseEscrowPayload,
+  DeployMultiReleaseEscrowPayload,
+  DeploySingleReleaseEscrowPayload,
 } from "@trustless-work/escrow";
 import type {
   CreateEscrowFormData,
@@ -8,12 +8,10 @@ import type {
   SingleReleaseCreateFormData,
 } from "@/features/escrows/schemas/create-escrow.schema";
 
-export function toInitializePayload(
+export function toDeployPayload(
   values: CreateEscrowFormData,
   signer: string,
-):
-  | InitializeSingleReleaseEscrowPayload
-  | InitializeMultiReleaseEscrowPayload {
+): DeploySingleReleaseEscrowPayload | DeployMultiReleaseEscrowPayload {
   const rolesBase = {
     approvers: values.roles.approvers,
     serviceProviders: values.roles.serviceProviders,
@@ -21,6 +19,11 @@ export function toInitializePayload(
     releaseSigners: values.roles.releaseSigners,
     disputeResolvers: values.roles.disputeResolvers,
     admin: values.roles.admin,
+  };
+
+  const trustline = {
+    contractId: values.trustline.address.trim(),
+    symbol: values.trustline.symbol.trim(),
   };
 
   if (values.type === "multi-release") {
@@ -39,10 +42,7 @@ export function toInitializePayload(
         amount: milestone.amount,
         receiver: milestone.receiver,
       })),
-      trustline: {
-        address: multiValues.trustline.address,
-        symbol: multiValues.trustline.symbol,
-      },
+      trustline,
     };
   }
 
@@ -63,9 +63,9 @@ export function toInitializePayload(
       description: milestone.description,
       approvalsTarget: milestone.approvalsTarget,
     })),
-    trustline: {
-      address: singleValues.trustline.address,
-      symbol: singleValues.trustline.symbol,
-    },
+    trustline,
   };
 }
+
+/** @deprecated Use `toDeployPayload` */
+export const toInitializePayload = toDeployPayload;

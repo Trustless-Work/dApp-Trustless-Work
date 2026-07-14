@@ -1,5 +1,5 @@
 ---
-description: Patrones escrow — ActionsProvider, SDK scope, forms con schema, localStorage MVP
+description: Patrones escrow — ActionsProvider, SDK scope, forms con schema, indexer reads
 globs: "src/features/escrows/**/*.{ts,tsx},src/app/dashboard/escrows/**/*.{ts,tsx},src/providers/TrustlessWorkProvider.tsx"
 alwaysApply: false
 ---
@@ -25,12 +25,22 @@ const { fund } = useEscrowActions(escrow.contractId, escrow.type);
 
 - Provider solo bajo `src/app/dashboard/escrows/layout.tsx` (o equivalente)
 - No envolver toda la app
+- Mutate y reads en el dApp: **solo REST** (`useEscrowRest`, `useDeployEscrow`, fund, …, `useSendTransaction`)
+- GraphQL queda **solo en el SDK** — el dApp no importa `useEscrowGraphql` ni tipos `Graphql*`
+- Cache de lecturas: `escrow-read.service` + TanStack Query (no hooks del SDK como cache)
 
-## Persistencia (MVP)
+## Lecturas / cache
 
-- Fuente de verdad actual: `localEscrowRepository` (`EscrowRepository` interface)
-- Al tocar list/detail: mantener la interface; no dispersar `localStorage` keys mágicas
-- Nuevo backend/indexer → implementar `EscrowRepository`, no bypass
+- Fuente de verdad: Core REST (`listEscrows`, `getEscrow`)
+- Lista: `useEscrowsInfinite` + `escrowsListQueryKey(filters)` — filtros **en** el queryKey
+- Detalle: `useEscrowDetail` → `escrowDetailQueryKey(contractId)` — `getEscrow` ya trae events + deposits; **no** llamar `/financial` ni `/events`
+- Tras mutate: `invalidateQueries` de list / detail — **no** localStorage
+
+## Filtros (URL)
+
+- Todos los filtros de lista viven en search params (`useEscrowListSearchParams`)
+- Mapper único: `toRestListParams`
+- Debounce en campos de texto; `router.replace` + `scroll: false`
 
 ## Forms de acciones
 

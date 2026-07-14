@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  getStellarExpertAccountUrl,
   getStellarExpertContractUrl,
   getStellarExpertTransactionUrl,
   toStellarExpertNetwork,
@@ -44,5 +45,13 @@ describe("getStellarExpertTransactionUrl", () => {
     expect(
       getStellarExpertTransactionUrl("mainnet", "  abc123def  "),
     ).toBe("https://stellar.expert/explorer/public/tx/abc123def");
+  });
+});
+
+describe("getStellarExpertAccountUrl", () => {
+  it("builds a testnet account URL", () => {
+    expect(getStellarExpertAccountUrl("testnet", "GABC")).toBe(
+      "https://stellar.expert/explorer/testnet/account/GABC",
+    );
   });
 });

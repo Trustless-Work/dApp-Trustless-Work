@@ -4,10 +4,8 @@ import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import { isStoredSingleReleaseEscrow } from "@/features/escrows/types/escrow.types";
 import {
   getMilestoneApprovalsTarget,
-  isMilestoneApproved,
-  isMilestoneDisputed,
-  isMilestoneReleased,
   type EscrowMilestone,
+  type MilestoneFlag,
 } from "@/features/escrows/utils/escrow-milestone.helper";
 
 export type EscrowRoleEntry = {
@@ -15,12 +13,6 @@ export type EscrowRoleEntry = {
   readonly label: string;
   readonly addresses: readonly string[];
 };
-
-export type MilestoneDisplayStatus =
-  | "pending"
-  | "approved"
-  | "released"
-  | "disputed";
 
 export type EscrowBadgeVariant =
   | "default"
@@ -30,25 +22,42 @@ export type EscrowBadgeVariant =
   | "ghost"
   | "link";
 
-export type MilestoneCardDisplayStatus =
-  | "pending"
-  | "in_progress"
-  | "completed"
-  | "released"
-  | "disputed";
+export function getMilestoneFlagLabel(flag: MilestoneFlag): string {
+  switch (flag) {
+    case "approved":
+      return "Approved";
+    case "released":
+      return "Released";
+    case "disputed":
+      return "Disputed";
+    case "resolved":
+      return "Resolved";
+  }
+}
 
-export function getMilestoneStatusBadgeVariant(
-  status: MilestoneDisplayStatus,
+export function getMilestoneFlagDotClassName(flag: MilestoneFlag): string {
+  switch (flag) {
+    case "approved":
+    case "released":
+    case "resolved":
+      return "bg-emerald-500";
+    case "disputed":
+      return "bg-destructive";
+  }
+}
+
+export function getMilestoneFlagBadgeVariant(
+  flag: MilestoneFlag,
 ): EscrowBadgeVariant {
-  switch (status) {
-    case "pending":
-      return "secondary";
+  switch (flag) {
     case "approved":
       return "outline";
     case "released":
       return "default";
     case "disputed":
       return "destructive";
+    case "resolved":
+      return "secondary";
   }
 }
 
@@ -79,40 +88,6 @@ export function getEscrowCardStatusBadgeVariant(
   }
 }
 
-export function getMilestoneCardStatusBadgeVariant(
-  status: MilestoneCardDisplayStatus,
-): EscrowBadgeVariant {
-  switch (status) {
-    case "pending":
-      return "secondary";
-    case "in_progress":
-      return "outline";
-    case "completed":
-      return "default";
-    case "released":
-      return "secondary";
-    case "disputed":
-      return "destructive";
-  }
-}
-
-export function getMilestoneCardStatusLabel(
-  status: MilestoneCardDisplayStatus,
-): string {
-  switch (status) {
-    case "pending":
-      return "Pending";
-    case "in_progress":
-      return "In progress";
-    case "completed":
-      return "Completed";
-    case "released":
-      return "Released";
-    case "disputed":
-      return "Disputed";
-  }
-}
-
 export function getEscrowTypeLabel(type: StoredEscrow["type"]): string {
   return type === "single-release" ? "Single release" : "Multi release";
 }
@@ -127,24 +102,6 @@ export function getEscrowStatusLabel(escrow: StoredEscrow): string {
   }
 
   return "Active";
-}
-
-export function getMilestoneDisplayStatus(
-  milestone: EscrowMilestone,
-): MilestoneDisplayStatus {
-  if (isMilestoneDisputed(milestone)) {
-    return "disputed";
-  }
-
-  if (isMilestoneReleased(milestone)) {
-    return "released";
-  }
-
-  if (isMilestoneApproved(milestone)) {
-    return "approved";
-  }
-
-  return "pending";
 }
 
 export function formatMilestoneApprovals(milestone: EscrowMilestone): string {
@@ -231,10 +188,19 @@ export function getEscrowDisplayAmount(escrow: StoredEscrow): number {
 }
 
 export function getEscrowAssetSymbol(escrow: StoredEscrow): string {
-  return escrow.trustline.symbol;
+  const trustline = escrow.trustline;
+  if ("symbol" in trustline && typeof trustline.symbol === "string") {
+    return trustline.symbol;
+  }
+
+  return "USDC";
 }
 
 export function isEscrowReleased(escrow: StoredEscrow): boolean {
+  if (escrow.status === "released") {
+    return true;
+  }
+
   if (isStoredSingleReleaseEscrow(escrow)) {
     return escrow.released === true;
   }
@@ -243,6 +209,10 @@ export function isEscrowReleased(escrow: StoredEscrow): boolean {
 }
 
 export function isEscrowDisputed(escrow: StoredEscrow): boolean {
+  if (escrow.status === "disputed") {
+    return true;
+  }
+
   if (isStoredSingleReleaseEscrow(escrow)) {
     return escrow.dispute?.isDisputed === true;
   }

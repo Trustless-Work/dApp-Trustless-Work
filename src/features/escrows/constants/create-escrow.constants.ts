@@ -131,7 +131,7 @@ export const CREATE_ESCROW_PLACEHOLDERS = {
   platformFee: "2",
   stellarAddress: "G…",
   trustlineSymbol: "USDC",
-  trustlineCustomAddress: "G… or C…",
+  trustlineCustomAddress: "C… (Soroban SAC contract id)",
   milestoneDescription: "Describe this deliverable",
   approvalsTarget: "1",
   milestoneAmount: "250",

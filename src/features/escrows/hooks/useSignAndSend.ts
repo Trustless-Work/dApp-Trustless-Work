@@ -1,13 +1,16 @@
 "use client";
 
 import type {
-  EscrowRequestResponse,
+  BuildTransactionResponse,
+  DeployEscrowResponse,
   SendTransactionResponse,
 } from "@trustless-work/escrow";
 import { useSendTransaction } from "@trustless-work/escrow";
 import { useCallback, useState } from "react";
 import { signTransaction } from "@/components/tw-blocks/wallet-kit/wallet-kit";
 import { useWalletContext } from "@/providers/WalletProvider";
+
+type BuildTxResult = BuildTransactionResponse | DeployEscrowResponse;
 
 export function useSignAndSend() {
   const { walletAddress } = useWalletContext();
@@ -16,7 +19,7 @@ export function useSignAndSend() {
 
   const signAndSend = useCallback(
     async (
-      buildTx: () => Promise<EscrowRequestResponse>,
+      buildTx: () => Promise<BuildTxResult>,
     ): Promise<SendTransactionResponse> => {
       if (!walletAddress) {
         throw new Error("Connect your wallet to continue.");
@@ -25,13 +28,20 @@ export function useSignAndSend() {
       setLoading(true);
 
       try {
-        const { unsignedXdr } = await buildTx();
+        const buildResult = await buildTx();
         const signedXdr = await signTransaction({
-          unsignedTransaction: unsignedXdr,
+          unsignedTransaction: buildResult.unsignedXdr,
           address: walletAddress,
         });
 
-        return await sendTransaction(signedXdr);
+        const sendResult = await sendTransaction(signedXdr);
+        const buildContractId =
+          "contractId" in buildResult ? buildResult.contractId : undefined;
+
+        return {
+          ...sendResult,
+          contractId: sendResult.contractId ?? buildContractId,
+        };
       } finally {
         setLoading(false);
       }

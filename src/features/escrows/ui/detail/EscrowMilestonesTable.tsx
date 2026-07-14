@@ -1,9 +1,7 @@
 "use client";
 
 import type { MultiReleaseMilestone } from "@trustless-work/escrow";
-import type { ReactNode } from "react";
 import { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -16,14 +14,16 @@ import { UsdcAmount } from "@/components/shared/UsdcAmount";
 import { useLinkedAddressHighlight } from "@/features/escrows/hooks/useLinkedAddressHighlight";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
+import { EscrowMilestoneCard } from "@/features/escrows/ui/detail/EscrowMilestoneCard";
 import { MilestoneActionsMenu } from "@/features/escrows/ui/detail/MilestoneActionsMenu";
+import { MilestoneDetailsDialog } from "@/features/escrows/ui/detail/MilestoneDetailsDialog";
 import { EscrowCopyField } from "@/features/escrows/ui/detail/EscrowCopyField";
+import { MilestoneFlagsBadges } from "@/features/escrows/ui/MilestoneFlagsBadges";
 import { MilestoneStatusBadge } from "@/features/escrows/ui/MilestoneStatusBadge";
 import {
   formatMilestoneApprovals,
   getAddressOccurrenceCounts,
   getEscrowAssetSymbol,
-  getMilestoneDisplayStatus,
   isSharedEscrowAddress,
 } from "@/features/escrows/utils/escrow-display.helper";
 import { cn } from "@/lib/utils";
@@ -32,95 +32,10 @@ type EscrowMilestonesTableProps = {
   escrow: StoredEscrow;
 };
 
-type EscrowMilestone = StoredEscrow["milestones"][number];
-
 const tableHeadClassName =
   "h-auto px-5 py-4 text-xs font-medium uppercase tracking-wide text-muted-foreground";
 
 const tableCellClassName = "px-5 py-5 align-middle";
-
-const MilestoneField = ({
-  label,
-  children,
-}: {
-  label: string;
-  children: ReactNode;
-}) => (
-  <div className="flex flex-col gap-1">
-    <span className="text-xs text-muted-foreground">{label}</span>
-    <div className="text-sm font-medium">{children}</div>
-  </div>
-);
-
-type MilestoneRowProps = {
-  escrow: StoredEscrow;
-  milestone: EscrowMilestone;
-  index: number;
-  isMulti: boolean;
-  symbol: string;
-  getLinkedAddressProps: ReturnType<
-    typeof useLinkedAddressHighlight
-  >["getLinkedAddressProps"];
-  receiverCounts: ReadonlyMap<string, number>;
-};
-
-const MilestoneCard = ({
-  escrow,
-  milestone,
-  index,
-  isMulti,
-  symbol,
-  getLinkedAddressProps,
-  receiverCounts,
-}: MilestoneRowProps) => {
-  const displayStatus = getMilestoneDisplayStatus(milestone);
-  const multiMilestone = isMulti ? (milestone as MultiReleaseMilestone) : null;
-
-  return (
-    <Card>
-      <CardHeader className="flex flex-row items-start justify-between gap-3 pb-4">
-        <CardTitle className="text-base font-medium leading-snug">
-          <span className="text-muted-foreground">#{index + 1}</span>{" "}
-          {milestone.description}
-        </CardTitle>
-        <MilestoneActionsMenu escrow={escrow} milestoneIndex={index} />
-      </CardHeader>
-      <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <MilestoneField label="Status">
-          <MilestoneStatusBadge status={displayStatus} />
-        </MilestoneField>
-        <MilestoneField label="Approvals">
-          {formatMilestoneApprovals(milestone)}
-        </MilestoneField>
-        {isMulti && multiMilestone ? (
-          <>
-            <MilestoneField label="Amount">
-              <UsdcAmount
-                amount={multiMilestone.amount}
-                symbol={symbol}
-                size="sm"
-              />
-            </MilestoneField>
-            <MilestoneField label="Receiver">
-              <EscrowCopyField
-                value={multiMilestone.receiver}
-                compact
-                maxVisibleChars={18}
-                {...getLinkedAddressProps(
-                  multiMilestone.receiver,
-                  isSharedEscrowAddress(
-                    receiverCounts,
-                    multiMilestone.receiver,
-                  ),
-                )}
-              />
-            </MilestoneField>
-          </>
-        ) : null}
-      </CardContent>
-    </Card>
-  );
-};
 
 export const EscrowMilestonesTable = ({
   escrow,
@@ -152,7 +67,7 @@ export const EscrowMilestonesTable = ({
 
       <div className="mt-6 flex flex-col gap-4 md:hidden">
         {escrow.milestones.map((milestone, index) => (
-          <MilestoneCard
+          <EscrowMilestoneCard
             key={index}
             escrow={escrow}
             milestone={milestone}
@@ -165,7 +80,7 @@ export const EscrowMilestonesTable = ({
         ))}
       </div>
 
-      <div className="mt-6 hidden md:block">
+      <div className="mt-6 hidden overflow-x-auto md:block">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
@@ -179,7 +94,7 @@ export const EscrowMilestonesTable = ({
                   <TableHead className={cn(tableHeadClassName, "text-right")}>
                     Amount
                   </TableHead>
-                  <TableHead className={cn(tableHeadClassName, "w-[26%]")}>
+                  <TableHead className={cn(tableHeadClassName, "w-[20%]")}>
                     Receiver
                   </TableHead>
                 </>
@@ -187,7 +102,7 @@ export const EscrowMilestonesTable = ({
               <TableHead className={cn(tableHeadClassName, "text-right")}>
                 Approvals
               </TableHead>
-              <TableHead className={cn(tableHeadClassName, "w-16 text-right")}>
+              <TableHead className={cn(tableHeadClassName, "w-28 text-right")}>
                 <span className="sr-only">Actions</span>
               </TableHead>
             </TableRow>
@@ -195,7 +110,6 @@ export const EscrowMilestonesTable = ({
 
           <TableBody>
             {escrow.milestones.map((milestone, index) => {
-              const displayStatus = getMilestoneDisplayStatus(milestone);
               const multiMilestone = isMulti
                 ? (milestone as MultiReleaseMilestone)
                 : null;
@@ -216,19 +130,28 @@ export const EscrowMilestonesTable = ({
                       "max-w-xs whitespace-normal",
                     )}
                   >
-                    <p
-                      className="font-medium leading-snug"
-                      title={milestone.description}
-                    >
-                      {milestone.description}
-                    </p>
+                    <div className="flex items-start gap-2">
+                      <p
+                        className="min-w-0 flex-1 font-medium leading-snug"
+                        title={milestone.description}
+                      >
+                        {milestone.description}
+                      </p>
+                      <MilestoneFlagsBadges
+                        milestone={milestone}
+                        hideEmpty
+                        className="mt-1.5"
+                      />
+                    </div>
                   </TableCell>
                   <TableCell className={tableCellClassName}>
-                    <MilestoneStatusBadge status={displayStatus} />
+                    <MilestoneStatusBadge milestone={milestone} />
                   </TableCell>
                   {isMulti && multiMilestone ? (
                     <>
-                      <TableCell className={cn(tableCellClassName, "text-right")}>
+                      <TableCell
+                        className={cn(tableCellClassName, "text-right")}
+                      >
                         <UsdcAmount
                           amount={multiMilestone.amount}
                           symbol={symbol}
@@ -266,7 +189,12 @@ export const EscrowMilestonesTable = ({
                     {formatMilestoneApprovals(milestone)}
                   </TableCell>
                   <TableCell className={cn(tableCellClassName, "text-right")}>
-                    <div className="flex justify-end">
+                    <div className="flex items-center justify-end gap-1">
+                      <MilestoneDetailsDialog
+                        escrow={escrow}
+                        milestone={milestone}
+                        milestoneIndex={index}
+                      />
                       <MilestoneActionsMenu
                         escrow={escrow}
                         milestoneIndex={index}

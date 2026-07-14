@@ -58,7 +58,10 @@ const MilestoneRowSkeleton = ({ isMulti }: { isMulti: boolean }) => (
       <Skeleton className="h-4 w-4" />
     </TableCell>
     <TableCell className="px-5 py-5">
-      <Skeleton className="h-4 w-full max-w-xs" />
+      <div className="flex items-start gap-2">
+        <Skeleton className="h-4 w-full max-w-xs" />
+        <Skeleton className="mt-1 size-2.5 shrink-0 rounded-full" />
+      </div>
     </TableCell>
     <TableCell className="px-5 py-5">
       <Skeleton className="h-6 w-20 rounded-full" />
@@ -77,7 +80,10 @@ const MilestoneRowSkeleton = ({ isMulti }: { isMulti: boolean }) => (
       <Skeleton className="ml-auto h-4 w-10" />
     </TableCell>
     <TableCell className="px-5 py-5">
-      <Skeleton className="ml-auto size-8 rounded-full" />
+      <div className="flex justify-end gap-1">
+        <Skeleton className="h-8 w-16 rounded-full" />
+        <Skeleton className="size-8 rounded-full" />
+      </div>
     </TableCell>
   </TableRow>
 );
@@ -85,8 +91,14 @@ const MilestoneRowSkeleton = ({ isMulti }: { isMulti: boolean }) => (
 const MilestoneCardSkeleton = ({ isMulti }: { isMulti: boolean }) => (
   <Card>
     <CardHeader className="flex flex-row items-start justify-between gap-3 pb-4">
-      <Skeleton className="h-5 w-full max-w-xs" />
-      <Skeleton className="size-8 shrink-0 rounded-full" />
+      <div className="flex min-w-0 flex-1 items-start gap-2">
+        <Skeleton className="h-5 w-full max-w-xs" />
+        <Skeleton className="mt-1 size-2.5 shrink-0 rounded-full" />
+      </div>
+      <div className="flex shrink-0 gap-1">
+        <Skeleton className="h-8 w-16 rounded-full" />
+        <Skeleton className="size-8 rounded-full" />
+      </div>
     </CardHeader>
     <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {Array.from({ length: isMulti ? 4 : 2 }).map((_, index) => (
@@ -149,6 +161,7 @@ export const EscrowDetailSkeleton = ({
             </div>
             <ActionGroupSkeleton />
             <ActionGroupSkeleton />
+            <ActionGroupSkeleton />
           </aside>
         </div>
       </section>
@@ -194,6 +207,27 @@ export const EscrowDetailSkeleton = ({
           </Table>
         </div>
       </section>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <section className="rounded-3xl border border-border bg-card p-6 sm:p-8">
+          <Skeleton className="h-6 w-20" />
+          <Skeleton className="mt-2 h-4 w-48" />
+          <div className="mt-6 space-y-3">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Skeleton key={index} className="h-20 w-full rounded-2xl" />
+            ))}
+          </div>
+        </section>
+        <section className="rounded-3xl border border-border bg-card p-6 sm:p-8">
+          <Skeleton className="h-6 w-24" />
+          <Skeleton className="mt-2 h-4 w-52" />
+          <div className="mt-6 space-y-3">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Skeleton key={index} className="h-20 w-full rounded-2xl" />
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 };

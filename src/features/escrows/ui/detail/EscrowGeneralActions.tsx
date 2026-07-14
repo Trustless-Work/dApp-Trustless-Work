@@ -163,8 +163,8 @@ export const EscrowGeneralActions = ({ escrow }: EscrowGeneralActionsProps) => {
   const showDispute = policy.canDisputeEscrow();
   const showResolve = policy.canResolveEscrowDispute();
 
-  const hasFundingGroup =
-    showFund || showWithdraw || showUpdate || showManageMilestones;
+  const hasFundingGroup = showFund || showWithdraw;
+  const hasConfigurationGroup = showUpdate || showManageMilestones;
   const hasReleasesGroup = showRelease || showDispute || showResolve;
 
   return (
@@ -195,6 +195,17 @@ export const EscrowGeneralActions = ({ escrow }: EscrowGeneralActionsProps) => {
           {showWithdraw ? (
             <WithdrawFundsAction escrow={escrow} icon={Banknote} />
           ) : null}
+        </ActionGroup>
+      ) : null}
+
+      {hasConfigurationGroup ? (
+        <ActionGroup
+          id="configuration"
+          title="Configuration"
+          description="Update escrow details or manage milestones."
+          open={openGroup === "configuration"}
+          onToggle={handleToggleGroup}
+        >
           {showUpdate ? (
             <UpdateEscrowAction escrow={escrow} icon={Wrench} />
           ) : null}

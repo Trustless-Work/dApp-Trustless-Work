@@ -1,4 +1,5 @@
 import { z } from "zod/v3";
+import { getApprovalsTargetExceedsApproversMessage } from "@/features/escrows/utils/create-escrow.helper";
 import { isStellarPublicKey } from "@/helpers/stellar.helper";
 
 const amountFromInputSchema = z
@@ -47,6 +48,7 @@ export type StartDisputeFormData = z.infer<typeof startDisputeSchema>;
 
 export const changeMilestoneStatusSchema = z.object({
   newStatus: z.string().trim().min(1, "Status is required").max(100),
+  newEvidence: z.string().trim().max(5000).optional(),
 });
 
 export type ChangeMilestoneStatusFormData = z.infer<
@@ -66,3 +68,88 @@ export const resolveDisputeSchema = z.object({
 
 export type ResolveDisputeFormInput = z.input<typeof resolveDisputeSchema>;
 export type ResolveDisputeFormData = z.output<typeof resolveDisputeSchema>;
+
+const manageExistingMilestoneSchema = z.object({
+  index: z.number().int().min(0),
+  description: z.string().trim().min(1, "Description is required"),
+  amount: z.coerce.number(),
+});
+
+const manageNewMilestoneSchema = z.object({
+  description: z.string().trim().min(1, "Description is required"),
+  approvalsTarget: z.coerce.number().int().min(1, "At least 1 approval"),
+  amount: z.coerce.number(),
+  receiver: z.string(),
+});
+
+export type ManageMilestonesSchemaParams = {
+  readonly isMulti: boolean;
+  readonly approversCount: number;
+};
+
+export function createManageMilestonesSchema({
+  isMulti,
+  approversCount,
+}: ManageMilestonesSchemaParams) {
+  return z
+    .object({
+      existingMilestones: z.array(manageExistingMilestoneSchema),
+      newMilestones: z.array(manageNewMilestoneSchema),
+    })
+    .superRefine((data, ctx) => {
+      data.newMilestones.forEach((milestone, index) => {
+        if (milestone.approvalsTarget > approversCount) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: getApprovalsTargetExceedsApproversMessage(
+              milestone.approvalsTarget,
+              approversCount,
+            ),
+            path: ["newMilestones", index, "approvalsTarget"],
+          });
+        }
+
+        if (!isMulti) {
+          return;
+        }
+
+        if (!(milestone.amount > 0)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Amount must be greater than 0",
+            path: ["newMilestones", index, "amount"],
+          });
+        }
+
+        const receiverResult = stellarAddressSchema.safeParse(
+          milestone.receiver,
+        );
+        if (!receiverResult.success) {
+          receiverResult.error.issues.forEach((issue) => {
+            ctx.addIssue({
+              ...issue,
+              path: ["newMilestones", index, "receiver", ...issue.path],
+            });
+          });
+        }
+      });
+
+      if (!isMulti) {
+        return;
+      }
+
+      data.existingMilestones.forEach((milestone, index) => {
+        if (!(milestone.amount > 0)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Amount must be greater than 0",
+            path: ["existingMilestones", index, "amount"],
+          });
+        }
+      });
+    });
+}
+
+export type ManageMilestonesFormData = z.infer<
+  ReturnType<typeof createManageMilestonesSchema>
+>;

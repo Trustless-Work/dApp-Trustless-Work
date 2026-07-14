@@ -1,77 +1,102 @@
 "use client";
 
 import { PlusIcon, Trash2Icon } from "lucide-react";
+import type { UseFormReturn } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import type {
-  ExistingMilestoneRow,
-  NewMilestoneRow,
-} from "@/features/escrows/utils/manage-milestones.helper";
+import { CREATE_ESCROW_PLACEHOLDERS } from "@/features/escrows/constants/create-escrow.constants";
+import type { ManageMilestonesFormData } from "@/features/escrows/schemas/escrow-action.schemas";
+import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
+import { getApprovalsTargetHint } from "@/features/escrows/utils/create-escrow.helper";
+import { createEmptyNewMilestone } from "@/features/escrows/utils/manage-milestones.helper";
 
 type ManageMilestonesFormProps = {
+  form: UseFormReturn<ManageMilestonesFormData>;
+  escrow: StoredEscrow;
   isMulti: boolean;
   canEditExisting: boolean;
-  existingRows: ExistingMilestoneRow[];
-  newRows: NewMilestoneRow[];
-  onExistingRowsChange: (rows: ExistingMilestoneRow[]) => void;
-  onNewRowsChange: (rows: NewMilestoneRow[]) => void;
+  approversCount: number;
 };
 
 export const ManageMilestonesForm = ({
+  form,
+  escrow,
   isMulti,
   canEditExisting,
-  existingRows,
-  newRows,
-  onExistingRowsChange,
-  onNewRowsChange,
+  approversCount,
 }: ManageMilestonesFormProps) => {
+  const existingFields = useFieldArray({
+    control: form.control,
+    name: "existingMilestones",
+  });
+  const newFields = useFieldArray({
+    control: form.control,
+    name: "newMilestones",
+  });
+
   return (
     <div className="flex max-h-[60vh] flex-col gap-4 overflow-y-auto">
       {canEditExisting ? (
         <div className="flex flex-col gap-3">
           <p className="text-sm font-medium">Existing milestones</p>
-          {existingRows.map((row, index) => (
+          {existingFields.fields.map((field, index) => (
             <div
-              key={row.index}
-              className="flex flex-col gap-2 rounded-lg border p-3"
+              key={field.id}
+              className="flex flex-col gap-2 rounded-lg border border-border p-3"
             >
-              <Label htmlFor={`manage-milestone-desc-${row.index}`}>
-                Milestone {row.index + 1} description
-              </Label>
-              <Input
-                id={`manage-milestone-desc-${row.index}`}
-                value={row.description}
-                onChange={(event) => {
-                  const next = [...existingRows];
-                  next[index] = {
-                    ...row,
-                    description: event.target.value,
-                  };
-                  onExistingRowsChange(next);
-                }}
+              <FormField
+                control={form.control}
+                name={`existingMilestones.${index}.description`}
+                render={({ field: descriptionField }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Milestone {field.index + 1} description
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...descriptionField} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
               {isMulti ? (
-                <>
-                  <Label htmlFor={`manage-milestone-amount-${row.index}`}>
-                    Amount
-                  </Label>
-                  <Input
-                    id={`manage-milestone-amount-${row.index}`}
-                    type="number"
-                    min={0}
-                    step="any"
-                    value={row.amount}
-                    onChange={(event) => {
-                      const next = [...existingRows];
-                      next[index] = {
-                        ...row,
-                        amount: event.target.value,
-                      };
-                      onExistingRowsChange(next);
-                    }}
-                  />
-                </>
+                <FormField
+                  control={form.control}
+                  name={`existingMilestones.${index}.amount`}
+                  render={({ field: amountField }) => (
+                    <FormItem>
+                      <FormLabel>Amount</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={0}
+                          step="any"
+                          value={amountField.value ?? ""}
+                          onChange={(event) =>
+                            amountField.onChange(
+                              event.target.value === ""
+                                ? ""
+                                : Number(event.target.value),
+                            )
+                          }
+                          onBlur={amountField.onBlur}
+                          name={amountField.name}
+                          ref={amountField.ref}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               ) : null}
             </div>
           ))}
@@ -85,89 +110,124 @@ export const ManageMilestonesForm = ({
 
       <div className="flex flex-col gap-3">
         <p className="text-sm font-medium">New milestones</p>
-        {newRows.map((row, index) => (
+        {newFields.fields.map((field, index) => (
           <div
-            key={index}
-            className="flex flex-col gap-2 rounded-lg border p-3"
+            key={field.id}
+            className="flex flex-col gap-2 rounded-lg border border-border p-3"
           >
             <div className="flex items-center justify-between gap-2">
-              <Label htmlFor={`new-milestone-desc-${index}`}>Description</Label>
+              <p className="text-sm font-medium">New milestone {index + 1}</p>
               <Button
                 type="button"
                 variant="ghost"
                 size="icon-sm"
-                onClick={() =>
-                  onNewRowsChange(
-                    newRows.filter((_, rowIndex) => rowIndex !== index),
-                  )
-                }
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                onClick={() => newFields.remove(index)}
               >
                 <Trash2Icon />
               </Button>
             </div>
-            <Input
-              id={`new-milestone-desc-${index}`}
-              value={row.description}
-              onChange={(event) => {
-                const next = [...newRows];
-                next[index] = {
-                  ...row,
-                  description: event.target.value,
-                };
-                onNewRowsChange(next);
-              }}
-              placeholder="Milestone description"
+
+            <FormField
+              control={form.control}
+              name={`newMilestones.${index}.description`}
+              render={({ field: descriptionField }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...descriptionField}
+                      placeholder="Milestone description"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <Label htmlFor={`new-milestone-target-${index}`}>
-              Approvals target
-            </Label>
-            <Input
-              id={`new-milestone-target-${index}`}
-              type="number"
-              min={1}
-              value={row.approvalsTarget}
-              onChange={(event) => {
-                const next = [...newRows];
-                next[index] = {
-                  ...row,
-                  approvalsTarget: event.target.value,
-                };
-                onNewRowsChange(next);
-              }}
+
+            <FormField
+              control={form.control}
+              name={`newMilestones.${index}.approvalsTarget`}
+              render={({ field: approvalsField }) => (
+                <FormItem>
+                  <FormLabel>Approvals Required</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      min={1}
+                      max={Math.max(approversCount, 1)}
+                      placeholder={CREATE_ESCROW_PLACEHOLDERS.approvalsTarget}
+                      value={approvalsField.value ?? ""}
+                      onChange={(event) =>
+                        approvalsField.onChange(
+                          event.target.value === ""
+                            ? ""
+                            : Number(event.target.value),
+                        )
+                      }
+                      onBlur={approvalsField.onBlur}
+                      name={approvalsField.name}
+                      ref={approvalsField.ref}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    {getApprovalsTargetHint(approversCount)}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
+
             {isMulti ? (
               <>
-                <Label htmlFor={`new-milestone-amount-${index}`}>Amount</Label>
-                <Input
-                  id={`new-milestone-amount-${index}`}
-                  type="number"
-                  min={0}
-                  step="any"
-                  value={row.amount}
-                  onChange={(event) => {
-                    const next = [...newRows];
-                    next[index] = {
-                      ...row,
-                      amount: event.target.value,
-                    };
-                    onNewRowsChange(next);
-                  }}
+                <FormField
+                  control={form.control}
+                  name={`newMilestones.${index}.amount`}
+                  render={({ field: amountField }) => (
+                    <FormItem>
+                      <FormLabel>Amount</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={0}
+                          step="any"
+                          placeholder={
+                            CREATE_ESCROW_PLACEHOLDERS.milestoneAmount
+                          }
+                          value={amountField.value ?? ""}
+                          onChange={(event) =>
+                            amountField.onChange(
+                              event.target.value === ""
+                                ? ""
+                                : Number(event.target.value),
+                            )
+                          }
+                          onBlur={amountField.onBlur}
+                          name={amountField.name}
+                          ref={amountField.ref}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                <Label htmlFor={`new-milestone-receiver-${index}`}>
-                  Receiver
-                </Label>
-                <Input
-                  id={`new-milestone-receiver-${index}`}
-                  value={row.receiver}
-                  onChange={(event) => {
-                    const next = [...newRows];
-                    next[index] = {
-                      ...row,
-                      receiver: event.target.value,
-                    };
-                    onNewRowsChange(next);
-                  }}
-                  placeholder="G…"
+                <FormField
+                  control={form.control}
+                  name={`newMilestones.${index}.receiver`}
+                  render={({ field: receiverField }) => (
+                    <FormItem>
+                      <FormLabel>Receiver</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...receiverField}
+                          placeholder={
+                            CREATE_ESCROW_PLACEHOLDERS.stellarAddress
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </>
             ) : null}
@@ -180,15 +240,7 @@ export const ManageMilestonesForm = ({
           size="sm"
           className="self-start"
           onClick={() =>
-            onNewRowsChange([
-              ...newRows,
-              {
-                description: "",
-                approvalsTarget: "1",
-                amount: "",
-                receiver: "",
-              },
-            ])
+            newFields.append(createEmptyNewMilestone(escrow, isMulti))
           }
         >
           <PlusIcon />

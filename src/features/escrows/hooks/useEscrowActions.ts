@@ -36,36 +36,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { toast } from "sonner";
 import {
+  ESCROWS_LIST_QUERY_ROOT,
   escrowDetailQueryKey,
-  escrowsQueryKey,
 } from "@/features/escrows/constants/escrow.constants";
-import {
-  localEscrowRepository,
-  toStoredEscrow,
-} from "@/features/escrows/services/escrow-repository";
-import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import { getEscrowErrorMessage } from "@/features/escrows/utils/escrow-error.helper";
 import { showEscrowTransactionSuccessToast } from "@/features/escrows/utils/escrow-transaction-toast.helper";
 import { playSound } from "@/lib/sounds";
 import { useSignAndSend } from "@/features/escrows/hooks/useSignAndSend";
 import { useWalletContext } from "@/providers/WalletProvider";
-
-function persistEscrowResponse(
-  walletAddress: string,
-  response: SendTransactionResponse,
-  existing?: StoredEscrow | null,
-): StoredEscrow | null {
-  const contractId = response.contractId ?? existing?.contractId;
-  const escrow = response.escrow;
-
-  if (!contractId || !escrow) {
-    return null;
-  }
-
-  const stored = toStoredEscrow(escrow, contractId, existing);
-  localEscrowRepository.upsert(walletAddress, stored);
-  return stored;
-}
 
 export function useEscrowActions(contractId: string, escrowType: EscrowType) {
   const { walletAddress } = useWalletContext();
@@ -83,13 +61,13 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
   const { manageMilestones: manageMilestonesRequest } = useManageMilestones();
 
   const invalidate = useCallback(async () => {
-    await queryClient.invalidateQueries({
-      queryKey: escrowsQueryKey(walletAddress),
-    });
-    await queryClient.invalidateQueries({
-      queryKey: escrowDetailQueryKey(contractId, walletAddress),
-    });
-  }, [contractId, queryClient, walletAddress]);
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ESCROWS_LIST_QUERY_ROOT }),
+      queryClient.invalidateQueries({
+        queryKey: escrowDetailQueryKey(contractId),
+      }),
+    ]);
+  }, [contractId, queryClient]);
 
   const runAction = useCallback(
     async (
@@ -104,49 +82,34 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
         return null;
       }
 
-      const existing = localEscrowRepository.getByContractId(
-        contractId,
-        walletAddress,
-      );
       const toastId = toast.loading(messages.loading);
 
       try {
         const response = await action();
-        const stored = persistEscrowResponse(walletAddress, response, existing);
-
-        if (!stored) {
-          toast.error(
-            "Transaction submitted but escrow data was not returned.",
-            { id: toastId },
-          );
-          return null;
-        }
 
         await invalidate();
+        playSound("deploy");
         showEscrowTransactionSuccessToast({
           title: messages.success,
           txHash: response.txHash,
           toastId,
         });
-        return stored;
+        return response;
       } catch (error) {
         playSound("error");
         toast.error(getEscrowErrorMessage(error), { id: toastId });
         return null;
       }
     },
-    [contractId, invalidate, walletAddress],
+    [invalidate, walletAddress],
   );
 
   const fund = useCallback(
     (payload: FundEscrowPayload) =>
-      runAction(
-        () => signAndSend(() => fundEscrow(payload, escrowType)),
-        {
-          loading: "Funding escrow...",
-          success: "Escrow funded successfully",
-        },
-      ),
+      runAction(() => signAndSend(() => fundEscrow(payload, escrowType)), {
+        loading: "Funding escrow...",
+        success: "Escrow funded successfully",
+      }),
     [escrowType, fundEscrow, runAction, signAndSend],
   );
 
@@ -192,25 +155,19 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
         | SingleReleaseReleaseFundsPayload
         | MultiReleaseReleaseFundsPayload,
     ) =>
-      runAction(
-        () => signAndSend(() => releaseFunds(payload, escrowType)),
-        {
-          loading: "Releasing funds...",
-          success: "Funds released successfully",
-        },
-      ),
+      runAction(() => signAndSend(() => releaseFunds(payload, escrowType)), {
+        loading: "Releasing funds...",
+        success: "Funds released successfully",
+      }),
     [escrowType, releaseFunds, runAction, signAndSend],
   );
 
   const releaseBatch = useCallback(
     (payload: MultiReleaseReleaseFundsPayload) =>
-      runAction(
-        () => signAndSend(() => releaseMilestones(payload)),
-        {
-          loading: "Releasing milestones...",
-          success: "Milestones released successfully",
-        },
-      ),
+      runAction(() => signAndSend(() => releaseMilestones(payload)), {
+        loading: "Releasing milestones...",
+        success: "Milestones released successfully",
+      }),
     [releaseMilestones, runAction, signAndSend],
   );
 
@@ -220,25 +177,19 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
         | SingleReleaseStartDisputePayload
         | MultiReleaseStartDisputePayload,
     ) =>
-      runAction(
-        () => signAndSend(() => startDispute(payload, escrowType)),
-        {
-          loading: "Starting dispute...",
-          success: "Dispute started",
-        },
-      ),
+      runAction(() => signAndSend(() => startDispute(payload, escrowType)), {
+        loading: "Starting dispute...",
+        success: "Dispute started",
+      }),
     [escrowType, runAction, signAndSend, startDispute],
   );
 
   const disputeBatch = useCallback(
     (payload: MultiReleaseStartDisputePayload) =>
-      runAction(
-        () => signAndSend(() => disputeMilestones(payload)),
-        {
-          loading: "Disputing milestones...",
-          success: "Milestones disputed",
-        },
-      ),
+      runAction(() => signAndSend(() => disputeMilestones(payload)), {
+        loading: "Disputing milestones...",
+        success: "Milestones disputed",
+      }),
     [disputeMilestones, runAction, signAndSend],
   );
 
@@ -248,13 +199,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
         | SingleReleaseResolveDisputePayload
         | MultiReleaseResolveDisputePayload,
     ) =>
-      runAction(
-        () => signAndSend(() => resolveDispute(payload, escrowType)),
-        {
-          loading: "Resolving dispute...",
-          success: "Dispute resolved",
-        },
-      ),
+      runAction(() => signAndSend(() => resolveDispute(payload, escrowType)), {
+        loading: "Resolving dispute...",
+        success: "Dispute resolved",
+      }),
     [escrowType, resolveDispute, runAction, signAndSend],
   );
 
@@ -280,13 +228,10 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
         | UpdateSingleReleaseEscrowPayload
         | UpdateMultiReleaseEscrowPayload,
     ) =>
-      runAction(
-        () => signAndSend(() => updateEscrow(payload, escrowType)),
-        {
-          loading: "Updating escrow...",
-          success: "Escrow updated successfully",
-        },
-      ),
+      runAction(() => signAndSend(() => updateEscrow(payload, escrowType)), {
+        loading: "Updating escrow...",
+        success: "Escrow updated successfully",
+      }),
     [escrowType, runAction, signAndSend, updateEscrow],
   );
 
@@ -297,8 +242,7 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
         | ManageMultiReleaseMilestonesPayload,
     ) =>
       runAction(
-        () =>
-          signAndSend(() => manageMilestonesRequest(payload, escrowType)),
+        () => signAndSend(() => manageMilestonesRequest(payload, escrowType)),
         {
           loading: "Updating milestones...",
           success: "Milestones updated",

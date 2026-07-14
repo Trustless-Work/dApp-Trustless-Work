@@ -4,131 +4,76 @@ import type { MultiReleaseMilestone } from "@trustless-work/escrow";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { UsdcAmount } from "@/components/shared/UsdcAmount";
-import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
+import type { EscrowListItem } from "@/features/escrows/types/escrow.types";
 import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
 import {
   EscrowCardStatusBadge,
   EscrowTypeBadge,
 } from "@/features/escrows/ui/EscrowStatusBadge";
-import { MilestoneCardStatusBadge } from "@/features/escrows/ui/MilestoneStatusBadge";
+import { MilestoneFlagsBadges } from "@/features/escrows/ui/MilestoneFlagsBadges";
 import {
   getEscrowAssetSymbol,
   getEscrowDisplayAmount,
   isEscrowDisputed,
   isEscrowReleased,
-  type MilestoneCardDisplayStatus,
 } from "@/features/escrows/utils/escrow-display.helper";
+import { getMilestoneStatusText } from "@/features/escrows/utils/escrow-milestone.helper";
 import { truncateStellarAddress } from "@/helpers/stellar.helper";
 
 type EscrowCardStatus = "active" | "released" | "disputed";
 
-type EscrowCardMilestone = {
-  readonly id: string;
-  readonly title: string;
-  readonly status: MilestoneCardDisplayStatus;
-  readonly amount?: number;
-};
-
 type EscrowCardProps = {
-  escrow: StoredEscrow;
+  item: EscrowListItem;
 };
 
-function getEscrowCardStatus(escrow: StoredEscrow): EscrowCardStatus {
-  if (isEscrowDisputed(escrow)) {
+function getEscrowCardStatus(item: EscrowListItem): EscrowCardStatus {
+  if (item.status === "disputed" || isEscrowDisputed(item.stored)) {
     return "disputed";
   }
 
-  if (isEscrowReleased(escrow)) {
+  if (item.status === "released" || isEscrowReleased(item.stored)) {
     return "released";
   }
 
   return "active";
 }
 
-function normalizeMilestoneStatus(
-  rawStatus: string | undefined,
-): Exclude<MilestoneCardDisplayStatus, "released" | "disputed"> {
-  const status = rawStatus?.toLowerCase().replace(/\s+/g, "_");
-
-  if (status === "in_progress") {
-    return "in_progress";
-  }
-
-  if (status === "completed") {
-    return "completed";
-  }
-
-  return "pending";
-}
-
-function getMilestoneCardStatus(
-  escrow: StoredEscrow,
-  milestone: StoredEscrow["milestones"][number],
-): MilestoneCardDisplayStatus {
-  if (isStoredMultiReleaseEscrow(escrow)) {
-    const multiMilestone = milestone as MultiReleaseMilestone;
-
-    if (multiMilestone.dispute?.isDisputed) {
-      return "disputed";
-    }
-
-    if (multiMilestone.released) {
-      return "released";
-    }
-  }
-
-  return normalizeMilestoneStatus(milestone.status);
-}
-
-function mapEscrowMilestones(escrow: StoredEscrow): EscrowCardMilestone[] {
+export const EscrowCard = ({ item }: EscrowCardProps) => {
+  const escrow = item.stored;
+  const status = getEscrowCardStatus(item);
+  const amount = item.totalAmount ?? getEscrowDisplayAmount(escrow);
+  const currency = item.assetSymbol || getEscrowAssetSymbol(escrow);
   const isMulti = isStoredMultiReleaseEscrow(escrow);
-
-  return escrow.milestones.map((milestone, index) => {
-    const multiMilestone = isMulti
-      ? (milestone as MultiReleaseMilestone)
-      : null;
-
-    return {
-      id: `${escrow.contractId}-${index}`,
-      title: milestone.description || `Milestone ${index + 1}`,
-      status: getMilestoneCardStatus(escrow, milestone),
-      amount: multiMilestone?.amount,
-    };
-  });
-}
-
-export const EscrowCard = ({ escrow }: EscrowCardProps) => {
-  const status = getEscrowCardStatus(escrow);
-  const amount = getEscrowDisplayAmount(escrow);
-  const currency = getEscrowAssetSymbol(escrow);
-  const milestones = mapEscrowMilestones(escrow);
+  const milestones = escrow.milestones;
   const visibleMilestones = milestones.slice(0, 3);
   const remaining = milestones.length - visibleMilestones.length;
 
   return (
     <Link
-      href={`/dashboard/escrows/${escrow.contractId}`}
-      className="block h-full"
+      href={`/dashboard/escrows/${item.contractId}`}
+      className="block h-full min-h-0"
     >
-      <article className="flex h-[22rem] flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm transition-shadow hover:shadow-lg">
+      <article className="flex h-full min-h-[18rem] flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm transition-shadow hover:shadow-lg">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <div className="mb-4 flex items-center gap-2">
+            <div className="mb-3 flex flex-wrap items-center gap-2">
               <EscrowTypeBadge escrow={escrow} />
-
-              <Badge variant="secondary" className="font-mono font-normal uppercase">
-                {truncateStellarAddress(escrow.contractId, 8, 6)}
+              <Badge
+                variant="secondary"
+                className="font-mono font-normal uppercase"
+              >
+                {truncateStellarAddress(item.contractId, 8, 6)}
               </Badge>
             </div>
             <h3 className="truncate text-base font-semibold leading-tight text-balance">
-              {escrow.title}
+              {item.title}
             </h3>
           </div>
           <EscrowCardStatusBadge status={status} />
         </div>
 
         <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-          {escrow.description}
+          {item.description}
         </p>
 
         <div className="mt-4 grid grid-cols-2 gap-3">
@@ -145,7 +90,7 @@ export const EscrowCard = ({ escrow }: EscrowCardProps) => {
           <div className="rounded-2xl border-2 px-3 py-2.5">
             <p className="text-xs text-muted-foreground">Balance</p>
             <UsdcAmount
-              amount={escrow.balance}
+              amount={item.balance}
               symbol={currency}
               size="lg"
               emphasis
@@ -159,26 +104,42 @@ export const EscrowCard = ({ escrow }: EscrowCardProps) => {
             Milestones
           </p>
           <ul className="flex flex-col gap-1.5">
-            {visibleMilestones.map((milestone) => (
-              <li
-                key={milestone.id}
-                className="flex items-center justify-between gap-2"
-              >
-                <span className="min-w-0 flex-1 truncate text-sm">
-                  {milestone.title}
-                </span>
-                <div className="flex shrink-0 items-center gap-2">
-                  <MilestoneCardStatusBadge status={milestone.status} />
-                  {typeof milestone.amount === "number" ? (
-                    <UsdcAmount
-                      amount={milestone.amount}
-                      symbol={currency}
-                      size="sm"
-                    />
-                  ) : null}
-                </div>
-              </li>
-            ))}
+            {visibleMilestones.map((milestone, index) => {
+              const statusText = getMilestoneStatusText(milestone);
+              const multiMilestone = isMulti
+                ? (milestone as MultiReleaseMilestone)
+                : null;
+
+              return (
+                <li
+                  key={`${escrow.contractId}-${index}`}
+                  className="flex items-center justify-between gap-2"
+                >
+                  <span className="min-w-0 flex-1 truncate text-sm">
+                    {milestone.description || `Milestone ${index + 1}`}
+                  </span>
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    {statusText ? (
+                      <Badge
+                        variant="secondary"
+                        className="max-w-24 truncate font-normal normal-case"
+                        title={statusText}
+                      >
+                        {statusText}
+                      </Badge>
+                    ) : null}
+                    <MilestoneFlagsBadges milestone={milestone} hideEmpty />
+                    {typeof multiMilestone?.amount === "number" ? (
+                      <UsdcAmount
+                        amount={multiMilestone.amount}
+                        symbol={currency}
+                        size="sm"
+                      />
+                    ) : null}
+                  </div>
+                </li>
+              );
+            })}
           </ul>
           {remaining > 0 ? (
             <p className="mt-auto pt-2 text-xs font-medium text-muted-foreground">

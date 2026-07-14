@@ -1,7 +1,6 @@
 export const codeExamples = {
-  rest: `// Initialize API client
-const API_BASE_URL = 'https://api.trustlesswork.com'; // Mainnet
-// const API_BASE_URL = 'https://api.dev.trustlesswork.com'; // Testnet
+  rest: `// Initialize API client (Core v2)
+const API_BASE_URL = 'https://trustless-core-production.up.railway.app';
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY || "";
 
 const headers = {
@@ -9,20 +8,24 @@ const headers = {
   "x-api-key": your_api_key,
 };
 
-// Example: Fund Escrow
+// Example: Fund Escrow (build unsigned XDR)
 const fundEscrow = async (contractId, signer, amount) => {
   try {
-    const response = await fetch(\`\${API_BASE_URL}/escrow/single-release/fund-escrow\`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        contractId,
-        signer,
-        amount
-      })
-    });
-    
+    const response = await fetch(
+      \`\${API_BASE_URL}/escrow/single-release/v2/fund\`,
+      {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          contractId,
+          signer,
+          amount
+        })
+      }
+    );
+
     const data = await response.json();
+    // { unsignedXdr, txHash }
     return data;
   } catch (error) {
     console.error('Error funding escrow:', error);
@@ -34,14 +37,14 @@ const fundEscrow = async (contractId, signer, amount) => {
 
 import React from "react";
 import {
-  development, // Testnet: "https://api.dev.trustlesswork.com"
-  mainNet,     // Mainnet: "https://api.trustlesswork.com"
+  development,
+  mainNet,
   TrustlessWorkConfig,
 } from "@trustless-work/escrow";
 
 export function TrustlessWorkProvider({ children }) {
   const apiKey = process.env.NEXT_PUBLIC_API_KEY || "";
-  
+
   return (
     <TrustlessWorkConfig baseURL={development} apiKey={apiKey}>
       {children}
@@ -49,11 +52,9 @@ export function TrustlessWorkProvider({ children }) {
   );
 }`,
 
-  react: `// Usage Example
+  react: `// Usage Example (SDK v5)
 import { useFundEscrow, useSendTransaction } from "@trustless-work/escrow";
-import {
-  FundEscrowPayload,
-} from "@trustless-work/escrow/types";
+import type { FundEscrowPayload } from "@trustless-work/escrow/types";
 
 export const FundEscrowComponent = () => {
   const { fundEscrow } = useFundEscrow();
@@ -61,36 +62,23 @@ export const FundEscrowComponent = () => {
 
   const onSubmit = async (payload: FundEscrowPayload) => {
     try {
-      const { unsignedTransaction } = await fundEscrow(
-        payload,
-        "single-release",
-        // or "multi-release"
-      );
+      const { unsignedXdr } = await fundEscrow(payload, "single-release");
 
-      if (!unsignedTransaction) {
-        throw new Error(
-          "Unsigned transaction is missing from fundEscrow response."
-        );
+      if (!unsignedXdr) {
+        throw new Error("Unsigned XDR missing from fundEscrow response.");
       }
 
-      // Sign the transaction
       const signedXdr = await signTransaction({
-        unsignedTransaction,
+        unsignedTransaction: unsignedXdr,
         address: walletAddress || "",
       });
 
-      if (!signedXdr) {
-        throw new Error("Signed transaction is missing.");
-      }
-
       const data = await sendTransaction(signedXdr);
-
-      if (data.status === "SUCCESS" && escrow) {
-        // Handle success
-      }
+      // { txHash, ledger, contractId?, escrow?, code? }
+      console.log(data.txHash);
     } catch (error: unknown) {
       // Handle error
     }
-  }
+  };
 };`,
 };

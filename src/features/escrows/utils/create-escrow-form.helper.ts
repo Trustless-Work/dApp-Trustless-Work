@@ -7,6 +7,12 @@ import type { EscrowType } from "@/features/escrows/types/escrow.types";
 
 const defaultTrustline = trustlineOptions[0];
 
+export const TEMPLATE_DISPUTE_RESOLVER =
+  "GCWTL5XN22BWFB6QSF4SKYKFQP3G3KTEHUFK7HR7CGRQJFVCO2WVXVLE";
+
+export const TEMPLATE_ADMIN =
+  "GCK27OWIRLRVHGFOOO67SF5NL2LD5WIQSFAT5MMFEF7AGUOREUL7SBSX";
+
 export function buildDefaultRoles(walletAddress: string) {
   const address = walletAddress || "";
 
@@ -76,7 +82,11 @@ export function buildTemplateValues(
   type: EscrowType,
   walletAddress: string,
 ): CreateEscrowFormData {
-  const roles = buildDefaultRoles(walletAddress);
+  const roles = {
+    ...buildDefaultRoles(walletAddress),
+    disputeResolvers: [TEMPLATE_DISPUTE_RESOLVER],
+    admin: TEMPLATE_ADMIN,
+  };
   const trustline = {
     isCustom: false,
     address: defaultTrustline?.value ?? "",

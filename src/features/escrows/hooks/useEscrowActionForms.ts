@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
   changeMilestoneStatusSchema,
+  createManageMilestonesSchema,
   fundEscrowSchema,
   resolveDisputeSchema,
   startDisputeSchema,
@@ -12,6 +13,7 @@ import {
   type ChangeMilestoneStatusFormData,
   type FundEscrowFormData,
   type FundEscrowFormInput,
+  type ManageMilestonesFormData,
   type ResolveDisputeFormData,
   type ResolveDisputeFormInput,
   type StartDisputeFormData,
@@ -19,6 +21,7 @@ import {
   type WithdrawFundsFormData,
   type WithdrawFundsFormInput,
 } from "@/features/escrows/schemas/escrow-action.schemas";
+import type { ManageMilestonesDefaultValues } from "@/features/escrows/utils/manage-milestones.helper";
 
 export function useFundEscrowForm() {
   return useForm<FundEscrowFormInput, unknown, FundEscrowFormData>({
@@ -61,7 +64,7 @@ export function useStartDisputeForm() {
 export function useChangeMilestoneStatusForm(defaultStatus = "") {
   return useForm<ChangeMilestoneStatusFormData>({
     resolver: zodResolver(changeMilestoneStatusSchema),
-    defaultValues: { newStatus: defaultStatus },
+    defaultValues: { newStatus: defaultStatus, newEvidence: "" },
     mode: "onChange",
   });
 }
@@ -72,6 +75,23 @@ export function useResolveDisputeForm(
   return useForm<ResolveDisputeFormInput, unknown, ResolveDisputeFormData>({
     resolver: zodResolver(resolveDisputeSchema),
     defaultValues: { rows: defaultRows },
+    mode: "onChange",
+  });
+}
+
+export function useManageMilestonesForm(params: {
+  isMulti: boolean;
+  approversCount: number;
+  defaultValues: ManageMilestonesDefaultValues;
+}) {
+  return useForm<ManageMilestonesFormData>({
+    resolver: zodResolver(
+      createManageMilestonesSchema({
+        isMulti: params.isMulti,
+        approversCount: params.approversCount,
+      }),
+    ),
+    defaultValues: params.defaultValues,
     mode: "onChange",
   });
 }

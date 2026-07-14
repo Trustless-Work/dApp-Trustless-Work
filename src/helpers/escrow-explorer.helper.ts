@@ -24,6 +24,15 @@ export function getStellarExpertTransactionUrl(
   return `https://stellar.expert/explorer/${explorerNetwork}/tx/${txHash.trim()}`;
 }
 
+export function getStellarExpertAccountUrl(
+  network: NetworkType,
+  address: string,
+): string {
+  const explorerNetwork = toStellarExpertNetwork(network);
+
+  return `https://stellar.expert/explorer/${explorerNetwork}/account/${address.trim()}`;
+}
+
 export function getTrustlessWorkViewerUrl(
   network: NetworkType,
   contractId: string,

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useChangeMilestoneStatusForm } from "@/features/escrows/hooks/useEscrowActionForms";
 import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type { ChangeMilestoneStatusFormData } from "@/features/escrows/schemas/escrow-action.schemas";
@@ -34,6 +35,8 @@ export const ChangeMilestoneStatusAction = ({
         return;
       }
 
+      const evidence = values.newEvidence?.trim();
+
       const result = await changeStatus({
         contractId: escrow.contractId,
         serviceProvider: walletAddress,
@@ -41,13 +44,14 @@ export const ChangeMilestoneStatusAction = ({
           {
             index: milestoneIndex,
             newStatus: values.newStatus,
+            ...(evidence ? { newEvidence: evidence } : {}),
           },
         ],
       });
 
       if (result) {
         setOpen(false);
-        form.reset({ newStatus: "" });
+        form.reset({ newStatus: "", newEvidence: "" });
       }
     },
   );
@@ -67,7 +71,7 @@ export const ChangeMilestoneStatusAction = ({
         onOpenChange={(nextOpen) => {
           setOpen(nextOpen);
           if (!nextOpen) {
-            form.reset({ newStatus: "" });
+            form.reset({ newStatus: "", newEvidence: "" });
           }
         }}
       >
@@ -76,20 +80,38 @@ export const ChangeMilestoneStatusAction = ({
             <DialogHeader>
               <DialogTitle>Change Milestone Status</DialogTitle>
             </DialogHeader>
-            <div className="flex flex-col gap-2 py-4">
-              <Label htmlFor={`milestone-status-${milestoneIndex}`}>
-                New status
-              </Label>
-              <Input
-                id={`milestone-status-${milestoneIndex}`}
-                placeholder="In progress"
-                {...form.register("newStatus")}
-              />
-              {form.formState.errors.newStatus ? (
-                <p className="text-sm text-destructive">
-                  {form.formState.errors.newStatus.message}
-                </p>
-              ) : null}
+            <div className="flex flex-col gap-4 py-4">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor={`milestone-status-${milestoneIndex}`}>
+                  New status
+                </Label>
+                <Input
+                  id={`milestone-status-${milestoneIndex}`}
+                  placeholder="In progress"
+                  {...form.register("newStatus")}
+                />
+                {form.formState.errors.newStatus ? (
+                  <p className="text-sm text-destructive">
+                    {form.formState.errors.newStatus.message}
+                  </p>
+                ) : null}
+              </div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor={`milestone-evidence-${milestoneIndex}`}>
+                  Evidence (optional)
+                </Label>
+                <Textarea
+                  id={`milestone-evidence-${milestoneIndex}`}
+                  placeholder="URL or notes proving delivery"
+                  rows={4}
+                  {...form.register("newEvidence")}
+                />
+                {form.formState.errors.newEvidence ? (
+                  <p className="text-sm text-destructive">
+                    {form.formState.errors.newEvidence.message}
+                  </p>
+                ) : null}
+              </div>
             </div>
             <DialogFooter>
               <Button

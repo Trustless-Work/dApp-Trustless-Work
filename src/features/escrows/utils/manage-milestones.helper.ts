@@ -2,58 +2,65 @@ import type {
   ManageMultiReleaseMilestonesPayload,
   ManageSingleReleaseMilestonesPayload,
 } from "@trustless-work/escrow";
+import type { ManageMilestonesFormData } from "@/features/escrows/schemas/escrow-action.schemas";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
 import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
 
-export type ExistingMilestoneRow = {
-  index: number;
-  description: string;
-  amount: string;
-};
+export type ManageMilestonesDefaultValues = ManageMilestonesFormData;
 
-export type NewMilestoneRow = {
-  description: string;
-  approvalsTarget: string;
-  amount: string;
-  receiver: string;
-};
-
-export function buildExistingMilestoneRows(
-  escrow: StoredEscrow,
-): ExistingMilestoneRow[] {
-  return escrow.milestones.map((milestone, index) => ({
-    index,
-    description: milestone.description,
-    amount:
-      "amount" in milestone && typeof milestone.amount === "number"
-        ? String(milestone.amount)
-        : "",
-  }));
+export function getEscrowApproversCount(escrow: StoredEscrow): number {
+  return escrow.roles.approvers.length;
 }
 
-export function filterValidNewMilestoneRows(
-  rows: readonly NewMilestoneRow[],
-  isMulti: boolean,
-): NewMilestoneRow[] {
-  return rows.filter(
-    (row) =>
-      row.description.trim().length > 0 &&
-      Number.isFinite(Number(row.approvalsTarget)) &&
-      Number(row.approvalsTarget) > 0 &&
-      (!isMulti ||
-        (Number.isFinite(Number(row.amount)) &&
-          Number(row.amount) > 0 &&
-          row.receiver.trim().length > 0)),
-  );
+export function buildManageMilestonesDefaultValues(
+  escrow: StoredEscrow,
+): ManageMilestonesDefaultValues {
+  return {
+    existingMilestones: escrow.milestones.map((milestone, index) => ({
+      index,
+      description: milestone.description,
+      amount:
+        "amount" in milestone && typeof milestone.amount === "number"
+          ? milestone.amount
+          : 0,
+    })),
+    newMilestones: [],
+  };
 }
 
-export function hasExistingMilestoneChanges(
+export function getDefaultNewMilestoneReceiver(escrow: StoredEscrow): string {
+  return escrow.roles.approvers[0] ?? escrow.roles.serviceProviders[0] ?? "";
+}
+
+export function createEmptyNewMilestone(
   escrow: StoredEscrow,
-  existingRows: readonly ExistingMilestoneRow[],
   isMulti: boolean,
+): ManageMilestonesFormData["newMilestones"][number] {
+  return {
+    description: "",
+    approvalsTarget: 1,
+    amount: 0,
+    receiver: isMulti ? getDefaultNewMilestoneReceiver(escrow) : "",
+  };
+}
+
+export function hasManageMilestonesChanges(
+  escrow: StoredEscrow,
+  values: ManageMilestonesFormData,
+  canEditExisting: boolean,
 ): boolean {
-  return existingRows.some((row, index) => {
-    const original = escrow.milestones[index];
+  const isMulti = isStoredMultiReleaseEscrow(escrow);
+
+  if (values.newMilestones.length > 0) {
+    return true;
+  }
+
+  if (!canEditExisting) {
+    return false;
+  }
+
+  return values.existingMilestones.some((row) => {
+    const original = escrow.milestones[row.index];
     if (!original) {
       return false;
     }
@@ -65,7 +72,7 @@ export function hasExistingMilestoneChanges(
     if (
       isMulti &&
       "amount" in original &&
-      Number(row.amount) !== original.amount
+      row.amount !== original.amount
     ) {
       return true;
     }
@@ -77,27 +84,25 @@ export function hasExistingMilestoneChanges(
 export function buildManageMilestonesPayload(
   escrow: StoredEscrow,
   walletAddress: string,
-  existingRows: readonly ExistingMilestoneRow[],
-  newRows: readonly NewMilestoneRow[],
+  values: ManageMilestonesFormData,
   canEditExisting: boolean,
 ):
   | ManageSingleReleaseMilestonesPayload
   | ManageMultiReleaseMilestonesPayload {
   const isMulti = isStoredMultiReleaseEscrow(escrow);
-  const validNewRows = filterValidNewMilestoneRows(newRows, isMulti);
 
   if (isMulti) {
     return {
       contractId: escrow.contractId,
       admin: walletAddress,
-      newMilestones: validNewRows.map((row) => ({
+      newMilestones: values.newMilestones.map((row) => ({
         description: row.description.trim(),
-        approvalsTarget: Number(row.approvalsTarget),
-        amount: Number(row.amount),
+        approvalsTarget: row.approvalsTarget,
+        amount: row.amount,
         receiver: row.receiver.trim(),
       })),
       milestoneUpdates: canEditExisting
-        ? existingRows
+        ? values.existingMilestones
             .map((row) => {
               const original = escrow.milestones[row.index];
               if (!original || !("amount" in original)) {
@@ -106,7 +111,7 @@ export function buildManageMilestonesPayload(
 
               const descriptionChanged =
                 row.description.trim() !== original.description;
-              const amountChanged = Number(row.amount) !== original.amount;
+              const amountChanged = row.amount !== original.amount;
 
               if (!descriptionChanged && !amountChanged) {
                 return null;
@@ -117,7 +122,7 @@ export function buildManageMilestonesPayload(
                 ...(descriptionChanged
                   ? { newDescription: row.description.trim() }
                   : {}),
-                ...(amountChanged ? { newAmount: Number(row.amount) } : {}),
+                ...(amountChanged ? { newAmount: row.amount } : {}),
               };
             })
             .filter((row): row is NonNullable<typeof row> => row !== null)
@@ -128,12 +133,12 @@ export function buildManageMilestonesPayload(
   return {
     contractId: escrow.contractId,
     admin: walletAddress,
-    newMilestones: validNewRows.map((row) => ({
+    newMilestones: values.newMilestones.map((row) => ({
       description: row.description.trim(),
-      approvalsTarget: Number(row.approvalsTarget),
+      approvalsTarget: row.approvalsTarget,
     })),
     milestoneUpdates: canEditExisting
-      ? existingRows
+      ? values.existingMilestones
           .map((row) => {
             const original = escrow.milestones[row.index];
             if (!original) {

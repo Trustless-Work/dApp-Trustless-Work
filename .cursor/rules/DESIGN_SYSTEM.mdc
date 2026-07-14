@@ -1,0 +1,128 @@
+---
+description: Trustless Work visual design system — tokens, radius, density, house composition. Enforce on all product/dashboard UI.
+alwaysApply: true
+---
+
+# Design system (Trustless Work dApp)
+
+Fuente de verdad visual del **app shell + features + settings**. Marketing/home es otro idioma — no copiar al dashboard.
+
+Detalle completo → skill `trustless-work-ui` (`.claude/skills/trustless-work-ui/`).
+
+---
+
+## Stack
+
+| Capa | Valor |
+| --- | --- |
+| shadcn | `radix-luma` (`components.json`) |
+| Tokens | `src/app/globals.css` (Tailwind v4 `@theme`) |
+| Font | Space Grotesk (`font-sans` / `font-heading`) + Geist Mono |
+| Icons | `lucide-react` — default `size-4` |
+| Utils | `cn()` from `@/lib/utils` |
+| Surfaces | `@/components/ui/*`, `Container`, `NoData` |
+
+---
+
+## Tokens — commandments
+
+1. **Semantic only** in product UI: `bg-background`, `bg-card`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-primary`, `text-destructive`, `bg-muted`.
+2. Brand primary = `#006be4` (`--primary-500`). Scale `primary-50`…`primary-900` ok; never invent new blues.
+3. **No raw palettes** in features: `bg-blue-500`, `text-green-600`, `bg-emerald-*`, `purple-*`, etc.
+4. Dark mode via CSS vars / opacity (`dark:bg-input/30`) — never manual `dark:bg-gray-*` overrides for chrome.
+5. Destructive = soft tint (`bg-destructive/10 text-destructive`), not solid red fills.
+
+---
+
+## Radius map
+
+| Class | Use |
+| --- | --- |
+| `rounded-4xl` | Button, Badge, filter pill controls |
+| `rounded-lg` | Input, Select, Textarea, Toggle, Alert |
+| `rounded-xl` | Card, Dialog, Sheet, Empty/NoData, inset sidebar |
+| `rounded-2xl` | `Container`, nested amount tiles |
+| `rounded-3xl` | Escrow detail panels, escrow grid cards |
+| `rounded-full` | Avatar (default), Switch, status dots |
+| `rounded-md` | Menu items, Skeleton, tab triggers — **not** buttons |
+
+Base: `--radius: 0.625rem`.
+
+---
+
+## Density
+
+| Element | Size |
+| --- | --- |
+| Input / Select / Toggle | `h-8` |
+| Button default | `h-9` · `size="sm"` → `h-8` · header CTAs prefer `size="sm"` |
+| Badge | fixed `h-5` `text-xs` |
+| Icons inline | `size-4` · compact `size-3` / `size-3.5` · page header `size-5 sm:size-6` |
+| Gaps | controls `gap-1.5` · sections `gap-4` / `gap-6` · form FieldGroup `gap-5` |
+| Flex siblings | **`gap-*`**, not `space-x`/`space-y` (ok `space-y` only for title→description stacks) |
+
+Focus: `focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50` (buttons `/30`).
+
+Elevación: prefer **`ring-1 ring-foreground/10`** over heavy shadows on cards/dialogs. Soft `shadow-sm` on Container / hover cards ok; avoid `shadow-lg` as default card chrome.
+
+---
+
+## Compose, don’t restyle
+
+- Use CVA **variants** (`variant`, `size`) before custom color/typography classes.
+- `className` = layout (flex, grid, width, margin) — not recoloring primitives.
+- Prefer existing `Button` / `Badge` / `Card` / `Dialog` / `Table` / `Skeleton` / `NoData`.
+
+---
+
+## House recipes (one-liners)
+
+```tsx
+// Page header title
+"text-pretty text-2xl font-semibold tracking-tight md:text-3xl"
+// Section title
+"text-lg font-semibold tracking-tight"
+// Container (settings / list shell)
+"w-full rounded-2xl border border-border bg-card/40 p-6 shadow-sm"
+// Escrow detail panel
+"rounded-3xl border border-border bg-card p-6 sm:p-8"
+// Filter bar
+"rounded-xl border border-border bg-card p-3 md:p-4"
+// Filter controls
+"h-9 w-full rounded-4xl border-border bg-background …"
+// Dual list
+"md:hidden" cards + "hidden md:block" table
+// Dialog footer
+Cancel variant="outline" → primary action right
+// Empty
+<NoData title="…" />  // never custom dashed empties
+```
+
+Shell pad: `p-4 md:px-8`. Navbar: `h-14 md:h-16`, `bg-background/80 backdrop-blur-md`.
+
+Badge status: disputed → `destructive`; released/resolved → `secondary`; flags → `outline` / `default`. No `success`/`warning` variants — stay on existing Badge variants.
+
+---
+
+## Prohibido
+
+- Raw Tailwind color utilities in product/feature UI
+- Marketing aesthetics in dashboard (hero gradients, `text-5xl`, glass `bg-background/10`, purple blurs)
+- `rounded-md` / non-pill on `Button` / `Badge`
+- Solid destructive button fills as default
+- Custom empty states instead of `NoData`
+- Generic muted `div` loaders instead of `Skeleton` ([SKELETONS.mdc](SKELETONS.mdc))
+- Restyling Card/Dialog colors via `className` instead of tokens
+- Inventing new design languages mid-feature
+
+---
+
+## Checklist rápido
+
+- [ ] Semantic tokens only
+- [ ] Radius matches map (pill / field / card / panel)
+- [ ] Control heights `h-8` / button `h-9` or `sm`
+- [ ] Icons `size-4` (or documented exception)
+- [ ] Empty → `NoData`; loading → co-located Skeleton
+- [ ] Dual `md` layout for data tables
+- [ ] Light + dark look correct without hard-coded greys
