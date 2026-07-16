@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { DashboardSkeleton } from "@/features/dashboard/ui/dashboard-skeleton";
+import { TrustlessWorkProvider } from "@/providers/TrustlessWorkProvider";
 
 const DashboardContent = dynamic(
   () =>
@@ -14,5 +15,9 @@ const DashboardContent = dynamic(
 );
 
 export const DashboardView = () => {
-  return <DashboardContent />;
+  return (
+    <TrustlessWorkProvider>
+      <DashboardContent />
+    </TrustlessWorkProvider>
+  );
 };

@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
+import type { DashboardCreatedPoint } from "@/features/dashboard/types/dashboard.types";
 import { formatDate, formatInteger } from "./formater";
 import {
   ChartContainer,
@@ -10,13 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { Delta, DeltaIcon, DeltaValue } from "./delta";
 import { DashboardCard, DashboardCardSeparator } from "./dashboard-card";
-import {
-  chartRowsStatic,
-  ordersChartConfig,
-  peakDateStatic,
-  peakRowStatic,
-  totalOrdersStatic,
-} from "@/features/dashboard/ui/orders-chart.data";
+import { ordersChartConfig } from "@/features/dashboard/ui/orders-chart.data";
 import {
   OrdersGradientBar,
   renderPeakLabel,
@@ -24,12 +19,25 @@ import {
 
 const PEAK_FALLBACK = "—";
 
-export function OrdersChart() {
-  const peakOrdersLabel = peakRowStatic
-    ? formatInteger(peakRowStatic.orders)
+type OrdersChartProps = {
+  series: readonly DashboardCreatedPoint[];
+  total: number;
+  deltaPct: number;
+  peakDate: string | null;
+};
+
+export function OrdersChart({
+  series,
+  total,
+  deltaPct,
+  peakDate,
+}: OrdersChartProps) {
+  const peakRow = series.find((row) => row.isPeak);
+  const peakOrdersLabel = peakRow
+    ? formatInteger(peakRow.orders)
     : PEAK_FALLBACK;
-  const peakDateLabel = peakRowStatic
-    ? formatDate(peakRowStatic.date, "day-month")
+  const peakDateLabel = peakRow
+    ? formatDate(peakRow.date, "day-month")
     : PEAK_FALLBACK;
 
   return (
@@ -37,10 +45,10 @@ export function OrdersChart() {
       <div className="flex items-start justify-between gap-2 md:pe-2">
         <div className="flex flex-col gap-1">
           <span className="font-semibold text-2xl tabular-nums tracking-tight">
-            {formatInteger(totalOrdersStatic)}
+            {formatInteger(total)}
           </span>
           <span className="text-pretty text-muted-foreground text-xs">
-            Orders in the last 30 days
+            Escrows created in the last 30 days
           </span>
         </div>
         <div className="flex flex-col items-end gap-1">
@@ -54,7 +62,7 @@ export function OrdersChart() {
           </span>
           <DashboardCardSeparator />
           <div className="inline-flex items-center gap-1 text-xs">
-            <Delta value={9.8}>
+            <Delta value={deltaPct}>
               <DeltaIcon filled variant="arrow" />
               <DeltaValue />
             </Delta>
@@ -68,7 +76,7 @@ export function OrdersChart() {
       >
         <BarChart
           accessibilityLayer
-          data={chartRowsStatic}
+          data={[...series]}
           margin={{ left: 0, right: 0, top: 0, bottom: 0 }}
         >
           <XAxis
@@ -91,7 +99,7 @@ export function OrdersChart() {
                 height={props.height}
                 index={props.index}
                 payload={props.payload}
-                peakDate={peakDateStatic}
+                peakDate={peakDate ?? ""}
                 width={props.width}
                 x={props.x}
                 y={props.y}
