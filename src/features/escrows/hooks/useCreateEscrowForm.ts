@@ -12,7 +12,6 @@ import {
   getBasicsStepFields,
   getRolesStepFields,
 } from "@/features/escrows/constants/create-escrow.constants";
-import { ESCROWS_LIST_QUERY_ROOT } from "@/features/escrows/constants/escrow.constants";
 import { useSignAndSend } from "@/features/escrows/hooks/useSignAndSend";
 import {
   createEscrowSchema,
@@ -27,6 +26,10 @@ import {
 } from "@/features/escrows/utils/create-escrow-form.helper";
 import { toDeployPayload } from "@/features/escrows/utils/create-escrow-payload.helper";
 import { showEscrowTransactionSuccessToast } from "@/features/escrows/utils/escrow-transaction-toast.helper";
+import {
+  refreshEscrowQueries,
+  scheduleEscrowIndexerCatchUp,
+} from "@/features/escrows/utils/escrow-query.helper";
 import { useWalletContext } from "@/providers/WalletProvider";
 
 type UseCreateEscrowFormOptions = {
@@ -128,9 +131,8 @@ export function useCreateEscrowForm(options?: UseCreateEscrowFormOptions) {
         return;
       }
 
-      await queryClient.invalidateQueries({
-        queryKey: ESCROWS_LIST_QUERY_ROOT,
-      });
+      await refreshEscrowQueries(queryClient, contractId);
+      scheduleEscrowIndexerCatchUp(queryClient, contractId);
 
       showEscrowTransactionSuccessToast({
         title: "Escrow created successfully",

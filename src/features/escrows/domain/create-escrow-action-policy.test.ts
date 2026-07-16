@@ -302,6 +302,52 @@ describe("createEscrowActionPolicy role gating", () => {
     ).toBe(false);
   });
 
+  it("blocks multi manage milestones when any milestone is disputed or resolved", () => {
+    const disputed = createMultiEscrow({
+      balance: 0,
+      milestones: [
+        {
+          ...pendingMilestone(),
+          amount: 50,
+          receiver: RECEIVER,
+          dispute: { isDisputed: true, resolved: false, reason: "" },
+        },
+        {
+          ...pendingMilestone(),
+          description: "Milestone 2",
+          amount: 50,
+          receiver: RECEIVER,
+        },
+      ],
+    });
+
+    expect(
+      createEscrowActionPolicy(disputed, ADMIN).canManageMilestones(),
+    ).toBe(false);
+
+    const resolved = createMultiEscrow({
+      balance: 0,
+      milestones: [
+        {
+          ...approvedMilestone(),
+          amount: 50,
+          receiver: RECEIVER,
+          dispute: { isDisputed: false, resolved: true, reason: "" },
+        },
+        {
+          ...pendingMilestone(),
+          description: "Milestone 2",
+          amount: 50,
+          receiver: RECEIVER,
+        },
+      ],
+    });
+
+    expect(
+      createEscrowActionPolicy(resolved, ADMIN).canManageMilestones(),
+    ).toBe(false);
+  });
+
   it("hides operational actions when no wallet is connected", () => {
     const escrow = createSingleEscrow({
       milestones: [pendingMilestone()],

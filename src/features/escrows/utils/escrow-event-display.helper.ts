@@ -11,18 +11,18 @@ import {
 } from "lucide-react";
 
 const EVENT_LABELS: Record<string, string> = {
-  deploy: "Deployed",
-  fund: "Funded",
-  update: "Updated",
-  approve: "Approved",
-  release: "Released",
-  dispute: "Dispute started",
-  resolve: "Dispute resolved",
-  withdraw: "Withdrawn",
-  change_status: "Status changed",
-  changeMilestoneStatus: "Status changed",
-  manage_milestones: "Milestones updated",
-  manageMilestones: "Milestones updated",
+  deploy: "DEPLOYED",
+  fund: "FUNDED",
+  update: "UPDATED",
+  approve: "APPROVED",
+  release: "RELEASED",
+  dispute: "DISPUTE STARTED",
+  resolve: "DISPUTE RESOLVED",
+  withdraw: "WITHDRAWN",
+  change_status: "STATUS CHANGED",
+  changeMilestoneStatus: "STATUS CHANGED",
+  manage_milestones: "MILESTONES UPDATED",
+  manageMilestones: "MILESTONES UPDATED",
 };
 
 const EVENT_ICONS: Record<string, LucideIcon> = {
@@ -48,10 +48,10 @@ export function getEscrowEventLabel(kind: string): string {
     .trim();
 
   if (!spaced) {
-    return "Event";
+    return "EVENT";
   }
 
-  return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+  return spaced.toUpperCase();
 }
 
 export function getEscrowEventIcon(kind: string): LucideIcon {

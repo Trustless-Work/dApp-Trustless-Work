@@ -1,13 +1,14 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { Button } from "@/components/ui/button";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import type {
   EscrowActionTriggerMode,
   EscrowActionVariant,
 } from "@/features/escrows/types/escrow-action.types";
 import { EscrowActionTrigger } from "@/features/escrows/ui/detail/EscrowActionTrigger";
-import type { LucideIcon } from "lucide-react";
 
 type ActionTriggerProps = {
   label: string;
@@ -15,6 +16,7 @@ type ActionTriggerProps = {
   triggerVariant?: EscrowActionVariant;
   icon?: LucideIcon;
   destructive?: boolean;
+  compact?: boolean;
   onActivate: () => void;
   children?: ReactNode;
 };
@@ -25,6 +27,7 @@ export const ActionTrigger = ({
   triggerVariant,
   icon,
   destructive = false,
+  compact = false,
   onActivate,
   children,
 }: ActionTriggerProps) => {
@@ -48,6 +51,29 @@ export const ActionTrigger = ({
 
   if (children) {
     return <>{children}</>;
+  }
+
+  if (compact) {
+    const Icon = icon;
+    const variant =
+      triggerVariant === "primary"
+        ? "default"
+        : triggerVariant === "danger" || destructive
+          ? "destructive"
+          : "outline";
+
+    return (
+      <Button
+        type="button"
+        size="sm"
+        variant={variant}
+        className="shrink-0"
+        onClick={onActivate}
+      >
+        {Icon ? <Icon className="size-4" aria-hidden="true" /> : null}
+        {label}
+      </Button>
+    );
   }
 
   return (

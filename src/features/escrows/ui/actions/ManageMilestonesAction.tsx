@@ -41,6 +41,7 @@ export const ManageMilestonesAction = ({
   const form = useManageMilestonesForm({
     isMulti,
     approversCount,
+    existingCount: escrow.milestones.length,
     defaultValues: buildManageMilestonesDefaultValues(escrow),
   });
 

@@ -1,7 +1,12 @@
 "use client";
 
 import { PlusIcon, Trash2Icon } from "lucide-react";
-import type { UseFormReturn } from "react-hook-form";
+import type {
+  FieldValues,
+  Path,
+  PathValue,
+  UseFormReturn,
+} from "react-hook-form";
 import { useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,100 +21,60 @@ import { Input } from "@/components/ui/input";
 import {
   CREATE_ESCROW_PLACEHOLDERS,
   MAX_ROLE_ADDRESS_COUNT,
-  type MultiRoleFieldName,
 } from "@/features/escrows/constants/create-escrow.constants";
-import type { CreateEscrowFormData } from "@/features/escrows/schemas/create-escrow.schema";
-
-type RoleArrayKey = MultiRoleFieldName extends `roles.${infer Key}` ? Key : never;
 
 function isAddressFilled(value: string | undefined): boolean {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function getRoleArrayKey(name: MultiRoleFieldName): RoleArrayKey {
-  return name.replace("roles.", "") as RoleArrayKey;
-}
-
-function appendRoleAddress(
-  form: UseFormReturn<CreateEscrowFormData>,
-  name: MultiRoleFieldName,
-): void {
-  const roles = form.getValues("roles");
-  const key = getRoleArrayKey(name);
-  const current = roles[key];
-
-  if (!Array.isArray(current) || current.length >= MAX_ROLE_ADDRESS_COUNT) {
-    return;
-  }
-
-  const lastAddress = current[current.length - 1];
-  if (!isAddressFilled(lastAddress)) {
-    return;
-  }
-
-  form.setValue(
-    "roles",
-    {
-      ...roles,
-      [key]: [...current, ""],
-    },
-    {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: false,
-    },
-  );
-}
-
-function removeRoleAddress(
-  form: UseFormReturn<CreateEscrowFormData>,
-  name: MultiRoleFieldName,
-  index: number,
-): void {
-  const roles = form.getValues("roles");
-  const key = getRoleArrayKey(name);
-  const current = roles[key];
-
-  if (!Array.isArray(current) || current.length <= 1) {
-    return;
-  }
-
-  form.setValue(
-    "roles",
-    {
-      ...roles,
-      [key]: current.filter((_, currentIndex) => currentIndex !== index),
-    },
-    {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: false,
-    },
-  );
-}
-
-type EscrowRoleAddressListProps = {
-  form: UseFormReturn<CreateEscrowFormData>;
-  name: MultiRoleFieldName;
+type EscrowRoleAddressListProps<TForm extends FieldValues> = {
+  form: UseFormReturn<TForm>;
+  name: Path<TForm>;
   label: string;
   description: string;
   disabled?: boolean;
 };
 
-export const EscrowRoleAddressList = ({
+export const EscrowRoleAddressList = <TForm extends FieldValues>({
   form,
   name,
   label,
   description,
   disabled = false,
-}: EscrowRoleAddressListProps) => {
-  const watchedAddresses = useWatch({
-    control: form.control,
-    name,
-  });
+}: EscrowRoleAddressListProps<TForm>) => {
+  const watchedAddresses = useWatch({ control: form.control, name });
   const addresses: string[] = Array.isArray(watchedAddresses)
-    ? watchedAddresses
+    ? (watchedAddresses as string[])
     : [];
+
+  const setAddresses = (next: string[]): void => {
+    form.setValue(name, next as PathValue<TForm, Path<TForm>>, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: false,
+    });
+  };
+
+  const appendAddress = (): void => {
+    if (addresses.length >= MAX_ROLE_ADDRESS_COUNT) {
+      return;
+    }
+
+    const lastAddress = addresses[addresses.length - 1];
+    if (!isAddressFilled(lastAddress)) {
+      return;
+    }
+
+    setAddresses([...addresses, ""]);
+  };
+
+  const removeAddress = (index: number): void => {
+    if (addresses.length <= 1) {
+      return;
+    }
+
+    setAddresses(addresses.filter((_, currentIndex) => currentIndex !== index));
+  };
 
   const lastAddress = addresses[addresses.length - 1];
   const canAppend =
@@ -127,7 +92,7 @@ export const EscrowRoleAddressList = ({
           <div key={`${name}-${index}`} className="flex items-start gap-2">
             <FormField
               control={form.control}
-              name={`${name}.${index}`}
+              name={`${name}.${index}` as Path<TForm>}
               render={({ field: addressField }) => (
                 <FormItem className="flex-1">
                   <FormLabel className="sr-only">
@@ -152,7 +117,7 @@ export const EscrowRoleAddressList = ({
                 size="icon-sm"
                 disabled={disabled}
                 className="mt-0.5 shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                onClick={() => removeRoleAddress(form, name, index)}
+                onClick={() => removeAddress(index)}
               >
                 <Trash2Icon />
               </Button>
@@ -168,7 +133,7 @@ export const EscrowRoleAddressList = ({
           size="sm"
           disabled={disabled || !canAppend}
           className="mt-3"
-          onClick={() => appendRoleAddress(form, name)}
+          onClick={appendAddress}
         >
           <PlusIcon />
           Add address

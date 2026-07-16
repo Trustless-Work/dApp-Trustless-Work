@@ -1,4 +1,10 @@
 import { z } from "zod/v3";
+import { MAX_MILESTONES_PER_ESCROW } from "@/features/escrows/constants/create-escrow.constants";
+import {
+  multiReleaseRolesSchema,
+  singleReleaseRolesSchema,
+  trustlineSchema,
+} from "@/features/escrows/schemas/escrow-shared.schema";
 import { getApprovalsTargetExceedsApproversMessage } from "@/features/escrows/utils/create-escrow.helper";
 import { isStellarPublicKey } from "@/helpers/stellar.helper";
 
@@ -33,12 +39,66 @@ export const withdrawFundsSchema = z.object({
 export type WithdrawFundsFormInput = z.input<typeof withdrawFundsSchema>;
 export type WithdrawFundsFormData = z.output<typeof withdrawFundsSchema>;
 
-export const updateEscrowSchema = z.object({
-  title: z.string().trim().min(1, "Title is required").max(200),
-  description: z.string().trim().min(1, "Description is required").max(2000),
+const updateEngagementIdSchema = z
+  .string()
+  .trim()
+  .min(1, "Engagement ID is required")
+  .max(100, "Maximum 100 characters");
+
+const updateTitleSchema = z
+  .string()
+  .trim()
+  .min(1, "Title is required")
+  .max(100, "Maximum 100 characters");
+
+const updateDescriptionSchema = z
+  .string()
+  .trim()
+  .min(1, "Description is required")
+  .max(500, "Maximum 500 characters");
+
+const updatePlatformFeeSchema = z.coerce
+  .number()
+  .min(0)
+  .max(100, "Fee must be between 0 and 100");
+
+const updateSingleReleaseSchema = z.object({
+  type: z.literal("single-release"),
+  engagementId: updateEngagementIdSchema,
+  title: updateTitleSchema,
+  description: updateDescriptionSchema,
+  amount: z.coerce.number().min(0, "Amount cannot be negative"),
+  platformFee: updatePlatformFeeSchema,
+  roles: singleReleaseRolesSchema,
+  trustline: trustlineSchema,
 });
 
-export type UpdateEscrowFormData = z.infer<typeof updateEscrowSchema>;
+const updateMultiReleaseSchema = z.object({
+  type: z.literal("multi-release"),
+  engagementId: updateEngagementIdSchema,
+  title: updateTitleSchema,
+  description: updateDescriptionSchema,
+  platformFee: updatePlatformFeeSchema,
+  roles: multiReleaseRolesSchema,
+  trustline: trustlineSchema,
+});
+
+export const updateEscrowSchema = z.discriminatedUnion("type", [
+  updateSingleReleaseSchema,
+  updateMultiReleaseSchema,
+]);
+
+export type UpdateSingleReleaseFormData = z.infer<
+  typeof updateSingleReleaseSchema
+>;
+
+export type UpdateMultiReleaseFormData = z.infer<
+  typeof updateMultiReleaseSchema
+>;
+
+export type UpdateEscrowFormData =
+  | UpdateSingleReleaseFormData
+  | UpdateMultiReleaseFormData;
 
 export const startDisputeSchema = z.object({
   reason: z.string().trim().min(1, "Reason is required").max(1000),
@@ -85,11 +145,13 @@ const manageNewMilestoneSchema = z.object({
 export type ManageMilestonesSchemaParams = {
   readonly isMulti: boolean;
   readonly approversCount: number;
+  readonly existingCount: number;
 };
 
 export function createManageMilestonesSchema({
   isMulti,
   approversCount,
+  existingCount,
 }: ManageMilestonesSchemaParams) {
   return z
     .object({
@@ -97,6 +159,14 @@ export function createManageMilestonesSchema({
       newMilestones: z.array(manageNewMilestoneSchema),
     })
     .superRefine((data, ctx) => {
+      if (existingCount + data.newMilestones.length > MAX_MILESTONES_PER_ESCROW) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `An escrow can have at most ${MAX_MILESTONES_PER_ESCROW} milestones.`,
+          path: ["newMilestones"],
+        });
+      }
+
       data.newMilestones.forEach((milestone, index) => {
         if (milestone.approvalsTarget > approversCount) {
           ctx.addIssue({

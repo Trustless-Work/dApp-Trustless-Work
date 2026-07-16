@@ -227,6 +227,15 @@ export const MilestonesFieldArray = ({
 
   return (
     <div className="flex flex-col gap-3">
+      {fields.length === 0 ? (
+        <div className="rounded-lg border border-border bg-muted/30 px-4 py-6 text-center">
+          <p className="text-sm font-medium">No milestones</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            You can deploy this escrow without milestones and add them later.
+          </p>
+        </div>
+      ) : null}
+
       {fields.map((field, index) => (
         <div
           key={field.id}
@@ -234,18 +243,17 @@ export const MilestonesFieldArray = ({
         >
           <div className="mb-3 flex items-center justify-between gap-2">
             <p className="text-sm font-medium">Milestone {index + 1}</p>
-            {fields.length > 1 ? (
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                disabled={disabled}
-                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                onClick={() => remove(index)}
-              >
-                <Trash2Icon />
-              </Button>
-            ) : null}
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              disabled={disabled}
+              aria-label={`Remove milestone ${index + 1}`}
+              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+              onClick={() => remove(index)}
+            >
+              <Trash2Icon className="size-4" aria-hidden="true" />
+            </Button>
           </div>
 
           {escrowType === "single-release" ? (
@@ -274,7 +282,7 @@ export const MilestonesFieldArray = ({
         onClick={handleAdd}
         className="self-start"
       >
-        <PlusIcon />
+        <PlusIcon className="size-4" aria-hidden="true" />
         Add milestone
       </Button>
     </div>

@@ -55,6 +55,9 @@ const ActionGroupSkeleton = () => (
 const MilestoneRowSkeleton = ({ isMulti }: { isMulti: boolean }) => (
   <TableRow>
     <TableCell className="px-5 py-5">
+      <Skeleton className="size-4 rounded-[4px]" />
+    </TableCell>
+    <TableCell className="px-5 py-5">
       <Skeleton className="h-4 w-4" />
     </TableCell>
     <TableCell className="px-5 py-5">
@@ -91,9 +94,12 @@ const MilestoneRowSkeleton = ({ isMulti }: { isMulti: boolean }) => (
 const MilestoneCardSkeleton = ({ isMulti }: { isMulti: boolean }) => (
   <Card>
     <CardHeader className="flex flex-row items-start justify-between gap-3 pb-4">
-      <div className="flex min-w-0 flex-1 items-start gap-2">
-        <Skeleton className="h-5 w-full max-w-xs" />
-        <Skeleton className="mt-1 size-2.5 shrink-0 rounded-full" />
+      <div className="flex min-w-0 flex-1 items-start gap-3">
+        <Skeleton className="mt-1 size-4 shrink-0 rounded-[4px]" />
+        <div className="flex min-w-0 flex-1 items-start gap-2">
+          <Skeleton className="h-5 w-full max-w-xs" />
+          <Skeleton className="mt-1 size-2.5 shrink-0 rounded-full" />
+        </div>
       </div>
       <div className="flex shrink-0 gap-1">
         <Skeleton className="h-8 w-16 rounded-full" />
@@ -115,7 +121,7 @@ export const EscrowDetailSkeleton = ({
   type = "multi-release",
 }: EscrowDetailSkeletonProps) => {
   const isMulti = type === "multi-release";
-  const columnCount = isMulti ? 7 : 5;
+  const columnCount = isMulti ? 8 : 6;
 
   return (
     <div className="flex flex-col gap-6">

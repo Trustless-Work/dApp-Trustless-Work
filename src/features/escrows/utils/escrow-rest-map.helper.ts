@@ -1,4 +1,5 @@
 import type {
+  EscrowAsset,
   EscrowDeposit,
   EscrowDetail,
   EscrowEvent,
@@ -95,9 +96,39 @@ type SummaryLike = {
   updatedAt: string;
   status: EscrowStatus | string | null;
   type: EscrowType | string;
-  totalAmount: number | null;
+  totalAmount: string | null;
+  balance?: string;
+  asset?: EscrowAsset | null;
   snapshot: unknown;
 };
+
+function resolveAssetSymbol(
+  summary: SummaryLike,
+  snapshot: EscrowSnapshot,
+): string {
+  if (summary.asset?.name) {
+    return summary.asset.name;
+  }
+
+  if (
+    "symbol" in snapshot.trustline &&
+    typeof snapshot.trustline.symbol === "string" &&
+    snapshot.trustline.symbol.trim() !== ""
+  ) {
+    return snapshot.trustline.symbol;
+  }
+
+  return "USDC";
+}
+
+function mapSnapshotMilestones(
+  milestones: MultiReleaseEscrowSnapshot["milestones"],
+): MultiReleaseMilestone[] {
+  return milestones.map((milestone) => ({
+    ...milestone,
+    amount: parseEscrowAmount(milestone.amount),
+  }));
+}
 
 function mapSingleStored(
   summary: SummaryLike,
@@ -111,12 +142,11 @@ function mapSingleStored(
     engagementId: snapshot.engagementId || summary.engagementId || "",
     title: snapshot.title,
     description: snapshot.description,
-    platformFee: snapshot.platformFee,
+    platformFee: parseEscrowAmount(snapshot.platformFee),
     balance,
-    receiverMemo: snapshot.receiverMemo,
     trustline: snapshot.trustline,
     roles: snapshot.roles,
-    amount: snapshot.amount,
+    amount: parseEscrowAmount(snapshot.amount),
     milestones: snapshot.milestones as SingleReleaseMilestone[],
     dispute: snapshot.dispute,
     released: snapshot.released,
@@ -144,11 +174,11 @@ function mapMultiStored(
     engagementId: snapshot.engagementId || summary.engagementId || "",
     title: snapshot.title,
     description: snapshot.description,
-    platformFee: snapshot.platformFee,
+    platformFee: parseEscrowAmount(snapshot.platformFee),
     balance,
     trustline: snapshot.trustline,
     roles: snapshot.roles,
-    milestones: snapshot.milestones as MultiReleaseMilestone[],
+    milestones: mapSnapshotMilestones(snapshot.milestones),
   };
 
   return {
@@ -163,12 +193,15 @@ function mapMultiStored(
 
 export function mapEscrowSummaryToStored(
   summary: SummaryLike,
-  balance = 0,
+  balanceOverride?: number,
 ): StoredEscrow | null {
   const snapshot = asSnapshot(summary.snapshot);
   if (!snapshot) {
     return null;
   }
+
+  const balance =
+    balanceOverride ?? parseEscrowAmount(summary.balance ?? "0");
 
   const type = resolveType(
     typeof summary.type === "string" ? summary.type : null,
@@ -203,12 +236,12 @@ function resolveTotalAmount(
   }
 
   if ("amount" in stored) {
-    return stored.amount;
+    return parseEscrowAmount(stored.amount);
   }
 
   return stored.milestones.reduce(
     (sum, milestone) =>
-      sum + ("amount" in milestone ? Number(milestone.amount) : 0),
+      sum + ("amount" in milestone ? parseEscrowAmount(milestone.amount) : 0),
     0,
   );
 }
@@ -221,6 +254,7 @@ export function mapEscrowSummaryToListItem(
     return null;
   }
 
+  const snapshot = asSnapshot(summary.snapshot);
   const totalAmount = resolveTotalAmount(summary, stored);
   const status = (summary.status ?? stored.status ?? "active") as
     | EscrowStatus
@@ -238,10 +272,9 @@ export function mapEscrowSummaryToListItem(
     updatedAt: summary.updatedAt,
     totalAmount,
     balance: stored.balance,
-    assetSymbol:
-      stored.trustline && "symbol" in stored.trustline
-        ? (stored.trustline.symbol ?? "USDC")
-        : "USDC",
+    assetSymbol: snapshot
+      ? resolveAssetSymbol(summary, snapshot)
+      : (summary.asset?.name ?? "USDC"),
     milestoneCount: stored.milestones.length,
     financial: null,
     stored,

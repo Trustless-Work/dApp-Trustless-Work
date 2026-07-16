@@ -21,19 +21,28 @@ import type {
 import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
 import { ConfirmActionDialog } from "@/features/escrows/ui/actions/ConfirmActionDialog";
+import { formatMilestoneNumbers } from "@/features/escrows/utils/milestone-batch.helper";
 
 type StartDisputeActionProps = EscrowActionProps | EscrowMilestoneActionProps;
 
-function hasMilestoneIndex(
+function hasMilestoneIndexes(
   props: StartDisputeActionProps,
 ): props is EscrowMilestoneActionProps {
-  return "milestoneIndex" in props;
+  return "milestoneIndexes" in props;
 }
 
 export const StartDisputeAction = (props: StartDisputeActionProps) => {
-  const { escrow, triggerVariant, icon, triggerMode = "button" } = props;
-  const milestoneIndex = hasMilestoneIndex(props)
-    ? props.milestoneIndex
+  const {
+    escrow,
+    triggerVariant,
+    icon,
+    triggerMode = "button",
+    label,
+    compact,
+    onSuccess,
+  } = props;
+  const milestoneIndexes = hasMilestoneIndexes(props)
+    ? props.milestoneIndexes
     : undefined;
   const isMulti = isStoredMultiReleaseEscrow(escrow);
   const [open, setOpen] = useState(false);
@@ -42,9 +51,14 @@ export const StartDisputeAction = (props: StartDisputeActionProps) => {
   const { dispute, disputeBatch, loading, walletAddress } =
     useEscrowActionsContext();
 
-  if (isMulti && milestoneIndex === undefined) {
+  if (isMulti && (!milestoneIndexes || milestoneIndexes.length === 0)) {
     return null;
   }
+
+  const isBatch = (milestoneIndexes?.length ?? 0) > 1;
+  const numbers = milestoneIndexes
+    ? formatMilestoneNumbers(milestoneIndexes)
+    : "";
 
   const handleConfirm = async () => {
     const isValid = await form.trigger();
@@ -59,7 +73,7 @@ export const StartDisputeAction = (props: StartDisputeActionProps) => {
           contractId: escrow.contractId,
           signer: walletAddress,
           reason: values.reason,
-          milestoneIndexes: [milestoneIndex ?? 0],
+          milestoneIndexes: milestoneIndexes ?? [],
         })
       : await dispute({
           contractId: escrow.contractId,
@@ -71,16 +85,18 @@ export const StartDisputeAction = (props: StartDisputeActionProps) => {
       setConfirmOpen(false);
       setOpen(false);
       form.reset({ reason: "" });
+      onSuccess?.();
     }
   };
 
   return (
     <>
       <ActionTrigger
-        label="Start Dispute"
+        label={label ?? "Start Dispute"}
         triggerMode={triggerMode}
         triggerVariant={triggerVariant}
         icon={icon}
+        compact={compact}
         destructive
         onActivate={() => setOpen(true)}
       />
@@ -96,8 +112,15 @@ export const StartDisputeAction = (props: StartDisputeActionProps) => {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Start Dispute</DialogTitle>
+            <DialogTitle>
+              {isBatch ? "Start Disputes" : "Start Dispute"}
+            </DialogTitle>
           </DialogHeader>
+          {isBatch ? (
+            <p className="text-sm text-muted-foreground">
+              Opens a dispute for milestones {numbers}.
+            </p>
+          ) : null}
           <div className="flex flex-col gap-2 py-4">
             <Label htmlFor="dispute-reason">Reason</Label>
             <Textarea
@@ -141,7 +164,7 @@ export const StartDisputeAction = (props: StartDisputeActionProps) => {
       <ConfirmActionDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        title="Start Dispute?"
+        title={isBatch ? "Start Disputes?" : "Start Dispute?"}
         description="Disputes trigger on-chain arbitration. This action cannot be undone casually."
         confirmLabel="Start Dispute"
         loading={loading}

@@ -18,6 +18,7 @@ export type EscrowBadgeVariant =
   | "default"
   | "secondary"
   | "destructive"
+  | "success"
   | "outline"
   | "ghost"
   | "link";
@@ -53,7 +54,7 @@ export function getMilestoneFlagBadgeVariant(
     case "approved":
       return "outline";
     case "released":
-      return "default";
+      return "success";
     case "disputed":
       return "destructive";
     case "resolved":
@@ -69,7 +70,7 @@ export function getEscrowStatusBadgeVariant(
   }
 
   if (isEscrowReleased(escrow)) {
-    return "secondary";
+    return "success";
   }
 
   return "default";
@@ -82,7 +83,7 @@ export function getEscrowCardStatusBadgeVariant(
     case "active":
       return "default";
     case "released":
-      return "secondary";
+      return "success";
     case "disputed":
       return "destructive";
   }

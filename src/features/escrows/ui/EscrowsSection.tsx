@@ -81,7 +81,7 @@ export const EscrowsSection = ({ onCreateRequest }: EscrowsSectionProps) => {
       ) : (
         <div className="flex min-h-0 flex-1 flex-col gap-4">
           <div className="min-h-0 flex-1 overflow-y-auto">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-10">
               {escrows.map((item) => (
                 <EscrowCard key={item.contractId} item={item} />
               ))}

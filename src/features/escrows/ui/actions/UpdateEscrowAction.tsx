@@ -9,18 +9,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Form } from "@/components/ui/form";
 import { useUpdateEscrowForm } from "@/features/escrows/hooks/useEscrowActionForms";
 import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActionsProvider";
 import type { UpdateEscrowFormData } from "@/features/escrows/schemas/escrow-action.schemas";
 import type { EscrowActionProps } from "@/features/escrows/types/escrow-action.types";
+import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
+import { UpdateEscrowForm } from "@/features/escrows/ui/actions/UpdateEscrowForm";
 import {
-  isStoredMultiReleaseEscrow,
-  isStoredSingleReleaseEscrow,
-} from "@/features/escrows/types/escrow.types";
+  buildUpdateEscrowDefaultValues,
+  buildUpdateEscrowPayload,
+} from "@/features/escrows/utils/update-escrow-payload.helper";
 
 export const UpdateEscrowAction = ({
   escrow,
@@ -29,10 +29,8 @@ export const UpdateEscrowAction = ({
   triggerMode = "button",
 }: EscrowActionProps) => {
   const [open, setOpen] = useState(false);
-  const form = useUpdateEscrowForm({
-    title: escrow.title,
-    description: escrow.description,
-  });
+  const isMulti = isStoredMultiReleaseEscrow(escrow);
+  const form = useUpdateEscrowForm(escrow);
   const { update, loading, walletAddress } = useEscrowActionsContext();
 
   const handleSubmit = form.handleSubmit(
@@ -41,68 +39,8 @@ export const UpdateEscrowAction = ({
         return;
       }
 
-      const admin = escrow.roles.admin;
-
-      const result = isStoredSingleReleaseEscrow(escrow)
-        ? await update({
-            contractId: escrow.contractId,
-            admin,
-            escrow: {
-              engagementId: escrow.engagementId,
-              title: values.title,
-              description: values.description,
-              amount: escrow.amount,
-              platformFee: escrow.platformFee,
-              roles: escrow.roles,
-              milestones: escrow.milestones.map((milestone) => ({
-                description: milestone.description,
-                status: milestone.status,
-                approvalsTarget: milestone.approvalsTarget ?? 1,
-              })),
-              trustline: {
-                address: escrow.trustline.address,
-                symbol:
-                  "symbol" in escrow.trustline
-                    ? escrow.trustline.symbol
-                    : undefined,
-                contractId:
-                  "contractId" in escrow.trustline
-                    ? escrow.trustline.contractId
-                    : escrow.trustline.address,
-              },
-            },
-          })
-        : isStoredMultiReleaseEscrow(escrow)
-          ? await update({
-              contractId: escrow.contractId,
-              admin,
-              escrow: {
-                engagementId: escrow.engagementId,
-                title: values.title,
-                description: values.description,
-                platformFee: escrow.platformFee,
-                roles: escrow.roles,
-                milestones: escrow.milestones.map((milestone) => ({
-                  description: milestone.description,
-                  status: milestone.status,
-                  approvalsTarget: milestone.approvalsTarget ?? 1,
-                  amount: milestone.amount,
-                  receiver: milestone.receiver,
-                })),
-                trustline: {
-                  address: escrow.trustline.address,
-                  symbol:
-                    "symbol" in escrow.trustline
-                      ? escrow.trustline.symbol
-                      : undefined,
-                  contractId:
-                    "contractId" in escrow.trustline
-                      ? escrow.trustline.contractId
-                      : escrow.trustline.address,
-                },
-              },
-            })
-          : null;
+      const payload = buildUpdateEscrowPayload(escrow, values);
+      const result = await update(payload);
 
       if (result) {
         setOpen(false);
@@ -118,63 +56,38 @@ export const UpdateEscrowAction = ({
         triggerVariant={triggerVariant}
         icon={icon}
         onActivate={() => {
-          form.reset({
-            title: escrow.title,
-            description: escrow.description,
-          });
+          form.reset(buildUpdateEscrowDefaultValues(escrow));
           setOpen(true);
         }}
       />
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <form onSubmit={handleSubmit}>
-            <DialogHeader>
-              <DialogTitle>Update Escrow Metadata</DialogTitle>
-            </DialogHeader>
-            <div className="flex flex-col gap-3 py-4">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="update-title">Title</Label>
-                <Input
-                  id="update-title"
-                  placeholder="Escrow title"
-                  {...form.register("title")}
-                />
-                {form.formState.errors.title ? (
-                  <p className="text-sm text-destructive">
-                    {form.formState.errors.title.message}
-                  </p>
-                ) : null}
+        <DialogContent className="sm:max-w-2xl">
+          <Form {...form}>
+            <form onSubmit={handleSubmit}>
+              <DialogHeader>
+                <DialogTitle>Update Escrow</DialogTitle>
+              </DialogHeader>
+
+              <div className="py-4">
+                <UpdateEscrowForm form={form} isMulti={isMulti} />
               </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="update-description">Description</Label>
-                <Textarea
-                  id="update-description"
-                  rows={3}
-                  placeholder="Describe the escrow scope and deliverables"
-                  {...form.register("description")}
-                />
-                {form.formState.errors.description ? (
-                  <p className="text-sm text-destructive">
-                    {form.formState.errors.description.message}
-                  </p>
-                ) : null}
-              </div>
-            </div>
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                disabled={loading}
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={loading}>
-                Save Changes
-              </Button>
-            </DialogFooter>
-          </form>
+
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={loading}
+                  onClick={() => setOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={loading}>
+                  Save Changes
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
     </>

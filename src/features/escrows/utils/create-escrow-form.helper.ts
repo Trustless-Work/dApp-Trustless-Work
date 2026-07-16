@@ -200,9 +200,7 @@ export function migrateFormValues(
   }
 
   const receiver =
-    current.type === "single-release"
-      ? current.roles.receiver
-      : walletAddress;
+    current.type === "single-release" ? current.roles.receiver : walletAddress;
   const amount = current.type === "single-release" ? current.amount : 0;
 
   return {

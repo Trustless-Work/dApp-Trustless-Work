@@ -38,7 +38,7 @@ export const MilestoneActionsMenu = ({
   const policy = useEscrowActionPolicy(escrow);
   const milestoneProps = {
     escrow,
-    milestoneIndex,
+    milestoneIndexes: [milestoneIndex],
     triggerMode: "menu-item" as const,
   };
 
