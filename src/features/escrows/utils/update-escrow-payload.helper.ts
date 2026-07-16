@@ -17,12 +17,36 @@ import {
   isStoredSingleReleaseEscrow,
 } from "@/features/escrows/types/escrow.types";
 
-const KNOWN_TRUSTLINE_ADDRESSES = new Set(
-  trustlineOptions.map((option) => option.value),
-);
+function buildTrustlineDefaults(escrow: StoredEscrow): {
+  isCustom: boolean;
+  address: string;
+  symbol: string;
+} {
+  const candidates = [
+    escrow.trustline.contractId,
+    escrow.trustline.address,
+  ].filter(
+    (value): value is string =>
+      typeof value === "string" && value.trim().length > 0,
+  );
 
-function getTrustlineAddress(escrow: StoredEscrow): string {
-  return escrow.trustline.contractId ?? escrow.trustline.address ?? "";
+  const matched = trustlineOptions.find((option) =>
+    candidates.some((candidate) => candidate === option.value),
+  );
+
+  if (matched) {
+    return {
+      isCustom: false,
+      address: matched.value,
+      symbol: matched.label,
+    };
+  }
+
+  return {
+    isCustom: true,
+    address: candidates[0] ?? "",
+    symbol: escrow.trustline.symbol ?? "",
+  };
 }
 
 function buildBaseRolesDefaults(escrow: StoredEscrow) {
@@ -39,12 +63,7 @@ function buildBaseRolesDefaults(escrow: StoredEscrow) {
 export function buildUpdateEscrowDefaultValues(
   escrow: StoredEscrow,
 ): UpdateEscrowFormData {
-  const trustlineAddress = getTrustlineAddress(escrow);
-  const trustline = {
-    isCustom: !KNOWN_TRUSTLINE_ADDRESSES.has(trustlineAddress),
-    address: trustlineAddress,
-    symbol: escrow.trustline.symbol ?? "",
-  };
+  const trustline = buildTrustlineDefaults(escrow);
 
   if (isStoredMultiReleaseEscrow(escrow)) {
     return {

@@ -104,49 +104,57 @@ export const EscrowCard = ({ item }: EscrowCardProps) => {
           <p className="text-xs font-medium text-muted-foreground uppercase">
             Milestones
           </p>
-          <ul className="flex flex-col gap-3">
-            {visibleMilestones.map((milestone, index) => {
-              const statusText = getMilestoneStatusText(milestone);
-              const multiMilestone = isMulti
-                ? (milestone as MultiReleaseMilestone)
-                : null;
-
-              return (
-                <li
-                  key={`${escrow.contractId}-${index}`}
-                  className="flex min-h-8 items-center justify-between gap-2"
-                >
-                  <span className="min-w-0 flex-1 truncate text-sm leading-5">
-                    {milestone.description || `Milestone ${index + 1}`}
-                  </span>
-                  <div className="flex shrink-0 items-center gap-1.5">
-                    {statusText ? (
-                      <Badge
-                        variant="secondary"
-                        className="max-w-24 truncate font-normal normal-case"
-                        title={statusText}
-                      >
-                        {statusText}
-                      </Badge>
-                    ) : null}
-                    <MilestoneFlagsBadges milestone={milestone} hideEmpty />
-                    {typeof multiMilestone?.amount === "number" ? (
-                      <UsdcAmount
-                        amount={multiMilestone.amount}
-                        symbol={currency}
-                        size="sm"
-                      />
-                    ) : null}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-          {remaining > 0 ? (
-            <p className="text-xs font-medium text-muted-foreground">
-              +{remaining} more milestone{remaining > 1 ? "s" : ""}
+          {milestones.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-border bg-muted/30 px-3 py-4 text-sm text-muted-foreground">
+              No milestones yet
             </p>
-          ) : null}
+          ) : (
+            <>
+              <ul className="flex flex-col gap-3">
+                {visibleMilestones.map((milestone, index) => {
+                  const statusText = getMilestoneStatusText(milestone);
+                  const multiMilestone = isMulti
+                    ? (milestone as MultiReleaseMilestone)
+                    : null;
+
+                  return (
+                    <li
+                      key={`${escrow.contractId}-${index}`}
+                      className="flex min-h-8 items-center justify-between gap-2"
+                    >
+                      <span className="min-w-0 flex-1 truncate text-sm leading-5">
+                        {milestone.description || `Milestone ${index + 1}`}
+                      </span>
+                      <div className="flex shrink-0 items-center gap-1.5">
+                        {statusText ? (
+                          <Badge
+                            variant="secondary"
+                            className="max-w-24 truncate font-normal normal-case"
+                            title={statusText}
+                          >
+                            {statusText}
+                          </Badge>
+                        ) : null}
+                        <MilestoneFlagsBadges milestone={milestone} hideEmpty />
+                        {typeof multiMilestone?.amount === "number" ? (
+                          <UsdcAmount
+                            amount={multiMilestone.amount}
+                            symbol={currency}
+                            size="sm"
+                          />
+                        ) : null}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+              {remaining > 0 ? (
+                <p className="text-xs font-medium text-muted-foreground">
+                  +{remaining} more milestone{remaining > 1 ? "s" : ""}
+                </p>
+              ) : null}
+            </>
+          )}
         </div>
 
         <footer className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-4">

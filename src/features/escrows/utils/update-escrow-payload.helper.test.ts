@@ -95,6 +95,24 @@ describe("buildUpdateEscrowDefaultValues", () => {
     expect(defaults.amount).toBe(100);
     expect(defaults.roles.receiver).toBe(RECEIVER);
     expect(defaults.trustline.address).toBe("CUSDC");
+    expect(defaults.trustline.isCustom).toBe(true);
+  });
+
+  it("uses the asset Select preset when trustline matches a known option", () => {
+    const escrow = createSingleEscrow();
+    escrow.trustline.contractId =
+      "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA";
+    escrow.trustline.address =
+      "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA";
+    escrow.trustline.symbol = "USDC";
+
+    const defaults = buildUpdateEscrowDefaultValues(escrow);
+
+    expect(defaults.trustline.isCustom).toBe(false);
+    expect(defaults.trustline.address).toBe(
+      "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA",
+    );
+    expect(defaults.trustline.symbol).toBe("USDC");
   });
 
   it("omits amount for multi-release escrows", () => {
