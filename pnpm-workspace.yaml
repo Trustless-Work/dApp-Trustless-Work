@@ -13,3 +13,6 @@ allowBuilds:
   unrs-resolver: true
   usb: true
   utf-8-validate: true
+
+minimumReleaseAgeExclude:
+  - '@trustless-work/escrow@5.0.0-beta.0'
