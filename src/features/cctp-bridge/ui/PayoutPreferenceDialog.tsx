@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,12 +31,17 @@ import {
 import { formatAddress } from "@/helpers/format.helper";
 import { getCctpDestinationOptions } from "@/features/cctp-bridge/lib/chains";
 import { useCrossChainDestination } from "@/features/cctp-bridge/hooks/useCrossChainDestination";
+import { useFeeQuote } from "@/features/cctp-bridge/hooks/useFeeQuote";
 import {
+  useBuildPayoutPreference,
   useClearPayoutPreference,
-  useSetPayoutPreference,
+  useConfirmPayoutPreference,
 } from "@/features/cctp-bridge/hooks/usePayoutPreferenceMutations";
 import { usePayoutPreferenceForm } from "@/features/cctp-bridge/hooks/usePayoutPreferenceForm";
-import type { EscrowKind } from "@/features/cctp-bridge/types/cctp-bridge.types";
+import type {
+  EscrowKind,
+  SetCrossChainDestinationResponse,
+} from "@/features/cctp-bridge/types/cctp-bridge.types";
 
 type PayoutPreferenceDialogProps = {
   open: boolean;
@@ -46,11 +51,22 @@ type PayoutPreferenceDialogProps = {
   milestoneIndex?: number;
 };
 
+function formatUsdc(amount: number): string {
+  return `$${amount.toFixed(amount < 1 ? 4 : 2)}`;
+}
+
 /**
  * Receiver-only dialog: lets the receiver pick where they get paid on the
  * next release — Stellar (default) or a chain + address via CCTP. The
  * release signer never sees or controls this; the receiver pre-registers it
  * and a normal release routes automatically.
+ *
+ * Two-step flow so the receiver sees the fee before signing anything:
+ *   1. Form step — pick chain + address; a live "estimated fee" updates as
+ *      the chain selection changes (approximate — Circle's quote is
+ *      gas-driven and can move between reads).
+ *   2. Confirm step — the exact `max_fee` that got baked into the built,
+ *      unsigned tx; only on confirm does the wallet prompt for a signature.
  */
 export const PayoutPreferenceDialog = ({
   open,
@@ -67,19 +83,33 @@ export const PayoutPreferenceDialog = ({
     enabled: open,
   });
 
-  const setPreference = useSetPayoutPreference(escrow);
+  const [pendingTx, setPendingTx] =
+    useState<SetCrossChainDestinationResponse & { receiver: string }>();
+
+  const buildPreference = useBuildPayoutPreference(escrow);
+  const confirmPreference = useConfirmPayoutPreference(escrow);
   const clearPreference = useClearPayoutPreference(escrow);
-  const isBusy = setPreference.isPending || clearPreference.isPending;
+  const isBusy =
+    buildPreference.isPending ||
+    confirmPreference.isPending ||
+    clearPreference.isPending;
 
   const { form, onSubmit } = usePayoutPreferenceForm({
-    isSubmitting: setPreference.isPending,
+    isSubmitting: buildPreference.isPending,
     onSubmit: async (values) => {
-      await setPreference.mutateAsync(values);
+      const built = await buildPreference.mutateAsync(values);
+      setPendingTx(built);
     },
   });
 
+  const selectedDomain = form.watch("destinationDomain");
+  const feeQuote = useFeeQuote(
+    pendingTx ? undefined : selectedDomain,
+  );
+
   useEffect(() => {
     if (open) {
+      setPendingTx(undefined);
       form.reset({
         destinationDomain: current?.destinationDomain ?? 6,
         recipientAddress: current?.recipient ?? "",
@@ -87,6 +117,12 @@ export const PayoutPreferenceDialog = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, current]);
+
+  const handleConfirmAndSign = async () => {
+    if (!pendingTx) return;
+    await confirmPreference.mutateAsync(pendingTx);
+    onOpenChange(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -103,6 +139,40 @@ export const PayoutPreferenceDialog = ({
           <div className="flex items-center justify-center py-6">
             <Loader2 className="animate-spin text-muted-foreground" />
           </div>
+        ) : pendingTx ? (
+          <>
+            <div className="rounded-md border bg-muted/40 p-4 text-sm">
+              <p className="text-muted-foreground">You&apos;re about to pay</p>
+              <p className="text-lg font-semibold text-foreground">
+                {formatUsdc(pendingTx.estimatedFeeUsdc)} USDC
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                in forwarding fees, deducted automatically from your share
+                when this escrow releases.
+              </p>
+            </div>
+
+            <DialogFooter className="flex-col gap-2 sm:flex-row sm:justify-between">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setPendingTx(undefined)}
+                disabled={isBusy}
+              >
+                Back
+              </Button>
+              <Button onClick={handleConfirmAndSign} disabled={isBusy}>
+                {confirmPreference.isPending ? (
+                  <>
+                    <Loader2 className="animate-spin" />
+                    Confirming...
+                  </>
+                ) : (
+                  "Confirm & sign"
+                )}
+              </Button>
+            </DialogFooter>
+          </>
         ) : (
           <>
             {current ? (
@@ -146,6 +216,13 @@ export const PayoutPreferenceDialog = ({
                           ))}
                         </SelectContent>
                       </Select>
+                      <FormDescription>
+                        {feeQuote.isLoading
+                          ? "Checking the current fee..."
+                          : feeQuote.data
+                            ? `Estimated fee: ~${formatUsdc(feeQuote.data.estimatedFeeUsdc)} USDC (gas-driven, may change slightly by the time you confirm)`
+                            : null}
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -196,13 +273,13 @@ export const PayoutPreferenceDialog = ({
                   )}
 
                   <Button type="submit" disabled={isBusy}>
-                    {setPreference.isPending ? (
+                    {buildPreference.isPending ? (
                       <>
                         <Loader2 className="animate-spin" />
-                        Saving...
+                        Preparing...
                       </>
                     ) : (
-                      "Save preference"
+                      "Continue"
                     )}
                   </Button>
                 </DialogFooter>

@@ -2,10 +2,13 @@ import http from "@/lib/http";
 import type {
   AttestationResponse,
   ClearCrossChainDestinationInput,
+  CctpDestinationDomain,
   CrossChainDestination,
+  FeeQuote,
   GetCrossChainDestinationInput,
   SendTransactionResponse,
   SetCrossChainDestinationInput,
+  SetCrossChainDestinationResponse,
   UnsignedTransactionResponse,
 } from "@/features/cctp-bridge/types/cctp-bridge.types";
 
@@ -17,11 +20,19 @@ export class CctpBridgeService {
   /** Builds the unsigned tx for the receiver to register their cross-chain payout target. */
   async buildSetCrossChainDestination(
     input: SetCrossChainDestinationInput,
-  ): Promise<UnsignedTransactionResponse> {
+  ): Promise<SetCrossChainDestinationResponse> {
     const { escrowKind, ...body } = input;
-    const { data } = await http.post<UnsignedTransactionResponse>(
+    const { data } = await http.post<SetCrossChainDestinationResponse>(
       `${escrowBasePath(escrowKind)}/cross-chain-destination`,
       body,
+    );
+    return data;
+  }
+
+  /** Live fee estimate for a destination — a snapshot, not a locked price. */
+  async getFeeQuote(destinationDomain: CctpDestinationDomain): Promise<FeeQuote> {
+    const { data } = await http.get<FeeQuote>(
+      `/core/cctp/fee-quote/${destinationDomain}`,
     );
     return data;
   }

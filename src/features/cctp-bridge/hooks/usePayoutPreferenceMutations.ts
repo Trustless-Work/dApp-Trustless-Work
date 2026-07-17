@@ -28,12 +28,13 @@ async function ensureReceiverAddress(
 }
 
 /**
- * Registers the receiver's cross-chain payout preference: builds the
- * unsigned tx on the backend, signs it with the receiver's Stellar wallet,
- * then submits the signed XDR through the generic send-transaction endpoint.
+ * Step 1 of registering a payout preference: builds the unsigned tx on the
+ * backend (which prices `max_fee` from a live Circle quote) without signing
+ * anything yet. Returns `estimatedFeeUsdc` so the caller can show the
+ * receiver the exact fee that will be baked into the tx and get their
+ * confirmation before the wallet signature prompt.
  */
-export function useSetPayoutPreference(escrow: EscrowContext) {
-  const queryClient = useQueryClient();
+export function useBuildPayoutPreference(escrow: EscrowContext) {
   const { connectWallet } = useWallet();
   const { walletAddress } = useWalletContext();
 
@@ -43,19 +44,33 @@ export function useSetPayoutPreference(escrow: EscrowContext) {
       recipientAddress: string;
     }) => {
       const receiver = await ensureReceiverAddress(walletAddress, connectWallet);
-
-      const { unsignedXdr } = await cctpBridgeService.buildSetCrossChainDestination({
+      const built = await cctpBridgeService.buildSetCrossChainDestination({
         ...escrow,
         receiver,
         destinationDomain: params.destinationDomain,
         recipientAddress: params.recipientAddress,
       });
+      return { ...built, receiver };
+    },
+    onError: (error) => {
+      toast.error(parseApiError(error).detail);
+    },
+  });
+}
 
+/**
+ * Step 2: signs the already-built tx (from `useBuildPayoutPreference`) with
+ * the receiver's Stellar wallet and submits it.
+ */
+export function useConfirmPayoutPreference(escrow: EscrowContext) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: { unsignedXdr: string; receiver: string }) => {
       const signedXdr = await signTransaction({
-        unsignedTransaction: unsignedXdr,
-        address: receiver,
+        unsignedTransaction: params.unsignedXdr,
+        address: params.receiver,
       });
-
       return cctpBridgeService.sendTransaction(signedXdr);
     },
     onSuccess: () => {

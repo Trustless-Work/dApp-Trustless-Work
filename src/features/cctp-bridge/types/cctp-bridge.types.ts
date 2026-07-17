@@ -32,6 +32,18 @@ export interface UnsignedTransactionResponse {
   txHash: string;
 }
 
+/** `set_cross_chain_destination`'s response, plus the fee baked into `max_fee`. */
+export interface SetCrossChainDestinationResponse
+  extends UnsignedTransactionResponse {
+  estimatedFeeUsdc: number;
+}
+
+/** Live fee preview for a destination — a snapshot, not a locked price. */
+export interface FeeQuote {
+  destinationDomain: number;
+  estimatedFeeUsdc: number;
+}
+
 export interface SendTransactionResponse {
   txHash: string;
   ledger: number;
