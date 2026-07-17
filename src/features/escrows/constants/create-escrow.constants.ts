@@ -12,6 +12,8 @@ export type CreateEscrowFieldPath = FieldPath<CreateEscrowFormData>;
 
 export const MAX_ROLE_ADDRESS_COUNT = 5;
 
+export const MAX_MILESTONES_PER_ESCROW = 50;
+
 export const CREATE_ESCROW_STEPS = [
   {
     id: "basics",

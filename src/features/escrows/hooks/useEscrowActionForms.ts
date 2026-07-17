@@ -21,6 +21,8 @@ import {
   type WithdrawFundsFormData,
   type WithdrawFundsFormInput,
 } from "@/features/escrows/schemas/escrow-action.schemas";
+import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
+import { buildUpdateEscrowDefaultValues } from "@/features/escrows/utils/update-escrow-payload.helper";
 import type { ManageMilestonesDefaultValues } from "@/features/escrows/utils/manage-milestones.helper";
 
 export function useFundEscrowForm() {
@@ -42,13 +44,10 @@ export function useWithdrawFundsForm(defaultAddress = "") {
   });
 }
 
-export function useUpdateEscrowForm(defaults: {
-  title: string;
-  description: string;
-}) {
+export function useUpdateEscrowForm(escrow: StoredEscrow) {
   return useForm<UpdateEscrowFormData>({
     resolver: zodResolver(updateEscrowSchema),
-    defaultValues: defaults,
+    defaultValues: buildUpdateEscrowDefaultValues(escrow),
     mode: "onChange",
   });
 }
@@ -82,6 +81,7 @@ export function useResolveDisputeForm(
 export function useManageMilestonesForm(params: {
   isMulti: boolean;
   approversCount: number;
+  existingCount: number;
   defaultValues: ManageMilestonesDefaultValues;
 }) {
   return useForm<ManageMilestonesFormData>({
@@ -89,6 +89,7 @@ export function useManageMilestonesForm(params: {
       createManageMilestonesSchema({
         isMulti: params.isMulti,
         approversCount: params.approversCount,
+        existingCount: params.existingCount,
       }),
     ),
     defaultValues: params.defaultValues,

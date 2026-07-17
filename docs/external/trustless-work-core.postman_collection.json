@@ -1,0 +1,3422 @@
+{
+  "info": {
+    "_postman_id": "37bfde3a-b50a-4a0e-9637-315f51d01c15",
+    "name": "Trustless Work Core API",
+    "description": "Complete endpoint collection for the Trustless Work Core API (as of 2026-07-15).\n\nAUTH: collection-level x-api-key header = {{apiKey}} (format id.secret). Human wallet sessions use a Bearer token instead \u2014 set {{bearerToken}} and switch a request's Authorization to Bearer where needed.\n\nCORE FLOW: Escrow Transactions build an unsignedXdr -> sign it in the wallet -> Stellar > Send transaction submits the signedXdr.\n\nSet the collection variables (baseUrl, apiKey, and the sample G_/C_ addresses) before use.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth & Onboarding",
+      "item": [
+        {
+          "name": "Bootstrap admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/bootstrap-admin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "bootstrap-admin"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"adminSecret\": \"REPLACE_WITH_ADMIN_BOOTSTRAP_SECRET\",\n  \"email\": \"admin@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Public. First run only. Returns full ADMIN api key ONCE.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register \u2014 challenge",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register/challenge",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register",
+                "challenge"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"{{G_address}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "ADMIN/BACKOFFICE_ADMIN key. SEP-10 step 1."
+          },
+          "response": []
+        },
+        {
+          "name": "Register \u2014 verify",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"{{G_address}}\",\n  \"signedXdr\": \"{{signedXdr}}\",\n  \"email\": \"dev@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "ADMIN/BACKOFFICE_ADMIN key. Returns ESCROW_MANAGER api key ONCE (201)."
+          },
+          "response": []
+        },
+        {
+          "name": "Recover \u2014 challenge",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/recover/challenge",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "recover",
+                "challenge"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"{{G_address}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Recover \u2014 verify",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/recover/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "recover",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"{{G_address}}\",\n  \"signedXdr\": \"{{signedXdr}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Mints a fresh ESCROW_MANAGER key (201)."
+          },
+          "response": []
+        },
+        {
+          "name": "Session \u2014 challenge",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/session/challenge",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "session",
+                "challenge"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"{{G_address}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Human wallet login step 1."
+          },
+          "response": []
+        },
+        {
+          "name": "Session \u2014 verify",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/session/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "session",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"{{G_address}}\",\n  \"signedXdr\": \"{{signedXdr}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Returns { token, expiresAt } \u2014 the user's Bearer session JWT."
+          },
+          "response": []
+        },
+        {
+          "name": "Session \u2014 logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/session/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "session",
+                "logout"
+              ]
+            },
+            "description": "Any auth. Invalidates all of the user's session tokens."
+          },
+          "response": []
+        }
+      ],
+      "description": "SEP-10 challenge/verify. register/recover/session challenge+verify require an ADMIN/BACKOFFICE_ADMIN key (backoffice mediates)."
+    },
+    {
+      "name": "Me \u2014 Users, API Keys, Wallets",
+      "item": [
+        {
+          "name": "Get me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            },
+            "description": "Any auth."
+          },
+          "response": []
+        },
+        {
+          "name": "List my API keys",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/me/api-keys?limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "api-keys"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create my API key",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/me/api-keys",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "api-keys"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Production backend\",\n  \"platformId\": \"{{platformId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Returns full key ONCE (201)."
+          },
+          "response": []
+        },
+        {
+          "name": "Rotate my API key",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/me/api-keys/{{keyId}}/rotate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "api-keys",
+                "{{keyId}}",
+                "rotate"
+              ]
+            },
+            "description": "Mints replacement + revokes old. Returns full key ONCE."
+          },
+          "response": []
+        },
+        {
+          "name": "Revoke my API key",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/me/api-keys/{{keyId}}/revoke",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "api-keys",
+                "{{keyId}}",
+                "revoke"
+              ]
+            },
+            "description": "Soft-delete, idempotent."
+          },
+          "response": []
+        },
+        {
+          "name": "List my wallets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/me/wallets?limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "wallets"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unlink wallet",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/me/wallets/{{G_address}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "wallets",
+                "{{G_address}}"
+              ]
+            },
+            "description": "204. Cannot remove the last verified wallet (409)."
+          },
+          "response": []
+        },
+        {
+          "name": "Link wallet \u2014 challenge",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wallets/link/challenge",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wallets",
+                "link",
+                "challenge"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"{{G_address}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Link wallet \u2014 verify",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/wallets/link/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wallets",
+                "link",
+                "verify"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"{{G_address}}\",\n  \"signedXdr\": \"{{signedXdr}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Returns { verified, address }."
+          },
+          "response": []
+        }
+      ],
+      "description": "Self-service. Owner is always the credential (works with x-api-key or Bearer session)."
+    },
+    {
+      "name": "Platforms & Subjects",
+      "item": [
+        {
+          "name": "Create platform",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/platforms",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "platforms"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Grant Fox\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201."
+          },
+          "response": []
+        },
+        {
+          "name": "List my platforms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/me/platforms?limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "platforms"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update platform",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/platforms/{{platformId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "platforms",
+                "{{platformId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Grant Fox Payments\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Archive platform",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/platforms/{{platformId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "platforms",
+                "{{platformId}}"
+              ]
+            },
+            "description": "204. Soft archive; scoped api-keys revoked, data preserved."
+          },
+          "response": []
+        },
+        {
+          "name": "Create subject",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/platforms/{{platformId}}/subjects",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "platforms",
+                "{{platformId}}",
+                "subjects"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"walletAddress\": \"{{G_address}}\",\n  \"externalId\": \"user_42\",\n  \"label\": \"Juan Perez\",\n  \"metadata\": {\n    \"plan\": \"pro\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201. Upsert by externalId."
+          },
+          "response": []
+        },
+        {
+          "name": "List subjects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/platforms/{{platformId}}/subjects?limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "platforms",
+                "{{platformId}}",
+                "subjects"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update subject",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/platforms/{{platformId}}/subjects/{{subjectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "platforms",
+                "{{platformId}}",
+                "subjects",
+                "{{subjectId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"Juan P.\",\n  \"metadata\": {\n    \"plan\": \"enterprise\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Archive subject",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/platforms/{{platformId}}/subjects/{{subjectId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "platforms",
+                "{{platformId}}",
+                "subjects",
+                "{{subjectId}}"
+              ]
+            },
+            "description": "204. Soft archive; attributed history preserved."
+          },
+          "response": []
+        }
+      ],
+      "description": "Multi-tenancy. Attach subjects to escrows at deploy via X-TW-Subject / X-TW-Platform."
+    },
+    {
+      "name": "Escrow Transactions",
+      "item": [
+        {
+          "name": "Single Release / v1",
+          "item": [
+            {
+              "name": "Deploy",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/deploy",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "deploy"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"signer\": \"{{G_address}}\",\n  \"engagementId\": \"ENG-12345\",\n  \"title\": \"Project Alpha\",\n  \"description\": \"Single-release v1 escrow.\",\n  \"roles\": {\n    \"approver\": \"{{G_address}}\",\n    \"serviceProvider\": \"{{G_address}}\",\n    \"platformAddress\": \"{{G_address}}\",\n    \"releaseSigner\": \"{{G_address}}\",\n    \"disputeResolver\": \"{{G_address}}\",\n    \"receiver\": \"{{G_address}}\"\n  },\n  \"amount\": 1000,\n  \"platformFee\": 1,\n  \"milestones\": [\n    {\n      \"description\": \"Phase 1\",\n      \"evidence\": \"https://example.com/ev\"\n    }\n  ],\n  \"trustline\": {\n    \"contractId\": \"{{C_token}}\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Requires ESCROW_MANAGER. Optional headers X-TW-Subject / X-TW-Platform. Returns { unsignedXdr, txHash, contractId }."
+              },
+              "response": []
+            },
+            {
+              "name": "Fund",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/fund",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "fund"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\",\n  \"amount\": 1000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Approve milestone",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/approve-milestone",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "approve-milestone"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"approver\": \"{{G_address}}\",\n  \"milestoneIndex\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change milestone status",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/change-milestone-status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "change-milestone-status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"serviceProvider\": \"{{G_address}}\",\n  \"milestoneIndex\": 0,\n  \"newStatus\": \"completed\",\n  \"newEvidence\": \"https://example.com/proof\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Release funds",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/release-funds",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "release-funds"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"releaseSigner\": \"{{G_address}}\",\n  \"trustlessWorkAddress\": \"{{G_trustlessWork}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Dispute",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/dispute",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "dispute"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resolve dispute",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/resolve-dispute",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "resolve-dispute"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"disputeResolver\": \"{{G_address}}\",\n  \"trustlessWorkAddress\": \"{{G_trustlessWork}}\",\n  \"distributions\": [\n    {\n      \"address\": \"{{G_address}}\",\n      \"amount\": 500\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Extend TTL",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/extend-ttl",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "extend-ttl"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"platformAddress\": \"{{G_address}}\",\n  \"ledgersToExtend\": 100000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/update",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "update"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"platformAddress\": \"{{G_address}}\",\n  \"escrow\": {\n    \"engagementId\": \"ENG-12345\",\n    \"title\": \"Project Alpha\",\n    \"description\": \"Updated.\",\n    \"amount\": 1000,\n    \"platformFee\": 1,\n    \"receiverMemo\": 0,\n    \"roles\": {\n      \"approver\": \"{{G_address}}\",\n      \"serviceProvider\": \"{{G_address}}\",\n      \"platformAddress\": \"{{G_address}}\",\n      \"releaseSigner\": \"{{G_address}}\",\n      \"disputeResolver\": \"{{G_address}}\",\n      \"receiver\": \"{{G_address}}\"\n    },\n    \"milestones\": [\n      {\n        \"description\": \"Phase 1\",\n        \"status\": \"pending\",\n        \"evidence\": \"\",\n        \"approved\": false\n      }\n    ],\n    \"flags\": {\n      \"disputed\": false,\n      \"released\": false,\n      \"resolved\": false\n    },\n    \"trustline\": {\n      \"contractId\": \"{{C_token}}\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Withdraw remaining funds",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/withdraw-remaining-funds",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "withdraw-remaining-funds"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"disputeResolver\": \"{{G_address}}\",\n  \"trustlessWorkAddress\": \"{{G_trustlessWork}}\",\n  \"distributions\": [\n    {\n      \"address\": \"{{G_address}}\",\n      \"amount\": 500\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get escrow balances (batch)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/escrow-balances?addresses={{C_escrow}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "escrow-balances"
+                  ],
+                  "query": [
+                    {
+                      "key": "addresses",
+                      "value": "{{C_escrow}}"
+                    },
+                    {
+                      "key": "addresses",
+                      "value": "{{C_escrow}}",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "1-20 contract addresses. Returns [{ address, balance, decimals }] (live, on-chain)."
+              },
+              "response": []
+            },
+            {
+              "name": "Get escrow (on-chain)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v1/{{C_escrow}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v1",
+                    "{{C_escrow}}"
+                  ]
+                },
+                "description": "On-chain snapshot. Path: /escrow/single-release/v1/:contractId"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Single Release / v2",
+          "item": [
+            {
+              "name": "Deploy",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/deploy",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "deploy"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"signer\": \"{{G_address}}\",\n  \"engagementId\": \"ENG-12345\",\n  \"title\": \"Project Alpha\",\n  \"description\": \"Single-release v2 escrow.\",\n  \"roles\": {\n    \"approvers\": [\n      \"{{G_address}}\"\n    ],\n    \"serviceProviders\": [\n      \"{{G_address}}\"\n    ],\n    \"platform\": \"{{G_address}}\",\n    \"releaseSigners\": [\n      \"{{G_address}}\"\n    ],\n    \"disputeResolvers\": [\n      \"{{G_address}}\"\n    ],\n    \"receiver\": \"{{G_address}}\",\n    \"admin\": \"{{G_address}}\",\n    \"observers\": []\n  },\n  \"amount\": 1000,\n  \"platformFee\": 1,\n  \"milestones\": [\n    {\n      \"description\": \"Phase 1\",\n      \"status\": \"pending\",\n      \"approvalsTarget\": 1\n    }\n  ],\n  \"trustline\": {\n    \"contractId\": \"{{C_token}}\"\n  },\n  \"receiverMemo\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Requires ESCROW_MANAGER. Optional headers X-TW-Subject / X-TW-Platform. milestones optional (0-50). Returns { unsignedXdr, txHash, contractId }."
+              },
+              "response": []
+            },
+            {
+              "name": "Fund",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/fund",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "fund"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\",\n  \"amount\": 1000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Approve milestones (batch)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/approve-milestones",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "approve-milestones"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"approver\": \"{{G_address}}\",\n  \"milestoneIndexes\": [\n    0\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Approve & release milestones",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/approve-and-release-milestones",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "approve-and-release-milestones"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\",\n  \"milestoneIndexes\": [\n    0\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "V2 only. Signer must be in both approvers and releaseSigners."
+              },
+              "response": []
+            },
+            {
+              "name": "Change milestone status (batch)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/change-milestone-status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "change-milestone-status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"serviceProvider\": \"{{G_address}}\",\n  \"updates\": [\n    {\n      \"index\": 0,\n      \"newStatus\": \"completed\",\n      \"newEvidence\": \"https://example.com/proof\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Manage milestones",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/manage-milestones",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "manage-milestones"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"admin\": \"{{G_address}}\",\n  \"newMilestones\": [\n    {\n      \"description\": \"Phase 2\",\n      \"status\": \"pending\",\n      \"approvalsTarget\": 1\n    }\n  ],\n  \"milestoneUpdates\": [\n    {\n      \"index\": 0,\n      \"newDescription\": \"Phase 1 (revised)\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "V2 only. Append newMilestones and/or edit descriptions."
+              },
+              "response": []
+            },
+            {
+              "name": "Release funds",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/release-funds",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "release-funds"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"releaseSigner\": \"{{G_address}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "V2 has no trustlessWorkAddress (supplied server-side)."
+              },
+              "response": []
+            },
+            {
+              "name": "Dispute",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/dispute",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "dispute"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\",\n  \"reason\": \"Deliverable not met\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resolve dispute",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/resolve-dispute",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "resolve-dispute"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"disputeResolver\": \"{{G_address}}\",\n  \"distributions\": [\n    {\n      \"address\": \"{{G_address}}\",\n      \"amount\": 500\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Extend TTL",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/extend-ttl",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "extend-ttl"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"admin\": \"{{G_address}}\",\n  \"ledgersToExtend\": 100000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/update",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "update"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"admin\": \"{{G_address}}\",\n  \"escrow\": {\n    \"engagementId\": \"ENG-12345\",\n    \"title\": \"Project Alpha\",\n    \"description\": \"Updated.\",\n    \"amount\": 1000,\n    \"platformFee\": 1,\n    \"receiverMemo\": 0,\n    \"roles\": {\n      \"approvers\": [\n        \"{{G_address}}\"\n      ],\n      \"serviceProviders\": [\n        \"{{G_address}}\"\n      ],\n      \"platform\": \"{{G_address}}\",\n      \"releaseSigners\": [\n        \"{{G_address}}\"\n      ],\n      \"disputeResolvers\": [\n        \"{{G_address}}\"\n      ],\n      \"receiver\": \"{{G_address}}\",\n      \"admin\": \"{{G_address}}\",\n      \"observers\": []\n    },\n    \"milestones\": [\n      {\n        \"description\": \"Phase 1\",\n        \"status\": \"pending\",\n        \"approvalsTarget\": 1\n      }\n    ],\n    \"trustline\": {\n      \"contractId\": \"{{C_token}}\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Withdraw remaining funds",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/withdraw-remaining-funds",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "withdraw-remaining-funds"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"disputeResolver\": \"{{G_address}}\",\n  \"distributions\": [\n    {\n      \"address\": \"{{G_address}}\",\n      \"amount\": 500\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get escrow balances (batch)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/escrow-balances?addresses={{C_escrow}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "escrow-balances"
+                  ],
+                  "query": [
+                    {
+                      "key": "addresses",
+                      "value": "{{C_escrow}}"
+                    },
+                    {
+                      "key": "addresses",
+                      "value": "{{C_escrow}}",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get escrow (on-chain)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/single-release/v2/{{C_escrow}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "single-release",
+                    "v2",
+                    "{{C_escrow}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Multi Release / v1",
+          "item": [
+            {
+              "name": "Deploy",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/deploy",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "deploy"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"signer\": \"{{G_address}}\",\n  \"engagementId\": \"ENG-67890\",\n  \"title\": \"Product launch\",\n  \"description\": \"Multi-release v1 escrow.\",\n  \"roles\": {\n    \"approver\": \"{{G_address}}\",\n    \"serviceProvider\": \"{{G_address}}\",\n    \"platformAddress\": \"{{G_address}}\",\n    \"releaseSigner\": \"{{G_address}}\",\n    \"disputeResolver\": \"{{G_address}}\"\n  },\n  \"platformFee\": 1,\n  \"milestones\": [\n    {\n      \"description\": \"Phase 1\",\n      \"amount\": 250,\n      \"receiver\": \"{{G_address}}\",\n      \"evidence\": \"https://example.com/ev\"\n    }\n  ],\n  \"trustline\": {\n    \"contractId\": \"{{C_token}}\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Requires ESCROW_MANAGER. No top-level amount: total = sum of milestone amounts; each milestone has its own receiver."
+              },
+              "response": []
+            },
+            {
+              "name": "Fund",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/fund",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "fund"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\",\n  \"amount\": 250\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Approve milestone",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/approve-milestone",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "approve-milestone"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"approver\": \"{{G_address}}\",\n  \"milestoneIndex\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change milestone status",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/change-milestone-status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "change-milestone-status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"serviceProvider\": \"{{G_address}}\",\n  \"milestoneIndex\": 0,\n  \"newStatus\": \"completed\",\n  \"newEvidence\": \"https://example.com/proof\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Release milestone funds",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/release-milestone-funds",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "release-milestone-funds"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"releaseSigner\": \"{{G_address}}\",\n  \"trustlessWorkAddress\": \"{{G_trustlessWork}}\",\n  \"milestoneIndex\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Dispute milestone",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/dispute-milestone",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "dispute-milestone"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\",\n  \"milestoneIndex\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resolve milestone dispute",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/resolve-milestone-dispute",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "resolve-milestone-dispute"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"disputeResolver\": \"{{G_address}}\",\n  \"trustlessWorkAddress\": \"{{G_trustlessWork}}\",\n  \"milestoneIndex\": 0,\n  \"distributions\": [\n    {\n      \"address\": \"{{G_address}}\",\n      \"amount\": 250\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Extend TTL",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/extend-ttl",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "extend-ttl"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"platformAddress\": \"{{G_address}}\",\n  \"ledgersToExtend\": 100000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/update",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "update"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"platformAddress\": \"{{G_address}}\",\n  \"escrow\": {\n    \"engagementId\": \"ENG-67890\",\n    \"title\": \"Product launch\",\n    \"description\": \"Updated.\",\n    \"platformFee\": 1,\n    \"receiverMemo\": 0,\n    \"roles\": {\n      \"approver\": \"{{G_address}}\",\n      \"serviceProvider\": \"{{G_address}}\",\n      \"platformAddress\": \"{{G_address}}\",\n      \"releaseSigner\": \"{{G_address}}\",\n      \"disputeResolver\": \"{{G_address}}\"\n    },\n    \"milestones\": [\n      {\n        \"description\": \"Phase 1\",\n        \"amount\": 250,\n        \"receiver\": \"{{G_address}}\",\n        \"status\": \"pending\",\n        \"evidence\": \"\",\n        \"flags\": {\n          \"approved\": false,\n          \"disputed\": false,\n          \"released\": false,\n          \"resolved\": false\n        }\n      }\n    ],\n    \"trustline\": {\n      \"contractId\": \"{{C_token}}\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Withdraw remaining funds",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/withdraw-remaining-funds",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "withdraw-remaining-funds"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"disputeResolver\": \"{{G_address}}\",\n  \"trustlessWorkAddress\": \"{{G_trustlessWork}}\",\n  \"distributions\": [\n    {\n      \"address\": \"{{G_address}}\",\n      \"amount\": 250\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get escrow balances (batch)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/escrow-balances?addresses={{C_escrow}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "escrow-balances"
+                  ],
+                  "query": [
+                    {
+                      "key": "addresses",
+                      "value": "{{C_escrow}}"
+                    },
+                    {
+                      "key": "addresses",
+                      "value": "{{C_escrow}}",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get escrow (on-chain)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v1/{{C_escrow}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v1",
+                    "{{C_escrow}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Multi Release / v2",
+          "item": [
+            {
+              "name": "Deploy",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/deploy",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "deploy"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"signer\": \"{{G_address}}\",\n  \"engagementId\": \"ENG-67890\",\n  \"title\": \"Product launch\",\n  \"description\": \"Multi-release v2 escrow.\",\n  \"roles\": {\n    \"approvers\": [\n      \"{{G_address}}\"\n    ],\n    \"serviceProviders\": [\n      \"{{G_address}}\"\n    ],\n    \"platform\": \"{{G_address}}\",\n    \"releaseSigners\": [\n      \"{{G_address}}\"\n    ],\n    \"disputeResolvers\": [\n      \"{{G_address}}\"\n    ],\n    \"admin\": \"{{G_address}}\",\n    \"observers\": []\n  },\n  \"platformFee\": 1,\n  \"milestones\": [\n    {\n      \"description\": \"Phase 1\",\n      \"amount\": 250,\n      \"receiver\": \"{{G_address}}\",\n      \"status\": \"pending\",\n      \"approvalsTarget\": 1\n    }\n  ],\n  \"trustline\": {\n    \"contractId\": \"{{C_token}}\"\n  },\n  \"receiverMemo\": 0\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Requires ESCROW_MANAGER. milestones optional (add later via manage-milestones); each milestone has its own receiver."
+              },
+              "response": []
+            },
+            {
+              "name": "Fund",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/fund",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "fund"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\",\n  \"amount\": 250\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Approve milestones (batch)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/approve-milestones",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "approve-milestones"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"approver\": \"{{G_address}}\",\n  \"milestoneIndexes\": [\n    0\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Approve & release milestones",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/approve-and-release-milestones",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "approve-and-release-milestones"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\",\n  \"milestoneIndexes\": [\n    0\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "V2 only. Signer must be in both approvers and releaseSigners."
+              },
+              "response": []
+            },
+            {
+              "name": "Change milestone status (batch)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/change-milestone-status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "change-milestone-status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"serviceProvider\": \"{{G_address}}\",\n  \"updates\": [\n    {\n      \"index\": 0,\n      \"newStatus\": \"completed\",\n      \"newEvidence\": \"https://example.com/proof\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Manage milestones",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/manage-milestones",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "manage-milestones"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"admin\": \"{{G_address}}\",\n  \"newMilestones\": [\n    {\n      \"description\": \"Phase 2\",\n      \"amount\": 300,\n      \"receiver\": \"{{G_address}}\",\n      \"status\": \"pending\",\n      \"approvalsTarget\": 1\n    }\n  ],\n  \"milestoneUpdates\": [\n    {\n      \"index\": 0,\n      \"newDescription\": \"Phase 1 (revised)\",\n      \"newAmount\": 275\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "V2 only. Amount edits forbidden while funded."
+              },
+              "response": []
+            },
+            {
+              "name": "Release funds (batch)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/release-funds",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "release-funds"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"releaseSigner\": \"{{G_address}}\",\n  \"milestoneIndexes\": [\n    0\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Dispute milestones (batch)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/dispute-milestones",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "dispute-milestones"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"signer\": \"{{G_address}}\",\n  \"milestoneIndexes\": [\n    0\n  ],\n  \"reason\": \"Deliverable not met\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resolve dispute (batch)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/resolve-dispute",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "resolve-dispute"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"disputeResolver\": \"{{G_address}}\",\n  \"milestoneIndexes\": [\n    0\n  ],\n  \"distributions\": [\n    {\n      \"address\": \"{{G_address}}\",\n      \"amount\": 250\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Extend TTL",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/extend-ttl",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "extend-ttl"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"admin\": \"{{G_address}}\",\n  \"ledgersToExtend\": 100000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/update",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "update"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"admin\": \"{{G_address}}\",\n  \"escrow\": {\n    \"engagementId\": \"ENG-67890\",\n    \"title\": \"Product launch\",\n    \"description\": \"Updated.\",\n    \"platformFee\": 1,\n    \"receiverMemo\": 0,\n    \"roles\": {\n      \"approvers\": [\n        \"{{G_address}}\"\n      ],\n      \"serviceProviders\": [\n        \"{{G_address}}\"\n      ],\n      \"platform\": \"{{G_address}}\",\n      \"releaseSigners\": [\n        \"{{G_address}}\"\n      ],\n      \"disputeResolvers\": [\n        \"{{G_address}}\"\n      ],\n      \"admin\": \"{{G_address}}\",\n      \"observers\": []\n    },\n    \"milestones\": [\n      {\n        \"description\": \"Phase 1\",\n        \"amount\": 250,\n        \"receiver\": \"{{G_address}}\",\n        \"status\": \"pending\",\n        \"approvalsTarget\": 1\n      }\n    ],\n    \"trustline\": {\n      \"contractId\": \"{{C_token}}\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Withdraw remaining funds",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/withdraw-remaining-funds",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "withdraw-remaining-funds"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"contractId\": \"{{C_escrow}}\",\n  \"disputeResolver\": \"{{G_address}}\",\n  \"distributions\": [\n    {\n      \"address\": \"{{G_address}}\",\n      \"amount\": 250\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get escrow balances (batch)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/escrow-balances?addresses={{C_escrow}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "escrow-balances"
+                  ],
+                  "query": [
+                    {
+                      "key": "addresses",
+                      "value": "{{C_escrow}}"
+                    },
+                    {
+                      "key": "addresses",
+                      "value": "{{C_escrow}}",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get escrow (on-chain)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/escrow/multi-release/v2/{{C_escrow}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "escrow",
+                    "multi-release",
+                    "v2",
+                    "{{C_escrow}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ],
+      "description": "Build unsigned XDRs. Sign in the wallet, then submit via Stellar > Send transaction. Deploy requires ESCROW_MANAGER; every POST/PUT returns { unsignedXdr, txHash, contractId? } (200)."
+    },
+    {
+      "name": "Stellar \u2014 Submit",
+      "item": [
+        {
+          "name": "Send transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/stellar/send-transaction",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "stellar",
+                "send-transaction"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signedXdr\": \"{{signedXdr}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Submit a client-signed XDR. Response is plain call, factory-deploy success (contractId+escrow), or indexer-lagging (code)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Escrow Read-Model (queries)",
+      "item": [
+        {
+          "name": "List escrows",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/escrows?scope=mine&limit=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "escrows"
+              ],
+              "query": [
+                {
+                  "key": "scope",
+                  "value": "mine"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "sort",
+                  "value": "updatedAt",
+                  "disabled": true
+                },
+                {
+                  "key": "order",
+                  "value": "desc",
+                  "disabled": true
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "disabled": true
+                },
+                {
+                  "key": "contractType",
+                  "value": "single-release",
+                  "disabled": true
+                },
+                {
+                  "key": "engagementId",
+                  "value": "ENG-1",
+                  "disabled": true
+                },
+                {
+                  "key": "contractIds",
+                  "value": "{{C_escrow}}",
+                  "disabled": true
+                },
+                {
+                  "key": "participant",
+                  "value": "{{G_address}}",
+                  "disabled": true
+                },
+                {
+                  "key": "role",
+                  "value": "approver",
+                  "disabled": true
+                },
+                {
+                  "key": "platformId",
+                  "value": "{{platformId}}",
+                  "disabled": true
+                },
+                {
+                  "key": "subjectId",
+                  "value": "{{subjectId}}",
+                  "disabled": true
+                },
+                {
+                  "key": "createdAfter",
+                  "value": "2026-01-01T00:00:00.000Z",
+                  "disabled": true
+                },
+                {
+                  "key": "createdBefore",
+                  "value": "2026-12-31T23:59:59.000Z",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Open reads. scope=mine|all. Returns { data:[EscrowSummary], hasMore, nextCursor }. Amounts are human decimal strings; each row carries balance + asset{name,address,contractId}."
+          },
+          "response": []
+        },
+        {
+          "name": "Batch details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/escrows/details?contractIds={{C_escrow}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "escrows",
+                "details"
+              ],
+              "query": [
+                {
+                  "key": "contractIds",
+                  "value": "{{C_escrow}}"
+                },
+                {
+                  "key": "contractIds",
+                  "value": "{{C_escrow}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "1-50 ids. { data:[{ escrow, deposits }] }."
+          },
+          "response": []
+        },
+        {
+          "name": "Batch financial",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/escrows/financial?contractIds={{C_escrow}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "escrows",
+                "financial"
+              ],
+              "query": [
+                {
+                  "key": "contractIds",
+                  "value": "{{C_escrow}}"
+                },
+                {
+                  "key": "contractIds",
+                  "value": "{{C_escrow}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "{ data:[EscrowFinancial] } \u2014 platformFee, totalDeposited/Released, pendingRelease, nextRelease, balance."
+          },
+          "response": []
+        },
+        {
+          "name": "Batch milestones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/escrows/milestones?contractIds={{C_escrow}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "escrows",
+                "milestones"
+              ],
+              "query": [
+                {
+                  "key": "contractIds",
+                  "value": "{{C_escrow}}"
+                },
+                {
+                  "key": "contractIds",
+                  "value": "{{C_escrow}}",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get escrow (detail)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/escrows/{{C_escrow}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "escrows",
+                "{{C_escrow}}"
+              ]
+            },
+            "description": "{ escrow, events[first 200], deposits }."
+          },
+          "response": []
+        },
+        {
+          "name": "Get escrow events (timeline)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/escrows/{{C_escrow}}/events?limit=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "escrows",
+                "{{C_escrow}}",
+                "events"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "order",
+                  "value": "asc",
+                  "disabled": true
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get escrow milestones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/escrows/{{C_escrow}}/milestones",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "escrows",
+                "{{C_escrow}}",
+                "milestones"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "CQRS read-model. Auth: any ESCROW_MANAGER (reads are open). Eventually consistent with chain."
+    },
+    {
+      "name": "GraphQL",
+      "item": [
+        {
+          "name": "Dashboard (escrows page)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query Dashboard($cursor: String) {\n  escrows(scope: mine, limit: 25, sort: updatedAt, order: desc, cursor: $cursor) {\n    data {\n      contractId type status balance\n      asset { name contractId }\n      financial { totalDeposited totalReleased pendingRelease balance }\n    }\n    hasMore nextCursor\n  }\n}",
+                "variables": "{\n  \"cursor\": null\n}"
+              }
+            },
+            "description": "Same auth as REST (x-api-key / Bearer, ESCROW_MANAGER)."
+          },
+          "response": []
+        },
+        {
+          "name": "Escrow detail",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query Detail($id: String!) {\n  escrow(contractId: $id) {\n    contractId type status balance\n    asset { name address contractId }\n    milestones\n    participants { address role }\n    deposits { fromAddress amount ledgerClosedAt }\n    events(limit: 50) { data { kind actor ledgerClosedAt } hasMore nextCursor }\n  }\n}",
+                "variables": "{\n  \"id\": \"{{C_escrow}}\"\n}"
+              }
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "POST /graphql. Field-selection twin of the REST reads."
+    },
+    {
+      "name": "Admin (operator \u2014 ADMIN/BACKOFFICE_ADMIN key)",
+      "item": [
+        {
+          "name": "Users",
+          "item": [
+            {
+              "name": "Create user",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"a@example.com\",\n  \"firstName\": \"Ada\",\n  \"lastName\": \"Lovelace\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "201."
+              },
+              "response": []
+            },
+            {
+              "name": "List users",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users?limit=50&offset=0",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get user",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users/{{userId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users",
+                    "{{userId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update user",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users/{{userId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users",
+                    "{{userId}}"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isActive\": true,\n  \"emailVerified\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Partial. isActive false = soft delete; true = reactivate."
+              },
+              "response": []
+            },
+            {
+              "name": "Set user roles",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users/{{userId}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users",
+                    "{{userId}}",
+                    "roles"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"roles\": [\n    \"BACKOFFICE_ADMIN\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete (deactivate) user",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/users/{{userId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users",
+                    "{{userId}}"
+                  ]
+                },
+                "description": "Soft-delete. Returns updated UserResponse (not 204)."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "API Keys",
+          "item": [
+            {
+              "name": "Create API key",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/api-keys",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "api-keys"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"roles\": [\n    \"ESCROW_MANAGER\"\n  ],\n  \"description\": \"Mobile app\",\n  \"expiresAt\": \"2027-01-01T00:00:00.000Z\",\n  \"platformId\": \"{{platformId}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "Returns full key ONCE (201)."
+              },
+              "response": []
+            },
+            {
+              "name": "Rotate API key",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}/rotate",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "api-keys",
+                    "{{keyId}}",
+                    "rotate"
+                  ]
+                },
+                "description": "Old key stays active until revoked. Returns full key ONCE."
+              },
+              "response": []
+            },
+            {
+              "name": "Revoke API key",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}/revoke",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "api-keys",
+                    "{{keyId}}",
+                    "revoke"
+                  ]
+                },
+                "description": "Soft-delete."
+              },
+              "response": []
+            },
+            {
+              "name": "Set API key roles",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "api-keys",
+                    "{{keyId}}",
+                    "roles"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"roles\": [\n    \"ADMIN\",\n    \"BACKOFFICE_ADMIN\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete API key (hard)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "api-keys",
+                    "{{keyId}}"
+                  ]
+                },
+                "description": "204. Hard delete (GDPR). Use revoke for normal lifecycle."
+              },
+              "response": []
+            },
+            {
+              "name": "Cleanup expired keys",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/api-keys/cleanup-expired",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "api-keys",
+                    "cleanup-expired"
+                  ]
+                },
+                "description": "{ revoked, keyIds[] }."
+              },
+              "response": []
+            },
+            {
+              "name": "List API keys (offset)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/api-keys?limit=50&offset=0",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "api-keys"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                },
+                "description": "Offset pagination: { data, pagination:{limit,offset,total} }."
+              },
+              "response": []
+            },
+            {
+              "name": "List a user's API keys (keyset)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/api-keys/user/{{userId}}?limit=20",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "api-keys",
+                    "user",
+                    "{{userId}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get API key",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "api-keys",
+                    "{{keyId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Attributions",
+          "item": [
+            {
+              "name": "Reconcile attributions",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/attributions/reconcile",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "attributions",
+                    "reconcile"
+                  ]
+                },
+                "description": "{ attached, waiting }."
+              },
+              "response": []
+            },
+            {
+              "name": "Cleanup attributions",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/admin/attributions/cleanup",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "attributions",
+                    "cleanup"
+                  ]
+                },
+                "description": "{ expired }."
+              },
+              "response": []
+            }
+          ]
+        }
+      ],
+      "description": "Require an ADMIN/BACKOFFICE_ADMIN api-key (wallet sessions get 403)."
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Public. 200 { status:'ok' } or 503.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://trustless-core-production.up.railway.app"
+    },
+    {
+      "key": "apiKey",
+      "value": "REPLACE_WITH_KEY_ID.SECRET"
+    },
+    {
+      "key": "bearerToken",
+      "value": "REPLACE_WITH_SESSION_JWT"
+    },
+    {
+      "key": "signedXdr",
+      "value": "REPLACE_WITH_SIGNED_XDR"
+    },
+    {
+      "key": "G_address",
+      "value": "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
+    },
+    {
+      "key": "G_issuer",
+      "value": "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5"
+    },
+    {
+      "key": "G_trustlessWork",
+      "value": "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
+    },
+    {
+      "key": "C_escrow",
+      "value": "CDHAZ2RTE2MDHYQQ7NATF5IVKIFVGLX6FHJ66OPK6MUXBSTRRXFXJ6QB"
+    },
+    {
+      "key": "C_token",
+      "value": "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA"
+    },
+    {
+      "key": "platformId",
+      "value": "7"
+    },
+    {
+      "key": "subjectId",
+      "value": "15"
+    },
+    {
+      "key": "userId",
+      "value": "42"
+    },
+    {
+      "key": "keyId",
+      "value": "REPLACE_WITH_KEY_ID"
+    }
+  ]
+}

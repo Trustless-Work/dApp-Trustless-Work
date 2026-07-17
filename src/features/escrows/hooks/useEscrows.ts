@@ -78,9 +78,10 @@ export function useEscrowDetail(contractId: string) {
     refetchIntervalInBackground: false,
   });
 
-  const isResolving =
-    !hasWalletHydrated ||
-    (canFetch && (query.isPending || query.isFetching));
+  const isInitialLoading =
+    canFetch && query.isPending && query.data === undefined;
+
+  const isResolving = !hasWalletHydrated || isInitialLoading;
 
   return {
     ...query,

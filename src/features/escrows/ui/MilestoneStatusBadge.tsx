@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import {
   getMilestoneStatusText,
+  isMilestoneReleased,
   type EscrowMilestone,
 } from "@/features/escrows/utils/escrow-milestone.helper";
 import { cn } from "@/lib/utils";
@@ -26,9 +27,15 @@ export const MilestoneStatusBadge = ({
     );
   }
 
+  const normalized = status.trim().toLowerCase();
+  const variant =
+    isMilestoneReleased(milestone) || normalized === "released"
+      ? "success"
+      : "secondary";
+
   return (
     <Badge
-      variant="secondary"
+      variant={variant}
       className={cn("max-w-40 truncate font-normal normal-case", className)}
       title={status}
     >
@@ -36,4 +43,3 @@ export const MilestoneStatusBadge = ({
     </Badge>
   );
 };
-

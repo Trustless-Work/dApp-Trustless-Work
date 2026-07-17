@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import type { DashboardStat } from "@/features/dashboard/types/dashboard.types";
 import { Delta, DeltaIcon, DeltaValue } from "./delta";
 import {
   DashboardCard,
@@ -6,45 +7,21 @@ import {
   DashboardCardTitle,
 } from "./dashboard-card";
 
-type Stat = {
-  label: string;
-  value: string;
-  delta: number;
-  hint: string;
+type DashboardStatsProps = {
+  stats: readonly DashboardStat[];
 };
 
-const stats: readonly Stat[] = [
-  {
-    label: "Repeat purchase rate",
-    value: "38.4%",
-    delta: 2.7,
-    hint: "vs prior 30 days",
-  },
-  {
-    label: "Orders",
-    value: "1,842",
-    delta: 4.1,
-    hint: "vs prior 30 days",
-  },
-  {
-    label: "Average order value",
-    value: "$154.60",
-    delta: -1.3,
-    hint: "vs prior 30 days",
-  },
-] as const;
-
-export function DashboardStats() {
+export function DashboardStats({ stats }: DashboardStatsProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3">
-      {stats.map((s) => (
-        <StatCard key={s.label} stat={s} />
+      {stats.map((stat) => (
+        <StatCard key={stat.label} stat={stat} />
       ))}
     </div>
   );
 }
 
-function StatCard({ stat }: { stat: Stat }) {
+function StatCard({ stat }: { stat: DashboardStat }) {
   const { label, value, delta, hint } = stat;
   return (
     <DashboardCard className="group">

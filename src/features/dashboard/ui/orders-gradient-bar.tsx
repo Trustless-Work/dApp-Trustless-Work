@@ -1,8 +1,5 @@
 import type { ChartConfig } from "@/components/ui/chart";
-import {
-  chartRowsStatic,
-  ordersChartConfig,
-} from "@/features/dashboard/ui/orders-chart.data";
+import { ordersChartConfig } from "@/features/dashboard/ui/orders-chart.data";
 import { formatDate } from "@/features/dashboard/ui/formater";
 
 /** Horizontal overlap hides band-scale rounding + SVG antialiasing hairlines between neighbours. */
@@ -107,17 +104,17 @@ export function renderPeakLabel({
   x,
   y,
   width,
-  index,
+  payload,
 }: {
   x?: number | string;
   y?: number | string;
   width?: number | string;
-  index?: number;
+  payload?: { date?: string; isPeak?: boolean };
 }) {
-  const row = typeof index === "number" ? chartRowsStatic[index] : undefined;
   if (
     !(
-      row?.isPeak &&
+      payload?.isPeak &&
+      typeof payload.date === "string" &&
       typeof x === "number" &&
       typeof y === "number" &&
       typeof width === "number"
@@ -132,7 +129,7 @@ export function renderPeakLabel({
       x={x + width / 2}
       y={y - 8}
     >
-      {formatDate(row.date, "day-month")}
+      {formatDate(payload.date, "day-month")}
     </text>
   );
 }

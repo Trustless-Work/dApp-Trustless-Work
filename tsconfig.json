@@ -20,12 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@trustless-work/escrow": [
-        "../trustlesswork-sdk-react/src/index.ts"
-      ],
-      "@trustless-work/escrow/*": [
-        "../trustlesswork-sdk-react/src/*"
-      ]
+      "@trustless-work/escrow": ["./node_modules/@trustless-work/escrow"],
+      "@trustless-work/escrow/*": ["./node_modules/@trustless-work/escrow/*"]
     }
   },
   "include": [

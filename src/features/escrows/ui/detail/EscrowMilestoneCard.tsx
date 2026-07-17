@@ -3,6 +3,7 @@
 import type { MultiReleaseMilestone } from "@trustless-work/escrow";
 import type { ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { UsdcAmount } from "@/components/shared/UsdcAmount";
 import { useLinkedAddressHighlight } from "@/features/escrows/hooks/useLinkedAddressHighlight";
 import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
@@ -41,6 +42,8 @@ type EscrowMilestoneCardProps = {
     typeof useLinkedAddressHighlight
   >["getLinkedAddressProps"];
   receiverCounts: ReadonlyMap<string, number>;
+  selected: boolean;
+  onSelectedChange: (checked: boolean) => void;
 };
 
 export const EscrowMilestoneCard = ({
@@ -51,23 +54,33 @@ export const EscrowMilestoneCard = ({
   symbol,
   getLinkedAddressProps,
   receiverCounts,
+  selected,
+  onSelectedChange,
 }: EscrowMilestoneCardProps) => {
   const multiMilestone = isMulti ? (milestone as MultiReleaseMilestone) : null;
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-start justify-between gap-3 pb-4">
-        <CardTitle className="flex min-w-0 items-start gap-2 text-base font-medium leading-snug">
-          <span className="min-w-0 flex-1">
-            <span className="text-muted-foreground">#{index + 1}</span>{" "}
-            {milestone.description}
-          </span>
-          <MilestoneFlagsBadges
-            milestone={milestone}
-            hideEmpty
-            className="mt-1.5"
+        <div className="flex min-w-0 flex-1 items-start gap-3">
+          <Checkbox
+            checked={selected}
+            onCheckedChange={(value) => onSelectedChange(value === true)}
+            aria-label={`Select milestone ${index + 1}`}
+            className="mt-1"
           />
-        </CardTitle>
+          <CardTitle className="flex min-w-0 items-start gap-2 text-base font-medium leading-snug">
+            <span className="min-w-0 flex-1">
+              <span className="text-muted-foreground">#{index + 1}</span>{" "}
+              {milestone.description}
+            </span>
+            <MilestoneFlagsBadges
+              milestone={milestone}
+              hideEmpty
+              className="mt-1.5"
+            />
+          </CardTitle>
+        </div>
         <div className="flex shrink-0 items-center gap-1">
           <MilestoneDetailsDialog
             escrow={escrow}

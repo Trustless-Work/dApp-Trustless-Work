@@ -18,6 +18,7 @@ import {
   isEscrowReleased,
 } from "@/features/escrows/utils/escrow-display.helper";
 import { getMilestoneStatusText } from "@/features/escrows/utils/escrow-milestone.helper";
+import { formatIsoDateTimeCompact } from "@/helpers/format.helper";
 import { truncateStellarAddress } from "@/helpers/stellar.helper";
 
 type EscrowCardStatus = "active" | "released" | "disputed";
@@ -53,7 +54,7 @@ export const EscrowCard = ({ item }: EscrowCardProps) => {
       href={`/dashboard/escrows/${item.contractId}`}
       className="block h-full min-h-0"
     >
-      <article className="flex h-full min-h-[18rem] flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm transition-shadow hover:shadow-lg">
+      <article className="flex h-full min-h-[20rem] flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 text-card-foreground shadow-sm transition-shadow hover:shadow-lg">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -99,54 +100,71 @@ export const EscrowCard = ({ item }: EscrowCardProps) => {
           </div>
         </div>
 
-        <div className="mt-4 flex min-h-0 flex-1 flex-col">
-          <p className="mb-2 text-xs font-medium text-muted-foreground uppercase">
+        <div className="mt-4 flex min-h-0 flex-1 flex-col gap-3 pb-4">
+          <p className="text-xs font-medium text-muted-foreground uppercase">
             Milestones
           </p>
-          <ul className="flex flex-col gap-1.5">
-            {visibleMilestones.map((milestone, index) => {
-              const statusText = getMilestoneStatusText(milestone);
-              const multiMilestone = isMulti
-                ? (milestone as MultiReleaseMilestone)
-                : null;
-
-              return (
-                <li
-                  key={`${escrow.contractId}-${index}`}
-                  className="flex items-center justify-between gap-2"
-                >
-                  <span className="min-w-0 flex-1 truncate text-sm">
-                    {milestone.description || `Milestone ${index + 1}`}
-                  </span>
-                  <div className="flex shrink-0 items-center gap-1.5">
-                    {statusText ? (
-                      <Badge
-                        variant="secondary"
-                        className="max-w-24 truncate font-normal normal-case"
-                        title={statusText}
-                      >
-                        {statusText}
-                      </Badge>
-                    ) : null}
-                    <MilestoneFlagsBadges milestone={milestone} hideEmpty />
-                    {typeof multiMilestone?.amount === "number" ? (
-                      <UsdcAmount
-                        amount={multiMilestone.amount}
-                        symbol={currency}
-                        size="sm"
-                      />
-                    ) : null}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-          {remaining > 0 ? (
-            <p className="mt-auto pt-2 text-xs font-medium text-muted-foreground">
-              +{remaining} more milestone{remaining > 1 ? "s" : ""}
+          {milestones.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-border bg-muted/30 px-3 py-4 text-sm text-muted-foreground">
+              No milestones yet
             </p>
-          ) : null}
+          ) : (
+            <>
+              <ul className="flex flex-col gap-3">
+                {visibleMilestones.map((milestone, index) => {
+                  const statusText = getMilestoneStatusText(milestone);
+                  const multiMilestone = isMulti
+                    ? (milestone as MultiReleaseMilestone)
+                    : null;
+
+                  return (
+                    <li
+                      key={`${escrow.contractId}-${index}`}
+                      className="flex min-h-8 items-center justify-between gap-2"
+                    >
+                      <span className="min-w-0 flex-1 truncate text-sm leading-5">
+                        {milestone.description || `Milestone ${index + 1}`}
+                      </span>
+                      <div className="flex shrink-0 items-center gap-1.5">
+                        {statusText ? (
+                          <Badge
+                            variant="secondary"
+                            className="max-w-24 truncate font-normal normal-case"
+                            title={statusText}
+                          >
+                            {statusText}
+                          </Badge>
+                        ) : null}
+                        <MilestoneFlagsBadges milestone={milestone} hideEmpty />
+                        {typeof multiMilestone?.amount === "number" ? (
+                          <UsdcAmount
+                            amount={multiMilestone.amount}
+                            symbol={currency}
+                            size="sm"
+                          />
+                        ) : null}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+              {remaining > 0 ? (
+                <p className="text-xs font-medium text-muted-foreground">
+                  +{remaining} more milestone{remaining > 1 ? "s" : ""}
+                </p>
+              ) : null}
+            </>
+          )}
         </div>
+
+        <footer className="mt-auto flex items-center justify-between gap-2 border-t border-border pt-4">
+          <time
+            dateTime={item.createdAt}
+            className="text-xs text-muted-foreground tabular-nums"
+          >
+            {formatIsoDateTimeCompact(item.createdAt)}
+          </time>
+        </footer>
       </article>
     </Link>
   );

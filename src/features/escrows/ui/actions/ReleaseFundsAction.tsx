@@ -17,13 +17,14 @@ import type {
   EscrowMilestoneActionProps,
 } from "@/features/escrows/types/escrow-action.types";
 import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
+import { formatMilestoneNumbers } from "@/features/escrows/utils/milestone-batch.helper";
 
 type ReleaseFundsActionProps = EscrowActionProps | EscrowMilestoneActionProps;
 
-function hasMilestoneIndex(
+function hasMilestoneIndexes(
   props: ReleaseFundsActionProps,
 ): props is EscrowMilestoneActionProps {
-  return "milestoneIndex" in props;
+  return "milestoneIndexes" in props;
 }
 
 export const ReleaseFundsAction = (props: ReleaseFundsActionProps) => {
@@ -32,17 +33,26 @@ export const ReleaseFundsAction = (props: ReleaseFundsActionProps) => {
     triggerVariant,
     icon,
     triggerMode = "button",
+    label,
+    compact,
+    onSuccess,
   } = props;
-  const milestoneIndex = hasMilestoneIndex(props)
-    ? props.milestoneIndex
+  const milestoneIndexes = hasMilestoneIndexes(props)
+    ? props.milestoneIndexes
     : undefined;
   const isMulti = isStoredMultiReleaseEscrow(escrow);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const { release, releaseBatch, loading, walletAddress } = useEscrowActionsContext();
+  const { release, releaseBatch, loading, walletAddress } =
+    useEscrowActionsContext();
 
-  if (isMulti && milestoneIndex === undefined) {
+  if (isMulti && (!milestoneIndexes || milestoneIndexes.length === 0)) {
     return null;
   }
+
+  const isBatch = (milestoneIndexes?.length ?? 0) > 1;
+  const numbers = milestoneIndexes
+    ? formatMilestoneNumbers(milestoneIndexes)
+    : "";
 
   const handleConfirm = async () => {
     if (!walletAddress) {
@@ -53,7 +63,7 @@ export const ReleaseFundsAction = (props: ReleaseFundsActionProps) => {
       ? await releaseBatch({
           contractId: escrow.contractId,
           releaseSigner: walletAddress,
-          milestoneIndexes: [milestoneIndex ?? 0],
+          milestoneIndexes: milestoneIndexes ?? [],
         })
       : await release({
           contractId: escrow.contractId,
@@ -62,16 +72,18 @@ export const ReleaseFundsAction = (props: ReleaseFundsActionProps) => {
 
     if (result) {
       setConfirmOpen(false);
+      onSuccess?.();
     }
   };
 
   return (
     <>
       <ActionTrigger
-        label="Release Funds"
+        label={label ?? "Release Funds"}
         triggerMode={triggerMode}
         triggerVariant={triggerVariant ?? "primary"}
         icon={icon}
+        compact={compact}
         onActivate={() => setConfirmOpen(true)}
       />
 
@@ -107,8 +119,12 @@ export const ReleaseFundsAction = (props: ReleaseFundsActionProps) => {
         <ConfirmActionDialog
           open={confirmOpen}
           onOpenChange={setConfirmOpen}
-          title="Release Funds?"
-          description="Releasing funds is irreversible. Confirm that the milestone is approved."
+          title={isBatch ? "Release Funds?" : "Release Funds?"}
+          description={
+            isBatch
+              ? `Releasing funds for milestones ${numbers} is irreversible. Confirm that each milestone is approved.`
+              : "Releasing funds is irreversible. Confirm that the milestone is approved."
+          }
           confirmLabel="Release Funds"
           loading={loading}
           onConfirm={handleConfirm}

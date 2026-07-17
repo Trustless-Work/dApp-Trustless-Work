@@ -17,17 +17,29 @@ import { useEscrowActionsContext } from "@/features/escrows/providers/EscrowActi
 import type { ChangeMilestoneStatusFormData } from "@/features/escrows/schemas/escrow-action.schemas";
 import type { EscrowMilestoneActionProps } from "@/features/escrows/types/escrow-action.types";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
+import { formatMilestoneNumbers } from "@/features/escrows/utils/milestone-batch.helper";
 
 export const ChangeMilestoneStatusAction = ({
   escrow,
-  milestoneIndex,
+  milestoneIndexes,
   triggerVariant,
   icon,
   triggerMode = "button",
+  label,
+  compact,
+  onSuccess,
 }: EscrowMilestoneActionProps) => {
   const [open, setOpen] = useState(false);
   const form = useChangeMilestoneStatusForm();
   const { changeStatus, loading, walletAddress } = useEscrowActionsContext();
+
+  if (milestoneIndexes.length === 0) {
+    return null;
+  }
+
+  const isBatch = milestoneIndexes.length > 1;
+  const numbers = formatMilestoneNumbers(milestoneIndexes);
+  const fieldId = milestoneIndexes.join("-");
 
   const handleSubmit = form.handleSubmit(
     async (values: ChangeMilestoneStatusFormData) => {
@@ -40,18 +52,17 @@ export const ChangeMilestoneStatusAction = ({
       const result = await changeStatus({
         contractId: escrow.contractId,
         serviceProvider: walletAddress,
-        updates: [
-          {
-            index: milestoneIndex,
-            newStatus: values.newStatus,
-            ...(evidence ? { newEvidence: evidence } : {}),
-          },
-        ],
+        updates: milestoneIndexes.map((index) => ({
+          index,
+          newStatus: values.newStatus,
+          ...(evidence ? { newEvidence: evidence } : {}),
+        })),
       });
 
       if (result) {
         setOpen(false);
         form.reset({ newStatus: "", newEvidence: "" });
+        onSuccess?.();
       }
     },
   );
@@ -59,10 +70,14 @@ export const ChangeMilestoneStatusAction = ({
   return (
     <>
       <ActionTrigger
-        label="Update Milestone Status"
+        label={
+          label ??
+          (isBatch ? "Update Milestone Statuses" : "Update Milestone Status")
+        }
         triggerMode={triggerMode}
         triggerVariant={triggerVariant}
         icon={icon}
+        compact={compact}
         onActivate={() => setOpen(true)}
       />
 
@@ -78,15 +93,24 @@ export const ChangeMilestoneStatusAction = ({
         <DialogContent>
           <form onSubmit={handleSubmit}>
             <DialogHeader>
-              <DialogTitle>Change Milestone Status</DialogTitle>
+              <DialogTitle>
+                {isBatch
+                  ? "Change Milestone Statuses"
+                  : "Change Milestone Status"}
+              </DialogTitle>
             </DialogHeader>
+            {isBatch ? (
+              <p className="text-sm text-muted-foreground">
+                Applies the same status to milestones {numbers}.
+              </p>
+            ) : null}
             <div className="flex flex-col gap-4 py-4">
               <div className="flex flex-col gap-2">
-                <Label htmlFor={`milestone-status-${milestoneIndex}`}>
+                <Label htmlFor={`milestone-status-${fieldId}`}>
                   New status
                 </Label>
                 <Input
-                  id={`milestone-status-${milestoneIndex}`}
+                  id={`milestone-status-${fieldId}`}
                   placeholder="In progress"
                   {...form.register("newStatus")}
                 />
@@ -97,11 +121,11 @@ export const ChangeMilestoneStatusAction = ({
                 ) : null}
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor={`milestone-evidence-${milestoneIndex}`}>
+                <Label htmlFor={`milestone-evidence-${fieldId}`}>
                   Evidence (optional)
                 </Label>
                 <Textarea
-                  id={`milestone-evidence-${milestoneIndex}`}
+                  id={`milestone-evidence-${fieldId}`}
                   placeholder="URL or notes proving delivery"
                   rows={4}
                   {...form.register("newEvidence")}

@@ -1,11 +1,12 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import {
   AlertTriangle,
+  CheckCircle2,
   ChevronRight,
-  CreditCard,
-  Megaphone,
-  Plug,
-  ShoppingCart,
+  CircleDot,
+  Scale,
+  Wallet,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -17,51 +18,33 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
+import type { DashboardAttentionItem } from "@/features/dashboard/types/dashboard.types";
 import { formatInteger } from "./formater";
 import { DashboardCard, DashboardCardTitle } from "./dashboard-card";
 
-const items = [
-  {
-    title: "Retry failed payments",
-    href: "#",
-    count: 3,
-    icon: <CreditCard aria-hidden="true" strokeWidth={2} />,
-  },
-  {
-    title: "Draft campaigns",
-    href: "#",
-    count: 5,
-    icon: <Megaphone aria-hidden="true" strokeWidth={2} />,
-  },
-  {
-    title: "Webhook delivery errors",
-    href: "#",
-    count: 1,
-    icon: <Plug aria-hidden="true" strokeWidth={2} />,
-  },
-  {
-    title: "Low inventory SKUs",
-    href: "#",
-    count: 2,
-    icon: <AlertTriangle aria-hidden="true" strokeWidth={2} />,
-  },
-  {
-    title: "Unfulfilled orders",
-    href: "#",
-    count: 12,
-    icon: <ShoppingCart aria-hidden="true" strokeWidth={2} />,
-  },
-] as const;
+const ATTENTION_ICONS: Record<DashboardAttentionItem["icon"], ReactNode> = {
+  dispute: <Scale aria-hidden="true" strokeWidth={2} />,
+  pending: <CircleDot aria-hidden="true" strokeWidth={2} />,
+  unfunded: <Wallet aria-hidden="true" strokeWidth={2} />,
+  active: <AlertTriangle aria-hidden="true" strokeWidth={2} />,
+  released: <CheckCircle2 aria-hidden="true" strokeWidth={2} />,
+};
 
-export function NeedsAttention() {
+type NeedsAttentionProps = {
+  items: readonly DashboardAttentionItem[];
+};
+
+export function NeedsAttention({ items }: NeedsAttentionProps) {
   return (
     <DashboardCard className="gap-2">
       <DashboardCardTitle>Needs attention</DashboardCardTitle>
       <ItemGroup className="gap-0">
         {items.map((row) => (
-          <Item asChild key={row.title} size="sm">
+          <Item asChild key={row.id} size="sm">
             <Link href={row.href}>
-              <ItemMedia variant="icon">{row.icon}</ItemMedia>
+              <ItemMedia variant="icon">
+                {ATTENTION_ICONS[row.icon]}
+              </ItemMedia>
               <ItemContent className="font-normal text-muted-foreground text-xs">
                 <ItemTitle>{row.title}</ItemTitle>
                 <ItemDescription className="sr-only">

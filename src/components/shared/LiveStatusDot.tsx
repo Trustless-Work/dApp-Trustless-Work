@@ -11,7 +11,7 @@ const toneStyles: Record<
     ping: "bg-background",
   },
   released: {
-    dot: "bg-muted-foreground",
+    dot: "bg-emerald-500",
     ping: null,
   },
   disputed: {

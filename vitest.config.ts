@@ -1,5 +1,18 @@
+import fs from "node:fs";
 import path from "node:path";
 import { defineConfig } from "vitest/config";
+
+const localEscrowEntry = path.resolve(
+  __dirname,
+  "../react-library-trustless-work/src/index.ts",
+);
+const useLocalEscrowSdk = process.env.USE_LOCAL_ESCROW_SDK === "true";
+
+if (useLocalEscrowSdk && !fs.existsSync(localEscrowEntry)) {
+  throw new Error(
+    `USE_LOCAL_ESCROW_SDK=true but local SDK entry not found at ${localEscrowEntry}`,
+  );
+}
 
 export default defineConfig({
   test: {
@@ -16,6 +29,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      ...(useLocalEscrowSdk
+        ? { "@trustless-work/escrow": localEscrowEntry }
+        : {}),
     },
   },
 });

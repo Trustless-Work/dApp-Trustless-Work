@@ -36,9 +36,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { toast } from "sonner";
 import {
-  ESCROWS_LIST_QUERY_ROOT,
-  escrowDetailQueryKey,
-} from "@/features/escrows/constants/escrow.constants";
+  refreshEscrowQueries,
+  scheduleEscrowIndexerCatchUp,
+} from "@/features/escrows/utils/escrow-query.helper";
 import { getEscrowErrorMessage } from "@/features/escrows/utils/escrow-error.helper";
 import { showEscrowTransactionSuccessToast } from "@/features/escrows/utils/escrow-transaction-toast.helper";
 import { playSound } from "@/lib/sounds";
@@ -60,13 +60,9 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
   const { updateEscrow } = useUpdateEscrow();
   const { manageMilestones: manageMilestonesRequest } = useManageMilestones();
 
-  const invalidate = useCallback(async () => {
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ESCROWS_LIST_QUERY_ROOT }),
-      queryClient.invalidateQueries({
-        queryKey: escrowDetailQueryKey(contractId),
-      }),
-    ]);
+  const refreshEscrowData = useCallback(async () => {
+    await refreshEscrowQueries(queryClient, contractId);
+    scheduleEscrowIndexerCatchUp(queryClient, contractId);
   }, [contractId, queryClient]);
 
   const runAction = useCallback(
@@ -87,7 +83,7 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
       try {
         const response = await action();
 
-        await invalidate();
+        await refreshEscrowData();
         playSound("deploy");
         showEscrowTransactionSuccessToast({
           title: messages.success,
@@ -101,7 +97,7 @@ export function useEscrowActions(contractId: string, escrowType: EscrowType) {
         return null;
       }
     },
-    [invalidate, walletAddress],
+    [refreshEscrowData, walletAddress],
   );
 
   const fund = useCallback(

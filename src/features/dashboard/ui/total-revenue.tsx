@@ -1,21 +1,11 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatFullCurrency, formatPercent } from "./formater";
 import { DashboardCard, DashboardCardTitle } from "./dashboard-card";
 
-/** Demo headline for the total revenue gauge and subscription split. */
-const TOTAL_REVENUE = 284_920;
-
-/**
- * Demo split — recurring subscription revenue vs usage/services (SaaS-style story).
- * Gauge fill follows subscription share.
- */
-const SUBSCRIPTION_REVENUE = 207_994;
-const SUBSCRIPTION_SHARE = SUBSCRIPTION_REVENUE / TOTAL_REVENUE;
-
 const GAUGE_SEGMENTS = 52;
-const GAUGE_PROGRESS = SUBSCRIPTION_SHARE;
 
 /** viewBox units — arc opens downward like the reference (apex toward top of SVG). */
 const VB = { w: 240, h: 200 };
@@ -26,18 +16,18 @@ const R_MID = 92;
 const TICK_HALF = 10;
 const STROKE = 4.5;
 
-type RevenueSplitVariant = "subscriptions" | "usage";
+type RevenueSplitVariant = "released" | "locked";
 
 const REVENUE_SPLIT: Record<
   RevenueSplitVariant,
   { label: string; color: string; opacity?: number }
 > = {
-  subscriptions: {
-    label: "Subscriptions",
+  released: {
+    label: "Released",
     color: "var(--chart-2)",
   },
-  usage: {
-    label: "Usage & services",
+  locked: {
+    label: "Locked",
     color: "var(--chart-2)",
     opacity: 0.35,
   },
@@ -86,8 +76,8 @@ function RevenueRadialGauge({
           const angle = angleDegForSegment(index);
           const active = index < filledCount;
           const split = active
-            ? REVENUE_SPLIT.subscriptions
-            : REVENUE_SPLIT.usage;
+            ? REVENUE_SPLIT.released
+            : REVENUE_SPLIT.locked;
           const { x1, y1, x2, y2 } = tickLine(angle);
 
           return (
@@ -113,14 +103,22 @@ function RevenueRadialGauge({
   );
 }
 
-export function TotalRevenue() {
-  const gaugeLabel = `Subscription revenue share ${formatPercent(SUBSCRIPTION_SHARE * 100, 1)}`;
+type TotalRevenueProps = {
+  totalDeposited: number;
+  releasedShare: number;
+};
+
+export function TotalRevenue({
+  totalDeposited,
+  releasedShare,
+}: TotalRevenueProps) {
+  const gaugeLabel = `Released share ${formatPercent(releasedShare * 100, 1)}`;
 
   return (
     <DashboardCard className="gap-4">
       <div className="sr-only">{gaugeLabel}</div>
 
-      <RevenueRadialGauge progress={GAUGE_PROGRESS}>
+      <RevenueRadialGauge progress={releasedShare}>
         <div
           className={cn(
             "flex size-10 items-center justify-center rounded-full bg-secondary text-muted-foreground [&>svg]:size-4",
@@ -129,9 +127,9 @@ export function TotalRevenue() {
           <Wallet aria-hidden="true" strokeWidth={2} />
         </div>
         <div className="relative z-10 mt-2 flex w-full flex-col items-center">
-          <DashboardCardTitle>Total Revenue</DashboardCardTitle>
+          <DashboardCardTitle>Total deposited</DashboardCardTitle>
           <span className="text-balance text-center font-medium text-foreground text-sm tabular-nums tracking-tight">
-            {formatFullCurrency(TOTAL_REVENUE)}
+            {formatFullCurrency(totalDeposited)}
           </span>
         </div>
       </RevenueRadialGauge>
@@ -157,9 +155,15 @@ export function TotalRevenue() {
         )}
       </div>
 
-      <Button className="w-full" size="sm" variant="secondary">
-        View Detail
-        <ArrowRight aria-hidden="true" data-icon="inline-end" strokeWidth={2} />
+      <Button asChild className="w-full" size="sm" variant="secondary">
+        <Link href="/dashboard/escrows">
+          View Detail
+          <ArrowRight
+            aria-hidden="true"
+            data-icon="inline-end"
+            strokeWidth={2}
+          />
+        </Link>
       </Button>
     </DashboardCard>
   );

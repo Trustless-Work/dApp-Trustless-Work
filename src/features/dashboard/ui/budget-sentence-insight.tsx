@@ -1,16 +1,23 @@
 import { cn } from "@/lib/utils";
 import { MessageCircle, PieChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatPercent } from "./formater";
 import { DashboardCard } from "./dashboard-card";
 
-/**
- * Minimal “headline sentence” insight: one block of copy with an inline KPI,
- * inspired by monochrome dashboard callouts that read like product narrative.
- */
-export function BudgetSentenceInsight({ className }: { className?: string }) {
-  /** Demo delta (same spirit as reference: “…improved by 3.5%…”). */
-  const upliftPct = 3.5;
-  const upliftLabel = upliftPct >= 0 ? "improved" : "narrowed";
+type BudgetSentenceInsightProps = {
+  className?: string;
+  pendingReleasePct: number;
+};
+
+export function BudgetSentenceInsight({
+  className,
+  pendingReleasePct,
+}: BudgetSentenceInsightProps) {
+  const rounded = Math.abs(pendingReleasePct);
+  const tone =
+    pendingReleasePct <= 0
+      ? "No funds are pending release across recent escrows."
+      : null;
 
   return (
     <DashboardCard
@@ -19,7 +26,7 @@ export function BudgetSentenceInsight({ className }: { className?: string }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5 font-medium text-sm">
           <PieChart className="size-4" strokeWidth={2} />
-          AI Insights
+          Insights
         </div>
         <div className="flex items-center gap-2">
           <Button className="text-muted-foreground" size="sm" variant="ghost">
@@ -28,7 +35,7 @@ export function BudgetSentenceInsight({ className }: { className?: string }) {
               data-icon="inline-start"
               strokeWidth={2}
             />
-            Ask AI
+            Escrow Insights
           </Button>
         </div>
       </div>
@@ -39,11 +46,15 @@ export function BudgetSentenceInsight({ className }: { className?: string }) {
           "md:max-w-86 md:text-lg xl:text-2xl",
         )}
       >
-        Unused budget runway {upliftLabel} by{" "}
-        <span className="font-medium text-foreground">
-          {Math.abs(upliftPct)}% this month
-        </span>{" "}
-        vs. trailing burn.
+        {tone ?? (
+          <>
+            Pending release is{" "}
+            <span className="font-medium text-foreground">
+              {formatPercent(rounded, 1)} of deposited volume
+            </span>{" "}
+            across recent org escrows.
+          </>
+        )}
       </p>
     </DashboardCard>
   );

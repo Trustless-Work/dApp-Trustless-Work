@@ -21,19 +21,28 @@ import type {
 } from "@/features/escrows/types/escrow-action.types";
 import { isStoredMultiReleaseEscrow } from "@/features/escrows/types/escrow.types";
 import { ActionTrigger } from "@/features/escrows/ui/actions/ActionTrigger";
+import { formatMilestoneNumbers } from "@/features/escrows/utils/milestone-batch.helper";
 
 type ResolveDisputeActionProps = EscrowActionProps | EscrowMilestoneActionProps;
 
-function hasMilestoneIndex(
+function hasMilestoneIndexes(
   props: ResolveDisputeActionProps,
 ): props is EscrowMilestoneActionProps {
-  return "milestoneIndex" in props;
+  return "milestoneIndexes" in props;
 }
 
 export const ResolveDisputeAction = (props: ResolveDisputeActionProps) => {
-  const { escrow, triggerVariant, icon, triggerMode = "button" } = props;
-  const milestoneIndex = hasMilestoneIndex(props)
-    ? props.milestoneIndex
+  const {
+    escrow,
+    triggerVariant,
+    icon,
+    triggerMode = "button",
+    label,
+    compact,
+    onSuccess,
+  } = props;
+  const milestoneIndexes = hasMilestoneIndexes(props)
+    ? props.milestoneIndexes
     : undefined;
   const isMulti = isStoredMultiReleaseEscrow(escrow);
   const [open, setOpen] = useState(false);
@@ -44,9 +53,14 @@ export const ResolveDisputeAction = (props: ResolveDisputeActionProps) => {
   });
   const { resolve, loading, walletAddress } = useEscrowActionsContext();
 
-  if (isMulti && milestoneIndex === undefined) {
+  if (isMulti && (!milestoneIndexes || milestoneIndexes.length === 0)) {
     return null;
   }
+
+  const isBatch = (milestoneIndexes?.length ?? 0) > 1;
+  const numbers = milestoneIndexes
+    ? formatMilestoneNumbers(milestoneIndexes)
+    : "";
 
   const handleSubmit = form.handleSubmit(
     async (values: ResolveDisputeFormData) => {
@@ -59,7 +73,7 @@ export const ResolveDisputeAction = (props: ResolveDisputeActionProps) => {
             contractId: escrow.contractId,
             disputeResolver: walletAddress,
             distributions: values.rows,
-            milestoneIndexes: [milestoneIndex ?? 0],
+            milestoneIndexes: milestoneIndexes ?? [],
           })
         : await resolve({
             contractId: escrow.contractId,
@@ -70,6 +84,7 @@ export const ResolveDisputeAction = (props: ResolveDisputeActionProps) => {
       if (result) {
         setOpen(false);
         form.reset({ rows: [{ address: "", amount: "" }] });
+        onSuccess?.();
       }
     },
   );
@@ -77,10 +92,11 @@ export const ResolveDisputeAction = (props: ResolveDisputeActionProps) => {
   return (
     <>
       <ActionTrigger
-        label="Resolve Dispute"
+        label={label ?? "Resolve Dispute"}
         triggerMode={triggerMode}
         triggerVariant={triggerVariant}
         icon={icon}
+        compact={compact}
         onActivate={() => setOpen(true)}
       />
 
@@ -96,8 +112,16 @@ export const ResolveDisputeAction = (props: ResolveDisputeActionProps) => {
         <DialogContent className="sm:max-w-xl">
           <form onSubmit={handleSubmit}>
             <DialogHeader>
-              <DialogTitle>Resolve Dispute</DialogTitle>
+              <DialogTitle>
+                {isBatch ? "Resolve Disputes" : "Resolve Dispute"}
+              </DialogTitle>
             </DialogHeader>
+            {isBatch ? (
+              <p className="text-sm text-muted-foreground">
+                Resolves disputes for milestones {numbers} with the same
+                distributions.
+              </p>
+            ) : null}
 
             <div className="flex max-h-[60vh] flex-col gap-3 overflow-y-auto py-4">
               {fields.map((field, index) => (

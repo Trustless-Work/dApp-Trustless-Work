@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
+    "dev:sdk-local": "USE_LOCAL_ESCROW_SDK=true next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
@@ -21,6 +22,7 @@
     "@tanstack/react-query-devtools": "^5.101.1",
     "@tanstack/react-table": "^8.21.3",
     "@trustless-work/blocks": "^1.2.5",
+    "@trustless-work/escrow": "5.0.0-beta.0",
     "@visx/curve": "4.0.1-alpha.0",
     "@visx/event": "4.0.1-alpha.0",
     "@visx/gradient": "4.0.1-alpha.0",

@@ -15,6 +15,12 @@ function buildEscrowSummary(
     engagementId: "ENG-1",
     status: "active",
     totalAmount: null,
+    balance: "250.5",
+    asset: {
+      name: "USDC",
+      address: "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5",
+      contractId: "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA",
+    },
     lastLedgerSeq: "1",
     createdAt: "2026-01-01T00:00:00.000Z",
     updatedAt: "2026-01-02T00:00:00.000Z",
@@ -23,7 +29,7 @@ function buildEscrowSummary(
       description: "Monthly payroll escrow",
       engagementId: "ENG-1",
       trustline: { address: "CUSDC", symbol: "USDC" },
-      platformFee: 2,
+      platformFee: "2",
       roles: {
         approvers: ["G1"],
         serviceProviders: ["G2"],
@@ -33,7 +39,7 @@ function buildEscrowSummary(
         receiver: "G6",
         admin: "G7",
       },
-      amount: 1000,
+      amount: "1000",
       milestones: [{ description: "Done", approvalsTarget: 1 }],
     },
     ...overrides,
@@ -41,17 +47,23 @@ function buildEscrowSummary(
 }
 
 describe("mapEscrowSummaryToStored", () => {
-  it("maps single-release snapshot into StoredEscrow", () => {
-    const stored = mapEscrowSummaryToStored(buildEscrowSummary(), 250);
+  it("maps single-release snapshot into StoredEscrow with API balance", () => {
+    const stored = mapEscrowSummaryToStored(buildEscrowSummary());
 
     expect(stored).toMatchObject({
       type: "single-release",
       contractId: "CDCONTRACT",
       title: "Payroll",
       amount: 1000,
-      balance: 250,
+      balance: 250.5,
       status: "active",
     });
+  });
+
+  it("allows explicit balance override", () => {
+    const stored = mapEscrowSummaryToStored(buildEscrowSummary(), 99);
+
+    expect(stored).toMatchObject({ balance: 99 });
   });
 });
 
@@ -62,10 +74,25 @@ describe("mapEscrowSummaryToListItem", () => {
     expect(item).toMatchObject({
       contractId: "CDCONTRACT",
       title: "Payroll",
+      balance: 250.5,
       assetSymbol: "USDC",
       layout: "standard",
       financial: null,
     });
+  });
+
+  it("prefers root asset name over trustline symbol", () => {
+    const item = mapEscrowSummaryToListItem(
+      buildEscrowSummary({
+        asset: { name: "EURC", address: null, contractId: null },
+        snapshot: {
+          ...buildEscrowSummary().snapshot,
+          trustline: { address: "CUSDC", symbol: "USDC" },
+        },
+      }),
+    );
+
+    expect(item?.assetSymbol).toBe("EURC");
   });
 
   it("returns null when snapshot is invalid", () => {
