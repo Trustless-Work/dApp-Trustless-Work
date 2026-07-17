@@ -13,7 +13,7 @@ type PayoutPreferenceActionProps = EscrowActionProps | EscrowMilestoneActionProp
 function hasMilestoneIndex(
   props: PayoutPreferenceActionProps,
 ): props is EscrowMilestoneActionProps {
-  return "milestoneIndex" in props;
+  return "milestoneIndexes" in props;
 }
 
 /**
@@ -25,7 +25,7 @@ function hasMilestoneIndex(
 export const PayoutPreferenceAction = (props: PayoutPreferenceActionProps) => {
   const { escrow, triggerVariant, icon, triggerMode = "button" } = props;
   const milestoneIndex = hasMilestoneIndex(props)
-    ? props.milestoneIndex
+    ? props.milestoneIndexes[0]
     : undefined;
   const [open, setOpen] = useState(false);
 
