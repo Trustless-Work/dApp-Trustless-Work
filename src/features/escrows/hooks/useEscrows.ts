@@ -16,6 +16,7 @@ import { createEscrowReadService } from "@/features/escrows/services/escrow-read
 import type { EscrowListFilters } from "@/features/escrows/types/escrow.types";
 import { flattenKeysetPages } from "@/lib/pagination";
 import { DEFAULT_KEYSET_LIMIT } from "@/types/pagination.entity";
+import { useActiveOrganization } from "@/providers/OrganizationProvider";
 import { useWalletContext } from "@/providers/WalletProvider";
 
 function useEscrowReadService() {
@@ -26,9 +27,19 @@ function useEscrowReadService() {
 
 export function useEscrowsInfinite(filters?: EscrowListFilters) {
   const { filters: urlFilters } = useEscrowListSearchParams();
-  const resolvedFilters = filters ?? urlFilters;
+  const { activeOrganizationId } = useActiveOrganization();
   const { hasWalletHydrated } = useWalletContext();
   const service = useEscrowReadService();
+
+  const resolvedFilters = useMemo((): EscrowListFilters => {
+    const base = filters ?? urlFilters;
+    return {
+      ...base,
+      platformId: activeOrganizationId ?? "",
+    };
+  }, [filters, urlFilters, activeOrganizationId]);
+
+  const canFetch = hasWalletHydrated && Boolean(activeOrganizationId);
 
   const query = useInfiniteQuery({
     queryKey: escrowsListQueryKey(resolvedFilters),
@@ -40,7 +51,7 @@ export function useEscrowsInfinite(filters?: EscrowListFilters) {
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) =>
       lastPage.hasMore ? (lastPage.nextCursor ?? undefined) : undefined,
-    enabled: hasWalletHydrated,
+    enabled: canFetch,
     staleTime: 1000 * 30,
     placeholderData: keepPreviousData,
   });
@@ -54,7 +65,7 @@ export function useEscrowsInfinite(filters?: EscrowListFilters) {
     ...query,
     escrows,
     filters: resolvedFilters,
-    isLoading: !hasWalletHydrated || query.isPending,
+    isLoading: !canFetch || query.isPending,
   };
 }
 

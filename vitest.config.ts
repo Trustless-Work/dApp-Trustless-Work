@@ -22,7 +22,6 @@ export default defineConfig({
       SKIP_ENV_VALIDATION: "true",
       SESSION_SECRET: "test-placeholder-secret-32chars-min!",
       CORE_API_URL: "https://api.dev.trustlesswork.com",
-      NEXT_PUBLIC_TW_API_KEY: "test-placeholder",
       NODE_ENV: "test",
     },
   },

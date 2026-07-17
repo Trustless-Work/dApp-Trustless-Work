@@ -1,3 +1,5 @@
+import { getStoredSoundEffectsEnabled } from "@/lib/client-storage";
+
 const SOUND_SOURCES = {
   accept: "/sounds/accept.mp3",
   delete: "/sounds/delete.mp3",
@@ -26,6 +28,10 @@ function getAudio(type: SoundType): HTMLAudioElement | null {
 }
 
 export function playSound(type: SoundType): void {
+  if (!getStoredSoundEffectsEnabled()) {
+    return;
+  }
+
   const audio = getAudio(type);
   if (!audio) {
     return;

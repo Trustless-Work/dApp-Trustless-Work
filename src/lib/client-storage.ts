@@ -42,3 +42,21 @@ export function setStoredActiveOrganizationId(organizationId: string): void {
 export function clearStoredActiveOrganizationId(): void {
   getClientStorage().removeItem(ACTIVE_ORGANIZATION_STORAGE_KEY);
 }
+
+export const SOUND_EFFECTS_STORAGE_KEY = "soundEffectsEnabled";
+
+export function getStoredSoundEffectsEnabled(): boolean {
+  const stored = getClientStorage().getItem(SOUND_EFFECTS_STORAGE_KEY);
+  if (stored === null) {
+    return true;
+  }
+
+  return stored !== "false";
+}
+
+export function setStoredSoundEffectsEnabled(enabled: boolean): void {
+  getClientStorage().setItem(
+    SOUND_EFFECTS_STORAGE_KEY,
+    enabled ? "true" : "false",
+  );
+}

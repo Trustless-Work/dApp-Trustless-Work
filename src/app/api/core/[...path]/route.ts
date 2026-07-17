@@ -36,11 +36,23 @@ async function handleCoreProxy(request: NextRequest, context: RouteContext) {
   const corePath = `/${path.join("/")}`;
   const search = request.nextUrl.search;
 
+  const headers: Record<string, string> = {
+    "Content-Type": request.headers.get("content-type") ?? "application/json",
+  };
+
+  const platformId = request.headers.get("x-tw-platform");
+  if (platformId) {
+    headers["X-TW-Platform"] = platformId;
+  }
+
+  const subjectId = request.headers.get("x-tw-subject");
+  if (subjectId) {
+    headers["X-TW-Subject"] = subjectId;
+  }
+
   const init: RequestInit = {
     method: request.method,
-    headers: {
-      "Content-Type": request.headers.get("content-type") ?? "application/json",
-    },
+    headers,
   };
 
   if (request.method !== "GET" && request.method !== "HEAD") {
