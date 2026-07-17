@@ -21,10 +21,10 @@
     "paths": {
       "@/*": ["./src/*"],
       "@trustless-work/escrow": [
-        "../react-library-trustless-work/src/index.ts"
+        "../trustlesswork-sdk-react/src/index.ts"
       ],
       "@trustless-work/escrow/*": [
-        "../react-library-trustless-work/src/*"
+        "../trustlesswork-sdk-react/src/*"
       ]
     }
   },

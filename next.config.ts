@@ -4,7 +4,7 @@ import path from "path";
 
 const escrowLibraryEntry = path.resolve(
   __dirname,
-  "../react-library-trustless-work/src/index.ts",
+  "../trustlesswork-sdk-react/src/index.ts",
 );
 
 const nextConfig: NextConfig = {
