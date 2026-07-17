@@ -1,10 +1,14 @@
 import type { EscrowRoleContext } from "@/features/escrows/domain/escrow-role-context";
-import type { StoredEscrow } from "@/features/escrows/types/escrow.types";
+import {
+  isStoredSingleReleaseEscrow,
+  type StoredEscrow,
+} from "@/features/escrows/types/escrow.types";
 import {
   hasApproverAlreadyApproved,
   isMilestoneApproved,
   isMilestoneDisputed,
   isMilestoneReleased,
+  isMilestoneTerminal,
 } from "@/features/escrows/utils/escrow-milestone.helper";
 
 export abstract class EscrowActionPolicy {
@@ -78,17 +82,41 @@ export abstract class EscrowActionPolicy {
    * CONTRACT_ROLES_REFERENCE.md in the contracts repo: the release signer
    * only decides *when* to release, never *how* the receiver gets paid).
    * Same for both escrow kinds, so it lives here instead of being abstract.
+   *
+   * Also hidden once the escrow/milestone is released or resolved — the
+   * payout already happened (or the terminal Stellar path was taken), so
+   * the destination the receiver registers can no longer change anything.
    */
   canManagePayoutPreference(milestoneIndex?: number): boolean {
     if (milestoneIndex === undefined) {
-      return this.roles.isEscrowReceiver();
+      if (!this.roles.isEscrowReceiver()) {
+        return false;
+      }
+
+      return !this.isEscrowReleasedOrResolved();
     }
 
-    return this.roles.isMilestoneReceiver(milestoneIndex);
+    if (!this.roles.isMilestoneReceiver(milestoneIndex)) {
+      return false;
+    }
+
+    const milestone = this.getMilestone(milestoneIndex);
+    return milestone !== null && !isMilestoneTerminal(milestone);
   }
 
   protected getMilestone(milestoneIndex: number) {
     return this.escrow.milestones[milestoneIndex] ?? null;
+  }
+
+  /** Single-release only: released or its dispute is resolved (terminal). */
+  private isEscrowReleasedOrResolved(): boolean {
+    if (!isStoredSingleReleaseEscrow(this.escrow)) {
+      return false;
+    }
+
+    return (
+      this.escrow.released === true || this.escrow.dispute?.resolved === true
+    );
   }
 
   protected hasPositiveBalance(): boolean {
