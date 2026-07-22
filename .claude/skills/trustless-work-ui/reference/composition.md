@@ -1,6 +1,8 @@
 # Composition — Trustless Work house style
 
-How feature screens compose primitives. Source of truth: dashboard shell + escrows/settings/orgs UI.
+> **Canonical:** [`docs/DESIGN_SYSTEM.md`](../../../../docs/DESIGN_SYSTEM.md) (§10–15). This file is a quick extract for agents; update the canonical doc when recipes change.
+
+How feature screens compose primitives. Code exemplars: dashboard shell + escrows/settings/orgs UI.
 
 ---
 
