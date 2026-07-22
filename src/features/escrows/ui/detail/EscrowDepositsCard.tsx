@@ -38,7 +38,11 @@ function parseDepositAmount(value: string | number): number {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function getDepositAssetSymbol(asset: string): string {
+function getDepositAssetSymbol(asset: string | undefined | null): string {
+  if (!asset) {
+    return "USDC";
+  }
+
   const [symbol] = asset.split(":");
   return symbol || "USDC";
 }
