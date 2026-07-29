@@ -1,5 +1,7 @@
 # Primitives — Trustless Work dApp
 
+> **Canonical:** [`docs/DESIGN_SYSTEM.md`](../../../../docs/DESIGN_SYSTEM.md) (§9). This file is a quick extract for agents; update the canonical doc when CVA patterns change.
+
 Exact patterns from `src/components/ui/`. Prefer variants over `className` color overrides.
 
 `cn` = `clsx` + `tailwind-merge` at `@/lib/utils`.

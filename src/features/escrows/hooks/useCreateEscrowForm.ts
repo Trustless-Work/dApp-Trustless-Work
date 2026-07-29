@@ -30,6 +30,7 @@ import {
   refreshEscrowQueries,
   scheduleEscrowIndexerCatchUp,
 } from "@/features/escrows/utils/escrow-query.helper";
+import { useActiveOrganization } from "@/providers/OrganizationProvider";
 import { useWalletContext } from "@/providers/WalletProvider";
 
 type UseCreateEscrowFormOptions = {
@@ -41,6 +42,7 @@ export function useCreateEscrowForm(options?: UseCreateEscrowFormOptions) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { walletAddress } = useWalletContext();
+  const { activeOrganizationId } = useActiveOrganization();
   const { deployEscrow } = useDeployEscrow();
   const { signAndSend, loading } = useSignAndSend();
   const initialType = options?.initialType ?? "single-release";
@@ -115,13 +117,18 @@ export function useCreateEscrowForm(options?: UseCreateEscrowFormOptions) {
       return;
     }
 
+    if (!activeOrganizationId) {
+      toast.error("Select an organization to create an escrow.");
+      return;
+    }
+
     const payload = toDeployPayload(values, walletAddress);
 
     try {
-      // Attribution (`X-TW-Platform`) is optional and must be a Core platform id,
-      // not the dApp organization id. The API key already scopes the platform.
       const response = await signAndSend(() =>
-        deployEscrow(payload, values.type),
+        deployEscrow(payload, values.type, {
+          platformId: activeOrganizationId,
+        }),
       );
 
       const contractId = response.contractId;

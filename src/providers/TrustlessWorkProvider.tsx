@@ -1,11 +1,9 @@
 "use client";
 
-import { clientEnv } from "@/lib/env";
-import {
-  TrustlessWorkConfig,
-  development,
-} from "@trustless-work/escrow";
+import { TrustlessWorkConfig } from "@trustless-work/escrow";
 import type { ComponentProps, ReactNode } from "react";
+import { useMemo } from "react";
+import { useActiveOrganization } from "@/providers/OrganizationProvider";
 
 type TrustlessWorkProviderProps = {
   children: ReactNode;
@@ -15,13 +13,26 @@ type TrustlessWorkChildren = ComponentProps<
   typeof TrustlessWorkConfig
 >["children"];
 
+const CORE_BFF_BASE_URL = "/api/core";
+
 export const TrustlessWorkProvider = ({
   children,
 }: TrustlessWorkProviderProps) => {
-  const apiKey = clientEnv.integrations.twApiKey;
+  const { activeOrganizationId } = useActiveOrganization();
+
+  const defaultHeaders = useMemo(() => {
+    if (!activeOrganizationId) {
+      return undefined;
+    }
+
+    return { "X-TW-Platform": activeOrganizationId };
+  }, [activeOrganizationId]);
 
   return (
-    <TrustlessWorkConfig baseURL={development} apiKey={apiKey}>
+    <TrustlessWorkConfig
+      baseURL={CORE_BFF_BASE_URL}
+      defaultHeaders={defaultHeaders}
+    >
       {children as TrustlessWorkChildren}
     </TrustlessWorkConfig>
   );

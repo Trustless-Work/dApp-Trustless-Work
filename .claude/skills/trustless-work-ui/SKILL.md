@@ -7,8 +7,11 @@ description: Enforces Trustless Work dApp visual language (radix-luma, Space Gro
 
 Product design system for the dApp. Stay on the existing visual line — do not invent a new aesthetic.
 
+**Canonical source (full, portable):** [`docs/DESIGN_SYSTEM.md`](../../../docs/DESIGN_SYSTEM.md)  
 **Rule (always on):** `.cursor/rules/DESIGN_SYSTEM.mdc`  
 **Stack:** shadcn `radix-luma` · Tailwind v4 · Space Grotesk · Lucide · tokens in `src/app/globals.css`
+
+Before inventing styles, read or apply the checklist in `docs/DESIGN_SYSTEM.md`. Files under `reference/` are quick extracts for agents; on conflict, the canonical doc (and the code) wins.
 
 ---
 
@@ -22,7 +25,7 @@ Product design system for the dApp. Stay on the existing visual line — do not 
 
 | Context | Use instead |
 | --- | --- |
-| Marketing / home / landing | Separate visual language — see [composition.md](reference/composition.md)#marketing-exception |
+| Marketing / home / landing | Separate visual language — see [docs/DESIGN_SYSTEM.md §14](../../../docs/DESIGN_SYSTEM.md#14-marketing-exception) |
 | Creative one-off experiments | `frontend-design` only if user explicitly wants a new aesthetic **outside** product |
 | Adding shadcn components via CLI | `shadcn` skill, then style with **this** skill |
 | Skeletons / empty / tables policy | Also follow `SKELETONS.mdc` + `DAPP.mdc` |
@@ -33,10 +36,11 @@ Product design system for the dApp. Stay on the existing visual line — do not 
 
 ## Workflow
 
-1. **Tokens** — semantic colors, radius map, density → [tokens.md](reference/tokens.md)
-2. **Primitive** — pick existing `@/components/ui/*` variant; do not restyle colors → [primitives.md](reference/primitives.md)
-3. **Recipe** — copy house composition for the screen type → [composition.md](reference/composition.md)
-4. **Checklist** — run review checklist below before finishing
+1. **Canonical** — full tokens, primitives, composition, states, porting → [`docs/DESIGN_SYSTEM.md`](../../../docs/DESIGN_SYSTEM.md)
+2. **Tokens (quick)** — [tokens.md](reference/tokens.md) (extract; prefer canonical)
+3. **Primitive** — pick existing `@/components/ui/*` variant; do not restyle colors → [primitives.md](reference/primitives.md)
+4. **Recipe** — copy house composition for the screen type → [composition.md](reference/composition.md)
+5. **Checklist** — run review checklist below (same as canonical §16)
 
 ---
 
@@ -86,6 +90,8 @@ Product design system for the dApp. Stay on the existing visual line — do not 
 | flags (approved) | `outline` |
 | flags (released) | `default` |
 | active (product exception) | inverted `bg-foreground text-background` + live dot — do not invent more inverted badges |
+
+Do **not** use Badge `success` for domain status (see canonical §9.4 / §12).
 
 ### Gaps
 
@@ -143,6 +149,7 @@ Product design system for the dApp. Stay on the existing visual line — do not 
 
 ## References
 
-- [tokens.md](reference/tokens.md) — CSS variables, brand scale, focus, shadows
-- [primitives.md](reference/primitives.md) — exact CVA classes for ui components
-- [composition.md](reference/composition.md) — page recipes, anti-patterns, marketing exception
+- **[docs/DESIGN_SYSTEM.md](../../../docs/DESIGN_SYSTEM.md)** — canonical (tokens, primitives, composition, states, porting)
+- [tokens.md](reference/tokens.md) — extract; prefer canonical
+- [primitives.md](reference/primitives.md) — extract; prefer canonical
+- [composition.md](reference/composition.md) — extract; prefer canonical

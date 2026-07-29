@@ -1,5 +1,7 @@
 # Tokens — Trustless Work dApp
 
+> **Canonical:** [`docs/DESIGN_SYSTEM.md`](../../../../docs/DESIGN_SYSTEM.md) (§3–8). This file is a quick extract for agents; update the canonical doc when tokens change.
+
 Source: `src/app/globals.css`, `src/app/layout.tsx`, `components.json`.
 
 ---
