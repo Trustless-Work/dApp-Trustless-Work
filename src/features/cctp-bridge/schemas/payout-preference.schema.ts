@@ -12,10 +12,8 @@ export const payoutPreferenceSchema = z
     recipientAddress: z.string().trim().min(1, "Recipient address is required"),
   })
   .superRefine((values, ctx) => {
-    // Accept any destination-chain address shape we support (EVM, Stellar, or
-    // Solana) without branching on the selected domain — the backend is the
-    // authority on the domain↔address pairing. The three formats can't
-    // overlap, so this stays unambiguous.
+    // Accept any supported address shape (EVM, Stellar, Solana) without
+    // branching on domain — the backend owns the domain↔address pairing.
     const isStellarAddress = isValidWallet(values.recipientAddress);
     const isEvmAddress = EVM_ADDRESS_REGEX.test(values.recipientAddress);
     const isSolanaAddress = SOLANA_ADDRESS_REGEX.test(values.recipientAddress);

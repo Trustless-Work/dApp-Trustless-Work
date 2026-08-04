@@ -25,10 +25,9 @@ type CompleteCctpMintDialogProps = {
 };
 
 /**
- * Shown to the receiver after a release that routed their share cross-chain.
- * Polls Circle's attestation for the burn, then lets the receiver submit
- * `receiveMessage` on the destination chain with their own EVM wallet —
- * mint completion is receiver-driven, no relayer involved.
+ * Shown after a release that routed the receiver's share cross-chain. Polls
+ * Circle's attestation, then lets the receiver submit `receiveMessage` on the
+ * destination chain with their own EVM wallet (no relayer).
  */
 export const CompleteCctpMintDialog = ({
   open,

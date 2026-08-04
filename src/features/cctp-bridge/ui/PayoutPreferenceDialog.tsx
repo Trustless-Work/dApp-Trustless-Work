@@ -56,17 +56,10 @@ function formatUsdc(amount: number): string {
 }
 
 /**
- * Receiver-only dialog: lets the receiver pick where they get paid on the
- * next release — Stellar (default) or a chain + address via CCTP. The
- * release signer never sees or controls this; the receiver pre-registers it
- * and a normal release routes automatically.
- *
- * Two-step flow so the receiver sees the fee before signing anything:
- *   1. Form step — pick chain + address; a live "estimated fee" updates as
- *      the chain selection changes (approximate — Circle's quote is
- *      gas-driven and can move between reads).
- *   2. Confirm step — the exact `max_fee` that got baked into the built,
- *      unsigned tx; only on confirm does the wallet prompt for a signature.
+ * Receiver-only dialog to pick the next-release payout: Stellar (default) or
+ * a chain + address via CCTP. Two-step so the receiver sees the fee first:
+ * the form step shows a live estimate, the confirm step shows the exact
+ * baked-in `max_fee` and only then prompts the wallet signature.
  */
 export const PayoutPreferenceDialog = ({
   open,

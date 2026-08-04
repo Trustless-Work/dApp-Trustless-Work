@@ -16,12 +16,7 @@ function hasMilestoneIndex(
   return "milestoneIndexes" in props;
 }
 
-/**
- * Receiver-only entry point into the CCTP "how you want to get paid" flow.
- * Thin wrapper: gating already happened at the call site
- * (`policy.canManagePayoutPreference()`), this just opens the dialog that
- * does the actual work (`src/features/cctp-bridge/ui/PayoutPreferenceDialog`).
- */
+/** Receiver-only entry point into the CCTP payout flow. Thin wrapper (gated by the call site) that opens `PayoutPreferenceDialog`. */
 export const PayoutPreferenceAction = (props: PayoutPreferenceActionProps) => {
   const { escrow, triggerVariant, icon, triggerMode = "button" } = props;
   const milestoneIndex = hasMilestoneIndex(props)

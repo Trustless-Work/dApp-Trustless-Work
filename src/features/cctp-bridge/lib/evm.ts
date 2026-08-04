@@ -35,10 +35,7 @@ function getInjectedProvider(): EthereumProvider {
   return provider;
 }
 
-/**
- * Ensures the injected wallet is connected and on the right destination
- * chain, adding the chain to the wallet if it doesn't know it yet.
- */
+/** Ensures the injected wallet is connected and on the right chain, adding it if unknown. */
 async function ensureChain(
   provider: EthereumProvider,
   chain: CctpDestinationChain,
@@ -84,11 +81,7 @@ async function ensureChain(
   return account;
 }
 
-/**
- * Completes the CCTP transfer on the destination chain by submitting the
- * attestation to `MessageTransmitterV2.receiveMessage`. The receiver signs
- * and pays gas with their own EVM wallet. Returns the destination tx hash.
- */
+/** Completes the CCTP transfer via `MessageTransmitterV2.receiveMessage`; receiver signs and pays gas. Returns the dest tx hash. */
 export async function completeMintOnEvm(args: {
   chain: CctpDestinationChain;
   message: Hex;

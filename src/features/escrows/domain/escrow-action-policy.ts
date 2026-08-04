@@ -75,17 +75,9 @@ export abstract class EscrowActionPolicy {
   abstract canResolveMilestoneDispute(milestoneIndex: number): boolean;
 
   /**
-   * Whether the connected wallet can manage the CCTP cross-chain payout
-   * preference for this escrow (single-release, omit `milestoneIndex`) or
-   * milestone (multi-release, pass `milestoneIndex`). Receiver-only, by
-   * design — never the release signer, admin, or anyone else (see
-   * CONTRACT_ROLES_REFERENCE.md in the contracts repo: the release signer
-   * only decides *when* to release, never *how* the receiver gets paid).
-   * Same for both escrow kinds, so it lives here instead of being abstract.
-   *
-   * Also hidden once the escrow/milestone is released or resolved — the
-   * payout already happened (or the terminal Stellar path was taken), so
-   * the destination the receiver registers can no longer change anything.
+   * Whether the wallet can manage the CCTP payout preference for this escrow
+   * (omit `milestoneIndex`) or milestone (pass it). Receiver-only, and hidden
+   * once released or resolved (the payout can no longer change).
    */
   canManagePayoutPreference(milestoneIndex?: number): boolean {
     if (milestoneIndex === undefined) {

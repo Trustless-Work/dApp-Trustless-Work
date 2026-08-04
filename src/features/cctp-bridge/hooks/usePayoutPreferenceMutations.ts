@@ -27,13 +27,7 @@ async function ensureReceiverAddress(
   return connectWallet();
 }
 
-/**
- * Step 1 of registering a payout preference: builds the unsigned tx on the
- * backend (which prices `max_fee` from a live Circle quote) without signing
- * anything yet. Returns `estimatedFeeUsdc` so the caller can show the
- * receiver the exact fee that will be baked into the tx and get their
- * confirmation before the wallet signature prompt.
- */
+/** Step 1: builds the unsigned tx on the backend and returns `estimatedFeeUsdc`, so the receiver confirms the fee before signing. */
 export function useBuildPayoutPreference(escrow: EscrowContext) {
   const { connectWallet } = useWallet();
   const { walletAddress } = useWalletContext();
@@ -58,10 +52,7 @@ export function useBuildPayoutPreference(escrow: EscrowContext) {
   });
 }
 
-/**
- * Step 2: signs the already-built tx (from `useBuildPayoutPreference`) with
- * the receiver's Stellar wallet and submits it.
- */
+/** Step 2: signs the built tx with the receiver's Stellar wallet and submits it. */
 export function useConfirmPayoutPreference(escrow: EscrowContext) {
   const queryClient = useQueryClient();
 
@@ -91,10 +82,7 @@ export function useConfirmPayoutPreference(escrow: EscrowContext) {
   });
 }
 
-/**
- * Clears the receiver's cross-chain payout preference, reverting future
- * releases to a normal Stellar payout.
- */
+/** Clears the payout preference, reverting future releases to a Stellar payout. */
 export function useClearPayoutPreference(escrow: EscrowContext) {
   const queryClient = useQueryClient();
   const { connectWallet } = useWallet();

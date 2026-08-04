@@ -15,12 +15,7 @@ import {
 } from "viem/chains";
 import { getStoredNetwork } from "@/lib/client-storage";
 
-/**
- * A CCTP destination chain the receiver can complete a mint on with an EVM
- * wallet. `domain` is Circle's CCTP domain (identical on testnet and
- * mainnet). `messageTransmitter` is the contract whose `receiveMessage`
- * completes the mint on this chain.
- */
+/** CCTP destination chain for EVM mints. `domain` is Circle's CCTP domain; `messageTransmitter.receiveMessage` completes the mint. */
 export interface CctpDestinationChain {
   domain: number;
   label: string;
@@ -29,11 +24,7 @@ export interface CctpDestinationChain {
   messageTransmitter: `0x${string}`;
 }
 
-/**
- * CCTP v2 MessageTransmitterV2. The address is identical across every EVM
- * chain within the same environment (per Circle's docs; testnet also
- * verified on-chain as the `to` of completed mint txs).
- */
+/** CCTP v2 MessageTransmitterV2 — same address across every EVM chain in an environment. */
 const MESSAGE_TRANSMITTER_V2 = {
   testnet: "0xE737e5cEBEEBa77EFE34D4aa090756590b1CE275",
   mainnet: "0x81D40F21F12A8F0E3252Bccb954D722d4c464B64",
@@ -46,14 +37,7 @@ interface ChainDefinition {
   mainnet: Chain;
 }
 
-/**
- * EVM chains this UI can complete a mint on. Solana (domain 5) is handled
- * separately (see `getCctpDestinationOptions`): registering a destination
- * only needs a domain + recipient address and Circle's Forwarding Service
- * auto-completes the mint, but the manual EVM mint fallback
- * (`completeMintOnEvm`) needs `viemChain`/`messageTransmitter`, which Solana
- * doesn't have — so Solana stays out of this EVM-only list.
- */
+/** EVM chains the UI can complete a mint on. Solana is handled separately (auto-completed by Circle, no manual EVM mint path). */
 const CHAIN_DEFINITIONS: ChainDefinition[] = [
   { domain: 0, label: "Ethereum", testnet: sepolia, mainnet },
   { domain: 1, label: "Avalanche", testnet: avalancheFuji, mainnet: avalanche },
@@ -63,11 +47,7 @@ const CHAIN_DEFINITIONS: ChainDefinition[] = [
   { domain: 7, label: "Polygon", testnet: polygonAmoy, mainnet: polygon },
 ];
 
-/**
- * Destination chains available for the currently selected network (the same
- * testnet/mainnet toggle used for the rest of the app, via
- * `getStoredNetwork()`) rather than a build-time env var.
- */
+/** Destination chains for the currently selected network (via `getStoredNetwork()`). */
 export function getCctpDestinationChains(): CctpDestinationChain[] {
   const isMainnet = getStoredNetwork() === "mainnet";
   const messageTransmitter = isMainnet
@@ -101,13 +81,7 @@ export interface CctpDestinationOption {
 /** Circle's CCTP domain for Solana. Same on testnet and mainnet. */
 const SOLANA_DOMAIN = 5;
 
-/**
- * Destinations offered in the payout-preference selector. Same as the EVM
- * chains plus Solana (domain 5). Registering a destination only needs a
- * domain + recipient address, so Solana belongs here even though it can't be
- * a full `CctpDestinationChain` (no `viemChain`/`messageTransmitter`); the
- * EVM-only mint path stays on `getCctpDestinationChains`.
- */
+/** Destinations for the payout-preference selector: EVM chains plus Solana (registration only needs a domain + address). */
 export function getCctpDestinationOptions(): CctpDestinationOption[] {
   const evm = getCctpDestinationChains().map(({ domain, label }) => ({
     domain,
@@ -116,8 +90,7 @@ export function getCctpDestinationOptions(): CctpDestinationOption[] {
   return [...evm, { domain: SOLANA_DOMAIN, label: "Solana" }];
 }
 
-/** Domain -> label map covering every domain the backend accepts, including
- * Solana (5), for read-only display of an already-registered preference. */
+/** Domain -> label map for read-only display of a registered preference. */
 const ALL_DOMAIN_LABELS: Record<number, string> = {
   0: "Ethereum",
   1: "Avalanche",

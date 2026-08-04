@@ -7,12 +7,7 @@ import { completeMintOnEvm } from "@/features/cctp-bridge/lib/evm";
 import { getCctpChainByDomain } from "@/features/cctp-bridge/lib/chains";
 import { parseApiError } from "@/lib/api-error";
 
-/**
- * Completes the receiver-driven mint on the destination EVM chain: submits
- * the CCTP message + Circle attestation to `MessageTransmitterV2.receiveMessage`
- * using the receiver's own EVM wallet (no relayer). Returns the destination
- * tx hash.
- */
+/** Completes the mint on the destination EVM chain via `MessageTransmitterV2.receiveMessage` (receiver's own wallet, no relayer). Returns the dest tx hash. */
 export function useCompleteCctpMint() {
   return useMutation({
     mutationFn: async (params: {
