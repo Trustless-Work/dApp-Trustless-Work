@@ -41,13 +41,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/bootstrap-admin",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "bootstrap-admin"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "bootstrap-admin"]
             },
             "body": {
               "mode": "raw",
@@ -77,14 +72,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/register/challenge",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "register",
-                "challenge"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register", "challenge"]
             },
             "body": {
               "mode": "raw",
@@ -111,14 +100,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/register/verify",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "register",
-                "verify"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register", "verify"]
             },
             "body": {
               "mode": "raw",
@@ -145,14 +128,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/recover/challenge",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "recover",
-                "challenge"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "recover", "challenge"]
             },
             "body": {
               "mode": "raw",
@@ -178,14 +155,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/recover/verify",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "recover",
-                "verify"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "recover", "verify"]
             },
             "body": {
               "mode": "raw",
@@ -212,14 +183,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/session/challenge",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "session",
-                "challenge"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "session", "challenge"]
             },
             "body": {
               "mode": "raw",
@@ -246,14 +211,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/auth/session/verify",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "session",
-                "verify"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "session", "verify"]
             },
             "body": {
               "mode": "raw",
@@ -275,14 +234,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/auth/session/logout",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "auth",
-                "session",
-                "logout"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "session", "logout"]
             },
             "description": "Any auth. Invalidates all of the user's session tokens."
           },
@@ -301,13 +254,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users",
-                "me"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me"]
             },
             "description": "Any auth."
           },
@@ -320,14 +268,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me/api-keys?limit=20",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users",
-                "me",
-                "api-keys"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "api-keys"],
               "query": [
                 {
                   "key": "limit",
@@ -355,14 +297,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/users/me/api-keys",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users",
-                "me",
-                "api-keys"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "api-keys"]
             },
             "body": {
               "mode": "raw",
@@ -384,16 +320,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me/api-keys/{{keyId}}/rotate",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users",
-                "me",
-                "api-keys",
-                "{{keyId}}",
-                "rotate"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "api-keys", "{{keyId}}", "rotate"]
             },
             "description": "Mints replacement + revokes old. Returns full key ONCE."
           },
@@ -406,16 +334,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me/api-keys/{{keyId}}/revoke",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users",
-                "me",
-                "api-keys",
-                "{{keyId}}",
-                "revoke"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "api-keys", "{{keyId}}", "revoke"]
             },
             "description": "Soft-delete, idempotent."
           },
@@ -428,14 +348,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me/wallets?limit=20",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users",
-                "me",
-                "wallets"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "wallets"],
               "query": [
                 {
                   "key": "limit",
@@ -458,15 +372,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me/wallets/{{G_address}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users",
-                "me",
-                "wallets",
-                "{{G_address}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "wallets", "{{G_address}}"]
             },
             "description": "204. Cannot remove the last verified wallet (409)."
           },
@@ -484,14 +391,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/wallets/link/challenge",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wallets",
-                "link",
-                "challenge"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wallets", "link", "challenge"]
             },
             "body": {
               "mode": "raw",
@@ -517,14 +418,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/wallets/link/verify",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "wallets",
-                "link",
-                "verify"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["wallets", "link", "verify"]
             },
             "body": {
               "mode": "raw",
@@ -557,12 +452,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/platforms",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "platforms"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["platforms"]
             },
             "body": {
               "mode": "raw",
@@ -584,14 +475,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/users/me/platforms?limit=20",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "users",
-                "me",
-                "platforms"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "platforms"],
               "query": [
                 {
                   "key": "limit",
@@ -619,13 +504,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/platforms/{{platformId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "platforms",
-                "{{platformId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["platforms", "{{platformId}}"]
             },
             "body": {
               "mode": "raw",
@@ -646,13 +526,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/platforms/{{platformId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "platforms",
-                "{{platformId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["platforms", "{{platformId}}"]
             },
             "description": "204. Soft archive; scoped api-keys revoked, data preserved."
           },
@@ -670,14 +545,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/platforms/{{platformId}}/subjects",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "platforms",
-                "{{platformId}}",
-                "subjects"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["platforms", "{{platformId}}", "subjects"]
             },
             "body": {
               "mode": "raw",
@@ -699,14 +568,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/platforms/{{platformId}}/subjects?limit=20",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "platforms",
-                "{{platformId}}",
-                "subjects"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["platforms", "{{platformId}}", "subjects"],
               "query": [
                 {
                   "key": "limit",
@@ -734,9 +597,7 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/platforms/{{platformId}}/subjects/{{subjectId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "platforms",
                 "{{platformId}}",
@@ -763,9 +624,7 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/platforms/{{platformId}}/subjects/{{subjectId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "platforms",
                 "{{platformId}}",
@@ -798,15 +657,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/deploy",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v1",
-                    "deploy"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v1", "deploy"]
                 },
                 "body": {
                   "mode": "raw",
@@ -833,15 +685,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/fund",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v1",
-                    "fund"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v1", "fund"]
                 },
                 "body": {
                   "mode": "raw",
@@ -867,9 +712,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/approve-milestone",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "single-release",
@@ -901,9 +744,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/change-milestone-status",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "single-release",
@@ -935,15 +776,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/release-funds",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v1",
-                    "release-funds"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v1", "release-funds"]
                 },
                 "body": {
                   "mode": "raw",
@@ -969,15 +803,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/dispute",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v1",
-                    "dispute"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v1", "dispute"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1003,15 +830,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/resolve-dispute",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v1",
-                    "resolve-dispute"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v1", "resolve-dispute"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1037,15 +857,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/extend-ttl",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v1",
-                    "extend-ttl"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v1", "extend-ttl"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1071,15 +884,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/update",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v1",
-                    "update"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v1", "update"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1105,9 +911,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/withdraw-remaining-funds",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "single-release",
@@ -1134,15 +938,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/escrow-balances?addresses={{C_escrow}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v1",
-                    "escrow-balances"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v1", "escrow-balances"],
                   "query": [
                     {
                       "key": "addresses",
@@ -1166,15 +963,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v1/{{C_escrow}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v1",
-                    "{{C_escrow}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v1", "{{C_escrow}}"]
                 },
                 "description": "On-chain snapshot. Path: /escrow/single-release/v1/:contractId"
               },
@@ -1197,15 +987,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/deploy",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v2",
-                    "deploy"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v2", "deploy"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1232,15 +1015,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/fund",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v2",
-                    "fund"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v2", "fund"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1266,9 +1042,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/approve-milestones",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "single-release",
@@ -1300,9 +1074,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/approve-and-release-milestones",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "single-release",
@@ -1335,9 +1107,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/change-milestone-status",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "single-release",
@@ -1369,9 +1139,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/manage-milestones",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "single-release",
@@ -1404,15 +1172,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/release-funds",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v2",
-                    "release-funds"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v2", "release-funds"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1439,15 +1200,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/dispute",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v2",
-                    "dispute"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v2", "dispute"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1473,15 +1227,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/resolve-dispute",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v2",
-                    "resolve-dispute"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v2", "resolve-dispute"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1507,15 +1254,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/extend-ttl",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v2",
-                    "extend-ttl"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v2", "extend-ttl"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1541,15 +1281,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/update",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v2",
-                    "update"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v2", "update"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1575,9 +1308,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/withdraw-remaining-funds",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "single-release",
@@ -1604,15 +1335,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/escrow-balances?addresses={{C_escrow}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v2",
-                    "escrow-balances"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v2", "escrow-balances"],
                   "query": [
                     {
                       "key": "addresses",
@@ -1635,15 +1359,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/single-release/v2/{{C_escrow}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "single-release",
-                    "v2",
-                    "{{C_escrow}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "single-release", "v2", "{{C_escrow}}"]
                 }
               },
               "response": []
@@ -1665,15 +1382,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/deploy",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v1",
-                    "deploy"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v1", "deploy"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1700,15 +1410,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/fund",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v1",
-                    "fund"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v1", "fund"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1734,15 +1437,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/approve-milestone",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v1",
-                    "approve-milestone"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v1", "approve-milestone"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1768,9 +1464,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/change-milestone-status",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "multi-release",
@@ -1802,9 +1496,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/release-milestone-funds",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "multi-release",
@@ -1836,15 +1528,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/dispute-milestone",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v1",
-                    "dispute-milestone"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v1", "dispute-milestone"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1870,9 +1555,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/resolve-milestone-dispute",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "multi-release",
@@ -1904,15 +1587,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/extend-ttl",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v1",
-                    "extend-ttl"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v1", "extend-ttl"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1938,15 +1614,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/update",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v1",
-                    "update"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v1", "update"]
                 },
                 "body": {
                   "mode": "raw",
@@ -1972,9 +1641,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/withdraw-remaining-funds",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "multi-release",
@@ -2001,15 +1668,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/escrow-balances?addresses={{C_escrow}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v1",
-                    "escrow-balances"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v1", "escrow-balances"],
                   "query": [
                     {
                       "key": "addresses",
@@ -2032,15 +1692,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v1/{{C_escrow}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v1",
-                    "{{C_escrow}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v1", "{{C_escrow}}"]
                 }
               },
               "response": []
@@ -2062,15 +1715,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/deploy",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v2",
-                    "deploy"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v2", "deploy"]
                 },
                 "body": {
                   "mode": "raw",
@@ -2097,15 +1743,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/fund",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v2",
-                    "fund"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v2", "fund"]
                 },
                 "body": {
                   "mode": "raw",
@@ -2131,9 +1770,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/approve-milestones",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "multi-release",
@@ -2165,9 +1802,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/approve-and-release-milestones",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "multi-release",
@@ -2200,9 +1835,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/change-milestone-status",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "multi-release",
@@ -2234,15 +1867,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/manage-milestones",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v2",
-                    "manage-milestones"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v2", "manage-milestones"]
                 },
                 "body": {
                   "mode": "raw",
@@ -2269,15 +1895,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/release-funds",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v2",
-                    "release-funds"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v2", "release-funds"]
                 },
                 "body": {
                   "mode": "raw",
@@ -2303,9 +1922,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/dispute-milestones",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "multi-release",
@@ -2337,15 +1954,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/resolve-dispute",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v2",
-                    "resolve-dispute"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v2", "resolve-dispute"]
                 },
                 "body": {
                   "mode": "raw",
@@ -2371,15 +1981,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/extend-ttl",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v2",
-                    "extend-ttl"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v2", "extend-ttl"]
                 },
                 "body": {
                   "mode": "raw",
@@ -2405,15 +2008,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/update",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v2",
-                    "update"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v2", "update"]
                 },
                 "body": {
                   "mode": "raw",
@@ -2439,9 +2035,7 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/withdraw-remaining-funds",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
                   "path": [
                     "escrow",
                     "multi-release",
@@ -2468,15 +2062,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/escrow-balances?addresses={{C_escrow}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v2",
-                    "escrow-balances"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v2", "escrow-balances"],
                   "query": [
                     {
                       "key": "addresses",
@@ -2499,15 +2086,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/escrow/multi-release/v2/{{C_escrow}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "escrow",
-                    "multi-release",
-                    "v2",
-                    "{{C_escrow}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["escrow", "multi-release", "v2", "{{C_escrow}}"]
                 }
               },
               "response": []
@@ -2532,13 +2112,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/stellar/send-transaction",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "stellar",
-                "send-transaction"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["stellar", "send-transaction"]
             },
             "body": {
               "mode": "raw",
@@ -2565,12 +2140,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/escrows?scope=mine&limit=50",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "escrows"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["escrows"],
               "query": [
                 {
                   "key": "scope",
@@ -2658,13 +2229,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/escrows/details?contractIds={{C_escrow}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "escrows",
-                "details"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["escrows", "details"],
               "query": [
                 {
                   "key": "contractIds",
@@ -2688,13 +2254,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/escrows/financial?contractIds={{C_escrow}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "escrows",
-                "financial"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["escrows", "financial"],
               "query": [
                 {
                   "key": "contractIds",
@@ -2718,13 +2279,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/escrows/milestones?contractIds={{C_escrow}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "escrows",
-                "milestones"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["escrows", "milestones"],
               "query": [
                 {
                   "key": "contractIds",
@@ -2747,13 +2303,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/escrows/{{C_escrow}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "escrows",
-                "{{C_escrow}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["escrows", "{{C_escrow}}"]
             },
             "description": "{ escrow, events[first 200], deposits }."
           },
@@ -2766,14 +2317,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/escrows/{{C_escrow}}/events?limit=50",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "escrows",
-                "{{C_escrow}}",
-                "events"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["escrows", "{{C_escrow}}", "events"],
               "query": [
                 {
                   "key": "limit",
@@ -2801,14 +2346,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/escrows/{{C_escrow}}/milestones",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "escrows",
-                "{{C_escrow}}",
-                "milestones"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["escrows", "{{C_escrow}}", "milestones"]
             }
           },
           "response": []
@@ -2831,12 +2370,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/graphql",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "graphql"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
             },
             "body": {
               "mode": "graphql",
@@ -2861,12 +2396,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/graphql",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "graphql"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
             },
             "body": {
               "mode": "graphql",
@@ -2899,13 +2430,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/admin/users",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "users"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users"]
                 },
                 "body": {
                   "mode": "raw",
@@ -2927,13 +2453,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/users?limit=50&offset=0",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "users"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users"],
                   "query": [
                     {
                       "key": "limit",
@@ -2955,14 +2476,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/users/{{userId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "users",
-                    "{{userId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users", "{{userId}}"]
                 }
               },
               "response": []
@@ -2979,14 +2494,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/admin/users/{{userId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "users",
-                    "{{userId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users", "{{userId}}"]
                 },
                 "body": {
                   "mode": "raw",
@@ -3013,15 +2522,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/admin/users/{{userId}}/roles",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "users",
-                    "{{userId}}",
-                    "roles"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users", "{{userId}}", "roles"]
                 },
                 "body": {
                   "mode": "raw",
@@ -3042,14 +2544,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/users/{{userId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "users",
-                    "{{userId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "users", "{{userId}}"]
                 },
                 "description": "Soft-delete. Returns updated UserResponse (not 204)."
               },
@@ -3072,13 +2568,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/admin/api-keys",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "api-keys"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "api-keys"]
                 },
                 "body": {
                   "mode": "raw",
@@ -3100,15 +2591,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}/rotate",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "api-keys",
-                    "{{keyId}}",
-                    "rotate"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "api-keys", "{{keyId}}", "rotate"]
                 },
                 "description": "Old key stays active until revoked. Returns full key ONCE."
               },
@@ -3121,15 +2605,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}/revoke",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "api-keys",
-                    "{{keyId}}",
-                    "revoke"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "api-keys", "{{keyId}}", "revoke"]
                 },
                 "description": "Soft-delete."
               },
@@ -3147,15 +2624,8 @@
                 ],
                 "url": {
                   "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}/roles",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "api-keys",
-                    "{{keyId}}",
-                    "roles"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "api-keys", "{{keyId}}", "roles"]
                 },
                 "body": {
                   "mode": "raw",
@@ -3176,14 +2646,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "api-keys",
-                    "{{keyId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "api-keys", "{{keyId}}"]
                 },
                 "description": "204. Hard delete (GDPR). Use revoke for normal lifecycle."
               },
@@ -3196,14 +2660,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/api-keys/cleanup-expired",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "api-keys",
-                    "cleanup-expired"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "api-keys", "cleanup-expired"]
                 },
                 "description": "{ revoked, keyIds[] }."
               },
@@ -3216,13 +2674,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/api-keys?limit=50&offset=0",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "api-keys"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "api-keys"],
                   "query": [
                     {
                       "key": "limit",
@@ -3245,15 +2698,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/api-keys/user/{{userId}}?limit=20",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "api-keys",
-                    "user",
-                    "{{userId}}"
-                  ],
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "api-keys", "user", "{{userId}}"],
                   "query": [
                     {
                       "key": "limit",
@@ -3276,14 +2722,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/api-keys/{{keyId}}",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "api-keys",
-                    "{{keyId}}"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "api-keys", "{{keyId}}"]
                 }
               },
               "response": []
@@ -3300,14 +2740,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/attributions/reconcile",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "attributions",
-                    "reconcile"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "attributions", "reconcile"]
                 },
                 "description": "{ attached, waiting }."
               },
@@ -3320,14 +2754,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{baseUrl}}/admin/attributions/cleanup",
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "path": [
-                    "admin",
-                    "attributions",
-                    "cleanup"
-                  ]
+                  "host": ["{{baseUrl}}"],
+                  "path": ["admin", "attributions", "cleanup"]
                 },
                 "description": "{ expired }."
               },
@@ -3348,12 +2776,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/health",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "health"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
             },
             "description": "Public. 200 { status:'ok' } or 503.",
             "auth": {
@@ -3368,7 +2792,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "https://trustless-core-production.up.railway.app"
+      "value": "https://beta.api.trustlesswork.com"
     },
     {
       "key": "apiKey",

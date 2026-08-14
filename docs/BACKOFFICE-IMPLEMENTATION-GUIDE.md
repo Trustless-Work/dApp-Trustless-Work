@@ -21,7 +21,7 @@ of truth. This API is **not** a database that owns escrow state — it is two co
 
 2. **The read‑model side** (`/escrows/**`, GraphQL `/graphql`). A CQRS projection fed by an
    off‑chain **Indexer** that watches the chain and forwards contract state/events. It is a fast,
-   queryable **cache** — *eventually consistent* with the chain, never authoritative.
+   queryable **cache** — _eventually consistent_ with the chain, never authoritative.
 
 ```
         ┌─────────────────────────────────────────────────────────────┐
@@ -50,18 +50,18 @@ optimistically update, don't assume the projection is instantaneous.
 
 ## 2. Conventions that apply everywhere
 
-| Topic | Rule |
-|---|---|
-| **Base URL** | Production: `https://trustless-core-production.up.railway.app`. **No global path prefix, no URL versioning** — the version is literally in the escrow paths (`/escrow/single-release/v2/...`). |
-| **Content type** | `application/json` for all bodies. |
-| **BigInt** | Every 64‑bit id (`id`, `userId`, `platformId`, `subjectId`, `ledgerSeq`, …) is serialized **as a string**. Never assume it fits a JS `number`. |
-| **Dates** | ISO‑8601 strings (`2026-07-15T00:00:00.000Z`). |
-| **Amounts** | **Human token units as decimal strings** on the read‑model (`"250.5"`), and **plain numbers** in transaction‑build request bodies (`250.5`). No base units on the wire. Scaling uses the token's real SEP‑41 `decimals()` (USDC = 7; custom tokens may differ). |
-| **platformFee** | A **percent** integer in build bodies (`1` = 1%); a percent decimal string on reads (`"5"` = 5%). |
-| **Validation** | Global `ValidationPipe` with `whitelist + forbidNonWhitelisted`. **Unknown/extra fields → 400.** Wrong types → 400. |
-| **Errors** | RFC‑9457 Problem Details on every non‑2xx (see §3). |
-| **Rate limiting** | Budgeted **per credential** (per api‑key id / per session token / per IP for public routes), not globally. Expect `429 TOO_MANY_REQUESTS`. `POST /auth/bootstrap-admin` is tightened to 5/min. |
-| **Swagger** | Interactive docs at `/docs`, raw OpenAPI JSON at `/api`. GraphQL SDL committed at `docs/schema.graphql`. |
+| Topic             | Rule                                                                                                                                                                                                                                                            |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Base URL**      | Production: `https://beta.api.trustlesswork.com`. **No global path prefix, no URL versioning** — the version is literally in the escrow paths (`/escrow/single-release/v2/...`).                                                                                |
+| **Content type**  | `application/json` for all bodies.                                                                                                                                                                                                                              |
+| **BigInt**        | Every 64‑bit id (`id`, `userId`, `platformId`, `subjectId`, `ledgerSeq`, …) is serialized **as a string**. Never assume it fits a JS `number`.                                                                                                                  |
+| **Dates**         | ISO‑8601 strings (`2026-07-15T00:00:00.000Z`).                                                                                                                                                                                                                  |
+| **Amounts**       | **Human token units as decimal strings** on the read‑model (`"250.5"`), and **plain numbers** in transaction‑build request bodies (`250.5`). No base units on the wire. Scaling uses the token's real SEP‑41 `decimals()` (USDC = 7; custom tokens may differ). |
+| **platformFee**   | A **percent** integer in build bodies (`1` = 1%); a percent decimal string on reads (`"5"` = 5%).                                                                                                                                                               |
+| **Validation**    | Global `ValidationPipe` with `whitelist + forbidNonWhitelisted`. **Unknown/extra fields → 400.** Wrong types → 400.                                                                                                                                             |
+| **Errors**        | RFC‑9457 Problem Details on every non‑2xx (see §3).                                                                                                                                                                                                             |
+| **Rate limiting** | Budgeted **per credential** (per api‑key id / per session token / per IP for public routes), not globally. Expect `429 TOO_MANY_REQUESTS`. `POST /auth/bootstrap-admin` is tightened to 5/min.                                                                  |
+| **Swagger**       | Interactive docs at `/docs`, raw OpenAPI JSON at `/api`. GraphQL SDL committed at `docs/schema.graphql`.                                                                                                                                                        |
 
 ### 3. Error shape (RFC‑9457 Problem Details)
 
@@ -184,12 +184,12 @@ which point your `/escrows/**` queries reflect it.
 Four **families**, each with a `v1` and `v2`. Pick the version you deploy with and stay on it for
 that escrow's lifetime — the on‑chain contract is versioned.
 
-| Family | Base path | When to use |
-|---|---|---|
-| Single‑release v1 | `/escrow/single-release/v1` | Legacy. One lump sum, released once. |
+| Family            | Base path                   | When to use                                                                      |
+| ----------------- | --------------------------- | -------------------------------------------------------------------------------- |
+| Single‑release v1 | `/escrow/single-release/v1` | Legacy. One lump sum, released once.                                             |
 | Single‑release v2 | `/escrow/single-release/v2` | **Current** single‑payout escrow. Multi‑approver, `admin` role, dispute reasons. |
-| Multi‑release v1 | `/escrow/multi-release/v1` | Legacy. Independently releasable milestones. |
-| Multi‑release v2 | `/escrow/multi-release/v2` | **Current** milestone escrow. Batch ops, `admin` role, `manage-milestones`. |
+| Multi‑release v1  | `/escrow/multi-release/v1`  | Legacy. Independently releasable milestones.                                     |
+| Multi‑release v2  | `/escrow/multi-release/v2`  | **Current** milestone escrow. Batch ops, `admin` role, `manage-milestones`.      |
 
 **Prefer v2 for new integrations.** v1 is documented for completeness and existing escrows.
 
@@ -212,11 +212,11 @@ Returned by **every** `POST`/`PUT` build endpoint (HTTP **200**, not 201):
 ### 6.2 Auth & headers for build endpoints
 
 - Credential: `x-api-key` (or Bearer). **Deploy requires the `ESCROW_MANAGER` role**; all other
-  actions require only a valid credential (the *contract* enforces who may sign each op on‑chain).
+  actions require only a valid credential (the _contract_ enforces who may sign each op on‑chain).
 - **Deploy** endpoints also accept two optional attribution headers so a platform can tag the
   escrow to one of its end‑users:
   - `X-TW-Subject: <externalId>` — the platform's own id for the end‑user (optional).
-  - `X-TW-Platform: <platformId>` — required **only** when a *wallet session* owns multiple
+  - `X-TW-Platform: <platformId>` — required **only** when a _wallet session_ owns multiple
     platforms (api‑keys already carry their platform).
 
 ### 6.3 Addresses & amounts in bodies
@@ -232,22 +232,22 @@ Returned by **every** `POST`/`PUT` build endpoint (HTTP **200**, not 201):
 
 Endpoint list (append to the base path). Bodies below note **v1 → v2** differences.
 
-| Action | Method + path | Body (v2 unless noted) |
-|---|---|---|
-| **Deploy** | `POST /deploy` | see §6.4.1 |
-| **Fund** | `POST /fund` | `{ contractId, signer, amount }` (same in v1/v2) |
-| **Approve** | `POST /approve-milestones` (v2) · `POST /approve-milestone` (v1) | v2: `{ contractId, approver, milestoneIndexes: number[] }` · v1: `{ contractId, approver, milestoneIndex }` |
-| **Approve & release** | `POST /approve-and-release-milestones` (**v2 only**) | `{ contractId, signer, milestoneIndexes: number[] }` (signer must be approver **and** release signer) |
-| **Change milestone status** | `POST /change-milestone-status` | v2: `{ contractId, serviceProvider, updates: [{ index, newStatus, newEvidence? }] }` · v1: `{ contractId, serviceProvider, milestoneIndex, newStatus, newEvidence? }` |
-| **Manage milestones** | `POST /manage-milestones` (**v2 only**) | `{ contractId, admin, newMilestones: MilestoneV2[], milestoneUpdates: [{ index, newDescription? }] }` |
-| **Release funds** | `POST /release-funds` | v2: `{ contractId, releaseSigner }` · v1: `{ contractId, releaseSigner, trustlessWorkAddress }` |
-| **Dispute** | `POST /dispute` | v2: `{ contractId, signer, reason }` · v1: `{ contractId, signer }` |
-| **Resolve dispute** | `POST /resolve-dispute` | v2: `{ contractId, disputeResolver, distributions: [{ address, amount }] }` · v1: adds `trustlessWorkAddress` |
-| **Update** | `PUT /update` | v2: `{ contractId, admin, escrow: {…full props…} }` · v1: signer is `platformAddress`, escrow props include `flags` |
-| **Extend TTL** | `POST /extend-ttl` | v2: `{ contractId, admin, ledgersToExtend }` · v1: signer is `platformAddress` |
-| **Withdraw remaining** | `POST /withdraw-remaining-funds` | v2: `{ contractId, disputeResolver, distributions: [...] }` · v1: adds `trustlessWorkAddress` |
-| **Get escrow** | `GET /:contractId` | on‑chain snapshot (see §6.6) |
-| **Get balances (batch)** | `GET /escrow-balances?addresses=C…&addresses=C…` | `≤ 20` addresses → `[{ address, balance, decimals }]` |
+| Action                      | Method + path                                                    | Body (v2 unless noted)                                                                                                                                                |
+| --------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Deploy**                  | `POST /deploy`                                                   | see §6.4.1                                                                                                                                                            |
+| **Fund**                    | `POST /fund`                                                     | `{ contractId, signer, amount }` (same in v1/v2)                                                                                                                      |
+| **Approve**                 | `POST /approve-milestones` (v2) · `POST /approve-milestone` (v1) | v2: `{ contractId, approver, milestoneIndexes: number[] }` · v1: `{ contractId, approver, milestoneIndex }`                                                           |
+| **Approve & release**       | `POST /approve-and-release-milestones` (**v2 only**)             | `{ contractId, signer, milestoneIndexes: number[] }` (signer must be approver **and** release signer)                                                                 |
+| **Change milestone status** | `POST /change-milestone-status`                                  | v2: `{ contractId, serviceProvider, updates: [{ index, newStatus, newEvidence? }] }` · v1: `{ contractId, serviceProvider, milestoneIndex, newStatus, newEvidence? }` |
+| **Manage milestones**       | `POST /manage-milestones` (**v2 only**)                          | `{ contractId, admin, newMilestones: MilestoneV2[], milestoneUpdates: [{ index, newDescription? }] }`                                                                 |
+| **Release funds**           | `POST /release-funds`                                            | v2: `{ contractId, releaseSigner }` · v1: `{ contractId, releaseSigner, trustlessWorkAddress }`                                                                       |
+| **Dispute**                 | `POST /dispute`                                                  | v2: `{ contractId, signer, reason }` · v1: `{ contractId, signer }`                                                                                                   |
+| **Resolve dispute**         | `POST /resolve-dispute`                                          | v2: `{ contractId, disputeResolver, distributions: [{ address, amount }] }` · v1: adds `trustlessWorkAddress`                                                         |
+| **Update**                  | `PUT /update`                                                    | v2: `{ contractId, admin, escrow: {…full props…} }` · v1: signer is `platformAddress`, escrow props include `flags`                                                   |
+| **Extend TTL**              | `POST /extend-ttl`                                               | v2: `{ contractId, admin, ledgersToExtend }` · v1: signer is `platformAddress`                                                                                        |
+| **Withdraw remaining**      | `POST /withdraw-remaining-funds`                                 | v2: `{ contractId, disputeResolver, distributions: [...] }` · v1: adds `trustlessWorkAddress`                                                                         |
+| **Get escrow**              | `GET /:contractId`                                               | on‑chain snapshot (see §6.6)                                                                                                                                          |
+| **Get balances (batch)**    | `GET /escrow-balances?addresses=C…&addresses=C…`                 | `≤ 20` addresses → `[{ address, balance, decimals }]`                                                                                                                 |
 
 #### 6.4.1 Single‑release **v2** deploy body
 
@@ -270,9 +270,15 @@ Endpoint list (append to the base path). Bodies below note **v1 → v2** differe
   "amount": 1000,
   "platformFee": 1,
   "milestones": [
-    { "description": "Phase 1 — design", "status": "pending", "approvalsTarget": 1 }
+    {
+      "description": "Phase 1 — design",
+      "status": "pending",
+      "approvalsTarget": 1
+    }
   ],
-  "trustline": { "contractId": "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA" },
+  "trustline": {
+    "contractId": "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA"
+  },
   "receiverMemo": 0
 }
 ```
@@ -322,9 +328,17 @@ Same table as single‑release, with these multi‑release specifics:
   },
   "platformFee": 1,
   "milestones": [
-    { "description": "Phase 1", "amount": 250, "receiver": "G...", "status": "pending", "approvalsTarget": 1 }
+    {
+      "description": "Phase 1",
+      "amount": 250,
+      "receiver": "G...",
+      "status": "pending",
+      "approvalsTarget": 1
+    }
   ],
-  "trustline": { "contractId": "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA" },
+  "trustline": {
+    "contractId": "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA"
+  },
   "receiverMemo": 0
 }
 ```
@@ -340,21 +354,39 @@ differs by family/version — v2 single‑release example:
   "type": "single-release",
   "contractId": "C...",
   "contractBaseId": "C...factory",
-  "engagementId": "ENG-1", "title": "…", "description": "…",
-  "amount": 1000, "balance": 500, "platformFee": 5, "receiverMemo": 0,
+  "engagementId": "ENG-1",
+  "title": "…",
+  "description": "…",
+  "amount": 1000,
+  "balance": 500,
+  "platformFee": 5,
+  "receiverMemo": 0,
   "trustline": { "address": "C...", "contractId": "C...", "symbol": "USDC" },
-  "roles": { "approvers": ["G..."], "serviceProviders": ["G..."], "platform": "G...",
-             "releaseSigners": ["G..."], "disputeResolvers": ["G..."], "receiver": "G...",
-             "admin": "G...", "observers": [] },
-  "milestones": [ { "description": "…", "status": "pending", "evidence": "",
-                    "approvals": { "target": 2, "approvalCount": 1, "approvedBy": ["G..."] } } ],
+  "roles": {
+    "approvers": ["G..."],
+    "serviceProviders": ["G..."],
+    "platform": "G...",
+    "releaseSigners": ["G..."],
+    "disputeResolvers": ["G..."],
+    "receiver": "G...",
+    "admin": "G...",
+    "observers": []
+  },
+  "milestones": [
+    {
+      "description": "…",
+      "status": "pending",
+      "evidence": "",
+      "approvals": { "target": 2, "approvalCount": 1, "approvedBy": ["G..."] }
+    }
+  ],
   "dispute": { "isDisputed": false, "reason": "", "resolved": false },
   "released": false
 }
 ```
 
 - v1 single‑release uses `id` (not `contractId`/`type`), scalar `roles`, milestone `approved:
-  boolean`, and a `flags {disputed, released, resolved}` object.
+boolean`, and a `flags {disputed, released, resolved}` object.
 - Multi‑release milestones carry per‑milestone `amount`, `receiver`, `approvals`/`approved`,
   `dispute`/`flags`, `released`.
 - `GET /escrow-balances?addresses=…` (≤ 20 C… addresses) returns `[{ address, balance, decimals }]`
@@ -381,15 +413,32 @@ on‑chain by the contract's `require_auth`).
 
 1. **Plain call** (fund/release/approve/dispute/… against an existing escrow):
    ```json
-   { "txHash": "a3f1…", "ledger": 12345678, "code": "STELLAR_TX_SUBMITTED", "message": "The escrow has been funded." }
+   {
+     "txHash": "a3f1…",
+     "ledger": 12345678,
+     "code": "STELLAR_TX_SUBMITTED",
+     "message": "The escrow has been funded."
+   }
    ```
-2. **Factory deploy — success** (escrow deployed *and* indexed in time):
+2. **Factory deploy — success** (escrow deployed _and_ indexed in time):
    ```json
-   { "txHash": "a3f1…", "ledger": 12345678, "contractId": "C...", "escrow": { /* initial snapshot */ } }
+   {
+     "txHash": "a3f1…",
+     "ledger": 12345678,
+     "contractId": "C...",
+     "escrow": {
+       /* initial snapshot */
+     }
+   }
    ```
 3. **Factory deploy — indexer lagging** (tx is in the ledger, snapshot not ready yet):
    ```json
-   { "txHash": "a3f1…", "ledger": 12345678, "code": "STELLAR_TX_SUBMITTED_INDEXER_LAGGING", "message": "…retry shortly." }
+   {
+     "txHash": "a3f1…",
+     "ledger": 12345678,
+     "code": "STELLAR_TX_SUBMITTED_INDEXER_LAGGING",
+     "message": "…retry shortly."
+   }
    ```
 
 **Client branching:** if `code` is present, switch on it; otherwise the presence of `contractId`
@@ -409,22 +458,22 @@ this deployment's network (escrow state is public on‑chain). Caller identity o
 
 Query params (all optional, AND‑combined):
 
-| param | type | default | notes |
-|---|---|---|---|
-| `scope` | `mine \| all` | `mine` | `mine` = escrows that concern the caller (verified‑wallet participation ∪ platform attribution). `all` = every escrow on the network. |
-| `limit` | int 1–200 | 50 | page size |
-| `cursor` | string | — | opaque, from previous `nextCursor` |
-| `sort` | `createdAt \| updatedAt` | `updatedAt` | |
-| `order` | `asc \| desc` | `desc` | |
-| `createdAfter` / `createdBefore` | ISO date | — | range filter |
-| `status` | string | — | exact lifecycle status |
-| `contractType` | string | — | e.g. `single-release`, `multi-release` |
-| `engagementId` | string | — | exact |
-| `contractIds` | string[] | — | batch filter, repeat the param, 1–50 C… addresses |
-| `participant` | G… | — | escrows where this wallet is an on‑chain participant |
-| `role` | snake_case | — | combined with `participant`: "wallet X as approver" |
-| `platformId` | numeric string | — | tenant‑scoped; caller must own it → else `403 ESCROW_FILTER_FORBIDDEN` |
-| `subjectId` | numeric string | — | tenant‑scoped like `platformId` |
+| param                            | type                     | default     | notes                                                                                                                                 |
+| -------------------------------- | ------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `scope`                          | `mine \| all`            | `mine`      | `mine` = escrows that concern the caller (verified‑wallet participation ∪ platform attribution). `all` = every escrow on the network. |
+| `limit`                          | int 1–200                | 50          | page size                                                                                                                             |
+| `cursor`                         | string                   | —           | opaque, from previous `nextCursor`                                                                                                    |
+| `sort`                           | `createdAt \| updatedAt` | `updatedAt` |                                                                                                                                       |
+| `order`                          | `asc \| desc`            | `desc`      |                                                                                                                                       |
+| `createdAfter` / `createdBefore` | ISO date                 | —           | range filter                                                                                                                          |
+| `status`                         | string                   | —           | exact lifecycle status                                                                                                                |
+| `contractType`                   | string                   | —           | e.g. `single-release`, `multi-release`                                                                                                |
+| `engagementId`                   | string                   | —           | exact                                                                                                                                 |
+| `contractIds`                    | string[]                 | —           | batch filter, repeat the param, 1–50 C… addresses                                                                                     |
+| `participant`                    | G…                       | —           | escrows where this wallet is an on‑chain participant                                                                                  |
+| `role`                           | snake_case               | —           | combined with `participant`: "wallet X as approver"                                                                                   |
+| `platformId`                     | numeric string           | —           | tenant‑scoped; caller must own it → else `403 ESCROW_FILTER_FORBIDDEN`                                                                |
+| `subjectId`                      | numeric string           | —           | tenant‑scoped like `platformId`                                                                                                       |
 
 **Response envelope:**
 
@@ -443,19 +492,25 @@ Query params (all optional, AND‑combined):
   "status": "active",
   "totalAmount": null,
   "balance": "0.0001",
-  "asset": { "name": "USDC", "address": "GBBD...issuer", "contractId": "CBIEL...token" },
+  "asset": {
+    "name": "USDC",
+    "address": "GBBD...issuer",
+    "contractId": "CBIEL...token"
+  },
   "lastLedgerSeq": "5512345",
   "createdAt": "2026-01-01T00:00:00.000Z",
   "updatedAt": "2026-01-02T00:00:00.000Z",
-  "snapshot": { /* full camelCased contract state, amounts in human units */ }
+  "snapshot": {
+    /* full camelCased contract state, amounts in human units */
+  }
 }
 ```
 
 - `balance` — **projected** balance (`total deposited − total released`) from the deposit trail;
   always present (`"0"` when nothing deposited); eventually consistent with the on‑chain token
-  balance. *(New — see the change log.)*
+  balance. _(New — see the change log.)_
 - `asset` — resolved trustline token `{ name, address, contractId }`; any unresolved field is
-  `null`. *(New.)*
+  `null`. _(New.)_
 - `totalAmount` — multi‑release only (sum of milestone amounts); `null` for single‑release (the
   amount lives in `snapshot.amount`).
 - **No** `createdByUserId` / `creatorAddress` — off‑chain authorship is **not** exposed on reads.
@@ -485,9 +540,14 @@ human units). 404 only if the contract is unknown on this network.
 
 ```json
 {
-  "contractId": "C...", "type": "single-release", "asset": "USDC:GBBD...",
-  "platformFee": "5", "totalAmount": "250.5",
-  "totalDeposited": "250.5", "totalReleased": "0", "pendingRelease": "250.5",
+  "contractId": "C...",
+  "type": "single-release",
+  "asset": "USDC:GBBD...",
+  "platformFee": "5",
+  "totalAmount": "250.5",
+  "totalDeposited": "250.5",
+  "totalReleased": "0",
+  "pendingRelease": "250.5",
   "nextRelease": { "milestoneIndex": null, "amount": "250.5" },
   "balance": "250.5"
 }
@@ -520,13 +580,31 @@ Example — a dashboard page:
 
 ```graphql
 query Dashboard($cursor: String) {
-  escrows(scope: mine, limit: 25, sort: updatedAt, order: desc, cursor: $cursor) {
+  escrows(
+    scope: mine
+    limit: 25
+    sort: updatedAt
+    order: desc
+    cursor: $cursor
+  ) {
     data {
-      contractId type status balance
-      asset { name contractId }
-      financial { totalDeposited totalReleased pendingRelease balance }
+      contractId
+      type
+      status
+      balance
+      asset {
+        name
+        contractId
+      }
+      financial {
+        totalDeposited
+        totalReleased
+        pendingRelease
+        balance
+      }
     }
-    hasMore nextCursor
+    hasMore
+    nextCursor
   }
 }
 ```
@@ -536,12 +614,34 @@ Example — one escrow detail:
 ```graphql
 query Detail($id: String!) {
   escrow(contractId: $id) {
-    contractId type status balance
-    asset { name address contractId }
+    contractId
+    type
+    status
+    balance
+    asset {
+      name
+      address
+      contractId
+    }
     milestones
-    participants { address role }
-    deposits { fromAddress amount ledgerClosedAt }
-    events(limit: 50) { data { kind actor ledgerClosedAt } hasMore nextCursor }
+    participants {
+      address
+      role
+    }
+    deposits {
+      fromAddress
+      amount
+      ledgerClosedAt
+    }
+    events(limit: 50) {
+      data {
+        kind
+        actor
+        ledgerClosedAt
+      }
+      hasMore
+      nextCursor
+    }
   }
 }
 ```
@@ -552,18 +652,18 @@ query Detail($id: String!) {
 
 ### 10.1 Onboarding & sessions (`/auth/**`)
 
-| Endpoint | Auth | Body | Returns |
-|---|---|---|---|
-| `POST /auth/bootstrap-admin` | public (5/min) | `{ adminSecret, email? }` | `GeneratedApiKey` (ADMIN), once |
-| `POST /auth/register/challenge` | ADMIN/BACKOFFICE_ADMIN key | `{ address }` | `{ xdr, networkPassphrase, expiresAt }` |
-| `POST /auth/register/verify` | ADMIN/BACKOFFICE_ADMIN key | `{ address, signedXdr, email? }` | `GeneratedApiKey` (ESCROW_MANAGER), once — **201** |
-| `POST /auth/recover/challenge` | ADMIN/BACKOFFICE_ADMIN key | `{ address }` | challenge (404 if wallet not registered) |
-| `POST /auth/recover/verify` | ADMIN/BACKOFFICE_ADMIN key | `{ address, signedXdr }` | `GeneratedApiKey`, once — **201** |
-| `POST /auth/session/challenge` | ADMIN/BACKOFFICE_ADMIN key | `{ address }` | challenge (404 if not registered) |
-| `POST /auth/session/verify` | ADMIN/BACKOFFICE_ADMIN key | `{ address, signedXdr }` | `{ token, expiresAt }` — the human's Bearer JWT |
-| `POST /auth/session/logout` | any auth | — | `{ loggedOut: true }` (invalidates all the user's sessions) |
+| Endpoint                        | Auth                       | Body                             | Returns                                                     |
+| ------------------------------- | -------------------------- | -------------------------------- | ----------------------------------------------------------- |
+| `POST /auth/bootstrap-admin`    | public (5/min)             | `{ adminSecret, email? }`        | `GeneratedApiKey` (ADMIN), once                             |
+| `POST /auth/register/challenge` | ADMIN/BACKOFFICE_ADMIN key | `{ address }`                    | `{ xdr, networkPassphrase, expiresAt }`                     |
+| `POST /auth/register/verify`    | ADMIN/BACKOFFICE_ADMIN key | `{ address, signedXdr, email? }` | `GeneratedApiKey` (ESCROW_MANAGER), once — **201**          |
+| `POST /auth/recover/challenge`  | ADMIN/BACKOFFICE_ADMIN key | `{ address }`                    | challenge (404 if wallet not registered)                    |
+| `POST /auth/recover/verify`     | ADMIN/BACKOFFICE_ADMIN key | `{ address, signedXdr }`         | `GeneratedApiKey`, once — **201**                           |
+| `POST /auth/session/challenge`  | ADMIN/BACKOFFICE_ADMIN key | `{ address }`                    | challenge (404 if not registered)                           |
+| `POST /auth/session/verify`     | ADMIN/BACKOFFICE_ADMIN key | `{ address, signedXdr }`         | `{ token, expiresAt }` — the human's Bearer JWT             |
+| `POST /auth/session/logout`     | any auth                   | —                                | `{ loggedOut: true }` (invalidates all the user's sessions) |
 
-> Register/recover/session **challenge+verify** are *mediated by the backoffice's admin key* — the
+> Register/recover/session **challenge+verify** are _mediated by the backoffice's admin key_ — the
 > backoffice drives SEP‑10 on behalf of the wallet user, then hands the user their session token or
 > api‑key.
 
@@ -659,7 +759,7 @@ Model the milestone state machine visually and gate each action by role:
 
 - Service provider marks progress → `change-milestone-status`.
 - Approver approves → `approve-milestones` (v2 batch). Show `approvals { target, approvalCount,
-  approvedBy }` as a progress pill (multi‑approver in v2).
+approvedBy }` as a progress pill (multi‑approver in v2).
 - Release signer releases → `release-funds` (v2) / `release-milestone-funds` (v1). v2 shortcut:
   `approve-and-release-milestones` when one signer holds both roles.
 - Admin edits/adds milestones → `manage-milestones` (v2) / `update` (v1).
@@ -700,8 +800,8 @@ Model the milestone state machine visually and gate each action by role:
   (precedence disputed > released > active). `funded` is not a status — infer it from `balance` /
   deposits.
 - **Milestone (v2)**: `{ description, status, evidence, approvals { target, approvalCount,
-  approvedBy[] }, amount?(multi), receiver?(multi), dispute?, released? }`. **v1**: `approved:
-  boolean` + `flags`.
+approvedBy[] }, amount?(multi), receiver?(multi), dispute?, released? }`. **v1**: `approved:
+boolean` + `flags`.
 - **Amounts:** reads = human decimal strings; build bodies = human numbers; `platformFee` = percent.
 - **`balance` = projected** (deposited − released), eventually consistent — the authoritative
   balance is the on‑chain token balance (`GET /escrow-balances` reads it live from the chain).
@@ -716,9 +816,12 @@ Model the milestone state machine visually and gate each action by role:
 - **Version lock:** an escrow deployed with v2 is driven by v2 endpoints for life. Don't mix.
 - **BigInt as string** and **amounts as strings** on reads — parse accordingly.
 - **Reads are open** — do not build authorization around "can this user see this escrow"; they can
-  see all. Use `scope=mine` for *segmentation*, and `platformId`/`subjectId` (tenant‑scoped) for
+  see all. Use `scope=mine` for _segmentation_, and `platformId`/`subjectId` (tenant‑scoped) for
   filtering your own data.
 - **Unknown fields → 400.** Send exactly the documented body.
 - **Secrets once:** persist `apiKey` on receipt.
 - **`receiverMemo`:** send `0`/omit if unused — it will not appear in deploy response snapshots.
+
+```
+
 ```

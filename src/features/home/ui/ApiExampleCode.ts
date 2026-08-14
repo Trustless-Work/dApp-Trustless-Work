@@ -1,6 +1,6 @@
 export const codeExamples = {
   rest: `// Initialize API client (Core v2)
-const API_BASE_URL = 'https://trustless-core-production.up.railway.app';
+const API_BASE_URL = 'https://beta.api.trustlesswork.com';
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY || "";
 
 const headers = {
