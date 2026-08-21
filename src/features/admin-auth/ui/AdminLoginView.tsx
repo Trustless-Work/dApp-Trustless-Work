@@ -1,7 +1,6 @@
 "use client";
 
 import { AuthPageLayout } from "@/components/shared/AuthPageLayout";
-import { Spinner } from "@/components/ui/spinner";
 import { useAdminLogin } from "@/features/admin-auth/hooks/useAdminLogin";
 import { AdminCredentialsForm } from "@/features/admin-auth/ui/AdminCredentialsForm";
 import { AdminMfaChallengeForm } from "@/features/admin-auth/ui/AdminMfaChallengeForm";
@@ -16,7 +15,6 @@ const HEADINGS = {
   credentials: "Sign in to the Backoffice",
   mfa_challenge: "Two-factor authentication",
   mfa_enroll: "Set up two-factor",
-  verified: "Signing you in",
 } as const;
 
 export const AdminLoginView = ({ allowedEmailDomain }: AdminLoginViewProps) => {
@@ -28,7 +26,6 @@ export const AdminLoginView = ({ allowedEmailDomain }: AdminLoginViewProps) => {
     credentials: `Use your @${allowedEmailDomain} account.`,
     mfa_challenge: "Enter the 6-digit code from your authenticator app.",
     mfa_enroll: "Scan the QR, then enter the 6-digit code.",
-    verified: "Taking you to the backoffice.",
   } as const;
 
   return (
@@ -70,12 +67,6 @@ export const AdminLoginView = ({ allowedEmailDomain }: AdminLoginViewProps) => {
             void restart();
           }}
         />
-      ) : null}
-
-      {step.kind === "verified" ? (
-        <div className="flex justify-center py-4">
-          <Spinner className="size-6" />
-        </div>
       ) : null}
 
       {step.kind === "credentials" ? (

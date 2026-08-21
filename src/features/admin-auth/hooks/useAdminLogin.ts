@@ -150,11 +150,14 @@ export function useAdminLogin({ allowedEmailDomain }: UseAdminLoginOptions) {
 
       const { factorId, challengeId } = step;
       setIsBusy(true);
+      let navigatedAway = false;
 
       try {
         await adminAuthService.verifyFactor(factorId, challengeId, values.code);
-        setStep({ kind: "verified" });
 
+        // Keep the MFA form mounted with the submit button loading until the
+        // navigation unmounts this view — do not flip to a full-page spinner.
+        navigatedAway = true;
         router.replace(redirectPath);
         router.refresh();
       } catch (error) {
@@ -184,7 +187,9 @@ export function useAdminLogin({ allowedEmailDomain }: UseAdminLoginOptions) {
         await adminAuthService.signOutQuietly("local");
         setStep({ kind: "credentials" });
       } finally {
-        setIsBusy(false);
+        if (!navigatedAway) {
+          setIsBusy(false);
+        }
       }
     },
     [redirectPath, router, step],

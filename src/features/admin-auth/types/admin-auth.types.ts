@@ -93,8 +93,7 @@ export type AdminTotpEnrollment = {
 export type AdminLoginStep =
   | { readonly kind: "credentials" }
   | ({ readonly kind: "mfa_challenge" } & AdminMfaChallenge)
-  | ({ readonly kind: "mfa_enroll" } & AdminMfaChallenge & AdminTotpEnrollment)
-  | { readonly kind: "verified" };
+  | ({ readonly kind: "mfa_enroll" } & AdminMfaChallenge & AdminTotpEnrollment);
 
 export type AdminMfaStep = Extract<
   AdminLoginStep,
