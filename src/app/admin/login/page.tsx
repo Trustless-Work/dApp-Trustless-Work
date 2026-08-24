@@ -5,7 +5,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { AdminLoginView } from "@/features/admin-auth/ui/AdminLoginView";
 
 export const metadata: Metadata = {
-  title: "Backoffice sign in",
+  title: "Admin",
 };
 
 /**
