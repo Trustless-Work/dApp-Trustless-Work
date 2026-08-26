@@ -48,8 +48,14 @@ export const GrowthTab = ({ range }: GrowthTabProps) => {
   const isLoading = escrowQuery.isPending || usersQuery.isPending;
   const errorMessage = escrowQuery.errorMessage ?? usersQuery.errorMessage;
 
-  const escrowData = escrowQuery.data?.data ?? [];
-  const userData = usersQuery.data?.data ?? [];
+  const escrowData = useMemo(
+    () => escrowQuery.data?.data ?? [],
+    [escrowQuery.data?.data],
+  );
+  const userData = useMemo(
+    () => usersQuery.data?.data ?? [],
+    [usersQuery.data?.data],
+  );
   const granularity = resolveResponseGranularity(
     escrowQuery.data?.granularity ?? usersQuery.data?.granularity,
     range.granularity,

@@ -69,7 +69,10 @@ export const RevenueTab = ({ range }: RevenueTabProps) => {
     eventType,
   });
 
-  const buckets = query.data?.data ?? [];
+  const buckets = useMemo(
+    () => query.data?.data ?? [],
+    [query.data?.data],
+  );
   const granularity = resolveResponseGranularity(
     query.data?.granularity,
     range.granularity,
@@ -165,7 +168,7 @@ export const RevenueTab = ({ range }: RevenueTabProps) => {
     eventType,
     eventsQuery.data?.pagination.total,
     eventsQuery.isPending,
-    query.data?.feeBps,
+    query.data,
     statSummaries,
   ]);
 
@@ -237,7 +240,7 @@ export const RevenueTab = ({ range }: RevenueTabProps) => {
                   }
                 />
                 <ChartLegend content={<ChartLegendContent />} />
-                {tokenKeys.map((token, index) => (
+                {tokenKeys.map((token) => (
                   <Bar
                     key={token}
                     dataKey={token}

@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts";
-import { Badge } from "@/components/ui/badge";
 import {
   ChartContainer,
   ChartTooltip,

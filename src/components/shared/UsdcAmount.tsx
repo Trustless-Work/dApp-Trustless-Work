@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { formatAssetAmount, isUsdcSymbol } from "@/helpers/format.helper";
 import { cn } from "@/lib/utils";
 
-type UsdcAmountSize = "sm" | "md" | "lg" | "xl" | "2xl";
+export type UsdcAmountSize = "sm" | "md" | "lg" | "xl" | "2xl";
 
 type UsdcAmountProps = {
   amount: number;
