@@ -1,12 +1,11 @@
+"use client";
+
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Breadcrumb } from "@/components/shared/Breadcrumb";
+import { NetworkToggle } from "@/components/shared/NetworkToggle";
 import { ToggleTheme } from "@/components/shared/ToggleTheme";
 
-/**
- * Same sticky header chrome as the dashboard `Navbar`, without wallet or
- * network controls — those belong to the Stellar session, not the backoffice.
- */
 export const AdminNavbar = () => {
   return (
     <header className="sticky top-0 z-20 shrink-0 border-b bg-background/80 backdrop-blur-md">
@@ -21,9 +20,18 @@ export const AdminNavbar = () => {
           <Breadcrumb />
         </div>
 
-        <div className="flex shrink-0 items-center">
+        <div className="hidden shrink-0 items-center gap-2 md:flex">
+          <NetworkToggle />
           <ToggleTheme />
         </div>
+
+        <div className="flex shrink-0 items-center md:hidden">
+          <ToggleTheme />
+        </div>
+      </div>
+
+      <div className="border-t border-border/60 px-3 py-2 md:hidden">
+        <NetworkToggle className="w-full justify-center px-2" />
       </div>
     </header>
   );

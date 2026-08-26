@@ -30,6 +30,11 @@ export function isUsdcSymbol(symbol: string): boolean {
   return symbol.trim().toUpperCase() === "USDC";
 }
 
+export function isXlmSymbol(symbol: string): boolean {
+  const normalized = symbol.trim().toLowerCase();
+  return normalized === "xlm" || normalized === "native";
+}
+
 /**
  * Format the timestamp
  *

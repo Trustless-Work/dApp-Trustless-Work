@@ -55,8 +55,9 @@ export const DASHBOARD_PAGES: Record<string, DashboardPageConfig> = {
 
 export const ADMIN_PAGES: Record<string, DashboardPageConfig> = {
   "/admin": {
-    title: "Dashboard",
-    description: "Analytics and insights for Trustless Work",
+    title: "Analytics",
+    description:
+      "Platform growth, revenue by token, and escrow lifecycle insights.",
     icon: LayoutDashboardIcon,
   },
 };

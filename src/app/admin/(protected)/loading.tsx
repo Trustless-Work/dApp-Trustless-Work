@@ -1,4 +1,5 @@
-/** Empty while the backoffice dashboard has no content to skeletonize. */
+import { AdminAnalyticsSkeleton } from "@/features/admin-analytics/ui/AdminAnalyticsSkeleton";
+
 export default function AdminLoading() {
-  return null;
+  return <AdminAnalyticsSkeleton />;
 }
