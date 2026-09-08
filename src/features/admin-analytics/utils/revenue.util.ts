@@ -1,6 +1,10 @@
 import Decimal from "decimal.js";
 import { formatPercent } from "@/helpers/chart-format.helper";
-import { isUsdcSymbol, isXlmSymbol } from "@/helpers/format.helper";
+import {
+  isUsdcSymbol,
+  isUsdtSymbol,
+  isXlmSymbol,
+} from "@/helpers/format.helper";
 import type {
   RevenueAsset,
   RevenueBucket,
@@ -14,7 +18,7 @@ export const KNOWN_USDC_CONTRACT_IDS = new Set([
   "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
 ]);
 
-export type RevenueStatGroup = "usdc" | "xlm" | "other";
+export type RevenueStatGroup = "usdc" | "usdt" | "xlm" | "other";
 
 export type RevenueStatSummary = {
   key: RevenueStatGroup;
@@ -75,6 +79,10 @@ export function isUsdcRevenueAsset(asset: RevenueAsset): boolean {
   return KNOWN_USDC_CONTRACT_IDS.has(asset.address.trim());
 }
 
+export function isUsdtRevenueAsset(asset: RevenueAsset): boolean {
+  return isUsdtSymbol(resolveAssetSymbol(asset));
+}
+
 export function isXlmRevenueAsset(asset: RevenueAsset): boolean {
   const symbol = asset.symbol?.trim() ?? "";
   const address = asset.address.trim().toLowerCase();
@@ -91,6 +99,10 @@ export function classifyRevenueStatGroup(asset: RevenueAsset): RevenueStatGroup 
     return "usdc";
   }
 
+  if (isUsdtRevenueAsset(asset)) {
+    return "usdt";
+  }
+
   if (isXlmRevenueAsset(asset)) {
     return "xlm";
   }
@@ -100,8 +112,35 @@ export function classifyRevenueStatGroup(asset: RevenueAsset): RevenueStatGroup 
 
 const REVENUE_STAT_GROUP_LABELS: Record<RevenueStatGroup, string> = {
   usdc: "USDC fees",
+  usdt: "USDT fees",
   xlm: "XLM fees",
   other: "Other trustline fees",
+};
+
+const REVENUE_STAT_GROUP_ORDER = ["usdc", "usdt", "xlm", "other"] as const;
+
+const BRANDED_STAT_PLACEHOLDERS: Record<
+  Exclude<RevenueStatGroup, "other">,
+  RevenueAsset
+> = {
+  usdc: {
+    address: "USDC",
+    symbol: "USDC",
+    decimals: 7,
+    resolved: true,
+  },
+  usdt: {
+    address: "USDT0",
+    symbol: "USDT0",
+    decimals: 7,
+    resolved: true,
+  },
+  xlm: {
+    address: "native",
+    symbol: "XLM",
+    decimals: 7,
+    resolved: true,
+  },
 };
 
 export function formatFeeBpsPercent(feeBps: number): string {
@@ -119,6 +158,7 @@ export function buildRevenueStatSummaries(
     { total: Decimal; resolved: boolean; displayAsset: RevenueAsset | null }
   > = {
     usdc: { total: new Decimal(0), resolved: true, displayAsset: null },
+    usdt: { total: new Decimal(0), resolved: true, displayAsset: null },
     xlm: { total: new Decimal(0), resolved: true, displayAsset: null },
     other: { total: new Decimal(0), resolved: true, displayAsset: null },
   };
@@ -135,15 +175,23 @@ export function buildRevenueStatSummaries(
     entry.displayAsset ??= bucket.asset;
   }
 
-  return (["usdc", "xlm", "other"] as const)
-    .map((key) => ({
+  return REVENUE_STAT_GROUP_ORDER.map((key) => {
+    const entry = groups[key];
+    const displayAsset =
+      entry.displayAsset ??
+      (key === "other" ? null : BRANDED_STAT_PLACEHOLDERS[key]);
+
+    return {
       key,
       label: REVENUE_STAT_GROUP_LABELS[key],
-      totalFee: groups[key].total.toString(),
-      resolved: groups[key].resolved,
-      displayAsset: groups[key].displayAsset,
-    }))
-    .filter((summary) => new Decimal(summary.totalFee).gt(0));
+      totalFee: entry.total.toString(),
+      resolved: entry.resolved,
+      displayAsset,
+    };
+  }).filter(
+    (summary) =>
+      summary.key !== "other" || new Decimal(summary.totalFee).gt(0),
+  );
 }
 
 export function getBucketPeriod(bucket: RevenueBucket): string {

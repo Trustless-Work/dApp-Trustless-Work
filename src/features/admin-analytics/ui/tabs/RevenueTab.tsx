@@ -172,15 +172,6 @@ export const RevenueTab = ({ range }: RevenueTabProps) => {
     statSummaries,
   ]);
 
-  const statColumns: 2 | 3 | 4 | 5 =
-    stats.length >= 5
-      ? 5
-      : stats.length >= 4
-        ? 4
-        : stats.length === 3
-          ? 3
-          : 2;
-
   const handleEventTypeChange = useCallback((next?: RevenueEventType) => {
     setEventType(next);
     setEventsOffset(0);
@@ -207,7 +198,7 @@ export const RevenueTab = ({ range }: RevenueTabProps) => {
       ) : null}
 
       {stats.length > 0 ? (
-        <StatGrid columns={statColumns} stats={stats} />
+        <StatGrid columns={3} stats={stats} />
       ) : null}
 
       <div

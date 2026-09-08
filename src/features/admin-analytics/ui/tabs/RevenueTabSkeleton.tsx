@@ -12,10 +12,10 @@ const ChartRegionSkeleton = ({ className }: { className?: string }) => (
 
 const STAT_CARD_SKELETONS = [
   { titleWidth: "w-20", withAssetIcon: true, hintWidth: "w-24" },
+  { titleWidth: "w-20", withAssetIcon: true, hintWidth: "w-24" },
   { titleWidth: "w-16", withAssetIcon: true, hintWidth: "w-24" },
   { titleWidth: "w-32", withAssetIcon: false, hintWidth: "w-28" },
   { titleWidth: "w-28", withAssetIcon: false, hintWidth: "w-28" },
-  { titleWidth: "w-24", withAssetIcon: false, hintWidth: "w-28" },
 ] as const;
 
 const StatCardSkeleton = ({
@@ -32,10 +32,10 @@ const StatCardSkeleton = ({
       className="absolute bottom-0 group-last:hidden lg:hidden"
       orientation="horizontal"
     />
-    <DashboardCardSeparator
-      className="absolute right-0 hidden h-full group-last:hidden lg:block"
-      orientation="vertical"
-    />
+      <DashboardCardSeparator
+        className="absolute right-0 hidden h-full group-last:hidden lg:block lg:group-[:nth-child(3n)]:hidden"
+        orientation="vertical"
+      />
 
     <div className="flex min-w-0 flex-col justify-center gap-2">
       <Skeleton className={cn("h-3", titleWidth)} />
@@ -58,7 +58,7 @@ const StatCardSkeleton = ({
 
 export const RevenueTabSkeleton = () => (
   <div className="flex flex-col gap-4">
-    <div className="grid grid-cols-1 lg:grid-cols-5">
+    <div className="grid grid-cols-1 lg:grid-cols-3">
       {STAT_CARD_SKELETONS.map((stat, index) => (
         <StatCardSkeleton key={index} {...stat} />
       ))}

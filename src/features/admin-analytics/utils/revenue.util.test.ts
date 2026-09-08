@@ -6,6 +6,7 @@ import {
   buildRevenueStatSummaries,
   formatFeeBpsPercent,
   groupRevenueByToken,
+  isUsdtRevenueAsset,
   resolveAssetSymbol,
 } from "@/features/admin-analytics/utils/revenue.util";
 import type { RevenueBucket } from "@/features/admin-analytics/types/analytics.types";
@@ -75,6 +76,31 @@ describe("resolveAssetSymbol", () => {
   });
 });
 
+describe("isUsdtRevenueAsset", () => {
+  it("identifies USDT0 as the USDT asset", () => {
+    expect(
+      isUsdtRevenueAsset({
+        address: "CUSDTCONTRACTADDRESS000000000000000000000000000000000",
+        symbol: "USDT0",
+        decimals: 7,
+        resolved: true,
+      }),
+    ).toBe(true);
+  });
+
+  it("rejects USDC and native assets", () => {
+    expect(isUsdtRevenueAsset(usdcAsset)).toBe(false);
+    expect(
+      isUsdtRevenueAsset({
+        address: "native",
+        symbol: "native",
+        decimals: 7,
+        resolved: true,
+      }),
+    ).toBe(false);
+  });
+});
+
 describe("groupRevenueByToken", () => {
   it("sums fees within the same token only", () => {
     const summaries = groupRevenueByToken(buckets);
@@ -112,7 +138,7 @@ describe("buildCategoryBreakdown", () => {
 });
 
 describe("buildRevenueStatSummaries", () => {
-  it("groups fees into USDC, XLM, and other trustline buckets", () => {
+  it("groups fees into USDC, USDT, XLM, and other trustline buckets", () => {
     const mixedBuckets: RevenueBucket[] = [
       ...buckets,
       {
@@ -127,6 +153,20 @@ describe("buildRevenueStatSummaries", () => {
         category: "released",
         releasedAmount: "100",
         feeAmount: "2",
+        escrowCount: 1,
+      },
+      {
+        period: "2026-08",
+        month: "2026-08",
+        asset: {
+          address: "CUSDTCONTRACTADDRESS000000000000000000000000000000000",
+          symbol: "USDT0",
+          decimals: 7,
+          resolved: true,
+        },
+        category: "released",
+        releasedAmount: "80",
+        feeAmount: "1.2",
         escrowCount: 1,
       },
       {
@@ -161,22 +201,53 @@ describe("buildRevenueStatSummaries", () => {
 
     const summaries = buildRevenueStatSummaries(mixedBuckets);
 
-    expect(summaries).toHaveLength(3);
+    expect(summaries).toHaveLength(4);
     expect(summaries[0]).toMatchObject({
       key: "usdc",
       label: "USDC fees",
       totalFee: "5.1",
     });
     expect(summaries[1]).toMatchObject({
+      key: "usdt",
+      label: "USDT fees",
+      totalFee: "1.2",
+    });
+    expect(summaries[2]).toMatchObject({
       key: "xlm",
       label: "XLM fees",
       totalFee: "2",
     });
-    expect(summaries[2]).toMatchObject({
+    expect(summaries[3]).toMatchObject({
       key: "other",
       label: "Other trustline fees",
       totalFee: "0.7",
       resolved: false,
+    });
+  });
+
+  it("always shows USDC, USDT, and XLM at zero when they have no fees", () => {
+    const summaries = buildRevenueStatSummaries(buckets);
+
+    expect(summaries.map((summary) => summary.key)).toEqual([
+      "usdc",
+      "usdt",
+      "xlm",
+    ]);
+    expect(summaries[0]).toMatchObject({
+      key: "usdc",
+      totalFee: "5.1",
+    });
+    expect(summaries[1]).toMatchObject({
+      key: "usdt",
+      label: "USDT fees",
+      totalFee: "0",
+      displayAsset: { symbol: "USDT0" },
+    });
+    expect(summaries[2]).toMatchObject({
+      key: "xlm",
+      label: "XLM fees",
+      totalFee: "0",
+      displayAsset: { symbol: "XLM" },
     });
   });
 });

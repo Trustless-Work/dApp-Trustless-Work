@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import type { RevenueAsset } from "@/features/admin-analytics/types/analytics.types";
 import {
   isUsdcRevenueAsset,
+  isUsdtRevenueAsset,
   isXlmRevenueAsset,
   resolveAssetSymbol,
 } from "@/features/admin-analytics/utils/revenue.util";
@@ -22,6 +23,10 @@ type RevenueAssetAmountProps = {
 
 export function isUsdcAsset(asset: RevenueAsset): boolean {
   return isUsdcRevenueAsset(asset);
+}
+
+export function isUsdtAsset(asset: RevenueAsset): boolean {
+  return isUsdtRevenueAsset(asset);
 }
 
 export function isXlmAsset(asset: RevenueAsset): boolean {
@@ -45,21 +50,22 @@ function BrandedAmount({
   const numericAmount = parseDisplayAmount(amount);
   const unresolvedMarker = asset.resolved ? null : "*";
 
-  const brandedAmount = isUsdcAsset(asset) ? (
-    <UsdcAmount
-      amount={numericAmount}
-      emphasis={emphasis}
-      size={size}
-      symbol={symbol}
-    />
-  ) : (
-    <XlmAmount
-      amount={numericAmount}
-      emphasis={emphasis}
-      size={size}
-      symbol={symbol}
-    />
-  );
+  const brandedAmount =
+    isUsdcAsset(asset) || isUsdtAsset(asset) ? (
+      <UsdcAmount
+        amount={numericAmount}
+        emphasis={emphasis}
+        size={size}
+        symbol={symbol}
+      />
+    ) : (
+      <XlmAmount
+        amount={numericAmount}
+        emphasis={emphasis}
+        size={size}
+        symbol={symbol}
+      />
+    );
 
   return (
     <span
@@ -88,7 +94,7 @@ export const RevenueAssetAmount = ({
   const symbol = resolveAssetSymbol(asset);
   const unresolvedMarker = asset.resolved ? null : "*";
 
-  if (isUsdcAsset(asset) || isXlmAsset(asset)) {
+  if (isUsdcAsset(asset) || isUsdtAsset(asset) || isXlmAsset(asset)) {
     return (
       <BrandedAmount
         align={align}

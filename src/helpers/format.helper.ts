@@ -30,6 +30,11 @@ export function isUsdcSymbol(symbol: string): boolean {
   return symbol.trim().toUpperCase() === "USDC";
 }
 
+export function isUsdtSymbol(symbol: string): boolean {
+  const normalized = symbol.trim().toUpperCase();
+  return normalized === "USDT" || normalized === "USDT0";
+}
+
 export function isXlmSymbol(symbol: string): boolean {
   const normalized = symbol.trim().toLowerCase();
   return normalized === "xlm" || normalized === "native";

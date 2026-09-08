@@ -32,13 +32,26 @@ export function StatGrid({ stats, columns = 3 }: StatGridProps) {
   return (
     <div className={cn("grid grid-cols-1", columnClass)}>
       {stats.map((stat) => (
-        <StatCard key={stat.label} stat={stat} />
+        <StatCard key={stat.label} columns={columns} stat={stat} />
       ))}
     </div>
   );
 }
 
-function StatCard({ stat }: { stat: StatGridItem }) {
+const LAST_IN_ROW_CLASS: Record<2 | 3 | 4 | 5, string> = {
+  2: "lg:group-[:nth-child(2n)]:hidden",
+  3: "lg:group-[:nth-child(3n)]:hidden",
+  4: "lg:group-[:nth-child(4n)]:hidden",
+  5: "lg:group-[:nth-child(5n)]:hidden",
+};
+
+function StatCard({
+  stat,
+  columns,
+}: {
+  stat: StatGridItem;
+  columns: 2 | 3 | 4 | 5;
+}) {
   const { label, value, delta, hint } = stat;
 
   return (
@@ -50,6 +63,7 @@ function StatCard({ stat }: { stat: StatGridItem }) {
       <DashboardCardSeparator
         className={cn(
           "absolute right-0 hidden h-full group-last:hidden lg:block",
+          LAST_IN_ROW_CLASS[columns],
         )}
         orientation="vertical"
       />
