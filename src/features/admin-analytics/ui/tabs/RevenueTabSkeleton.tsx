@@ -106,10 +106,8 @@ export const RevenueTabSkeleton = () => (
     <DashboardCardSeparator />
 
     <DashboardCard className="gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Skeleton className="h-3 w-28" />
-        <Skeleton className="h-9 w-[180px]" />
-      </div>
+      <Skeleton className="h-3 w-28" />
+      <Skeleton className="h-3 w-72" />
       <RevenueEventsTableSkeleton />
     </DashboardCard>
   </div>

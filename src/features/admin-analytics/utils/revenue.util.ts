@@ -368,3 +368,10 @@ export function countEventsByType(
     { release: 0, resolve_dispute: 0 },
   );
 }
+
+/** Rows that count toward revenue totals — one per escrow. */
+export function attributingEvents(
+  events: readonly RevenueEvent[],
+): RevenueEvent[] {
+  return events.filter((event) => event.attributesRevenue);
+}

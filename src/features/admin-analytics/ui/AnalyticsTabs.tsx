@@ -21,9 +21,16 @@ type AnalyticsTabsProps = {
   growthContent: React.ReactNode;
   revenueContent: React.ReactNode;
   escrowsContent: React.ReactNode;
+  apiKeysContent: React.ReactNode;
+  filtersContent?: React.ReactNode;
 };
 
-const TABS_WITH_RANGE = new Set<AnalyticsTabId>(["growth", "revenue"]);
+const TABS_WITH_RANGE = new Set<AnalyticsTabId>([
+  "growth",
+  "revenue",
+  "escrows",
+  "api-keys",
+]);
 
 export const AnalyticsTabs = ({
   activeTab,
@@ -32,6 +39,8 @@ export const AnalyticsTabs = ({
   growthContent,
   revenueContent,
   escrowsContent,
+  apiKeysContent,
+  filtersContent,
 }: AnalyticsTabsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -53,6 +62,7 @@ export const AnalyticsTabs = ({
     growth: growthContent,
     revenue: revenueContent,
     escrows: escrowsContent,
+    "api-keys": apiKeysContent,
   };
 
   return (
@@ -65,7 +75,9 @@ export const AnalyticsTabs = ({
           )}
           variant="line"
         >
-          {ANALYTICS_TABS.map((tab, index) => (
+          {ANALYTICS_TABS.map((tab, index) => {
+            const TabIcon = tab.icon;
+            return (
             <Fragment key={tab.id}>
               {index > 0 ? (
                 <Separator className="h-auto" orientation="vertical" />
@@ -73,22 +85,27 @@ export const AnalyticsTabs = ({
               <TabsTrigger
                 className={cn(
                   "h-auto flex-none cursor-pointer rounded-none border-0 bg-transparent px-3 py-0 shadow-none",
-                  "text-base text-muted-foreground",
+                  "inline-flex items-center gap-2 text-base text-muted-foreground",
                   "hover:bg-transparent hover:text-foreground",
                   "data-active:bg-transparent data-active:font-semibold data-active:text-foreground data-active:shadow-none",
                   "after:hidden",
                 )}
                 value={tab.id}
               >
+                <TabIcon aria-hidden="true" className="size-4 shrink-0" />
                 {tab.label}
               </TabsTrigger>
             </Fragment>
-          ))}
+            );
+          })}
         </TabsList>
 
-        {TABS_WITH_RANGE.has(activeTab) ? (
-          <AnalyticsRangeSelect value={range} onChange={onRangeChange} />
-        ) : null}
+        <div className="flex flex-wrap items-center gap-2">
+          {filtersContent}
+          {TABS_WITH_RANGE.has(activeTab) ? (
+            <AnalyticsRangeSelect value={range} onChange={onRangeChange} />
+          ) : null}
+        </div>
       </div>
 
       {ANALYTICS_TABS.map((tab) => (

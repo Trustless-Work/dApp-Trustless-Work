@@ -71,3 +71,7 @@ export function seriesParams(range: AnalyticsRange): Record<string, string | num
     periods: range.periods,
   };
 }
+
+export function rangeParams(range: AnalyticsRange): UtcRangeBounds {
+  return getUtcRangeBounds(range);
+}

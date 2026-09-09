@@ -141,6 +141,10 @@ export type ParsedRevenueEventsParams = {
   readonly from?: string;
   readonly to?: string;
   readonly eventType?: "release" | "resolve_dispute";
+  readonly sort?: "timestamp" | "amount";
+  readonly order?: "desc" | "asc";
+  readonly search?: string;
+  readonly asset?: string;
 };
 
 type ParseRevenueEventsResult =
@@ -150,6 +154,108 @@ type ParseRevenueEventsResult =
 function isValidIsoDateTime(value: string): boolean {
   const parsed = Date.parse(value);
   return Number.isFinite(parsed);
+}
+
+export type ParsedRangeParams = {
+  readonly from?: string;
+  readonly to?: string;
+};
+
+type ParseRangeResult =
+  | { readonly ok: true; readonly value: ParsedRangeParams }
+  | { readonly ok: false; readonly error: NextResponse };
+
+export function parseRangeParams(
+  searchParams: URLSearchParams,
+): ParseRangeResult {
+  const from = searchParams.get("from")?.trim();
+  if (from && !isValidIsoDateTime(from)) {
+    const body: ProblemDetails = {
+      status: 400,
+      code: "VALIDATION_ERROR",
+      detail: "from must be a valid ISO 8601 datetime",
+    };
+    return { ok: false, error: NextResponse.json(body, { status: 400 }) };
+  }
+
+  const to = searchParams.get("to")?.trim();
+  if (to && !isValidIsoDateTime(to)) {
+    const body: ProblemDetails = {
+      status: 400,
+      code: "VALIDATION_ERROR",
+      detail: "to must be a valid ISO 8601 datetime",
+    };
+    return { ok: false, error: NextResponse.json(body, { status: 400 }) };
+  }
+
+  return {
+    ok: true,
+    value: {
+      ...(from ? { from } : {}),
+      ...(to ? { to } : {}),
+    },
+  };
+}
+
+export const MIN_ANALYTICS_TOP_LIMIT = 1;
+export const MAX_ANALYTICS_TOP_LIMIT = 50;
+export const DEFAULT_ANALYTICS_TOP_LIMIT = 10;
+
+export type ParsedAnalyticsTopParams = ParsedRangeParams & {
+  readonly by: string;
+  readonly limit: number;
+};
+
+type ParseAnalyticsTopResult =
+  | { readonly ok: true; readonly value: ParsedAnalyticsTopParams }
+  | { readonly ok: false; readonly error: NextResponse };
+
+export function parseAnalyticsTopParams(
+  searchParams: URLSearchParams,
+  allowedBy: readonly string[],
+): ParseAnalyticsTopResult {
+  const rangeParsed = parseRangeParams(searchParams);
+  if (!rangeParsed.ok) {
+    return rangeParsed;
+  }
+
+  const byRaw = searchParams.get("by")?.trim();
+  if (!byRaw || !allowedBy.includes(byRaw)) {
+    const body: ProblemDetails = {
+      status: 400,
+      code: "VALIDATION_ERROR",
+      detail: `by must be one of: ${allowedBy.join(", ")}`,
+    };
+    return { ok: false, error: NextResponse.json(body, { status: 400 }) };
+  }
+
+  const limitRaw = searchParams.get("limit");
+  let limit = DEFAULT_ANALYTICS_TOP_LIMIT;
+  if (limitRaw !== null && limitRaw.trim() !== "") {
+    const parsed = Number(limitRaw);
+    if (
+      !Number.isInteger(parsed) ||
+      parsed < MIN_ANALYTICS_TOP_LIMIT ||
+      parsed > MAX_ANALYTICS_TOP_LIMIT
+    ) {
+      const body: ProblemDetails = {
+        status: 400,
+        code: "VALIDATION_ERROR",
+        detail: `limit must be an integer between ${MIN_ANALYTICS_TOP_LIMIT} and ${MAX_ANALYTICS_TOP_LIMIT}`,
+      };
+      return { ok: false, error: NextResponse.json(body, { status: 400 }) };
+    }
+    limit = parsed;
+  }
+
+  return {
+    ok: true,
+    value: {
+      by: byRaw,
+      limit,
+      ...rangeParsed.value,
+    },
+  };
 }
 
 export function parseRevenueEventsParams(
@@ -223,6 +329,62 @@ export function parseRevenueEventsParams(
     eventType = eventTypeRaw;
   }
 
+  const sortRaw = searchParams.get("sort")?.trim();
+  let sort: ParsedRevenueEventsParams["sort"];
+  if (sortRaw) {
+    if (sortRaw !== "timestamp" && sortRaw !== "amount") {
+      const body: ProblemDetails = {
+        status: 400,
+        code: "VALIDATION_ERROR",
+        detail: "sort must be timestamp or amount",
+      };
+      return { ok: false, error: NextResponse.json(body, { status: 400 }) };
+    }
+    sort = sortRaw;
+  }
+
+  const orderRaw = searchParams.get("order")?.trim();
+  let order: ParsedRevenueEventsParams["order"];
+  if (orderRaw) {
+    if (orderRaw !== "desc" && orderRaw !== "asc") {
+      const body: ProblemDetails = {
+        status: 400,
+        code: "VALIDATION_ERROR",
+        detail: "order must be desc or asc",
+      };
+      return { ok: false, error: NextResponse.json(body, { status: 400 }) };
+    }
+    order = orderRaw;
+  }
+
+  const searchRaw = searchParams.get("search")?.trim();
+  let search: string | undefined;
+  if (searchRaw) {
+    if (searchRaw.length > 100) {
+      const body: ProblemDetails = {
+        status: 400,
+        code: "VALIDATION_ERROR",
+        detail: "search must be at most 100 characters",
+      };
+      return { ok: false, error: NextResponse.json(body, { status: 400 }) };
+    }
+    search = searchRaw;
+  }
+
+  const assetRaw = searchParams.get("asset")?.trim();
+  let asset: string | undefined;
+  if (assetRaw) {
+    if (assetRaw.length === 0) {
+      const body: ProblemDetails = {
+        status: 400,
+        code: "VALIDATION_ERROR",
+        detail: "asset must be a non-empty token contract id",
+      };
+      return { ok: false, error: NextResponse.json(body, { status: 400 }) };
+    }
+    asset = assetRaw;
+  }
+
   return {
     ok: true,
     value: {
@@ -231,6 +393,10 @@ export function parseRevenueEventsParams(
       ...(from ? { from } : {}),
       ...(to ? { to } : {}),
       ...(eventType ? { eventType } : {}),
+      ...(sort ? { sort } : {}),
+      ...(order ? { order } : {}),
+      ...(search ? { search } : {}),
+      ...(asset ? { asset } : {}),
     },
   };
 }

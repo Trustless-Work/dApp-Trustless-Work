@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_ANALYTICS_MONTHS,
+  parseAnalyticsTopParams,
   parseMonthsParam,
+  parseRevenueEventsParams,
 } from "@/lib/admin-session-response";
 
 describe("parseMonthsParam", () => {
@@ -47,5 +49,47 @@ describe("parseMonthsParam", () => {
   it("rejects fractional values", () => {
     const result = parseMonthsParam("12.5");
     expect(result.ok).toBe(false);
+  });
+});
+
+describe("parseRevenueEventsParams", () => {
+  it("accepts sort, order, search, and asset params", () => {
+    const params = new URLSearchParams({
+      sort: "amount",
+      order: "asc",
+      search: "acme",
+      asset: "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA",
+    });
+    const result = parseRevenueEventsParams(params);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.sort).toBe("amount");
+      expect(result.value.order).toBe("asc");
+      expect(result.value.search).toBe("acme");
+      expect(result.value.asset).toBe(
+        "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA",
+      );
+    }
+  });
+
+  it("rejects invalid sort values", () => {
+    const result = parseRevenueEventsParams(
+      new URLSearchParams({ sort: "released" }),
+    );
+    expect(result.ok).toBe(false);
+  });
+});
+
+describe("parseAnalyticsTopParams", () => {
+  it("validates by against an allow list", () => {
+    const result = parseAnalyticsTopParams(
+      new URLSearchParams({ by: "fee", limit: "20" }),
+      ["amount", "fee"],
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value.by).toBe("fee");
+      expect(result.value.limit).toBe(20);
+    }
   });
 });

@@ -15,8 +15,12 @@ import {
 } from "@/components/dashboard/dashboard-card";
 import { cn } from "@/lib/utils";
 import { formatInteger } from "@/helpers/chart-format.helper";
+import type { AnalyticsRange } from "@/features/admin-analytics/constants/analytics-range";
+import type { EscrowsTopBy } from "@/features/admin-analytics/types/analytics-v2.types";
 import { useStatusFunnel } from "@/features/admin-analytics/hooks/useAdminAnalytics";
 import { DonutChart } from "@/features/admin-analytics/ui/charts/DonutChart";
+import { ConversionSection } from "@/features/admin-analytics/ui/escrows/ConversionSection";
+import { TopEscrowsBoard } from "@/features/admin-analytics/ui/escrows/TopEscrowsBoard";
 import {
   funnelLiveTotal,
   normalizeStatusFunnel,
@@ -38,8 +42,13 @@ const funnelChartConfig = {
   },
 };
 
-export const EscrowsTab = () => {
-  const query = useStatusFunnel();
+type EscrowsTabProps = {
+  range: AnalyticsRange;
+  topBy: EscrowsTopBy;
+};
+
+export const EscrowsTab = ({ range, topBy }: EscrowsTabProps) => {
+  const query = useStatusFunnel(range);
   const rows = useMemo(
     () => normalizeStatusFunnel(query.data?.data ?? []),
     [query.data?.data],
@@ -54,7 +63,10 @@ export const EscrowsTab = () => {
           key: row.key,
           label: row.label,
           value: String(row.count),
-          color: row.color ?? CHART_COLORS[index % CHART_COLORS.length] ?? "var(--chart-1)",
+          color:
+            row.color ??
+            CHART_COLORS[index % CHART_COLORS.length] ??
+            "var(--chart-1)",
         })),
     [rows],
   );
@@ -86,7 +98,12 @@ export const EscrowsTab = () => {
         hint: "deployment",
       },
     ],
-    [liveTotal, query.data?.removedCount, query.data?.shellCount, query.data?.network],
+    [
+      liveTotal,
+      query.data?.removedCount,
+      query.data?.shellCount,
+      query.data?.network,
+    ],
   );
 
   if (query.isPending) {
@@ -100,6 +117,11 @@ export const EscrowsTab = () => {
           {query.errorMessage}
         </p>
       ) : null}
+
+      <p className="text-muted-foreground text-xs">
+        Status funnel reflects escrows created in the selected range. Escrows
+        without a chain clock are excluded when date bounds apply.
+      </p>
 
       <StatGrid columns={4} stats={stats} />
 
@@ -149,17 +171,11 @@ export const EscrowsTab = () => {
               slices={donutSlices}
             />
           </DashboardCard>
-
-          <DashboardCard className="gap-1">
-            <p className="text-muted-foreground text-xs">
-              Excluded from funnel:{" "}
-              {formatInteger(query.data?.removedCount ?? 0)} removed on-chain,{" "}
-              {formatInteger(query.data?.shellCount ?? 0)} shell rows awaiting
-              projection.
-            </p>
-          </DashboardCard>
         </div>
       </div>
+
+      <ConversionSection range={range} />
+      <TopEscrowsBoard by={topBy} range={range} />
     </div>
   );
 };

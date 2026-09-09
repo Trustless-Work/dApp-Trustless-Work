@@ -69,6 +69,7 @@ export const revenueEventOrganizationSchema = z
   .object({
     id: z.string().min(1),
     name: z.string().min(1),
+    archived: z.boolean(),
   })
   .nullable();
 
@@ -84,6 +85,20 @@ export const revenueEventSchema = z.object({
   asset: revenueAssetSchema,
   amount: z.string(),
   feeAmount: z.string(),
+  attributesRevenue: z.boolean(),
+});
+
+export const topOrganizationAssetSchema = z.object({
+  asset: revenueAssetSchema,
+  escrowCount: z.number(),
+  releasedAmount: z.string(),
+  feeAmount: z.string(),
+});
+
+export const topOrganizationSchema = z.object({
+  organization: revenueEventOrganizationSchema,
+  escrowCount: z.number(),
+  byAsset: z.array(topOrganizationAssetSchema),
 });
 
 export const revenueEventsPaginationSchema = z.object({
@@ -97,6 +112,8 @@ export const revenueEventsResponseSchema = z.object({
   feeBps: z.number(),
   data: z.array(revenueEventSchema),
   pagination: revenueEventsPaginationSchema,
+  escrowTotal: z.number(),
+  topOrganizations: z.array(topOrganizationSchema),
 });
 
 /** @deprecated Use seriesGrowthPointSchema */

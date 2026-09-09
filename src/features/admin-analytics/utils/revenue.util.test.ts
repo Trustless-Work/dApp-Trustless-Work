@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  attributingEvents,
   buildCategoryBreakdown,
   buildCategoryLineSeries,
   buildRevenueChartSeries,
@@ -9,7 +10,10 @@ import {
   isUsdtRevenueAsset,
   resolveAssetSymbol,
 } from "@/features/admin-analytics/utils/revenue.util";
-import type { RevenueBucket } from "@/features/admin-analytics/types/analytics.types";
+import type {
+  RevenueBucket,
+  RevenueEvent,
+} from "@/features/admin-analytics/types/analytics.types";
 
 const usdcAsset = {
   address: "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA",
@@ -257,5 +261,29 @@ describe("formatFeeBpsPercent", () => {
     expect(formatFeeBpsPercent(30)).toBe("0.3%");
     expect(formatFeeBpsPercent(25)).toBe("0.25%");
     expect(formatFeeBpsPercent(100)).toBe("1%");
+  });
+});
+
+describe("attributingEvents", () => {
+  const baseEvent: RevenueEvent = {
+    escrowId: "CBZXBSOQH3EWJHY5JE65QW6ZFJYLXKUAYNGG3PEGNSHHRFVVBLOF3FSQ",
+    engagementId: null,
+    eventType: "release",
+    createdAt: "2026-06-09T23:33:46.000Z",
+    txHash: null,
+    organization: { id: "1", name: "Acme", archived: false },
+    asset: usdcAsset,
+    amount: "100",
+    feeAmount: "0.3",
+    attributesRevenue: false,
+  };
+
+  it("keeps only rows with attributesRevenue true", () => {
+    const events: RevenueEvent[] = [
+      baseEvent,
+      { ...baseEvent, attributesRevenue: true, escrowId: "other" },
+    ];
+    expect(attributingEvents(events)).toHaveLength(1);
+    expect(attributingEvents(events)[0]?.attributesRevenue).toBe(true);
   });
 });

@@ -9,6 +9,8 @@ import type {
   revenueEventSchema,
   revenueEventsResponseSchema,
   revenueEventTypeSchema,
+  topOrganizationAssetSchema,
+  topOrganizationSchema,
   seriesGrowthPointSchema,
   statusBucketSchema,
   statusFunnelResponseSchema,
@@ -30,6 +32,11 @@ export type DataQualityResponse = z.infer<typeof dataQualityResponseSchema>;
 export type RevenueEvent = z.infer<typeof revenueEventSchema>;
 export type RevenueEventType = z.infer<typeof revenueEventTypeSchema>;
 export type RevenueEventsResponse = z.infer<typeof revenueEventsResponseSchema>;
+export type TopOrganization = z.infer<typeof topOrganizationSchema>;
+export type TopOrganizationAsset = z.infer<typeof topOrganizationAssetSchema>;
+
+export type RevenueEventSort = "timestamp" | "amount";
+export type RevenueEventOrder = "desc" | "asc";
 
 export type RevenueCategory = RevenueBucket["category"];
 
@@ -49,4 +56,8 @@ export type RevenueEventsQuery = {
   readonly from?: string;
   readonly to?: string;
   readonly eventType?: RevenueEventType;
+  readonly sort?: RevenueEventSort;
+  readonly order?: RevenueEventOrder;
+  readonly search?: string;
+  readonly asset?: string;
 };

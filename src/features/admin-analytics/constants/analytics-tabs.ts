@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import { CoinsIcon, DiscIcon, TrendingUpIcon } from "lucide-react";
+import { CoinsIcon, DiscIcon, KeyIcon, TrendingUpIcon } from "lucide-react";
 
-export type AnalyticsTabId = "growth" | "revenue" | "escrows";
+export type AnalyticsTabId = "growth" | "revenue" | "escrows" | "api-keys";
 
 export type AnalyticsTab = {
   id: AnalyticsTabId;
@@ -28,6 +28,12 @@ export const ANALYTICS_TABS: readonly AnalyticsTab[] = [
     label: "Escrows",
     icon: DiscIcon,
     description: "Live escrow status funnel",
+  },
+  {
+    id: "api-keys",
+    label: "API Keys",
+    icon: KeyIcon,
+    description: "Key usage and platform attribution",
   },
 ] as const;
 

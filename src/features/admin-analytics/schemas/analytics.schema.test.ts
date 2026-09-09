@@ -95,7 +95,7 @@ describe("revenueEventsResponseSchema", () => {
           eventType: "release",
           createdAt: "2026-06-09T23:33:46.000Z",
           txHash: "44a4a684cd8dbec745ca1d29855edd2f7eada7ff07e06b831c31102268b6a633",
-          organization: { id: "12", name: "Acme Marketplace" },
+          organization: { id: "12", name: "Acme Marketplace", archived: false },
           asset: {
             address: "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA",
             symbol: "USDC",
@@ -104,9 +104,30 @@ describe("revenueEventsResponseSchema", () => {
           },
           amount: "263.5",
           feeAmount: "0.7905",
+          attributesRevenue: true,
         },
       ],
       pagination: { limit: 50, offset: 0, total: 41 },
+      escrowTotal: 12,
+      topOrganizations: [
+        {
+          organization: { id: "12", name: "Acme Marketplace", archived: false },
+          escrowCount: 3,
+          byAsset: [
+            {
+              asset: {
+                address: "CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA",
+                symbol: "USDC",
+                decimals: 7,
+                resolved: true,
+              },
+              escrowCount: 3,
+              releasedAmount: "263.5",
+              feeAmount: "0.7905",
+            },
+          ],
+        },
+      ],
     });
     expect(result.success).toBe(true);
   });
