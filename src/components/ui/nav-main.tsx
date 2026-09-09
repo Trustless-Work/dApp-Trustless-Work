@@ -25,8 +25,11 @@ import type {
 import { ArrowUpRightIcon, ChevronRightIcon } from "lucide-react";
 
 function isPathActive(pathname: string, url: string): boolean {
-  if (url === "/dashboard") {
-    return pathname === "/dashboard";
+  // Section homes (`/dashboard`, `/admin`) only highlight on an exact match so
+  // nested routes do not light up the root item.
+  const isSectionHome = url.split("/").filter(Boolean).length === 1;
+  if (isSectionHome) {
+    return pathname === url;
   }
 
   return pathname === url || pathname.startsWith(`${url}/`);

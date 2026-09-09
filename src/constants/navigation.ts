@@ -59,3 +59,17 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
     ],
   },
 ];
+
+/** Backoffice sidebar — same shape as the dashboard, different destinations. */
+export const ADMIN_NAV_GROUPS: DashboardNavGroup[] = [
+  {
+    label: "Platform",
+    items: [
+      {
+        title: "Dashboard",
+        url: "/admin",
+        icon: LayoutDashboardIcon,
+      },
+    ],
+  },
+];
